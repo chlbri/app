@@ -33,11 +33,9 @@ describe('Error transitions testing)', () => {
           signals: voidAction({
             'interval::error': ({ payload }) => {
               mock('Error received:', payload);
-              console.warn('Error received:', payload);
             },
             'interval::next': ({ payload }) => {
               mock('NEXT received:', payload);
-              console.warn('Next received:', payload);
             },
           }),
         },

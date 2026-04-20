@@ -57,10 +57,6 @@ describe('machine coverage', () => {
 
     const strings: (string | string[])[] = [];
 
-    afterEach(() => {
-      console.warn('state', '=>', service.state.value);
-    });
-
     // #region Hooks
 
     const {

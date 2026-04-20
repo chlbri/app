@@ -90,7 +90,6 @@ describe('Integration testing for interpret, Children', () => {
     const parent = _parent5.provideOptions(({ sendTo, voidAction }) => ({
       actions: {
         notify: voidAction(() => {
-          console.warn('REACH');
           notify();
         }),
         sendChildNext: sendTo(child)(() => {

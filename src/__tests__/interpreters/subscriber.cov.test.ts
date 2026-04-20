@@ -112,7 +112,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
     describe('#01 => event type matching cases', () => {
       test('#01 => should handle matching event type with handler', async () => {
         const service = interpret(machine1, baseConfig);
-        const nextFn = vi.fn(() => console.warn('next-result'));
+        const nextFn = vi.fn(() => 'next-result');
 
         const subscriber = service.subscribe({ NEXT: nextFn });
 

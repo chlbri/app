@@ -22,22 +22,3 @@ createSequence()
   .add(DELAY, () => sub.next(3))
   .add(DELAY, () => sub.complete())
   .run();
-
-// pausable.start();
-// sub.next(1);
-
-// setTimeout(() => {
-//   sub.next(2);
-// }, DELAY);
-
-// // setTimeout(() => {
-// //   sub.error('Test error');
-// // }, DELAY * 2);
-
-// setTimeout(() => {
-//   sub.next(2);
-// }, DELAY * 4);
-
-// setTimeout(() => {
-//   sub.complete();
-// }, DELAY * 5);

@@ -1956,7 +1956,6 @@ export class Interpreter<
       if (splitsAreDifferents) return split2 - split1;
       return from2.localeCompare(from1);
     });
-    console.warn('flat2', JSON.stringify(flat2[0], null, 2));
 
     return flat2;
   };
