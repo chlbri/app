@@ -10,7 +10,6 @@ describe.concurrent('Interpreter addOptions return', () => {
     const machine = _machine1;
 
     const service = interpret(machine, { context: 0 });
-
     const result = service.addOptions(({ assign }) => ({
       actions: {
         increment: assign('context', ({ context }) => context + 1),
@@ -25,11 +24,8 @@ describe.concurrent('Interpreter addOptions return', () => {
 
   test('#02 => should return undefined when callback returns undefined', () => {
     const machine = _machine2;
-
     const service = interpret(machine, { context: 0 });
-
     const result = service.addOptions(() => undefined as any);
-
     expect(result).toBeUndefined();
   });
 
@@ -60,7 +56,6 @@ describe.concurrent('Interpreter addOptions return', () => {
     const machine = _machine4;
 
     const service = interpret(machine, { context: 0 });
-
     const result = service.addOptions(({ assign }) => ({
       actions: {
         increment: assign('context', ({ context }) => context + 1),

@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/coverage/actors/2ids.2.machine',
@@ -27,5 +28,15 @@ export default createMachine(
         },
       },
     },
+  },
+  {
+    pContext: type({
+      iter1: 'number',
+      iter2: 'number',
+      all: {
+        iter1: 'number',
+        iter2: 'number',
+      },
+    }),
   },
 );

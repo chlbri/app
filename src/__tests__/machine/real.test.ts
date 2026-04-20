@@ -4,7 +4,7 @@ import { interpret } from '#interpreter';
 import { type StateValue } from '#states';
 import * as helpers from '@bemedev/typings/helpers';
 import { constructTests } from '#fixtures';
-import type { inferT } from '@bemedev/typings';
+import type { inferO } from '@bemedev/typings';
 import _machine1 from './real.1.machine';
 import _machine2 from './real.2.machine';
 import _mainMachine3 from './real.3.machine';
@@ -748,7 +748,7 @@ describe('REAL LIFE TESTS', () => {
       helpers.array(helpers.union('string', 'number')),
     );
 
-    type CSVDataDeep = inferT<typeof deep> | CsvDataMap;
+    type CSVDataDeep = inferO<typeof deep> | CsvDataMap;
     interface CsvDataMap {
       [key: Keys]: CSVDataDeep;
     }
@@ -881,7 +881,7 @@ describe('REAL LIFE TESTS', () => {
            * @returns
            */
           prepare: assign('context', () => {
-            const current = { label: '', type: 'text' } as inferT<
+            const current = { label: '', type: 'text' } as inferO<
               typeof field
             >;
 
@@ -915,14 +915,14 @@ describe('REAL LIFE TESTS', () => {
       waiter: waiter(500),
     }));
 
-    const useLang = (_lang: inferT<typeof lang>, index: number) => {
+    const useLang = (_lang: inferO<typeof lang>, index: number) => {
       const invite = `#${index < 10 ? '0' + index : index} => Language should be ${_lang}`;
       return tupleOf(invite, () => {
         expect(service.select('lang')).toEqual(_lang);
       });
     };
 
-    const useValue = (value: inferT<typeof helpers.sv>, index: number) => {
+    const useValue = (value: inferO<typeof helpers.sv>, index: number) => {
       const invite = `#${index < 10 ? '0' + index : index} => value match`;
       return tupleOf(invite, () => {
         expect(service.state.value).toEqual(value);

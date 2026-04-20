@@ -27,8 +27,8 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2
       '@bemedev/typings':
-        specifier: ^0.3.0
-        version: 0.3.0
+        specifier: ^0.5.2
+        version: 0.5.2
       clone-deep:
         specifier: ^4.0.1
         version: 4.0.1
@@ -220,8 +220,8 @@ packages:
     resolution: {integrity: sha512-NMbZAIbjlHJ+GeQkvFi8vMUBI0kqArR73nx67rXwMjKdqQbOvc9nsQKgdAEPKaGxV6bWXKzzuEFqzsuQKKp2Yw==}
     engines: {node: '>=22'}
 
-  '@bemedev/typings@0.3.0':
-    resolution: {integrity: sha512-rWmLcUWAXA3dVBvJ1zVf7hr9+KORFwR8VVoE6MTRnrUWxv/3Hxzzc9gspdv2BBIAZbHLZ+bYHD/mqX19eEI6ag==}
+  '@bemedev/typings@0.5.2':
+    resolution: {integrity: sha512-kgJLPDcPxqFHETbPVYHBX82t7A28vPMdBNPPcJS7PhwOUsCebQlO91L4/5XYZ+szKbBP+hN8T3vqVA0nGy0DCg==}
     engines: {node: '>=24'}
 
   '@bemedev/x-guard@0.2.0':
@@ -2073,7 +2073,7 @@ snapshots:
 
   '@bemedev/types@0.4.2': {}
 
-  '@bemedev/typings@0.3.0': {}
+  '@bemedev/typings@0.5.2': {}
 
   '@bemedev/x-guard@0.2.0': {}
 

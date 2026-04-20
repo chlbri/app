@@ -7,7 +7,6 @@ import byKey from '#bemedev/features/objects/typings/byKey';
 import keysOf from '#bemedev/features/objects/typings/keysOf';
 import type {
   AllowedNames,
-  Cast,
   NotUndefined,
   PrimitiveObject,
 } from '#bemedev/globals/types';
@@ -46,13 +45,12 @@ import { decompose, getByKey, type Decompose } from '@bemedev/decompose';
 
 import type { Action } from '#actions';
 import type { DelayFunction } from '#delays';
-import { ActorsConfigMap, EventsR, type EventObject } from '#events';
+import { ActorsConfigMap, type EventObject } from '#events';
 
 import { _unknown } from '#bemedev/globals/utils/_unknown';
 import type { PredicateS } from '#guards';
-import type { ActorsMapT } from '#utils/typings';
 import { withTimeout } from '@bemedev/better-promise';
-import { inferT, ObjectT } from '@bemedev/typings';
+import type { inferT, StandardOutput } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import { registerMachine, type Register } from '../registry';
 import { assignByKey, expandFnMap } from './functions';
@@ -67,7 +65,11 @@ import type {
   TimeAction_F,
   VoidAction_F,
 } from './machine.types';
-import type { Config, MachineOptions } from './types';
+import type {
+  Config,
+  MachineOptions2,
+  SimpleMachineOptions2,
+} from './types';
 
 /**
  * A class representing a state machine.
@@ -92,14 +94,7 @@ class Machine<
   const Ta extends string = string,
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
-  Mo extends MachineOptions<C, A, Pc, Tc, Ta, Eo> = MachineOptions<
-    C,
-    A,
-    Pc,
-    Tc,
-    Ta,
-    Eo
-  >,
+  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > implements AnyMachine<E, A, Pc, Tc> {
   /**
    * The configuration of the machine for this {@linkcode Machine}.
@@ -178,21 +173,6 @@ class Machine<
    * @remarks Used for typing purposes only.
    */
   get __events() {
-    return _unknown<EventsR<E>>();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the events map for this {@linkcode Machine} as a type.
-   *
-   * @see {@linkcode ToEvents}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __eventsO() {
     return _unknown<Eo>();
   }
 
@@ -258,6 +238,17 @@ class Machine<
    */
   get __stateExtended() {
     return _unknown<StateExtended<Eo, Pc, Tc, Ta>>();
+  }
+
+  /**
+   * @deprecated
+   *
+   * This property provides all possible paths for this {@linkcode Machine} as a type.
+   *
+   * @remarks Used for typing purposes only.
+   */
+  get __allPaths() {
+    return _unknown<AllPaths>();
   }
 
   /**
@@ -481,6 +472,12 @@ class Machine<
    */
   #pContext!: Pc;
 
+  #tags: Ta[];
+
+  get tags() {
+    return this.#tags;
+  }
+
   #initialKeys: string[] = [];
 
   /**
@@ -505,6 +502,11 @@ class Machine<
       object: 'both',
     });
     this.#flat = flatMap(this.#config, true);
+
+    this.#tags = Object.values(this.#flat)
+      .map(({ tags }) => toArray.typed(tags))
+      .filter(d => !!d)
+      .flat() as any;
     this.#initialConfig = initialConfig(this.#config);
     this.#getInitialKeys();
     this.longRuns = this.#config.__longRuns === true;
@@ -1290,25 +1292,37 @@ export function createMachine<
   const C extends Config<Current['paths']['map']> = Config<
     Current['paths']['map']
   >,
-  const Pc extends Current['pContext'] = Current['pContext'],
-  const Tc extends ObjectT = ObjectT,
-  const E extends Record<Current['events'], ObjectT> = Record<
-    Current['events'],
-    ObjectT
+  const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
+    Current['pContext']
   >,
-  const A extends ActorsMapT<
-    Current['options']['children'],
-    Current['options']['emitters']
-  > = ActorsMapT<
-    Current['options']['children'],
-    Current['options']['emitters']
+  const Tc extends StandardOutput<PrimitiveObject> =
+    StandardOutput<PrimitiveObject>,
+  const E extends StandardOutput<
+    Record<Current['events'], PrimitiveObject>
+  > = StandardOutput<Record<Current['events'], PrimitiveObject>>,
+  const A extends StandardOutput<
+    ActorsConfigMap<
+      Current['options']['children'],
+      Current['options']['emitters']
+    >
+  > = StandardOutput<
+    ActorsConfigMap<
+      Current['options']['children'],
+      Current['options']['emitters']
+    >
   >,
-  const _E extends EventsMap = Cast<inferT<E>, EventsMap>,
-  _A extends ActorsConfigMap = Cast<inferT<A>, ActorsConfigMap>,
+  _E extends inferT<E> = inferT<E>,
+  _A extends inferT<A> = inferT<A>,
+  _Pc extends inferT<Pc> = inferT<Pc>,
+  _Tc extends inferT<Tc> = inferT<Tc>,
+  Tags extends Exclude<Current['tags'], undefined> = Exclude<
+    Current['tags'],
+    undefined
+  >,
+  Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
 >(
   name: Name,
   config: C,
-
   types?: {
     context?: Tc;
     pContext?: Pc;
@@ -1317,16 +1331,17 @@ export function createMachine<
   },
 ): Machine<
   C,
-  inferT<Pc extends ObjectT ? Pc : 'undefined'>,
-  inferT<Tc> extends infer U extends PrimitiveObject ? U : any,
+  _Pc,
+  _Tc,
   _E,
   _A,
-  Exclude<Current['tags'], undefined>,
-  ToEventObject<ToEvents<_E, _A>>,
-  Current['paths']['all']
+  Tags,
+  Eo,
+  Current['paths']['all'],
+  MachineOptions2<_Pc, _Tc, Tags, Eo, Current['options']>
 > {
-  const eventsMap = types?.eventsMap ?? {};
-  const actorsMap = types?.actorsMap ?? {};
+  const eventsMap = types?.eventsMap?.['~standard']?.types?.output ?? {};
+  const actorsMap = types?.actorsMap?.['~standard']?.types?.output ?? {};
 
   const out = new Machine(config as Config)
     ._provideEvents(eventsMap)

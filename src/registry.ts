@@ -1,5 +1,4 @@
 import type { ConfigDef, NoExtraKeysConfigDef } from '#machines';
-import type { ObjectT } from '@bemedev/typings';
 import type { AnyMachine } from './machine/machine.types';
 
 export type RegisterOptions = Record<
@@ -21,10 +20,10 @@ export interface Register extends Record<
       map: NoExtraKeysConfigDef<ConfigDef>;
       all: string;
     };
-    events: string;
 
+    events: string;
     options: RegisterOptions;
-    pContext?: ObjectT;
+    pContext?: any;
     tags?: string;
   }
   // oxlint-disable-next-line typescript/no-empty-object-type

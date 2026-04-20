@@ -2,25 +2,34 @@ import { DELAY } from '#fixturesData';
 import { interpret } from '#interpreter';
 import { createMachine } from '#machine';
 import { constructTests } from '#fixtures';
+import { type } from '@bemedev/typings';
 
-export const machine1 = createMachine('src/__tests__/delays/fixtures', {
-  initial: 'idle',
-  states: {
-    idle: {
-      activities: {
-        DELAY: 'inc',
+export const machine1 = createMachine(
+  'src/__tests__/delays/fixtures',
+  {
+    initial: 'idle',
+    states: {
+      idle: {
+        activities: {
+          DELAY: 'inc',
+        },
+        on: {
+          NEXT: { description: 'Next', target: '/final' },
+        },
       },
-      on: {
-        NEXT: { description: 'Next', target: '/final' },
-      },
-    },
-    final: {
-      on: {
-        NEXT: '/idle',
+      final: {
+        on: {
+          NEXT: '/idle',
+        },
       },
     },
   },
-}).provideOptions(({ assign }) => ({
+  {
+    context: type({
+      iterator: 'number',
+    }),
+  },
+).provideOptions(({ assign }) => ({
   actions: {
     inc: assign('context.iterator', ({ context }) => context.iterator + 1),
   },

@@ -1,6 +1,7 @@
 import { createMachine } from '#machine';
 import { notU } from '#utils';
 import { createPausable } from '@bemedev/rx-pausable';
+import { type } from '@bemedev/typings';
 import { interval } from 'rxjs/internal/observable/interval';
 import { map } from 'rxjs/internal/operators/map';
 import { take } from 'rxjs/internal/operators/take';
@@ -37,6 +38,17 @@ export const machineEmitter1 = createMachine(
         },
       },
     },
+  },
+  {
+    context: type('number'),
+    actorsMap: type({
+      emitters: {
+        interval: {
+          next: 'number',
+          error: 'never',
+        },
+      },
+    }),
   },
 );
 
@@ -91,6 +103,17 @@ export const machineEmitter3 = createMachine(
         },
       },
     },
+  },
+  {
+    context: type('number'),
+    actorsMap: type({
+      emitters: {
+        interval1: {
+          next: 'number',
+          error: 'never',
+        },
+      },
+    }),
   },
 ).provideOptions(({ assign }) => ({
   actions: {

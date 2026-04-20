@@ -115,7 +115,16 @@ import type {
 } from '#bemedev/globals/types';
 import { toEmitterSrc, type EmitterFunction2 } from '#emitters';
 import type { Machine } from '#machine';
-import type { ActorsMapFrom, AnyMachine, ChildFunction2 } from '#machines';
+import type {
+  ActorsMapFrom,
+  AllPathsFrom,
+  AnyMachine,
+  ChildFunction2,
+  EventsFrom,
+  MachineOptionsFrom,
+  SimpleMachineOptions2,
+  TagFrom,
+} from '#machines';
 import { createScheduler } from '@bemedev/scheduler';
 import type { ChildConfig, EmitterConfig } from '../actor.types';
 import { createSubscriber, type SubscriberClass } from './subscriber';
@@ -152,12 +161,13 @@ export class Interpreter<
   const A extends ActorsConfigMap = ActorsConfigMap,
   const Ta extends string = string,
   const Eo extends EventObject = EventObject,
-  AllPaths extends string = string,
+  const AllPaths extends string = string,
+  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > implements AnyInterpreter<E, A, Pc, Tc> {
   /**
    * The {@linkcode Machine} machine being interpreted.
    */
-  #machine: Machine<C, Pc, Tc, E, A, Ta, Eo, AllPaths>;
+  #machine: Machine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
 
   /**
    * The current {@linkcode WorkingStatus} status of the this {@linkcode Interpreter} service.
@@ -2305,7 +2315,11 @@ export type InterpreterFrom<M extends AnyMachine> = Interpreter<
   PrivateContextFrom<M>,
   ContextFrom<M>,
   EventsMapFrom<M>,
-  ActorsMapFrom<M>
+  ActorsMapFrom<M>,
+  TagFrom<M>,
+  EventsFrom<M>,
+  AllPathsFrom<M>,
+  MachineOptionsFrom<M>
 >;
 
 /**
@@ -2319,7 +2333,7 @@ export type InterpreterFrom<M extends AnyMachine> = Interpreter<
  */
 export const interpret: Interpreter_F = (..._args) => {
   const [machine, args] = _args;
-  const { mode, exact, pContext, context } = args ?? {};
+  const { mode, exact, pContext, context } = _any(args ?? {});
   const out: any = new Interpreter(machine, mode, exact);
   out._providePrivateContext(pContext);
   out._provideContext(context);

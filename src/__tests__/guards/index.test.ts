@@ -147,6 +147,7 @@ describe('Interpret for guards', () => {
       context: { data: 5 },
       pContext: { data: 'avion' },
     });
+
     const { useStateValue, start } = constructTests(service);
 
     test(...start(1));

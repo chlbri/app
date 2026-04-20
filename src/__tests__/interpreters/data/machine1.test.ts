@@ -15,7 +15,7 @@ describe('machine1', () => {
       useContext: constructContexts(({ context }) => context),
 
       useIterator: constructContexts(
-        ({ context }) => context?.iterator,
+        ({ context }) => context.iterator,
         'iterator',
       ),
     }),

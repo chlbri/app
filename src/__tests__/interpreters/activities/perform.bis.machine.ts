@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/activities/perform.bis.machine',
@@ -22,5 +23,15 @@ export default createMachine(
         },
       },
     },
+  },
+  {
+    context: type(({ partial, union }) =>
+      union(
+        partial({
+          iterator: 'number',
+        }),
+        'undefined',
+      ),
+    ),
   },
 );

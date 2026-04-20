@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/activities/pause.machine',
@@ -18,5 +19,10 @@ export default createMachine(
         always: '/idle',
       },
     },
+  },
+  {
+    context: type({
+      iterator: 'number',
+    }),
   },
 );

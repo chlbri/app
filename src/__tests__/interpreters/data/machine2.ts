@@ -1,6 +1,6 @@
 import { interpret } from '#interpreters';
 import { notU } from '#utils';
-import { createConfig, type EventsFrom } from '#machines';
+import { createConfig } from '#machines';
 import { createMachine } from '#machine';
 import { DELAY } from './constants';
 import { fakeDB } from './fakeDB';
@@ -230,7 +230,5 @@ export const _machine2 = createMachine(
     },
   }),
 );
-
-type TT = Extract<EventsFrom<typeof machine2>, { type: 'WRITE' }>;
 
 // #endregion

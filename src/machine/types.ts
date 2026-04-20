@@ -541,7 +541,10 @@ export type GetActorKeysFromMachine<T extends KeyU<'config'>> =
 
 export type ChildConfigDef = EventsMap;
 
-export type ChildConfigMap = RecordS<ChildConfigDef>;
+export type ChildConfigMap<S extends string = string> = Record<
+  S,
+  ChildConfigDef
+>;
 
 export type Child<
   E extends EventObject = EventObject,
@@ -562,12 +565,12 @@ export type Child<
  */
 export type FnMapFrom<
   T extends KeyU<
-    '__eventsO' | 'pContext' | 'context' | 'actorsMap' | '__tag'
+    '__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'
   >,
   R = any,
   Ex extends string = never,
 > = FnMapR<
-  Extract<T['__eventsO'], EventObject>,
+  Extract<T['__events'], EventObject>,
   ContextFrom<T>,
   Extract<T['__tag'], string>,
   R,
@@ -617,6 +620,7 @@ export type MachineOptions<
   delays: Partial<GetDelaysFromFlat<Flat, Eo, Pc, Tc, T>>;
   actors: Partial<GetActorsFromFlat<Flat, Eo, A, Pc, Tc, T>>;
 }>;
+
 export type MachineOptions2<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -628,8 +632,12 @@ export type MachineOptions2<
   guards: Partial<Record<O['guards'], PredicateS<Eo, Pc, Tc, T>>>;
   delays: Partial<Record<O['delays'], DelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
-    children: Record<O['children'], ChildFunction2<Eo, Pc, Tc, T, any>>;
-    emitters: Record<O['emitters'], EmitterFunction2<Eo, Pc, Tc, T, any>>;
+    children: Partial<
+      Record<O['children'], ChildFunction2<Eo, Pc, Tc, T, any>>
+    >;
+    emitters: Partial<
+      Record<O['emitters'], EmitterFunction2<Eo, Pc, Tc, T, any>>
+    >;
   }>;
 }>;
 
@@ -743,13 +751,21 @@ export type ActorsMapFrom<T extends KeyU<'actorsMap'>> = Extract<
   ActorsConfigMap
 >;
 
+export type TagsFrom<T extends KeyU<'tags'>> = T['tags'];
+export type TagFrom<T extends KeyU<'__tag'>> = T['__tag'];
+
+export type AllPathsFrom<T extends KeyU<'__allPaths'>> = T['__allPaths'];
+
 /**
  * Getting all events from a machine.
  *
  * @template : {@linkcode KeyU}<'__events'> [T] - type of the machine events
  *
  */
-export type EventsFrom<T extends KeyU<'__events'>> = T['__events'];
+export type EventsFrom<T extends KeyU<'__events'>> = Extract<
+  T['__events'],
+  EventObject
+>;
 
 /**
  * Get all actions map from a machine.

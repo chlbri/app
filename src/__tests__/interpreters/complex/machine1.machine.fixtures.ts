@@ -1,7 +1,7 @@
-import type { inferT } from '@bemedev/typings';
+import type { inferO } from '@bemedev/typings';
 import { asset, intermediary } from './machine1.machine.typings';
 
-export const ASSET_1: inferT<typeof asset> = {
+export const ASSET_1: inferO<typeof asset> = {
   id: 'asset-001',
   description: 'A beautiful house',
   value: 300000,
@@ -24,7 +24,7 @@ export const ASSET_1: inferT<typeof asset> = {
   },
 };
 
-export const INTERMEDIARY_1: inferT<typeof intermediary> = {
+export const INTERMEDIARY_1: inferO<typeof intermediary> = {
   id: 'intermediary-001',
   wallet: '0xintermediary123456',
   personality: 'individual',
@@ -39,7 +39,7 @@ export const INTERMEDIARY_1: inferT<typeof intermediary> = {
   nationalID: 'A123456789',
 };
 
-export const INTERMEDIARY_2: inferT<typeof intermediary> = {
+export const INTERMEDIARY_2: inferO<typeof intermediary> = {
   id: 'intermediary-002',
   wallet: '0xintermediary654321',
   personality: 'company',

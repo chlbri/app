@@ -6,12 +6,12 @@ import type {
 } from '#bemedev/globals/types';
 import type { EmitterConfigMap } from '#emitters';
 import type { ChildConfigMap } from '#machines';
+import { EmptyObject } from '@bemedev/decompose';
 import type {
   ALWAYS_EVENT,
   INIT_EVENT,
   MAX_EXCEEDED_EVENT_TYPE,
 } from './constants';
-import { EmptyObject } from '@bemedev/decompose';
 
 /**
  * Represents an event object with a type and payload.
@@ -49,12 +49,9 @@ export type AllEvent = EventObject | EventStrings;
  * @see {@linkcode Unionize} for the utility type that creates a union type from
  * the keys of the map.
  */
-export type EventsR<T extends EventsMap> =
-  Unionize<T> extends infer U
-    ? U extends any
-      ? { type: keyof U & string; payload: U[keyof U] }
-      : never
-    : never;
+export type EventsR<T extends EventsMap> = {
+  [K in keyof T & string]: { type: K; payload: T[K] };
+}[keyof T & string];
 
 type _EmitterConfigR<T extends EmitterConfigMap> =
   Unionize<T> extends infer U extends EmitterConfigMap
@@ -79,9 +76,12 @@ type _ChildConfigR<T extends ChildConfigMap> = {
     : never;
 }[keyof T & string];
 
-export type ActorsConfigMap = {
-  children?: ChildConfigMap;
-  emitters?: EmitterConfigMap;
+export type ActorsConfigMap<
+  Sc extends string = string,
+  Se extends string = string,
+> = {
+  children?: ChildConfigMap<Sc>;
+  emitters?: EmitterConfigMap<Se>;
 };
 
 /**
@@ -100,14 +100,15 @@ export type ToEvents<E extends EventsMap, A extends ActorsConfigMap> =
   | ToEventsR<E, A>
   | EventStrings;
 
-export type EventArgObject<E extends EventObject> =
-  object extends E['payload']
-    ? E['type'] | E
-    : E['payload'] extends never
+export type EventArgObject<E extends EventObject> = E extends any
+  ? E['payload'] extends never
+    ? E['type']
+    : PrimitiveObject extends E['payload']
       ? E['type'] | E
       : Equals<E['payload'], EmptyObject> extends true
         ? E['type'] | E
-        : E;
+        : E
+  : never;
 
 export type EventArgAll<E extends AllEvent> = E extends string
   ? E

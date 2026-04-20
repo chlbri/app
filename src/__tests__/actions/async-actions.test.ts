@@ -97,7 +97,7 @@ describe('Async action helpers', () => {
     }));
 
     const service = interpret(machine, {
-      context: { name: '', error: '' },
+      context: { name: '' },
     });
 
     test('#00 => start', service.start);
@@ -126,7 +126,7 @@ describe('Async action helpers', () => {
       },
     }));
 
-    const service = interpret(machine, { context: undefined });
+    const service = interpret(machine);
 
     test('#00 => start', service.start);
 

@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 const machine = createMachine(
   'src/__tests__/machine/addOptions-return.4.machine',
@@ -15,10 +16,10 @@ const machine = createMachine(
     },
   },
   {
-    eventsMap: {
-      INCREMENT: 'primitive',
-    },
-    context: 'number',
+    eventsMap: type({
+      INCREMENT: 'never',
+    }),
+    context: type('number'),
   },
 );
 

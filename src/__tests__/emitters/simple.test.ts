@@ -5,16 +5,15 @@ import { machineEmitter2, WAITERS } from './data';
 vi.useFakeTimers();
 describe('Simple Machine2 (from Machine1)', () => {
   const mockFn = vi.fn();
-  const service = interpret(
-    machineEmitter2.provideOptions(({ voidAction }) => ({
-      actions: {
-        mockCompleteAction: voidAction(() => {
-          mockFn('Complete action executed');
-        }),
-      },
-    })),
-    { context: 0 },
-  );
+  const machine = machineEmitter2.provideOptions(({ voidAction }) => ({
+    actions: {
+      mockCompleteAction: voidAction(() => {
+        mockFn('Complete action executed');
+      }),
+    },
+  }));
+
+  const service = interpret(machine, { context: 0 });
 
   const {
     useContext,

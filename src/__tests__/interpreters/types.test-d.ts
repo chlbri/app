@@ -8,7 +8,7 @@ import type {
   EventsMapFrom,
   GuardKeysFrom,
   PrivateContextFrom,
-} from '../../machine/types';
+} from '#machines';
 import type { Config3, Machine3 } from './data/machine3';
 
 type TTConfig = ConfigFrom<Machine3>;

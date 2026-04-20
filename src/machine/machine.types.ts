@@ -115,6 +115,9 @@ export interface AnyMachine<
   actions: any;
   predicates: any;
   delays: any;
+  __allPaths: string;
+  __tag: string;
+  tags: string[];
   children: any;
   renew: any;
   initialConfig: NodeConfig;
@@ -131,22 +134,10 @@ export type AssignAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = <
-  D = 0 extends 1 & Tc
-    ? Record<string, any>
-    : 0 extends 1 & Pc
-      ? Decompose<
-          { context: Tc },
-          { object: 'both'; start: false; sep: '.' }
-        >
-      : Pc extends undefined
-        ? Decompose<
-            { context: Tc },
-            { object: 'both'; start: false; sep: '.' }
-          >
-        : Decompose<
-            { pContext: Pc; context: Tc },
-            { object: 'both'; start: false; sep: '.' }
-          >,
+  D = Decompose<
+    { pContext: Pc; context: Tc },
+    { object: 'both'; start: false; sep: '.' }
+  >,
   K extends keyof D = keyof D,
   F extends D[K] | Promise<D[K]> = D[K] | Promise<D[K]>,
   Err extends PrimitiveObject = PrimitiveObject,
@@ -206,22 +197,10 @@ export type FilterAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = <
-  D = 0 extends 1 & Tc
-    ? Record<string, any>
-    : 0 extends 1 & Pc
-      ? Decompose<
-          { context: Tc },
-          { object: 'both'; start: false; sep: '.' }
-        >
-      : Pc extends undefined
-        ? Decompose<
-            { context: Tc },
-            { object: 'both'; start: false; sep: '.' }
-          >
-        : Decompose<
-            { pContext: Pc; context: Tc },
-            { object: 'both'; start: false; sep: '.' }
-          >,
+  D = Decompose<
+    { pContext: Pc; context: Tc },
+    { object: 'both'; start: false; sep: '.' }
+  >,
   K extends keyof D & string = keyof D & string,
 >(
   key: K,
@@ -462,3 +441,33 @@ export type _ActionTypes =
 export type ActionTypes = `actions.${_ActionTypes}`;
 
 export type AppTypes = ActionTypes | 'guards' | 'pContext' | 'context';
+
+/**
+ * Helper type for a machine Register entry.
+ *
+ * @template Events - Union of event name strings from eventsMap keys.
+ * @template Children - Union of children actor key strings.
+ * @template Emitters - Union of emitter actor key strings.
+ * @template PContext - The pContext ObjectT shape (or undefined).
+ * @template Tags - Union of tag strings from state nodes.
+ */
+export type MachineEntry<
+  Events extends string = never,
+  Children extends string = never,
+  Emitters extends string = never,
+  PContext = never,
+  Tags extends string = never,
+> = {
+  paths: { map: any; all: string };
+  events: Events;
+  options: {
+    children: Children;
+    emitters: Emitters;
+    tags: Tags;
+    actions: string;
+    delays: string;
+    guards: string;
+  };
+  pContext: PContext;
+  tags: Tags;
+};

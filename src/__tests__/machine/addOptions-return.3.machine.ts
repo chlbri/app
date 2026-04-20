@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/machine/addOptions-return.3.machine',
@@ -19,9 +20,9 @@ export default createMachine(
     },
   },
   {
-    eventsMap: {
-      CHECK: 'primitive',
-    },
-    context: 'number',
+    eventsMap: type({
+      CHECK: 'never',
+    }),
+    context: type('number'),
   },
 );

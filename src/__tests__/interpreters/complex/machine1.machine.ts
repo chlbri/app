@@ -1,10 +1,10 @@
 import { emptyFn } from '#fixtures';
 import { createMachine } from '#machine';
-import { helpers, type inferT } from '@bemedev/typings';
+import { type, type inferO } from '@bemedev/typings';
 import isOnline from 'is-online';
 import { asset, intermediary } from './machine1.machine.typings';
 
-export const BLOCK_IMMO_INTERMEDIARY: inferT<typeof intermediary> = {
+export const BLOCK_IMMO_INTERMEDIARY: inferO<typeof intermediary> = {
   id: 'block-immo-001',
   wallet: '0xblockimmo123456',
   personality: 'company',
@@ -106,26 +106,28 @@ export const machine = createMachine(
     },
   },
   {
-    eventsMap: {
-      START: helpers.partial({
+    eventsMap: type(({ partial }) => ({
+      START: partial({
         asset,
         mandatory: intermediary,
       }),
       ADD_INTERMEDIARY: intermediary,
-      RESET: 'primitive',
-    },
+      RESET: 'never',
+    })),
 
-    context: helpers.partial({
-      asset,
-      intermediaries: helpers.array(intermediary),
-      internetStatus: 'boolean',
-      errors: helpers.partial({
-        noAsset: 'string',
-        intermediary: {
-          offline: 'string',
-        },
+    context: type(({ partial, array }) =>
+      partial({
+        asset,
+        intermediaries: array(intermediary),
+        internetStatus: 'boolean',
+        errors: partial({
+          noAsset: 'string',
+          intermediary: {
+            offline: 'string',
+          },
+        }),
       }),
-    }),
+    ),
   },
 ).provideOptions(({ assign, erase, batch }) => ({
   actions: {

@@ -328,7 +328,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `MachineOptionsFrom` / `MoF`, `ConfigFrom`, `PrivateContextFrom`,
   `ContextFrom`, `EventsMapFrom`, `StateFrom`, `DecomposedStateFrom`,
   `StateExtendedFrom`, `StatePFrom`, `StatePextendedFrom`, `ActorsMapFrom`,
-  `EventsFrom`
+  `EventsObjectFrom`
 - **Feat**: Add `constructStateValue`, `constructSend` helpers and
   `defaultI` constant in `fixtures/index.ts`
 - **Refactor**: Add `jsxSingleQuote: true` in `oxfmt.config.ts`

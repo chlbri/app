@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/activities/perform.machine',
@@ -16,5 +17,10 @@ export default createMachine(
         },
       },
     },
+  },
+  {
+    context: type({
+      iterator: 'number',
+    }),
   },
 );

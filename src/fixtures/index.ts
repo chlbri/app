@@ -12,7 +12,11 @@ import type {
   EventsMap,
 } from '#events';
 import type { Interpreter } from '#interpreter';
-import type { Config, GetEventsFromConfig } from '#machines';
+import type {
+  Config,
+  GetEventsFromConfig,
+  SimpleMachineOptions2,
+} from '#machines';
 import type { StateValue } from '#states';
 import { IS_TEST } from '#utils';
 import type { EmptyObject } from '@bemedev/decompose';
@@ -268,15 +272,17 @@ type ConstructTestsResult2 = Record<
 
 export const constructTests = <
   const C extends Config = Config,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
+  const Pc = any,
+  const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,
   const A extends ActorsConfigMap = ActorsConfigMap,
   const T extends object = object,
   const Ta extends string = string,
   const Eo extends EventObject = EventObject,
+  const AllPaths extends string = string,
+  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 >(
-  service: Interpreter<C, Pc, Tc, E, A, Ta, Eo>,
+  service: Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>,
   helper?: (option: Option<Eo, Pc, Tc>) => T,
   startIndex = 0,
 ): ConstructTestsResult<Eo, T, Ta> => {

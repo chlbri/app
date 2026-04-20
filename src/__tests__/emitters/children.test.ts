@@ -92,16 +92,15 @@ describe('Children', () => {
 
   describe('#02 => Emitter Machine3, with complete #2', () => {
     const mockFn = vi.fn();
-    const service = interpret(
-      machineEmitter3.provideOptions(({ voidAction }) => ({
-        actions: {
-          mockCompleteAction: voidAction(() => {
-            mockFn('Complete action executed');
-          }),
-        },
-      })),
-      { context: 0 },
-    );
+    const machine = machineEmitter3.provideOptions(({ voidAction }) => ({
+      actions: {
+        mockCompleteAction: voidAction(() => {
+          mockFn('Complete action executed');
+        }),
+      },
+    }));
+
+    const service = interpret(machine, { context: 0 });
     const { useContext, waiter, useMock, useNext, start, stop } =
       constructTests(
         service,

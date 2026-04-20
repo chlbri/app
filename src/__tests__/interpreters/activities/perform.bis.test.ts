@@ -48,7 +48,7 @@ describe('cov => Performs send to itself actions', () => {
   const useIterator = (iterator: number, index: number) => {
     const invite = `#${index < 10 ? '0' + index : index} => iterator is "${iterator}"`;
     return tupleOf(invite, async () => {
-      expect(service.select('iterator')).toBe(iterator);
+      expect(service.state.context?.iterator).toBe(iterator);
     });
   };
 

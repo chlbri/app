@@ -502,7 +502,6 @@ describe('machine coverage', () => {
       '__actionFn',
       '__actionKey',
       '__config',
-      '__eventsO',
       '__childKey',
       '__tag',
       '__actionParams',

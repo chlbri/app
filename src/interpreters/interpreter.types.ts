@@ -12,12 +12,7 @@ import type {
 } from '#bemedev/globals/types';
 import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
-import type {
-  ActorsConfigMap,
-  EventArg,
-  EventObject,
-  EventsMap,
-} from '#events';
+import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
 import type {
   AnyMachine,

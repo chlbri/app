@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/actions/async-actions.8.machine',
@@ -11,5 +12,8 @@ export default createMachine(
         },
       },
     },
+  },
+  {
+    context: type('number'),
   },
 );

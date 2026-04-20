@@ -6,10 +6,9 @@ import _machine2 from './actions.2.machine';
 
 describe('Interpret for actions', () => {
   const action1 = vi.fn().mockReturnValue(defaultC);
-  describe('#01 => string', () => {
-    const machine = _machine1;
 
-    const service = interpret(machine, defaultC);
+  describe('#01 => string', () => {
+    const service = interpret(_machine1);
     const { send, useStateValue, start } = constructTests(service);
     test(...start());
     test(...useStateValue('state2'));
@@ -58,9 +57,7 @@ describe('Interpret for actions', () => {
   });
 
   describe('#02 => describer', () => {
-    const machine = _machine2;
-
-    const service = interpret(machine, defaultC);
+    const service = interpret(_machine2);
     const { send, useStateValue, start } = constructTests(service);
     test(...start());
     test(...useStateValue('state2'));

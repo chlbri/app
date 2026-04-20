@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 import { DELAY } from './constants';
 
 // #region machine1
@@ -15,6 +16,11 @@ export const machine1 = createMachine(
 
       final: {},
     },
+  },
+  {
+    context: type({
+      iterator: 'number',
+    }),
   },
 );
 
