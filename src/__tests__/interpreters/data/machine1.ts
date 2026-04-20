@@ -21,6 +21,10 @@ export const machine1 = createMachine(
     context: type({
       iterator: 'number',
     }),
+
+    eventsMap: type({
+      NEXT: 'never',
+    }),
   },
 );
 

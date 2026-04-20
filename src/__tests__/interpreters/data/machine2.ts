@@ -1,11 +1,11 @@
 import { interpret } from '#interpreters';
-import { notU } from '#utils';
-import { createConfig } from '#machines';
 import { createMachine } from '#machine';
+import { createConfig } from '#machines';
+import { notU } from '#utils';
+import { type } from '@bemedev/typings';
 import { DELAY } from './constants';
 import { fakeDB } from './fakeDB';
 import { machine1 } from './machine1';
-import * as helpers from '@bemedev/typings/helpers';
 // #region machine2
 
 export const config2 = createConfig({
@@ -86,24 +86,31 @@ export const config2 = createConfig({
   },
 });
 
-const typings = helpers.any({
-  eventsMap: {
+export const typings2 = {
+  eventsMap: type(({ primitiveObject }) => ({
     FETCH: 'never',
-    WRITE: {
+    WRITE: primitiveObject({
       value: 'string',
-    },
+    }),
     NEXT: 'never',
     FINISH: 'never',
-  },
-  pContext: {
+  })),
+  pContext: type({
     iterator: 'number',
-  },
-  context: {
+  }),
+  context: type(({ array }) => ({
     iterator: 'number',
     input: 'string',
-    data: helpers.array('string'),
-  },
-});
+    data: array('string'),
+  })),
+  actorsMap: type({
+    children: {
+      machine1: {
+        NEXT: 'never',
+      },
+    },
+  }),
+} as const;
 
 export const machine2 = createMachine(
   'src/__tests__/interpreters/data/machine2',
@@ -118,7 +125,7 @@ export const machine2 = createMachine(
     },
     ...config2,
   },
-  typings,
+  typings2,
 ).provideOptions(({ isNotValue, isValue, assign, voidAction }) => ({
   actions: {
     inc: assign(
@@ -177,7 +184,7 @@ const _config2 = createConfig({
 export const _machine2 = createMachine(
   'src/__tests__/interpreters/data/machine2._2',
   _config2,
-  typings,
+  typings2,
 ).provideOptions(
   ({
     isNotValue,

@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/composition.1.machine',
@@ -30,5 +31,16 @@ export default createMachine(
         },
       },
     },
+  },
+  {
+    eventsMap: type({
+      ADD_CONDITION: 'never',
+      REMOVE_CONDITION: 'never',
+    }),
+
+    context: type({
+      iterator: 'number',
+      condition: 'boolean',
+    }),
   },
 );

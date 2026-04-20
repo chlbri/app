@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/composition.2.machine',
@@ -11,5 +12,10 @@ export default createMachine(
         },
       },
     },
+  },
+  {
+    eventsMap: type({
+      NEXT: 'never',
+    }),
   },
 );

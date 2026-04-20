@@ -15,25 +15,45 @@ describe('Complex machine 1', () => {
     context: {},
   });
 
-  const { start, wait500, wait150 } = constructTests(
-    service,
-    ({ waiter }) => ({
-      wait500: waiter(500),
-      wait150: waiter(150),
-    }),
-  );
+  const {
+    start,
+    wait500,
+    wait150,
+    send,
+    useIntermediariesLength,
+    stop,
+    useStateValue,
+  } = constructTests(service, ({ waiter, contexts }) => ({
+    wait500: waiter(500),
+    wait50: waiter(50),
+    wait150: waiter(150),
 
-  afterAll(service.stop);
+    useIntermediariesLength: contexts(
+      ({ context }) => context.intermediaries?.length,
+    ),
+  }));
+
+  afterAll(() => {
+    const [, fn] = stop();
+    fn();
+  });
+
+  test(...useStateValue('idle'));
   test(...start());
 
-  test('#02 => provide asset', () => {
-    service.send({
+  test(
+    ...send({
       type: 'START',
       payload: {
         asset: ASSET_1,
       },
-    });
-  });
+    }),
+  );
+
+  test(...useIntermediariesLength(1, 1));
+  test(...useStateValue('idle'));
+  test(...wait150());
+  test(...useStateValue('checking'));
 
   describe('#03 => Check context', () => {
     test('#01 => the asset is defined', () => {
@@ -41,9 +61,7 @@ describe('Complex machine 1', () => {
     });
 
     describe('#02 => the intermediaries', () => {
-      test('#01 => should have length 1', () => {
-        expect(service.select('intermediaries')).toHaveLength(1);
-      });
+      test(...useIntermediariesLength(1, 1));
 
       test('#02 => The Block_Immo intermediary is present', () => {
         expect(service.select('intermediaries.[0]')).toEqual(
@@ -62,12 +80,12 @@ describe('Complex machine 1', () => {
     expect(decomposed).not.toContain('working.adding');
   });
 
-  test('#06 => add an intermediary', async () => {
-    service.send({
+  test(
+    ...send({
       type: 'ADD_INTERMEDIARY',
       payload: INTERMEDIARY_1,
-    });
-  });
+    }),
+  );
 
   test('#07 => state is at "working.adding"', () => {
     const decomposed = decomposeSV(service.state.value);
@@ -91,7 +109,7 @@ describe('Complex machine 1', () => {
     });
 
     describe('#02 => the intermediaries', () => {
-      test('#01 => should have length 2', () => {
+      test('#01 => should have length 3', () => {
         expect(service.select('intermediaries')).toHaveLength(2);
       });
 
@@ -109,9 +127,7 @@ describe('Complex machine 1', () => {
     });
   });
 
-  test('#11 => reset the context', () => {
-    service.send('RESET');
-  });
+  test(...send('RESET'));
 
   describe('#12 => Check context', () => {
     test('#01 => the asset is undefined', () => {
@@ -130,15 +146,15 @@ describe('Complex machine 1', () => {
     expect(decomposed).not.toContain('working');
   });
 
-  test('#14 => provide asset and a mandatory', () => {
-    service.send({
+  test(
+    ...send({
       type: 'START',
       payload: {
         asset: ASSET_1,
         mandatory: INTERMEDIARY_2,
       },
-    });
-  });
+    }),
+  );
 
   describe('#15 => Check context', () => {
     test('#01 => the asset is defined', () => {
@@ -173,12 +189,12 @@ describe('Complex machine 1', () => {
     expect(decomposed).not.toContain('working.adding');
   });
 
-  test('#18 => Add the same intermediary ', () => {
-    service.send({
+  test(
+    ...send({
       type: 'ADD_INTERMEDIARY',
       payload: INTERMEDIARY_2,
-    });
-  });
+    }),
+  );
 
   test('#19 => state is at "working.idle"', () => {
     const decomposed = decomposeSV(service.state.value);
@@ -211,12 +227,12 @@ describe('Complex machine 1', () => {
     });
   });
 
-  test('#21 => Add other intermediary ', () => {
-    service.send({
+  test(
+    ...send({
       type: 'ADD_INTERMEDIARY',
       payload: INTERMEDIARY_1,
-    });
-  });
+    }),
+  );
 
   test('#22 => state is at "working.adding"', () => {
     const decomposed = decomposeSV(service.state.value);

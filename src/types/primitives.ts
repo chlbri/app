@@ -305,7 +305,7 @@ type _FnMap<
   T extends string = string,
   R = any,
   Ex extends string = never,
-  TT extends Exclude<E, Ex | { type: Ex }> = Exclude<E, Ex | { type: Ex }>,
+  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > = {
   [key in EventToType<TT>]?: (
     state: StatePextended<

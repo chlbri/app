@@ -90,17 +90,16 @@ type DSF2 = keyof DecomposedStateFrom<typeof machine2>;
 
 expectTypeOf<DSF2>().toEqualTypeOf<
   | 'context'
-  | 'tags'
   | 'value'
+  | 'tags'
   | 'status'
   | 'event'
-  | 'context.input'
-  | 'context.iterator'
   | 'context.data'
   | `context.data.[${number}]`
-  | `tags.[${number}]`
-  | 'event.type'
+  | 'context.iterator'
+  | 'context.input'
   | 'event.payload'
+  | 'event.type'
   | 'event.payload.value'
 >();
 

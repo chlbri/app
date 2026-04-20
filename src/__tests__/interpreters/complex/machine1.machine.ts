@@ -45,13 +45,7 @@ export const machine = createMachine(
               target: '/checking',
               description: 'Start the machine',
               guards: 'assetIsDefined',
-              actions: [
-                'provideAsset',
-                {
-                  name: 'addBlockImmoIntermediary',
-                  description: 'BLOCK_IMMO is the first intermediary',
-                },
-              ],
+              actions: ['provideAsset', 'addBlockImmoIntermediary'],
             },
             {
               actions: ['error.noAsset'],

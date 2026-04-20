@@ -154,3 +154,17 @@ export type EventToType<
     : T,
   Ex
 >;
+
+export type ExtractSender<
+  T extends EventObject,
+  E extends T['type'],
+  R extends Extract<T, { type: E }>['payload'] = Extract<
+    T,
+    { type: E }
+  >['payload'],
+> =
+  Equals<R, never> extends true
+    ? []
+    : PrimitiveObject extends R
+      ? []
+      : [payload: R];

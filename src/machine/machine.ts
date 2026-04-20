@@ -73,14 +73,14 @@ import type {
 
 /**
  * A class representing a state machine.
- * It provides methods to manage states, actions, predicates, delays, promises, and machines.
+ * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
  * @template : {@linkcode Config} [C] - The configuration type of the machine.
  * @template Pc : The private context type of the machine.
  * @template : {@linkcode PrimitiveObject} [Pc] - The context type of the machine.
  * @template : {@linkcode GetEventsFromConfig}<{@linkcode C}> [E] - The events map type derived from the configuration.
  * @template : {@linkcode PromiseeMap} [P] - The promisees map type derived from the configuration.
- * @template : {@linkcode SimpleMachineOptions2} [Mo] - The options type for the machine, which includes actions, predicates, delays, promises, and machines. Defaults to {@linkcode MachineOptions}<[{@linkcode C} , {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} ]>.
+ * @template : {@linkcode SimpleMachineOptions2} [Mo] - The options type for the machine, which includes actions, guards, delays, promises, and machines. Defaults to {@linkcode MachineOptions}<[{@linkcode C} , {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} ]>.
  *
  * @implements {@linkcode AnyMachine}<{@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} >
  */
@@ -353,7 +353,7 @@ class Machine<
    * @remarks Used for typing purposes only.
    */
   get __guardKey() {
-    return this.#typingsByKey('predicates');
+    return this.#typingsByKey('guards');
   }
 
   /**
@@ -451,7 +451,7 @@ class Machine<
   // #region private
   #actions?: Mo['actions'];
 
-  #predicates?: Mo['guards'];
+  #guards?: Mo['guards'];
 
   #delays?: Mo['delays'];
 
@@ -560,8 +560,8 @@ class Machine<
     return this.#actions;
   }
 
-  get predicates() {
-    return this.#predicates;
+  get guards() {
+    return this.#guards;
   }
 
   get delays() {
@@ -612,8 +612,8 @@ class Machine<
   #addActions = (actions?: Mo['actions']) =>
     (this.#actions = merge(this.#actions, actions));
 
-  #addGuards = (predicates?: Mo['guards']) =>
-    (this.#predicates = merge(this.#predicates, predicates));
+  #addGuards = (guards?: Mo['guards']) =>
+    (this.#guards = merge(this.#guards, guards));
 
   #addDelays = (delays?: Mo['delays']) =>
     (this.#delays = merge(this.#delays, delays));
@@ -628,7 +628,7 @@ class Machine<
    * Create options for the machine.
    *
    * @param option a function that provides options for the machine.
-   * Options can include actions, predicates, delays, promises, and child machines.
+   * Options can include actions, guards, delays, promises, and child machines.
    *
    * Remark: Used for typings, when you're outside the Machine class.
    */
@@ -642,7 +642,7 @@ class Machine<
 
     const _legacy = Object.freeze({
       actions: cloneDeep(this.#actions),
-      predicates: cloneDeep(this.#predicates),
+      guards: cloneDeep(this.#guards),
       delays: cloneDeep(this.#delays),
       actors: cloneDeep(this.#actors),
     }) as any;
@@ -823,7 +823,7 @@ class Machine<
    * Provides options for the machine.
    *
    * @param option a function that provides options for the machine.
-   * Options can include actions, predicates, delays, promises, and child machines.
+   * Options can include actions, guards, delays, promises, and child machines.
    */
   addOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
     const out = this.createOptions(helper as any);
@@ -841,7 +841,7 @@ class Machine<
    * Provides options for the machine.
    *
    * @param helper a function that provides options for the machine.
-   * Options can include actions, predicates, delays, promises, and child machines.
+   * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
   provideOptions = <T extends Mo>(
@@ -868,7 +868,7 @@ class Machine<
     const pContext = cloneDeep(this.#pContext);
     const context = structuredClone(this.#context);
     const actions = cloneDeep(this.#actions);
-    const guards = cloneDeep(this.#predicates);
+    const guards = cloneDeep(this.#guards);
     const delays = cloneDeep(this.#delays);
     const actorsMap = cloneDeep(this.#actorsMap);
     const events = cloneDeep(this.#eventsMap);
@@ -1029,13 +1029,13 @@ class Machine<
   toNode = this.valueToConfig;
 
   get options() {
-    const predicates = this.#predicates;
+    const guards = this.#guards;
     const actions = this.#actions;
     const delays = this.#delays;
     const actors = this.#actors;
 
     const out = _unknown<Mo>({
-      predicates,
+      guards,
       actions,
       delays,
 

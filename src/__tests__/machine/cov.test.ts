@@ -23,144 +23,314 @@ describe('machine coverage', () => {
       log.mockClear();
     });
 
-    describe(TEXT, () => {
-      // #region Config
+    // #region Config
 
-      const service = interpret(_machine2, {
-        context: {
-          input: '',
-          data: [],
-          iterator: 0,
+    const service = interpret(_machine2, {
+      context: {
+        input: '',
+        data: [],
+        iterator: 0,
+      },
+
+      pContext: { iterator: 0 },
+    });
+
+    const subscriber = service.subscribe(
+      {
+        WRITE: ({ payload: { value } }) =>
+          console.log('WRITE with', ':', `"${value}"`),
+        NEXT: () => console.log('NEXT time, you will see!!'),
+        else: nothing,
+      },
+      {
+        equals: (s1, s2) => {
+          return equal(s1.event, s2.event);
         },
+      },
+    );
 
-        pContext: { iterator: 0 },
+    const INPUT = 'a';
+
+    const FAKES = fakeDB
+      .filter(({ name }) => name.includes(INPUT))
+      .map(({ name }) => name);
+
+    const strings: (string | string[])[] = [];
+
+    afterEach(() => {
+      console.warn('state', '=>', service.state.value);
+    });
+
+    // #region Hooks
+
+    const {
+      start,
+      pause,
+      resume,
+      send,
+      useStateValue,
+      useWaiter,
+      useWrite,
+      useIterator,
+      useIteratorC,
+      useInput,
+      useData,
+      useConsole,
+    } = constructTests(
+      service,
+      ({ waiter: _waiter, sender, contexts }) => ({
+        useWaiter: _waiter(DELAY),
+        useWrite: sender('WRITE'),
+        useIterator: contexts(
+          ({ context }) => context?.iterator,
+          'iterator',
+        ),
+        useIteratorC: contexts(
+          ({ pContext }) => (pContext as any)?.iterator,
+          'private iterator',
+        ),
+        useInput: contexts(({ context }) => context?.input, 'input'),
+        useData: (index: number, ...datas: any[]) => {
+          const inviteStrict = `#02 => Check strict data`;
+
+          const strict = () => {
+            expect(service.context?.data).toStrictEqual(datas);
+          };
+
+          const inviteLength = `#01 => Length of data is ${datas.length}`;
+
+          const length = () => {
+            expect(service.context?.data?.length).toBe(datas.length);
+          };
+
+          const _index = index < 10 ? '0' + index : index;
+          const invite = `#${_index} => Check data`;
+          const func = () => {
+            test(inviteLength, length);
+            test(inviteStrict, strict);
+          };
+
+          return tupleOf(invite, func);
+        },
+        useConsole: (
+          index: number,
+          ..._strings: (string | string[])[]
+        ) => {
+          const inviteStrict = `#02 => Check strict string`;
+
+          const strict = () => {
+            const calls = strings.map(data => [data].flat());
+            expect(log.mock.calls).toStrictEqual(calls);
+          };
+
+          const inviteLength = `#01 => Length of calls is : ${_strings.length}`;
+
+          const length = () => {
+            strings.push(..._strings);
+            expect(log.mock.calls.length).toBe(strings.length);
+          };
+
+          const _index = index < 10 ? '0' + index : index;
+          const invite = `#${_index} => Check the console`;
+          const func = () => {
+            test(inviteLength, length);
+            test(inviteStrict, strict);
+          };
+
+          return tupleOf(invite, func);
+        },
+      }),
+    );
+
+    // #endregion
+
+    // #endregion
+
+    describe('TESTS', () => {
+      test.only(...start());
+      test.only(...useWaiter(6, 1));
+
+      describe.only('#02 => Check the service', () => {
+        test(...useStateValue('idle', 1));
+        test(...useIterator(6, 2));
+        test(...useIteratorC(6, 3));
+        const array = ['Debounced action executed'];
+        describe(...useConsole(4, ...array));
       });
 
-      const subscriber = service.subscribe(
-        {
-          WRITE: ({ payload: { value } }) =>
-            console.log('WRITE with', ':', `"${value}"`),
-          NEXT: () => console.log('NEXT time, you will see!!'),
-          else: nothing,
-        },
-        {
-          equals: (s1, s2) => {
-            return equal(s1.event, s2.event);
-          },
-        },
-      );
+      test(...send('NEXT', 3));
 
-      const INPUT = 'a';
-
-      const FAKES = fakeDB
-        .filter(({ name }) => name.includes(INPUT))
-        .map(({ name }) => name);
-
-      const strings: (string | string[])[] = [];
-
-      // #region Hooks
-
-      service.send('NEXT');
-
-      const {
-        start,
-        pause,
-        resume,
-        send,
-        useStateValue,
-        useWaiter,
-        useWrite,
-        useIterator,
-        useIteratorC,
-        useInput,
-        useData,
-        useConsole,
-      } = constructTests(
-        service,
-        ({ waiter: _waiter, sender, contexts }) => ({
-          useWaiter: _waiter(DELAY),
-          useWrite: sender('WRITE'),
-          useIterator: contexts(
-            ({ context }) => context?.iterator,
-            'iterator',
+      describe('#05 => Check the service', () => {
+        test(
+          ...useStateValue(
+            {
+              working: {
+                fetch: 'idle',
+                ui: 'idle',
+              },
+            },
+            1,
           ),
-          useIteratorC: contexts(
-            ({ pContext }) => (pContext as any)?.iterator,
-            'private iterator',
+        );
+
+        test(...useIterator(6, 2));
+        test(...useIteratorC(6, 3));
+
+        describe(...useConsole(4, 'NEXT time, you will see!!'));
+      });
+
+      test(...useWaiter(6, 5));
+
+      describe('#06 => Check the service', () => {
+        test(...useIterator(18, 1));
+        test(...useIteratorC(12, 2));
+        const array = Array(6).fill('sendPanelToUser');
+        describe(...useConsole(3, ...array));
+      });
+
+      test(...pause(7));
+
+      describe('#08 => Check the service', () => {
+        test(
+          ...useStateValue(
+            {
+              working: {
+                fetch: 'idle',
+                ui: 'idle',
+              },
+            },
+            1,
           ),
-          useInput: contexts(({ context }) => context?.input, 'input'),
-          useData: (index: number, ...datas: any[]) => {
-            const inviteStrict = `#02 => Check strict data`;
+        );
 
-            const strict = () => {
-              expect(service.context?.data).toStrictEqual(datas);
-            };
+        test(...useIterator(18, 2));
+        test(...useIteratorC(12, 3));
 
-            const inviteLength = `#01 => Length of data is ${datas.length}`;
+        describe(...useConsole(4));
+      });
 
-            const length = () => {
-              expect(service.context?.data?.length).toBe(datas.length);
-            };
+      test(...useWaiter(6, 9));
 
-            const _index = index < 10 ? '0' + index : index;
-            const invite = `#${_index} => Check data`;
-            const func = () => {
-              test(inviteLength, length);
-              test(inviteStrict, strict);
-            };
+      describe('#10 => Check the service', () => {
+        test(
+          ...useStateValue(
+            {
+              working: {
+                fetch: 'idle',
+                ui: 'idle',
+              },
+            },
+            1,
+          ),
+        );
 
-            return tupleOf(invite, func);
-          },
-          useConsole: (
-            index: number,
-            ..._strings: (string | string[])[]
-          ) => {
-            const inviteStrict = `#02 => Check strict string`;
+        test(...useIterator(18, 2));
+        test(...useIteratorC(12, 3));
 
-            const strict = () => {
-              const calls = strings.map(data => [data].flat());
-              expect(log.mock.calls).toStrictEqual(calls);
-            };
+        describe(...useConsole(4));
+      });
 
-            const inviteLength = `#01 => Length of calls is : ${_strings.length}`;
+      test(...resume(11));
 
-            const length = () => {
-              strings.push(..._strings);
-              expect(log.mock.calls.length).toBe(strings.length);
-            };
+      test(...useWaiter(12, 12));
 
-            const _index = index < 10 ? '0' + index : index;
-            const invite = `#${_index} => Check the console`;
-            const func = () => {
-              test(inviteLength, length);
-              test(inviteStrict, strict);
-            };
+      describe('#13 => Check the service', () => {
+        test(
+          ...useStateValue(
+            {
+              working: {
+                fetch: 'idle',
+                ui: 'idle',
+              },
+            },
+            1,
+          ),
+        );
 
-            return tupleOf(invite, func);
-          },
-        }),
-      );
+        test(...useIterator(42, 2));
+        test(...useIteratorC(24, 3));
+        const array = [
+          'sendPanelToUser',
+          ...Array(11).fill('sendPanelToUser'),
+        ];
+        describe(...useConsole(4, ...array));
+      });
 
-      // #endregion
+      test(...useWrite({ value: '' }));
 
-      // #endregion
+      describe('#15 => Check the service', () => {
+        test(
+          ...useStateValue(
+            {
+              working: {
+                fetch: 'idle',
+                ui: 'input',
+              },
+            },
+            1,
+          ),
+        );
 
-      describe('TESTS', () => {
-        test(...start());
+        test(...useIterator(42, 2));
+        test(...useIteratorC(24, 3));
+        test(...useInput('', 4));
+        describe(...useConsole(5, ['WRITE with', ':', '""']));
+      });
 
-        test(...useWaiter(6, 1));
+      test(...useWaiter(12, 16));
 
-        describe('#02 => Check the service', () => {
-          test(...useStateValue('idle', 1));
-          test(...useIterator(6, 2));
-          test(...useIteratorC(6, 3));
-          const array = ['Debounced action executed'];
-          describe(...useConsole(4, ...array));
-        });
+      describe('#17 => Check the service', () => {
+        test(
+          ...useStateValue(
+            {
+              working: {
+                fetch: 'idle',
+                ui: 'input',
+              },
+            },
+            1,
+          ),
+        );
 
-        test(...send('NEXT', 3));
+        test(...useIterator(66, 2));
+        test(...useIteratorC(36, 3));
+        test(...useInput('', 4));
+        const array = [
+          'sendPanelToUser',
+          'Input, please !!',
+          ...Array(11)
+            .fill(['sendPanelToUser', 'Input, please !!'])
+            .flat(),
+        ];
 
-        describe('#05 => Check the service', () => {
+        describe(...useConsole(5, ...array));
+      });
+
+      test(...useWrite({ value: INPUT }));
+
+      describe('#19 => Check the service', () => {
+        test(
+          ...useStateValue(
+            {
+              working: {
+                fetch: 'idle',
+                ui: 'idle',
+              },
+            },
+            1,
+          ),
+        );
+
+        test(...useIterator(66, 2));
+        test(...useIteratorC(36, 3));
+        test(...useInput('', 4));
+        describe(...useConsole(5, ['WRITE with', ':', `"${INPUT}"`]));
+      });
+
+      describe.skip('REST', () => {
+        test(...useWaiter(12, 20));
+
+        describe('#21 => Check the service', () => {
           test(
             ...useStateValue(
               {
@@ -173,324 +343,147 @@ describe('machine coverage', () => {
             ),
           );
 
-          test(...useIterator(6, 2));
-          test(...useIteratorC(6, 3));
-
-          describe(...useConsole(4, 'NEXT time, you will see!!'));
-        });
-
-        test(...useWaiter(6, 5));
-
-        describe('#06 => Check the service', () => {
-          test(...useIterator(18, 1));
-          test(...useIteratorC(12, 2));
-          const array = Array(6).fill('sendPanelToUser');
-          describe(...useConsole(3, ...array));
-        });
-
-        test(...pause(7));
-
-        describe('#08 => Check the service', () => {
-          test(
-            ...useStateValue(
-              {
-                working: {
-                  fetch: 'idle',
-                  ui: 'idle',
-                },
-              },
-              1,
-            ),
-          );
-
-          test(...useIterator(18, 2));
-          test(...useIteratorC(12, 3));
-
-          describe(...useConsole(4));
-        });
-
-        test(...useWaiter(6, 9));
-
-        describe('#10 => Check the service', () => {
-          test(
-            ...useStateValue(
-              {
-                working: {
-                  fetch: 'idle',
-                  ui: 'idle',
-                },
-              },
-              1,
-            ),
-          );
-
-          test(...useIterator(18, 2));
-          test(...useIteratorC(12, 3));
-
-          describe(...useConsole(4));
-        });
-
-        test(...resume(11));
-
-        test(...useWaiter(12, 12));
-
-        describe('#13 => Check the service', () => {
-          test(
-            ...useStateValue(
-              {
-                working: {
-                  fetch: 'idle',
-                  ui: 'idle',
-                },
-              },
-              1,
-            ),
-          );
-
-          test(...useIterator(42, 2));
-          test(...useIteratorC(24, 3));
-          const array = [
-            'sendPanelToUser',
-            ...Array(11).fill('sendPanelToUser'),
-          ];
-          describe(...useConsole(4, ...array));
-        });
-
-        test(...useWrite({ value: '' }));
-
-        describe('#15 => Check the service', () => {
-          test(
-            ...useStateValue(
-              {
-                working: {
-                  fetch: 'idle',
-                  ui: 'input',
-                },
-              },
-              1,
-            ),
-          );
-
-          test(...useIterator(42, 2));
-          test(...useIteratorC(24, 3));
+          test(...useIterator(90, 2));
+          test(...useIteratorC(48, 3));
           test(...useInput('', 4));
-          describe(...useConsole(5, ['WRITE with', ':', '""']));
+          describe(...useConsole(5, ...Array(12).fill('sendPanelToUser')));
         });
 
-        test(...useWaiter(12, 16));
-
-        describe('#17 => Check the service', () => {
-          test(
-            ...useStateValue(
-              {
-                working: {
-                  fetch: 'idle',
-                  ui: 'input',
-                },
-              },
-              1,
-            ),
-          );
-
-          test(...useIterator(66, 2));
-          test(...useIteratorC(36, 3));
-          test(...useInput('', 4));
-          const array = [
-            'sendPanelToUser',
-            'Input, please !!',
-            ...Array(11)
-              .fill(['sendPanelToUser', 'Input, please !!'])
-              .flat(),
-          ];
-
-          describe(...useConsole(5, ...array));
-        });
+        test(
+          '#22 => Close the subscriber',
+          subscriber.close.bind(subscriber),
+        );
 
         test(...useWrite({ value: INPUT }));
 
-        describe('#19 => Check the service', () => {
+        describe('#24 => Check the service', () => {
           test(
             ...useStateValue(
               {
                 working: {
                   fetch: 'idle',
-                  ui: 'idle',
+                  ui: 'input',
                 },
               },
               1,
             ),
           );
 
-          test(...useIterator(66, 2));
-          test(...useIteratorC(36, 3));
-          test(...useInput('', 4));
-          describe(...useConsole(5, ['WRITE with', ':', `"${INPUT}"`]));
+          test(...useIterator(90, 2));
+          test(...useIteratorC(48, 3));
+          test(...useInput(INPUT, 4));
+          describe(...useConsole(5));
         });
 
-        describe.skip('REST', () => {
-          test(...useWaiter(12, 20));
+        test(...useWaiter(6, 25));
 
-          describe('#21 => Check the service', () => {
-            test(
-              ...useStateValue(
-                {
-                  working: {
-                    fetch: 'idle',
-                    ui: 'idle',
-                  },
+        describe('#26 => Check the service', () => {
+          test(
+            ...useStateValue(
+              {
+                working: {
+                  fetch: 'idle',
+                  ui: 'input',
                 },
-                1,
-              ),
-            );
+              },
+              1,
+            ),
+          );
 
-            test(...useIterator(90, 2));
-            test(...useIteratorC(48, 3));
-            test(...useInput('', 4));
-            describe(
-              ...useConsole(5, ...Array(12).fill('sendPanelToUser')),
-            );
+          test(...useIterator(102, 2));
+          test(...useIteratorC(54, 3));
+          test(...useInput(INPUT, 4));
+          describe(...useData(5));
+          describe(...useConsole(6, ...Array(6).fill('sendPanelToUser')));
+        });
+
+        test(...send('FETCH', 27));
+
+        describe('#28 => Check the service', () => {
+          test(
+            ...useStateValue(
+              {
+                working: {
+                  fetch: 'idle',
+                  ui: 'input',
+                },
+              },
+              1,
+            ),
+          );
+
+          test(...useIterator(102, 2));
+          test(...useIteratorC(54, 3));
+          test(...useInput(INPUT, 4));
+          describe(...useData(5, ...FAKES));
+          describe(...useConsole(6));
+        });
+
+        test(...useWaiter(0, 29));
+
+        describe('#30 => Check the service', () => {
+          test(
+            ...useStateValue(
+              {
+                working: {
+                  fetch: 'idle',
+                  ui: 'input',
+                },
+              },
+              1,
+            ),
+          );
+
+          test(...useIterator(102, 2));
+          test(...useIteratorC(54, 3));
+          test(...useInput(INPUT, 4));
+          describe(...useData(5, ...FAKES));
+          describe(...useConsole(5));
+        });
+
+        test(...useWaiter(6, 31));
+
+        describe('#32 => Check the service', () => {
+          test(
+            ...useStateValue(
+              {
+                working: {
+                  fetch: 'idle',
+                  ui: 'input',
+                },
+              },
+              1,
+            ),
+          );
+
+          test(...useIterator(114, 2));
+          test(...useIteratorC(60, 3));
+          test(...useInput(INPUT, 4));
+          describe(...useData(5, ...FAKES));
+          describe(...useConsole(6, ...Array(6).fill('sendPanelToUser')));
+        });
+
+        describe('#33 => Close the service', async () => {
+          test(...pause(1));
+
+          describe('#02 => Calls of log', () => {
+            test('#01 => Length of calls of log is the same of length of strings', () => {
+              expect(log).toBeCalledTimes(strings.length);
+            });
+
+            test('#02 => Log is called "70" times', () => {
+              expect(log).toBeCalledTimes(70);
+            });
+          });
+
+          test('#03 => Log the time of all tests', () => {
+            console.timeEnd(TEXT);
           });
 
           test(
-            '#22 => Close the subscriber',
-            subscriber.close.bind(subscriber),
+            '#04 => dispose',
+            service[Symbol.asyncDispose].bind(service),
           );
-
-          test(...useWrite({ value: INPUT }));
-
-          describe('#24 => Check the service', () => {
-            test(
-              ...useStateValue(
-                {
-                  working: {
-                    fetch: 'idle',
-                    ui: 'input',
-                  },
-                },
-                1,
-              ),
-            );
-
-            test(...useIterator(90, 2));
-            test(...useIteratorC(48, 3));
-            test(...useInput(INPUT, 4));
-            describe(...useConsole(5));
-          });
-
-          test(...useWaiter(6, 25));
-
-          describe('#26 => Check the service', () => {
-            test(
-              ...useStateValue(
-                {
-                  working: {
-                    fetch: 'idle',
-                    ui: 'input',
-                  },
-                },
-                1,
-              ),
-            );
-
-            test(...useIterator(102, 2));
-            test(...useIteratorC(54, 3));
-            test(...useInput(INPUT, 4));
-            describe(...useData(5));
-            describe(
-              ...useConsole(6, ...Array(6).fill('sendPanelToUser')),
-            );
-          });
-
-          test(...send('FETCH', 27));
-
-          describe('#28 => Check the service', () => {
-            test(
-              ...useStateValue(
-                {
-                  working: {
-                    fetch: 'idle',
-                    ui: 'input',
-                  },
-                },
-                1,
-              ),
-            );
-
-            test(...useIterator(102, 2));
-            test(...useIteratorC(54, 3));
-            test(...useInput(INPUT, 4));
-            describe(...useData(5, ...FAKES));
-            describe(...useConsole(6));
-          });
-
-          test(...useWaiter(0, 29));
-
-          describe('#30 => Check the service', () => {
-            test(
-              ...useStateValue(
-                {
-                  working: {
-                    fetch: 'idle',
-                    ui: 'input',
-                  },
-                },
-                1,
-              ),
-            );
-
-            test(...useIterator(102, 2));
-            test(...useIteratorC(54, 3));
-            test(...useInput(INPUT, 4));
-            describe(...useData(5, ...FAKES));
-            describe(...useConsole(5));
-          });
-
-          test(...useWaiter(6, 31));
-
-          describe('#32 => Check the service', () => {
-            test(
-              ...useStateValue(
-                {
-                  working: {
-                    fetch: 'idle',
-                    ui: 'input',
-                  },
-                },
-                1,
-              ),
-            );
-
-            test(...useIterator(114, 2));
-            test(...useIteratorC(60, 3));
-            test(...useInput(INPUT, 4));
-            describe(...useData(5, ...FAKES));
-            describe(
-              ...useConsole(6, ...Array(6).fill('sendPanelToUser')),
-            );
-          });
-
-          describe('#33 => Close the service', async () => {
-            test(...pause(1));
-
-            describe('#02 => Calls of log', () => {
-              test('#01 => Length of calls of log is the same of length of strings', () => {
-                expect(log).toBeCalledTimes(strings.length);
-              });
-
-              test('#02 => Log is called "70" times', () => {
-                expect(log).toBeCalledTimes(70);
-              });
-            });
-
-            test('#03 => Log the time of all tests', () => {
-              console.timeEnd(TEXT);
-            });
-
-            test(
-              '#04 => dispose',
-              service[Symbol.asyncDispose].bind(service),
-            );
-          });
         });
       });
     });

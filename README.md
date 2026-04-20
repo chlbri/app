@@ -97,7 +97,7 @@ pnpm add @bemedev/app-ts
    - [filter & erase](#54-filter--erase)
    - [resend & forceSend](#55-resend--forcesend)
    - [Async actions & errorFn](#56-async-actions--errorfn)
-6. [Guards (predicates)](#6-guards-predicates)
+6. [Guards (guards)](#6-guards-guards)
 7. [Transitions: on, after, always](#7-transitions-on-after-always)
 8. [Activities (recurring actions)](#8-activities-recurring-actions)
 9. [Actors: emitters](#9-actors-emitters)
@@ -497,11 +497,11 @@ internal `_addError` channel — no uncaught rejection.
 
 ## 6. Guards (Predicates)
 
-Guards are pure predicates that decide whether a transition should fire.
+Guards are pure guards that decide whether a transition should fire.
 
 ```typescript
 .provideOptions(({ isValue, isNotValue }) => ({
-  predicates: {
+  guards: {
     // Built-in value check helpers
     isEmpty: isValue('context.items', []),
     hasToken: isNotValue('context.token', undefined),
@@ -1110,7 +1110,7 @@ const machine = createMachine(
 
 Both `provideOptions` and `addOptions` support accessing previously defined
 options through the `_legacy` parameter. This enables composition of
-existing actions, predicates, delays, and actors without manual tracking.
+existing actions, guards, delays, and actors without manual tracking.
 
 ### On a Machine
 
@@ -1171,13 +1171,13 @@ const service3 = service2.provideOptions(({ assign }, { _legacy }) => ({
 
 **Properties available in `_legacy`:**
 
-| Property             | Content                         |
-| -------------------- | ------------------------------- |
-| `_legacy.actions`    | Previously defined actions      |
-| `_legacy.predicates` | Previously defined guards       |
-| `_legacy.delays`     | Previously defined delays       |
-| `_legacy.machines`   | Previously defined child actors |
-| `_legacy.emitters`   | Previously defined emitters     |
+| Property           | Content                         |
+| ------------------ | ------------------------------- |
+| `_legacy.actions`  | Previously defined actions      |
+| `_legacy.guards`   | Previously defined guards       |
+| `_legacy.delays`   | Previously defined delays       |
+| `_legacy.machines` | Previously defined child actors |
+| `_legacy.emitters` | Previously defined emitters     |
 
 **Key features:**
 

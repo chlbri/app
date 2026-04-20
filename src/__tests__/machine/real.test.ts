@@ -1,10 +1,7 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import type { Keys } from '#bemedev/globals/types';
+import { constructTests } from '#fixtures';
 import { interpret } from '#interpreter';
 import { type StateValue } from '#states';
-import * as helpers from '@bemedev/typings/helpers';
-import { constructTests } from '#fixtures';
-import type { inferO } from '@bemedev/typings';
 import _machine1 from './real.1.machine';
 import _machine2 from './real.2.machine';
 import _mainMachine3 from './real.3.machine';
@@ -740,53 +737,7 @@ describe('REAL LIFE TESTS', () => {
 
   describe('#03 => Real life testing #2', () => {
     // #region Typings
-    const csvData = helpers.record(helpers.union('string', 'number'));
 
-    const deep = helpers.union(
-      'string',
-      'number',
-      helpers.array(helpers.union('string', 'number')),
-    );
-
-    type CSVDataDeep = inferO<typeof deep> | CsvDataMap;
-    interface CsvDataMap {
-      [key: Keys]: CSVDataDeep;
-    }
-
-    const csvDataDeep = helpers.custom<CSVDataDeep>();
-    const lang = helpers.litterals('en', 'es', 'fr');
-
-    const fieldType = helpers.litterals(
-      'number',
-      'date',
-      'conditional',
-      'text',
-      'select',
-      'checkbox',
-      'color',
-      'email',
-      'time',
-      'url',
-      'tel',
-      'datetime-local',
-      'image',
-      'file',
-      'week',
-    );
-
-    const field = helpers.any({
-      label: 'string',
-      type: fieldType,
-      options: helpers.optional(helpers.array('string')),
-      data: helpers.optional(
-        helpers.partial({
-          data: helpers.array(csvData),
-          headers: helpers.array('string'),
-          merged: csvDataDeep,
-          name: 'string',
-        }),
-      ),
-    });
     // #endregion
 
     const mainMachine = _mainMachine3.provideOptions(
@@ -881,10 +832,7 @@ describe('REAL LIFE TESTS', () => {
            * @returns
            */
           prepare: assign('context', () => {
-            const current = { label: '', type: 'text' } as inferO<
-              typeof field
-            >;
-
+            const current = { label: '', type: 'text' } as any;
             return {
               fields: [structuredClone(current)],
               lang: 'en' as const,
@@ -903,37 +851,21 @@ describe('REAL LIFE TESTS', () => {
     });
 
     // #region Hooks
-    type SE = Parameters<typeof service.send>[0];
 
-    const useSend = (event: SE, index: number) => {
-      const invite = `#${index < 10 ? '0' + index : index} => Send a "${(event as any).type ?? event}" event`;
-
-      return tupleOf(invite, () => service.send(event));
-    };
-
-    const { start, waiter } = constructTests(service, ({ waiter }) => ({
-      waiter: waiter(500),
-    }));
-
-    const useLang = (_lang: inferO<typeof lang>, index: number) => {
-      const invite = `#${index < 10 ? '0' + index : index} => Language should be ${_lang}`;
-      return tupleOf(invite, () => {
-        expect(service.select('lang')).toEqual(_lang);
-      });
-    };
-
-    const useValue = (value: inferO<typeof helpers.sv>, index: number) => {
-      const invite = `#${index < 10 ? '0' + index : index} => value match`;
-      return tupleOf(invite, () => {
-        expect(service.state.value).toEqual(value);
-      });
-    };
+    const { start, waiter, send, useLang, useStateValue } = constructTests(
+      service,
+      ({ waiter, contexts }) => ({
+        waiter: waiter(500),
+        useLang: contexts(({ context: { lang } }) => lang),
+      }),
+    );
 
     // #endregion
 
     describe('TESTS', () => {
       test(...start(0));
-      test(...useValue({ working: 'idle' }, 1));
+      test(...useStateValue({ working: 'idle' }, 1));
+
       test('#02 => Context should be initialized', () => {
         expect(service.state.context).toEqual({
           fields: [{ label: '', type: 'text' }],
@@ -944,18 +876,18 @@ describe('REAL LIFE TESTS', () => {
           },
         });
       });
-      test(
-        ...useSend({ type: 'CHANGE_LANG', payload: { lang: 'fr' } }, 3),
-      );
+
+      test(...send({ type: 'CHANGE_LANG', payload: { lang: 'fr' } }, 3));
       test(...useLang('en', 4));
       test(...waiter(1, 5));
       test(...useLang('fr', 6));
-      test(...useSend('ADD', 7));
+      test(...send('ADD', 7));
+
       describe('#08 => Should add a new field', () => {
-        test('#08.01 => Should have two fields', () => {
+        test('#08 => Should have two fields', () => {
           expect(service.state.context.fields).toHaveLength(2);
         });
-        test('#08.01 => These 2 are same', () => {
+        test('#08 => These 2 are same', () => {
           expect(service.state.context.fields?.[0]).toEqual({
             label: '',
             type: 'text',
@@ -970,7 +902,7 @@ describe('REAL LIFE TESTS', () => {
         });
       });
       test(
-        ...useSend(
+        ...send(
           {
             type: 'UPDATE',
             payload: {
@@ -982,32 +914,38 @@ describe('REAL LIFE TESTS', () => {
         ),
       );
       describe('#10 => Fiels are not changed', () => {
-        test('#08.01 => Should have two fields', () => {
+        test('#08 => Should have two fields', () => {
           expect(service.state.context.fields).toHaveLength(2);
         });
-        test('#08.01 => These 2 are same', () => {
+
+        test('#08 => These 2 are same', () => {
           expect(service.state.context.fields?.[0]).toEqual({
             label: '',
             type: 'text',
           });
+
           expect(service.state.context.fields?.[1]).toEqual({
             label: '',
             type: 'text',
           });
+
           expect(service.state.context.fields?.[0]).toEqual(
             service.state.context.fields?.[1],
           );
         });
       });
+
       test(...waiter(1, 11));
+
       test('#12 => Should update first field', () => {
         expect(service.state.context.fields?.[0]).toEqual({
           label: 'Name',
           type: 'text',
         });
       });
+
       test(
-        ...useSend(
+        ...send(
           {
             type: 'UPDATE:NOW',
             payload: {
@@ -1018,19 +956,22 @@ describe('REAL LIFE TESTS', () => {
           9,
         ),
       );
+
       test('#10 => Should immediately update second field', () => {
         expect(service.state.context.fields?.[1]).toEqual({
           label: 'Email',
           type: 'email',
         });
       });
-      test(...useSend({ type: 'FIELDS:REGISTER', payload: {} }, 11));
-      test(...useValue({ working: 'register' }, 12));
+
+      test(...send('FIELDS:REGISTER', 11));
+      test(...useStateValue({ working: 'register' }, 12));
+
       test('#13 => Fields state should be registration', () => {
         expect(service.state.context.states?.fields).toBe('registration');
       });
       test(
-        ...useSend(
+        ...send(
           {
             type: 'VALUES:REGISTER',
             payload: {
@@ -1048,16 +989,16 @@ describe('REAL LIFE TESTS', () => {
         });
         expect(service.state.context.states?.values).toBe('registration');
       });
-      test(...useSend({ type: 'VALUES:MODIFY', payload: {} }, 16));
+      test(...send('VALUES:MODIFY', 16));
       test('#17 => Values state should be idle', () => {
         expect(service.state.context.states?.values).toBe('idle');
       });
-      test(...useSend({ type: 'FIELDS:MODIFY', payload: {} }, 18));
-      test(...useValue({ working: 'idle' }, 19));
+      test(...send('FIELDS:MODIFY', 18));
+      test(...useStateValue({ working: 'idle' }, 19));
       test('#20 => Fields state should be idle', () => {
         expect(service.state.context.states?.fields).toBe('idle');
       });
-      test(...useSend({ type: 'REMOVE', payload: { index: 1 } }, 21));
+      test(...send({ type: 'REMOVE', payload: { index: 1 } }, 21));
       test('#22 => Should remove second field', () => {
         expect(service.state.context.fields).toHaveLength(1);
         expect(service.state.context.fields?.[0]).toEqual({
@@ -1065,8 +1006,10 @@ describe('REAL LIFE TESTS', () => {
           type: 'text',
         });
       });
-      test(...useSend({ type: 'FIELDS:REGISTER', payload: {} }, 23));
-      test(...useValue({ working: 'register' }, 24));
+
+      test(...send('FIELDS:REGISTER', 23));
+      test(...useStateValue({ working: 'register' }, 24));
+
       test('#25 => Final state check - should be in register with proper context', () => {
         expect(service.state.context).toEqual({
           fields: [{ label: 'Name', type: 'text' }],

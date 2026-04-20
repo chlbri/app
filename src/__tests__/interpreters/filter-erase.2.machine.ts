@@ -1,13 +1,12 @@
 import { createMachine } from '#machine';
-import { typings } from '#utils';
+import { type } from '@bemedev/typings';
+import { any } from '@bemedev/typings/helpers';
 
-interface Person {
-  name: string;
-  age: number;
-  active: boolean;
-}
-
-const person = typings.custom<Person>();
+const person = any({
+  name: 'string',
+  age: 'number',
+  active: 'boolean',
+});
 
 export default createMachine(
   'src/__tests__/interpreters/filter-erase.2.machine',
@@ -28,5 +27,14 @@ export default createMachine(
       filtered: {},
     },
   },
-  { context: { people: typings.array(person) } },
+  {
+    context: type(({ array }) => ({
+      people: array(person),
+    })),
+
+    eventsMap: type(({ array }) => ({
+      ADD_PEOPLE: { people: array(person) },
+      FILTER_ACTIVE: 'never',
+    })),
+  },
 );

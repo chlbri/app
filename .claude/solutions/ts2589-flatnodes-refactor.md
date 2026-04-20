@@ -292,7 +292,7 @@ export type MachineOptions<
   Flat extends FlatMapN<C, false> = FlatMapN<C, false>, // <-- expensive
 > = Partial<{
   actions: Partial<GetActionsFromFlat<Flat, Eo, Pc, Tc, T>>; // re-iterates Flat
-  predicates: Partial<GetGuardsFromFlat<Flat, Eo, Pc, Tc, T>>; // re-iterates Flat
+  guards: Partial<GetGuardsFromFlat<Flat, Eo, Pc, Tc, T>>; // re-iterates Flat
   delays: Partial<GetDelaysFromFlat<Flat, Eo, Pc, Tc, T>>; // re-iterates Flat
   actors: Partial<GetActorsFromFlat<Flat, Eo, A, Pc, Tc, T>>; // re-iterates Flat
 }>;
@@ -312,7 +312,7 @@ export type MachineOptions<
   actions: Partial<
     Record<Keys['actionKeys'] & string, Action2<Eo, Pc, Tc, T>>
   >;
-  predicates: Partial<
+  guards: Partial<
     Record<Keys['guardKeys'] & string, PredicateS<Eo, Pc, Tc, T>>
   >;
   delays: Partial<
@@ -430,7 +430,7 @@ export type MachineOptions<
   Keys extends _AllKeysFromFlat<Flat> = _AllKeysFromFlat<Flat>,
 > = Partial<{
   actions:    Partial<Record<Keys['actionKeys'] & string, Action2<Eo, Pc, Tc, T>>>;
-  predicates: Partial<Record<Keys['guardKeys'] & string, PredicateS<Eo, Pc, Tc, T>>>;
+  guards: Partial<Record<Keys['guardKeys'] & string, PredicateS<Eo, Pc, Tc, T>>>;
   delays:     Partial<Record<Keys['delayKeys'] & string, DelayFunction2<Eo, Pc, Tc, T>>>;
   ...
 }>;

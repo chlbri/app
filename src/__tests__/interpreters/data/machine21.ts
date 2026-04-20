@@ -3,6 +3,7 @@ import { interpret } from '#interpreter';
 import { createMachine } from '#machine';
 import { createConfig } from '#machines';
 import { notU } from '#utils';
+import { type } from '@bemedev/typings';
 import { DELAY } from './constants';
 import { fakeDB } from './fakeDB';
 import { machine1 } from './machine1';
@@ -99,6 +100,32 @@ export const machine21 = createMachine(
     },
     ...config21,
   },
+  {
+    eventsMap: type({
+      NEXT: 'never',
+      FETCH: 'never',
+      WRITE: { value: 'string' },
+      SEND: 'never',
+    }),
+
+    context: type(({ array }) => ({
+      iterator: 'number',
+      input: 'string',
+      data: array('string'),
+    })),
+
+    pContext: type({
+      iterator: 'number',
+    }),
+
+    actorsMap: type({
+      children: {
+        machine1: {
+          NEXT: 'never',
+        },
+      },
+    }),
+  },
 ).provideOptions(
   ({ isNotValue, isValue, assign, voidAction, sendTo }) => ({
     actions: {
@@ -127,7 +154,7 @@ export const machine21 = createMachine(
           .map(item => item.name),
       ),
     },
-    predicates: {
+    guards: {
       isInputEmpty: isValue('context.input', ''),
       isInputNotEmpty: isNotValue('context.input', ''),
     },

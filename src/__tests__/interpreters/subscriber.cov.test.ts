@@ -17,15 +17,15 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
     exact: true,
   };
 
-  describe('#01.01 => function subscriber cases', () => {
-    test('#01.01.01 => should handle function subscriber', async () => {
+  describe('#01 => function subscriber cases', () => {
+    test('#01 => should handle function subscriber', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(() => 'function-result');
 
       const subscriber = service.subscribe(mockFn);
 
-      service.start();
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.start();
+      await service.send('NEXT');
 
       expect(mockFn).toHaveBeenCalled();
       expect(subscriber.state).toBe('active');
@@ -33,7 +33,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       service.stop();
     });
 
-    test('#01.01.02 => should handle function subscriber with different states', async () => {
+    test('#01 => should handle function subscriber with different states', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(
         (state: State<EventObject, TestContext>) =>
@@ -42,9 +42,9 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
       const subscriber = service.subscribe(mockFn);
 
-      service.start();
-      expect(mockFn).toHaveBeenCalledTimes(5);
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.start();
+      expect(mockFn).toHaveBeenCalledTimes(6); // Appelé à l'initialisation et à chaque changement de contexte
+      await service.send('NEXT');
 
       expect(mockFn).toHaveBeenCalledTimes(12);
       expect(subscriber.state).toBe('active');
@@ -52,46 +52,46 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       service.stop();
     });
 
-    test('#01.01.03 => should not call function when subscriber is paused', async () => {
+    test('#01 => should not call function when subscriber is paused', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn();
 
       const subscriber = service.subscribe(mockFn);
 
-      service.start();
-      expect(mockFn).toHaveBeenCalledTimes(5);
+      await service.start();
+      expect(mockFn).toHaveBeenCalledTimes(6); // Appelé à l'initialisation et à chaque changement de contexte
       subscriber.close();
-      expect(mockFn).toHaveBeenCalledTimes(5);
-      await service.send({ type: 'NEXT', payload: {} });
+      expect(mockFn).toHaveBeenCalledTimes(6);
+      await service.send('NEXT');
 
       expect(subscriber.state).toBe('paused');
-      expect(mockFn).toHaveBeenCalledTimes(5);
+      expect(mockFn).toHaveBeenCalledTimes(6);
 
       service.stop();
     });
 
-    test('#01.01.04 => should not call function when subscriber is disposed', async () => {
+    test('#01 => should not call function when subscriber is disposed', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn();
 
       const subscriber = service.subscribe(mockFn);
 
-      service.start();
+      await service.start();
       subscriber.unsubscribe();
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.send('NEXT');
 
       expect(subscriber.state).toBe('disposed');
 
       service.stop();
     });
 
-    test('#01.01.05 => should handle function subscriber reopening', async () => {
+    test('#01 => should handle function subscriber reopening', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(() => 'reopened-result');
 
       const subscriber = service.subscribe(mockFn);
 
-      service.start();
+      await service.start();
 
       // Pause puis reopen
       subscriber.close();
@@ -100,7 +100,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       subscriber.open();
       expect(subscriber.state).toBe('active');
 
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.send('NEXT');
 
       expect(mockFn).toHaveBeenCalled();
 
@@ -108,16 +108,16 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
     });
   });
 
-  describe('#01.02 => object subscriber cases', () => {
-    describe('#01.02.01 => event type matching cases', () => {
-      test('#01.02.01.01 => should handle matching event type with handler', async () => {
+  describe('#01 => object subscriber cases', () => {
+    describe('#01 => event type matching cases', () => {
+      test('#01 => should handle matching event type with handler', async () => {
         const service = interpret(machine1, baseConfig);
-        const nextFn = vi.fn(() => 'next-result');
+        const nextFn = vi.fn(() => console.warn('next-result'));
 
         const subscriber = service.subscribe({ NEXT: nextFn });
 
-        service.start();
-        await service.send({ type: 'NEXT', payload: {} });
+        await service.start();
+        await service.send('NEXT');
         expect((service.event as any).type).toBe('NEXT');
 
         expect(nextFn).toHaveBeenCalled();
@@ -126,7 +126,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         service.stop();
       });
 
-      test('#01.02.01.02 => should handle matching event type with handler and payload access', async () => {
+      test('#01 => should handle matching event type with handler and payload access', async () => {
         const service = interpret(machine1, baseConfig);
         const nextFn = vi.fn((state: StatePFrom<Machine1>) => {
           const payload = state.payload;
@@ -138,8 +138,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
         const subscriber = service.subscribe({ NEXT: nextFn });
 
-        service.start();
-        await service.send({ type: 'NEXT', payload: { data: 'test' } });
+        await service.start();
+        await service.send('NEXT');
 
         expect(nextFn).toHaveBeenCalled();
         expect(subscriber.state).toBe('active');
@@ -147,7 +147,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         service.stop();
       });
 
-      test('#01.02.01.03 => should handle non-matching event type with else', async () => {
+      test('#01 => should handle non-matching event type with else', async () => {
         const service = interpret(machine1, baseConfig);
         const nextFn = vi.fn();
         const elseFn = vi.fn(() => 'else-for-unknown');
@@ -161,7 +161,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
         // Simuler un événement qui ne correspond pas
         // (utiliser un événement interne pour déclencher else)
-        await service.send({ type: 'NEXT', payload: {} });
+        await service.send('NEXT');
 
         expect(nextFn).toHaveBeenCalled();
         expect(subscriber.state).toBe('active');
@@ -169,7 +169,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         service.stop();
       });
 
-      test('#01.02.01.04 => should handle event type matching but handler is null', async () => {
+      test('#01 => should handle event type matching but handler is null', async () => {
         const service = interpret(machine1, baseConfig);
         const elseFn = vi.fn(() => 'else-null-handler');
 
@@ -178,15 +178,15 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
           else: elseFn,
         });
 
-        service.start();
-        await service.send({ type: 'NEXT', payload: {} });
+        await service.start();
+        await service.send('NEXT');
 
         expect(subscriber.state).toBe('active');
 
         service.stop();
       });
 
-      test('#01.02.01.05 => should handle event type matching but handler is undefined', async () => {
+      test('#01.05 => should handle event type matching but handler is undefined', async () => {
         const service = interpret(machine1, baseConfig);
         const elseFn = vi.fn(() => 'else-undefined-handler');
 
@@ -195,8 +195,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
           else: elseFn,
         });
 
-        service.start();
-        await service.send({ type: 'NEXT', payload: {} });
+        await service.start();
+        await service.send('NEXT');
 
         expect(subscriber.state).toBe('active');
 
@@ -204,8 +204,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       });
     });
 
-    describe('#01.02.02 => multiple event handlers', () => {
-      test('#01.02.02.01 => should handle multiple event types with specific handlers', async () => {
+    describe('#01 => multiple event handlers', () => {
+      test('#01 => should handle multiple event types with specific handlers', async () => {
         const service = interpret(machine1, baseConfig);
         const nextFn = vi.fn(() => 'next-handler');
 
@@ -213,8 +213,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
           NEXT: nextFn,
         });
 
-        service.start();
-        await service.send({ type: 'NEXT', payload: {} });
+        await service.start();
+        await service.send('NEXT');
 
         expect(nextFn).toHaveBeenCalled();
         expect(subscriber.state).toBe('active');
@@ -222,7 +222,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         service.stop();
       });
 
-      test('#01.02.02.02 => should handle first matching event type in order', async () => {
+      test('#01 => should handle first matching event type in order', async () => {
         const service = interpret(machine1, baseConfig);
         const firstFn = vi.fn(() => 'first-handler');
 
@@ -230,8 +230,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
           NEXT: firstFn,
         });
 
-        service.start();
-        await service.send({ type: 'NEXT', payload: {} });
+        await service.start();
+        await service.send('NEXT');
 
         expect(firstFn).toHaveBeenCalled();
         expect(subscriber.state).toBe('active');
@@ -240,8 +240,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       });
     });
 
-    describe('#01.02.03 => else handler cases', () => {
-      test('#01.02.03.01 => should handle else without specific handlers', async () => {
+    describe('#01.03 => else handler cases', () => {
+      test('#01.03 => should handle else without specific handlers', async () => {
         const service = interpret(machine1, baseConfig);
         const elseFn = vi.fn(() => 'else-result');
 
@@ -249,15 +249,15 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
           else: elseFn,
         });
 
-        service.start();
-        await service.send({ type: 'NEXT', payload: {} });
+        await service.start();
+        await service.send('NEXT');
 
         expect(subscriber.state).toBe('active');
 
         service.stop();
       });
 
-      test('#01.02.03.02 => should handle mixed handlers with else', async () => {
+      test('#01.03 => should handle mixed handlers with else', async () => {
         const service = interpret(machine1, baseConfig);
         const nextFn = vi.fn(() => 'next-result');
         const elseFn = vi.fn(() => 'else-result');
@@ -267,8 +267,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
           else: elseFn,
         });
 
-        service.start();
-        await service.send({ type: 'NEXT', payload: {} });
+        await service.start();
+        await service.send('NEXT');
 
         expect(nextFn).toHaveBeenCalled();
         expect(subscriber.state).toBe('active');
@@ -279,7 +279,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
   });
 
   describe('#01.03 => edge cases and error handling', () => {
-    test('#01.03.01 => should handle custom equality function', async () => {
+    test('#01.03 => should handle custom equality function', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(() => 'custom-equality');
       const customEquals = vi.fn(
@@ -293,15 +293,15 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         equals: customEquals,
       });
 
-      service.start();
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.start();
+      await service.send('NEXT');
 
       expect(subscriber.state).toBe('active');
 
       service.stop();
     });
 
-    test('#01.03.02 => should handle states equal according to custom equality', async () => {
+    test('#01.03 => should handle states equal according to custom equality', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn();
       const customEquals = vi.fn(returnTrue); // Always equal
@@ -310,8 +310,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         equals: customEquals,
       });
 
-      service.start();
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.start();
+      await service.send('NEXT');
 
       expect(subscriber.state).toBe('active');
 
@@ -323,8 +323,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
       const subscriber = service.subscribe({});
 
-      service.start();
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.start();
+      await service.send('NEXT');
 
       expect(subscriber.state).toBe('active');
 
@@ -341,8 +341,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
       expect(subscriber.id).toBe('custom-subscriber-id');
 
-      service.start();
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.start();
+      await service.send('NEXT');
 
       expect(subscriber.state).toBe('active');
 
@@ -351,7 +351,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
   });
 
   describe('#01.04 => subscriber lifecycle', () => {
-    test('#01.04.01 => should handle subscriber state changes', () => {
+    test('#01.04 => should handle subscriber state changes', () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(() => 'lifecycle-result');
 
@@ -376,9 +376,10 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       service.stop();
     });
 
-    test('#01.04.02 => should not reopen after disposal', () => {
+    test('#01.04 => should not reopen after disposal', () => {
       const service = interpret(machine1, baseConfig);
-      const subscriber = service.subscribe(vi.fn());
+      const mockFn = vi.fn(() => 'dispose-reopen-result');
+      const subscriber = service.subscribe(mockFn);
 
       service.start();
 
@@ -433,7 +434,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
   });
 
   describe('#01.05 => integration with machine states', () => {
-    test('#01.05.01 => should handle state transitions', async () => {
+    test('#01.05 => should handle state transitions', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn((state: State<EventObject, TestContext>) => {
         return `state-${state.value}`;
@@ -441,10 +442,10 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
       const subscriber = service.subscribe(mockFn);
 
-      service.start();
+      await service.start();
       expect(service.value).toBe('idle');
 
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.send('NEXT');
       expect(service.value).toBe('final');
 
       expect(mockFn).toHaveBeenCalled();
@@ -453,7 +454,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       service.stop();
     });
 
-    test('#01.05.02 => should handle context changes', async () => {
+    test('#01.05 => should handle context changes', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn((state: State<EventObject, TestContext>) => {
         return `iterator-${state.context.iterator}`;
@@ -461,12 +462,12 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
       const subscriber = service.subscribe(mockFn);
 
-      service.start();
+      await service.start();
 
       // Le contexte peut changer via les activities
       expect(service.context.iterator).toBe(0);
 
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.send('NEXT');
 
       expect(mockFn).toHaveBeenCalled();
       expect(subscriber.state).toBe('active');
@@ -480,16 +481,16 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
       const subscriber = service.subscribe(mockFn);
 
-      service.start();
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.start();
+      await service.send('NEXT');
       service.stop();
 
       // Après stop, le subscriber peut être disposé - c'est normal
       expect(['active', 'disposed']).toContain(subscriber.state);
 
       // Restart machine
-      service.start();
-      await service.send({ type: 'NEXT', payload: {} });
+      await service.start();
+      await service.send('NEXT');
 
       expect(mockFn).toHaveBeenCalled();
       const sameStatus = {

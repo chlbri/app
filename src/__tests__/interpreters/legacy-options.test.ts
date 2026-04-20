@@ -83,7 +83,7 @@ describe.concurrent('Legacy Options Access', () => {
     expect(service.state.context).toBe(4);
   });
 
-  test('#03 =>should access previous predicates via _legacy', async () => {
+  test('#03 =>should access previous guards via _legacy', async () => {
     const machine = _machine3;
 
     // First call - define isPositive
@@ -298,7 +298,7 @@ describe.concurrent('Legacy Options Access', () => {
       expect(service.state.context).toBe(9);
     });
 
-    test('#03 => should access previous predicates via _legacy on service.addOptions', async () => {
+    test('#03 => should access previous guards via _legacy on service.addOptions', async () => {
       const machine = _machine9;
 
       const service = interpret(machine, { context: 5 });

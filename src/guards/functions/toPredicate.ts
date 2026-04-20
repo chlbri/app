@@ -20,7 +20,7 @@ export type _ToPredicateF = <
   events: E,
   actorsMap: A,
   guard: GuardConfig,
-  predicates?: PredicateMap<Eo, Pc, Tc, T>,
+  guards?: PredicateMap<Eo, Pc, Tc, T>,
 ) => {
   func?: GuardDefUnion<[StateExtended<Eo, Pc, Tc, T>]> | undefined;
   errors: string[];
@@ -37,7 +37,7 @@ export type ToPredicate_F = <
   events: E,
   actorsMap: A,
   guard: GuardConfig,
-  predicates?: PredicateMap<Eo, Pc, Tc, T>,
+  guards?: PredicateMap<Eo, Pc, Tc, T>,
 ) => {
   predicate?: PredicateS3<Eo, Pc, Tc, T> | undefined;
   errors: string[];
@@ -47,12 +47,12 @@ const _toPredicate: _ToPredicateF = (
   events,
   actorsMap,
   guard,
-  predicates,
+  _guards,
 ) => {
   const errors: string[] = [];
 
   if (isDescriber(guard)) {
-    const fn = predicates?.[guard.name];
+    const fn = _guards?.[guard.name];
     if (typeof fn === 'boolean') return { func: () => fn, errors };
     const func = fn ? reduceFnMap(events, actorsMap, fn) : undefined;
     if (!func) errors.push(`Predicate (${guard.name}) is not defined`);
@@ -60,7 +60,7 @@ const _toPredicate: _ToPredicateF = (
   }
 
   if (isString(guard)) {
-    const fn = predicates?.[guard];
+    const fn = _guards?.[guard];
     if (typeof fn === 'boolean') return { func: () => fn, errors };
     const func = fn ? reduceFnMap(events, actorsMap, fn) : undefined;
     if (!func) errors.push(`Predicate (${guard}) is not defined`);
@@ -69,7 +69,7 @@ const _toPredicate: _ToPredicateF = (
 
   const makeArray = (guards: GuardConfig[]) => {
     return guards
-      .map(guard => _toPredicate(events, actorsMap, guard, predicates))
+      .map(guard => _toPredicate(events, actorsMap, guard, _guards))
       .filter(({ errors: errors1 }) => {
         const check = errors1.length > 0;
         if (check) {
@@ -104,7 +104,7 @@ const _toPredicate: _ToPredicateF = (
  * @param events of type {@linkcode EventsMap} [E], the events map to use for resolving the predicate.
  * @param promisees of type {@linkcode PromiseeMap} [P], the promisees map to use for resolving the predicate.
  * @param guard of type {@linkcode GuardConfig}, the guard configuration to convert to a predicate.
- * @param predicates of type {@linkcode PredicateMap}, the map of predicates containing functions to execute.
+ * @param guards of type {@linkcode PredicateMap}, the map of guards containing functions to execute.
  * @returns an object containing the predicate function and any errors encountered during the conversion.
  *
  * @see {@linkcode PrimitiveObject}
@@ -121,14 +121,9 @@ export const toPredicate: ToPredicate_F = (
   events,
   actorsMap,
   guard,
-  predicates,
+  guards,
 ) => {
-  const { func, errors } = _toPredicate(
-    events,
-    actorsMap,
-    guard,
-    predicates,
-  );
+  const { func, errors } = _toPredicate(events, actorsMap, guard, guards);
 
   if (!func) return { errors };
 

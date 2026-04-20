@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/filter-erase.6.machine',
@@ -18,5 +19,19 @@ export default createMachine(
       },
       cleared: {},
     },
+  },
+  {
+    context: type(({ partial }) =>
+      partial({
+        name: 'string',
+        age: 'number',
+        email: 'string',
+      }),
+    ),
+
+    eventsMap: type({
+      SET_DATA: { name: 'string', age: 'number', email: 'string' },
+      CLEAR_ALL: 'never',
+    }),
   },
 );

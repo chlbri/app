@@ -113,7 +113,7 @@ export interface AnyMachine<
   __decomposedState: any;
   addOptions: any;
   actions: any;
-  predicates: any;
+  guards: any;
   delays: any;
   __allPaths: string;
   __tag: string;
@@ -217,24 +217,9 @@ export type EraseAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = <
-  D extends object = Extract<
-    0 extends 1 & Tc
-      ? Record<string, any>
-      : 0 extends 1 & Pc
-        ? Decompose<
-            { context: Tc },
-            { object: 'both'; start: false; sep: '.' }
-          >
-        : Pc extends undefined
-          ? Decompose<
-              { context: Tc },
-              { object: 'both'; start: false; sep: '.' }
-            >
-          : Decompose<
-              { pContext: Pc; context: Tc },
-              { object: 'both'; start: false; sep: '.' }
-            >,
-    object
+  D extends object = Decompose<
+    { pContext: Pc; context: Tc },
+    { object: 'both'; start: false; sep: '.' }
   >,
   DD = 0 extends 1 & Tc ? Record<string, any> : SubTypeLow<D, undefined>,
   K extends keyof DD & string = keyof DD & string,
@@ -371,7 +356,7 @@ export type AddOptionsParam_F<
   option: AddOption<E, Pc, Tc, T>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
-   * Provides actions, predicates, emitters, machines, promises, and delays.
+   * Provides actions, guards, emitters, machines, promises, and delays.
    */
   legacyOptions: {
     _legacy: LegacyOptions<Mo>;

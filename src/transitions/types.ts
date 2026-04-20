@@ -61,7 +61,7 @@ export type ExtractActionsFromTransition<
  * @returns The guards extracted from the transition configuration.
  *
  * @see {@linkcode GuardConfig} for the structure of guard configurations.
- * @see {@linkcode FromGuard} for converting guard configurations to predicates.
+ * @see {@linkcode FromGuard} for converting guard configurations to guards
  * @see {@linkcode ReduceArray} for reducing arrays to their elements.
  * @see {@linkcode SingleOrArrayL} for handling single or array
  */

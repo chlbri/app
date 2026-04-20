@@ -61,34 +61,6 @@ describe('machine coverage', () => {
           return tupleOf(invite, func);
         },
 
-        // useConsole: (
-        //   index: number,
-        //   ..._strings: (string | string[])[]
-        // ) => {
-        //   const inviteStrict = `#02 => Check strict string`;
-
-        //   const strict = () => {
-        //     const calls = strings.map(data => [data].flat());
-        //     expect(log.mock.calls).toStrictEqual(calls);
-        //   };
-
-        //   const inviteLength = `#01 => Length of calls is : ${_strings.length}`;
-
-        //   const length = () => {
-        //     strings.push(..._strings);
-        //     expect(log.mock.calls.length).toBe(strings.length);
-        //   };
-
-        //   const _index = index < 10 ? '0' + index : index;
-        //   const invite = `#${_index} => Check the console`;
-        //   const func = () => {
-        //     test(inviteLength, length);
-        //     test(inviteStrict, strict);
-        //   };
-
-        //   return tupleOf(invite, func);
-        // },
-
         useIterator: contexts(
           ({ context }) => context?.iterator,
           'iterator',

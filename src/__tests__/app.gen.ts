@@ -162,25 +162,25 @@ declare module '../index' {
       'NEXT' | 'FETCH' | 'WRITE' | 'FINISH',
       'machine1',
       never,
-      { iterator: number }
+      { iterator: any }
     >;
     'src/__tests__/interpreters/data/machine2._2': MachineEntry<
       'NEXT' | 'FETCH' | 'WRITE' | 'FINISH',
       'machine1',
       never,
-      { iterator: number }
+      { iterator: any }
     >;
     'src/__tests__/interpreters/data/machine21': MachineEntry<
       'NEXT' | 'FETCH' | 'WRITE' | 'SEND',
       'machine1',
       never,
-      { iterator: number }
+      { iterator: any }
     >;
     'src/__tests__/interpreters/data/machine23': MachineEntry<
       'NEXT' | 'FETCH' | 'WRITE' | 'FINISH',
       'machine1',
       never,
-      { iterator: number }
+      { iterator: any }
     >;
     'src/__tests__/interpreters/data/machine3': MachineEntry<
       'EVENT' | 'EVENT2' | 'EVENT3',

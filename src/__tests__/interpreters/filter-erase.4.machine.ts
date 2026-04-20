@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/filter-erase.4.machine',
@@ -18,5 +19,16 @@ export default createMachine(
       },
       cleared: {},
     },
+  },
+  {
+    context: type(({ optional }) => ({
+      name: optional('string'),
+      data: 'number',
+    })),
+
+    eventsMap: type({
+      SET_NAME: { name: 'string' },
+      CLEAR_NAME: 'never',
+    }),
   },
 );

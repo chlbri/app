@@ -1,5 +1,4 @@
 import { createMachine } from '#machine';
-import { defaultT } from '#fixtures';
 import { createConfig } from '#machines';
 
 const simpleConfig = createConfig({
@@ -17,5 +16,4 @@ const simpleConfig = createConfig({
 export default createMachine(
   'src/__tests__/interpreters/selftransitions/after.1.machine',
   simpleConfig,
-  defaultT,
 );

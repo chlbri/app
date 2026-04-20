@@ -100,11 +100,11 @@ describe('Composition', () => {
     test('#02 => Events Map', () => {
       expect(service.eventsMap).toStrictEqual({
         EVENT: {
-          password: undefined,
-          username: undefined,
+          password: 'string',
+          username: 'string',
         },
-        EVENT2: undefined,
-        EVENT3: { login: undefined, pwd: undefined },
+        EVENT2: 'boolean',
+        EVENT3: { login: 'string', pwd: 'string' },
       });
     });
 

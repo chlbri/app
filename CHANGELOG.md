@@ -486,8 +486,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Refactor actors to keyed maps and tighten types**
   - Convert actor registries from arrays to keyed maps for O(1) lookup
   - Tighten TypeScript types across actors, machine, and interpreter
-- **Refactor predicates and delays to function-only form**
-  - Remove object form support; accept only functions for predicates/delays
+- **Refactor guards and delays to function-only form**
+  - Remove object form support; accept only functions for guards/delays
   - Update all related tests accordingly
 - **Refactor emitters to use rxjs Observable**
   - Replace internal pausable implementation with `@bemedev/rx-pausable`
@@ -775,8 +775,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 </summary>
 
 - **Add `_legacy` parameter to `addOptions` and `provideOptions` methods**
-  - Allows access to previously defined actions, predicates, delays,
-    promises, machines, and emitters
+  - Allows access to previously defined actions, guards, delays, promises,
+    machines, and emitters
   - Available in both `Machine` and `Interpreter` classes
   - Provides immutable snapshot of options from previous calls
   - Enables reusing and composing existing options without manual tracking

@@ -19,7 +19,7 @@ export type ToTransition_F = <
   config: TransitionConfig,
   options?: Pick<
     SimpleMachineOptions<Pc, Tc, T, Eo>,
-    'actions' | 'predicates'
+    'actions' | 'guards'
   >,
 ) => Transition<Eo, Pc, Tc, T>;
 
@@ -29,7 +29,7 @@ export type ToTransition_F = <
  * @param events - The events map used for action and guard resolution.
  * @param actorsMap - The actors map used for action and guard resolution.
  * @param config - The transition configuration to convert.
- * @param options - Optional machine options that may include actions and predicates configurations.
+ * @param options - Optional machine options that may include actions and guards configurations.
  * @returns A structured transition object with target, actions, guards, and optional description.
  *
  * @see {@linkcode ToTransition_F} for more details
@@ -52,7 +52,7 @@ export const toTransition: ToTransition_F = (
     .typed(config.actions)
     .map(action => toAction(events, actorsMap, action, options?.actions));
   const guards = toArray<GuardConfig>(config.guards).map(guard =>
-    toPredicate(events, actorsMap, guard, options?.predicates),
+    toPredicate(events, actorsMap, guard, options?.guards),
   );
 
   const out = { target, actions, guards } as any;

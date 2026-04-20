@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export const machine = createMachine(
   'src/__tests__/interpreters/tags/tags.machine',
@@ -20,5 +21,11 @@ export const machine = createMachine(
       },
       final: {},
     },
+  },
+  {
+    eventsMap: type({
+      NEXT: 'never',
+      PREV: 'never',
+    }),
   },
 );

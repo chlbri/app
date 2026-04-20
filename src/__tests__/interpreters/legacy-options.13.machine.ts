@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/legacy-options.13.machine',
@@ -13,5 +14,14 @@ export default createMachine(
         },
       },
     },
+  },
+  {
+    context: type('number'),
+
+    eventsMap: type({
+      OP1: 'never',
+      OP2: 'never',
+      OP3: 'never',
+    }),
   },
 );

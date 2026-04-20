@@ -10,6 +10,7 @@ import type {
   EventArgObject,
   EventObject,
   EventsMap,
+  ExtractSender,
 } from '#events';
 import type { Interpreter } from '#interpreter';
 import type {
@@ -198,27 +199,13 @@ type Option<
   tupleOf: OptionTupleOf;
 
   sender: {
-    <T extends Eo['type']>(
+    <const T extends Eo['type']>(
       type: T,
-    ): (
-      ...data: Extract<Eo, { type: T }>['payload'] extends infer P
-        ? object extends P
-          ? P extends never
-            ? []
-            : [payload: P]
-          : []
-        : []
-    ) => TestArr;
+    ): (...data: ExtractSender<Eo, T>) => TestArr;
 
-    index: <T extends Eo['type']>(
+    index: <const T extends Eo['type']>(
       type: T,
-    ) => (
-      ...data: Extract<Eo, { type: T }>['payload'] extends infer P
-        ? object extends P
-          ? [index: number]
-          : [index: number, payload: P]
-        : [index: number]
-    ) => TestArr;
+    ) => (...data: ExtractSender<Eo, T>) => TestArr;
   };
 };
 
@@ -406,7 +393,7 @@ export const constructTests = <
             const _payload = JSON.stringify(data).substring(0, 15);
             const invite = `#${index()} => send ${type} event with payload : ${_payload}`;
             const payload = __payload[0] ?? {};
-            const event = { type, payload } as EventArg<E>;
+            const event: any = { type, payload };
             return tupleOf(invite, async () => {
               service.send(event);
               await fakeWaiter(0);
@@ -426,7 +413,7 @@ export const constructTests = <
                 __payload[0] < 10 ? '0' + __payload[0] : __payload[0];
               const invite = `#${index(_index)} => send ${type} event with payload : ${_payload}`;
               const payload = __payload[1] ?? {};
-              const event = { type, payload } as EventArg<E>;
+              const event: any = { type, payload };
               return tupleOf(invite, async () => {
                 service.send(event);
                 await fakeWaiter(0);
@@ -445,7 +432,7 @@ export const constructTests = <
       const invite = `#${index(_index)} => current value is :${_value}`;
 
       return tupleOf(invite, () => {
-        expect(service.value).toEqual(value);
+        expect(service.state.value).toEqual(value);
       });
     },
 

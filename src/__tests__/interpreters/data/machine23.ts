@@ -1,6 +1,6 @@
 import { createMachine } from '#machine';
 import { toFunction } from '#utils';
-import { machine2 } from './machine2';
+import { machine2, typings2 } from './machine2';
 
 // #region machine23
 export const machine23 = createMachine(
@@ -90,6 +90,7 @@ export const machine23 = createMachine(
       final: {},
     },
   },
+  typings2,
 )
   .provideOptions(toFunction<any>(machine2.options))
   .provideOptions(({ debounce: _debounce, assign }) => ({

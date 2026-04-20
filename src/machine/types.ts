@@ -593,7 +593,7 @@ export type FnMapFrom<
  * All options can be :
  * * `initials` - a record of initial states.
  * * `actions` - a partial record of actions, where keys are action names and values are action functions.
- * * `predicates` - a partial record of predicates, where keys are predicate names and values are predicate functions.
+ * * `guards` - a partial record of guards, where keys are predicate names and values are predicate functions.
  * * `promises` - a partial record of promises, where keys are promise names and values are promise functions.
  * * `delays` - a partial record of delays, where keys are delay names and values are delay functions.
  * * `machines` - a partial record of child services, where keys are machine names and values are child services.
@@ -818,14 +818,14 @@ export type ActionKeysFrom<T extends KeyU<'__actionKey'>> =
   T['__actionKey'];
 
 /**
- * Get all predicates map from a machine.
+ * Get all guards map from a machine.
  *
- * @template : {@linkcode KeyU}<'predicates'> [T] - type of the machine predicates map.
+ * @template : {@linkcode KeyU}<'guards'> [T] - type of the machine guards map.
  *
  * @see {@linkcode NotUndefined}
  */
-export type PredicatesMapFrom<T extends KeyU<'predicates'>> = NotUndefined<
-  T['predicates']
+export type PredicatesMapFrom<T extends KeyU<'guards'>> = NotUndefined<
+  T['guards']
 >;
 
 /**
@@ -842,9 +842,9 @@ export type PredicateSFrom<T extends KeyU<'__predicate'>> = NotUndefined<
 /**
  * Get the guard keys from a machine.
  *
- * @template : {@linkcode KeyU}<'predicates'> [T] - type of the machine machine predicates map.
+ * @template : {@linkcode KeyU}<'guards'> [T] - type of the machine machine guards map.
  *
- * @see {@linkcode NotUndefined} for ensuring the predicates map is not undefined.
+ * @see {@linkcode NotUndefined} for ensuring the guards map is not undefined.
  * @see {@linkcode PredicatesMapFrom} for extracting guards from the machine.
  */
 export type GuardKeysFrom<T extends KeyU<'__guardKey'>> = T['__guardKey'];

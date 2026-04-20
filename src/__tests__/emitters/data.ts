@@ -105,7 +105,7 @@ export const machineEmitter3 = createMachine(
     },
   },
   {
-    context: type('number'),
+    context: type(({ union }) => union('number', 'undefined')),
     actorsMap: type({
       emitters: {
         interval1: {

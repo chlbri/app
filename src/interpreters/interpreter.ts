@@ -20,10 +20,9 @@ import {
   transformEventArg,
   type ActorsConfigMap,
   type EventArgObject,
-  type EventArgT,
   type EventObject,
   type EventsMap,
-  type ToEventsR,
+  type ExtractSender,
 } from '#events';
 import { toPredicate, type GuardConfig } from '#guards';
 import { getEntries, getExits } from '#machine';
@@ -148,7 +147,7 @@ import { createSubscriber, type SubscriberClass } from './subscriber';
  * allowing for the execution of state transitions, handling of events, and management of the machine's lifecycle.
  * It supports various modes of operation, including strict and normal modes,
  * and provides mechanisms for error and warning handling.
- * * It also allows for the execution of actions, predicates, and delays,
+ * * It also allows for the execution of actions, guards, and delays,
  * * as well as the management of child interpreters and scheduled tasks.
  *
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
@@ -1124,6 +1123,7 @@ export class Interpreter<
       await this.#performActions(...toArray.typed(diffEntries));
       return transition;
     }
+
     const { guards, actions, target } = transition;
     const { diffEntries, diffExits } = this.#diffNext(target);
 
@@ -1816,7 +1816,7 @@ export class Interpreter<
    * Provides options for the interpreter and returns a new interpreter instance.
    *
    * @param option a function that provides options for the machine.
-   * Options can include actions, predicates, delays, promises, and child machines.
+   * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new interpreter instance with the provided options applied.
    */
   provideOptions = (
@@ -1956,6 +1956,7 @@ export class Interpreter<
       if (splitsAreDifferents) return split2 - split1;
       return from2.localeCompare(from1);
     });
+    console.warn('flat2', JSON.stringify(flat2[0], null, 2));
 
     return flat2;
   };
@@ -2008,11 +2009,8 @@ export class Interpreter<
    *
    * @see {@linkcode send} for sending events directly.
    */
-  sender = <T extends EventArgT<E>>(type: T) => {
-    type Arg = Extract<ToEventsR<E, A>, { type: T }>['payload'];
-    type Payload = object extends Arg ? [] : [Arg];
-
-    return (...data: Payload) => {
+  sender = <const T extends Eo['type']>(type: T) => {
+    return (...data: ExtractSender<Eo, T>) => {
       const payload = data.length === 1 ? data[0] : {};
       const event = { type, payload } as unknown as EventArgObject<Eo>;
       return this.send(event);
@@ -2204,13 +2202,13 @@ export class Interpreter<
   toPredicateFn = (guard: GuardConfig) => {
     const events = this.#machine.eventsMap;
     const actorsMap = this.#machine.actorsMap;
-    const predicates = this.#machine.predicates;
+    const guards = this.#machine.guards;
 
     const { predicate, errors } = toPredicate<E, A, Pc, Tc, Ta, Eo>(
       events,
       actorsMap,
       guard,
-      predicates,
+      guards,
     );
 
     return this.#returnWithWarning(predicate, ...errors);
