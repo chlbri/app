@@ -17,5 +17,9 @@ export * from './strings';
 export * from './toFunction';
 export * from './undefined';
 export * from './typings';
+export * from './parseTree';
+export * from './parseTree.types';
+export { buildPathsMap } from './parseTree.helpers';
+export * from './readonly';
 
 export const deepEqual = <T>(a: T, b: T) => equal(a, b);

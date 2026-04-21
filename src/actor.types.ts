@@ -1,5 +1,9 @@
 import type { ActionConfig } from '#actions';
-import type { SingleOrArrayT, TransitionConfigMapA } from '#transitions';
+import type {
+  SingleOrArrayT,
+  TransitionConfig,
+  TransitionConfigMapA,
+} from '#transitions';
 import type { Require } from '#bemedev/globals/types';
 
 export type CommonActor = {
@@ -34,6 +38,11 @@ export type EmitterConfig<Paths = string> =
     : never;
 
 export type ExtractSrcFromActor<T extends { src: string }> = T['src'];
+
+export type __ChildConfig = CommonActor & {
+  on: [string, TransitionConfig[]][];
+  contexts?: [string, string][];
+};
 
 export type _ChildConfig<Paths = string> = CommonActor &
   (
