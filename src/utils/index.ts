@@ -21,5 +21,6 @@ export * from './parseTree';
 export * from './parseTree.types';
 export { buildPathsMap } from './parseTree.helpers';
 export * from './readonly';
+export * from './reduceDescribers';
 
 export const deepEqual = <T>(a: T, b: T) => equal(a, b);

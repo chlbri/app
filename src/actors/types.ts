@@ -1,4 +1,4 @@
-import type { ActionConfig } from '#actions';
+import type { WithDescriber } from '#actions';
 import type {
   SingleOrArrayT,
   TransitionConfig,
@@ -14,7 +14,7 @@ export type CommonActor = {
  * The finally part of a completion configuration.
  *
  * @see {@linkcode TransitionConfigMapA} for the type of transition configurations.
- * @see {@linkcode ActionConfig} for the type of action configurations.
+ * @see {@linkcode WithDescriber} for the type of action configurations.
  */
 export type FinallyConfig =
   Omit<TransitionConfigMapA, 'target'> extends infer F extends Omit<
@@ -22,8 +22,8 @@ export type FinallyConfig =
     'target'
   >
     ?
-        | (F | ActionConfig)
-        | readonly [...Require<F, 'guards'>[], F | ActionConfig]
+        | (F | WithDescriber)
+        | readonly [...Require<F, 'guards'>[], F | WithDescriber]
     : never;
 
 export type _EmitterConfig<Paths = string> = CommonActor & {

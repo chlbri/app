@@ -1,4 +1,4 @@
-import type { ActionConfig, FromActionConfig } from '#actions';
+import type { WithDescriber, FromActionConfig } from '#actions';
 import type {
   NotUndefined,
   PrimitiveObject,
@@ -13,7 +13,7 @@ type gType = typeof GUARD_TYPE;
 type and = gType['and'];
 type or = gType['or'];
 
-export type GuardUnion = ActionConfig | GuardAnd | GuardOr;
+export type GuardUnion = WithDescriber | GuardAnd | GuardOr;
 
 export type GuardAnd = {
   [k in and]: GuardUnion[];
@@ -26,7 +26,7 @@ export type GuardOr = {
 /**
  * JSON configuration for a guard.
  *
- * @see {@linkcode ActionConfig} for more details.
+ * @see {@linkcode WithDescriber} for more details.
  * @see {@linkcode GuardAnd} for more details.
  * @see {@linkcode GuardOr} for more details.
  */
@@ -42,7 +42,7 @@ export type GuardConfig = GuardUnion;
  * @see {@linkcode GuardAnd} for more details.
  * @see {@linkcode GuardOr} for more details.
  */
-export type FromGuard<T extends GuardConfig> = T extends ActionConfig
+export type FromGuard<T extends GuardConfig> = T extends WithDescriber
   ? FromActionConfig<T>
   : T extends GuardAnd
     ? FromGuard<ReduceArray<T['and']>>

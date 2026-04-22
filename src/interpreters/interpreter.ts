@@ -1,4 +1,4 @@
-import { toAction, type ActionConfig } from '#actions';
+import { toAction, type WithDescriber } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
 import isPrimitive from '#bemedev/features/common/castings/primitive/is';
 import {
@@ -105,7 +105,7 @@ import type {
   WorkingStatus,
 } from './interpreter.types';
 
-import type { FinallyConfig } from '#actor';
+import type { FinallyConfig } from '../actors/types';
 import _unknown from '#bemedev/features/common/castings/_unknown';
 import type {
   AllowedNames,
@@ -125,7 +125,7 @@ import type {
   TagFrom,
 } from '#machines';
 import { createScheduler } from '@bemedev/scheduler';
-import type { ChildConfig, EmitterConfig } from '../actor.types';
+import type { ChildConfig, EmitterConfig } from '../actors/types';
 import { createSubscriber, type SubscriberClass } from './subscriber';
 
 /**
@@ -952,7 +952,7 @@ export class Interpreter<
     } else throw error;
   }
 
-  #performActions = async (...actions: ActionConfig[]) => {
+  #performActions = async (...actions: WithDescriber[]) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
 
     for (const fn of fns) {
@@ -2105,8 +2105,8 @@ export class Interpreter<
     const keysNext = Object.keys(flatNext);
 
     const keys = entriesCurrent.map(([key]) => key);
-    const diffEntries: ActionConfig[] = [];
-    const diffExits: ActionConfig[] = [];
+    const diffEntries: WithDescriber[] = [];
+    const diffExits: WithDescriber[] = [];
 
     // #region Entry actions
 
@@ -2187,7 +2187,7 @@ export class Interpreter<
     return;
   };
 
-  toActionFn = (action: ActionConfig) => {
+  toActionFn = (action: WithDescriber) => {
     const events = this.#machine.eventsMap;
     const actorsMap = this.#machine.actorsMap;
     const actions = this.#machine.actions;

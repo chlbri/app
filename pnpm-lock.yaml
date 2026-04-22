@@ -20,6 +20,9 @@ importers:
       '@bemedev/interval2':
         specifier: ^0.1.3
         version: 0.1.3
+      '@bemedev/pipe':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@bemedev/scheduler':
         specifier: ^0.1.0
         version: 0.1.0
@@ -187,6 +190,10 @@ packages:
   '@bemedev/interval2@0.1.3':
     resolution: {integrity: sha512-RWbferVoFH0CkpeNZ7DW2MFdl04clqp4Q9WaiQAqlW8kgsizQltXhy780QDtWkQi+cRLWZ9j/ItYcVJ1nr+vDQ==}
     engines: {node: '>=20'}
+
+  '@bemedev/pipe@1.0.0':
+    resolution: {integrity: sha512-hHRPsT18hRz49Xq5sR3QuN3wotZ7V8XvP4nMvuyU89CwKxu9HRLZ5G/ZCvv4Ztb597x4mtpwYX0+Jq6Qd2RxWg==}
+    engines: {node: '>=24'}
 
   '@bemedev/rolldown-config@0.5.0':
     resolution: {integrity: sha512-2/aYRV7Fnh7O7p/oUvRZ02js4gStCjZTfa3bE2g28WZBkvhH4aMkMFN3Cdj+ayIhn+gKDVrI3TAtTOxINHRhrw==}
@@ -2046,6 +2053,8 @@ snapshots:
   '@bemedev/interval2@0.1.3':
     dependencies:
       '@bemedev/sleep': 0.1.2
+
+  '@bemedev/pipe@1.0.0': {}
 
   '@bemedev/rolldown-config@0.5.0(glob@13.0.6)(rolldown@1.0.0-rc.16)(rollup@4.60.2)(typescript@6.0.3)':
     dependencies:

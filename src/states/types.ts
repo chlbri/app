@@ -1,4 +1,4 @@
-import type { Action, ActionConfig, FromActionConfig } from '#actions';
+import type { Action, WithDescriber, FromActionConfig } from '#actions';
 import type {
   Equals,
   Keys,
@@ -22,20 +22,28 @@ export type SNC = NodeConfig;
 
 export type ActivityMap =
   | {
-      guards: SingleOrArrayL<GuardConfig>;
-      actions: SingleOrArrayL<ActionConfig>;
+      guards?: SingleOrArrayL<GuardConfig>;
+      actions: SingleOrArrayL<WithDescriber>;
     }
-  | ActionConfig;
+  | WithDescriber;
 
-export type ActivityArray = SingleOrArrayL<ActivityMap>;
+export type ActivityArray =
+  | [
+      ...{
+        guards: SingleOrArrayL<GuardConfig>;
+        actions: SingleOrArrayL<WithDescriber>;
+      }[],
+      ActivityMap,
+    ]
+  | ActivityMap;
 
 export type ActivityConfig = Record<string, ActivityArray>;
 
 export type ActionsFromActivity<TS extends ActivityArray> = TS extends any
   ? ReduceArray<TS> extends infer TR
-    ? TR extends { actions: SingleOrArrayL<ActionConfig> }
+    ? TR extends { actions: SingleOrArrayL<WithDescriber> }
       ? FromGuard<ReduceArray<TR['actions']>>
-      : FromActionConfig<ReduceArray<Extract<TR, ActionConfig>>>
+      : FromActionConfig<ReduceArray<Extract<TR, WithDescriber>>>
     : never
   : never;
 
@@ -69,8 +77,8 @@ export type ExtractDelaysFromActivity<T> = 'activities' extends keyof T
 
 export type BaseConfig = {
   readonly description?: string;
-  readonly entry?: SingleOrArrayL<ActionConfig>;
-  readonly exit?: SingleOrArrayL<ActionConfig>;
+  readonly entry?: SingleOrArrayL<WithDescriber>;
+  readonly exit?: SingleOrArrayL<WithDescriber>;
   readonly tags?: SingleOrArrayL<string>;
   readonly activities?: ActivityConfig;
 };

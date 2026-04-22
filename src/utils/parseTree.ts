@@ -1,5 +1,5 @@
-import type { ActionConfig } from '#actions';
-import type { __ChildConfig, _EmitterConfig } from '#actor';
+import type { WithDescriber } from '#actions';
+import type { __ChildConfig, _EmitterConfig } from '../actors/types';
 import { flatMap, type NodeConfig } from '#states';
 import { buildPathsMap, traverse } from './parseTree.helpers';
 import type { OutputParseTree, ParseTreeContext } from './parseTree.types';
@@ -7,21 +7,18 @@ import type { OutputParseTree, ParseTreeContext } from './parseTree.types';
 export type ParseTree_F = (config: NodeConfig) => OutputParseTree;
 
 export const parseTree: ParseTree_F = config => {
-  const flat = flatMap(config);
+  const __config = config;
+  const flat = flatMap(__config);
   const allPaths = Object.keys(flat);
 
   // Initialize context with Sets
   const ctx: ParseTreeContext = {
-    actionsSet: new Set<ActionConfig>(),
-    guardsSet: new Set<ActionConfig>(),
-    emittersMap: new Map<string, _EmitterConfig>(),
-    childrenMap: new Map<string, __ChildConfig>(),
-    delaysSet: new Set<string>(),
-    pathsSet: new Set<string>(),
-    actionsKeysSet: new Set<string>(),
-    guardsKeysSet: new Set<string>(),
-    actionsAddedSet: new Set<string>(),
-    guardsAddedSet: new Set<string>(),
+    actions: new Set<string>(),
+    guards: new Set<string>(),
+    emitters: new Set<string>(),
+    children: new Set<string>(),
+    delays: new Set<string>(),
+    allPaths: new Set<string>(allPaths),
   };
 
   // Traverse through all nodes in flat structure
@@ -29,7 +26,7 @@ export const parseTree: ParseTree_F = config => {
 
   return {
     flat,
-    __config: config,
+    __config,
     keys: {
       actions: Array.from(ctx.actionsKeysSet),
       guards: Array.from(ctx.guardsKeysSet),

@@ -1,4 +1,4 @@
-import type { ChildConfig } from '../../actor.types';
+import type { ChildConfig } from '../../actors/types';
 import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toTransition } from '#transitions';

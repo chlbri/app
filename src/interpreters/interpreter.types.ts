@@ -1,6 +1,6 @@
 import type {
   Action2,
-  ActionConfig,
+  WithDescriber,
   ActionResult,
   MaybeAsyncActionResult,
 } from '#actions';
@@ -72,7 +72,7 @@ export type ToAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action?: ActionConfig) => Action2<E, Pc, Tc, T>;
+> = (action?: WithDescriber) => Action2<E, Pc, Tc, T>;
 
 export type PerformActionLater_F<
   E extends EventObject = EventObject,
@@ -237,7 +237,7 @@ export interface AnyInterpreter<
   subscribe: AddSubscriber_F<E, A, Tc, T>;
 
   send: (event: any) => Promise<void>;
-  toActionFn: (action: ActionConfig) => any;
+  toActionFn: (action: WithDescriber) => any;
   toPredicateFn: (guard: GuardConfig) => any;
   toPromiseSrcFn: (src: string) => any;
   toDelayFn: (delay: string) => any;
@@ -268,8 +268,8 @@ export type TimeOutAction = {
 
 export type DiffNext = {
   sv: StateValue;
-  diffEntries: ActionConfig[];
-  diffExits: ActionConfig[];
+  diffEntries: WithDescriber[];
+  diffExits: WithDescriber[];
 };
 
 export type CollectedPausable = {

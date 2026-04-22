@@ -1,4 +1,4 @@
-import type { Action2, ActionConfig, ActionResult } from '#actions';
+import type { Action2, WithDescriber, ActionResult } from '#actions';
 
 import type { DefinedValue } from '#guards';
 import type {
@@ -80,7 +80,7 @@ export type Elements<
 export type GetIO_F = (
   key: 'exit' | 'entry',
   node?: NodeConfig,
-) => ActionConfig[];
+) => WithDescriber[];
 
 /**
  * Simple representation of a machine with meaningful properties.

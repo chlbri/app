@@ -1,5 +1,5 @@
 import { readonly } from '#utils';
-import { parseTree } from '../../utils/parseTree';
+import { parseTree } from './parseTree';
 
 describe('#01 => parseTree', () => {
   // #region atomic
@@ -68,8 +68,12 @@ describe('#01 => parseTree', () => {
 
   // #region entry/exit actions
   describe('#02 => entry and exit actions', () => {
+    const compositeAction = readonly({
+      name: 'entryAction2',
+      description: 'another entry action',
+    });
     const config = {
-      entry: ['entryAction1', 'entryAction2'],
+      entry: ['entryAction1', compositeAction],
       exit: 'exitAction1',
     } as const;
     const result = parseTree(config);
@@ -85,7 +89,7 @@ describe('#01 => parseTree', () => {
 
     test('#03 => entry actions in actions array', () => {
       expect(result.actions).toContain('entryAction1');
-      expect(result.actions).toContain('entryAction2');
+      expect(result.actions).toContainEqual(compositeAction);
     });
 
     test('#04 => exit action in actions array', () => {
@@ -120,12 +124,16 @@ describe('#01 => parseTree', () => {
     });
 
     describe('#02 => transition object with actions and guards', () => {
+      const complexGuard = readonly({
+        name: 'complexGuard',
+        description: 'a complex guard',
+      });
       const config = readonly({
         on: {
           NEXT: {
             target: '/child',
             actions: ['doSomething'],
-            guards: ['canGo'],
+            guards: ['canGo', complexGuard],
           },
         },
       });
@@ -137,6 +145,7 @@ describe('#01 => parseTree', () => {
 
       test('#02 => guard key extracted', () => {
         expect(result.keys.guards).toContain('canGo');
+        expect(result.keys.guards).toContain('complexGuard');
       });
 
       test('#03 => action in actions array', () => {
@@ -145,14 +154,25 @@ describe('#01 => parseTree', () => {
 
       test('#04 => guard in guards array', () => {
         expect(result.guards).toContain('canGo');
+        expect(result.guards).toContainEqual(complexGuard);
       });
     });
 
     describe('#03 => array transition with guards then target', () => {
+      const guardsB = readonly({
+        name: 'guardsB',
+        description: 'guards for transition B',
+      });
+      const duplicateGuardsB = readonly({
+        name: 'guardsB',
+        description: 'guards for transition B',
+      });
       const config = readonly({
         on: {
           NEXT: [
             { target: '/a', guards: ['guardA'], actions: ['actionA'] },
+            { target: '/b', guards: [guardsB], actions: ['actionB'] },
+            { guards: duplicateGuardsB },
             '/default',
           ],
         },
@@ -161,6 +181,7 @@ describe('#01 => parseTree', () => {
 
       test('#01 => guard key extracted', () => {
         expect(result.keys.guards).toContain('guardA');
+        expect(result.keys.guards).toContain('guardsB');
       });
 
       test('#02 => action key extracted', () => {
@@ -182,12 +203,28 @@ describe('#01 => parseTree', () => {
     });
 
     describe('#02 => always as array with actions and guards', () => {
+      const alwaysAction2 = readonly({
+        name: 'alwaysAction2',
+        description: 'another always action',
+      });
+      const alwaysAction3 = readonly({
+        name: 'alwaysAction3',
+        description: 'yet another always action',
+      });
+      const alwaysGuard2 = readonly({
+        name: 'alwaysGuard2',
+        description: 'another always guard',
+      });
+      const alwaysGuard3 = readonly({
+        name: 'alwaysGuard3',
+        description: 'yet another always guard',
+      });
       const config = readonly({
         always: [
           {
             target: '/a',
-            guards: ['alwaysGuard'],
-            actions: ['alwaysAction'],
+            guards: ['alwaysGuard', alwaysGuard2, alwaysGuard3],
+            actions: ['alwaysAction', alwaysAction2, alwaysAction3],
           },
           '/fallback',
         ],
@@ -196,18 +233,26 @@ describe('#01 => parseTree', () => {
 
       test('#01 => guard key extracted', () => {
         expect(result.keys.guards).toContain('alwaysGuard');
+        expect(result.keys.guards).toContain('alwaysGuard2');
+        expect(result.keys.guards).toContain('alwaysGuard3');
       });
 
       test('#02 => action key extracted', () => {
         expect(result.keys.actions).toContain('alwaysAction');
+        expect(result.keys.actions).toContain('alwaysAction2');
+        expect(result.keys.actions).toContain('alwaysAction3');
       });
 
       test('#03 => guard in guards array', () => {
         expect(result.guards).toContain('alwaysGuard');
+        expect(result.guards).toContainEqual(alwaysGuard2);
+        expect(result.guards).toContainEqual(alwaysGuard3);
       });
 
       test('#04 => action in actions array', () => {
         expect(result.actions).toContain('alwaysAction');
+        expect(result.actions).toContainEqual(alwaysAction2);
+        expect(result.actions).toContainEqual(alwaysAction3);
       });
     });
   });

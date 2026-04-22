@@ -1,8 +1,16 @@
-import type { __ChildConfig } from '#actor';
+import type { __ChildConfig } from '../actors/types';
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import type { ConfigDef, NoExtraKeysConfigDef } from '#machines';
-import type { NodeConfig } from '#states';
+import type { ActivityConfig, NodeConfig } from '#states';
+import type { _TransitionConfig, TransitionConfig } from '#transitions';
+import type { SingleOrArrayL } from '~types';
+import { reduceGuards } from '../guards/functions/helpers/reduceGuards';
 import type { ParseTreeContext } from './parseTree.types';
+import type { GuardUnion } from '#guards';
+import type { WithDescriber } from '#actions';
+import { reduceActivity } from '../states/functions/reduceActivity';
+import { pipe } from '@bemedev/pipe';
+import { reduceDescribers } from './reduceDescribers';
 
 // Recursively builds the paths map (ConfigDef) from a NodeConfig node.
 // `targets` is all state paths in the machine; `initial` is only set for compound nodes;
@@ -35,111 +43,64 @@ export const buildPathsMap = (
 };
 
 // Helper to extract from single activity
-export const processActivity = (activity: any, ctx: ParseTreeContext) => {
-  if (typeof activity === 'string') {
-    ctx.actionsKeysSet.add(activity);
-    if (!ctx.actionsAddedSet.has(activity)) {
-      ctx.actionsAddedSet.add(activity);
-      ctx.actionsSet.add(activity);
-    }
-  } else if (typeof activity === 'object' && activity !== null) {
-    if ('actions' in activity) {
-      const actions = toArray.typed(activity.actions);
-      actions.forEach(a => {
-        const aKey =
-          typeof a === 'string' ? a : (a as any).description || '';
-        if (aKey) ctx.actionsKeysSet.add(aKey);
-        if (!ctx.actionsAddedSet.has(aKey)) {
-          ctx.actionsAddedSet.add(aKey);
-          ctx.actionsSet.add(a);
-        }
-      });
-    }
-    if ('guards' in activity) {
-      const guards = toArray.typed(activity.guards);
-      guards.forEach(g => {
-        const gKey =
-          typeof g === 'string' ? g : (g as any).description || '';
-        if (gKey) ctx.guardsKeysSet.add(gKey);
-        if (!ctx.guardsAddedSet.has(gKey)) {
-          ctx.guardsAddedSet.add(gKey);
-          ctx.guardsSet.add(g);
-        }
-      });
-    }
-  }
+export const processActivity = (
+  ctx: ParseTreeContext,
+  activity?: ActivityConfig,
+) => {
+  const pipeOn = pipe(
+    (value?: ActivityConfig) => value ?? {},
+    reduceActivity,
+    values => {
+      values.actions.forEach(ctx.actions.add.bind(ctx.actions));
+      values.guards.forEach(ctx.guards.add.bind(ctx.guards));
+      values.delays.forEach(ctx.delays.add.bind(ctx.delays));
+    },
+  );
+
+  pipeOn(activity);
+};
+
+const processGuards = (
+  ctx: ParseTreeContext,
+  guards?: SingleOrArrayL<GuardUnion>,
+) => {
+  const pipeOn = pipe(
+    (values?: typeof guards) => toArray.typed(values),
+    values => reduceGuards(...values),
+    values => reduceDescribers(...values),
+    values => values.forEach(ctx.guards.add.bind(ctx.guards)),
+  );
+
+  pipeOn(guards);
+};
+
+const processActions = (
+  ctx: ParseTreeContext,
+  actions?: SingleOrArrayL<WithDescriber>,
+) => {
+  const pipeOn = pipe(
+    (values?: typeof actions) => toArray.typed(values),
+    values => reduceDescribers(...values),
+    values => values.forEach(ctx.actions.add.bind(ctx.actions)),
+  );
+
+  pipeOn(actions);
 };
 
 // Helper to extract from transitions
 export const processTransition = (
-  transition: any,
+  transition: _TransitionConfig,
   eventKey: string,
   ctx: ParseTreeContext,
 ) => {
   if (typeof transition === 'string') {
     ctx.pathsSet.add(`on.${eventKey}`);
-  } else if (Array.isArray(transition)) {
-    transition.forEach((trans, index) => {
-      if (typeof trans === 'object') {
-        if ('target' in trans || 'actions' in trans) {
-          ctx.pathsSet.add(
-            `on.${eventKey}${typeof trans === 'object' && Array.isArray(transition) ? `.[${index}]` : ''}`,
-          );
-        }
-        if ('actions' in trans) {
-          const actions = toArray.typed(trans.actions);
-          actions.forEach(a => {
-            const aKey =
-              typeof a === 'string' ? a : (a as any).description || '';
-            if (aKey) ctx.actionsKeysSet.add(aKey);
-            if (!ctx.actionsAddedSet.has(aKey)) {
-              ctx.actionsAddedSet.add(aKey);
-              ctx.actionsSet.add(a);
-            }
-          });
-        }
-        if ('guards' in trans) {
-          const guards = toArray.typed(trans.guards);
-          guards.forEach(g => {
-            const gKey =
-              typeof g === 'string' ? g : (g as any).description || '';
-            if (gKey) ctx.guardsKeysSet.add(gKey);
-            if (!ctx.guardsAddedSet.has(gKey)) {
-              ctx.guardsAddedSet.add(gKey);
-              ctx.guardsSet.add(g);
-            }
-          });
-        }
-      }
-    });
   } else if (typeof transition === 'object') {
     if ('target' in transition || 'actions' in transition) {
       ctx.pathsSet.add(`on.${eventKey}`);
     }
-    if ('actions' in transition) {
-      const actions = toArray.typed(transition.actions);
-      actions.forEach(a => {
-        const aKey =
-          typeof a === 'string' ? a : (a as any).description || '';
-        if (aKey) ctx.actionsKeysSet.add(aKey);
-        if (!ctx.actionsAddedSet.has(aKey)) {
-          ctx.actionsAddedSet.add(aKey);
-          ctx.actionsSet.add(a);
-        }
-      });
-    }
-    if ('guards' in transition) {
-      const guards = toArray.typed(transition.guards);
-      guards.forEach(g => {
-        const gKey =
-          typeof g === 'string' ? g : (g as any).description || '';
-        if (gKey) ctx.guardsKeysSet.add(gKey);
-        if (!ctx.guardsAddedSet.has(gKey)) {
-          ctx.guardsAddedSet.add(gKey);
-          ctx.guardsSet.add(g);
-        }
-      });
-    }
+    processActions(ctx, transition.actions);
+    processGuards(ctx, transition.guards);
   }
 };
 
@@ -158,7 +119,7 @@ export const processActor = (
     // ChildConfig
     if (!ctx.childrenMap.has(actorKey)) {
       const childEntry: __ChildConfig = {
-        description: actor.description,
+        description: actor.name,
         on: Object.entries(actor.on || {}),
         contexts: actor.contexts
           ? Object.entries(actor.contexts)
@@ -172,48 +133,19 @@ export const processActor = (
 
 // Process all nodes in flat structure
 export const traverse = (node: NodeConfig, ctx: ParseTreeContext) => {
-  // Extract entry actions
-  if (node.entry) {
-    const entries = toArray.typed(node.entry as any);
-    entries.forEach(entry => {
-      const eKey =
-        typeof entry === 'string'
-          ? entry
-          : (entry as any).description || '';
-      if (eKey) ctx.actionsKeysSet.add(eKey);
-      if (!ctx.actionsAddedSet.has(eKey)) {
-        ctx.actionsAddedSet.add(eKey);
-        ctx.actionsSet.add(entry);
-      }
-    });
-  }
-
-  // Extract exit actions
-  if (node.exit) {
-    const exits = toArray.typed(node.exit as any);
-    exits.forEach(exit => {
-      const eKey =
-        typeof exit === 'string' ? exit : (exit as any).description || '';
-      if (eKey) ctx.actionsKeysSet.add(eKey);
-      if (!ctx.actionsAddedSet.has(eKey)) {
-        ctx.actionsAddedSet.add(eKey);
-        ctx.actionsSet.add(exit);
-      }
-    });
-  }
+  processActions(ctx, node.entry);
+  processActions(ctx, node.exit);
+  processActivity(ctx, node.activities);
 
   // Extract from activities
-  if (node.activities) {
-    Object.entries(node.activities).forEach(([_actKey, activity]) => {
-      const activities = toArray.typed(activity as any);
-      activities.forEach(act => processActivity(act, ctx));
-    });
-  }
 
   // Extract from on transitions
   if (node.on) {
     Object.entries(node.on).forEach(([eventKey, transition]) => {
-      processTransition(transition, eventKey, ctx);
+      const transitions = toArray.typed(transition);
+      transitions.forEach(trans =>
+        processTransition(trans as any, eventKey, ctx),
+      );
     });
   }
 
@@ -226,24 +158,24 @@ export const traverse = (node: NodeConfig, ctx: ParseTreeContext) => {
           if ('actions' in trans) {
             const actions = toArray.typed(trans.actions);
             actions.forEach(a => {
-              const aKey =
-                typeof a === 'string' ? a : (a as any).description || '';
-              if (aKey) ctx.actionsKeysSet.add(aKey);
-              if (!ctx.actionsAddedSet.has(aKey)) {
-                ctx.actionsAddedSet.add(aKey);
-                ctx.actionsSet.add(a);
+              const aKey = typeof a === 'string' ? a : (a as any).name;
+              if (aKey) {
+                if (!ctx.actionsKeysSet.has(aKey)) {
+                  ctx.actionsSet.add(a);
+                }
+                ctx.actionsKeysSet.add(aKey);
               }
             });
           }
           if ('guards' in trans) {
             const guards = toArray.typed(trans.guards);
             guards.forEach(g => {
-              const gKey =
-                typeof g === 'string' ? g : (g as any).description || '';
-              if (gKey) ctx.guardsKeysSet.add(gKey);
-              if (!ctx.guardsAddedSet.has(gKey)) {
-                ctx.guardsAddedSet.add(gKey);
-                ctx.guardsSet.add(g);
+              const gKey = typeof g === 'string' ? g : (g as any).name;
+              if (gKey) {
+                if (!ctx.guardsKeysSet.has(gKey)) {
+                  ctx.guardsSet.add(g);
+                }
+                ctx.guardsKeysSet.add(gKey);
               }
             });
           }

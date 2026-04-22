@@ -1,4 +1,4 @@
-import type { EmitterConfig } from '../../actor.types';
+import type { EmitterConfig } from '../../actors/types';
 import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { SimpleMachineOptions } from '#machines';

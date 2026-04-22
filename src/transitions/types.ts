@@ -4,15 +4,16 @@ import type {
   NotUndefined,
   PrimitiveObject,
   Require,
+  SoA,
 } from '#bemedev/globals/types';
 import type { EventObject } from '#events';
 import type { Observable } from 'rxjs';
-import type { Action, ActionConfig, FromActionConfig } from '#actions';
+import type { Action, WithDescriber, FromActionConfig } from '#actions';
 import type {
   ActorConfig,
   ChildConfig,
   EmitterConfig,
-} from '../actor.types';
+} from '../actors/types';
 import type { FromGuard, GuardConfig, Predicate } from '#guards';
 
 import type { Emitter } from '#emitters';
@@ -28,10 +29,10 @@ import type {
  * Represents the simpliest configuration map for a transition.
  * Used as Helper
  */
-type _TransitionConfigMap<Paths = string> = {
+export type _TransitionConfigMap<Paths = string> = {
   readonly target?: Paths;
   // readonly internal?: boolean;
-  readonly actions?: SingleOrArrayL<ActionConfig>;
+  readonly actions?: SingleOrArrayL<WithDescriber>;
   readonly guards?: SingleOrArrayL<GuardConfig>;
   readonly description?: string;
 };
@@ -42,15 +43,15 @@ type _TransitionConfigMap<Paths = string> = {
  * @template T - The transition configuration type.
  * @returns The actions extracted from the transition configuration.
  *
- * @see {@linkcode ActionConfig} for the structure of action configurations.
+ * @see {@linkcode WithDescriber} for the structure of action configurations.
  * @see {@linkcode FromActionConfig} for converting action configurations to actions.
  * @see {@linkcode ReduceArray} for reducing arrays to their elements.
  * @see {@linkcode SingleOrArrayL} for handling single or array
  */
 export type ExtractActionsFromTransition<
-  T extends { actions: SingleOrArrayL<ActionConfig> },
+  T extends { actions: SingleOrArrayL<WithDescriber> },
 > =
-  ReduceArray<T['actions']> extends infer R extends ActionConfig
+  ReduceArray<T['actions']> extends infer R extends WithDescriber
     ? FromActionConfig<R>
     : never;
 
@@ -109,6 +110,10 @@ export type TransitionConfigMap<Paths = string> =
 export type TransitionConfig<Paths = string> =
   | Paths
   | TransitionConfigMap<Paths>;
+
+export type _TransitionConfig<Paths = string> =
+  | Paths
+  | _TransitionConfigMap<Paths>;
 
 /**
  * A version {@linkcode TransitionConfig} with string declaration.
@@ -176,14 +181,14 @@ export type GetEventKeysFromDelayed<T> = {
  * @see {@linkcode ExtractActionsFromTransition} for extracting actions from a transition configuration.
  * @see {@linkcode ReduceArray} for reducing arrays to their elements.
  * @see {@linkcode SingleOrArrayL} for handling single or array
- * @see {@linkcode ActionConfig} for the structure of action configurations.
+ * @see {@linkcode WithDescriber} for the structure of action configurations.
  *
  * @see {@linkcode ExtractGuardKeysFromTransition} for extracting guards from a transition configuration.
  */
 export type ExtractActionKeysFromDelayed<T> = ExtractActionsFromTransition<
   Extract<
     ReduceArray<T[keyof T]>,
-    { actions: SingleOrArrayL<ActionConfig> }
+    { actions: SingleOrArrayL<WithDescriber> }
   >
 >;
 
@@ -219,12 +224,19 @@ export type ExtractGuardKeysFromDelayed<T> =
  * @see {@linkcode SingleOrArrayL} for handling single or array
  */
 
-export type TransitionsConfig<Paths = string> = {
+export type TransitionsConfig<Paths extends string = string> = {
   readonly on?: DelayedTransitions<Paths>;
   readonly always?: AlwaysConfig<Paths>;
   readonly after?: DelayedTransitions<Paths>;
-  readonly actors?: RecordS<ActorConfig>;
+  readonly actors?: RecordS<ActorConfig<Paths>>;
 };
+
+export type _TransitionsConfig<Paths extends string = string> = Partial<
+  Record<'on' | 'after', Record<string, SoA<_TransitionConfig<Paths>>>> & {
+    actors: RecordS<ActorConfig<Paths>>;
+    always: SoA<AlwaysConfig<Paths>>;
+  }
+>;
 
 export type GetEventKeysFromEmitter<T extends EmitterConfig> =
   GetEventKeysFromDelayed<Pick<T, 'next' | 'error'>>;
@@ -276,7 +288,7 @@ export type ExtractDelayKeysFromTransitions<T extends TransitionsConfig> =
 type _ExtractActionsFromMap<T> = ExtractActionsFromTransition<
   Extract<
     ReduceArray<NotUndefined<T>>,
-    { actions: SingleOrArrayL<ActionConfig> }
+    { actions: SingleOrArrayL<WithDescriber> }
   >
 >;
 
@@ -285,7 +297,7 @@ type _ExtractActionsFromMap<T> = ExtractActionsFromTransition<
  */
 type _ExtractActionsFromFinally<T> =
   ReduceArray<T> extends infer Tr
-    ? Tr extends ActionConfig
+    ? Tr extends WithDescriber
       ? FromActionConfig<Tr>
       : _ExtractActionsFromMap<Tr>
     : never;
@@ -314,7 +326,7 @@ export type ExtractActionKeysFromActor<T> = T extends EmitterConfig
  * @see {@linkcode ExtractActionKeysFromPromisee} for extracting actions from promises.
  * @see {@linkcode ReduceArray} for reducing arrays to their elements.
  * @see {@linkcode SingleOrArrayL} for handling single or array
- * @see {@linkcode ActionConfig} for the structure of action configurations.
+ * @see {@linkcode WithDescriber} for the structure of action configurations.
  * @see {@linkcode NotUndefined} for ensuring the type is not undefined.
  * @see {@linkcode Extract}
  */
@@ -324,7 +336,7 @@ export type ExtractActionKeysFromTransitions<T extends TransitionsConfig> =
     | ExtractActionsFromTransition<
         Extract<
           ReduceArray<T['always']>,
-          { actions: SingleOrArrayL<ActionConfig> }
+          { actions: SingleOrArrayL<WithDescriber> }
         >
       >
     | (NotUndefined<T['actors']> extends infer Ta

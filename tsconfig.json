@@ -31,7 +31,7 @@
       "#constants": ["./src/constants/index.ts"],
       "#children": ["./src/children/index.ts"],
       "#delays": ["./src/delays/index.ts"],
-      "#actor": ["./src/actor.types.ts"],
+      "#actor": ["./src/actors/types.ts"],
       "#states": ["./src/states/index.ts"],
       "#interpreters": ["./src/interpreters/index.ts"],
       "#interpreter": ["./src/interpreters/interpreter.ts"],
