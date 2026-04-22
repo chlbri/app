@@ -2,7 +2,16 @@ import { createTests } from '@bemedev/dev-utils/vitest-extended';
 import { reduceActors } from './reduceActors';
 
 describe('reduceActors', () => {
-  const { acceptation, success } = createTests(reduceActors as any);
+  const { acceptation, success } = createTests(reduceActors, {
+    transform: result => ({
+      targets: Array.from(result.targets),
+      actions: Array.from(result.actions),
+      guards: Array.from(result.guards),
+      pContextKeys: Array.from(result.pContextKeys),
+      emitters: Array.from(result.emitters),
+      children: Array.from(result.children),
+    }),
+  });
 
   describe('#00 => acceptation', acceptation);
 

@@ -12,3 +12,5 @@ export const returnFalse = () => {
   if (IS_TEST) console.log(`${DEFAULT_NOTHING} call false`);
   return false;
 };
+
+export const defaultCheck = <T>(a: T, b: T) => a === b;

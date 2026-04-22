@@ -1,7 +1,7 @@
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
 import { reduceTransitions } from './reduceTransitions';
 
-describe('extractFromTransitions', () => {
+describe('reduceTransitions', () => {
   const { acceptation, success } = createTests(reduceTransitions, {
     transform: result => {
       return {

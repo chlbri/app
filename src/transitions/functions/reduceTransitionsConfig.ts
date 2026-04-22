@@ -1,4 +1,8 @@
+import { pipe } from '@bemedev/pipe';
 import type { _TransitionsConfig } from '../types';
+import { voidAction } from '@bemedev/pipe/extensions/common';
+import toArray from '#bemedev/features/arrays/castings/toArray';
+import { reduceTransitions } from './reduceTransitions';
 
 type Output = {
   actions: Set<string>;
@@ -33,6 +37,29 @@ export const reduceTransitionsConfig = (
   const pContextKeys = new Set<string>();
   const emitters = new Set<string>();
   const children = new Set<string>();
+
+  const piped = pipe(
+    () => transitions,
+    t => ({
+      on: t.on ?? {},
+      always: t.always ?? [],
+      actors: t.actors ?? {},
+      after: t.after ?? {},
+    }),
+    voidAction(({ on }) => {
+      Object.entries(on).forEach(([event, value]) => {
+        events.add(event);
+
+        const pipeV = pipe(
+          () => value,
+          v => toArray.typed(v),
+          v => reduceTransitions(...v),
+        );
+      });
+    }),
+  );
+
+  piped();
 
   return {
     actions,

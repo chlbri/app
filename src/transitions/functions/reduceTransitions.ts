@@ -3,6 +3,7 @@ import { reduceGuards } from '#guards';
 import { reduceDescribers } from '#utils';
 import { pipe } from '@bemedev/pipe';
 import type { _TransitionConfig } from '../types';
+import { voidAction } from '@bemedev/pipe/extensions/common';
 
 /**
  *  Extracts the target, actions, guards, and description from a transition configuration.
@@ -23,26 +24,29 @@ export const reduceTransitions = (...transitions: _TransitionConfig[]) => {
     if (typeof trans === 'string') {
       targets.add(trans);
     } else {
-      type TT = Exclude<_TransitionConfig, string>;
       const target = trans.target;
       if (target) targets.add(target);
 
-      const pipeA = pipe(
-        (actions?: TT['actions']) => toArray.typed(actions),
-        actions => reduceDescribers(...actions),
-        _actions => _actions.forEach(actions.add.bind(actions)),
+      const piped = pipe(
+        () => trans,
+        ({ actions, guards }) => ({ actions, guards }),
+
+        v => ({
+          actions: toArray.typed(v.actions),
+          guards: toArray.typed(v.guards),
+        }),
+
+        v => ({
+          actions: reduceDescribers(...v.actions),
+          guards: reduceGuards(...v.guards),
+        }),
+
+        voidAction(v => v.actions.forEach(actions.add.bind(actions))),
+        v => reduceDescribers(...v.guards),
+        v => v.forEach(guards.add.bind(guards)),
       );
 
-      const pipeG = pipe(
-        (guards?: TT['guards']) => toArray.typed(guards),
-        guards => guards.map(g => reduceGuards(g)),
-        guards => guards.flat(),
-        guards => reduceDescribers(...guards),
-        _guards => _guards.forEach(guards.add.bind(guards)),
-      );
-
-      pipeA(trans.actions);
-      pipeG(trans.guards);
+      piped();
     }
   });
 
