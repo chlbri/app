@@ -19,7 +19,7 @@ export * from './undefined';
 export * from './typings';
 export * from './parseTree';
 export * from './parseTree.types';
-export { buildPathsMap } from './parseTree.helpers';
+export { buildPaths as buildPathsMap } from './parseTree.helpers';
 export * from './readonly';
 export * from './reduceDescribers';
 export * from './set';

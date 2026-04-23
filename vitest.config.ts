@@ -22,6 +22,7 @@ export default defineConfig({
         '**/fixture.ts',
         '**/*.fixture.ts',
         '**/test.ts',
+        'src/cli/**',
       ],
     }),
   ],

@@ -1,43 +1,31 @@
 import type { ChildConfig } from './types';
 
 import toArray from '#bemedev/features/arrays/castings/toArray';
-import { _unknown } from '#bemedev/globals/utils/_unknown';
 import { reduceTransitions, type TransitionConfig } from '#transitions';
+import { createBetterSet } from '#utils';
 import { pipe } from '@bemedev/pipe';
+import { paramArray, tap } from '@bemedev/pipe/extensions';
 
-type Output = {
-  actions: Set<string>;
-  guards: Set<string>;
-  targets: Set<string>;
-  pContextKeys: Set<string>;
-};
+export const reduceChild = (child: ChildConfig) => {
+  const pContextKeys = createBetterSet<string>();
 
-export type ReduceChild_F = (child: ChildConfig) => Output;
-
-export const reduceChild: ReduceChild_F = child => {
-  const pContextKeys = new Set<string>();
-
-  const pipeContexts = pipe(
-    (child: ChildConfig) => child.contexts,
-    contexts => contexts ?? {},
-    contexts => Object.values(contexts),
-    values => {
-      values.forEach(pContextKeys.add.bind(pContextKeys));
-      return pContextKeys;
-    },
-  );
-
-  const pipeOn = pipe(
-    (child: ChildConfig) => child.on,
+  const result = pipe(
+    () => child,
+    tap(
+      pipe(
+        v => v.contexts,
+        v => v ?? {},
+        Object.values,
+        paramArray(pContextKeys.add),
+      ),
+    ),
+    v => v.on,
     on => on ?? {},
     on => Object.values(on),
     v => v.flat(),
-    v => toArray<TransitionConfig>(v),
-    v => reduceTransitions(...v),
-  );
-
-  const result = pipeOn(child);
-  pipeContexts(child);
+    toArray<TransitionConfig>,
+    paramArray(reduceTransitions),
+  )();
 
   return {
     ...result,

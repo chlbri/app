@@ -1,6 +1,8 @@
 import { DEFAULT_DELIMITER } from '#constants';
 import { flatByKey } from '@bemedev/decompose';
 import type { FlatMapN, NodeConfig } from '../types';
+import { expandFn } from '#bemedev/globals/utils/expandFn';
+import type { RecordS } from '~types';
 
 export type FlatMap_F<T extends NodeConfig = NodeConfig> = <
   const SN extends T,
@@ -22,13 +24,19 @@ export type FlatMap_F<T extends NodeConfig = NodeConfig> = <
  *
  * @see {@linkcode FlatMap_F} for more details.
  */
-export const flatMap: FlatMap_F = (
-  node,
-  children,
-  sep = DEFAULT_DELIMITER,
-) => {
-  return flatByKey.low(node, 'states', {
-    children,
-    sep,
-  });
-};
+export const flatMap = expandFn(
+  ((node, children, sep = DEFAULT_DELIMITER) => {
+    return flatByKey.low(node, 'states', {
+      children,
+      sep,
+    });
+  }) as FlatMap_F,
+  {
+    low: (node: NodeConfig, children = false, sep = DEFAULT_DELIMITER) => {
+      return flatByKey.low(node, 'states', {
+        children,
+        sep,
+      }) as RecordS<NodeConfig>;
+    },
+  },
+);

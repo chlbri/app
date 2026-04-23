@@ -13,12 +13,18 @@ export type ParseTreeContext = {
   events: BetterSet<string>;
   pContextKeys: BetterSet<string>;
   tags: BetterSet<string>;
+  __flat?: RecordS<NodeConfig>;
 };
 
 export type ConfigPaths = {
   targets: string[];
   initial?: string;
   states?: RecordS<ConfigPaths>;
+};
+
+export type ConfigPaths2 = {
+  targets: string[];
+  initial?: string;
 };
 
 export type NoExtraKeysConfigPaths<T extends ConfigPaths> = T & {

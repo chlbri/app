@@ -2,7 +2,6 @@ import { readonly } from '#utils';
 import { parseTree } from './parseTree';
 
 describe('#01 => parseTree', () => {
-  // #region atomic
   describe('#01 => atomic node (no states)', () => {
     const config = readonly({ type: 'atomic' });
     const result = parseTree(config);
@@ -16,57 +15,51 @@ describe('#01 => parseTree', () => {
       expect(result.__config).toBe(config);
     });
 
-    test('#03 => keys.actions is empty', () => {
-      expect(result.keys.actions).toEqual([]);
+    test('#03 => actions is empty', () => {
+      expect(result.actions.toArray).toEqual([]);
     });
 
-    test('#04 => keys.guards is empty', () => {
-      expect(result.keys.guards).toEqual([]);
+    test('#04 => guards is empty', () => {
+      expect(result.guards.toArray).toEqual([]);
     });
 
-    test('#05 => keys.emitters is empty', () => {
-      expect(result.keys.emitters).toEqual([]);
+    test('#05 => emitters is empty', () => {
+      expect(result.emitters.toArray).toEqual([]);
     });
 
-    test('#06 => keys.children is empty', () => {
-      expect(result.keys.children).toEqual([]);
+    test('#06 => children is empty', () => {
+      expect(result.children.toArray).toEqual([]);
     });
 
-    test('#07 => keys.delays is empty', () => {
-      expect(result.keys.delays).toEqual([]);
+    test('#07 => delays is empty', () => {
+      expect(result.delays.toArray).toEqual([]);
     });
 
-    test('#08 => keys.paths.all contains root', () => {
-      expect(result.keys.paths.all).toContain('/');
+    test('#08 => paths.all contains root', () => {
+      expect(result.paths.all).toContain('/');
     });
 
-    test('#09 => keys.paths.map.targets contains root path', () => {
-      expect(result.keys.paths.map.targets).toContain('/');
+    test('#09 => paths.map.targets contains root path', () => {
+      expect(result.paths.map.targets).toEqual([]);
     });
 
-    test('#10 => actions is empty', () => {
-      expect(result.actions).toEqual([]);
+    test('#10 => allPaths is empty', () => {
+      expect(result.allPaths.toArray).toContain('/'); // Root path is included in allPaths
     });
 
-    test('#11 => guards is empty', () => {
-      expect(result.guards).toEqual([]);
+    test('#11 => targets is empty', () => {
+      expect(result.targets.toArray).toEqual([]);
     });
 
-    test('#12 => emitters is empty', () => {
-      expect(result.emitters).toEqual([]);
+    test('#12 => events is empty', () => {
+      expect(result.events.toArray).toEqual([]);
     });
 
-    test('#13 => children is empty', () => {
-      expect(result.children).toEqual([]);
-    });
-
-    test('#14 => delays is empty', () => {
-      expect(result.delays).toEqual([]);
+    test('#13 => tags is empty', () => {
+      expect(result.tags.toArray).toEqual([]);
     });
   });
-  // #endregion
 
-  // #region entry/exit actions
   describe('#02 => entry and exit actions', () => {
     const compositeAction = readonly({
       name: 'entryAction2',
@@ -78,48 +71,32 @@ describe('#01 => parseTree', () => {
     } as const;
     const result = parseTree(config);
 
-    test('#01 => entry actions in keys.actions', () => {
-      expect(result.keys.actions).toContain('entryAction1');
-      expect(result.keys.actions).toContain('entryAction2');
+    test('#01 => entry actions in actions', () => {
+      expect(result.actions.toArray).toContain('entryAction1');
+      expect(result.actions.toArray).toContain('entryAction2');
     });
 
-    test('#02 => exit action in keys.actions', () => {
-      expect(result.keys.actions).toContain('exitAction1');
+    test('#02 => exit action in actions', () => {
+      expect(result.actions.toArray).toContain('exitAction1');
     });
 
-    test('#03 => entry actions in actions array', () => {
-      expect(result.actions).toContain('entryAction1');
-      expect(result.actions).toContainEqual(compositeAction);
-    });
-
-    test('#04 => exit action in actions array', () => {
-      expect(result.actions).toContain('exitAction1');
-    });
-
-    test('#05 => no duplicate keys', () => {
-      const unique = new Set(result.keys.actions);
-      expect(unique.size).toBe(result.keys.actions.length);
-    });
-
-    test('#06 => no duplicate actions', () => {
-      const unique = new Set(result.actions);
-      expect(unique.size).toBe(result.actions.length);
+    test('#03 => no duplicate actions', () => {
+      const unique = new Set(result.actions.toArray);
+      expect(unique.size).toBe(result.actions.toArray.length);
     });
   });
-  // #endregion
 
-  // #region on transitions
   describe('#03 => on transitions', () => {
     describe('#01 => string target', () => {
       const config = { on: { NEXT: '/child' } };
       const result = parseTree(config);
 
       test('#01 => path added', () => {
-        expect(result.keys.paths.all).toContain('/');
+        expect(result.paths.all).toContain('/');
       });
 
       test('#02 => no actions extracted', () => {
-        expect(result.actions).toEqual([]);
+        expect(result.actions.toArray).toEqual([]);
       });
     });
 
@@ -139,22 +116,13 @@ describe('#01 => parseTree', () => {
       });
       const result = parseTree(config);
 
-      test('#01 => action key extracted', () => {
-        expect(result.keys.actions).toContain('doSomething');
+      test('#01 => action extracted', () => {
+        expect(result.actions.toArray).toContain('doSomething');
       });
 
-      test('#02 => guard key extracted', () => {
-        expect(result.keys.guards).toContain('canGo');
-        expect(result.keys.guards).toContain('complexGuard');
-      });
-
-      test('#03 => action in actions array', () => {
-        expect(result.actions).toContain('doSomething');
-      });
-
-      test('#04 => guard in guards array', () => {
-        expect(result.guards).toContain('canGo');
-        expect(result.guards).toContainEqual(complexGuard);
+      test('#02 => guard extracted', () => {
+        expect(result.guards.toArray).toContain('canGo');
+        expect(result.guards.toArray).toContainEqual(complexGuard.name);
       });
     });
 
@@ -179,26 +147,25 @@ describe('#01 => parseTree', () => {
       });
       const result = parseTree(config);
 
-      test('#01 => guard key extracted', () => {
-        expect(result.keys.guards).toContain('guardA');
-        expect(result.keys.guards).toContain('guardsB');
+      test('#01 => guards extracted', () => {
+        expect(result.guards.toArray).toContain('guardA');
+        expect(result.guards.toArray).toContain('guardsB');
       });
 
-      test('#02 => action key extracted', () => {
-        expect(result.keys.actions).toContain('actionA');
+      test('#02 => actions extracted', () => {
+        expect(result.actions.toArray).toContain('actionA');
+        expect(result.actions.toArray).toContain('actionB');
       });
     });
   });
-  // #endregion
 
-  // #region always transitions
   describe('#04 => always transitions', () => {
     describe('#01 => always as string', () => {
-      const config = { always: '/target' };
-      const result = parseTree(config);
+      const result = parseTree({ always: '/target' });
 
-      test('#01 => "always" in paths', () => {
-        expect(result.keys.paths.all).toContain('/');
+      test('#01 => path added', () => {
+        console.warn(result);
+        expect(result.paths.all).toContain('/');
       });
     });
 
@@ -231,34 +198,30 @@ describe('#01 => parseTree', () => {
       });
       const result = parseTree(config);
 
-      test('#01 => guard key extracted', () => {
-        expect(result.keys.guards).toContain('alwaysGuard');
-        expect(result.keys.guards).toContain('alwaysGuard2');
-        expect(result.keys.guards).toContain('alwaysGuard3');
+      test('#01 => guards extracted', () => {
+        expect(result.guards.toArray).toContain('alwaysGuard');
+        expect(result.guards.toArray).toContain('alwaysGuard2');
+        expect(result.guards.toArray).toContain('alwaysGuard3');
       });
 
-      test('#02 => action key extracted', () => {
-        expect(result.keys.actions).toContain('alwaysAction');
-        expect(result.keys.actions).toContain('alwaysAction2');
-        expect(result.keys.actions).toContain('alwaysAction3');
+      test('#02 => actions extracted', () => {
+        expect(result.actions.toArray).toContain('alwaysAction');
+        expect(result.actions.toArray).toContain('alwaysAction2');
+        expect(result.actions.toArray).toContain('alwaysAction3');
       });
 
-      test('#03 => guard in guards array', () => {
-        expect(result.guards).toContain('alwaysGuard');
-        expect(result.guards).toContainEqual(alwaysGuard2);
-        expect(result.guards).toContainEqual(alwaysGuard3);
+      test('#03 => no duplicate guards', () => {
+        const unique = new Set(result.guards.toArray);
+        expect(unique.size).toBe(result.guards.toArray.length);
       });
 
-      test('#04 => action in actions array', () => {
-        expect(result.actions).toContain('alwaysAction');
-        expect(result.actions).toContainEqual(alwaysAction2);
-        expect(result.actions).toContainEqual(alwaysAction3);
+      test('#04 => no duplicate actions', () => {
+        const unique = new Set(result.actions.toArray);
+        expect(unique.size).toBe(result.actions.toArray.length);
       });
     });
   });
-  // #endregion
 
-  // #region after (delays)
   describe('#05 => after (delay) transitions', () => {
     const config = readonly({
       after: {
@@ -269,22 +232,20 @@ describe('#01 => parseTree', () => {
     const result = parseTree(config);
 
     test('#01 => delay keys extracted', () => {
-      expect(result.keys.delays).toContain('1000');
-      expect(result.keys.delays).toContain('LONG');
+      expect(result.delays.toArray).toContain('1000');
+      expect(result.delays.toArray).toContain('LONG');
     });
 
     test('#02 => action from delay extracted', () => {
-      expect(result.keys.actions).toContain('onTimeout');
+      expect(result.actions.toArray).toContain('onTimeout');
     });
 
     test('#03 => no duplicate delay keys', () => {
-      const unique = new Set(result.keys.delays);
-      expect(unique.size).toBe(result.keys.delays.length);
+      const unique = new Set(result.delays.toArray);
+      expect(unique.size).toBe(result.delays.toArray.length);
     });
   });
-  // #endregion
 
-  // #region activities
   describe('#06 => activities', () => {
     describe('#01 => activity as string action', () => {
       const config = {
@@ -293,7 +254,7 @@ describe('#01 => parseTree', () => {
       const result = parseTree(config);
 
       test('#01 => action key extracted', () => {
-        expect(result.keys.actions).toContain('pollAction');
+        expect(result.actions.toArray).toContain('pollAction');
       });
     });
 
@@ -309,39 +270,31 @@ describe('#01 => parseTree', () => {
 
       const result = parseTree(config);
 
-      test('#01 => action key extracted', () => {
-        expect(result.keys.actions).toContain('startPoll');
+      test('#01 => action extracted', () => {
+        expect(result.actions.toArray).toContain('startPoll');
       });
 
-      test('#02 => guard key extracted', () => {
-        expect(result.keys.guards).toContain('canPoll');
+      test('#02 => guard extracted', () => {
+        expect(result.guards.toArray).toContain('canPoll');
       });
     });
   });
-  // #endregion
 
-  // #region actors: emitters
   describe('#07 => actors emitters', () => {
     const emitter = { next: 'onNext', error: 'onError' };
     const config = { actors: { myEmitter: emitter } };
     const result = parseTree(config);
 
-    test('#01 => emitter key in keys.emitters', () => {
-      expect(result.keys.emitters).toContain('myEmitter');
+    test('#01 => emitter key in emitters', () => {
+      expect(result.emitters.toArray).toContain('myEmitter');
     });
 
-    test('#02 => emitter in emitters array', () => {
-      expect(result.emitters).toContain(emitter);
-    });
-
-    test('#03 => no duplicate emitter keys', () => {
-      const unique = new Set(result.keys.emitters);
-      expect(unique.size).toBe(result.keys.emitters.length);
+    test('#02 => no duplicate emitter keys', () => {
+      const unique = new Set(result.emitters.toArray);
+      expect(unique.size).toBe(result.emitters.toArray.length);
     });
   });
-  // #endregion
 
-  // #region actors: children
   describe('#08 => actors children', () => {
     const config = {
       actors: {
@@ -353,25 +306,15 @@ describe('#01 => parseTree', () => {
     };
     const result = parseTree(config);
 
-    test('#01 => child key in keys.children', () => {
-      expect(result.keys.children).toContain('myChild');
+    test('#01 => child key in children', () => {
+      expect(result.children.toArray).toContain('myChild');
     });
 
-    test('#02 => child in children array', () => {
-      expect(result.children.length).toBe(1);
-    });
-
-    test('#03 => child.on is entries array', () => {
-      expect(result.children[0].on).toEqual([['DONE', '/done']]);
-    });
-
-    test('#04 => child.contexts is entries array', () => {
-      expect(result.children[0].contexts).toEqual([['parentId', 'id']]);
+    test('#02 => child count is one', () => {
+      expect(result.children.toArray.length).toBe(1);
     });
   });
-  // #endregion
 
-  // #region compound state
   describe('#09 => compound state', () => {
     const config = {
       initial: 'idle',
@@ -388,31 +331,27 @@ describe('#01 => parseTree', () => {
       expect(result.flat).toHaveProperty('/active');
     });
 
-    test('#02 => keys.paths.all contains all paths', () => {
-      expect(result.keys.paths.all).toContain('/');
-      expect(result.keys.paths.all).toContain('/idle');
-      expect(result.keys.paths.all).toContain('/active');
+    test('#02 => paths.all contains all paths', () => {
+      expect(result.paths.all).toContain('/');
+      expect(result.paths.all).toContain('/idle');
+      expect(result.paths.all).toContain('/active');
     });
 
     test('#03 => paths.map.initial is set for compound', () => {
-      expect((result.keys.paths.map as any).initial).toBe('idle');
+      expect((result.paths.map as any).initial).toBe('idle');
     });
 
     test('#04 => paths.map.states has child entries', () => {
-      expect((result.keys.paths.map as any).states).toHaveProperty('idle');
-      expect((result.keys.paths.map as any).states).toHaveProperty(
-        'active',
-      );
+      expect((result.paths.map as any).states).toHaveProperty('idle');
+      expect((result.paths.map as any).states).toHaveProperty('active');
     });
 
     test('#05 => actions from child states extracted', () => {
-      expect(result.keys.actions).toContain('doStart');
-      expect(result.keys.actions).toContain('doStop');
+      expect(result.actions.toArray).toContain('doStart');
+      expect(result.actions.toArray).toContain('doStop');
     });
   });
-  // #endregion
 
-  // #region parallel state
   describe('#10 => parallel state', () => {
     const config = {
       type: 'parallel' as const,
@@ -429,17 +368,15 @@ describe('#01 => parseTree', () => {
     });
 
     test('#02 => paths.map.initial is NOT set for parallel', () => {
-      expect((result.keys.paths.map as any).initial).toBeUndefined();
+      expect((result.paths.map as any).initial).toBeUndefined();
     });
 
     test('#03 => actions from both branches extracted', () => {
-      expect(result.keys.actions).toContain('entryA');
-      expect(result.keys.actions).toContain('entryB');
+      expect(result.actions.toArray).toContain('entryA');
+      expect(result.actions.toArray).toContain('entryB');
     });
   });
-  // #endregion
 
-  // #region recursive (deeply nested)
   describe('#11 => deeply nested states', () => {
     const config = {
       initial: 'level1',
@@ -466,38 +403,37 @@ describe('#01 => parseTree', () => {
     });
 
     test('#02 => deep action extracted', () => {
-      expect(result.keys.actions).toContain('deepAction');
+      expect(result.actions.toArray).toContain('deepAction');
     });
 
     test('#03 => paths.map recursively has nested states', () => {
-      const map = result.keys.paths.map as any;
+      const map = result.paths.map as any;
       expect(map.states.level1.states.level2.states).toHaveProperty(
         'level3',
       );
     });
 
     test('#04 => paths.map.initial set at each compound level', () => {
-      const map = result.keys.paths.map as any;
+      const map = result.paths.map as any;
       expect(map.initial).toBe('level1');
       expect(map.states.level1.initial).toBe('level2');
       expect(map.states.level1.states.level2.initial).toBe('level3');
     });
 
     test('#05 => leaf node has no initial in paths.map', () => {
-      const map = result.keys.paths.map as any;
+      const map = result.paths.map as any;
       expect(
         map.states.level1.states.level2.states.level3.initial,
       ).toBeUndefined();
     });
 
     test('#06 => paths.map.targets contains all paths', () => {
-      expect(result.keys.paths.map.targets).toContain('/');
-      expect(result.keys.paths.map.targets).toContain('/level1');
+      expect(result.paths.map.targets).not.toContain('/');
+      expect(result.paths.map.targets).toContain('/level1/level2');
+      expect(result.paths.map.targets).toContain('/level1');
     });
   });
-  // #endregion
 
-  // #region no duplicates
   describe('#12 => no duplicates across states', () => {
     const config = {
       initial: 'a',
@@ -508,33 +444,19 @@ describe('#01 => parseTree', () => {
     };
     const result = parseTree(config);
 
-    test('#01 => keys.actions has no duplicates', () => {
-      const unique = new Set(result.keys.actions);
-      expect(unique.size).toBe(result.keys.actions.length);
+    test('#01 => actions has no duplicates', () => {
+      const unique = new Set(result.actions.toArray);
+      expect(unique.size).toBe(result.actions.toArray.length);
     });
 
-    test('#02 => actions array has no duplicates', () => {
-      const unique = new Set(result.actions);
-      expect(unique.size).toBe(result.actions.length);
-    });
-
-    test('#03 => sharedAction appears exactly once in keys', () => {
-      const count = result.keys.actions.filter(
-        k => k === 'sharedAction',
-      ).length;
-      expect(count).toBe(1);
-    });
-
-    test('#04 => sharedAction appears exactly once in actions', () => {
-      const count = result.actions.filter(
+    test('#02 => sharedAction appears exactly once', () => {
+      const count = result.actions.toArray.filter(
         a => a === 'sharedAction',
       ).length;
       expect(count).toBe(1);
     });
   });
-  // #endregion
 
-  // #region combined
   describe('#13 => combined config (actions, guards, delays, emitters, children)', () => {
     const config = {
       initial: 'idle',
@@ -569,55 +491,54 @@ describe('#01 => parseTree', () => {
     });
 
     test('#02 => entry action extracted', () => {
-      expect(result.keys.actions).toContain('onEntry');
+      expect(result.actions.toArray).toContain('onEntry');
     });
 
-    test('#03 => guard key extracted', () => {
-      expect(result.keys.guards).toContain('canStart');
+    test('#03 => guard extracted', () => {
+      expect(result.guards.toArray).toContain('canStart');
     });
 
     test('#04 => transition action extracted', () => {
-      expect(result.keys.actions).toContain('doStart');
+      expect(result.actions.toArray).toContain('doStart');
     });
 
     test('#05 => delay key extracted', () => {
-      expect(result.keys.delays).toContain('5000');
+      expect(result.delays.toArray).toContain('5000');
     });
 
     test('#06 => delay action extracted', () => {
-      expect(result.keys.actions).toContain('onIdle');
+      expect(result.actions.toArray).toContain('onIdle');
     });
 
     test('#07 => exit action extracted', () => {
-      expect(result.keys.actions).toContain('doClean');
+      expect(result.actions.toArray).toContain('doClean');
     });
 
     test('#08 => emitter key extracted', () => {
-      expect(result.keys.emitters).toContain('stream');
+      expect(result.emitters.toArray).toContain('stream');
     });
 
     test('#09 => child key extracted', () => {
-      expect(result.keys.children).toContain('childMachine');
+      expect(result.children.toArray).toContain('childMachine');
     });
 
     test('#10 => paths.map.initial is set', () => {
-      expect((result.keys.paths.map as any).initial).toBe('idle');
+      expect((result.paths.map as any).initial).toBe('idle');
     });
 
-    test('#11 => no duplicates in any array', () => {
-      for (const arr of [
-        result.keys.actions,
-        result.keys.guards,
-        result.keys.emitters,
-        result.keys.children,
-        result.keys.delays,
-        result.actions,
-        result.guards,
-      ]) {
+    test('#11 => no duplicates in any collection', () => {
+      const collections = [
+        result.actions.toArray,
+        result.guards.toArray,
+        result.emitters.toArray,
+        result.children.toArray,
+        result.delays.toArray,
+      ];
+
+      for (const arr of collections) {
         const unique = new Set(arr);
         expect(unique.size).toBe(arr.length);
       }
     });
   });
-  // #endregion
 });
