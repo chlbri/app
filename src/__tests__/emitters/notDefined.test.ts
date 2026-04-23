@@ -1,6 +1,6 @@
 import { constructTests } from '#fixtures';
 import { interpret } from '#interpreter';
-import { machineEmitter1 } from './data';
+import machineEmitter1 from './emitter1.machine';
 
 describe('Tests not defined emitters -> Machine1', () => {
   const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);

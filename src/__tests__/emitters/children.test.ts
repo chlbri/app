@@ -1,6 +1,7 @@
 import { constructTests } from '#fixtures';
 import { interpret } from '#interpreter';
-import { machineEmitter3, WAITERS } from './data';
+import machineEmitter3 from './emitter3.machine';
+import { WAITERS } from './emitter1.machine';
 
 vi.useFakeTimers();
 describe('Children', () => {
@@ -94,6 +95,7 @@ describe('Children', () => {
     const mockFn = vi.fn();
     const machine = machineEmitter3.provideOptions(({ voidAction }) => ({
       actions: {
+        //@ts-expect-error intented
         mockCompleteAction: voidAction(() => {
           mockFn('Complete action executed');
         }),

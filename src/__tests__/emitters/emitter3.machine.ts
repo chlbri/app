@@ -5,78 +5,10 @@ import { type } from '@bemedev/typings';
 import { interval } from 'rxjs/internal/observable/interval';
 import { map } from 'rxjs/internal/operators/map';
 import { take } from 'rxjs/internal/operators/take';
+import { WAITERS } from './emitter1.machine';
 
-export const WAITERS = {
-  short: 200,
-  medium: 500,
-  long: 1000,
-};
-
-export const machineEmitter1 = createMachine(
-  'src/__tests__/emitters/data',
-  {
-    initial: 'inactive',
-    actors: {
-      interval: {
-        next: {
-          actions: ['assigN'],
-        },
-        complete: {
-          actions: ['mockCompleteAction'],
-        },
-      },
-    },
-    states: {
-      inactive: {
-        on: {
-          NEXT: '/active',
-        },
-      },
-      active: {
-        on: {
-          NEXT: '/inactive',
-        },
-      },
-    },
-  },
-  {
-    context: type('number'),
-    actorsMap: type({
-      emitters: {
-        interval: {
-          next: 'number',
-          error: 'never',
-        },
-      },
-    }),
-  },
-);
-
-export const machineEmitter2 = machineEmitter1.provideOptions(
-  ({ assign }) => ({
-    actions: {
-      assigN: assign('context', {
-        'interval::next': ({ payload, context }) =>
-          notU(context) + payload,
-      }),
-    },
-    actors: {
-      emitters: {
-        interval: () =>
-          createPausable(
-            interval(WAITERS.short).pipe(
-              take(5),
-              map(v => v + 1),
-              map(v => v * 5),
-            ),
-          ),
-      },
-    },
-  }),
-);
-
-export const machineEmitter3 = createMachine(
-  'src/__tests__/emitters/data._2',
+export default createMachine(
+  'src/__tests__/emitters/emitter3.machine',
   {
     initial: 'inactive',
     states: {

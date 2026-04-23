@@ -1,17 +1,42 @@
 import { constructTests } from '#fixtures';
 import { interpret } from '#interpreter';
-import { machineEmitter2, WAITERS } from './data';
+import { notU } from '#utils';
+import { createPausable } from '@bemedev/rx-pausable';
+import { interval, map, take } from 'rxjs';
+import machineEmitter1, { WAITERS } from './emitter1.machine';
 
 vi.useFakeTimers();
 describe('Simple Machine2 (from Machine1)', () => {
   const mockFn = vi.fn();
-  const machine = machineEmitter2.provideOptions(({ voidAction }) => ({
-    actions: {
-      mockCompleteAction: voidAction(() => {
-        mockFn('Complete action executed');
-      }),
-    },
-  }));
+
+  const machine = machineEmitter1
+    .provideOptions(({ assign }) => ({
+      actions: {
+        assigN: assign('context', {
+          'interval::next': ({ payload, context }) =>
+            notU(context) + payload,
+        }),
+      },
+      actors: {
+        emitters: {
+          interval: () =>
+            createPausable(
+              interval(WAITERS.short).pipe(
+                take(5),
+                map(v => v + 1),
+                map(v => v * 5),
+              ),
+            ),
+        },
+      },
+    }))
+    .provideOptions(({ voidAction }) => ({
+      actions: {
+        mockCompleteAction: voidAction(() => {
+          mockFn('Complete action executed');
+        }),
+      },
+    }));
 
   const service = interpret(machine, { context: 0 });
 
