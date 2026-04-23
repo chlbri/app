@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { cli } from './cli';
+
 import { run } from 'cmd-ts';
+import { cli } from './cli';
 
 run(cli, process.argv.slice(2));

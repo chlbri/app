@@ -6,35 +6,6 @@ The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-<details>
-<summary>
-
-## **[3.0.0] - 18/04/2026** => _00:10_
-
-</summary>
-
-- **BREAKING**: Remove `promisees` actor type — `PromiseeConfig`,
-  `src/promises/*`, `PromiseFunction*`, `Promisee`, `PromisesMap`,
-  `toPromise`, `performPromisee`, `#addPromises`, `actors.promises` and
-  their tests are removed
-- **BREAKING**: `Action` / `Action2` / `ActionResult` widened to accept
-  `Promise<ActionResult<Pc, Tc>>` — the interpreter's action pipeline is
-  now async and sequentially awaited
-- **Add**: Optional `errorFn` parameter on all action helpers (`assign`,
-  `raise`, `debounce`, etc.) — handles promise rejections without breaking
-  the main flow
-- **Add**: Complete real-life tests and state machine schema
-- **Fix**: Full `Eo` propagation in the type hierarchy (`Machine`,
-  `Interpreter`, `MachineOptions`)
-- **Fix**: `Ta` propagation into `Mo` via `provideOptions` — correct typed
-  tag validation at compile time
-- **Refactor**: Interpreter simplification — action pipeline cleaned up and
-  sequentially awaited
-- **Refactor**: Clean up test cases and improve type coverage
-- <u>Test coverage **_100%_**</u>
-
-</details>
-
 <br/>
 
 <details>
