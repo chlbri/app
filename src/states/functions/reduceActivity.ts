@@ -1,42 +1,49 @@
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import { reduceTransitions } from '#transitions';
+import { createBetterSet } from '#utils';
 import { pipe } from '@bemedev/pipe';
 import { fromDescriber, isDescriber } from '~types';
 import type { ActivityConfig } from '../types';
+import { tap } from '@bemedev/pipe/extensions';
 
 export const reduceActivity = (activity: ActivityConfig) => {
-  const actions = new Set<string>();
-  const guards = new Set<string>();
-  const delays = new Set<string>();
+  const actions = createBetterSet<string>();
+  const guards = createBetterSet<string>();
+  const delays = createBetterSet<string>();
 
-  const pipeOn = pipe(
-    (value: ActivityConfig) => Object.entries(value),
-
-    values => {
-      return values.map(([key, value]) => {
-        delays.add(key);
-        return [key, value] as const;
-      });
-    },
-
-    values => values.map(([, value]) => value),
-    values => toArray.typed(values),
-    values => values.flat(),
-
-    values => {
-      return values.map(activity => {
-        if (typeof activity === 'string' || isDescriber(activity)) {
-          actions.add(fromDescriber(activity));
-        } else {
-          const result = reduceTransitions(activity);
-          result.actions.forEach(actions.add.bind(actions));
-          result.guards.forEach(guards.add.bind(guards));
-        }
-      });
+  const piped = pipe(
+    () => activity,
+    value => Object.entries(value),
+    v => {
+      return v.forEach(
+        pipe(
+          v => v,
+          tap(([key]) => delays.add(key)),
+          ([, value]) => value,
+          toArray.typed,
+          v => v.flat(),
+          v => {
+            return v.forEach(
+              pipe(
+                v => v,
+                v => {
+                  if (typeof v === 'string' || isDescriber(v)) {
+                    actions.add(fromDescriber(v));
+                  } else {
+                    const result = reduceTransitions(v);
+                    actions.add(...result.actions);
+                    guards.add(...result.guards);
+                  }
+                },
+              ),
+            );
+          },
+        ),
+      );
     },
   );
 
-  pipeOn(activity);
+  piped();
 
   return {
     actions,

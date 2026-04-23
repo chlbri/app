@@ -234,7 +234,7 @@ export type TransitionsConfig<Paths extends string = string> = {
 export type _TransitionsConfig<Paths extends string = string> = Partial<
   Record<'on' | 'after', Record<string, SoA<_TransitionConfig<Paths>>>> & {
     actors: RecordS<ActorConfig<Paths>>;
-    always: SoA<AlwaysConfig<Paths>>;
+    always: SoA<_TransitionConfig<Paths>>;
   }
 >;
 

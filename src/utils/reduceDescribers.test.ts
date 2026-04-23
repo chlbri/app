@@ -1,7 +1,7 @@
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
 import { reduceDescribers } from './reduceDescribers';
 
-describe('reduceActions', () => {
+describe('reduceDescribers', () => {
   const { acceptation, success } = createTests(reduceDescribers, {
     transform: Array.from,
   });

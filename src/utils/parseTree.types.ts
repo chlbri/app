@@ -1,29 +1,33 @@
-import type { ConfigDef, NoExtraKeysConfigDef } from '#machines';
 import type { NodeConfig } from '#states';
 import type { RecordS } from '~types';
+import type { BetterSet } from './set';
 
 export type ParseTreeContext = {
-  actions: Set<string>;
-  guards: Set<string>;
-  emitters: Set<string>;
-  children: Set<string>;
-  delays: Set<string>;
-  allPaths: Set<string>;
-  events: Set<string>;
-  actors: Set<string>;
+  actions: BetterSet<string>;
+  guards: BetterSet<string>;
+  emitters: BetterSet<string>;
+  children: BetterSet<string>;
+  delays: BetterSet<string>;
+  allPaths: BetterSet<string>;
+  targets: BetterSet<string>;
+  events: BetterSet<string>;
+  pContextKeys: BetterSet<string>;
+  tags: BetterSet<string>;
 };
 
-export type OutputParseTree = {
-  flat: RecordS<NodeConfig>;
-  __config: NodeConfig;
-  actions: string[];
-  guards: string[];
-  emitters: string[];
-  children: string[];
-  delays: string[];
+export type ConfigPaths = {
+  targets: string[];
+  initial?: string;
+  states?: RecordS<ConfigPaths>;
+};
 
-  paths: {
-    map: NoExtraKeysConfigDef<ConfigDef>;
-    all: string[];
+export type NoExtraKeysConfigPaths<T extends ConfigPaths> = T & {
+  [K in Exclude<keyof T, keyof ConfigPaths>]: never;
+} & {
+  states?: {
+    [K in keyof T['states']]: T['states'][K] extends infer TK extends
+      ConfigPaths
+      ? NoExtraKeysConfigPaths<TK>
+      : never;
   };
 };

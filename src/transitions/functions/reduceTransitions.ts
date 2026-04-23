@@ -1,6 +1,6 @@
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import { reduceGuards } from '#guards';
-import { reduceDescribers } from '#utils';
+import { createBetterSet, reduceDescribers } from '#utils';
 import { pipe } from '@bemedev/pipe';
 import type { _TransitionConfig } from '../types';
 import { voidAction } from '@bemedev/pipe/extensions/common';
@@ -16,9 +16,9 @@ import { voidAction } from '@bemedev/pipe/extensions/common';
  * @see {@linkcode reduceDescribers}
  */
 export const reduceTransitions = (...transitions: _TransitionConfig[]) => {
-  const actions = new Set<string>();
-  const guards = new Set<string>();
-  const targets = new Set<string>();
+  const actions = createBetterSet<string>();
+  const guards = createBetterSet<string>();
+  const targets = createBetterSet<string>();
 
   transitions.forEach(trans => {
     if (typeof trans === 'string') {
@@ -41,9 +41,9 @@ export const reduceTransitions = (...transitions: _TransitionConfig[]) => {
           guards: reduceGuards(...v.guards),
         }),
 
-        voidAction(v => v.actions.forEach(actions.add.bind(actions))),
+        voidAction(v => actions.add(...v.actions)),
         v => reduceDescribers(...v.guards),
-        v => v.forEach(guards.add.bind(guards)),
+        g => guards.add(...g),
       );
 
       piped();

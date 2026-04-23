@@ -1,15 +1,18 @@
-import type { __ChildConfig } from '../actors/types';
-import toArray from '#bemedev/features/arrays/castings/toArray';
-import type { ConfigDef, NoExtraKeysConfigDef } from '#machines';
-import type { ActivityConfig, NodeConfig } from '#states';
-import type { _TransitionConfig, TransitionConfig } from '#transitions';
-import type { SingleOrArrayL } from '~types';
-import { reduceGuards } from '../guards/functions/helpers/reduceGuards';
-import type { ParseTreeContext } from './parseTree.types';
-import type { GuardUnion } from '#guards';
 import type { WithDescriber } from '#actions';
-import { reduceActivity } from '../states/functions/reduceActivity';
+import toArray from '#bemedev/features/arrays/castings/toArray';
+import type { GuardUnion } from '#guards';
+import type { ConfigDef } from '#machines';
+import { flatMap, type ActivityConfig, type NodeConfig } from '#states';
+import type { _TransitionConfig, _TransitionsConfig } from '#transitions';
 import { pipe } from '@bemedev/pipe';
+import { tap } from '@bemedev/pipe/extensions/common';
+import type { RecordS, SingleOrArrayL } from '~types';
+import { reduceActors } from '../actors/reduceActors';
+import type { ActorConfig } from '../actors/types';
+import { reduceGuards } from '../guards/functions/helpers/reduceGuards';
+import { reduceActivity } from '../states/functions/reduceActivity';
+import { reduceTransitionsConfig } from '../transitions/functions/reduceTransitionsConfig';
+import type { ConfigPaths, ParseTreeContext } from './parseTree.types';
 import { reduceDescribers } from './reduceDescribers';
 
 // Recursively builds the paths map (ConfigDef) from a NodeConfig node.
@@ -17,25 +20,24 @@ import { reduceDescribers } from './reduceDescribers';
 // `states` is recursively built for each child state.
 export const buildPathsMap = (
   node: NodeConfig,
-  allPaths: string[],
-): NoExtraKeysConfigDef<ConfigDef> => {
-  const isCompound = 'initial' in node && node.initial !== undefined;
+  ...paths: string[]
+): ConfigPaths => {
+  
+
+
   const hasStates = 'states' in node && node.states !== undefined;
 
-  const result: ConfigDef = {
-    targets: allPaths.join(' | '),
+  const result: ConfigPaths = {
+    targets: paths,
   };
 
-  if (isCompound) {
-    (result as any).initial = (node as any).initial;
-  }
+  result.initial = node.initial;
 
   if (hasStates) {
-    (result as any).states = Object.fromEntries(
-      Object.entries((node as any).states).map(([key, child]) => [
-        key,
-        buildPathsMap(child as NodeConfig, allPaths),
-      ]),
+    result.states = Object.fromEntries(
+      Object.entries(node.states).map(([key, child]) => {
+        return [key, buildPathsMap(child as NodeConfig, ...paths)];
+      }),
     );
   }
 
@@ -43,22 +45,21 @@ export const buildPathsMap = (
 };
 
 // Helper to extract from single activity
-export const processActivity = (
-  ctx: ParseTreeContext,
-  activity?: ActivityConfig,
-) => {
-  const pipeOn = pipe(
-    (value?: ActivityConfig) => value ?? {},
-    reduceActivity,
-    values => {
-      values.actions.forEach(ctx.actions.add.bind(ctx.actions));
-      values.guards.forEach(ctx.guards.add.bind(ctx.guards));
-      values.delays.forEach(ctx.delays.add.bind(ctx.delays));
-    },
-  );
-
-  pipeOn(activity);
-};
+export const processActivity = pipe(
+  (ctx: ParseTreeContext, activity?: ActivityConfig) => ({
+    ctx,
+    values: pipe(
+      () => activity,
+      a => a ?? {},
+      reduceActivity,
+    )(),
+  }),
+  ({ ctx, values }) => {
+    ctx.actions.add(...values.actions);
+    ctx.guards.add(...values.guards);
+    ctx.delays.add(...values.delays);
+  },
+);
 
 const processGuards = (
   ctx: ParseTreeContext,
@@ -105,102 +106,76 @@ export const processTransition = (
 };
 
 // Helper to process actor configs
-export const processActor = (
-  actor: any,
-  actorKey: string,
+export const processActors = pipe(
+  (ctx: ParseTreeContext, actors?: RecordS<ActorConfig>) => {
+    return {
+      ctx,
+      actors: pipe(
+        () => actors,
+        a => a ?? {},
+        reduceActors,
+        v => v,
+      )(),
+    };
+  },
+  ({ ctx, actors }) => {
+    ctx.actions.add(...actors.actions);
+    ctx.guards.add(...actors.guards);
+    ctx.targets.add(...actors.targets);
+    ctx.emitters.add(...actors.emitters);
+    ctx.children.add(...actors.children);
+    ctx.pContextKeys.add(...actors.pContextKeys);
+  },
+);
+
+export const processTransitionsConfig = (
   ctx: ParseTreeContext,
+  transitions: _TransitionsConfig,
 ) => {
-  if ('next' in actor) {
-    // EmitterConfig
-    if (!ctx.emittersMap.has(actorKey)) {
-      ctx.emittersMap.set(actorKey, actor);
-    }
-  } else if ('on' in actor) {
-    // ChildConfig
-    if (!ctx.childrenMap.has(actorKey)) {
-      const childEntry: __ChildConfig = {
-        description: actor.name,
-        on: Object.entries(actor.on || {}),
-        contexts: actor.contexts
-          ? Object.entries(actor.contexts)
-          : undefined,
-      };
-      if (!childEntry.contexts) delete (childEntry as any).contexts;
-      ctx.childrenMap.set(actorKey, childEntry);
-    }
-  }
+  return pipe(
+    () => transitions,
+    reduceTransitionsConfig,
+    transitions => {
+      ctx.actions.add(...transitions.actions);
+      ctx.guards.add(...transitions.guards);
+      ctx.targets.add(...transitions.targets);
+      ctx.events.add(...transitions.events);
+      ctx.delays.add(...transitions.delays);
+      ctx.pContextKeys.add(...transitions.pContextKeys);
+      ctx.emitters.add(...transitions.emitters);
+      ctx.children.add(...transitions.children);
+    },
+  )();
 };
 
 // Process all nodes in flat structure
-export const traverse = (node: NodeConfig, ctx: ParseTreeContext) => {
+export const traverseOne = (ctx: ParseTreeContext, node: NodeConfig) => {
   processActions(ctx, node.entry);
   processActions(ctx, node.exit);
   processActivity(ctx, node.activities);
+  processTransitionsConfig(ctx, node);
 
-  // Extract from activities
-
-  // Extract from on transitions
-  if (node.on) {
-    Object.entries(node.on).forEach(([eventKey, transition]) => {
-      const transitions = toArray.typed(transition);
-      transitions.forEach(trans =>
-        processTransition(trans as any, eventKey, ctx),
+  pipe(
+    () => node,
+    n => n.tags,
+    toArray.typed,
+    v => ctx.tags.add(...v),
+  )();
+};
+export const traverse = (ctx: ParseTreeContext, node: NodeConfig) => {
+  pipe(
+    () => node,
+    flatMap,
+    v => Object.entries(v),
+    v => {
+      return v.forEach(
+        pipe(
+          v => v,
+          tap(([key]) => ctx.allPaths.add(key)),
+          ([, value]) => value,
+          v => traverseOne(ctx, v),
+        ),
       );
-    });
-  }
-
-  // Extract from always transitions
-  if (node.always) {
-    if (Array.isArray(node.always)) {
-      node.always.forEach((trans, index) => {
-        if (typeof trans === 'object') {
-          ctx.pathsSet.add(`always.[${index}]`);
-          if ('actions' in trans) {
-            const actions = toArray.typed(trans.actions);
-            actions.forEach(a => {
-              const aKey = typeof a === 'string' ? a : (a as any).name;
-              if (aKey) {
-                if (!ctx.actionsKeysSet.has(aKey)) {
-                  ctx.actionsSet.add(a);
-                }
-                ctx.actionsKeysSet.add(aKey);
-              }
-            });
-          }
-          if ('guards' in trans) {
-            const guards = toArray.typed(trans.guards);
-            guards.forEach(g => {
-              const gKey = typeof g === 'string' ? g : (g as any).name;
-              if (gKey) {
-                if (!ctx.guardsKeysSet.has(gKey)) {
-                  ctx.guardsSet.add(g);
-                }
-                ctx.guardsKeysSet.add(gKey);
-              }
-            });
-          }
-        }
-      });
-    } else {
-      ctx.pathsSet.add('always');
-    }
-  }
-
-  // Extract from after (delays)
-  if (node.after) {
-    Object.entries(node.after).forEach(([delayKey, transition]) => {
-      if (!ctx.delaysSet.has(delayKey)) {
-        ctx.delaysSet.add(delayKey);
-      }
-      ctx.pathsSet.add(`after.${delayKey}`);
-      processTransition(transition, delayKey, ctx);
-    });
-  }
-
-  // Extract from actors
-  if (node.actors) {
-    Object.entries(node.actors).forEach(([actorKey, actor]) => {
-      processActor(actor, actorKey, ctx);
-    });
-  }
+    },
+  )();
 };

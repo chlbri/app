@@ -3,24 +3,37 @@ import { defaultCheck } from '#guards';
 
 class BetterSet<T = any> implements Iterable<T> {
   get [Symbol.iterator]() {
-    return this.#items[Symbol.iterator];
+    return this.#items[Symbol.iterator].bind(this.#items);
   }
 
   #items: Set<T>;
+
   constructor(private equals?: (a: T, b: T) => boolean) {
     this.#items = new Set<T>();
   }
 
-  #provideItems = (items: Set<T>) => {
-    this.#items = items;
+  __provideItems = (items: Set<T> | BetterSet<T>) => {
+    if (items instanceof BetterSet) {
+      this.#items = items.#items;
+    } else {
+      this.#items = items;
+    }
   };
 
-  add = (item: T) => {
-    const array = this.toArray;
+  #add = (item: T) => {
     const equals = this.equals;
-    if (!!equals && array.some(i => equals(i, item))) return;
+
+    for (const item2 of this.#items) {
+      if (!equals) break;
+      if (equals(item, item2)) return;
+    }
+
     this.#items.add(item);
     return item;
+  };
+
+  add = (...items: T[]) => {
+    items.forEach(this.#add);
   };
 
   get has() {
@@ -28,7 +41,7 @@ class BetterSet<T = any> implements Iterable<T> {
   }
 
   get values() {
-    return this.#items.values();
+    return this.#items.values.bind(this.#items)();
   }
 
   get size() {
@@ -78,7 +91,7 @@ class BetterSet<T = any> implements Iterable<T> {
   ) => {
     const rest = new BetterSet<U | T>(equals);
     const items = this.#items.union(other.#items);
-    rest.#provideItems(items);
+    rest.__provideItems(items);
     return rest;
   };
 
@@ -88,7 +101,7 @@ class BetterSet<T = any> implements Iterable<T> {
   ) => {
     const rest = new BetterSet<U | T>(equals);
     const items = this.#items.intersection(other.#items);
-    rest.#provideItems(items);
+    rest.__provideItems(items);
     return rest;
   };
 
@@ -98,7 +111,7 @@ class BetterSet<T = any> implements Iterable<T> {
   ) => {
     const rest = new BetterSet<U | T>(equals);
     const items = this.#items.difference(other.#items);
-    rest.#provideItems(items);
+    rest.__provideItems(items);
     return rest;
   };
 
@@ -108,7 +121,7 @@ class BetterSet<T = any> implements Iterable<T> {
   ) => {
     const rest = new BetterSet<U | T>(equals);
     const items = this.#items.symmetricDifference(other.#items);
-    rest.#provideItems(items);
+    rest.__provideItems(items);
     return rest;
   };
 
