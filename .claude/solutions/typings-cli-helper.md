@@ -3,17 +3,56 @@
 ## Problem
 
 `createMachine` currently relies heavily on the TypeScript language server
-to infer complex generic types (`Config`, `EventsMap`, `ActorsConfigMap`,
-`PrimitiveObject`, etc.) at authoring time. The deep nesting of conditional
-types (`TransformPrimitiveObject`, `TransformConfigDef`,
+to infer complex generic types at authoring time. The deep nesting of
+conditional types (`TransformPrimitiveObject`, `TransformConfigDef`,
 `NoExtraKeysConfig`, `FlatMapN`, etc.) causes the TS server to slow down
 significantly on larger machines.
 
-The goal: offload type computation to a **CLI tool** that watches
-`*.fsm.ts` / `*.machine.ts` files and pre-generates type helpers into a
-single `app.gen.ts` file, so the TS server only consumes simple,
-pre-resolved types via a global `Register` interface (TanStack Start
-pattern).
+Additionally, the existing `app.gen.ts` generation uses the opaque
+`MachineEntry<Events, Children, Emitters, PContext, Tags>` helper type —
+which leaves `options.actions`, `options.guards`, and `options.delays` typed
+as the loose `string`. This means the compiler cannot constrain those
+identifiers at call-sites.
+
+**Goals of this rewrite**:
+
+1. Offload ALL type computation to a CLI tool.
+2. Eliminate `MachineEntry<>` from generated files — emit **fully inlined
+   raw types** so every string literal union is explicit.
+3. Use `parseTree` (the library's own runtime function) as the single source
+   of truth for extracting all symbol sets from a config.
+4. Use `ts-morph` for proper TypeScript AST extraction instead of fragile
+   regex heuristics.
+5. CLI built on `cmd-ts` + `chokidar`, following the same patterns used in
+   `@bemedev/codebase` and `@bemedev/core`.
+
+---
+
+## What Changes vs. the Previous Plan
+
+| Aspect                  | Old plan                                 | New plan (this doc)                       |
+| ----------------------- | ---------------------------------------- | ----------------------------------------- |
+| Config extraction       | Regex bracket-matching                   | `ts-morph` AST static evaluation          |
+| Symbol extraction       | Custom tree walker (`parseStateTree`)    | `parseTree()` from the library itself     |
+| Helper type in gen file | `MachineEntry<E, C, Em, Pc, Ta>`         | **No helper — raw inline type**           |
+| `options.actions`       | `string` (untyped)                       | `'action1' \| 'action2'` (literal union)  |
+| `options.guards`        | `string` (untyped)                       | `'guard1' \| 'guard2'` (literal union)    |
+| `options.delays`        | `string` (untyped)                       | `'delay1'` (literal union)                |
+| `paths.map`             | Reconstructed with `__targets` heuristic | Serialized from `parseTree` runtime value |
+| `paths.all`             | Array of strings                         | String literal union type                 |
+| `pContext`              | `any`                                    | Inline object type from `typings` arg     |
+
+---
+
+## Tool Stack
+
+| Tool        | Role                                                         |
+| ----------- | ------------------------------------------------------------ |
+| `cmd-ts`    | CLI command definitions (`generate`, `watch`)                |
+| `chokidar`  | File system watching for `*.machine.ts` / `*.fsm.ts`         |
+| `ts-morph`  | TypeScript AST parsing — config extraction + typings parsing |
+| `parseTree` | Runtime analysis of `NodeConfig` → all symbol sets           |
+| `glob`      | Initial file discovery                                       |
 
 ---
 
@@ -21,1295 +60,914 @@ pattern).
 
 ```
 User writes *.machine.ts / *.fsm.ts
-       |
-       v
-CLI (chokidar watcher)
-       |
-       v
-Parse all machine configs
-       |
-       v
-Generate single app.gen.ts at rootDir (or project root)
-  - Rewrites entire Config as strictly typed const (no __tsSchema)
-  - Generates StatePaths type for machine.ts and interpreter.ts
-  - declare module '@bemedev/app-ts' { interface Register { ... } }
-       |
-       v
-MACHINES registry: getMachine('relative/path') -> fully typed
+          │
+          ▼
+  ┌──────────────────────────────────────────┐
+  │   PHASE 1 — ts-morph AST Extraction      │
+  │                                          │
+  │  • Find createMachine(name, cfg, typ?)   │
+  │  • Extract name  → string literal        │
+  │  • Evaluate cfg  → NodeConfig object     │
+  │  • Extract typ   → pContext type string  │
+  └───────────────────┬──────────────────────┘
+                      │
+                      ▼
+  ┌──────────────────────────────────────────┐
+  │   PHASE 2 — parseTree Runtime Analysis   │
+  │                                          │
+  │  parseTree(config) → {                   │
+  │    paths.map, paths.all,                 │
+  │    events, actions, guards, delays,      │
+  │    emitters, children, tags,             │
+  │    pContextKeys                          │
+  │  }                                       │
+  └───────────────────┬──────────────────────┘
+                      │
+                      ▼
+  ┌──────────────────────────────────────────┐
+  │   PHASE 3 — Raw Type Serialization       │
+  │                                          │
+  │  BetterSet<string> → 'a' | 'b' | never   │
+  │  string[]          → '/' | '/idle'       │
+  │  ConfigPaths       → inline type literal │
+  │  pContextShape     → { data: string }    │
+  └───────────────────┬──────────────────────┘
+                      │
+                      ▼
+  ┌──────────────────────────────────────────┐
+  │   PHASE 4 — app.gen.ts Emission          │
+  │                                          │
+  │  declare module '...' {                  │
+  │    interface Register {                  │
+  │      'path': { /* raw inline type */ }   │
+  │    }                                     │
+  │  }                                       │
+  └──────────────────────────────────────────┘
+          │                      │
+          ▼                      ▼
+   cmd-ts generate          cmd-ts watch
+   (one-shot)           (chokidar watcher)
 ```
 
-**Single output file**: `app.gen.ts` at the `rootDir` defined in
-`tsconfig.json`, or at the project root if `rootDir` is not set. No
-per-machine `*.gen.ts` files.
+**Single output file**: `app.gen.ts` at the project root (or at `rootDir`
+from `tsconfig.json` if present). No per-machine `*.gen.ts` files.
 
 ---
 
-## Core Design: No `__tsSchema`, the Entire Config IS the Schema
+## File Convention
 
-**Current approach** (removed): The user imports a `__tsSchema` object from
-a `.gen.ts` file and injects it into the config. The `ConfigDef` type
-overlays target constraints on top of the config.
-
-**New approach**: The CLI **rewrites the entire config as a strictly typed
-`const`** in `app.gen.ts`. Each state node has its `targets` pre-resolved
-as a string literal union **excluding its own path**. The config in
-`app.gen.ts` IS the schema. No separate schema overlay, no `__tsSchema`
-key.
-
-**Before** (current, using `__tsSchema`):
+**Convention**: `*.fsm.ts` or `*.machine.ts`, one `export default
+createMachine(...)` per file.
 
 ```ts
-import { SCHEMAS } from './machine1.machine.gen';
+// src/__tests__/interpreters/tags/tags.machine.ts
+import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
-export const machine = createMachine({
-  __tsSchema: SCHEMAS.machine.__tsSchema, // ← REMOVED
-  initial: 'idle',
-  states: {
-    idle: { on: { NEXT: '/working' } },
-    working: { on: { DONE: '/final' } },
-    final: {},
+export default createMachine(
+  'src/__tests__/interpreters/tags/tags.machine',
+  {
+    initial: 'idle',
+    states: {
+      idle:    { tags: ['idle'],             on: { NEXT: '/working' } },
+      working: { tags: ['working', 'busy'],  on: { NEXT: '/final', PREV: '/idle' } },
+      final:   {},
+    },
   },
-}, typings({ ... }));
+  { eventsMap: type({ NEXT: 'never', PREV: 'never' }) },
+);
 ```
 
-**After** (CLI generates strict config type, user writes plain config):
+Rules:
+
+- **Arg 1**: string literal — the machine's register key (relative path,
+  no extension).
+- **Arg 2**: the config `NodeConfig` object literal. Must be statically
+  evaluable by ts-morph (pure object literal or locally-resolvable `const`).
+- **Arg 3** (optional): typings object — used **only** to extract `pContext`
+  and `context` type shapes. Event and actor symbol keys are extracted from
+  the config itself via `parseTree` and need not be repeated here.
+
+---
+
+## Phase 1 — ts-morph AST Extraction
+
+### 1.1 Open the Project
 
 ```ts
-// User writes this — no __tsSchema, no import from gen file
-export default createMachine('my/machine', {
-  initial: 'idle',
-  states: {
-    idle: { on: { NEXT: '/working' } },
-    working: { on: { DONE: '/final' } },
-    final: {},
-  },
-}, typings({ ... }));
+import { Project } from 'ts-morph';
+
+const project = new Project({
+  tsConfigFilePath: resolve(cwd, 'tsconfig.json'),
+  skipAddingFilesFromTsConfig: true,
+});
 ```
 
-The CLI watches, parses the config, and generates the strict const config
-type in `app.gen.ts`:
+A single `Project` instance is created once per `generateAppGen` call and
+shared across all source files. This avoids parsing `tsconfig.json` once
+per file and reuses the type checker.
+
+### 1.2 Locate the `createMachine` Call
+
+For each `*.machine.ts` / `*.fsm.ts` file, add the source file to ts-morph
+and navigate to the `export default createMachine(...)` call expression:
+
+```
+SourceFile
+  └─ ExportAssignment  (export default ...)
+       └─ CallExpression   (callee identifier === 'createMachine')
+            ├─ Arg [0]  StringLiteral              → machine name / register key
+            ├─ Arg [1]  ObjectLiteralExpression    → config
+            └─ Arg [2]  ObjectLiteralExpression    → typings (optional)
+```
+
+### 1.3 Evaluate the Config AST → `NodeConfig`
+
+The config argument is an `ObjectLiteralExpression`. ts-morph is used to
+**statically evaluate** it into a plain JavaScript `NodeConfig` object:
+
+- `StringLiteral` / `NumericLiteral` → plain value.
+- `ArrayLiteralExpression` → array (elements evaluated recursively).
+- `ObjectLiteralExpression` → plain object (properties evaluated recursively).
+- `Identifier` or `PropertyAccessExpression` → resolve the binding via
+  ts-morph's symbol API, then evaluate.
+- Anything non-resolvable (function calls, imports from external packages,
+  spread operators) → **skip the file with a warning**.
+
+> **Why not `eval()` / dynamic `import()`?**
+> Importing the file at CLI time would require a runtime environment
+> matching the project's module aliases (`#machine`, `#states`, etc.) and
+> could execute side effects. Static AST evaluation via ts-morph is
+> hermetic, alias-independent, and safe.
+
+### 1.4 Extract `pContext` Type from the Typings Arg
+
+The optional third argument may contain a `pContext` field built with the
+`@bemedev/typings` `type()` helper:
 
 ```ts
-// Inside app.gen.ts — the CLI rewrites the ENTIRE config as strictly typed const
+{ pContext: type({ data: 'string', count: 'number' }) }
+```
 
-type MyMachine_AllPaths = '/' | '/idle' | '/working' | '/final';
+ts-morph is used to find the `pContext` property inside the typings
+`ObjectLiteralExpression`, then:
 
-/**
- * Strictly typed config. Each state's available targets
- * are ALL paths EXCEPT its own path.
- * This replaces __tsSchema entirely.
- */
-type MyMachine_Config = {
-  readonly initial: 'idle' | 'working' | 'final';
-  readonly states: {
-    readonly idle: {
-      /** idle can target any path except '/idle' */
-      readonly __targets: Exclude<MyMachine_AllPaths, '/' | '/idle'>;
-      readonly on?: Record<
-        string,
-        TransitionConfig<Exclude<MyMachine_AllPaths, '/' | '/idle'>>
-      >;
-      readonly after?: Record<
-        string,
-        TransitionConfig<Exclude<MyMachine_AllPaths, '/' | '/idle'>>
-      >;
-      readonly always?: AlwaysConfig<
-        Exclude<MyMachine_AllPaths, '/' | '/idle'>
-      >;
-    };
-    readonly working: {
-      readonly __targets: Exclude<MyMachine_AllPaths, '/' | '/working'>;
-      readonly on?: Record<
-        string,
-        TransitionConfig<Exclude<MyMachine_AllPaths, '/' | '/working'>>
-      >;
-      readonly after?: Record<
-        string,
-        TransitionConfig<Exclude<MyMachine_AllPaths, '/' | '/working'>>
-      >;
-      readonly always?: AlwaysConfig<
-        Exclude<MyMachine_AllPaths, '/' | '/working'>
-      >;
-    };
-    readonly final: {
-      readonly __targets: Exclude<MyMachine_AllPaths, '/' | '/final'>;
-      readonly on?: Record<
-        string,
-        TransitionConfig<Exclude<MyMachine_AllPaths, '/' | '/final'>>
-      >;
-      readonly after?: Record<
-        string,
-        TransitionConfig<Exclude<MyMachine_AllPaths, '/' | '/final'>>
-      >;
-      readonly always?: AlwaysConfig<
-        Exclude<MyMachine_AllPaths, '/' | '/final'>
-      >;
-    };
-  };
+1. If the value is a `CallExpression` to `type(...)`, extract its first
+   argument and recursively convert primitive type strings to TS notation:
+   `'string'` → `string`, `'number'` → `number`, `'boolean'` → `boolean`,
+   `'never'` → `never`, nested objects → recurse.
+2. If absent or `undefined` → emit `undefined`.
+
+This produces an inline type string such as `{ data: string; count: number }`.
+
+---
+
+## Phase 2 — `parseTree` Runtime Analysis
+
+Once Phase 1 produces a plain `NodeConfig` object, the CLI calls the
+library's own `parseTree` function directly:
+
+```ts
+import { parseTree } from '../../utils/parseTree';
+
+const tree = parseTree(config); // NodeConfig → Output
+```
+
+`tree` contains every symbol set needed to populate a `Register` entry:
+
+| `tree` field    | Type                          | Maps to `Register` field             |
+| --------------- | ----------------------------- | ------------------------------------ |
+| `paths.all`     | `string[]`                    | `paths.all` → string literal union   |
+| `paths.map`     | `NoExtraKeysConfigPaths<...>` | `paths.map` → inline type literal    |
+| `events`        | `BetterSet<string>`           | `events` → string literal union      |
+| `actions`       | `BetterSet<string>`           | `options.actions` → literal union    |
+| `guards`        | `BetterSet<string>`           | `options.guards` → literal union     |
+| `delays`        | `BetterSet<string>`           | `options.delays` → literal union     |
+| `emitters`      | `BetterSet<string>`           | `options.emitters` → literal union   |
+| `children`      | `BetterSet<string>`           | `options.children` → literal union   |
+| `tags`          | `BetterSet<string>`           | `options.tags` + `tags?` → union     |
+| `pContextKeys`  | `BetterSet<string>`           | informational (for pContext type)    |
+
+`parseTree` traverses the entire nested state tree recursively, so the CLI
+contains **no custom tree walker**. Symbol extraction is 100% delegated.
+
+---
+
+## Phase 3 — Raw Type Serialization
+
+### 3.1 `BetterSet<string>` → string literal union
+
+```ts
+function setToUnion(set: BetterSet<string>): string {
+  const values = [...set];
+  if (values.length === 0) return 'never';
+  return values.map(v => `'${v}'`).join(' | ');
+}
+// {'NEXT', 'PREV'} → "'NEXT' | 'PREV'"
+// {}               → "never"
+```
+
+### 3.2 `string[]` (paths.all) → string literal union
+
+```ts
+function pathsToUnion(paths: string[]): string {
+  if (paths.length === 0) return 'never';
+  return paths.map(p => `'${p}'`).join(' | ');
+}
+// ['/', '/idle', '/working'] → "'/' | '/idle' | '/working'"
+```
+
+### 3.3 `ConfigPaths` (paths.map) → inline type object
+
+`parseTree`'s `paths.map` is a runtime `ConfigPaths` value:
+
+```ts
+type ConfigPaths = {
+  targets:  string[];
+  initial?: string;
+  states?:  Record<string, ConfigPaths>;
 };
 ```
 
-With compound states (nested), the same logic applies recursively:
+Serialization recurses over the runtime value and emits an inline
+TypeScript type literal:
 
 ```ts
-type Machine1_Config = {
-  readonly initial: 'idle' | 'checking' | 'working';
-  readonly states: {
-    readonly idle: {
-      readonly __targets:
+function configPathsToType(cp: ConfigPaths, indent = 0): string {
+  const pad = ' '.repeat(indent);
+  const targets = cp.targets.map(t => `'${t}'`).join(' | ') || 'never';
+  const lines: string[] = [`{ targets: (${targets})[];`];
+
+  if (cp.initial) {
+    const childNames = Object.keys(cp.states ?? {})
+      .map(k => `'${k}'`).join(' | ');
+    lines.push(`${pad}  initial?: ${childNames};`);
+  }
+
+  if (cp.states && Object.keys(cp.states).length > 0) {
+    const stateLines = Object.entries(cp.states)
+      .map(([k, v]) => `${pad}  '${k}': ${configPathsToType(v, indent + 2)};`);
+    lines.push(`${pad}  states?: {`, ...stateLines, `${pad}  };`);
+  }
+
+  lines.push(`${pad}}`);
+  return lines.join('\n' + pad);
+}
+```
+
+### 3.4 `pContext` type string
+
+The type string produced in Phase 1.4 is used verbatim. If absent, emit
+`undefined`.
+
+---
+
+## Phase 4 — Raw Inline Type Emission (No `MachineEntry`)
+
+Each machine produces one raw inline type block. No helper type
+(`MachineEntry`, `MachineTypeDef`, etc.) is imported or referenced in the
+generated file. Every field is an explicit literal union.
+
+### Target shape per Register entry
+
+```ts
+'<machine-name>': {
+  paths: {
+    map: <configPathsToType(tree.paths.map)>;
+    all: <pathsToUnion(tree.paths.all)>;
+  };
+  events: <setToUnion(tree.events)>;
+  options: {
+    children: <setToUnion(tree.children)>;
+    emitters: <setToUnion(tree.emitters)>;
+    tags:     <setToUnion(tree.tags)>;
+    actions:  <setToUnion(tree.actions)>;
+    delays:   <setToUnion(tree.delays)>;
+    guards:   <setToUnion(tree.guards)>;
+  };
+  pContext?: <pContextType>;
+  tags?: <setToUnion(tree.tags)>;
+};
+```
+
+### Full example — tags machine
+
+Given:
+
+```ts
+export default createMachine(
+  'src/__tests__/interpreters/tags/tags.machine',
+  {
+    initial: 'idle',
+    states: {
+      idle:    { tags: ['idle'],             on: { NEXT: '/working' } },
+      working: { tags: ['working', 'busy'],  on: { NEXT: '/final', PREV: '/idle' } },
+      final:   {},
+    },
+  },
+  { eventsMap: type({ NEXT: 'never', PREV: 'never' }) },
+);
+```
+
+`parseTree` returns:
+- `paths.all` = `['/', '/idle', '/working', '/final']`
+- `events`    = `{'NEXT', 'PREV'}`,   `actions` = `{}`,  `guards` = `{}`
+- `delays`    = `{}`,   `emitters` = `{}`,  `children` = `{}`
+- `tags`      = `{'idle', 'working', 'busy'}`
+
+Generated Register entry (no helper, no import needed):
+
+```ts
+'src/__tests__/interpreters/tags/tags.machine': {
+  paths: {
+    map: {
+      targets: ('/' | '/idle' | '/working' | '/final')[];
+      initial?: 'idle' | 'working' | 'final';
+      states?: {
+        '/idle':    { targets: ('/' | '/working' | '/final')[] };
+        '/working': { targets: ('/' | '/idle'    | '/final')[] };
+        '/final':   { targets: ('/' | '/idle'    | '/working')[] };
+      };
+    };
+    all: '/' | '/idle' | '/working' | '/final';
+  };
+  events: 'NEXT' | 'PREV';
+  options: {
+    children: never;
+    emitters: never;
+    tags:     'idle' | 'working' | 'busy';
+    actions:  never;
+    delays:   never;
+    guards:   never;
+  };
+  pContext?: undefined;
+  tags?: 'idle' | 'working' | 'busy';
+};
+```
+
+### Full example — complex machine with actions / guards / delays / pContext
+
+Given:
+
+```ts
+export default createMachine(
+  'src/__tests__/interpreters/complex/machine1.machine',
+  {
+    initial: 'idle',
+    states: {
+      idle: { on: { START: { target: '/checking', actions: 'provideAsset' } } },
+      checking: {
+        after: { CHECK_DELAY: { target: '/working', guards: 'assetIsDefined' } },
+        on: { RESET: '/idle' },
+      },
+      working: {
+        initial: 'idle',
+        entry: 'addIntermediary',
+        states: {
+          idle: {
+            on: {
+              ADD_INTERMEDIARY: {
+                target: '/working/adding',
+                guards: 'intermediariesAreNotFull',
+              },
+            },
+          },
+          adding: { on: { RESET: '/idle' } },
+        },
+      },
+    },
+  },
+  {
+    pContext: type({ asset: { id: 'string', value: 'number' } }),
+    eventsMap: type({ START: 'never', ADD_INTERMEDIARY: 'never', RESET: 'never' }),
+  },
+);
+```
+
+Generated Register entry:
+
+```ts
+'src/__tests__/interpreters/complex/machine1.machine': {
+  paths: {
+    map: {
+      targets: (
+        | '/'
+        | '/idle'
         | '/checking'
         | '/working'
         | '/working/idle'
-        | '/working/adding';
-      // ...
-    };
-    readonly checking: {
-      readonly __targets:
-        | '/idle'
-        | '/working'
-        | '/working/idle'
-        | '/working/adding';
-      // ...
-    };
-    readonly working: {
-      readonly initial: 'idle' | 'adding';
-      readonly __targets: '/idle' | '/checking';
-      readonly states: {
-        readonly idle: {
-          /** working/idle can target everything except '/', '/working', '/working/idle' */
-          readonly __targets: '/idle' | '/checking' | '/working/adding';
-          // ...
+        | '/working/adding'
+      )[];
+      initial?: 'idle' | 'checking' | 'working';
+      states?: {
+        '/idle': {
+          targets: ('/' | '/checking' | '/working' | '/working/idle' | '/working/adding')[];
         };
-        readonly adding: {
-          readonly __targets: '/idle' | '/checking' | '/working/idle';
-          // ...
+        '/checking': {
+          targets: ('/' | '/idle' | '/working' | '/working/idle' | '/working/adding')[];
+        };
+        '/working': {
+          targets: ('/' | '/idle' | '/checking')[];
+          initial?: 'idle' | 'adding';
+          states?: {
+            '/working/idle': {
+              targets: ('/' | '/idle' | '/checking' | '/working' | '/working/adding')[];
+            };
+            '/working/adding': {
+              targets: ('/' | '/idle' | '/checking' | '/working' | '/working/idle')[];
+            };
+          };
         };
       };
     };
+    all:
+      | '/'
+      | '/idle'
+      | '/checking'
+      | '/working'
+      | '/working/idle'
+      | '/working/adding';
   };
-};
-```
-
-The `__targets` field on each state node constrains all `target` values in
-`on`, `after`, `always`, and `actors` transitions within that node. The
-`Register` interface wires `MyMachine_Config` to the machine path, and
-`createMachine` reads the config type from `Register` to constrain the
-config parameter.
-
----
-
-## `StatePaths` Type for `machine.ts` and `interpreter.ts`
-
-A new `StatePaths` type is added to both `Machine` and `Interpreter`
-classes to constrain any API that accepts a state path to only valid paths
-for that machine.
-
-**In `src/machine/machine.ts`** — add a `StatePaths` type parameter derived
-from the config:
-
-```ts
-class Machine<
-  const C extends Config = Config,
-  const Pc = any,
-  const Tc extends PrimitiveObject = PrimitiveObject,
-  E extends GetEventsFromConfig<C> = GetEventsFromConfig<C>,
-  A extends ActorsConfigMap = GetActorKeysFromConfig<C>,
-  Ta extends ExtractTagsFromConfig<C> = ExtractTagsFromConfig<C>,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
-  // NEW: pre-resolved from Register, no longer computed from C
-  Sp extends string = string,
-  // ...
-> {
-  // ...
-
-  /**
-   * Type-safe state path accessor.
-   * Only accepts valid absolute paths for this machine.
-   * Pre-resolved from app.gen.ts via Register — no FlatMapN computation.
-   */
-  toNode(value: Sp): NodeConfig {
-    /* ... */
-  }
-
-  /**
-   * Check if a state path matches current value.
-   */
-  matches(path: Sp): boolean {
-    /* ... */
-  }
-}
-```
-
-**In `src/interpreters/interpreter.ts`** — the `Interpreter` also gets
-`StatePaths`:
-
-```ts
-class Interpreter<
-  const C extends Config = Config,
-  const Pc = any,
-  const Tc extends PrimitiveObject = PrimitiveObject,
-  E extends GetEventsFromConfig<C> = GetEventsFromConfig<C>,
-  A extends ActorsConfigMap = GetActorKeysFromConfig<C>,
-  Ta extends ExtractTagsFromConfig<C> = ExtractTagsFromConfig<C>,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
-  // NEW: state paths constraint
-  Sp extends string = string,
-> {
-  // ...
-
-  /**
-   * Check if the interpreter's current state matches a path.
-   * Only accepts valid state paths.
-   */
-  matches(path: Sp): boolean {
-    /* ... */
-  }
-
-  /**
-   * Subscribe to a specific state path.
-   * Only accepts valid state paths.
-   */
-  onState(path: Sp, callback: (state: State) => void): void {
-    /* ... */
-  }
-}
-```
-
-**How `StatePaths` flows from `app.gen.ts`**:
-
-The `Register` interface carries `AllPaths` per machine, and
-`createMachine` / `interpret` extract it:
-
-```ts
-// In app.gen.ts
-declare module '@bemedev/app-ts' {
-  interface Register {
-    machines: {
-      'my/machine': MachineTypeDef<
-        MyMachine_Config, // strictly typed config (replaces __tsSchema)
-        MyMachine_AllPaths // '/idle' | '/working' | '/final'
-        // ...action keys, guard keys, etc.
-      >;
-    };
-  }
-}
-```
-
-```ts
-// In registry.ts — getMachine returns Machine<..., Sp>
-// where Sp = Register['machines'][P]['allPaths']
-export function getMachine<P extends keyof Register['machines']>(
-  relativePath: P,
-): Machine<
-  Register['machines'][P]['config'],
-  Register['machines'][P]['pContext'],
-  Register['machines'][P]['context'],
-  // ...
-  Register['machines'][P]['allPaths'] // StatePaths!
-> {
-  return MACHINES[relativePath] as any;
-}
-```
-
----
-
-## Rule-by-Rule Implementation
-
-### Rule 1: Machine File Convention
-
-**Convention**: `*.fsm.ts` or `*.machine.ts`, one `export default` machine
-per file.
-
-**Current state**: Machines are currently named exports (e.g.,
-`export const machine = createMachine(...)`). This must change to
-`export default`.
-
-**Changes needed**:
-
-```ts
-// Before (current)
-export const machine = createMachine({ ... }, typings({ ... }));
-
-// After — no __tsSchema import, no gen file import
-export default createMachine('src/interpreters/__tests__/tags/tags', {
-  initial: 'idle',
-  states: {
-    idle: { tags: ['idle'], on: { NEXT: '/working' } },
-    working: { tags: ['working', 'busy'], on: { NEXT: '/final', PREV: '/idle' } },
-    final: {},
-  },
-}, typings({
-  eventsMap: { NEXT: 'primitive', PREV: 'primitive' },
-}));
-```
-
-The CLI (using `cmd-ts` + `chokidar`) watches for these files:
-
-```bash
-# One-shot generation
-app generate
-
-# Watch mode — regenerates app.gen.ts on any *.machine.ts / *.fsm.ts change
-app watch
-```
-
----
-
-### Rule 2: `createMachine` Gets 3 Arguments
-
-**New signature**:
-
-```ts
-createMachine(name, config, typingsArg?)
-```
-
-- **Arg 1 (`name: string`)**: Relative path to the project root,
-  auto-generated by the CLI on file creation, then watched.
-- **Arg 2 (`config`)**: The machine config — **strictly typed via
-  `Register`**, no `__tsSchema` needed. The CLI rewrites the entire config
-  type as a const with per-state target constraints.
-- **Arg 3 (`typingsArg?`)**: The typings (same as current arg 2, now
-  optional per Rule 5).
-
-**Implementation changes in `src/machine/machine.ts`**:
-
-```ts
-// Current: CreateMachine_F takes (config, types) + config has __tsSchema
-// New: CreateMachine_F takes (name, config, types?)
-//      config type comes from Register[name]['config'] — already strictly typed
-//      No __tsSchema key needed
-```
-
-The `NoExtraKeysConfig` type no longer needs the `__tsSchema` exception:
-
-```ts
-// Before
-export type NoExtraKeysConfig<T extends Config> = T & {
-  [K in Exclude<keyof T, keyof Config | '__tsSchema'>]: never; // ← __tsSchema exception
-};
-
-// After — clean, no special keys
-export type NoExtraKeysConfig<T extends Config> = T & {
-  [K in Exclude<keyof T, keyof Config>]: never;
+  events: 'START' | 'ADD_INTERMEDIARY' | 'RESET';
+  options: {
+    children: never;
+    emitters: never;
+    tags:    never;
+    actions: 'provideAsset' | 'addIntermediary';
+    delays:  'CHECK_DELAY';
+    guards:  'assetIsDefined' | 'intermediariesAreNotFull';
+  };
+  pContext?: { asset: { id: string; value: number } };
+  tags?: never;
 };
 ```
 
 ---
 
-### Rule 3: Global `MACHINES` Registry via `declare module` (TanStack Start Pattern)
-
-Instead of per-machine gen files or function overloads, the CLI generates a
-**single `app.gen.ts`** at the project root (no `rootDir` in tsconfig) that
-uses module declaration augmentation.
-
-**Runtime registry** (`src/machine/registry.ts`):
-
-```ts
-const MACHINES: Record<string, AnyMachine> = {};
-
-export function getMachine<P extends keyof Register['machines']>(
-  relativePath: P,
-): Register['machines'][P] {
-  return MACHINES[relativePath] as any;
-}
-
-// The Register interface — augmented by app.gen.ts
-export interface Register {
-  machines: Record<string, AnyMachine>;
-}
-
-export { MACHINES };
-```
-
-**Generated `app.gen.ts`** (at project root, written by CLI):
+## Generated `app.gen.ts` File Structure
 
 ```ts
 /**
  * This file is auto-generated by the @bemedev/app-ts CLI.
- * Do not edit manually.
+ * Do not edit manually. Re-run `app-ts generate` or restart `app-ts watch`.
  *
- * @see https://www.npmjs.com/package/@bemedev/app-ts
+ * Regenerated: 2026-04-23T10:00:00.000Z
  */
-
-// ============================================================
-// Machine: src/interpreters/__tests__/tags/tags
-// Source:   src/interpreters/__tests__/tags/tags.machine.ts
-// ============================================================
-
-type Tags_AllPaths =
-  | '/'
-  | '/idle'
-  | '/working'
-  | '/final';
-
-/**
- * Strictly typed config — replaces __tsSchema.
- * Each state's targets are all valid paths excluding
- * the root path and its own path.
- */
-type Tags_Config = {
-  readonly initial: 'idle' | 'working' | 'final';
-  readonly states: {
-    readonly idle: {
-      readonly __targets: Exclude<Tags_AllPaths, '/' | '/idle'>;
-    };
-    readonly working: {
-      readonly __targets: Exclude<Tags_AllPaths, '/' | '/working'>;
-    };
-    readonly final: {
-      readonly __targets: Exclude<Tags_AllPaths, '/' | '/final'>;
-    };
-  };
-};
-
-type Tags_ActionKeys = never;
-type Tags_GuardKeys = never;
-type Tags_DelayKeys = never;
-type Tags_EventKeys = 'NEXT' | 'PREV';
-type Tags_TagKeys = 'idle' | 'working' | 'busy';
-type Tags_EmitterKeys = never;
-type Tags_ChildrenKeys = never;
-
-type Tags_Context = {};
-type Tags_PContext = undefined;
-type Tags_Events = {
-  NEXT: {};
-  PREV: {};
-};
-type Tags_Actors = {};
-
-// ============================================================
-// Machine: src/interpreters/__tests__/complex/machine1
-// Source:   src/interpreters/__tests__/complex/machine1.machine.ts
-// ============================================================
-
-type Machine1_AllPaths =
-  | '/'
-  | '/idle'
-  | '/checking'
-  | '/working'
-  | '/working/idle'
-  | '/working/adding';
-
-/**
- * Strictly typed config with nested compound states.
- * No __tsSchema — the config IS the schema.
- */
-type Machine1_Config = {
-  readonly initial: 'idle' | 'checking' | 'working';
-  readonly states: {
-    readonly idle: {
-      readonly __targets: '/checking' | '/working' | '/working/idle' | '/working/adding';
-    };
-    readonly checking: {
-      readonly __targets: '/idle' | '/working' | '/working/idle' | '/working/adding';
-    };
-    readonly working: {
-      readonly __targets: '/idle' | '/checking';
-      readonly initial: 'idle' | 'adding';
-      readonly states: {
-        readonly idle: {
-          readonly __targets: '/idle' | '/checking' | '/working/adding';
-        };
-        readonly adding: {
-          readonly __targets: '/idle' | '/checking' | '/working/idle';
-        };
-      };
-    };
-  };
-};
-
-type Machine1_ActionKeys =
-  | 'provideAsset'
-  | 'reset'
-  | 'addMandatoryIntermediary'
-  | 'addBlockImmoIntermediary'
-  | 'error.noAsset'
-  | 'setOnlineStatus'
-  | 'addIntermediary'
-  | 'error.addIntermediary';
-
-type Machine1_GuardKeys =
-  | 'assetIsDefined'
-  | 'mandatoryIsDefined'
-  | 'intermediariesAreNotFull'
-  | 'intermediaryIsNotAdded';
-
-type Machine1_DelayKeys = 'CHECK_DELAY' | 'ADD_DELAY';
-type Machine1_EventKeys = 'START' | 'ADD_INTERMEDIARY' | 'RESET';
-type Machine1_TagKeys = 'un' | 'deux';
-type Machine1_EmitterKeys = never;
-type Machine1_ChildrenKeys = never;
-
-type Machine1_Context = {
-  asset?: {
-    id: string;
-    description: string;
-    value: number;
-    currency: { display: string; bank: string; description?: string };
-    location?: {
-      address?: string;
-      city?: string;
-      country?: string;
-      coordinates?: { lat: number; lng: number };
-      googleMapsLink?: string;
-    };
-    medias: {
-      photos?: string[];
-      videos?: string[];
-      documents?: string[];
-    };
-  };
-  intermediaries?: Array</* Intermediary resolved type */>;
-  internetStatus?: boolean;
-  errors?: {
-    noAsset?: string;
-    intermediary?: { offline?: string };
-  };
-};
-
-type Machine1_PContext = undefined;
-
-type Machine1_Events = {
-  START: {
-    asset?: Machine1_Context['asset'];
-    mandatory?: Machine1_Context['intermediaries'] extends Array<infer I> ? I : never;
-  };
-  ADD_INTERMEDIARY: Machine1_Context['intermediaries'] extends Array<infer I> ? I : never;
-  RESET: {};
-};
-
-type Machine1_Actors = {};
-
-// ============================================================
-// Example: Machine with children/emitters and pContext relation
-// ============================================================
-//
-// type WithActors_ChildrenKeys = 'childService' | 'otherChild';
-// type WithActors_EmitterKeys = 'priceStream' | 'statusStream';
-//
-// The children <-> pContext relation is preserved:
-// Each child key maps to its events AND the pContext path it uses
-//
-// type WithActors_ChildrenConfig = {
-//   childService: {
-//     events: { CHILD_EVENT: {} };
-//     parentPContext: { childData: { id: string; status: string } };
-//   };
-//   otherChild: {
-//     events: { OTHER_EVENT: { value: number } };
-//     parentPContext: { otherData: { count: number } };
-//   };
-// };
-
-// ============================================================
-// Global Register Interface
-// ============================================================
-
-/**
- * Type container for each machine.
- * Holds all pre-resolved types so the TS server never computes
- * FlatMapN, TransformPrimitiveObject, etc.
- */
-interface MachineTypeDef<
-  TConfig = unknown,
-  AllPaths extends string = string,
-  ActionKeys extends string = string,
-  GuardKeys extends string = string,
-  DelayKeys extends string = string,
-  EventKeys extends string = string,
-  TagKeys extends string = string,
-  EmitterKeys extends string = string,
-  ChildrenKeys extends string = string,
-  Context = unknown,
-  PContext = unknown,
-  Events = unknown,
-  Actors = unknown,
-  ChildrenConfig = unknown,
-> {
-  /** Strictly typed config — replaces __tsSchema entirely */
-  config: TConfig;
-  /** All valid state paths for this machine (used by StatePaths) */
-  allPaths: AllPaths;
-  actionKeys: ActionKeys;
-  guardKeys: GuardKeys;
-  delayKeys: DelayKeys;
-  eventKeys: EventKeys;
-  tagKeys: TagKeys;
-  emitterKeys: EmitterKeys;
-  childrenKeys: ChildrenKeys;
-  context: Context;
-  pContext: PContext;
-  events: Events;
-  actors: Actors;
-  /** Maps each child key to { events, parentPContext } */
-  childrenConfig: ChildrenConfig;
-}
 
 declare module '@bemedev/app-ts' {
   interface Register {
-    machines: {
-      'src/interpreters/__tests__/tags/tags': MachineTypeDef<
-        Tags_Config,
-        Tags_AllPaths,
-        Tags_ActionKeys,
-        Tags_GuardKeys,
-        Tags_DelayKeys,
-        Tags_EventKeys,
-        Tags_TagKeys,
-        Tags_EmitterKeys,
-        Tags_ChildrenKeys,
-        Tags_Context,
-        Tags_PContext,
-        Tags_Events,
-        Tags_Actors,
-        {}
-      >;
 
-      'src/interpreters/__tests__/complex/machine1': MachineTypeDef<
-        Machine1_Config,
-        Machine1_AllPaths,
-        Machine1_ActionKeys,
-        Machine1_GuardKeys,
-        Machine1_DelayKeys,
-        Machine1_EventKeys,
-        Machine1_TagKeys,
-        Machine1_EmitterKeys,
-        Machine1_ChildrenKeys,
-        Machine1_Context,
-        Machine1_PContext,
-        Machine1_Events,
-        Machine1_Actors,
-        {}
-      >;
-
-      // ... one entry per discovered *.machine.ts / *.fsm.ts file
+    // ── actions ──────────────────────────────────────────────────────────
+    'src/__tests__/actions/actions.1.machine': {
+      paths: {
+        map: {
+          targets: ('/' | '/idle' | '/working')[];
+          initial?: 'idle' | 'working';
+          states?: {
+            '/idle':    { targets: ('/' | '/working')[] };
+            '/working': { targets: ('/' | '/idle')[]   };
+          };
+        };
+        all: '/' | '/idle' | '/working';
+      };
+      events: 'NEXT';
+      options: {
+        children: never;
+        emitters: never;
+        tags:    never;
+        actions: never;
+        delays:  never;
+        guards:  never;
+      };
+      pContext?: undefined;
+      tags?: never;
     };
+
+    // ... one entry per *.machine.ts / *.fsm.ts (sorted alphabetically)
+
   }
 }
 
 export {};
 ```
 
-**How `getMachine` uses it**:
+Key rules:
 
-```ts
-import { getMachine } from '@bemedev/app-ts';
-
-// Fully typed — TS reads from Register, config is strictly const-typed
-// StatePaths flows from Register['machines'][P]['allPaths']
-const m = getMachine('src/interpreters/__tests__/complex/machine1');
-// m.matches('/idle')       ✅ valid
-// m.matches('/nonexistent') ❌ compile error
-```
+- **No imports** — the generated file has zero `import` statements. All
+  types are inline. No `MachineEntry`, no `type`, no `@bemedev/typings`.
+- One `declare module` block targeting the correct module specifier
+  (`'@bemedev/app-ts'` for a project-level gen file; `'../index'` for a
+  test-scoped gen file like `src/__tests__/app.gen.ts`).
+- Entries sorted **alphabetically** by machine name for deterministic diffs.
+- A **timestamp comment** at the top makes stale gen files easy to spot.
 
 ---
 
-### Rule 4: CLI Rewrites the Entire Config as the User Types
+## CLI Command Design (`cmd-ts`)
 
-The CLI (via chokidar watcher) performs **incremental type resolution** on
-save and writes everything into the single `app.gen.ts`. **The entire
-config is rewritten strictly as const** — this is the fundamental shift
-from the old `__tsSchema` approach.
-
-**What the CLI does on each save**:
-
-1. **Scan all `*.machine.ts` / `*.fsm.ts` files** in the project.
-2. **Parse each config**: Walk the state tree, collecting:
-   - All absolute state paths (`AllPaths`)
-   - Event names, action names, guard names, delay names, tag keys
-   - Emitter keys, children keys
-   - Activity keys
-3. **Compute per-state targets**: For each state node at path `P`, its
-   available targets are `AllPaths` excluding `'/'` and `P` (and for nested
-   states, also excluding the parent compound path).
-4. **Rewrite the entire config type as `const`**: Each state node gets a
-   `__targets` field with its constrained path union. The `on`, `after`,
-   `always`, `actors` transitions within that node are typed to only accept
-   those paths. No `__tsSchema`, no `ConfigDef`, no `TransformConfigDef` —
-   the config type is flat and pre-resolved.
-5. **Extract children <-> pContext relation**: For each child actor,
-   resolve which `pContext` path it maps to (currently computed by
-   `Recomposer<G['contexts']>`). Preserve in generated `ChildrenConfig`.
-6. **Generate all key literals**: `_ActionKeys`, `_GuardKeys`,
-   `_DelayKeys`, `_EventKeys`, `_TagKeys`, `_EmitterKeys`, `_ChildrenKeys`.
-7. **Resolve typings**: Pre-resolve `TransformPrimitiveObject` for context,
-   pContext, events, actors.
-8. **Write single `app.gen.ts`** at rootDir/project root with the
-   `declare module` block.
-
-**What this replaces**:
-
-| Old (removed)                  | New (generated in app.gen.ts)                     |
-| ------------------------------ | ------------------------------------------------- |
-| `__tsSchema` key in config     | `__targets` per state in generated `_Config` type |
-| `ConfigDef` type               | Direct const config type                          |
-| `TransformConfigDef<C2>`       | Pre-resolved, no computation                      |
-| `NoExtraKeysConfigDef<T>`      | Not needed — config is already strict             |
-| `SCHEMAS` object in `*.gen.ts` | Gone — no per-machine gen files                   |
-| `machine.real.gen.ts`          | Gone — merged into `app.gen.ts`                   |
-| `machine1.machine.gen.ts`      | Gone — merged into `app.gen.ts`                   |
-
-The children <-> pContext relation is critical. Currently
-`GetActorsSrcKeysFromFlat2` computes:
+### Package entry: `src/cli/index.ts`
 
 ```ts
-// From src/machine/types.ts L523-532
-type GetActorsSrcKeysFromFlat2<Flat, G> = {
-  children: {
-    [key in G['src']]: Record<Extract<G, { src: key }>['on'], any>;
-  };
-  emitters: GetEmittersSrcKeyFromFlat<Flat>;
-  pContext: Recomposer<G['contexts'][keyof G['contexts']]>;
-};
-```
+import { run, subcommands } from 'cmd-ts';
+import { generateCmd } from './commands/generate';
+import { watchCmd }    from './commands/watch';
 
-The CLI pre-resolves this into the gen file per-child:
-
-```ts
-// Generated in app.gen.ts for a machine with children
-type MyMachine_ChildrenConfig = {
-  childService: {
-    /** Events this child can receive */
-    events: Record<'CHILD_INIT' | 'CHILD_UPDATE', any>;
-    /** pContext paths this child uses from the parent machine */
-    parentPContext: { childData: { id: string; value: number } };
-    /** context key where the child is spawned */
-    context: 'context.activeChild';
-  };
-  anotherChild: {
-    events: Record<'RESET', any>;
-    parentPContext: { otherState: { count: number } };
-    context: 'context.secondary';
-  };
-};
-```
-
----
-
-### Rule 5: Third Argument is Conditionally Optional
-
-When a machine has **no events and no actors**, the third argument
-(`types`) becomes optional. If provided, it only needs `context` and/or
-`pContext` (as `Partial`).
-
-**Type-level implementation**:
-
-```ts
-// Simplified conditional types for the 3rd arg
-
-type HasEventsOrActors<C extends Config> =
-  GetEventsFromConfig<C> extends Record<string, never>
-    ? GetActorKeysFromConfig2<C> extends {
-        children: never;
-        emitters: never;
-      }
-      ? false
-      : true
-    : true;
-
-// When no events/actors:
-type OptionalTypingsArg = Partial<{
-  context: PrimitiveObjectT;
-  pContext: PrimitiveObjectT;
-}>;
-
-// Full form (when events or actors exist):
-type FullTypingsArg = {
-  eventsMap: PrimitiveObjectT;
-  pContext: PrimitiveObjectT;
-  context: PrimitiveObjectT;
-  actorsMap: ActorsMap;
-};
-```
-
-**In practice** - the CLI detects this and generates simpler types for
-machines without events/actors:
-
-```ts
-// A machine with no events, no actors
-export default createMachine('path/to/simple', {
-  initial: 'idle',
-  states: {
-    idle: {},
-    done: {},
-  },
-});
-// Third arg omitted entirely
-
-// A machine with only context
-export default createMachine(
-  'path/to/contextOnly',
-  {
-    initial: 'idle',
-    states: { idle: {}, done: {} },
-  },
-  typings({
-    context: { count: 'number' },
-  }),
-);
-// Only context/pContext needed
-```
-
----
-
-### Rule 6: Actors Unify Children and Emitters
-
-Currently, `ActorsConfigMap` separates children and emitters:
-
-```ts
-// src/events/types.ts L81-84
-export type ActorsConfigMap = {
-  children?: ChildConfigMap;
-  emitters?: EmitterConfigMap;
-};
-```
-
-**New structure**: Merge children and emitters into a single `actors`
-object, differentiated by their properties:
-
-```ts
-// New ActorDef
-type ActorDef = {
-  // A child actor: has events it can receive
-  events?: PrimitiveObjectT;
-  // An emitter actor: has an observable source
-  src?: PrimitiveObjectT;
-  // Shared: context key for spawning
-  context?: string;
-};
-
-type ActorsMap = Record<string, ActorDef>;
-```
-
-**How differentiation works**:
-
-| Actor Type | Has `events`? | Has `src`? |
-| ---------- | :-----------: | :--------: |
-| Child      |      Yes      |     No     |
-| Emitter    |      No       |    Yes     |
-| Both       |      Yes      |    Yes     |
-
-**Usage in typings**:
-
-```ts
-typings({
-  eventsMap: { START: 'primitive' },
-  context: { count: 'number' },
-  actorsMap: {
-    // A child actor (has events)
-    childService: {
-      events: { CHILD_EVENT: 'primitive' },
-    },
-    // An emitter actor (has src)
-    priceStream: {
-      src: { price: 'number', timestamp: 'number' },
-    },
-  },
-});
-```
-
-**Migration from current structure**:
-
-```ts
-// Before
-typings({
-  actorsMap: {
-    children: { childService: { CHILD_EVENT: 'primitive' } },
-    emitters: { priceStream: { price: 'number' } },
-  },
+const app = subcommands({
+  name: 'app-ts',
+  cmds: { generate: generateCmd, watch: watchCmd },
 });
 
-// After
-typings({
-  actorsMap: {
-    childService: { events: { CHILD_EVENT: 'primitive' } },
-    priceStream: { src: { price: 'number' } },
-  },
-});
+run(app, process.argv.slice(2));
 ```
 
-**Changes in `src/utils/typings.ts`**:
-
-Update the `Args` type:
+### `generate` command
 
 ```ts
-// Before
-type ActorsMap = Partial<
-  Record<'children' | 'promisees' | 'emitters', PrimitiveObjectT>
->;
-
-// After
-type ActorDef = {
-  events?: PrimitiveObjectT;
-  src?: PrimitiveObjectT;
-  context?: string;
-};
-
-type ActorsMap = Record<string, ActorDef>;
-
-export type Args<
-  E extends PrimitiveObjectT = PrimitiveObjectT,
-  P extends ActorsMap = ActorsMap,
-> = {
-  eventsMap: E;
-  pContext: PrimitiveObjectT;
-  context: PrimitiveObjectT;
-  actorsMap: P;
-};
-```
-
-Update `TransformArgs` to handle the new shape:
-
-```ts
-export type TransformArgs<T extends Partial<Args>> = {
-  eventsMap: TransformPrimitiveObject<T['eventsMap']>;
-  pContext: TransformPrimitiveObject<UndefinyT<T['pContext']>>;
-  context: TransformPrimitiveObject<UndefinyT<T['context']>>;
-  actorsMap: {
-    [K in keyof NotUndefined<T['actorsMap']>]: {
-      events: TransformPrimitiveObject<
-        NotUndefined<T['actorsMap']>[K]['events']
-      >;
-      src: TransformPrimitiveObject<
-        NotUndefined<T['actorsMap']>[K]['src']
-      >;
-    };
-  };
-} extends infer TT
-  ? { [key in keyof TT]: TT[key] }
-  : never;
-```
-
----
-
-### Rule 7: `typings()` Generates Types via `src/utils/typings.ts` Helpers
-
-The existing `typings()` function and its helpers (`typings.custom`,
-`typings.array`, `typings.optional`, `typings.intersection`,
-`typings.discriminatedUnion`, `typings.litterals`, `typings.partial`,
-`typings.record`, `typings.tuple`, `typings.union`, `typings.soa`,
-`typings.sv`) already handle runtime-to-type transforms via
-`TransformPrimitiveObject<T>`.
-
-**What changes**: The CLI pre-resolves these transforms at generation time
-into `app.gen.ts`, so the TS server receives already-resolved types instead
-of computing `TransformPrimitiveObject<deeply nested structure>` on every
-keystroke.
-
-All resolved types live in the single `app.gen.ts` under their machine's
-namespace prefix (e.g., `Machine1_Context`, `Tags_Events`), and are wired
-into the `Register` interface via `MachineTypeDef`.
-
----
-
-## The `app.gen.ts` Generation Location
-
-The CLI determines where to write `app.gen.ts`:
-
-1. Read `tsconfig.json` from project root.
-2. If `compilerOptions.rootDir` is defined, write `app.gen.ts` there.
-3. If `rootDir` is not defined (current project: no `rootDir`), write
-   `app.gen.ts` at the project root.
-
-For the current project (`tsconfig.json` has no `rootDir`), the file is
-generated at:
-
-```
-/Users/chlbri/Documents/github/NODE JS/Librairies bemedev/app-ts/app.gen.ts
-```
-
----
-
-## CLI Tool: `@bemedev/app-ts` CLI (using `cmd-ts`)
-
-The CLI is built with [`cmd-ts`](https://cmd-ts.vercel.app/) — the same
-type-driven CLI parser used by
-[`@bemedev/codebase`](https://github.com/chlbri/codebase). It follows the
-same patterns: `command()` + `subcommands()` + `run()`.
-
-### File Structure
-
-```
-cli/
-  index.ts          # Entry point: run(cli, process.argv.slice(2))
-  cli.ts            # subcommands({ cmds: { generate, watch } })
-  commands/
-    generate.ts     # command() — one-shot: scan all machines, write app.gen.ts
-    watch.ts        # command() — chokidar watcher: regenerate on file change
-  constants.ts      # BIN name, default patterns, etc.
-  core/
-    parser.ts       # Parse *.machine.ts / *.fsm.ts files (uses ts-morph AST)
-    generator.ts    # Generate the single app.gen.ts (config rewrite + Register)
-    resolver.ts     # Resolve TransformPrimitiveObject at build time
-    paths.ts        # Compute AllPaths and per-state target exclusions
-    utils.ts        # Path resolution helpers
-```
-
-### CLI Implementation
-
-**Entry point** (`cli/index.ts`):
-
-```ts
-#!/usr/bin/env node
-import { cli } from './cli';
-import { run } from 'cmd-ts';
-
-run(cli, process.argv.slice(2));
-```
-
-**Subcommands** (`cli/cli.ts`):
-
-```ts
-import { subcommands } from 'cmd-ts';
-import { generate } from './commands/generate';
-import { watch } from './commands/watch';
-import { BIN } from './constants';
-
-export const cli = subcommands({
-  name: BIN,
-  description: 'CLI for @bemedev/app-ts machine typings generation',
-  version: '1.0.0',
-  cmds: {
-    generate,
-    watch,
-  },
-});
-```
-
-**Generate command** (`cli/commands/generate.ts`):
-
-```ts
-import { command, option, string, multioption, array, flag } from 'cmd-ts';
+import { command, option, optional, string, flag } from 'cmd-ts';
 import { generateAppGen } from '../core/generator';
 
-export const generate = command({
+export const generateCmd = command({
   name: 'generate',
-  description:
-    'Scan all *.machine.ts / *.fsm.ts files and generate app.gen.ts',
+  description: 'Scan all *.machine.ts / *.fsm.ts and emit app.gen.ts',
   args: {
     output: option({
-      long: 'output',
-      short: 'o',
-      type: string,
-      description: 'Output file path for the generated file',
-      defaultValue: () => 'app.gen.ts',
+      type: optional(string),
+      long: 'output', short: 'o',
+      description: 'Output file path (default: app.gen.ts)',
     }),
-    excludes: multioption({
-      long: 'excludes',
-      short: 'x',
-      type: array(string),
-      description: 'Glob patterns to exclude',
-      defaultValue: () => ['node_modules', 'lib', 'dist'],
+    cwd: option({
+      type: optional(string),
+      long: 'cwd',
+      description: 'Working directory (default: process.cwd())',
+    }),
+    dryRun: flag({
+      long: 'dry-run',
+      description: 'Print output without writing to disk',
+    }),
+    excludes: option({
+      type: optional(string),
+      long: 'exclude',
+      description: 'Comma-separated glob patterns to exclude',
     }),
   },
-  handler: async ({ output, excludes }) => {
-    await generateAppGen({ output, excludes });
-    console.log(`Generated ${output}`);
+  handler: async ({ output, cwd, dryRun, excludes }) => {
+    await generateAppGen({
+      output,
+      cwd,
+      dryRun,
+      excludes: excludes?.split(','),
+    });
   },
 });
 ```
 
-**Watch command** (`cli/commands/watch.ts`):
+### `watch` command
 
 ```ts
-import { command, option, string, multioption, array } from 'cmd-ts';
-import chokidar from 'chokidar';
-import { generateAppGen } from '../core/generator';
+import { command, option, optional, string } from 'cmd-ts';
+import { watchMachines } from '../core/watcher';
 
-export const watch = command({
+export const watchCmd = command({
   name: 'watch',
-  description:
-    'Watch *.machine.ts / *.fsm.ts files and regenerate app.gen.ts on change',
+  description: 'Watch *.machine.ts / *.fsm.ts and regenerate app.gen.ts on change',
   args: {
-    output: option({
-      long: 'output',
-      short: 'o',
-      type: string,
-      description: 'Output file path for the generated file',
-      defaultValue: () => 'app.gen.ts',
-    }),
-    excludes: multioption({
-      long: 'excludes',
-      short: 'x',
-      type: array(string),
-      description: 'Glob patterns to exclude',
-      defaultValue: () => ['node_modules', 'lib', 'dist'],
-    }),
+    output: option({ type: optional(string), long: 'output', short: 'o' }),
+    cwd:    option({ type: optional(string), long: 'cwd' }),
   },
-  handler: async ({ output, excludes }) => {
-    // Initial generation
-    await generateAppGen({ output, excludes });
-    console.log(`Generated ${output}`);
-
-    // Watch for changes
-    const watcher = chokidar.watch(['**/*.machine.ts', '**/*.fsm.ts'], {
-      ignored: [output, '**/*.test.ts', ...excludes],
-    });
-
-    watcher.on('change', async filePath => {
-      console.log(`Changed: ${filePath}`);
-      await generateAppGen({ output, excludes });
-      console.log(`Regenerated ${output}`);
-    });
-
-    watcher.on('add', async filePath => {
-      console.log(`Added: ${filePath}`);
-      await generateAppGen({ output, excludes });
-      console.log(`Regenerated ${output}`);
-    });
-
-    watcher.on('unlink', async filePath => {
-      console.log(`Removed: ${filePath}`);
-      await generateAppGen({ output, excludes });
-      console.log(`Regenerated ${output}`);
-    });
-
-    console.log('Watching for machine file changes...');
+  handler: async ({ output, cwd }) => {
+    await watchMachines({ output, cwd });
   },
 });
 ```
 
-**Constants** (`cli/constants.ts`):
+---
+
+## Watch Mode (`chokidar`)
+
+`src/cli/core/watcher.ts`:
 
 ```ts
-export const BIN = 'app-ts';
+import chokidar from 'chokidar';
+import { resolve } from 'node:path';
+import { generateAppGen } from './generator';
+
+export async function watchMachines(options: {
+  output?: string;
+  cwd?: string;
+}): Promise<void> {
+  const cwd = resolve(options.cwd ?? process.cwd());
+
+  // Full generation before entering the watch loop
+  await generateAppGen({ ...options, cwd });
+
+  const watcher = chokidar.watch(
+    ['**/*.machine.ts', '**/*.fsm.ts'],
+    {
+      cwd,
+      ignored: [
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/lib/**',
+        options.output ?? 'app.gen.ts',
+      ],
+      persistent:    true,
+      ignoreInitial: true,
+    },
+  );
+
+  // Debounce: batch rapid changes (e.g. git checkout, bulk save)
+  let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+  const regenerate = (event: string, filePath: string) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async () => {
+      console.log(`[app-ts] ${event}: ${filePath} — regenerating…`);
+      try {
+        await generateAppGen({ ...options, cwd });
+        console.log('[app-ts] app.gen.ts updated.');
+      } catch (err) {
+        console.error('[app-ts] Generation failed:', err);
+      }
+    }, 150);
+  };
+
+  watcher
+    .on('add',    p => regenerate('add',    p))
+    .on('change', p => regenerate('change', p))
+    .on('unlink', p => regenerate('unlink', p));
+
+  console.log('[app-ts] Watching for machine file changes…');
+  await new Promise(() => {}); // keep process alive
+}
 ```
 
-### `package.json` Setup
+---
 
-```json
-{
-  "bin": {
-    "app-ts": "cli/index.ts"
-  },
-  "dependencies": {
-    "cmd-ts": "^0.15.0",
-    "chokidar": "^4.0.0",
-    "ts-morph": "^27.0.2"
+## Core Generator (`src/cli/core/generator.ts`)
+
+Skeleton — no custom tree walker, no regex config parser:
+
+```ts
+import { glob } from 'glob';
+import { writeFileSync } from 'node:fs';
+import { resolve, relative } from 'node:path';
+import { Project } from 'ts-morph';
+import { parseTree } from '../../utils/parseTree';
+import type { NodeConfig } from '#states';
+import type { ConfigPaths } from '../../utils/parseTree.types';
+
+// ── PHASE 1: ts-morph extraction ──────────────────────────────────────
+
+/**
+ * For a given source file use ts-morph to:
+ *  1. Find createMachine(name, config, typings?) call.
+ *  2. Statically evaluate the config ObjectLiteralExpression → NodeConfig.
+ *  3. Extract the pContext inline type string from the typings arg.
+ *
+ * Returns null if no recognisable createMachine call is found,
+ * or if the config is not statically evaluable.
+ */
+function extractMachineInfo(
+  sourceFilePath: string,
+  project: Project,
+): { name: string; config: NodeConfig; pContextType: string } | null { /* ... */ }
+
+/**
+ * Recursively convert an ObjectLiteralExpression into a plain JS object.
+ * Resolves const identifier bindings via ts-morph symbol resolution.
+ * Returns null if any part is not statically evaluable.
+ */
+function evaluateObjectLiteral(node: any, sourceFile: any): any | null { /* ... */ }
+
+/**
+ * Convert the `pContext` property inside the typings argument into an
+ * inline TypeScript type string, handling the @bemedev/typings `type()`
+ * pattern: 'string' → string, 'number' → number, nested objects → recurse.
+ * Returns 'undefined' if the field is absent.
+ */
+function extractPContextType(typingsNode: any): string { /* ... */ }
+
+// ── PHASE 2: parseTree delegation ─────────────────────────────────────
+//  No custom walker. parseTree covers all symbol extraction.
+
+// ── PHASE 3: serialization helpers ────────────────────────────────────
+
+function setToUnion(set: { values(): Iterable<string> }): string { /* ... */ }
+function pathsToUnion(paths: string[]): string { /* ... */ }
+function configPathsToType(cp: ConfigPaths, indent?: number): string { /* ... */ }
+
+// ── PHASE 4: per-machine entry emitter ────────────────────────────────
+
+function emitRegisterEntry(
+  name: string,
+  tree: ReturnType<typeof parseTree>,
+  pContextType: string,
+): string {
+  return [
+    `    '${name}': {`,
+    `      paths: {`,
+    `        map: ${configPathsToType(tree.paths.map, 8)};`,
+    `        all: ${pathsToUnion(tree.paths.all)};`,
+    `      };`,
+    `      events: ${setToUnion(tree.events)};`,
+    `      options: {`,
+    `        children: ${setToUnion(tree.children)};`,
+    `        emitters: ${setToUnion(tree.emitters)};`,
+    `        tags:     ${setToUnion(tree.tags)};`,
+    `        actions:  ${setToUnion(tree.actions)};`,
+    `        delays:   ${setToUnion(tree.delays)};`,
+    `        guards:   ${setToUnion(tree.guards)};`,
+    `      };`,
+    `      pContext?: ${pContextType};`,
+    `      tags?: ${setToUnion(tree.tags)};`,
+    `    };`,
+  ].join('\n');
+}
+
+// ── Public API ────────────────────────────────────────────────────────
+
+export async function generateAppGen(options: {
+  output?:   string;
+  excludes?: string[];
+  cwd?:      string;
+  dryRun?:   boolean;
+}): Promise<void> {
+  const cwd        = resolve(options.cwd ?? process.cwd());
+  const outputPath = resolve(cwd, options.output ?? 'app.gen.ts');
+
+  const files = await glob('**/*.{machine,fsm}.ts', {
+    cwd,
+    ignore: [
+      ...(options.excludes ?? []),
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/lib/**',
+    ],
+    absolute: true,
+  });
+
+  // Single Project instance for all files (one parse pass)
+  const project = new Project({
+    tsConfigFilePath: resolve(cwd, 'tsconfig.json'),
+    skipAddingFilesFromTsConfig: true,
+  });
+  for (const f of files) project.addSourceFileAtPath(f);
+
+  const entries: string[] = [];
+  for (const f of files.sort()) {
+    const info = extractMachineInfo(f, project);
+    if (!info) {
+      console.warn(`[app-ts] Skipping (not statically evaluable): ${relative(cwd, f)}`);
+      continue;
+    }
+    const tree = parseTree(info.config);
+    entries.push(emitRegisterEntry(info.name, tree, info.pContextType));
+  }
+
+  const content = [
+    `/**`,
+    ` * Auto-generated by @bemedev/app-ts CLI. Do not edit manually.`,
+    ` * Regenerated: ${new Date().toISOString()}`,
+    ` */`,
+    ``,
+    `declare module '@bemedev/app-ts' {`,
+    `  interface Register {`,
+    ``,
+    entries.join('\n\n'),
+    ``,
+    `  }`,
+    `}`,
+    ``,
+    `export {};`,
+    ``,
+  ].join('\n');
+
+  if (options.dryRun) {
+    process.stdout.write(content);
+  } else {
+    writeFileSync(outputPath, content, 'utf-8');
+    console.log(
+      `[app-ts] Written: ${relative(cwd, outputPath)} (${entries.length} machines)`,
+    );
   }
 }
 ```
 
-### Usage
+---
 
-```bash
-# One-shot generation
-app generate
-app generate --output src/app.gen.ts
-app generate --excludes node_modules lib dist
+## `parseTree` as the Authoritative Source
 
-# Watch mode
-app watch
-app watch --output src/app.gen.ts
+### Why `parseTree` and not a custom walker
 
-# During development (via tsx)
-pnpm tsx cli/index.ts generate
-pnpm tsx cli/index.ts watch
-```
+The previous `generator.ts` (v1) re-implemented tree traversal with a
+private `parseStateTree`, `extractActionsFromNode`, `collectActionKeys`,
+etc. set of helpers. These duplicated logic that already lives — and is
+already tested — inside `parseTree`.
 
-### npm scripts
+With v2:
 
-```json
+- `parseTree` is the **single, tested** source of truth for symbol
+  extraction.
+- Any future change to how the library interprets configs (new `always`
+  handling, new actor emitter types, new `pContextKeys` semantics) is
+  automatically reflected in the generated file on the next save.
+- The CLI carries **zero knowledge** of the internal config schema — it
+  calls `parseTree` and serializes what comes back.
+
+### What `parseTree` gives us (and what it does not)
+
+`parseTree` operates on the **runtime `NodeConfig` object** and extracts
+symbol **keys** — the string identifiers that appear as action names, guard
+names, delay names, event names, emitter keys, child keys, and tag names.
+
+It does **not** extract:
+
+- TypeScript payload types for each event (shape of `eventsMap`).
+- TypeScript type shape of `pContext`.
+- TypeScript type shape of `context`.
+
+These come from the `typings` argument (Phase 1.4). For the current
+`Register` shape, only `pContext` requires type extraction from the typings
+arg. All string literal unions come purely from `parseTree`.
+
+---
+
+## Register Shape Alignment
+
+The `Register` interface in `src/registry.ts` defines what each entry must
+satisfy. Each generated inline type is built to exactly match that shape:
+
+```ts
+// From src/registry.ts
 {
-  "scripts": {
-    "machines:generate": "tsx cli/index.ts generate",
-    "machines:watch": "tsx cli/index.ts watch"
-  }
+  paths: {
+    map: NoExtraKeysConfigDef<ConfigDef>;  // ← configPathsToType(tree.paths.map)
+    all: string;                           // ← pathsToUnion(tree.paths.all)
+  };
+  events: string;                          // ← setToUnion(tree.events)
+  options: {
+    children: string;                      // ← setToUnion(tree.children)
+    emitters: string;                      // ← setToUnion(tree.emitters)
+    tags:     string;                      // ← setToUnion(tree.tags)
+    actions:  string;  // ★ NOW SPECIFIC   // ← setToUnion(tree.actions)
+    delays:   string;  // ★ NOW SPECIFIC   // ← setToUnion(tree.delays)
+    guards:   string;  // ★ NOW SPECIFIC   // ← setToUnion(tree.guards)
+  };
+  pContext?: any;                          // ← extractPContextType(typings)
+  tags?: string;                           // ← setToUnion(tree.tags)
 }
 ```
 
-### Relation to `@bemedev/codebase`
-
-This CLI follows the same architecture as `@bemedev/codebase`:
-
-| `@bemedev/codebase`               | `@bemedev/app-ts` CLI                                  |
-| --------------------------------- | ------------------------------------------------------ |
-| `cmd-ts` for CLI parsing          | Same                                                   |
-| `ts-morph` for AST analysis       | Same — parse machine configs from TS source            |
-| `generate()` core function        | `generateAppGen()` — scan machines, write `app.gen.ts` |
-| Single output `codebase.json`     | Single output `app.gen.ts`                             |
-| `--output` / `--excludes` options | Same option pattern                                    |
-| `run(cli, process.argv.slice(2))` | Same entry point pattern                               |
+The key improvement over `MachineEntry<>` is that **`options.actions`,
+`options.delays`, and `options.guards` become exact string literal unions**
+instead of the loose `string`. This allows the machine's `addOptions` and
+related APIs to reject unknown identifiers at compile time.
 
 ---
 
-## Migration Path
+## Edge Cases and Constraints
 
-1. **Phase 1**: Add `name` as first arg to `createMachine`, keep old 2-arg
-   overload as deprecated.
-2. **Phase 2**: Add `StatePaths` type parameter to `Machine` and
-   `Interpreter` classes.
-3. **Phase 3**: Build CLI with `cmd-ts` (following `@bemedev/codebase`
-   patterns) — `generate` and `watch` subcommands. Uses `ts-morph` for AST
-   parsing, `chokidar` for file watching.
-4. **Phase 4**: Implement single `app.gen.ts` generation with
-   `declare module` pattern. Config is rewritten strictly as const —
-   `__tsSchema` removed.
-5. **Phase 5**: Add `MACHINES` registry + `getMachine()` consuming
-   `Register` (config + allPaths + all keys).
-6. **Phase 6**: Unify actors (children + emitters) with `_EmitterKeys` /
-   `_ChildrenKeys` + `ChildrenConfig`.
-7. **Phase 7**: Make third arg optional for event-less/actor-less machines.
-8. **Phase 8**: Remove deprecated 2-arg overload, `__tsSchema` key,
-   `ConfigDef` type, all per-machine `*.gen.ts` files.
+### Dynamically computed configs
 
----
+If the config argument contains expressions that ts-morph cannot resolve
+statically (spread `...baseConfig`, function calls, variables imported from
+external packages), the file is **skipped with a warning**. Machine configs
+must be pure object literals or reference only locally-resolvable `const`
+bindings.
 
-## Key Files to Modify
+### Multiple machines per file
 
-| File                                             | Changes                                                                                                                                    |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/machine/machine.ts` (L1283-1329)            | Update `CreateMachine_F` to 3 args, add `StatePaths` type param, remove `__tsSchema`                                                       |
-| `src/machine/types.ts` (L115-155)                | Remove `ConfigDef`, `NoExtraKeysConfigDef`, `TransformConfigDef`. Remove `__tsSchema` from `NoExtraKeysConfig`. Update actor-related types |
-| `src/interpreters/interpreter.ts` (L155+)        | Add `StatePaths` type param to `Interpreter`, constrain `matches`/`onState`/path APIs                                                      |
-| `src/utils/typings.ts` (L94-258)                 | Update `ActorsMap`, `Args`, `TransformArgs`, `DEFAULT_ARGS`                                                                                |
-| `src/events/types.ts` (L81-84)                   | Update `ActorsConfigMap` to new unified shape                                                                                              |
-| New: `src/machine/registry.ts`                   | `MACHINES` object + `getMachine()` + `Register` interface                                                                                  |
-| New: `cli/index.ts`                              | Entry point: `run(cli, process.argv.slice(2))`                                                                                             |
-| New: `cli/cli.ts`                                | `subcommands({ cmds: { generate, watch } })` via `cmd-ts`                                                                                  |
-| New: `cli/commands/generate.ts`                  | `command()` — one-shot scan + write `app.gen.ts`                                                                                           |
-| New: `cli/commands/watch.ts`                     | `command()` — chokidar watcher + regenerate on change                                                                                      |
-| New: `cli/constants.ts`                          | `BIN = 'app-ts'`, default patterns                                                                                                         |
-| New: `cli/core/generator.ts`                     | Single `app.gen.ts` generation (config rewrite + Register)                                                                                 |
-| New: `cli/core/parser.ts`                        | Parse machine files via `ts-morph` AST (like `@bemedev/codebase`)                                                                          |
-| New: `cli/core/paths.ts`                         | AllPaths computation + per-state target exclusions                                                                                         |
-| New: `cli/core/resolver.ts`                      | `TransformPrimitiveObject` resolution at build time                                                                                        |
-| Generated: `app.gen.ts` (project root)           | `declare module '@bemedev/app-ts'` with `Register`                                                                                         |
-| Remove: all `*.machine.gen.ts` / `*.real.gen.ts` | Replaced by single `app.gen.ts`                                                                                                            |
+Not supported. Convention: one `export default createMachine(...)` per
+`*.machine.ts` / `*.fsm.ts` file. If multiple call expressions are found,
+the CLI uses the first `export default` call and warns about the rest.
+
+### Missing `name` arg (legacy 2-arg form)
+
+If `createMachine(config, typings?)` is detected (no name string as first
+argument), the file is skipped. The 3-arg form is required for CLI-driven
+generation.
+
+### `never` vs absent union
+
+An empty `BetterSet` serializes to `never`. This is intentional:
+`options.actions: never` is a stronger signal than `options.actions: string`
+— it tells the compiler this machine truly defines no user-facing action
+keys.
 
 ---
 
-## Performance Impact
+## Summary of Removed Artifacts
 
-The key insight: instead of the TS server computing these recursive types
-on every keystroke:
+After this plan is implemented, the following are **deleted or superseded**:
 
-- `FlatMapN<C>` (recursive state tree flattening)
-- `ConfigDef` / `TransformConfigDef<C2>` (config schema overlay — gone
-  entirely)
-- `NoExtraKeysConfigDef<T>` (schema validation — gone entirely)
-- `__tsSchema` injection and resolution — gone entirely
-- `_GetKeyActionsFromFlat<Flat>` (action key extraction from flat map)
-- `_GetChildKeysFromFlat<Flat>` (children key extraction)
-- `_GetEmitterSrcKeyFromFlat<Flat>` (emitter key extraction)
-- `GetActorsSrcKeysFromFlat2<Flat>` (children + emitters + pContext
-  relation)
-- `TransformPrimitiveObject<T>` (deep typings resolution)
-- `NoExtraKeysConfig<C>` (config validation)
-- `Recomposer<P>` (pContext reconstruction from child paths)
+| Artifact                              | Reason                                          |
+| ------------------------------------- | ----------------------------------------------- |
+| `MachineEntry<>` type                 | Replaced by raw inline types in the gen file    |
+| Custom `parseStateTree()` in CLI      | Replaced by `parseTree()` from the library      |
+| `extractActionsFromNode()` in CLI     | `tree.actions` from `parseTree` covers this     |
+| `extractGuardsFromNode()` in CLI      | `tree.guards` from `parseTree` covers this      |
+| `extractConfigFromSource()` (regex)   | Replaced by ts-morph AST evaluation             |
+| `parseConfigString()` (regex)         | Replaced by ts-morph AST evaluation             |
+| `collectActionKeys()` etc. in CLI     | All covered by `parseTree` BetterSet fields     |
+| `import type { MachineEntry }` in gen | No imports allowed in the generated file        |
+| Per-machine `*.gen.ts` files          | Never generated — single `app.gen.ts` only      |
 
-...the CLI pre-computes them all once on save into `app.gen.ts`, and the TS
-server only sees:
-
-- **A strictly typed const config** with per-state `__targets` (replaces
-  `__tsSchema` + `ConfigDef`)
-- **`StatePaths`** — simple string literal union constraining all
-  path-accepting APIs
-- Simple string literal unions (`_ActionKeys`, `_GuardKeys`,
-  `_EmitterKeys`, `_ChildrenKeys`, etc.)
-- Pre-resolved object types (`_Context`, `_PContext`, `_Events`)
-- Pre-resolved children-to-pContext mappings (`_ChildrenConfig`)
-- The `Register` interface for `getMachine()` return types
-
-This should dramatically reduce TS server memory usage and response time.
