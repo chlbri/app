@@ -1,11 +1,11 @@
 import { createMachine } from '#machine';
-import { typings } from '#utils';
+import { type } from '@bemedev/typings';
 
 export const asyncActionsTypings1 = {
-  eventsMap: typings.eventsMap({
+  eventsMap: type({
     TEST: 'never',
   }),
-  context: typings.context('number'),
+  context: type('number'),
 } as const;
 
 export default createMachine(

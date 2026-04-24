@@ -45,7 +45,7 @@
       "#registry": ["./src/registry.ts"],
       "#config": ["./src/config/index.ts"],
       "#bemedev/*": ["./src/libs/bemedev/*"],
-      "@bemedev/app-ts": ["./src/index.ts"]
+      "@bemedev/app": ["./src/index.ts"]
     }
   }
 }

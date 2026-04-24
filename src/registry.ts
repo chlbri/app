@@ -11,7 +11,7 @@ export type RegisterOptions = Record<
  * It uses the TanStack Start pattern of `declare module` augmentation
  * to wire pre-resolved types to machine paths.
  *
- * @see https://www.npmjs.com/package/@bemedev/app-ts
+ * @see https://www.npmjs.com/package/@bemedev/app
  */
 export interface Register extends Record<
   string,

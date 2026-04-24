@@ -22,6 +22,7 @@ export default createMachine(
   {
     context: type('number'),
     actorsMap: type({
+      ccxc: 'any',
       emitters: {
         interval: {
           next: 'number',

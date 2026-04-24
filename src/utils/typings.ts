@@ -1,43 +1,30 @@
-export type { inferT, inferO, Fn } from '@bemedev/typings';
-import * as helpers from '@bemedev/typings/helpers';
+export type { Fn, inferO, inferT } from '@bemedev/typings';
 import {
   type,
   type inferSh,
   type ObjectT,
-  type PARTIAL,
+  type PrimitiveObjectT,
 } from '@bemedev/typings';
-
-export const ttypes = helpers.partial({
-  context: helpers.primitiveObject.type,
-  pContext: 'any',
-  eventsMap: helpers.record(helpers.primitiveObject.type),
-  actorsMap: helpers.partial({
-    emitters: helpers.record({
-      next: helpers.primitiveObject.type,
-      error: helpers.primitiveObject.type,
-    }),
-    children: helpers.record(helpers.record(helpers.primitiveObject.type)),
-  }),
-});
-
-export type TTypes<
-  K extends Exclude<keyof typeof ttypes, typeof PARTIAL> = Exclude<
-    keyof typeof ttypes,
-    typeof PARTIAL
-  >,
-> = (typeof ttypes)[K];
+import * as helpers from '@bemedev/typings/helpers';
 
 type Helpers = typeof helpers;
-type TransformF = <T extends ObjectT = ObjectT>(
+type TransformF<U extends ObjectT = ObjectT> = <T extends U = U>(
   option?: ((helpers: Helpers) => T) | T,
 ) => inferSh<T>;
 
-const _type: TransformF = type;
+type ActorsHelper = Partial<{
+  children: Record<string, Record<string, ObjectT>>;
+  emitters: Record<string, { next: ObjectT; error: ObjectT }>;
+}>;
+
+type NoExtraKeysActorsHelper<T extends ActorsHelper> = T &
+  Record<Exclude<keyof T, keyof ActorsHelper>, never>;
+
 export const typings = {
-  context: <T extends TTypes<'context'>>(t: T) => _type<T>(t),
-  pContext: _type,
-  eventsMap: <T extends TTypes<'eventsMap'>>(t: T) => _type<T>(t),
-  actorsMap: <T extends TTypes<'actorsMap'>>(t: T) => _type<T>(t),
+  context: type as TransformF<PrimitiveObjectT>,
+  pContext: type,
+  eventsMap: type as TransformF<Record<string, PrimitiveObjectT>>,
+  actorsMap: type as TransformF<NoExtraKeysActorsHelper<ActorsHelper>>,
 };
 
 export { helpers };

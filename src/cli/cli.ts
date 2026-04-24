@@ -5,7 +5,7 @@ import { BIN } from './core/constants';
 
 export const cli = subcommands({
   name: BIN,
-  description: 'CLI tool for @bemedev/app-ts type generation',
+  description: 'CLI tool for @bemedev/app type generation',
   cmds: {
     generate,
     watch,

@@ -11,7 +11,88 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.5.3] - 16/04/2026** => _23:49_
+## **[0.1.0-canary] - 23/04/2026** => _10:00_
+
+</summary>
+
+> ⚠️ **Complete rewrite** — unstable canary version intended for testers.
+> Do not use in production.
+
+### Breaking Changes
+
+- **Rename**: package renamed from `app-ts` to `@bemedev/app`
+- **Version**: reset to `0.1.0-canary` (new version line)
+- **Node.js**: minimum version raised from ≥ 22 to ≥ 24
+- **TypeScript**: upgraded to TypeScript 6.x (≥ 6.0.3)
+- **Removed** `src/actor.types.ts` — types merged into
+  `src/actors/types.ts`
+- **Removed** `src/machine/registry.ts` — replaced by `src/registry.ts`
+- **Test convention**: machine fixtures are now in `*.machine.ts` files
+  separate from `*.test.ts` files
+
+### New Features
+
+- **`registry.ts`**: global machine registry exported from the package —
+  `registerMachine`, `getMachine`, `MACHINES`, `Register` interface
+  (augmentable via `declare module`)
+- **`actors/` module**: `reduceActors`, `reduceChild`, `reduceEmitter` —
+  reduces actor configurations (emitters and children) into sets of
+  actions, guards and targets
+- **`utils/parseTree.ts`**: full traversal of a machine config — extracts
+  all paths, actions, guards, emitters, children, delays, events, tags and
+  pContext keys in a single call
+- **`utils/set.ts`**: `BetterSet<T>` class — enhanced Set with custom
+  equality, iterable, extended API (`add`, `has`, `values`, `size`,
+  `isEmpty`, `toArray`, `map`, `filter`)
+- **`utils/reduceDescribers.ts`**: `reduceDescribers` utility to flatten
+  describer configurations without duplicates
+- **`guards/helpers/reduceGuards.ts`**: `reduceGuards` — recursively
+  flattens AND/OR guard unions into a flat array of `WithDescriber[]`,
+  without duplicates
+- **`transitions/functions/reduceTransitions.ts`**: `reduceTransitions` —
+  extracts targets, actions and guards from a list of transition
+  configurations
+- **`transitions/functions/reduceTransitionsConfig.ts`**:
+  `reduceTransitionsConfig` — reduces a transition map by event
+- **`states/functions/reduceActivity.ts`**: `reduceActivity` — reduces the
+  activity configurations of a state
+- **CLI**: `--dry-run` flag on the `generate` command — prints output
+  without writing to disk
+- **CLI**: `dev` alias for the `watch` command
+- **CLI**: machine detection pattern extended — `*.machine.ts` and
+  `*.fsm.ts`
+
+### Refactors
+
+- `cli/core/generator.ts` fully rebuilt around `parseTree` for more
+  reliable and complete type extraction
+- `flatMap` (states) refactored via `expandFn` — centralised logic
+- `Machine` class: enriched generic parameters (`AllPaths`, `Eo`)
+- `Interpreter`: event and actor type handling refined
+- `transitions/` module reorganised with modular reduction logic
+- `utils` exports simplified: `buildPaths` now exported directly from
+  `src/utils/index.ts`
+- `typings` helpers rewired for stricter `actorsMap` inference and cleaner
+  type utilities in `src/utils/typings.ts`
+
+### Dependencies
+
+- **Update**: `rolldown` 1.0.0-rc.16 → 1.0.0-rc.17
+- **Update**: `typescript` ^5.x → ^6.0.3
+- **Add**: `rimraf` ^6.1.3 (dev)
+- **Update**: `@types/node` → ^25.6.0
+- **Update**: `oxlint` → ^1.61.0, `oxfmt` → ^0.46.0
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
+## **former @bemedev/app-ts [2.5.3] - 16/04/2026** => _23:49_
 
 </summary>
 
@@ -31,7 +112,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.5.2] - 16/04/2026** => _10:21_
+## **former @bemedev/app-ts [2.5.2] - 16/04/2026** => _10:21_
 
 </summary>
 
@@ -60,7 +141,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.5.1] - 16/04/2026** => _03:03_
+## **former @bemedev/app-ts [2.5.1] - 16/04/2026** => _03:03_
 
 </summary>
 
@@ -86,7 +167,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.5.0] - 16/04/2026** => _01:41_
+## **former @bemedev/app-ts [2.5.0] - 16/04/2026** => _01:41_
 
 </summary>
 
@@ -115,7 +196,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <summary>
 
-## **[2.4.2] - 15/04/2026** => _22:42_
+## **former @bemedev/app-ts [2.4.2] - 15/04/2026** => _22:42_
 
 </summary>
 
@@ -142,7 +223,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.4.1] - 06/04/2026** => _23:27_
+## **former @bemedev/app-ts [2.4.1] - 06/04/2026** => _23:27_
 
 </summary>
 
@@ -167,7 +248,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.4.0] - 06/04/2026** => _23:17_
+## **former @bemedev/app-ts [2.4.0] - 06/04/2026** => _23:17_
 
 </summary>
 
@@ -193,7 +274,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.3.4] - 03/04/2026** => _12:05_
+## **former @bemedev/app-ts [2.3.4] - 03/04/2026** => _12:05_
 
 </summary>
 
@@ -221,7 +302,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.3.2] - 30/03/2026** => _00:37_
+## **former @bemedev/app-ts [2.3.2] - 30/03/2026** => _00:37_
 
 </summary>
 
@@ -242,7 +323,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.3.1] - 29/03/2026** => _23:52_
+## **former @bemedev/app-ts [2.3.1] - 29/03/2026** => _23:52_
 
 </summary>
 
@@ -266,7 +347,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.3.0] - 26/03/2026** => _11:12_
+## **former @bemedev/app-ts [2.3.0] - 26/03/2026** => _11:12_
 
 </summary>
 
@@ -286,7 +367,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.2.2] - 26/03/2026** => _11:00_
+## **former @bemedev/app-ts [2.2.2] - 26/03/2026** => _11:00_
 
 </summary>
 
@@ -313,7 +394,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.2.1] - 26/03/2026** => _03:35_
+## **former @bemedev/app-ts [2.2.1] - 26/03/2026** => _03:35_
 
 </summary>
 
@@ -329,7 +410,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.2.0] - 26/03/2026** => _03:22_
+## **former @bemedev/app-ts [2.2.0] - 26/03/2026** => _03:22_
 
 </summary>
 
@@ -350,7 +431,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.1.0] - 25/03/2026** => _23:42_
+## **former @bemedev/app-ts [2.1.0] - 25/03/2026** => _23:42_
 
 </summary>
 
@@ -371,7 +452,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[2.0.0] - 13/03/2026** => _20:46_
+## **former @bemedev/app-ts [2.0.0] - 13/03/2026** => _20:46_
 
 </summary>
 
@@ -420,7 +501,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.7.0] - 12/03/2026** => _15:41_
+## **former @bemedev/app-ts [1.7.0] - 12/03/2026** => _15:41_
 
 </summary>
 
@@ -523,7 +604,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.6.6] - 23/12/2025** => _14:27_
+## **former @bemedev/app-ts [1.6.6] - 23/12/2025** => _14:27_
 
 </summary>
 
@@ -543,7 +624,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.6.5] - 16/12/2025** => _08:59_
+## **former @bemedev/app-ts [1.6.5] - 16/12/2025** => _08:59_
 
 </summary>
 
@@ -564,7 +645,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.6.4] - 16/12/2025** => _15:30_
+## **former @bemedev/app-ts [1.6.4] - 16/12/2025** => _15:30_
 
 </summary>
 
@@ -584,7 +665,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.6.3] - 02/12/2025** => _23:42_
+## **former @bemedev/app-ts [1.6.3] - 02/12/2025** => _23:42_
 
 </summary>
 
@@ -600,7 +681,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.6.2] - 01/12/2025** => _04:22_
+## **former @bemedev/app-ts [1.6.2] - 01/12/2025** => _04:22_
 
 </summary>
 
@@ -617,7 +698,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.6.1] - 29/11/2025** => _10:40_
+## **former @bemedev/app-ts [1.6.1] - 29/11/2025** => _10:40_
 
 </summary>
 
@@ -633,7 +714,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.6.0] - 28/11/2025** => _14:30_
+## **former @bemedev/app-ts [1.6.0] - 28/11/2025** => _14:30_
 
 </summary>
 
@@ -652,7 +733,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.5.0] - 28/11/2025** => _12:00_
+## **former @bemedev/app-ts [1.5.0] - 28/11/2025** => _12:00_
 
 </summary>
 
@@ -678,7 +759,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.4.6] - 25/11/2025** => _14:30_
+## **former @bemedev/app-ts [1.4.6] - 25/11/2025** => _14:30_
 
 </summary>
 
@@ -694,7 +775,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.4.5] - 25/11/2025** => _12:00_
+## **former @bemedev/app-ts [1.4.5] - 25/11/2025** => _12:00_
 
 </summary>
 
@@ -711,7 +792,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.4.4] - 25/11/2025** => _10:30_
+## **former @bemedev/app-ts [1.4.4] - 25/11/2025** => _10:30_
 
 </summary>
 
@@ -741,7 +822,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.4.3] - 24/11/2025** => _18:00_
+## **former @bemedev/app-ts [1.4.3] - 24/11/2025** => _18:00_
 
 </summary>
 
@@ -773,7 +854,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.4.2] - 24/11/2025** => _17:30_
+## **former @bemedev/app-ts [1.4.2] - 24/11/2025** => _17:30_
 
 </summary>
 
@@ -797,7 +878,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.4.1] - 2025/02/24** => _11:00_
+## **former @bemedev/app-ts [1.4.1] - 2025/02/24** => _11:00_
 
 </summary>
 
@@ -816,7 +897,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.4.0] - 2025/02/24** => _10:00_
+## **former @bemedev/app-ts [1.4.0] - 2025/02/24** => _10:00_
 
 </summary>
 
@@ -833,7 +914,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.3.0] - 2025/11/19** => _14:20_
+## **former @bemedev/app-ts [1.3.0] - 2025/11/19** => _14:20_
 
 </summary>
 
@@ -857,7 +938,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.2.2] - 2025/10/04** => _16:00_
+## **former @bemedev/app-ts [1.2.2] - 2025/10/04** => _16:00_
 
 </summary>
 
@@ -873,7 +954,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.2.0] - 2025/09/30** => _7:25_
+## **former @bemedev/app-ts [1.2.0] - 2025/09/30** => _7:25_
 
 </summary>
 
@@ -892,7 +973,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.1.1] - 2025/09/29** => _13:52_
+## **former @bemedev/app-ts [1.1.1] - 2025/09/29** => _13:52_
 
 </summary>
 
@@ -912,7 +993,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.1.0] - 2025/09/29** => _12:42_
+## **former @bemedev/app-ts [1.1.0] - 2025/09/29** => _12:42_
 
 </summary>
 
@@ -928,7 +1009,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## **[1.0.4] - 2025/09/24** => _23:59_
+## **former @bemedev/app-ts [1.0.4] - 2025/09/24** => _23:59_
 
 </summary>
 
@@ -944,7 +1025,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## **[1.0.3] - 2025/09/24** => _16:45_
+## **former @bemedev/app-ts [1.0.3] - 2025/09/24** => _16:45_
 
 </summary>
 
@@ -960,7 +1041,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## **[1.0.2] - 2025/09/24** => _16:45_
+## **former @bemedev/app-ts [1.0.2] - 2025/09/24** => _16:45_
 
 </summary>
 
@@ -977,7 +1058,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.0.1] - 2025/09/21** => _01:40_
+## **former @bemedev/app-ts [1.0.1] - 2025/09/21** => _01:40_
 
 </summary>
 
@@ -993,7 +1074,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[1.0.0] - 2025/09/20** => _18:40_
+## **former @bemedev/app-ts [1.0.0] - 2025/09/20** => _18:40_
 
 </summary>
 
@@ -1009,7 +1090,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.21] - 2025/08/17** => _23:25_
+## **former @bemedev/app-ts [0.9.21] - 2025/08/17** => _23:25_
 
 </summary>
 
@@ -1024,7 +1105,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.20] - 2025/08/16** => _18:00_
+## **former @bemedev/app-ts [0.9.20] - 2025/08/16** => _18:00_
 
 </summary>
 
@@ -1039,7 +1120,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.19] - 2025/08/16** => _17:40_
+## **former @bemedev/app-ts [0.9.19] - 2025/08/16** => _17:40_
 
 </summary>
 
@@ -1053,7 +1134,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.18] - 2025/08/15** => _23:25_
+## **former @bemedev/app-ts [0.9.18] - 2025/08/15** => _23:25_
 
 </summary>
 
@@ -1068,7 +1149,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.17] - 2025/08/15** => _23:00_
+## **former @bemedev/app-ts [0.9.17] - 2025/08/15** => _23:00_
 
 </summary>
 
@@ -1083,7 +1164,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.16] - 2025/08/15** => _23:00_
+## **former @bemedev/app-ts [0.9.16] - 2025/08/15** => _23:00_
 
 </summary>
 
@@ -1097,22 +1178,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.15] - 2025/08/15** => _00:20_
-
-</summary>
-
-- Improve createMachine typings
-- Upgrade deps
-- <u>Test coverage **_100%_**</u>
-
-</details>
-
-<br/>
-
-<details>
-<summary>
-
-## **[0.9.14] - 2025/08/15** => _00:00_
+## **former @bemedev/app-ts [0.9.15] - 2025/08/15** => _00:20_
 
 </summary>
 
@@ -1127,7 +1193,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.13] - 2025/08/14** => _23:15_
+## **former @bemedev/app-ts [0.9.14] - 2025/08/15** => _00:00_
+
+</summary>
+
+- Improve createMachine typings
+- Upgrade deps
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
+## **former @bemedev/app-ts [0.9.13] - 2025/08/14** => _23:15_
 
 </summary>
 
@@ -1144,7 +1225,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.12] - 2025/08/14** => _22:15_
+## **former @bemedev/app-ts [0.9.12] - 2025/08/14** => _22:15_
 
 </summary>
 
@@ -1160,7 +1241,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.11] - 2025/08/14** => _21:20_
+## **former @bemedev/app-ts [0.9.11] - 2025/08/14** => _21:20_
 
 </summary>
 
@@ -1175,7 +1256,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.10] - 2025/08/14** => _20:50_
+## **former @bemedev/app-ts [0.9.10] - 2025/08/14** => _20:50_
 
 </summary>
 
@@ -1190,7 +1271,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.8] - 2025/08/14** => _01:00_
+## **former @bemedev/app-ts [0.9.8] - 2025/08/14** => _01:00_
 
 </summary>
 
@@ -1206,7 +1287,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.7] - 2025/08/09** => _16:45_
+## **former @bemedev/app-ts [0.9.7] - 2025/08/09** => _16:45_
 
 </summary>
 
@@ -1221,7 +1302,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.6] - 2025/08/09** => _03:20_
+## **former @bemedev/app-ts [0.9.6] - 2025/08/09** => _03:20_
 
 </summary>
 
@@ -1235,7 +1316,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.4] - 2025/08/09** => _02:45_
+## **former @bemedev/app-ts [0.9.4] - 2025/08/09** => _02:45_
 
 </summary>
 
@@ -1249,7 +1330,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.3] - 2025/08/09** => _01:40_
+## **former @bemedev/app-ts [0.9.3] - 2025/08/09** => _01:40_
 
 </summary>
 
@@ -1266,7 +1347,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.2] - 2025/08/08** => _16:00_
+## **former @bemedev/app-ts [0.9.2] - 2025/08/08** => _16:00_
 
 </summary>
 
@@ -1280,7 +1361,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.1] - 2025/08/05** => _16:30_
+## **former @bemedev/app-ts [0.9.1] - 2025/08/05** => _16:30_
 
 </summary>
 
@@ -1294,7 +1375,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
-## **[0.9.0] - 2025/08/05** => _16:20_
+## **former @bemedev/app-ts [0.9.0] - 2025/08/05** => _16:20_
 
 </summary>
 
@@ -1423,28 +1504,28 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## [0.5.2] - 2024-07-14 _12:35_
+## former @bemedev/app-ts [0.5.2] - 2024-07-14 _12:35_
 
 - Upgrade deps
 - <u>Test coverage **_100%_**</u>
 
 <br/>
 
-## [0.5.1] - 2024-07-14 _00:15_
+## former @bemedev/app-ts [0.5.1] - 2024-07-14 _00:15_
 
 - Delete mode "strictest"
 - <u>Test coverage **_100%_**</u>
 
 <br/>
 
-## [0.5.0] - 2024-07-12 _19:15_
+## former @bemedev/app-ts [0.5.0] - 2024-07-12 _19:15_
 
 - Big FIX: changes state after each action
 - <u>Test coverage **_100%_**</u>
 
 <br/>
 
-## [0.4.0] - 2024-07-11 _15:45_
+## former @bemedev/app-ts [0.4.0] - 2024-07-11 _15:45_
 
 - Improve interpreter.subscribe
 - Reduce codebase
@@ -1453,7 +1534,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## [0.3.1] - 2024-07-10 _21:45_
+## former @bemedev/app-ts [0.3.1] - 2024-07-10 _21:45_
 
 - Exports `typings` from utils at root
 - Better typings, upgrade deps
@@ -1461,7 +1542,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## [0.3.1] - 2024-07-10 _21:45_
+## former @bemedev/app-ts [0.3.1] - 2024-07-10 _21:45_
 
 - Exports `typings` from utils at root
 - Better typings, upgrade deps
@@ -1469,7 +1550,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## [0.3.0] - 2024-07-10 _20:45_
+## former @bemedev/app-ts [0.3.0] - 2024-07-10 _20:45_
 
 - Add typings to help types events ands promisees
 - Add custom actions
@@ -1477,130 +1558,130 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## [0.2.9] - 2024-07-08 _01:20_
+## former @bemedev/app-ts [0.2.9] - 2024-07-08 _01:20_
 
 - Better typings, upgrade deps
 - <u>Test coverage **_98.89%_**</u>
 
 <br/>
 
-## [0.2.8] - 2024-07-07 _16:40_
+## former @bemedev/app-ts [0.2.8] - 2024-07-07 _16:40_
 
 - Better typings
 - <u>Test coverage **_98.89%_**</u>
 
 <br/>
 
-## [0.2.6] - 2024-03-29 _23:20_
+## former @bemedev/app-ts [0.2.6] - 2024-03-29 _23:20_
 
 - Fix: no use of node:os
 - <u>Test coverage **_99.9%_**</u>
 
 <br/>
 
-## [0.2.5] - 2024-03-29 _23:10_
+## former @bemedev/app-ts [0.2.5] - 2024-03-29 _23:10_
 
 - Fix: no use of node:util
 - <u>Test coverage **_99.9%_**</u>
 
 <br/>
 
-## [0.2.4-beta] - 2024-03-28 _15:20_
+## former @bemedev/app-ts [0.2.4-beta] - 2024-03-28 _15:20_
 
 - Fix bindings for subscribeMap and subscribe classes
 - <u>Test coverage **_99.9%_**</u>
 
 <br/>
 
-## [0.2.2-beta] - 2024-03-28 _01:50_
+## former @bemedev/app-ts [0.2.2-beta] - 2024-03-28 _01:50_
 
 - Add subscribe to be compliant with "from" style
 - <u>Test coverage **_100%_**</u>
 
 <br/>
 
-## [0.1.19-beta] - 2024-03-27 _15:00_
+## former @bemedev/app-ts [0.1.19-beta] - 2024-03-27 _15:00_
 
 - BREAKING CHANGE : rewind last versions
 
 <br/>
 
-## [0.1.18-beta] - 2024-03-27 _12:00_
+## former @bemedev/app-ts [0.1.18-beta] - 2024-03-27 _12:00_
 
 - Simplify event in state
 
 <br/>
 
-## [0.1.17-beta] - 2024-03-27 _11:00_
+## former @bemedev/app-ts [0.1.17-beta] - 2024-03-27 _11:00_
 
 - Add current event to state
 
 <br/>
 
-## [0.1.15-beta] - 2024-03-22 _19:00_
+## former @bemedev/app-ts [0.1.15-beta] - 2024-03-22 _19:00_
 
 - Ameliorate subscription
 
 <br/>
 
-## [0.1.14-beta] - 2024-03-22 _13:30_
+## former @bemedev/app-ts [0.1.14-beta] - 2024-03-22 _13:30_
 
 - Ameliorate subscription
 
 <br/>
 
-## [0.1.13-beta] - 2024-03-19 _23:30_
+## former @bemedev/app-ts [0.1.13-beta] - 2024-03-19 _23:30_
 
 - 100% coverage
 - Ameliorate subscribeM
 
 <br/>
 
-## [0.1.12-beta] - 2024-03-18 _16:00_
+## former @bemedev/app-ts [0.1.12-beta] - 2024-03-18 _16:00_
 
 - 100% coverage
 - Ready for production
 
 <br/>
 
-## [0.1.11-beta] - 2024-03-18 _02:30_
+## former @bemedev/app-ts [0.1.11-beta] - 2024-03-18 _02:30_
 
 - Possibility to send event to a child
 
 <br/>
 
-## [0.1.10-beta] - 2024-03-15 _17:00_
+## former @bemedev/app-ts [0.1.10-beta] - 2024-03-15 _17:00_
 
 - Fix library import @bemedev/decompose
 
 <br/>
 
-## [0.1.9-beta] - 2024-03-15 _15:10_
+## former @bemedev/app-ts [0.1.9-beta] - 2024-03-15 _15:10_
 
 - Simplify types for interpret
 
 <br/>
 
-## [0.1.5-beta] - 2024-03-15 _03:08_
+## former @bemedev/app-ts [0.1.5-beta] - 2024-03-15 _03:08_
 
 - Fix subscriber for hooks
 
 <br/>
 
-## [0.1.4-beta] - 2024-03-15 _00:00_
+## former @bemedev/app-ts [0.1.4-beta] - 2024-03-15 _00:00_
 
 - Fix imports
 
 <br/>
 
-## [0.1.3-beta] - 2024-03-14 _00:00_
+## former @bemedev/app-ts [0.1.3-beta] - 2024-03-14 _00:00_
 
 - <u>Test coverage **100**</u>
 - Documentation comming...
 
 <br/>
 
-## [0.1.2-canary] - 2024-03-14 _00:00_
+## former @bemedev/app-ts [0.1.2-canary] - 2024-03-14 _00:00_
 
 - <u>Test coverage **100%**</u>
 - Add helpers
@@ -1608,53 +1689,53 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
-## [0.1.0-beta] - 2024-03-04 _15:30_
+## former @bemedev/app-ts [0.1.0-beta] - 2024-03-04 _15:30_
 
 - <u>Test coverage **100%**</u>
 - Documentation comming...
 
 <br/>
 
-## [0.1.0-canary] - 2024-03-04 _15:30_
+## former @bemedev/app-ts [0.1.0-canary] - 2024-03-04 _15:30_
 
 - <u>Test coverage **100%**</u>
 
 <br/>
 
-## [0.0.9-canary] - 2024-03-04 _14:13_
+## former @bemedev/app-ts [0.0.9-canary] - 2024-03-04 _14:13_
 
 - Improve interpreter
 - <u>Test coverage **99.94%**</u>
 
 <br/>
 
-## [0.0.8-canary] - 2024-03-04 _01:30_
+## former @bemedev/app-ts [0.0.8-canary] - 2024-03-04 _01:30_
 
 - Improve to Predicate
 - <u>Test coverage **99.56%**</u>
 
 <br/>
 
-## [0.0.7-canary] - 2024-03-03 _16:30_
+## former @bemedev/app-ts [0.0.7-canary] - 2024-03-03 _16:30_
 
 - Add key of promisees to types
 - <u>Test coverage **99%**</u>
 
 <br/>
 
-## [0.0.5-canary] - 2024-02-25 _01:30_
+## former @bemedev/app-ts [0.0.5-canary] - 2024-02-25 _01:30_
 
 ### - Test coverage **90%**
 
 <br/>
 
-## [0.0.3-canary] - 2024-02-22
+## former @bemedev/app-ts [0.0.3-canary] - 2024-02-22
 
 ### - Test coverage **84%**
 
 <br/>
 
-## [0.1.0] - 2024-01-24
+## former @bemedev/app-ts [0.1.0] - 2024-01-24
 
 ### Added
 

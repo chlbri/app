@@ -1,6 +1,6 @@
 {
-  "name": "@bemedev/app-ts",
-  "version": "3.0.0",
+  "name": "@bemedev/app",
+  "version": "0.1.0-canary",
   "description": "A reprogramming method to code better",
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -93,8 +93,6 @@
     "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^4.1.4",
     "@vitest/ui": "^4.1.4",
-    "chokidar": "^5.0.0",
-    "cmd-ts": "^0.15.0",
     "glob": "^13.0.6",
     "globals": "^17.5.0",
     "husky": "^9.1.7",
@@ -106,11 +104,11 @@
     "rimraf": "^6.1.3",
     "rolldown": "1.0.0-rc.17",
     "rxjs": "^7.8.2",
-    "ts-morph": "^28.0.0",
     "tsc-alias": "^1.8.16",
     "tslib": "^2.8.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
+    "valibot": "^1.3.1",
     "vitest": "^4.1.4"
   },
   "dependencies": {
@@ -121,10 +119,13 @@
     "@bemedev/pipe": "^1.5.1",
     "@bemedev/scheduler": "^0.1.0",
     "@bemedev/sleep": "^0.2.2",
-    "@bemedev/typings": "^0.5.2",
+    "@bemedev/typings": "^0.5.4",
+    "chokidar": "^5.0.0",
     "clone-deep": "^4.0.1",
+    "cmd-ts": "^0.15.0",
     "deepmerge-ts": "^7.1.5",
     "fast-deep-equal": "^3.1.3",
-    "nanoid": "^5.1.9"
+    "nanoid": "^5.1.9",
+    "ts-morph": "^28.0.0"
   }
 }

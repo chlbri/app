@@ -36,3 +36,8 @@ version bump in `package.json`.
 ## Workflow
 
 Start at → [`steps/step1.md`](steps/step1.md)
+
+## NB
+
+README and CHANGELOG should always BE in ENGLISH, NO OTHER LANGUAGE, even
+if the project is primarily in another language.
