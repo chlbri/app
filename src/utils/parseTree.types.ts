@@ -1,6 +1,6 @@
 import type { NodeConfig } from '#states';
 import type { RecordS } from '~types';
-import type { BetterSet } from './set';
+import type { BetterSet } from '@bemedev/better-set';
 
 export type ParseTreeContext = {
   actions: BetterSet<string>;

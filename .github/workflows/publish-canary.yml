@@ -56,7 +56,7 @@ jobs:
           access: public
           strategy: all
           tag: canary
-          
+
       - name: Check - updated
         if: ${{ steps.publish.outputs.type }}
         run:

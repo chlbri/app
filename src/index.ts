@@ -1,6 +1,6 @@
 export * from '#interpreters';
 export * from '#machines';
-export * from './registry';
+export * from './registry.types';
 export {
   deepEqual,
   decompose,

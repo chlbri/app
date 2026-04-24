@@ -1,13 +1,12 @@
-import type { __ChildConfig, _EmitterConfig } from '../actors/types';
 import { type NodeConfig } from '#states';
+import { createBetterSet, type BetterSet } from '@bemedev/better-set';
+import type { RecordS } from '~types';
 import { buildPaths, traverse } from './parseTree.helpers';
 import type {
   ConfigPaths,
   NoExtraKeysConfigPaths,
   ParseTreeContext,
 } from './parseTree.types';
-import { createBetterSet, type BetterSet } from './set';
-import type { RecordS } from '~types';
 
 type Output = {
   __config: NodeConfig;

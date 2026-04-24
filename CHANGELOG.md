@@ -11,6 +11,34 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[0.1.1-canary] - 24/04/2026** => _10:00_
+
+</summary>
+
+> ⚠️ **Canary update** — unstable release with package and tooling
+> improvements.
+
+### Updates
+
+- **Version**: bumped from `0.1.0-canary` to `0.1.1-canary`
+- **Package**: added modern `exports` map and improved `generate` script
+  support
+- **Dependencies**: updated `@bemedev/dev-utils`, `@vitest/coverage-v8`,
+  `@vitest/ui`, `vitest`, `@bemedev/pipe`
+- **Add**: `@bemedev/app-cli` and `@bemedev/better-set`
+- **Note**: CLI helpers and type-generation tooling are delivered via the
+  companion `@bemedev/app-cli` package, a complementary library for better
+  typing similar to TanStack Start
+- **Dev tooling**: align build/test tooling with the rewritten package
+  structure
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[0.1.0-canary] - 23/04/2026** => _10:00_
 
 </summary>

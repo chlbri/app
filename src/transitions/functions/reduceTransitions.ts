@@ -1,9 +1,10 @@
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import { reduceGuards } from '#guards';
-import { createBetterSet, reduceDescribers } from '#utils';
+import { reduceDescribers } from '#utils';
 import { pipe } from '@bemedev/pipe';
 import type { _TransitionConfig } from '../types';
 import { voidAction } from '@bemedev/pipe/extensions/common';
+import { createBetterSet } from '@bemedev/better-set';
 
 /**
  *  Extracts the target, actions, guards, and description from a transition configuration.

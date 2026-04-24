@@ -52,7 +52,7 @@ import type { PredicateS } from '#guards';
 import { withTimeout } from '@bemedev/better-promise';
 import type { inferT, StandardOutput } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
-import { registerMachine, type Register } from '../registry';
+import { type Register } from '../registry.types';
 import { assignByKey, expandFnMap } from './functions';
 import type {
   AddOptions_F,
@@ -1321,7 +1321,7 @@ export function createMachine<
   >,
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
 >(
-  name: Name,
+  _: Name,
   config: C,
   types?: {
     context?: Tc;
@@ -1346,8 +1346,6 @@ export function createMachine<
   const out = new Machine(config as Config)
     ._provideEvents(eventsMap)
     ._provideActors(actorsMap);
-
-  registerMachine(name, out as any);
 
   return out as any;
 }

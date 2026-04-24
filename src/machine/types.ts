@@ -47,7 +47,7 @@ import type {
   ReduceArray,
 } from '~types';
 import { RecordS } from './../types/primitives';
-import type { RegisterOptions } from '#registry';
+import type { RegisterOptions } from '../registry.types';
 
 /**
  * Type representing the main JSON config.

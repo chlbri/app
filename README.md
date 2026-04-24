@@ -1,6 +1,6 @@
 # @bemedev/app
 
-> [!WARNING] **v0.1.0-canary — Early access build.** This version is under
+> [!WARNING] **v0.1.1-canary — Early access build.** This version is under
 > active development and may contain breaking changes between canary
 > releases. Do not use in production.
 
@@ -1256,6 +1256,10 @@ union** — enabling narrowing inside actions:
 `@bemedev/app` ships a **CLI and a type-level registry** that together give
 you **full compile-time types for every machine in your project** — paths,
 events, options, context — with zero manual annotation.
+
+The CLI helpers are provided by the companion package `@bemedev/app-cli`, a
+complementary library for better typing and CLI-driven code generation,
+similar in purpose to TanStack Start.
 
 The pattern is inspired by TanStack Router's `declare module` augmentation.
 

@@ -2,7 +2,7 @@ import type { ChildConfig } from './types';
 
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import { reduceTransitions, type TransitionConfig } from '#transitions';
-import { createBetterSet } from '#utils';
+import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { paramArray, tap } from '@bemedev/pipe/extensions';
 

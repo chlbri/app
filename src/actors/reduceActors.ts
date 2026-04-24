@@ -2,7 +2,7 @@ import type { ActorConfig } from '#actor';
 import type { RecordS } from '~types';
 import { reduceEmitter } from './reduceEmitter';
 import { reduceChild } from './reduceChild';
-import { createBetterSet } from '#utils';
+import { createBetterSet } from '@bemedev/better-set';
 
 export const reduceActors = (actor: RecordS<ActorConfig>) => {
   const actions = createBetterSet<string>();

@@ -17,6 +17,7 @@ export default defineConfig({
         '**/*.test-d.ts',
         '**/*.machine.ts',
         '**/experimental.ts',
+        './src/utils/nothing.ts',
         '**/fixtures.ts',
         '**/libs/bemedev/**/*',
         '**/fixture.ts',

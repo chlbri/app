@@ -1,6 +1,6 @@
 import { fromDescriber } from '~types';
 import type { WithDescriber } from '../actions/types';
-import { createBetterSet } from './set';
+import { createBetterSet } from '@bemedev/better-set';
 
 export const reduceDescribers = (...describers: WithDescriber[]) => {
   const keys = createBetterSet<string>();

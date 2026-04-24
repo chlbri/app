@@ -1,6 +1,6 @@
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import { reduceTransitions } from '#transitions';
-import { createBetterSet } from '#utils';
+import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { fromDescriber, isDescriber } from '~types';
 import type { ActivityConfig } from '../types';

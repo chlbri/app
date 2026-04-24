@@ -1,5 +1,4 @@
 import type { ConfigDef, NoExtraKeysConfigDef } from '#machines';
-import type { AnyMachine } from './machine/machine.types';
 
 export type RegisterOptions = Record<
   'children' | 'emitters' | 'tags' | 'actions' | 'delays' | 'guards',
@@ -28,20 +27,3 @@ export interface Register extends Record<
   }
   // oxlint-disable-next-line typescript/no-empty-object-type
 > {}
-
-const MACHINES: Record<string, AnyMachine> = {};
-
-export function registerMachine<P extends string>(
-  relativePath: P,
-  machine: AnyMachine,
-): void {
-  MACHINES[relativePath] = machine;
-}
-
-export function getMachine<P extends keyof Register>(
-  relativePath: P,
-): Register[P] {
-  return MACHINES[relativePath as string] as any;
-}
-
-export { MACHINES };

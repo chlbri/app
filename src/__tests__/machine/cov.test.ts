@@ -143,10 +143,10 @@ describe('machine coverage', () => {
     // #endregion
 
     describe('TESTS', () => {
-      test.only(...start());
-      test.only(...useWaiter(6, 1));
+      test(...start());
+      test(...useWaiter(6, 1));
 
-      describe.only('#02 => Check the service', () => {
+      describe('#02 => Check the service', () => {
         test(...useStateValue('idle', 1));
         test(...useIterator(6, 2));
         test(...useIteratorC(6, 3));
@@ -323,7 +323,7 @@ describe('machine coverage', () => {
         describe(...useConsole(5, ['WRITE with', ':', `"${INPUT}"`]));
       });
 
-      describe.skip('REST', () => {
+      describe('REST', () => {
         test(...useWaiter(12, 20));
 
         describe('#21 => Check the service', () => {

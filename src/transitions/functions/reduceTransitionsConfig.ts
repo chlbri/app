@@ -1,5 +1,5 @@
 import toArray from '#bemedev/features/arrays/castings/toArray';
-import { createBetterSet, type BetterSet } from '#utils';
+import { createBetterSet, type BetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { tap } from '@bemedev/pipe/extensions/common';
 import { reduceActors } from '../../actors/reduceActors';
