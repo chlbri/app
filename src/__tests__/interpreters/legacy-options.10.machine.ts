@@ -1,5 +1,6 @@
 import { createMachine } from '#machine';
 import { type } from '@bemedev/typings';
+import * as v from 'valibot';
 
 export default createMachine(
   'src/__tests__/interpreters/legacy-options.10.machine',
@@ -15,7 +16,7 @@ export default createMachine(
     },
   },
   {
-    context: type('number'),
+    context: v.number(),
 
     eventsMap: type({
       FIRST: 'never',

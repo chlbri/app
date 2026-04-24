@@ -7,7 +7,6 @@ export {
   decomposeSV,
   recompose,
   helpers,
-  ttypes,
   typings,
   type inferO,
   type inferT,

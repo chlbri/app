@@ -164,7 +164,6 @@ describe('#01 => parseTree', () => {
       const result = parseTree({ always: '/target' });
 
       test('#01 => path added', () => {
-        console.warn(result);
         expect(result.paths.all).toContain('/');
       });
     });

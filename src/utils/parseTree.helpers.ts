@@ -89,7 +89,6 @@ export const buildPaths = pipe(
   Object.fromEntries,
   recompose,
   v => v as ConfigPaths,
-  tap(v => console.warn(JSON.stringify(v, null, 2))),
 );
 
 // Helper to extract from single activity
