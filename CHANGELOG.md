@@ -13,11 +13,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-- **Fix**: Correction de la propagation de `Eo` dans le pipeline d'actions de l'interpréteur
-- **Fix**: `Action2` utilise désormais `MaybeAsyncActionResult<Pc, Tc>` au lieu de `Promise<ActionResult<Pc, Tc>>` pour une meilleure gestion des résultats asynchrones
-- **Refactor**: `FnMap` / `FnMapR` — ajout du paramètre générique `Ex` (défaut `never`) pour filtrer les types d'événements exclus via `Exclude<E, Ex | { type: Ex }>`
-- **Refactor**: `FnMapFrom` — paramètre `Ex` passe de `string` à `never` par défaut
-- **Refactor**: Renommage interne de `promisees` en `emitters` / `children` dans l'interpréteur et `ActorsMap`
+- **Fix**: Correction de la propagation de `Eo` dans le pipeline d'actions
+  de l'interpréteur
+- **Fix**: `Action2` utilise désormais `MaybeAsyncActionResult<Pc, Tc>` au
+  lieu de `Promise<ActionResult<Pc, Tc>>` pour une meilleure gestion des
+  résultats asynchrones
+- **Refactor**: `FnMap` / `FnMapR` — ajout du paramètre générique `Ex`
+  (défaut `never`) pour filtrer les types d'événements exclus via
+  `Exclude<E, Ex | { type: Ex }>`
+- **Refactor**: `FnMapFrom` — paramètre `Ex` passe de `string` à `never`
+  par défaut
+- **Refactor**: Renommage interne de `promisees` en `emitters` / `children`
+  dans l'interpréteur et `ActorsMap`
 - <u>Test coverage **_100%_**</u>
 
 </details>
