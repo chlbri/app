@@ -2,21 +2,14 @@
   "name": "Node.js Library",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
   // 8 GB RAM for the container
-  "runArgs": [
-    "--memory=8g",
-    "--memory-swap=8g",
-    "--cpus=2"
-  ],
+  "runArgs": ["--memory=8g", "--memory-swap=8g", "--cpus=2"],
   "hostRequirements": {
     "memory": "8gb"
   },
   // pnpm via corepack (ships with Node 24) + install deps
   "postCreateCommand": "corepack use pnpm@latest && pnpm install --frozen-lockfile",
   // Forward vitest --ui port, also Ollama
-  "forwardPorts": [
-    51204,
-    11434
-  ],
+  "forwardPorts": [51204, 11434],
   "portsAttributes": {
     "51204": {
       "label": "Vitest UI",
@@ -39,9 +32,7 @@
       "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "oxc.oxc-vscode",
-        "coverage-gutters.coverageFileNames": [
-          ".coverage/lcov.info"
-        ],
+        "coverage-gutters.coverageFileNames": [".coverage/lcov.info"],
         "vitest.enable": true,
         "vitest.commandLine": "pnpm run test:only"
       },

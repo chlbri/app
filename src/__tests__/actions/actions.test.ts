@@ -53,9 +53,6 @@ describe('Interpret for actions', () => {
 
     afterAll(() => {
       action1.mockClear();
-      console.warn('env', process.env.NODE_ENV);
-      console.warn('_warningsCollector', '=>', service._warningsCollector);
-      console.warn('_errorsCollector', '=>', service._errorsCollector);
     });
   });
 

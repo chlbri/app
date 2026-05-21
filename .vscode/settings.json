@@ -4,7 +4,6 @@
     ".github/workflows/publish-NPM.yml"
   ],
   "githubPullRequests.ignoredPullRequestBranches": ["dev"],
-  "demoTime.defaultFileType": "json",
   "editor.colorDecorators": false,
   "[json]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
