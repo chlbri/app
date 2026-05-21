@@ -64,7 +64,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "pnpm run rm:lib && pnpm run rolldown && pnpm run generate",
+    "build": "pnpm run rm:lib && pnpm run rolldown",
     "ci": "CI_START=$(date +%s) && pnpm run config:off && pnpm run lint && pnpm run test && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "ci:admin": "pnpm run rm && pnpm run upgrade:fast && pnpm run ci",
     "config": "pnpm install",
