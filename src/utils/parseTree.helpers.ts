@@ -6,10 +6,10 @@ import type { _TransitionsConfig } from '#transitions';
 import { recompose } from '@bemedev/decompose';
 import { pipe } from '@bemedev/pipe';
 import {
-  map,
   paramArray,
   tap,
-  toggleMap,
+  monad,
+  toggleMonad,
 } from '@bemedev/pipe/extensions/common';
 import type { RecordS, SingleOrArrayL } from '~types';
 import { reduceActivity } from '../states/functions/reduceActivity';
@@ -72,7 +72,7 @@ export const buildPaths = pipe(
     v.forEach(
       pipe(
         v => v,
-        toggleMap(
+        toggleMonad(
           ([key]) => Array.isArray(key),
           tap(([val1, val2]) => {
             array.push(val1, val2);
@@ -96,10 +96,10 @@ export const processActivity = pipe(
   (ctx: ParseTreeContext, activity?: ActivityConfig) => {
     pipe(
       () => activity,
-      map(branch => [
-        branch<ActivityConfig>({
-          cond: v => v !== undefined,
-          fn: tap(
+      monad(branch => [
+        branch(
+          v => v !== undefined,
+          tap(
             pipe(
               reduceActivity,
               tap(pipe(v => v.actions, paramArray(ctx.actions.add))),
@@ -107,7 +107,7 @@ export const processActivity = pipe(
               tap(pipe(v => v.delays, paramArray(ctx.delays.add))),
             ),
           ),
-        }),
+        ),
       ]),
     )();
   },

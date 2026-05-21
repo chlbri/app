@@ -11,6 +11,36 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[0.1.2-canary] - 21/05/2026** => _17:16_
+
+</summary>
+
+> ⚠️ **Canary update** — unstable release with package and tooling
+> improvements.
+
+### Refactors
+
+- **parseTree**: adopt new `@bemedev/pipe` Monad APIs (`monad`,
+  `toggleMonad`) in `src/utils/parseTree.helpers.ts`
+
+### Dependencies
+
+- **Dependencies**: update `@bemedev/better-set` to `^0.2.1`,
+  `@bemedev/pipe` to `^1.6.1`, `@bemedev/typings` to `^0.5.5`, `nanoid` to
+  `^5.1.11`
+- **Dev tooling**: update `rolldown` to `1.0.2`, `vitest` to `^4.1.7`,
+  `oxlint` to `^1.66.0`, `oxfmt` to `^0.51.0`, `@types/node` to `^25.9.1`,
+  and other developer utilities
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[0.1.1-canary] - 24/04/2026** => _10:00_
 
 </summary>
