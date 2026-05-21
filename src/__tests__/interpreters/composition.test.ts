@@ -17,6 +17,7 @@ import _machine1 from './composition.1.machine';
 import _machine2 from './composition.2.machine';
 import _machine3 from './composition.3.machine';
 import _machine4 from './composition.4.machine';
+import { defaultCheck } from '#guards';
 
 beforeAll(() => {
   vi.useFakeTimers();
@@ -447,7 +448,7 @@ describe('Composition', () => {
           return equal(s1.event, s2.event);
         },
       });
-      service.subscribe(dumbFn, { id: 'id' });
+      service.subscribe(dumbFn, { id: 'id', equals: defaultCheck });
 
       const log = vi.spyOn(console, 'log').mockImplementation(() => {});
 

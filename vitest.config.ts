@@ -24,6 +24,7 @@ export default defineConfig({
         '**/*.fixture.ts',
         '**/test.ts',
         'src/cli/**',
+        '**/__tests__/**',
       ],
     }),
   ],
@@ -33,6 +34,10 @@ export default defineConfig({
     allowOnly: true,
     passWithNoTests: true,
     slowTestThreshold: 3000,
+    environment: 'node',
+    env: {
+      NODE_ENV: 'test',
+    },
     globals: true,
     logHeapUsage: true,
     setupFiles: ['./vitest.setup.ts'],

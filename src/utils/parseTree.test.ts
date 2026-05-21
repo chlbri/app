@@ -105,7 +105,7 @@ describe('#01 => parseTree', () => {
         name: 'complexGuard',
         description: 'a complex guard',
       });
-      const config = readonly({
+      const config = readonly.freeze({
         on: {
           NEXT: {
             target: '/child',

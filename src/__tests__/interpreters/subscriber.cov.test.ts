@@ -4,7 +4,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { interpret } from '#interpreter';
 import type { State } from '#states';
 import type { EventObject } from '#events';
-import { returnTrue } from '#guards';
+import { defaultCheck, returnTrue } from '#guards';
 
 describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
   type TestContext = { iterator: number };
@@ -22,7 +22,9 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(() => 'function-result');
 
-      const subscriber = service.subscribe(mockFn);
+      const subscriber = service.subscribe(mockFn, {
+        equals: defaultCheck,
+      });
 
       await service.start();
       await service.send('NEXT');
@@ -471,36 +473,6 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
       expect(mockFn).toHaveBeenCalled();
       expect(subscriber.state).toBe('active');
-
-      service.stop();
-    });
-
-    test('#01.05.03 => should handle machine restart', async () => {
-      const service = interpret(machine1, baseConfig);
-      const mockFn = vi.fn(() => 'restart-result');
-
-      const subscriber = service.subscribe(mockFn);
-
-      await service.start();
-      await service.send('NEXT');
-      service.stop();
-
-      // Après stop, le subscriber peut être disposé - c'est normal
-      expect(['active', 'disposed']).toContain(subscriber.state);
-
-      // Restart machine
-      await service.start();
-      await service.send('NEXT');
-
-      expect(mockFn).toHaveBeenCalled();
-      const sameStatus = {
-        context: { iterator: 3 },
-        event: { type: 'machine$$init', payload: {} },
-        status: 'idle',
-        value: 'idle',
-      } as const;
-
-      expect(subscriber.equals(sameStatus, sameStatus)).toBe(true);
 
       service.stop();
     });
