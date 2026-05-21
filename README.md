@@ -1689,6 +1689,20 @@ type EmitterObserver<T> = {
 | `typings.sv`                           | `StateValue`                        |
 | `inferT<Schema>`                       | Extract TypeScript type from schema |
 
+### Advanced Exported Types
+
+These advanced helper and registry types are exported from `@bemedev/app` for strict compile-time checks, tooling integration, or typing extension points:
+
+| Type | Purpose |
+| --- | --- |
+| `Action2<E, Pc, Tc, T>` | Standard function signature for an action callback (takes `StateExtended` and returns a sync or async `ActionResult`). |
+| `ActorsConfigMap` | Core type representing the entire actors registry map (consisting of `children`, `emitters`, and `promisees` definitions). |
+| `ToEventObject<T>` | Utility type that converts event configurations into a unified `EventObject` interface. |
+| `ToEvents<E, A>` | Combines and maps standard events, child actors, emitters, and promisees into a unified, flat event map. |
+| `DelayFunction2<E, Pc, Tc, T>` | The signature for delayed transition functions (resolves to a `number` or a context-aware function returning a `number`). |
+| `EmitterFunction2<E, Pc, Tc, T, R>` | Type for emitter sources (takes `StateExtended` and returns a framework-agnostic `Pausable<R>` instance). |
+| `PredicateS<E, Tc, T>` | Type signature for guard predicate functions (takes a reduced state `State<E, Tc, T>` and returns `boolean`). |
+
 ### CLI
 
 ```bash
