@@ -11,6 +11,34 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[0.1.4-canary] - 22/05/2026** => _11:44_
+
+</summary>
+
+> ⚠️ **Canary update** — unstable release with package exports and typing
+> improvements.
+
+### Features
+
+- **Exports**: Add new public exports from `src/index.ts` and
+  `src/types/index.ts` for `EventArgObject`, `EventObject`, `EventsMap`,
+  `AllEvent`, `InitEvent`, `MAX_EXCEEDED_EVENT_TYPE`, state/node config
+  types, emitter helpers, and guard predicate utilities.
+- **Type utilities**: Export `inferSh` from `@bemedev/typings` through
+  `src/utils/typings.ts`.
+
+### Updates
+
+- **Package exports**: Expose `./constants` in `package.json` to support
+  package-wide `constants` imports.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[0.1.3-canary] - 21/05/2026** => _22:11_
 
 </summary>
@@ -20,23 +48,34 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Public Exports**: Add public type exports in `src/index.ts` to expose `Action2`, `ActorsConfigMap`, `ToEventObject`, `ToEvents`, `DelayFunction2`, `EmitterFunction2`, and `PredicateS` to package consumers.
-- **Devcontainer**: Add a development container configuration (`.devcontainer/devcontainer.json`) for seamless out-of-the-box development environments.
+- **Public Exports**: Add public type exports in `src/index.ts` to expose
+  `Action2`, `ActorsConfigMap`, `ToEventObject`, `ToEvents`,
+  `DelayFunction2`, `EmitterFunction2`, and `PredicateS` to package
+  consumers.
+- **Devcontainer**: Add a development container configuration
+  (`.devcontainer/devcontainer.json`) for seamless out-of-the-box
+  development environments.
 
 ### Fixes
 
-- **Repository URL**: Fix repository URL in `package.json` pointing to correct repo (`github.com/chlbri/app`).
-- **Build Script**: Remove `generate` command execution from the main `build` script in `package.json` for a cleaner, faster build pipeline.
+- **Repository URL**: Fix repository URL in `package.json` pointing to
+  correct repo (`github.com/chlbri/app`).
+- **Build Script**: Remove `generate` command execution from the main
+  `build` script in `package.json` for a cleaner, faster build pipeline.
 
 ### Refactors
 
-- **Migration**: Migrate configuration files and documentation from `.claude/` to `.agents/` directory structure.
-- **Verification**: Enhance development workflows with a spacing verification utility.
-- **Tooling**: Streamline devcontainer specs for increased memory/CPU allocation and optimize VSCode configuration settings.
+- **Migration**: Migrate configuration files and documentation from
+  `.claude/` to `.agents/` directory structure.
+- **Verification**: Enhance development workflows with a spacing
+  verification utility.
+- **Tooling**: Streamline devcontainer specs for increased memory/CPU
+  allocation and optimize VSCode configuration settings.
 
 ### Dependencies
 
-- **Package Manager**: Update workspace to explicitly declare and use `pnpm` as the package manager.
+- **Package Manager**: Update workspace to explicitly declare and use
+  `pnpm` as the package manager.
 
 - <u>Test coverage **_100%_**</u>
 

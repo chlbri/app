@@ -1,4 +1,4 @@
-export type { Fn, inferO, inferT } from '@bemedev/typings';
+export type { Fn, inferO, inferT, inferSh } from '@bemedev/typings';
 import {
   type,
   type inferSh,
