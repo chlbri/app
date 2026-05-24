@@ -1,4 +1,4 @@
-import type { ActionConfig, FromActionConfig } from '#actions';
+import type { WithDescriber, FromActionConfig } from '#actions';
 import type {
   NotUndefined,
   PrimitiveObject,
@@ -13,7 +13,7 @@ type gType = typeof GUARD_TYPE;
 type and = gType['and'];
 type or = gType['or'];
 
-export type GuardUnion = ActionConfig | GuardAnd | GuardOr;
+export type GuardUnion = WithDescriber | GuardAnd | GuardOr;
 
 export type GuardAnd = {
   [k in and]: GuardUnion[];
@@ -26,7 +26,7 @@ export type GuardOr = {
 /**
  * JSON configuration for a guard.
  *
- * @see {@linkcode ActionConfig} for more details.
+ * @see {@linkcode WithDescriber} for more details.
  * @see {@linkcode GuardAnd} for more details.
  * @see {@linkcode GuardOr} for more details.
  */
@@ -42,7 +42,7 @@ export type GuardConfig = GuardUnion;
  * @see {@linkcode GuardAnd} for more details.
  * @see {@linkcode GuardOr} for more details.
  */
-export type FromGuard<T extends GuardConfig> = T extends ActionConfig
+export type FromGuard<T extends GuardConfig> = T extends WithDescriber
   ? FromActionConfig<T>
   : T extends GuardAnd
     ? FromGuard<ReduceArray<T['and']>>
@@ -105,11 +105,11 @@ export type PredicateOr<
  * @template : [Pc], the type of the private context.
  * @template : type {@linkcode PrimitiveObject} [Tc], the type of the context.
  *
- * @returns A union type that can be a single predicate function, a combination of predicates with AND logic, or a combination of predicates with OR logic.
+ * @returns A union type that can be a single predicate function, a combination of guards with AND logic, or a combination of guards with OR logic.
  *
  * @see {@linkcode PredicateS2} for single predicate function.
- * @see {@linkcode PredicateAnd} for combining multiple predicates with AND logic.
- * @see {@linkcode PredicateOr} for combining multiple predicates with OR logic.
+ * @see {@linkcode PredicateAnd} for combining multiple guards with AND logic.
+ * @see {@linkcode PredicateOr} for combining multiple guards with OR logic.
  */
 export type Predicate<
   E extends EventObject = EventObject,
@@ -122,7 +122,7 @@ export type Predicate<
   | PredicateOr<E, Pc, Tc, T>;
 
 /**
- * Represents a map of predicates, where each key is a string and each value is a {@linkcode Predicate}.
+ * Represents a map of guards, where each key is a string and each value is a {@linkcode Predicate}.
  *
  * @template : type {@linkcode EventsMap} [E], the events map to use for resolving the predicate.
  * @template : type {@linkcode PromiseeMap} [P], the promisees map to use for resolving the predicate.

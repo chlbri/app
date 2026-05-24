@@ -1,11 +1,6 @@
 import { toAction } from '#actions';
 import type { PrimitiveObject } from '#bemedev/globals/types';
-import type {
-  ActorsConfigMap,
-  EventsMap,
-  ToEventObject,
-  ToEvents,
-} from '#events';
+import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toPredicate, type GuardConfig } from '#guards';
 import type { SimpleMachineOptions } from '#machines';
 import type { Transition, TransitionConfig } from '#transitions';
@@ -17,14 +12,14 @@ export type ToTransition_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
+  Eo extends EventObject = EventObject,
 >(
   events: E,
   actorsMap: A,
   config: TransitionConfig,
   options?: Pick<
-    SimpleMachineOptions<E, A, Pc, Tc, T, Eo>,
-    'actions' | 'predicates'
+    SimpleMachineOptions<Pc, Tc, T, Eo>,
+    'actions' | 'guards'
   >,
 ) => Transition<Eo, Pc, Tc, T>;
 
@@ -34,7 +29,7 @@ export type ToTransition_F = <
  * @param events - The events map used for action and guard resolution.
  * @param actorsMap - The actors map used for action and guard resolution.
  * @param config - The transition configuration to convert.
- * @param options - Optional machine options that may include actions and predicates configurations.
+ * @param options - Optional machine options that may include actions and guards configurations.
  * @returns A structured transition object with target, actions, guards, and optional description.
  *
  * @see {@linkcode ToTransition_F} for more details
@@ -57,7 +52,7 @@ export const toTransition: ToTransition_F = (
     .typed(config.actions)
     .map(action => toAction(events, actorsMap, action, options?.actions));
   const guards = toArray<GuardConfig>(config.guards).map(guard =>
-    toPredicate(events, actorsMap, guard, options?.predicates),
+    toPredicate(events, actorsMap, guard, options?.guards),
   );
 
   const out = { target, actions, guards } as any;

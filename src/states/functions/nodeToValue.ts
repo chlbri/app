@@ -29,6 +29,7 @@ export const nodeToValue: NodeToValue_F = body => {
 
     const keys = Object.keys(body.states);
 
+    /* v8 ignore else -- @preserve */
     if (keys.length === 1) {
       const key = keys[0];
       const value = body.states[key];

@@ -1,4 +1,4 @@
-import type { Action2, ActionConfig, ActionResult } from '#actions';
+import type { Action2, WithDescriber, ActionResult } from '#actions';
 
 import type { DefinedValue } from '#guards';
 import type {
@@ -19,6 +19,7 @@ import type {
   ActorsConfigMap,
   EventArg,
   EventArgAll,
+  EventArgObject,
   EventObject,
   EventsMap,
 } from '#events';
@@ -71,7 +72,7 @@ export type Elements<
   actorsMap: A;
   context: Tc;
   actions?: Mo['actions'];
-  predicates?: Mo['predicates'];
+  guards?: Mo['guards'];
   delays?: Mo['delays'];
   actors?: Mo['actors'];
 };
@@ -79,7 +80,7 @@ export type Elements<
 export type GetIO_F = (
   key: 'exit' | 'entry',
   node?: NodeConfig,
-) => ActionConfig[];
+) => WithDescriber[];
 
 /**
  * Simple representation of a machine with meaningful properties.
@@ -112,8 +113,11 @@ export interface AnyMachine<
   __decomposedState: any;
   addOptions: any;
   actions: any;
-  predicates: any;
+  guards: any;
   delays: any;
+  __allPaths: string;
+  __tag: string;
+  tags: string[];
   children: any;
   renew: any;
   initialConfig: NodeConfig;
@@ -131,10 +135,7 @@ export type AssignAction_F<
   T extends string = string,
 > = <
   D = Decompose<
-    {
-      pContext: Pc;
-      context: Tc;
-    },
+    { pContext: Pc; context: Tc },
     { object: 'both'; start: false; sep: '.' }
   >,
   K extends keyof D = keyof D,
@@ -197,22 +198,17 @@ export type FilterAction_F<
   T extends string = string,
 > = <
   D = Decompose<
-    {
-      pContext: Pc;
-      context: Tc;
-    },
-    { object: 'object'; start: false; sep: '.' }
+    { pContext: Pc; context: Tc },
+    { object: 'both'; start: false; sep: '.' }
   >,
   K extends keyof D & string = keyof D & string,
 >(
   key: K,
-  fn: K extends string
-    ? D[K] extends Array<infer Item>
-      ? (item: Item, index: number, array: Item[]) => boolean
-      : D[K] extends Ru
-        ? (value: ValuesOf<D[K]>, all: D[K]) => boolean
-        : never
-    : never,
+  fn: D[K] extends Array<infer Item>
+    ? (item: Item, index: number, array: Item[]) => boolean
+    : D[K] extends Ru
+      ? (value: ValuesOf<D[K]>, all: D[K]) => boolean
+      : never,
 ) => Action2<E, Pc, Tc, T>;
 
 export type EraseAction_F<
@@ -221,17 +217,11 @@ export type EraseAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = <
-  D extends object = Extract<
-    Decompose<
-      {
-        pContext: Pc;
-        context: Tc;
-      },
-      { object: 'both'; start: false; sep: '.' }
-    >,
-    object
+  D extends object = Decompose<
+    { pContext: Pc; context: Tc },
+    { object: 'both'; start: false; sep: '.' }
   >,
-  DD = SubTypeLow<D, undefined>,
+  DD = 0 extends 1 & Tc ? Record<string, any> : SubTypeLow<D, undefined>,
   K extends keyof DD & string = keyof DD & string,
 >(
   key: K,
@@ -319,7 +309,7 @@ export type LegacyOptions<
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > = Readonly<{
   actions?: Mo['actions'];
-  predicates?: Mo['predicates'];
+  guards?: Mo['guards'];
   delays?: Mo['delays'];
   actors?: Mo['actors'];
 }>;
@@ -366,7 +356,7 @@ export type AddOptionsParam_F<
   option: AddOption<E, Pc, Tc, T>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
-   * Provides actions, predicates, emitters, machines, promises, and delays.
+   * Provides actions, guards, emitters, machines, promises, and delays.
    */
   legacyOptions: {
     _legacy: LegacyOptions<Mo>;
@@ -400,13 +390,13 @@ export type SendToEvent<T = any> = {
 };
 
 export type ExtendedActionsParams<
-  E extends EventsMap = EventsMap,
+  Eo extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
 > = Partial<{
   scheduled: ScheduledData<Pc, Tc>;
-  resend: EventArg<E>;
-  forceSend: EventArg<E>;
+  resend: EventArgObject<Eo>;
+  forceSend: EventArgObject<Eo>;
   pauseActivity: string;
   resumeActivity: string;
   stopActivity: string;
@@ -436,3 +426,33 @@ export type _ActionTypes =
 export type ActionTypes = `actions.${_ActionTypes}`;
 
 export type AppTypes = ActionTypes | 'guards' | 'pContext' | 'context';
+
+/**
+ * Helper type for a machine Register entry.
+ *
+ * @template Events - Union of event name strings from eventsMap keys.
+ * @template Children - Union of children actor key strings.
+ * @template Emitters - Union of emitter actor key strings.
+ * @template PContext - The pContext ObjectT shape (or undefined).
+ * @template Tags - Union of tag strings from state nodes.
+ */
+export type MachineEntry<
+  Events extends string = never,
+  Children extends string = never,
+  Emitters extends string = never,
+  PContext = never,
+  Tags extends string = never,
+> = {
+  paths: { map: any; all: string };
+  events: Events;
+  options: {
+    children: Children;
+    emitters: Emitters;
+    tags: Tags;
+    actions: string;
+    delays: string;
+    guards: string;
+  };
+  pContext: PContext;
+  tags: Tags;
+};

@@ -1,12 +1,6 @@
 import _any from '#bemedev/features/common/castings/any';
 import type { PrimitiveObject } from '#bemedev/globals/types';
-import type {
-  ActorsConfigMap,
-  EventObject,
-  EventsMap,
-  ToEventObject,
-  ToEvents,
-} from '#events';
+import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { State } from '#states';
 import { nothing, toEventsMap } from '#utils';
 import type { TimerState } from '@bemedev/interval2';
@@ -29,7 +23,7 @@ class SubscriberClass<
   A extends ActorsConfigMap = ActorsConfigMap,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
+  Eo extends EventObject = EventObject,
   St extends State<Eo, Tc, T> = State<Eo, Tc, T>,
 > {
   #subscriber: FnMapR<Eo, Tc, T, void>;
@@ -47,10 +41,6 @@ class SubscriberClass<
 
   get id() {
     return this._id;
-  }
-
-  get equals() {
-    return this.#equals;
   }
 
   /**
@@ -135,7 +125,6 @@ class SubscriberClass<
     return this.#reduceFn(next);
   };
 
-  /* v8 ignore next 3*/
   get state() {
     return this.#state;
   }
@@ -170,9 +159,7 @@ type CreateSubscriber_F = <
   const A extends ActorsConfigMap = ActorsConfigMap,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  const Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<
-    ToEvents<E, A>
-  >,
+  const Eo extends EventObject = EventObject,
 >(
   eventsMap: E,
   actorsMap: A,

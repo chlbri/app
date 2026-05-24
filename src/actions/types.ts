@@ -8,11 +8,11 @@ import type { Describer, FromDescriber } from '~types';
  *
  * @see {@linkcode Describer} for more details.
  */
-export type ActionConfig = string | Describer;
+export type WithDescriber = string | Describer;
 
 /**
  * Retrieves the name of the action if it is a describer, otherwise returns the action itself.
- * @template : type {@linkcode ActionConfig} [T], ActionConfig to reduce
+ * @template : type {@linkcode WithDescriber} [T], ActionConfig to reduce
  * @returns The name of the action if it is a describer, otherwise the action itself.
  *
  * @see {@linkcode FromDescriber} for more details.

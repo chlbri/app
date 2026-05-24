@@ -133,6 +133,7 @@ yarn.lock
 
 # misc
 **/.DS_Store
+.pnpm-store
 *.pem
 
 #pnpm

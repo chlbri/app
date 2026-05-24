@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       branch:
         description: 'Branch to test'
@@ -16,24 +16,5 @@ on:
       - beta
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout pnpm repo
-        uses: 'chlbri/pnpmi-action@main'
-        with:
-          branch: ${{ inputs.branch }}
-
-      - name: lint
-        run: pnpm run lint
-
-      - name: Build
-        run: pnpm run pretest
-
-      - name: Test
-        run: pnpm run test:only
-
-      - name: Cleanup
-        run: pnpm run posttest
+  all:
+    uses: chlbri/node-github-actions/.github/workflows/ci.yml@main

@@ -5,6 +5,7 @@ import type {
   NotUndefined,
   PrimitiveObject,
 } from '#bemedev/globals/types';
+import { Identify } from '#bemedev/globals/types';
 import type { DelayFunction2 } from '#delays';
 import type {
   EmitterDef,
@@ -12,13 +13,7 @@ import type {
   EmitterReturn,
   EmittersMap,
 } from '#emitters';
-import type {
-  ActorsConfigMap,
-  EventObject,
-  EventsMap,
-  ToEventObject,
-  ToEvents,
-} from '#events';
+import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { PredicateS, PredicateS2 } from '#guards';
 import type {
   ActivityConfig,
@@ -49,10 +44,11 @@ import type {
   FnMapR,
   FnR,
   KeyU,
-  RecordS,
   ReduceArray,
 } from '~types';
-import { Identify } from '#bemedev/globals/types';
+import { RecordS } from './../types/primitives';
+import type { RegisterOptions } from '../registry.types';
+
 /**
  * Type representing the main JSON config.
  *
@@ -75,10 +71,13 @@ export type MachineConfig = Describer | string;
  * @see {@linkcode MachineConfig}
  * @see {@linkcode SingleOrArrayL}
  */
-export type Config = NodeConfig & {
+export type Config<
+  Paths extends NoExtraKeysConfigDef<ConfigDef> =
+    NoExtraKeysConfigDef<ConfigDef>,
+> = NodeConfig & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
-};
+} & TransformConfigDef<Paths>;
 
 export type ChildEvents<
   K extends string,
@@ -139,7 +138,7 @@ export type NoExtraKeysConfigNode<T extends NodeConfig> = T & {
   };
 };
 export type NoExtraKeysConfig<T extends Config> = T & {
-  [K in Exclude<keyof T, keyof Config | '__tsSchema'>]: never;
+  [K in Exclude<keyof T, keyof Config>]: never;
 } & {
   states?: Record<string, NoExtraKeysConfigNode<NodeConfig>>;
 };
@@ -542,7 +541,10 @@ export type GetActorKeysFromMachine<T extends KeyU<'config'>> =
 
 export type ChildConfigDef = EventsMap;
 
-export type ChildConfigMap = RecordS<ChildConfigDef>;
+export type ChildConfigMap<S extends string = string> = Record<
+  S,
+  ChildConfigDef
+>;
 
 export type Child<
   E extends EventObject = EventObject,
@@ -563,12 +565,12 @@ export type Child<
  */
 export type FnMapFrom<
   T extends KeyU<
-    '__eventsO' | 'pContext' | 'context' | 'actorsMap' | '__tag'
+    '__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'
   >,
   R = any,
   Ex extends string = never,
 > = FnMapR<
-  Extract<T['__eventsO'], EventObject>,
+  Extract<T['__events'], EventObject>,
   ContextFrom<T>,
   Extract<T['__tag'], string>,
   R,
@@ -591,7 +593,7 @@ export type FnMapFrom<
  * All options can be :
  * * `initials` - a record of initial states.
  * * `actions` - a partial record of actions, where keys are action names and values are action functions.
- * * `predicates` - a partial record of predicates, where keys are predicate names and values are predicate functions.
+ * * `guards` - a partial record of guards, where keys are predicate names and values are predicate functions.
  * * `promises` - a partial record of promises, where keys are promise names and values are promise functions.
  * * `delays` - a partial record of delays, where keys are delay names and values are delay functions.
  * * `machines` - a partial record of child services, where keys are machine names and values are child services.
@@ -606,18 +608,37 @@ export type FnMapFrom<
  */
 export type MachineOptions<
   C extends Config = Config,
-  E extends EventsMap = EventsMap,
   A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
+  Eo extends EventObject = EventObject,
   Flat extends FlatMapN<C, false> = FlatMapN<C, false>,
 > = Partial<{
   actions: Partial<GetActionsFromFlat<Flat, Eo, Pc, Tc, T>>;
-  predicates: Partial<GetGuardsFromFlat<Flat, Eo, Pc, Tc, T>>;
+  guards: Partial<GetGuardsFromFlat<Flat, Eo, Pc, Tc, T>>;
   delays: Partial<GetDelaysFromFlat<Flat, Eo, Pc, Tc, T>>;
   actors: Partial<GetActorsFromFlat<Flat, Eo, A, Pc, Tc, T>>;
+}>;
+
+export type MachineOptions2<
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  Eo extends EventObject = EventObject,
+  O extends RegisterOptions = RegisterOptions,
+> = Partial<{
+  actions: Partial<Record<O['actions'], Action2<Eo, Pc, Tc, T>>>;
+  guards: Partial<Record<O['guards'], PredicateS<Eo, Pc, Tc, T>>>;
+  delays: Partial<Record<O['delays'], DelayFunction2<Eo, Pc, Tc, T>>>;
+  actors: Partial<{
+    children: Partial<
+      Record<O['children'], ChildFunction2<Eo, Pc, Tc, T, any>>
+    >;
+    emitters: Partial<
+      Record<O['emitters'], EmitterFunction2<Eo, Pc, Tc, T, any>>
+    >;
+  }>;
 }>;
 
 /**
@@ -730,13 +751,21 @@ export type ActorsMapFrom<T extends KeyU<'actorsMap'>> = Extract<
   ActorsConfigMap
 >;
 
+export type TagsFrom<T extends KeyU<'tags'>> = T['tags'];
+export type TagFrom<T extends KeyU<'__tag'>> = T['__tag'];
+
+export type AllPathsFrom<T extends KeyU<'__allPaths'>> = T['__allPaths'];
+
 /**
  * Getting all events from a machine.
  *
  * @template : {@linkcode KeyU}<'__events'> [T] - type of the machine events
  *
  */
-export type EventsFrom<T extends KeyU<'__events'>> = T['__events'];
+export type EventsFrom<T extends KeyU<'__events'>> = Extract<
+  T['__events'],
+  EventObject
+>;
 
 /**
  * Get all actions map from a machine.
@@ -789,14 +818,14 @@ export type ActionKeysFrom<T extends KeyU<'__actionKey'>> =
   T['__actionKey'];
 
 /**
- * Get all predicates map from a machine.
+ * Get all guards map from a machine.
  *
- * @template : {@linkcode KeyU}<'predicates'> [T] - type of the machine predicates map.
+ * @template : {@linkcode KeyU}<'guards'> [T] - type of the machine guards map.
  *
  * @see {@linkcode NotUndefined}
  */
-export type PredicatesMapFrom<T extends KeyU<'predicates'>> = NotUndefined<
-  T['predicates']
+export type PredicatesMapFrom<T extends KeyU<'guards'>> = NotUndefined<
+  T['guards']
 >;
 
 /**
@@ -813,9 +842,9 @@ export type PredicateSFrom<T extends KeyU<'__predicate'>> = NotUndefined<
 /**
  * Get the guard keys from a machine.
  *
- * @template : {@linkcode KeyU}<'predicates'> [T] - type of the machine machine predicates map.
+ * @template : {@linkcode KeyU}<'guards'> [T] - type of the machine machine guards map.
  *
- * @see {@linkcode NotUndefined} for ensuring the predicates map is not undefined.
+ * @see {@linkcode NotUndefined} for ensuring the guards map is not undefined.
  * @see {@linkcode PredicatesMapFrom} for extracting guards from the machine.
  */
 export type GuardKeysFrom<T extends KeyU<'__guardKey'>> = T['__guardKey'];
@@ -881,15 +910,13 @@ export type ChildrenKeysFrom<T extends KeyU<'__childKey'>> =
  *
  */
 export type SimpleMachineOptions<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
+  Eo extends EventObject = EventObject,
 > = Partial<{
   actions: Partial<RecordS<Action2<Eo, Pc, Tc, T>>>;
-  predicates: Partial<RecordS<PredicateS2<Eo, Pc, Tc, T>>>;
+  guards: Partial<RecordS<PredicateS2<Eo, Pc, Tc, T>>>;
   delays: Partial<RecordS<DelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
     children: RecordS<ChildFunction2<Eo, Pc, Tc, T>>;
@@ -907,7 +934,7 @@ export type SimpleMachineOptions<
  * This type is more flexible than {@linkcode SimpleMachineOptions}
  */
 export type SimpleMachineOptions2 = Partial<
-  Record<'actions' | 'predicates' | 'delays', any> &
+  Record<'actions' | 'guards' | 'delays', any> &
     Record<
       'actors',
       {

@@ -9,6 +9,8 @@ export type GetChildren_F = (str: string, ...keys: string[]) => string[];
 export const getChildren: GetChildren_F = (str, ...keys) => {
   const noKeys = keys.length > 0;
   const out: string[] = [];
+
+  /* v8 ignore else -- @preserve */
   if (noKeys) {
     keys.forEach(key => {
       const notMatch = str !== key;

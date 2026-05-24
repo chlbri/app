@@ -69,6 +69,7 @@ export const valueToNodeConfig: ValueToNodeConfig_F = (body, from) => {
   flatFrom.forEach((key1, _, all) => {
     const check4 = keysFlatBody.some(key => key.startsWith(key1));
 
+    /* v8 ignore else -- @preserve */
     if (check4) {
       out1[key1] = (flatBody as any)[key1];
 

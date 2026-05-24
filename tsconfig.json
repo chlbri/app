@@ -25,13 +25,13 @@
     "paths": {
       "~types": ["./src/types/index.ts"],
       "#fixtures": ["./src/fixtures/index.ts"],
-      "#fixturesData": ["./src/interpreters/__tests__/data/index.ts"],
+      "#fixturesData": ["./src/__tests__/interpreters/data/index.ts"],
       "#utils": ["./src/utils/index.ts"],
       "#utils/*": ["./src/utils/*"],
       "#constants": ["./src/constants/index.ts"],
       "#children": ["./src/children/index.ts"],
       "#delays": ["./src/delays/index.ts"],
-      "#actor": ["./src/actor.types.ts"],
+      "#actor": ["./src/actors/types.ts"],
       "#states": ["./src/states/index.ts"],
       "#interpreters": ["./src/interpreters/index.ts"],
       "#interpreter": ["./src/interpreters/interpreter.ts"],
@@ -42,8 +42,10 @@
       "#emitters": ["./src/emitters/index.ts"],
       "#machine": ["./src/machine/machine.ts"],
       "#machines": ["./src/machine/index.ts"],
+      "#registry": ["./src/registry.types.ts"],
       "#config": ["./src/config/index.ts"],
-      "#bemedev/*": ["./src/libs/bemedev/*"]
+      "#bemedev/*": ["./src/libs/bemedev/*"],
+      "@bemedev/app": ["./src/index.ts"]
     }
   }
 }

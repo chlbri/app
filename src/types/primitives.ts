@@ -17,6 +17,7 @@ import type {
   StatePextended,
 } from '#states';
 import { checkKeys } from '#utils';
+import type { EmptyObject } from '@bemedev/decompose';
 
 export type IsString_F = (value: unknown) => value is string;
 
@@ -304,7 +305,7 @@ type _FnMap<
   T extends string = string,
   R = any,
   Ex extends string = never,
-  TT extends Exclude<E, Ex | { type: Ex }> = Exclude<E, Ex | { type: Ex }>,
+  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > = {
   [key in EventToType<TT>]?: (
     state: StatePextended<
@@ -602,6 +603,12 @@ export type FilterArray<
 
 export type DeeperPartial<T> = DeepPartial<T> | undefined;
 
-export type OptionalDefinition<P, V extends string> = undefined extends P
+type _OptionalDefinition<P, V extends string> = undefined extends P
   ? { [K in V]?: P }
   : { [K in V]: P };
+
+export type OptionalDefinition<
+  P,
+  V extends string,
+  R extends _OptionalDefinition<P, V> = _OptionalDefinition<P, V>,
+> = R extends never | RecordS<never> ? EmptyObject : R;

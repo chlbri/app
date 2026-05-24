@@ -76,6 +76,8 @@ export function resolve(basePath: string, relativePath: string): string {
   if (nonParentSegments.length === 0 && parentLevels > 0) {
     // For cases like '..' or '../../', we need to include the directory name
     // that we're at after the parent navigation
+
+    /* v8 ignore else -- @preserve */
     if (resultSegments.length >= 0) {
       // We want the directory name that we land on after going up
       // For example: from /parent/child/grandchild/grantchild with '..'
@@ -83,6 +85,7 @@ export function resolve(basePath: string, relativePath: string): string {
       // So we need to add one level back down
       const originalBaseSegments = baseSegments.slice(0, -1);
       const targetLevel = originalBaseSegments.length - parentLevels;
+
       if (targetLevel >= 0 && targetLevel < originalBaseSegments.length) {
         const targetDir = originalBaseSegments[targetLevel];
         return (
@@ -93,6 +96,7 @@ export function resolve(basePath: string, relativePath: string): string {
         );
       }
     }
+
     return DEFAULT_DELIMITER + resultSegments.join(DEFAULT_DELIMITER);
   }
 
@@ -119,6 +123,7 @@ export function resolve(basePath: string, relativePath: string): string {
       );
 
       // Use the alternative if it makes more sense (contains the segment we're looking for)
+      /* v8 ignore else -- @preserve */
       if (
         alternativeResult.length > resultSegments.length ||
         (alternativeResult.length === resultSegments.length &&

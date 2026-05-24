@@ -1,4 +1,4 @@
-import { toAction, type ActionConfig } from '#actions';
+import { toAction, type WithDescriber } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
 import isPrimitive from '#bemedev/features/common/castings/primitive/is';
 import {
@@ -19,12 +19,10 @@ import {
   possibleEvents,
   transformEventArg,
   type ActorsConfigMap,
-  type EventArg,
-  type EventArgT,
+  type EventArgObject,
   type EventObject,
-  type ToEventObject,
-  type ToEvents,
-  type ToEventsR,
+  type EventsMap,
+  type ExtractSender,
 } from '#events';
 import { toPredicate, type GuardConfig } from '#guards';
 import { getEntries, getExits } from '#machine';
@@ -38,7 +36,6 @@ import {
   type DirectMerge_F,
   type EventsMapFrom,
   type ExtendedActionsParams,
-  type GetEventsFromConfig,
   type PrivateContextFrom,
   type ScheduledData,
 } from '#machines';
@@ -108,6 +105,7 @@ import type {
   WorkingStatus,
 } from './interpreter.types';
 
+import type { FinallyConfig } from '../actors/types';
 import _unknown from '#bemedev/features/common/castings/_unknown';
 import type {
   AllowedNames,
@@ -118,14 +116,16 @@ import { toEmitterSrc, type EmitterFunction2 } from '#emitters';
 import type { Machine } from '#machine';
 import type {
   ActorsMapFrom,
+  AllPathsFrom,
   AnyMachine,
   ChildFunction2,
-  ExtractTagsFromConfig,
-  GetActorKeysFromConfig,
+  EventsFrom,
+  MachineOptionsFrom,
+  SimpleMachineOptions2,
+  TagFrom,
 } from '#machines';
-import type { FinallyConfig } from '#actor';
 import { createScheduler } from '@bemedev/scheduler';
-import type { ChildConfig, EmitterConfig } from '../actor.types';
+import type { ChildConfig, EmitterConfig } from '../actors/types';
 import { createSubscriber, type SubscriberClass } from './subscriber';
 
 /**
@@ -138,7 +138,7 @@ import { createSubscriber, type SubscriberClass } from './subscriber';
  * @template : type {@linkcode types} [Tc] - The context type.
  * @template : type {@linkcode EventsMap} [E] - The events map type, which maps event names to their
  * @template : type {@linkcode PromiseeMap} [P] - The promisees map type, which maps promise names to their
- * @template Mo : type {@linkcode SimpleMachineOptions2} - The machine options type, which includes various configurations for the machine. Default to {@linkcode MachineOptions}.
+ * @template Mo : type {@linkcode MachineOptions} - The machine options type, which includes various configurations for the machine. Default to {@linkcode MachineOptions}.
  *
  * @implements : {@linkcode AnyInterpreter}
  *
@@ -147,7 +147,7 @@ import { createSubscriber, type SubscriberClass } from './subscriber';
  * allowing for the execution of state transitions, handling of events, and management of the machine's lifecycle.
  * It supports various modes of operation, including strict and normal modes,
  * and provides mechanisms for error and warning handling.
- * * It also allows for the execution of actions, predicates, and delays,
+ * * It also allows for the execution of actions, guards, and delays,
  * * as well as the management of child interpreters and scheduled tasks.
  *
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
@@ -156,15 +156,17 @@ export class Interpreter<
   const C extends Config = Config,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
-  E extends GetEventsFromConfig<C> = GetEventsFromConfig<C>,
-  A extends ActorsConfigMap = GetActorKeysFromConfig<C>,
-  Ta extends ExtractTagsFromConfig<C> = ExtractTagsFromConfig<C>,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
+  const E extends EventsMap = EventsMap,
+  const A extends ActorsConfigMap = ActorsConfigMap,
+  const Ta extends string = string,
+  const Eo extends EventObject = EventObject,
+  const AllPaths extends string = string,
+  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > implements AnyInterpreter<E, A, Pc, Tc> {
   /**
    * The {@linkcode Machine} machine being interpreted.
    */
-  #machine: Machine<C, Pc, Tc, E, A, Ta, Eo>;
+  #machine: Machine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
 
   /**
    * The current {@linkcode WorkingStatus} status of the this {@linkcode Interpreter} service.
@@ -389,31 +391,23 @@ export class Interpreter<
         console.log(warnings);
       }
 
-      /* v8 ignore next 5 */
       const check2 = this.#errorsCollector.size > 0;
       if (check2) {
         const errors = this.#displayConsole(this.#errorsCollector);
         throw new Error(errors);
       }
-
-      return;
-    }
-
-    if (this.isNormal) {
+    } else {
       const check3 = this.#errorsCollector.size > 0;
       if (check3) {
         const errors = this.#displayConsole(this.#errorsCollector);
         console.error(errors);
       }
 
-      /* v8 ignore next 8 */
       const check4 = this.#warningsCollector.size > 0;
       if (check4) {
         const warnings = this.#displayConsole(this.#warningsCollector);
         console.log(warnings);
       }
-
-      return;
     }
   };
 
@@ -455,6 +449,7 @@ export class Interpreter<
       return this.#performStates({ value, tags });
     }
 
+    /* v8 ignore else -- @preserve */
     if (target) {
       this.#config = initialConfig(this.proposedNextConfig(target));
       const tags = this.tags;
@@ -584,12 +579,15 @@ export class Interpreter<
    * @see {@linkcode context} to get the current context.
    */
   get _pContext() {
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       return this.#pContext;
-      /* v8 ignore next 4 */
     }
+
+    /* v8 ignore start -- @preserve */
     console.error('pContext is not available in production');
     return;
+    /* v8 ignore stop -- @preserve */
   }
 
   get isReady() {
@@ -626,18 +624,23 @@ export class Interpreter<
    * @see {@linkcode getByKey} for retrieving values by key.
    */
   get _pSelect(): Selector_F<Pc> {
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       const check = this.isReady && isPrimitive(this.#pContext);
       const pContext = this.#pContext;
       if (check) return undefined as any;
+
+      /* v8 ignore else -- @preserve */
       if (pContext) {
         const out: any = (path: string) => getByKey(pContext, path);
         return out as any;
       }
-      /* v8 ignore next 4 */
     }
+
+    /* v8 ignore start -- @preserve */
     console.error('pContext is not available in production');
     return undefined as any;
+    /* v8 ignore stop -- @preserve */
   }
 
   /**
@@ -696,6 +699,11 @@ export class Interpreter<
   ) => {
     this.#collectedChildren.filter(filter).forEach(({ service, id }) => {
       service.stop();
+
+      this.#collectedChildren
+        .filter(f => f.id === id)
+        .forEach(({ service }) => service.dispose());
+
       this.#collectedChildren = this.#collectedChildren.filter(
         f => f.id !== id,
       );
@@ -836,7 +844,7 @@ export class Interpreter<
     return this.#sendTo(sentEvent.to, sentEvent.event);
   };
 
-  #performResendAction = async (resend?: EventArg<E>) => {
+  #performResendAction = async (resend?: EventArgObject<Eo>) => {
     if (!resend) return;
     const cannot = this.#cannotPerformEvents(resend);
     if (cannot) return;
@@ -852,7 +860,7 @@ export class Interpreter<
    *
    * @see {@linkcode TransitionConfig} for more information about transitions.
    */
-  #performForceSendAction = async (forceSend?: EventArg<E>) => {
+  #performForceSendAction = async (forceSend?: EventArgObject<Eo>) => {
     if (!forceSend) return;
     const values = Object.values(this.#machine.flat);
 
@@ -908,7 +916,7 @@ export class Interpreter<
     resumeTimer,
     stopTimer,
     sentEvent,
-  }: ExtendedActionsParams<E, Pc, Tc>) => {
+  }: ExtendedActionsParams<Eo, Pc, Tc>) => {
     this.#performSendToAction(sentEvent);
 
     this.#performScheduledAction(scheduled);
@@ -942,15 +950,16 @@ export class Interpreter<
    */
   #throwMaxCounter() {
     const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
+
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       this._addError(error);
       this.#throwing();
       this.stop();
-      /* v8 ignore next 1 */
     } else throw error;
   }
 
-  #performActions = async (...actions: ActionConfig[]) => {
+  #performActions = async (...actions: WithDescriber[]) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
 
     for (const fn of fns) {
@@ -1121,6 +1130,7 @@ export class Interpreter<
       await this.#performActions(...toArray.typed(diffEntries));
       return transition;
     }
+
     const { guards, actions, target } = transition;
     const { diffEntries, diffExits } = this.#diffNext(target);
 
@@ -1168,6 +1178,8 @@ export class Interpreter<
       const response = this.#performPredicates(
         ...toArray.typed(final.guards),
       );
+
+      /* v8 ignore else -- @preserve */
       if (response) {
         this.#performActions(...toArray.typed(final.actions));
       }
@@ -1813,7 +1825,7 @@ export class Interpreter<
    * Provides options for the interpreter and returns a new interpreter instance.
    *
    * @param option a function that provides options for the machine.
-   * Options can include actions, predicates, delays, promises, and child machines.
+   * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new interpreter instance with the provided options applied.
    */
   provideOptions = (
@@ -1882,12 +1894,15 @@ export class Interpreter<
    * @remarks returns nothing in prod
    */
   get _errorsCollector() {
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       return this.#errorsCollector;
-      /* v8 ignore next 3 */
     }
+
+    /* v8 ignore start -- @preserve */
     console.error('errorsCollector is not available in production');
     return;
+    /* v8 ignore stop -- @preserve */
   }
 
   /**
@@ -1896,12 +1911,14 @@ export class Interpreter<
    * @remarks returns nothing in prod
    */
   get _warningsCollector() {
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       return this.#warningsCollector;
-      /* v8 ignore next 3 */
     }
+    /* v8 ignore start -- @preserve */
     console.error('warningsCollector is not available in production');
     return;
+    /* v8 ignore stop -- @preserve */
   }
 
   protected _addError = (...errors: string[]) => {
@@ -1992,7 +2009,7 @@ export class Interpreter<
     return possibleEvents(this.#flat);
   }
 
-  #cannotPerformEvents = (_event: EventArg<E>) => {
+  #cannotPerformEvents = (_event: EventArgObject<Eo>) => {
     const type = eventToType(_event);
     const check = !this.#possibleEvents.includes(type);
     return check;
@@ -2005,13 +2022,10 @@ export class Interpreter<
    *
    * @see {@linkcode send} for sending events directly.
    */
-  sender = <T extends EventArgT<E>>(type: T) => {
-    type Arg = Extract<ToEventsR<E, A>, { type: T }>['payload'];
-    type Payload = object extends Arg ? [] : [Arg];
-
-    return (...data: Payload) => {
+  sender = <const T extends Eo['type']>(type: T) => {
+    return (...data: ExtractSender<Eo, T>) => {
       const payload = data.length === 1 ? data[0] : {};
-      const event = { type, payload } as EventArg<E>;
+      const event = { type, payload } as unknown as EventArgObject<Eo>;
       return this.send(event);
     };
   };
@@ -2022,7 +2036,7 @@ export class Interpreter<
    * @param _event - the {@linkcode EventArg} event to send.
    *
    */
-  #send = async (_event: EventArg<E>) => {
+  #send = async (_event: EventArgObject<Eo>) => {
     const event = transformEventArg(_event);
     const next = await this._send(event as any);
 
@@ -2043,7 +2057,7 @@ export class Interpreter<
    * If the event cannot be performed, it will not be sent.
    * If the event is sent, it will be processed and the state will be updated.
    */
-  send = async (_event: EventArg<E>) => {
+  send = async (_event: EventArgObject<Eo>) => {
     const check = this.#cannotPerformEvents(_event);
     if (check) return;
     return this.#send(_event);
@@ -2105,8 +2119,8 @@ export class Interpreter<
     const keysNext = Object.keys(flatNext);
 
     const keys = entriesCurrent.map(([key]) => key);
-    const diffEntries: ActionConfig[] = [];
-    const diffExits: ActionConfig[] = [];
+    const diffEntries: WithDescriber[] = [];
+    const diffExits: WithDescriber[] = [];
 
     // #region Entry actions
 
@@ -2187,7 +2201,7 @@ export class Interpreter<
     return;
   };
 
-  toActionFn = (action: ActionConfig) => {
+  toActionFn = (action: WithDescriber) => {
     const events = this.#machine.eventsMap;
     const actorsMap = this.#machine.actorsMap;
     const actions = this.#machine.actions;
@@ -2201,13 +2215,13 @@ export class Interpreter<
   toPredicateFn = (guard: GuardConfig) => {
     const events = this.#machine.eventsMap;
     const actorsMap = this.#machine.actorsMap;
-    const predicates = this.#machine.predicates;
+    const guards = this.#machine.guards;
 
     const { predicate, errors } = toPredicate<E, A, Pc, Tc, Ta, Eo>(
       events,
       actorsMap,
       guard,
-      predicates,
+      guards,
     );
 
     return this.#returnWithWarning(predicate, ...errors);
@@ -2277,10 +2291,8 @@ export class Interpreter<
   };
 
   // #region Disposable
-
   dispose = () => {
     this.stop();
-    this.#collectedChildren.forEach(({ service }) => service.dispose());
     this.#timeoutActions.forEach(this.#dispose);
   };
 
@@ -2312,7 +2324,11 @@ export type InterpreterFrom<M extends AnyMachine> = Interpreter<
   PrivateContextFrom<M>,
   ContextFrom<M>,
   EventsMapFrom<M>,
-  ActorsMapFrom<M>
+  ActorsMapFrom<M>,
+  TagFrom<M>,
+  EventsFrom<M>,
+  AllPathsFrom<M>,
+  MachineOptionsFrom<M>
 >;
 
 /**
@@ -2326,7 +2342,7 @@ export type InterpreterFrom<M extends AnyMachine> = Interpreter<
  */
 export const interpret: Interpreter_F = (..._args) => {
   const [machine, args] = _args;
-  const { mode, exact, pContext, context } = args ?? {};
+  const { mode, exact, pContext, context } = _any(args ?? {});
   const out: any = new Interpreter(machine, mode, exact);
   out._providePrivateContext(pContext);
   out._provideContext(context);

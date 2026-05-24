@@ -1,4 +1,4 @@
-import type { Action, ActionConfig, FromActionConfig } from '#actions';
+import type { Action, WithDescriber, FromActionConfig } from '#actions';
 import type {
   Equals,
   Keys,
@@ -22,20 +22,28 @@ export type SNC = NodeConfig;
 
 export type ActivityMap =
   | {
-      guards: SingleOrArrayL<GuardConfig>;
-      actions: SingleOrArrayL<ActionConfig>;
+      guards?: SingleOrArrayL<GuardConfig>;
+      actions: SingleOrArrayL<WithDescriber>;
     }
-  | ActionConfig;
+  | WithDescriber;
 
-export type ActivityArray = SingleOrArrayL<ActivityMap>;
+export type ActivityArray =
+  | [
+      ...{
+        guards: SingleOrArrayL<GuardConfig>;
+        actions: SingleOrArrayL<WithDescriber>;
+      }[],
+      ActivityMap,
+    ]
+  | ActivityMap;
 
 export type ActivityConfig = Record<string, ActivityArray>;
 
 export type ActionsFromActivity<TS extends ActivityArray> = TS extends any
   ? ReduceArray<TS> extends infer TR
-    ? TR extends { actions: SingleOrArrayL<ActionConfig> }
+    ? TR extends { actions: SingleOrArrayL<WithDescriber> }
       ? FromGuard<ReduceArray<TR['actions']>>
-      : FromActionConfig<ReduceArray<Extract<TR, ActionConfig>>>
+      : FromActionConfig<ReduceArray<Extract<TR, WithDescriber>>>
     : never
   : never;
 
@@ -69,19 +77,15 @@ export type ExtractDelaysFromActivity<T> = 'activities' extends keyof T
 
 export type BaseConfig = {
   readonly description?: string;
-  readonly entry?: SingleOrArrayL<ActionConfig>;
-  readonly exit?: SingleOrArrayL<ActionConfig>;
+  readonly entry?: SingleOrArrayL<WithDescriber>;
+  readonly exit?: SingleOrArrayL<WithDescriber>;
   readonly tags?: SingleOrArrayL<string>;
   readonly activities?: ActivityConfig;
 };
 
-export type CommonNodeConfig<Paths extends string = string> = BaseConfig &
-  TransitionsConfig<Paths>;
+export type CommonNodeConfig = BaseConfig & TransitionsConfig;
 
-export type NodeConfig<
-  Paths extends string = string,
-  I extends string = string,
-> = CommonNodeConfig<Paths> &
+export type NodeConfig = CommonNodeConfig &
   (
     | {
         readonly type?: 'atomic';
@@ -90,7 +94,7 @@ export type NodeConfig<
       }
     | {
         readonly type?: 'compound';
-        readonly initial: I;
+        readonly initial: string;
         readonly states: RecordS<NodeConfig>;
       }
     | {
@@ -100,28 +104,23 @@ export type NodeConfig<
       }
   );
 
-export type NodeConfigAtomic<Paths extends string = string> =
-  CommonNodeConfig<Paths> & {
-    readonly type?: 'atomic';
-    readonly initial?: never;
-    readonly states?: never;
-  };
+export type NodeConfigAtomic = CommonNodeConfig & {
+  readonly type?: 'atomic';
+  readonly initial?: never;
+  readonly states?: never;
+};
 
-export type NodeConfigCompound<
-  Paths extends string = string,
-  I extends string = string,
-> = CommonNodeConfig<Paths> & {
+export type NodeConfigCompound = CommonNodeConfig & {
   readonly type?: 'compound';
-  readonly initial: I;
+  readonly initial: string;
   readonly states: RecordS<NodeConfig>;
 };
 
-export type NodeConfigParallel<Paths extends string = string> =
-  CommonNodeConfig<Paths> & {
-    readonly type: 'parallel';
-    readonly initial?: never;
-    readonly states: RecordS<NodeConfig>;
-  };
+export type NodeConfigParallel = CommonNodeConfig & {
+  readonly type: 'parallel';
+  readonly initial?: never;
+  readonly states: RecordS<NodeConfig>;
+};
 
 export type StateValue = string | StateValueMap;
 

@@ -1,0 +1,175 @@
+import { emptyFn } from '#fixtures';
+import { interpret } from '#interpreter';
+import { createMachine } from '#machine';
+import { createConfig } from '#machines';
+import { notU } from '#utils';
+import { type } from '@bemedev/typings';
+import { DELAY } from './constants';
+import { fakeDB } from './fakeDB';
+import { machine1 } from './machine1';
+
+// #region machine21
+
+export const config21 = createConfig({
+  initial: 'idle',
+  states: {
+    idle: {
+      activities: {
+        DELAY: 'inc',
+      },
+      on: {
+        NEXT: '/working',
+      },
+    },
+    working: {
+      type: 'parallel',
+      activities: {
+        DELAY2: 'inc2',
+      },
+      on: {
+        SEND: {
+          actions: 'send',
+        },
+      },
+      states: {
+        fetch: {
+          initial: 'idle',
+          states: {
+            idle: {
+              activities: {
+                DELAY: 'sendPanelToUser',
+              },
+              on: {
+                FETCH: '/working/fetch/fetch',
+              },
+            },
+            fetch: {
+              entry: 'insertData',
+              always: '/working/fetch/idle',
+            },
+          },
+        },
+        ui: {
+          initial: 'idle',
+          states: {
+            idle: {
+              on: {
+                WRITE: {
+                  actions: 'write',
+                  target: '/working/ui/input',
+                },
+              },
+            },
+            input: {
+              activities: {
+                DELAY: {
+                  guards: 'isInputEmpty',
+                  actions: 'askUsertoInput',
+                },
+              },
+              on: {
+                WRITE: [
+                  {
+                    guards: 'isInputNotEmpty',
+                    actions: 'write',
+                    target: '/working/ui/idle',
+                  },
+                  '/working/ui/idle',
+                ],
+              },
+            },
+            final: {},
+          },
+        },
+      },
+    },
+    final: {},
+  },
+});
+
+export const machine21 = createMachine(
+  'src/__tests__/interpreters/data/machine21',
+  {
+    actors: {
+      machine1: {
+        on: {},
+        contexts: {
+          iterator: 'iterator',
+        },
+      },
+    },
+    ...config21,
+  },
+  {
+    eventsMap: type({
+      NEXT: 'never',
+      FETCH: 'never',
+      WRITE: { value: 'string' },
+      SEND: 'never',
+    }),
+
+    context: type(({ array }) => ({
+      iterator: 'number',
+      input: 'string',
+      data: array('string'),
+    })),
+
+    pContext: type({
+      iterator: 'number',
+    }),
+
+    actorsMap: type({
+      children: {
+        machine1: {
+          NEXT: 'never',
+        },
+      },
+    }),
+  },
+).provideOptions(
+  ({ isNotValue, isValue, assign, voidAction, sendTo }) => ({
+    actions: {
+      inc: assign(
+        'context.iterator',
+        ({ context }) => notU(context?.iterator) + 1,
+      ),
+      inc2: assign(
+        'context.iterator',
+        ({ context }) => notU(context?.iterator) + 4,
+      ),
+      sendPanelToUser: voidAction(() => console.log('sendPanelToUser')),
+      askUsertoInput: voidAction(() => console.log('Input, please !!')),
+      write: assign('context.input', {
+        WRITE: ({ payload: { value } }) => value,
+      }),
+      send: sendTo(machine1)(
+        async () => ({ to: 'machine1', event: 'NEXT' }),
+        {
+          error: emptyFn,
+        },
+      ),
+      insertData: assign('context.data', ({ context }) =>
+        fakeDB
+          .filter(item => item.name.includes(context?.input ?? ''))
+          .map(item => item.name),
+      ),
+    },
+    guards: {
+      isInputEmpty: isValue('context.input', ''),
+      isInputNotEmpty: isNotValue('context.input', ''),
+    },
+    actors: {
+      children: {
+        machine1: () =>
+          interpret(machine1, {
+            context: { iterator: 0 },
+          }),
+      },
+    },
+    delays: {
+      DELAY,
+      DELAY2: 2 * DELAY,
+    },
+  }),
+);
+// #endregion

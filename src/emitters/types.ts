@@ -61,7 +61,10 @@ export type EmitterDef = {
   error: PrimitiveObject;
 };
 
-export type EmitterConfigMap = RecordS<EmitterDef>;
+export type EmitterConfigMap<S extends string = string> = Record<
+  S,
+  EmitterDef
+>;
 
 export type Emitter<
   E extends EventObject = EventObject,

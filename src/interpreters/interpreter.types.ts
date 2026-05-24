@@ -1,6 +1,6 @@
 import type {
   Action2,
-  ActionConfig,
+  WithDescriber,
   ActionResult,
   MaybeAsyncActionResult,
 } from '#actions';
@@ -12,14 +12,7 @@ import type {
 } from '#bemedev/globals/types';
 import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
-import type {
-  ActorsConfigMap,
-  EventArg,
-  EventObject,
-  EventsMap,
-  ToEventObject,
-  ToEvents,
-} from '#events';
+import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
 import type {
   AnyMachine,
@@ -79,7 +72,7 @@ export type ToAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action?: ActionConfig) => Action2<E, Pc, Tc, T>;
+> = (action?: WithDescriber) => Action2<E, Pc, Tc, T>;
 
 export type PerformActionLater_F<
   E extends EventObject = EventObject,
@@ -184,7 +177,7 @@ export type AddSubscriber_F<
   A extends ActorsConfigMap = ActorsConfigMap,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
+  Eo extends EventObject = EventObject,
 > = (
   subscriber: FnMapR<Eo, Tc, T, void>,
   options?: SubscriberOptions<Eo, Tc, T>,
@@ -195,21 +188,23 @@ export type Subscribe_F<
   A extends ActorsConfigMap = ActorsConfigMap,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
+  Eo extends EventObject = EventObject,
 > = (
   subscriber: FnMapR<Eo, Tc, T, void>,
   options?: SubscriberOptions<Eo, Tc, T>,
 ) => SubscriberClass<E, A, Tc, T, Eo>;
 
-export type Selector_F<T = any> = T extends Primitive
-  ? undefined
-  : <
-      D extends Decompose<T, { start: false; object: 'both' }>,
-      K extends Extract<keyof D, string>,
-      R = D[K],
-    >(
-      selector: K,
-    ) => R;
+export type Selector_F<T = any> = 0 extends 1 & T
+  ? (key: string) => any
+  : T extends Primitive
+    ? undefined
+    : <
+        D extends Decompose<T, { start: false; object: 'both' }>,
+        K extends Extract<keyof D, string>,
+        R = D[K],
+      >(
+        selector: K,
+      ) => R;
 
 export interface AnyInterpreter<
   E extends EventsMap = EventsMap,
@@ -241,8 +236,8 @@ export interface AnyInterpreter<
 
   subscribe: AddSubscriber_F<E, A, Tc, T>;
 
-  send: (event: EventArg<E>) => Promise<void>;
-  toActionFn: (action: ActionConfig) => any;
+  send: (event: any) => Promise<void>;
+  toActionFn: (action: WithDescriber) => any;
   toPredicateFn: (guard: GuardConfig) => any;
   toPromiseSrcFn: (src: string) => any;
   toDelayFn: (delay: string) => any;
@@ -273,8 +268,8 @@ export type TimeOutAction = {
 
 export type DiffNext = {
   sv: StateValue;
-  diffEntries: ActionConfig[];
-  diffExits: ActionConfig[];
+  diffEntries: WithDescriber[];
+  diffExits: WithDescriber[];
 };
 
 export type CollectedPausable = {

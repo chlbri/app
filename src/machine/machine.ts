@@ -1,16 +1,21 @@
+import toArray from '#bemedev/features/arrays/castings/toArray';
 import _any from '#bemedev/features/common/castings/any';
 import commonT from '#bemedev/features/common/typings';
 import extract from '#bemedev/features/common/typings/extract';
+import { partialCall } from '#bemedev/features/functions/functions/partialCall';
 import byKey from '#bemedev/features/objects/typings/byKey';
 import keysOf from '#bemedev/features/objects/typings/keysOf';
 import type {
   AllowedNames,
-  NOmit,
   NotUndefined,
   PrimitiveObject,
 } from '#bemedev/globals/types';
 import { DEFAULT_DELIMITER } from '#constants';
-import { type EventsMap, type ToEvents } from '#events';
+import {
+  type EventsMap,
+  type ToEventObject,
+  type ToEvents,
+} from '#events';
 import {
   isDefinedS,
   isNotDefinedS,
@@ -36,18 +41,25 @@ import {
   type StateValue,
 } from '#states';
 import { merge, reduceFnMap } from '#utils';
-import toArray from '#bemedev/features/arrays/castings/toArray';
-import { partialCall } from '#bemedev/features/functions/functions/partialCall';
 import { decompose, getByKey, type Decompose } from '@bemedev/decompose';
 
 import type { Action } from '#actions';
 import type { DelayFunction } from '#delays';
-import { EventsR, ActorsConfigMap, ToEventObject } from '#events';
+import { ActorsConfigMap, type EventObject } from '#events';
 
 import { _unknown } from '#bemedev/globals/utils/_unknown';
 import type { PredicateS } from '#guards';
-import cloneDeep from 'clone-deep';
 import { withTimeout } from '@bemedev/better-promise';
+import type {
+  inferT,
+  ObjectT,
+  PrimitiveObjectT,
+  Sh,
+  StandardKey,
+  StandardOutput,
+} from '@bemedev/typings';
+import cloneDeep from 'clone-deep';
+import { type Register } from '../registry.types';
 import { assignByKey, expandFnMap } from './functions';
 import type {
   AddOptions_F,
@@ -62,27 +74,20 @@ import type {
 } from './machine.types';
 import type {
   Config,
-  ConfigDef,
-  ExtractTagsFromConfig,
-  GetActorKeysFromConfig,
-  GetActorKeysFromConfig2,
-  GetEventsFromConfig,
-  MachineOptions,
-  NoExtraKeysConfig,
-  NoExtraKeysConfigDef,
-  TransformConfigDef,
+  MachineOptions2,
+  SimpleMachineOptions2,
 } from './types';
 
 /**
  * A class representing a state machine.
- * It provides methods to manage states, actions, predicates, delays, promises, and machines.
+ * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
  * @template : {@linkcode Config} [C] - The configuration type of the machine.
  * @template Pc : The private context type of the machine.
  * @template : {@linkcode PrimitiveObject} [Pc] - The context type of the machine.
  * @template : {@linkcode GetEventsFromConfig}<{@linkcode C}> [E] - The events map type derived from the configuration.
  * @template : {@linkcode PromiseeMap} [P] - The promisees map type derived from the configuration.
- * @template : {@linkcode SimpleMachineOptions2} [Mo] - The options type for the machine, which includes actions, predicates, delays, promises, and machines. Defaults to {@linkcode MachineOptions}<[{@linkcode C} , {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} ]>.
+ * @template : {@linkcode SimpleMachineOptions2} [Mo] - The options type for the machine, which includes actions, guards, delays, promises, and machines. Defaults to {@linkcode MachineOptions}<[{@linkcode C} , {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} ]>.
  *
  * @implements {@linkcode AnyMachine}<{@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} >
  */
@@ -91,19 +96,12 @@ class Machine<
   const C extends Config = Config,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
-  E extends GetEventsFromConfig<C> = GetEventsFromConfig<C>,
-  A extends ActorsConfigMap = GetActorKeysFromConfig<C>,
-  Ta extends ExtractTagsFromConfig<C> = ExtractTagsFromConfig<C>,
-  Eo extends ToEventObject<ToEvents<E, A>> = ToEventObject<ToEvents<E, A>>,
-  Mo extends MachineOptions<C, E, A, Pc, Tc, Ta, Eo> = MachineOptions<
-    C,
-    E,
-    A,
-    Pc,
-    Tc,
-    Ta,
-    Eo
-  >,
+  const E extends EventsMap = EventsMap,
+  const A extends ActorsConfigMap = ActorsConfigMap,
+  const Ta extends string = string,
+  const Eo extends EventObject = EventObject,
+  const AllPaths extends string = string,
+  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > implements AnyMachine<E, A, Pc, Tc> {
   /**
    * The configuration of the machine for this {@linkcode Machine}.
@@ -182,21 +180,6 @@ class Machine<
    * @remarks Used for typing purposes only.
    */
   get __events() {
-    return _unknown<EventsR<E>>();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the events map for this {@linkcode Machine} as a type.
-   *
-   * @see {@linkcode ToEvents}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __eventsO() {
     return _unknown<Eo>();
   }
 
@@ -262,6 +245,17 @@ class Machine<
    */
   get __stateExtended() {
     return _unknown<StateExtended<Eo, Pc, Tc, Ta>>();
+  }
+
+  /**
+   * @deprecated
+   *
+   * This property provides all possible paths for this {@linkcode Machine} as a type.
+   *
+   * @remarks Used for typing purposes only.
+   */
+  get __allPaths() {
+    return _unknown<AllPaths>();
   }
 
   /**
@@ -366,7 +360,7 @@ class Machine<
    * @remarks Used for typing purposes only.
    */
   get __guardKey() {
-    return this.#typingsByKey('predicates');
+    return this.#typingsByKey('guards');
   }
 
   /**
@@ -464,7 +458,7 @@ class Machine<
   // #region private
   #actions?: Mo['actions'];
 
-  #predicates?: Mo['predicates'];
+  #guards?: Mo['guards'];
 
   #delays?: Mo['delays'];
 
@@ -484,6 +478,14 @@ class Machine<
    * @see {@linkcode Pc}
    */
   #pContext!: Pc;
+
+  #tags: Ta[];
+
+  //TODOD: Coverage getters
+
+  get tags() {
+    return this.#tags;
+  }
 
   #initialKeys: string[] = [];
 
@@ -509,6 +511,11 @@ class Machine<
       object: 'both',
     });
     this.#flat = flatMap(this.#config, true);
+
+    this.#tags = Object.values(this.#flat)
+      .map(({ tags }) => toArray.typed(tags))
+      .filter(d => !!d)
+      .flat() as any;
     this.#initialConfig = initialConfig(this.#config);
     this.#getInitialKeys();
     this.longRuns = this.#config.__longRuns === true;
@@ -562,8 +569,8 @@ class Machine<
     return this.#actions;
   }
 
-  get predicates() {
-    return this.#predicates;
+  get guards() {
+    return this.#guards;
   }
 
   get delays() {
@@ -614,8 +621,8 @@ class Machine<
   #addActions = (actions?: Mo['actions']) =>
     (this.#actions = merge(this.#actions, actions));
 
-  #addPredicates = (predicates?: Mo['predicates']) =>
-    (this.#predicates = merge(this.#predicates, predicates));
+  #addGuards = (guards?: Mo['guards']) =>
+    (this.#guards = merge(this.#guards, guards));
 
   #addDelays = (delays?: Mo['delays']) =>
     (this.#delays = merge(this.#delays, delays));
@@ -630,7 +637,7 @@ class Machine<
    * Create options for the machine.
    *
    * @param option a function that provides options for the machine.
-   * Options can include actions, predicates, delays, promises, and child machines.
+   * Options can include actions, guards, delays, promises, and child machines.
    *
    * Remark: Used for typings, when you're outside the Machine class.
    */
@@ -644,7 +651,7 @@ class Machine<
 
     const _legacy = Object.freeze({
       actions: cloneDeep(this.#actions),
-      predicates: cloneDeep(this.#predicates),
+      guards: cloneDeep(this.#guards),
       delays: cloneDeep(this.#delays),
       actors: cloneDeep(this.#actors),
     }) as any;
@@ -734,6 +741,7 @@ class Machine<
 
             let filteredValue: any;
 
+            /* v8 ignore else -- @preserve */
             if (Array.isArray(currentValue)) {
               // Filter array elements
               filteredValue = currentValue.filter(predicate);
@@ -825,13 +833,13 @@ class Machine<
    * Provides options for the machine.
    *
    * @param option a function that provides options for the machine.
-   * Options can include actions, predicates, delays, promises, and child machines.
+   * Options can include actions, guards, delays, promises, and child machines.
    */
   addOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
     const out = this.createOptions(helper as any);
 
     this.#addActions(out?.actions);
-    this.#addPredicates(out?.predicates);
+    this.#addGuards(out?.guards);
     this.#addDelays(out?.delays);
     this.#addChildren(out?.actors?.children);
     this.#addEmitters(out?.actors?.emitters);
@@ -843,7 +851,7 @@ class Machine<
    * Provides options for the machine.
    *
    * @param helper a function that provides options for the machine.
-   * Options can include actions, predicates, delays, promises, and child machines.
+   * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
   provideOptions = <T extends Mo>(
@@ -870,7 +878,7 @@ class Machine<
     const pContext = cloneDeep(this.#pContext);
     const context = structuredClone(this.#context);
     const actions = cloneDeep(this.#actions);
-    const predicates = cloneDeep(this.#predicates);
+    const guards = cloneDeep(this.#guards);
     const delays = cloneDeep(this.#delays);
     const actorsMap = cloneDeep(this.#actorsMap);
     const events = cloneDeep(this.#eventsMap);
@@ -881,7 +889,7 @@ class Machine<
       pContext,
       context,
       actions,
-      predicates,
+      guards,
       delays,
       actors,
       events,
@@ -921,7 +929,7 @@ class Machine<
       config,
       pContext,
       context,
-      predicates,
+      guards,
       actions,
       delays,
 
@@ -930,14 +938,14 @@ class Machine<
       actorsMap,
     } = this.#elements;
 
-    const out = new Machine<C, Pc, Tc, E, A, Ta, Eo, Mo>(config);
+    const out = new Machine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(config);
 
     out.#pContext = pContext;
     out.#context = context;
     out.#eventsMap = events;
     out.#actorsMap = actorsMap;
 
-    out.#addPredicates(predicates);
+    out.#addGuards(guards);
     out.#addActions(actions);
     out.#addDelays(delays);
     out.#addChildren(actors?.children);
@@ -1031,13 +1039,13 @@ class Machine<
   toNode = this.valueToConfig;
 
   get options() {
-    const predicates = this.#predicates;
+    const guards = this.#guards;
     const actions = this.#actions;
     const delays = this.#delays;
     const actors = this.#actors;
 
     const out = _unknown<Mo>({
-      predicates,
+      guards,
       actions,
       delays,
 
@@ -1280,50 +1288,78 @@ export const getExits = partialCall.paramArray(getIO, 'exit');
 
 export type { Machine };
 
-export type CreateMachine_F = <
-  const C2 extends NoExtraKeysConfigDef<ConfigDef> =
-    NoExtraKeysConfigDef<ConfigDef>,
-  const C extends Config & TransformConfigDef<C2> = Config &
-    TransformConfigDef<C2>,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  EventM extends GetEventsFromConfig<C> = GetEventsFromConfig<C>,
-  A0 extends GetActorKeysFromConfig2<C> = GetActorKeysFromConfig2<C>,
-  A extends NOmit<A0, 'pContext'> = NOmit<A0, 'pContext'>,
-  Pc extends A0['pContext'] = A0['pContext'],
->(
-  config: NoExtraKeysConfig<C & { __tsSchema?: NoExtraKeysConfigDef<C2> }>,
-  types: { pContext: Pc; context: Tc; eventsMap: EventM; actorsMap: A },
-) => Machine<
-  C,
-  // No need to be instanciated, they will be instanciated inside
-  Pc,
-  Tc,
-  EventM,
-  A
->;
-
 /**
- * Creates a new instance of {@linkcode Machine} with the provided configuration and
+ * Creates a new instance of {@linkcode Machine} with the provided configuration.
  *
- * @param config The configuration for the machine.
- * @param types An object containing the types for the machine:
- * - `pContext`: The private context type.
- * - `context`: The context type.
- * - `eventsMap`: The events map type derived from the configuration.
- * - `promiseesMap`: The promisees map type derived from the configuration.
- *
- * @param initials The initials {@linkcode StateValue} for all compound node configs for the {@linkcode Machine}, derived from the configuration.
- * @returns A new instance of {@linkcode Machine} with the provided configuration and
- *
- * @see {@linkcode CreateMachine_F}
+ * @param name - Unique name used to register the machine in the {@linkcode Register}.
+ * @param config - The machine configuration.
+ * @param types - Optional type hints (pContext, context, eventsMap, actorsMap).
+ *   Typically generated by the CLI into `app.gen.ts`.
  */
-export const createMachine: CreateMachine_F = (
-  config,
-  { eventsMap, actorsMap },
-) => {
+
+export type StandardOutput2<T extends ObjectT> = Pick<Sh<T>, StandardKey>;
+export type StdO2<T extends ObjectT> = StandardOutput2<T>;
+
+export function createMachine<
+  Name extends keyof Register & string,
+  Current extends Register[Name] = Register[Name],
+  const C extends Config<Current['paths']['map']> = Config<
+    Current['paths']['map']
+  >,
+  const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
+    Current['pContext']
+  >,
+  const Tc extends StandardOutput2<PrimitiveObjectT> =
+    StandardOutput2<PrimitiveObjectT>,
+  const E extends StandardOutput<
+    Record<Current['events'], PrimitiveObject>
+  > = StandardOutput<Record<Current['events'], PrimitiveObject>>,
+  const A extends StandardOutput<
+    ActorsConfigMap<
+      Current['options']['children'],
+      Current['options']['emitters']
+    >
+  > = StandardOutput<
+    ActorsConfigMap<
+      Current['options']['children'],
+      Current['options']['emitters']
+    >
+  >,
+  _E extends inferT<E> = inferT<E>,
+  _A extends inferT<A> = inferT<A>,
+  _Pc extends inferT<Pc> = inferT<Pc>,
+  _Tc extends inferT<Tc> = inferT<Tc>,
+  Tags extends Exclude<Current['tags'], undefined> = Exclude<
+    Current['tags'],
+    undefined
+  >,
+  Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
+>(
+  _: Name,
+  config: C,
+  types?: {
+    context?: Tc;
+    pContext?: Pc;
+    eventsMap?: E;
+    actorsMap?: A;
+  },
+): Machine<
+  C,
+  _Pc,
+  _Tc,
+  _E,
+  _A,
+  Tags,
+  Eo,
+  Current['paths']['all'],
+  MachineOptions2<_Pc, _Tc, Tags, Eo, Current['options']>
+> {
+  const eventsMap = types?.eventsMap?.['~standard']?.types?.output ?? {};
+  const actorsMap = types?.actorsMap?.['~standard']?.types?.output ?? {};
+
   const out = new Machine(config as Config)
     ._provideEvents(eventsMap)
-    ._provideActors(actorsMap);
+    ._provideActors(actorsMap as any);
 
   return out as any;
-};
+}
