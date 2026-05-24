@@ -1,8 +1,8 @@
 # @bemedev/app
 
-> [!WARNING] **v0.1.4-canary — Early access build.** This version is under
-> active development and may contain breaking changes between canary
-> releases. Do not use in production.
+> [!WARNING] **v0.1.5 — Stable release.** This is an early version; please
+> report issues and suggest improvements. Minor breaking changes may occur
+> before v1.0.0.
 
 A TypeScript library for building **finite state machines** with a fully
 type-safe, declarative API. It models states, transitions, context,
