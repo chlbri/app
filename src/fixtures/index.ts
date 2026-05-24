@@ -1,6 +1,6 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
 import _any from '#bemedev/features/common/castings/any';
-import type { PrimitiveObject } from '#bemedev/globals/types';
+import type { Equals, PrimitiveObject } from '#bemedev/globals/types';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
 import { expandFn } from '#bemedev/globals/utils/expandFn';
 import { DEFAULT_NOTHING } from '#constants';
@@ -26,6 +26,7 @@ import { buildIndex, buildInvite } from './invite';
 
 export * from './constants';
 export * from './invite';
+export * from './unhandledRejection';
 
 type TestArr = readonly [string, () => void];
 
@@ -228,7 +229,7 @@ type ConstructTestsResult<
       (...warnings: string[]): TestArr;
       index: (index: number, ...warnings: string[]) => TestArr;
     };
-  } & (string extends Ta
+  } & (Equals<Ta, never> extends true
     ? EmptyObject
     : {
         useTags: {

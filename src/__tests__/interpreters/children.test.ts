@@ -29,10 +29,10 @@ describe('Integration testing for interpret, Children', () => {
 
     const service = interpret(parent, {
       ...defaultC,
-      pContext: 0,
+      pContext: 0 as any,
     });
 
-    const { start, waiter, useIterator } = constructTests(
+    const { start, waiter, useIterator, dispose } = constructTests(
       service,
       ({ contexts, waiter }) => ({
         useIterator: contexts(({ pContext }) => pContext, 'iterator'),
@@ -40,12 +40,13 @@ describe('Integration testing for interpret, Children', () => {
       }),
     );
 
-    test(...start(1));
-    test(...useIterator(0, 2));
-    test(...waiter(1, 3));
-    test(...useIterator(1, 4));
-    test(...waiter(1, 5));
-    test(...useIterator(2, 6));
+    test(...start());
+    test(...useIterator(0 as any));
+    test(...waiter(1));
+    test(...useIterator(1 as any));
+    test(...waiter(1));
+    test(...useIterator(2 as any));
+    test(...dispose());
   });
 
   describe('#02 => context of child, and the type correspond to a subtype of privateContext of parent', () => {
@@ -59,10 +60,10 @@ describe('Integration testing for interpret, Children', () => {
 
     const service = interpret(parent, {
       ...defaultC,
-      pContext: { iterator: 0 },
+      pContext: { iterator: 0 } as any,
     });
 
-    const { start, waiter, useIterator, send } = constructTests(
+    const { start, waiter, useIterator, send, dispose } = constructTests(
       service,
       ({ contexts, waiter, sender }) => ({
         useIterator: contexts(
@@ -81,6 +82,8 @@ describe('Integration testing for interpret, Children', () => {
     test(...waiter(1, 5));
     test(...useIterator(2, 6));
     test(...send('NEXT', 7));
+    test(...dispose());
+    test(...waiter(5));
   });
 
   describe('#03 => Cover child->on', () => {

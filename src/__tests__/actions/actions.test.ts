@@ -8,7 +8,7 @@ describe('Interpret for actions', () => {
   const action1 = vi.fn().mockReturnValue(defaultC);
 
   describe('#01 => string', () => {
-    const service = interpret(_machine1);
+    const service = interpret(_machine1, { mode: 'normal' });
     const { send, useStateValue, start } = constructTests(service);
     test(...start());
     test(...useStateValue('state2'));

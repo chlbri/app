@@ -43,10 +43,6 @@ class SubscriberClass<
     return this._id;
   }
 
-  get equals() {
-    return this.#equals;
-  }
-
   /**
    * Creates an instance of SubscriberMapClass.
    * @param eventsMap - {@linkcode EventsMap} [E] - The events map.
@@ -129,7 +125,6 @@ class SubscriberClass<
     return this.#reduceFn(next);
   };
 
-  /* v8 ignore next 3*/
   get state() {
     return this.#state;
   }

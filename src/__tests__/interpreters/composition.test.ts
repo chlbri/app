@@ -5,19 +5,19 @@ import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MIN_ACTIVITY_TIME,
 } from '#constants';
-import { constructTests, defaultC } from '#fixtures';
+import { constructTests, defaultC, unhandledRejection } from '#fixtures';
 import { DELAY, fakeDB, machine21, machine3 } from '#fixturesData';
 import type { StateValue } from '#states';
 import { nothing } from '#utils';
 
-import equal from 'fast-deep-equal';
+import { defaultCheck } from '#guards';
 import { interpret, TIME_TO_RINIT_SELF_COUNTER } from '#interpreter';
-import type { AnyInterpreter } from '../../interpreters/interpreter.types';
+import type { AnyInterpreter } from '#interpreters';
+import equal from 'fast-deep-equal';
 import _machine1 from './composition.1.machine';
 import _machine2 from './composition.2.machine';
 import _machine3 from './composition.3.machine';
 import _machine4 from './composition.4.machine';
-import { defaultCheck } from '#guards';
 
 beforeAll(() => {
   vi.useFakeTimers();
@@ -219,8 +219,6 @@ describe('Composition', () => {
   });
 
   describe('#03 => Exceed selfTransitionsCounter', () => {
-    const fn = vi.spyOn(console, 'error');
-
     const machine = _machine1.provideOptions(({ isValue, assign }) => ({
       actions: {
         addCondition: ({ pContext, context }) => ({
@@ -247,36 +245,58 @@ describe('Composition', () => {
       },
     }));
 
-    const service = interpret(machine, {
-      ...defaultC,
-      context: { condition: false, iterator: 0 },
-      mode: 'normal',
-    });
-
     const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
 
-    const { start, useWaiter, useErrors } = constructTests(
-      service,
-      ({ waiter }) => ({
-        useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
-      }),
-    );
+    describe('#01 => mode is normal', () => {
+      const fn = vi.spyOn(console, 'error');
 
-    test(...start());
-    test(...useWaiter());
-
-    describe('#002 => Error is throwing', () => {
-      describe('#001 => console.error', () => {
-        test('#001 => called one time', () => {
-          expect(fn).toBeCalledTimes(1);
-        });
-
-        test('#02 => called with the error', () => {
-          expect(fn).toHaveBeenNthCalledWith(1, error);
-        });
+      const service = interpret(machine, {
+        ...defaultC,
+        context: { condition: false, iterator: 0 },
+        mode: 'normal',
       });
 
-      describe(...useErrors(error));
+      const { start, useWaiter, useErrors } = constructTests(
+        service,
+        ({ waiter }) => ({
+          useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
+        }),
+      );
+
+      test(...start());
+      test(...useWaiter());
+
+      describe('#002 => Error is throwing', () => {
+        describe('#001 => console.error', () => {
+          test('#001 => called one time', () => {
+            expect(fn).toBeCalledTimes(1);
+          });
+
+          test('#02 => called with the error', () => {
+            expect(fn).toHaveBeenNthCalledWith(1, error);
+          });
+        });
+
+        describe(...useErrors(error));
+      });
+    });
+
+    describe('#01 => mode is strict', () => {
+      test('#00 => Start throws error', async () => {
+        const service = interpret(machine, {
+          ...defaultC,
+          context: { condition: false, iterator: 0 },
+          mode: 'strict',
+        });
+
+        unhandledRejection(service.start, val => {
+          if (val instanceof Error) {
+            expect(val.message).toBe(error);
+          }
+        });
+
+        await vi.advanceTimersByTimeAsync(TIME_TO_RINIT_SELF_COUNTER);
+      });
     });
   });
 

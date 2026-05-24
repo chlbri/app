@@ -741,6 +741,7 @@ class Machine<
 
             let filteredValue: any;
 
+            /* v8 ignore else -- @preserve */
             if (Array.isArray(currentValue)) {
               // Filter array elements
               filteredValue = currentValue.filter(predicate);

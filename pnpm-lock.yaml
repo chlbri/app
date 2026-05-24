@@ -253,8 +253,8 @@ packages:
     resolution: {integrity: sha512-NMbZAIbjlHJ+GeQkvFi8vMUBI0kqArR73nx67rXwMjKdqQbOvc9nsQKgdAEPKaGxV6bWXKzzuEFqzsuQKKp2Yw==}
     engines: {node: '>=22'}
 
-  '@bemedev/typings@0.5.5':
-    resolution: {integrity: sha512-vG0RCK5GxR+T5N6jxs4Hw5R0PKxV4Zm0A0mx7+vKjlvtt5yEoCClNAUrux/XBTh+hJI1OhEvGs+7w60YgTgapA==}
+  '@bemedev/typings@0.5.6':
+    resolution: {integrity: sha512-QC73OxzEynPd+HxKBbLDbkU3i9leRNAwoOotj5WtP5J92vB+ctJ4+UuMDaZ9Nf7BuReWH3LKERfjXHYkfDCyOQ==}
     engines: {node: '>=24'}
 
   '@bemedev/typings@1.1.6':
@@ -1883,8 +1883,8 @@ packages:
   tinyexec@0.3.2:
     resolution: {integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==}
 
-  tinyexec@1.1.2:
-    resolution: {integrity: sha512-dAqSqE/RabpBKI8+h26GfLq6Vb3JVXs30XYQjdMjaj/c2tS8IYYMbIzP599KtRj7c57/wYApb3QjgRgXmrCukA==}
+  tinyexec@1.2.2:
+    resolution: {integrity: sha512-M/Q0B2cp4K7kynaT/vnED1j8TlLY+Pp7C6Wl2bl/7u/F0mUVwdyOpwomQb8JpYLitHUssAJRmLZdMCGsrx7i+g==}
     engines: {node: '>=18'}
 
   tinyglobby@0.2.16:
@@ -2087,7 +2087,7 @@ snapshots:
       '@bemedev/pipe': 1.6.1
       '@bemedev/scheduler': 0.1.0
       '@bemedev/sleep': 0.2.2
-      '@bemedev/typings': 0.5.5
+      '@bemedev/typings': 0.5.6
       chokidar: 5.0.0
       clone-deep: 4.0.1
       cmd-ts: 0.15.0
@@ -2183,7 +2183,7 @@ snapshots:
 
   '@bemedev/types@0.4.2': {}
 
-  '@bemedev/typings@0.5.5': {}
+  '@bemedev/typings@0.5.6': {}
 
   '@bemedev/typings@1.1.6':
     dependencies:
@@ -3496,7 +3496,7 @@ snapshots:
 
   tinyexec@0.3.2: {}
 
-  tinyexec@1.1.2: {}
+  tinyexec@1.2.2: {}
 
   tinyglobby@0.2.16:
     dependencies:
@@ -3582,7 +3582,7 @@ snapshots:
       picomatch: 4.0.4
       std-env: 4.1.0
       tinybench: 2.9.0
-      tinyexec: 1.1.2
+      tinyexec: 1.2.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
       vite: 8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(tsx@4.22.3)

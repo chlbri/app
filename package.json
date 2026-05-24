@@ -72,7 +72,7 @@
     "build": "pnpm rm:lib && pnpm run rolldown",
     "_ci": "pnpm clean --lockfile && pnpm run config:off && pnpm run lint && pnpm run test",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
-    "ci:admin": "CI_START=$(date +%s) && pnpm store prune && pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",
+    "ci:admin": "CI_START=$(date +%s) pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",
     "config": "pnpm install",
     "config:off": "pnpm run config --offline",
     "generate": "pnpm dlx @bemedev/app-cli generate -o ./src/__tests__/app.gen.ts",

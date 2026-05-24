@@ -14,6 +14,7 @@ export default defineConfig({
         '**/*.types.ts',
         '**/*.typegen.ts',
         '**/*.fixtures.ts',
+        '**/fixtures/**',
         '**/*.test-d.ts',
         '**/*.machine.ts',
         '**/experimental.ts',

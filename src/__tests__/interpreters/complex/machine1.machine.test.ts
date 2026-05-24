@@ -279,4 +279,27 @@ describe('Complex machine 1', () => {
       });
     });
   });
+
+  describe('#26 => Coverage', () => {
+    test('#01 => tags', () => {
+      const tags = machine.tags;
+      const expected = ['un', 'deux'];
+      expect(tags).toEqual(expected);
+    });
+
+    test('#02 => context', () => {
+      const context = machine.context;
+      expect(context).toBeUndefined();
+    });
+
+    test('#03 => pContext', () => {
+      const pContext = machine.pContext;
+      expect(pContext).toBeUndefined();
+    });
+
+    test('#04 => __allPaths', () => {
+      const allPaths = machine.__allPaths;
+      expect(allPaths).toBeUndefined();
+    });
+  });
 });

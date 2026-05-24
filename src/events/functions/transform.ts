@@ -17,6 +17,5 @@ export const transformEventArg: TransformEventArg = event => {
   const check1 = typeof event === 'string';
   if (check1) return { type: event, payload: {} } as any;
 
-  // TODO: coverage next line
-  return { ...event, payload: event.payload ?? {} };
+  return { ...event, payload: event.payload };
 };

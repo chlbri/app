@@ -13,5 +13,4 @@ export const defaultT = {
   },
 } as const;
 
-/* v8 ignore next */
 export const emptyFn = () => {};

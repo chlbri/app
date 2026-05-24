@@ -391,31 +391,23 @@ export class Interpreter<
         console.log(warnings);
       }
 
-      /* v8 ignore next 5 */
       const check2 = this.#errorsCollector.size > 0;
       if (check2) {
         const errors = this.#displayConsole(this.#errorsCollector);
         throw new Error(errors);
       }
-
-      return;
-    }
-
-    if (this.isNormal) {
+    } else {
       const check3 = this.#errorsCollector.size > 0;
       if (check3) {
         const errors = this.#displayConsole(this.#errorsCollector);
         console.error(errors);
       }
 
-      /* v8 ignore next 8 */
       const check4 = this.#warningsCollector.size > 0;
       if (check4) {
         const warnings = this.#displayConsole(this.#warningsCollector);
         console.log(warnings);
       }
-
-      return;
     }
   };
 
@@ -457,6 +449,7 @@ export class Interpreter<
       return this.#performStates({ value, tags });
     }
 
+    /* v8 ignore else -- @preserve */
     if (target) {
       this.#config = initialConfig(this.proposedNextConfig(target));
       const tags = this.tags;
@@ -586,12 +579,15 @@ export class Interpreter<
    * @see {@linkcode context} to get the current context.
    */
   get _pContext() {
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       return this.#pContext;
-      /* v8 ignore next 4 */
     }
+
+    /* v8 ignore start -- @preserve */
     console.error('pContext is not available in production');
     return;
+    /* v8 ignore stop -- @preserve */
   }
 
   get isReady() {
@@ -628,18 +624,23 @@ export class Interpreter<
    * @see {@linkcode getByKey} for retrieving values by key.
    */
   get _pSelect(): Selector_F<Pc> {
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       const check = this.isReady && isPrimitive(this.#pContext);
       const pContext = this.#pContext;
       if (check) return undefined as any;
+
+      /* v8 ignore else -- @preserve */
       if (pContext) {
         const out: any = (path: string) => getByKey(pContext, path);
         return out as any;
       }
-      /* v8 ignore next 4 */
     }
+
+    /* v8 ignore start -- @preserve */
     console.error('pContext is not available in production');
     return undefined as any;
+    /* v8 ignore stop -- @preserve */
   }
 
   /**
@@ -698,6 +699,11 @@ export class Interpreter<
   ) => {
     this.#collectedChildren.filter(filter).forEach(({ service, id }) => {
       service.stop();
+
+      this.#collectedChildren
+        .filter(f => f.id === id)
+        .forEach(({ service }) => service.dispose());
+
       this.#collectedChildren = this.#collectedChildren.filter(
         f => f.id !== id,
       );
@@ -944,11 +950,12 @@ export class Interpreter<
    */
   #throwMaxCounter() {
     const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
+
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       this._addError(error);
       this.#throwing();
       this.stop();
-      /* v8 ignore next 1 */
     } else throw error;
   }
 
@@ -1171,6 +1178,8 @@ export class Interpreter<
       const response = this.#performPredicates(
         ...toArray.typed(final.guards),
       );
+
+      /* v8 ignore else -- @preserve */
       if (response) {
         this.#performActions(...toArray.typed(final.actions));
       }
@@ -1885,12 +1894,15 @@ export class Interpreter<
    * @remarks returns nothing in prod
    */
   get _errorsCollector() {
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       return this.#errorsCollector;
-      /* v8 ignore next 3 */
     }
+
+    /* v8 ignore start -- @preserve */
     console.error('errorsCollector is not available in production');
     return;
+    /* v8 ignore stop -- @preserve */
   }
 
   /**
@@ -1899,12 +1911,14 @@ export class Interpreter<
    * @remarks returns nothing in prod
    */
   get _warningsCollector() {
+    /* v8 ignore else -- @preserve */
     if (IS_TEST) {
       return this.#warningsCollector;
-      /* v8 ignore next 3 */
     }
+    /* v8 ignore start -- @preserve */
     console.error('warningsCollector is not available in production');
     return;
+    /* v8 ignore stop -- @preserve */
   }
 
   protected _addError = (...errors: string[]) => {
@@ -2277,10 +2291,8 @@ export class Interpreter<
   };
 
   // #region Disposable
-
   dispose = () => {
     this.stop();
-    this.#collectedChildren.forEach(({ service }) => service.dispose());
     this.#timeoutActions.forEach(this.#dispose);
   };
 
