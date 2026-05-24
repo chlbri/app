@@ -3,4 +3,3 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@bemedev/typings@1.1.6'
   - '@bemedev/typings@1.1.5'
-
