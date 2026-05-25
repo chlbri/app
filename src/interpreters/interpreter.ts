@@ -780,7 +780,7 @@ export class Interpreter<
     this.#startPausables();
     this.#resumePausables(({ from }) => this.#isInsideValue(from));
 
-    return this.#performSelfTransitions();
+    return this.__performSelfTransitions();
   };
 
   /**
@@ -817,16 +817,17 @@ export class Interpreter<
     return structuredClone({ pContext, ...this.#state });
   }
 
-  #performAction: PerformActionLater_F<Eo, Pc, Tc, Ta> = action => {
-    this._iterate();
-    const out = withTimeout(
-      async () => action(this.#cloneState),
-      'Action timed out',
-      ...(this.longRuns ? [] : [DEFAULT_MAX_TIME_PROMISE]),
-    );
+  protected __performAction: PerformActionLater_F<Eo, Pc, Tc, Ta> =
+    action => {
+      this._iterate();
+      const out = withTimeout(
+        async () => action(this.#cloneState),
+        'Action timed out',
+        ...(this.longRuns ? [] : [DEFAULT_MAX_TIME_PROMISE]),
+      );
 
-    return out();
-  };
+      return out();
+    };
 
   #performScheduledAction = (scheduled?: ScheduledData<Pc, Tc>) => {
     if (!scheduled) return;
@@ -839,12 +840,17 @@ export class Interpreter<
     timer.start();
   };
 
-  #performSendToAction = (sentEvent?: { to: string; event: any }) => {
+  protected __performSendToAction = (sentEvent?: {
+    to: string;
+    event: any;
+  }) => {
     if (!sentEvent) return;
-    return this.#sendTo(sentEvent.to, sentEvent.event);
+    return this.__sendTo(sentEvent.to, sentEvent.event);
   };
 
-  #performResendAction = async (resend?: EventArgObject<Eo>) => {
+  protected __performResendAction = async (
+    resend?: EventArgObject<Eo>,
+  ) => {
     if (!resend) return;
     const cannot = this.#cannotPerformEvents(resend);
     if (cannot) return;
@@ -860,7 +866,9 @@ export class Interpreter<
    *
    * @see {@linkcode TransitionConfig} for more information about transitions.
    */
-  #performForceSendAction = async (forceSend?: EventArgObject<Eo>) => {
+  protected __performForceSendAction = async (
+    forceSend?: EventArgObject<Eo>,
+  ) => {
     if (!forceSend) return;
     const values = Object.values(this.#machine.flat);
 
@@ -905,7 +913,7 @@ export class Interpreter<
     this.#timeoutActions.filter(f => f.id === id).forEach(this.#stop);
   };
 
-  #performsExtendedActions = async ({
+  protected __performsExtendedActions = async ({
     forceSend,
     resend,
     scheduled,
@@ -917,7 +925,7 @@ export class Interpreter<
     stopTimer,
     sentEvent,
   }: ExtendedActionsParams<Eo, Pc, Tc>) => {
-    this.#performSendToAction(sentEvent);
+    this.__performSendToAction(sentEvent);
 
     this.#performScheduledAction(scheduled);
     this.#performPauseActivityAction(pauseActivity);
@@ -929,21 +937,22 @@ export class Interpreter<
 
     // ForceSendAction returns the result to make further actions
     const result =
-      (await this.#performForceSendAction(forceSend)) ??
-      (await this.#performResendAction(resend));
+      (await this.__performForceSendAction(forceSend)) ??
+      (await this.__performResendAction(resend));
 
     return result;
   };
 
-  #executeAction: PerformAction_F<Eo, Pc, Tc, Ta> = async action => {
-    this.#makeBusy();
+  protected __executeAction: PerformAction_F<Eo, Pc, Tc, Ta> =
+    async action => {
+      this.#makeBusy();
 
-    const { pContext, context, ...extendeds } =
-      await this.#performAction(action);
+      const { pContext, context, ...extendeds } =
+        await this.__performAction(action);
 
-    this.#mergeContexts({ pContext, context });
-    await this.#performsExtendedActions(extendeds);
-  };
+      this.#mergeContexts({ pContext, context });
+      await this.__performsExtendedActions(extendeds);
+    };
 
   /**
    * Throws if the number of self transitions exceeds {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
@@ -959,11 +968,11 @@ export class Interpreter<
     } else throw error;
   }
 
-  #performActions = async (...actions: WithDescriber[]) => {
+  protected __performActions = async (...actions: WithDescriber[]) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
 
     for (const fn of fns) {
-      await this.#executeAction(fn);
+      await this.__executeAction(fn);
     }
   };
 
@@ -1053,7 +1062,7 @@ export class Interpreter<
             const check4 = check2 || check3;
 
             if (check4) {
-              await this.#performActions(activity);
+              await this.__performActions(activity);
               continue;
             }
 
@@ -1062,7 +1071,7 @@ export class Interpreter<
             );
             if (check5) {
               const actions = toArray.typed(activity.actions);
-              await this.#performActions(...actions);
+              await this.__performActions(...actions);
             }
           }
         };
@@ -1122,36 +1131,37 @@ export class Interpreter<
    */
   protected _cachedIntervals: Interval2[] = [];
 
-  #performTransition: PerformTransition_F = async transition => {
-    const check = typeof transition == 'string';
-    if (check) {
-      const { diffEntries, diffExits } = this.#diffNext(transition);
-      await this.#performActions(...toArray.typed(diffExits));
-      await this.#performActions(...toArray.typed(diffEntries));
-      return transition;
-    }
+  protected __performTransition: PerformTransition_F =
+    async transition => {
+      const check = typeof transition == 'string';
+      if (check) {
+        const { diffEntries, diffExits } = this.#diffNext(transition);
+        await this.__performActions(...toArray.typed(diffExits));
+        await this.__performActions(...toArray.typed(diffEntries));
+        return transition;
+      }
 
-    const { guards, actions, target } = transition;
-    const { diffEntries, diffExits } = this.#diffNext(target);
+      const { guards, actions, target } = transition;
+      const { diffEntries, diffExits } = this.#diffNext(target);
 
-    const response = this.#performPredicates(
-      ...toArray<GuardConfig>(guards),
-    );
+      const response = this.#performPredicates(
+        ...toArray<GuardConfig>(guards),
+      );
 
-    if (response) {
-      await this.#performActions(...toArray.typed(diffExits));
-      await this.#performActions(...toArray.typed(actions));
-      await this.#performActions(...toArray.typed(diffEntries));
-      return target ?? false;
-    }
-    return false;
-  };
+      if (response) {
+        await this.__performActions(...toArray.typed(diffExits));
+        await this.__performActions(...toArray.typed(actions));
+        await this.__performActions(...toArray.typed(diffEntries));
+        return target ?? false;
+      }
+      return false;
+    };
 
   protected __performTransitions: PerformTransitions_F = async (
     ...transitions
   ) => {
     for (const _transition of transitions) {
-      const transition = await this.#performTransition(_transition);
+      const transition = await this.__performTransition(_transition);
       const check1 = typeof transition === 'string';
       if (check1) return transition;
     }
@@ -1171,7 +1181,7 @@ export class Interpreter<
 
       const check4 = check2 || check3;
       if (check4) {
-        this.#performActions(final);
+        this.__performActions(final);
         continue;
       }
 
@@ -1181,7 +1191,7 @@ export class Interpreter<
 
       /* v8 ignore else -- @preserve */
       if (response) {
-        this.#performActions(...toArray.typed(final.actions));
+        this.__performActions(...toArray.typed(final.actions));
       }
     }
     return;
@@ -1388,7 +1398,7 @@ export class Interpreter<
     return this.#schedulerEvent.schedule(cb, this.#sent);
   };
 
-  get #collectedSelfTransitions() {
+  protected get __collectedSelfTransitions() {
     const entries = Array.from(this.#collectedSelfTransitions0).filter(
       ([from]) => this.#isInsideValue(from),
     );
@@ -1683,10 +1693,10 @@ export class Interpreter<
     return instance;
   };
 
-  #performSelfTransitions = async () => {
+  protected __performSelfTransitions = async () => {
     this.#makeBusy();
     const previousState = structuredClone(this.#state);
-    await this.#collectedSelfTransitions?.();
+    await this.__collectedSelfTransitions?.();
     const nextState = structuredClone(this.#state);
     const check = !equal(previousState, nextState);
     if (check) this.#flush();
@@ -1696,7 +1706,7 @@ export class Interpreter<
   #startInitialEntries = () => {
     const actions = getEntries(this.#initialConfig);
     if (actions.length < 1) return;
-    this.#performActions(...actions);
+    this.__performActions(...actions);
   };
 
   /**
@@ -1974,7 +1984,7 @@ export class Interpreter<
     return flat2;
   };
 
-  protected _send: _Send_F<Eo> = async event => {
+  protected __presend: _Send_F<Eo> = async event => {
     this.#sent = true;
     this.#changeEvent(event);
     this.#setStatus('sending');
@@ -2036,9 +2046,9 @@ export class Interpreter<
    * @param _event - the {@linkcode EventArg} event to send.
    *
    */
-  #send = async (_event: EventArgObject<Eo>) => {
+  protected __send = async (_event: EventArgObject<Eo>) => {
     const event = transformEventArg(_event);
-    const next = await this._send(event as any);
+    const next = await this.__presend(event as any);
 
     if (isDefined(next)) {
       this.#config = next;
@@ -2060,7 +2070,7 @@ export class Interpreter<
   send = async (_event: EventArgObject<Eo>) => {
     const check = this.#cannotPerformEvents(_event);
     if (check) return;
-    return this.#send(_event);
+    return this.__send(_event);
   };
 
   /**
@@ -2280,7 +2290,10 @@ export class Interpreter<
    *
    * @see {@linkcode send} for sending events to the current service.
    */
-  #sendTo = async <T extends EventObject>(to: string, event: T) => {
+  protected __sendTo = async <T extends EventObject>(
+    to: string,
+    event: T,
+  ) => {
     const collector = this.#collectedChildren.filter(
       ({ from, id }) => this.#isInsideValue(from) && id === to,
     );

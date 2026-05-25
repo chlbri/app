@@ -646,8 +646,8 @@ class Machine<
     const isNotValue = this.#isNotValue;
     const isDefined = this.#isDefined;
     const isNotDefined = this.#isNotDefined;
-    const voidAction = this.#voidAction;
-    const sendTo = this.#sendTo;
+    const voidAction = this.__voidAction;
+    const sendTo = this.__sendTo;
 
     const _legacy = Object.freeze({
       actions: cloneDeep(this.#actions),
@@ -1119,7 +1119,9 @@ class Machine<
    *
    * @see {@linkcode reduceFnMap}
    */
-  #sendTo: SendAction_F<Eo, Pc, Tc, Ta> = <T extends AnyMachine>(
+  protected __sendTo: SendAction_F<Eo, Pc, Tc, Ta> = <
+    T extends AnyMachine,
+  >(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _?: T,
   ) => {
@@ -1189,7 +1191,10 @@ class Machine<
    *
    * @see {@linkcode VoidAction_F}
    */
-  #voidAction: VoidAction_F<Eo, Pc, Tc, Ta> = (fn, options?) => {
+  protected __voidAction: VoidAction_F<Eo, Pc, Tc, Ta> = (
+    fn,
+    options?,
+  ) => {
     if (!options) {
       return ({ context, pContext, ...rest }) => {
         const _fn = reduceFnMap(this.#eventsMap, this.#actorsMap, fn);
