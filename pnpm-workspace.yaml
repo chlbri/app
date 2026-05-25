@@ -1,5 +1,6 @@
 allowBuilds:
   esbuild: true
 minimumReleaseAgeExclude:
+  - '@bemedev/typings@1.2.0'
   - '@bemedev/typings@1.1.6'
   - '@bemedev/typings@1.1.5'
