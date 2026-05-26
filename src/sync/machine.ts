@@ -1,3 +1,4 @@
+import type { Action22 } from '#actions';
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import _any from '#bemedev/features/common/castings/any';
 import commonT from '#bemedev/features/common/typings';
@@ -5,16 +6,16 @@ import extract from '#bemedev/features/common/typings/extract';
 import { partialCall } from '#bemedev/features/functions/functions/partialCall';
 import byKey from '#bemedev/features/objects/typings/byKey';
 import keysOf from '#bemedev/features/objects/typings/keysOf';
-import type {
-  AllowedNames,
-  NotUndefined,
-  PrimitiveObject,
-} from '#bemedev/globals/types';
+import type { AllowedNames, NotUndefined } from '#bemedev/globals/types';
+import { _unknown } from '#bemedev/globals/utils/_unknown';
 import { DEFAULT_DELIMITER } from '#constants';
-import {
-  type EventsMap,
-  type ToEventObject,
-  type ToEvents,
+import type { DelayFunction } from '#delays';
+import type {
+  ActorsConfigMap,
+  EventObject,
+  EventsMap,
+  ToEventObject,
+  ToEvents,
 } from '#events';
 import {
   isDefinedS,
@@ -22,13 +23,20 @@ import {
   isNotValue,
   isValue,
   type DefinedValue,
+  type PredicateS,
 } from '#guards';
-import type {
-  State,
-  StateExtended,
-  StateP,
-  StatePextended,
-} from '#states';
+import {
+  assignByKey,
+  expandFnMap,
+  getByKey,
+  type AnyMachine,
+  type Elements,
+  type GetIO_F,
+  type MachineOptions2,
+  type ScheduledData,
+  type SimpleMachineOptions2,
+} from '#machines';
+import type { Register } from '#registry';
 import {
   flatMap,
   initialConfig,
@@ -37,46 +45,36 @@ import {
   nodeToValue,
   valueToNodeConfig,
   type FlatMapN,
-  type NodeConfig,
+  type State,
+  type StateExtended,
+  type StateP,
+  type StatePextended,
   type StateValue,
 } from '#states';
 import { merge, reduceFnMap } from '#utils';
-import { decompose, getByKey, type Decompose } from '@bemedev/decompose';
-
-import type { Action } from '#actions';
-import type { DelayFunction } from '#delays';
-import { ActorsConfigMap, type EventObject } from '#events';
-
-import { _unknown } from '#bemedev/globals/utils/_unknown';
-import type { PredicateS } from '#guards';
-import { withTimeout } from '@bemedev/better-promise';
+import { decompose, type Decompose } from '@bemedev/decompose';
 import type {
   inferT,
   ObjectT,
+  PrimitiveObject,
   PrimitiveObjectT,
   Sh,
   StandardKey,
   StandardOutput,
 } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
-import { type Register } from '../registry.types';
-import { assignByKey, expandFnMap } from './functions';
 import type {
-  AddOptions_F,
-  AddOptionsParam_F,
-  AnyMachine,
-  Elements,
-  GetIO_F,
-  ScheduledData,
-  SendAction_F,
-  TimeAction_F,
-  VoidAction_F,
-} from './machine.types';
+  SyncAddOptions_F,
+  SyncAddOptionsParam_F,
+  SyncSendAction_F,
+  SyncTimeAction_F,
+  SyncVoidAction_F,
+} from './machine.options.types';
 import type {
-  Config,
-  MachineOptions2,
-  SimpleMachineOptions2,
-} from './types';
+  AnySyncMachine,
+  SyncConfig,
+  SyncNodeConfig,
+} from './types.types';
 
 /**
  * A class representing a state machine.
@@ -91,9 +89,8 @@ import type {
  *
  * @implements {@linkcode AnyMachine}<{@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} >
  */
-
-class Machine<
-  const C extends Config = Config,
+class SyncMachine<
+  const C extends SyncConfig = SyncConfig,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,
@@ -102,7 +99,7 @@ class Machine<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> implements AnyMachine<E, A, Pc, Tc> {
+> implements AnySyncMachine<E, A, Pc, Tc> {
   /**
    * The configuration of the machine for this {@linkcode Machine}.
    *
@@ -197,7 +194,7 @@ class Machine<
    * @see {@linkcode Tc}
    */
   get __actionFn() {
-    return _unknown<Action<Eo, Pc, Tc, Ta>>();
+    return _unknown<Action22<Eo, Pc, Tc, Ta>>();
   }
 
   /**
@@ -340,7 +337,10 @@ class Machine<
   }
 
   #typingsByKey = <
-    K extends AllowedNames<AnyMachine<E, A, Pc, Tc>, object | undefined>,
+    K extends AllowedNames<
+      AnySyncMachine<E, A, Pc, Tc>,
+      object | undefined
+    >,
   >(
     key: K,
   ) => {
@@ -457,11 +457,8 @@ class Machine<
 
   // #region private
   #actions?: Mo['actions'];
-
   #guards?: Mo['guards'];
-
   #delays?: Mo['delays'];
-
   #actors?: Mo['actors'];
 
   /**
@@ -490,7 +487,7 @@ class Machine<
   /**
    * The initial node config of this {@linkcode Machine}.
    */
-  #initialConfig: NodeConfig;
+  #initialConfig: SyncNodeConfig;
   // #endregion
 
   /**
@@ -600,7 +597,7 @@ class Machine<
     return this.#initialKeys.includes(target);
   };
 
-  retrieveParentFromInitial = (target: string): NodeConfig => {
+  retrieveParentFromInitial = (target: string): SyncNodeConfig => {
     const check1 = this.isInitial(target);
     const flat: any = this.#flat;
     if (check1) {
@@ -639,7 +636,7 @@ class Machine<
    *
    * Remark: Used for typings, when you're outside the Machine class.
    */
-  createOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
+  createOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
     const isValue = this.#isValue;
     const isNotValue = this.#isNotValue;
     const isDefined = this.#isDefined;
@@ -661,61 +658,17 @@ class Machine<
         isDefined,
         isNotDefined,
 
-        assign: (key, fn, options?) => {
-          if (!options) {
-            return _any(expandFnMap)(
-              this.#eventsMap,
-              this.#actorsMap,
-              _any(key),
-              fn,
-            );
-          }
-
-          const { error: errorFn, max } = options;
-          const _fn = reduceFnMap(
+        assign: (key, fn) => {
+          return _any(expandFnMap)(
             this.#eventsMap,
             this.#actorsMap,
-            fn as any,
+            _any(key),
+            fn,
           );
-
-          return async ({ pContext, context, event, ...rest }) => {
-            const all = cloneDeep({ pContext, context });
-
-            const execute = async () => {
-              const rawResult = await _fn({
-                pContext,
-                context,
-                event,
-                ...rest,
-              });
-              return assignByKey(all, _any(key), rawResult);
-            };
-
-            try {
-              if (max !== undefined) {
-                const tp = withTimeout(
-                  execute,
-                  `assign-${String(key)}`,
-                  max,
-                );
-                return await tp();
-              }
-              return await execute();
-            } catch (e: any) {
-              const rawResult = errorFn({
-                context,
-                pContext,
-                payload: e,
-                ...rest,
-              });
-
-              return assignByKey(all, _any(key), rawResult);
-            }
-          };
         },
 
         batch: (...fns) => {
-          return async ({ context, pContext, ...rest }) => {
+          return ({ context, pContext, ...rest }) => {
             const state = this.#cloneStateExtended({
               context,
               pContext,
@@ -724,8 +677,8 @@ class Machine<
 
             let out: any;
             for (const fn of fns.filter(f => !!f)) {
-              if (!out) out = await fn(state);
-              else out = await fn({ ...out, ...rest });
+              if (!out) out = fn(state);
+              else out = fn({ ...out, ...rest });
             }
             return out;
           };
@@ -776,13 +729,13 @@ class Machine<
         sendTo,
 
         debounce: (fn, { id, ms = 100 }) => {
-          return async ({ context, pContext, ...rest }) => {
+          return ({ context, pContext, ...rest }) => {
             const state = this.#cloneStateExtended({
               context,
               pContext,
               ...rest,
             });
-            const data = await fn(state);
+            const data = fn(state);
 
             const scheduled: ScheduledData<Pc, Tc> = { data, ms, id };
 
@@ -833,7 +786,7 @@ class Machine<
    * @param option a function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    */
-  addOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
+  addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
     const out = this.createOptions(helper as any);
 
     this.#addActions(out?.actions);
@@ -853,7 +806,7 @@ class Machine<
    * @returns a new instance of the machine with the provided options applied.
    */
   provideOptions = <T extends Mo>(
-    helper: AddOptionsParam_F<Eo, Pc, Tc, Ta, T>,
+    helper: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T>,
   ) => {
     const out = this.renew;
     out.addOptions(helper);
@@ -876,8 +829,8 @@ class Machine<
     const pContext = cloneDeep(this.#pContext);
     const context = structuredClone(this.#context);
     const actions = cloneDeep(this.#actions);
-    const guards = cloneDeep(this.#guards);
     const delays = cloneDeep(this.#delays);
+    const guards = cloneDeep(this.#guards);
     const actorsMap = cloneDeep(this.#actorsMap);
     const events = cloneDeep(this.#eventsMap);
     const actors = cloneDeep(this.#actors);
@@ -936,7 +889,9 @@ class Machine<
       actorsMap,
     } = this.#elements;
 
-    const out = new Machine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(config);
+    const out = new SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
+      config,
+    );
 
     out.#pContext = pContext;
     out.#context = context;
@@ -976,7 +931,7 @@ class Machine<
   _provideEvents = <T extends EventsMap>(map: T) => {
     const { pContext, config, context, actorsMap } = this.#elements;
 
-    const out = new Machine<C, Pc, Tc, T, A>(config);
+    const out = new SyncMachine<C, Pc, Tc, T, A>(config);
 
     out.#pContext = pContext;
     out.#context = context;
@@ -993,7 +948,7 @@ class Machine<
   _provideActors = <T extends ActorsConfigMap>(map: T) => {
     const { pContext, config, context, events } = this.#elements;
 
-    const out = new Machine<C, Pc, Tc, E, T>(config);
+    const out = new SyncMachine<C, Pc, Tc, E, T>(config);
 
     out.#pContext = pContext;
     out.#context = context;
@@ -1046,7 +1001,6 @@ class Machine<
       guards,
       actions,
       delays,
-
       actors,
     });
 
@@ -1117,63 +1071,25 @@ class Machine<
    *
    * @see {@linkcode reduceFnMap}
    */
-  protected __sendTo: SendAction_F<Eo, Pc, Tc, Ta> = <
+  protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = <
     T extends AnyMachine,
   >(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _?: T,
   ) => {
-    return (fn, options?) => {
-      if (!options) {
-        const fn2 = reduceFnMap(this.eventsMap, this.#actorsMap, fn);
-        return ({ context, pContext, ...rest }) => {
-          const state = this.#cloneStateExtended({
-            context,
-            pContext,
-            ...rest,
-          });
-          const { event, to } = fn2(state) as any;
-
-          const sentEvent = { to, event };
-
-          return _any({ context, pContext, sentEvent });
-        };
-      }
-
-      const { error: errorFn, max } = options;
-
-      return async ({ context, pContext, event, ...rest }) => {
-        const out = _any({ context, pContext });
+    return fn => {
+      const fn2 = reduceFnMap(this.eventsMap, this.#actorsMap, fn);
+      return ({ context, pContext, ...rest }) => {
         const state = this.#cloneStateExtended({
           context,
           pContext,
-          event,
           ...rest,
         });
+        const { event, to } = fn2(state) as any;
 
-        const execute = async () => {
-          const fn2 = reduceFnMap(this.eventsMap, this.#actorsMap, fn);
-          const { event, to } = (await fn2(state)) as any;
-          const sentEvent = { to, event };
-          return _any({ ...out, sentEvent });
-        };
+        const sentEvent = { to, event };
 
-        try {
-          if (max !== undefined) {
-            const tp = withTimeout(execute, 'sendTo', max);
-            return await tp();
-          }
-          return await execute();
-        } catch (e: any) {
-          errorFn({
-            context,
-            pContext,
-            payload: e,
-            ...rest,
-          });
-
-          return out;
-        }
+        return _any({ context, pContext, sentEvent });
       };
     };
   };
@@ -1189,61 +1105,21 @@ class Machine<
    *
    * @see {@linkcode VoidAction_F}
    */
-  protected __voidAction: VoidAction_F<Eo, Pc, Tc, Ta> = (
-    fn,
-    options?,
-  ) => {
-    if (!options) {
-      return ({ context, pContext, ...rest }) => {
-        const _fn = reduceFnMap(this.#eventsMap, this.#actorsMap, fn);
-        const state = this.#cloneStateExtended({
-          context,
-          pContext,
-          ...rest,
-        });
-        _fn(state);
-
-        return _any({ context, pContext });
-      };
-    }
-
-    const { error: errorFn, max } = options;
-
-    return async ({ context, pContext, event, ...rest }) => {
-      const out = _any({ context, pContext });
+  protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
+    return ({ context, pContext, ...rest }) => {
+      const _fn = reduceFnMap(this.#eventsMap, this.#actorsMap, fn);
       const state = this.#cloneStateExtended({
         context,
         pContext,
-        event,
         ...rest,
       });
+      _fn(state);
 
-      const execute = async () => {
-        const _fn = reduceFnMap(this.#eventsMap, this.#actorsMap, fn);
-        await _fn(state);
-        return out;
-      };
-
-      try {
-        if (max !== undefined) {
-          const tp = withTimeout(execute, 'voidAction', max);
-          return await tp();
-        }
-        return await execute();
-      } catch (e: any) {
-        errorFn({
-          context,
-          pContext,
-          payload: e,
-          ...rest,
-        });
-
-        return out;
-      }
+      return _any({ context, pContext });
     };
   };
 
-  #timeAction = (name: string): TimeAction_F<Eo, Pc, Tc, Ta> => {
+  #timeAction = (name: string): SyncTimeAction_F<Eo, Pc, Tc, Ta> => {
     return id =>
       ({ context, pContext }) => {
         return _any({ context, pContext, [name]: id });
@@ -1289,7 +1165,7 @@ export const getEntries = partialCall.paramArray(getIO, 'entry');
  */
 export const getExits = partialCall.paramArray(getIO, 'exit');
 
-export type { Machine };
+export { type SyncMachine };
 
 /**
  * Creates a new instance of {@linkcode Machine} with the provided configuration.
@@ -1301,12 +1177,11 @@ export type { Machine };
  */
 
 export type StandardOutput2<T extends ObjectT> = Pick<Sh<T>, StandardKey>;
-export type StdO2<T extends ObjectT> = StandardOutput2<T>;
 
-export function createMachine<
+export function createSyncMachine<
   Name extends keyof Register & string,
   Current extends Register[Name] = Register[Name],
-  const C extends Config<Current['paths']['map']> = Config<
+  const C extends SyncConfig<Current['paths']['map']> = SyncConfig<
     Current['paths']['map']
   >,
   const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
@@ -1346,7 +1221,7 @@ export function createMachine<
     eventsMap?: E;
     actorsMap?: A;
   },
-): Machine<
+): SyncMachine<
   C,
   _Pc,
   _Tc,
@@ -1360,7 +1235,7 @@ export function createMachine<
   const eventsMap = types?.eventsMap?.['~standard']?.types?.output ?? {};
   const actorsMap = types?.actorsMap?.['~standard']?.types?.output ?? {};
 
-  const out = new Machine(config as Config)
+  const out = new SyncMachine(config as SyncConfig)
     ._provideEvents(eventsMap)
     ._provideActors(actorsMap as any);
 

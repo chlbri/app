@@ -54,6 +54,13 @@ export type Action<
   T extends string = string,
 > = FnMap<E, Pc, Tc, T, MaybeAsyncActionResult<Pc, Tc>>;
 
+export type Action3<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = FnMap<E, Pc, Tc, T, ActionResult<Pc, Tc>>;
+
 /**
  * Represents a collection of actions, where each action is identified by a string key.
  *

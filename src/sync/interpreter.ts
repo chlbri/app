@@ -1,17 +1,16 @@
 import { toAction, type WithDescriber } from '#actions';
+import type { ChildConfig, EmitterConfig, FinallyConfig } from '#actor';
+import toArray from '#bemedev/features/arrays/castings/toArray';
 import _any from '#bemedev/features/common/castings/any';
-import isPrimitive from '#bemedev/features/common/castings/primitive/is';
+import isDefined from '#bemedev/features/common/castings/is/defined';
+import { _unknown } from '#bemedev/globals/utils/_unknown';
+import { isPrimitive } from '#bemedev/globals/utils/is/primitive';
 import {
   DEFAULT_DELIMITER,
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
 } from '#constants';
-
-import toArray from '#bemedev/features/arrays/castings/toArray';
-import isDefined from '#bemedev/features/common/castings/is/defined';
-import { switchV } from '#bemedev/features/functions/functions/switch';
-import { toDelay } from '#delays';
 import {
   ALWAYS_EVENT,
   eventToType,
@@ -25,108 +24,93 @@ import {
   type ExtractSender,
 } from '#events';
 import { toPredicate, type GuardConfig } from '#guards';
-import { getEntries, getExits } from '#machine';
 import {
+  createSubscriber,
+  type AddSubscriber_F,
+  type CollectedPausable,
+  type CreateInterval2_F,
+  type DiffNext,
+  type ExecuteActivities_F,
+  type Mode,
+  type OptionalDefinitions,
+  type Selector_F,
+  type SubscriberClass,
+  type WorkingStatus,
+} from '#interpreters';
+import {
+  assignByKey,
   getByKey,
+  getEntries,
+  getExits,
   getTags,
   toChildSrc,
-  type Config,
+  type ActorsMapFrom,
+  type AllPathsFrom,
+  type ChildFunction2,
   type ConfigFrom,
   type ContextFrom,
   type DirectMerge_F,
+  type EventsFrom,
   type EventsMapFrom,
   type ExtendedActionsParams,
+  type MachineOptionsFrom,
   type PrivateContextFrom,
   type ScheduledData,
+  type SimpleMachineOptions2,
+  type TagFrom,
 } from '#machines';
 import {
   flatMap,
   initialConfig,
   nextSV,
-  Node,
   nodeToValue,
   resolveNode,
   type ActivityConfig,
-  type NodeConfig,
   type State,
   type StateExtended,
-  type StateValue,
 } from '#states';
-import type {
-  AlwaysConfig,
-  DelayedTransitions,
-  TransitionConfig,
-} from '#transitions';
+import type { AlwaysConfig, TransitionConfig } from '#transitions';
 import {
+  decomposeSV,
   IS_TEST,
   isStringEmpty,
   reduceDescriber,
   replaceAll,
 } from '#utils';
 import {
-  anyPromises,
-  asyncfy,
-  withTimeout,
-  type TimeoutPromise,
-} from '@bemedev/better-promise';
-
-import { assignByKey, decomposeSV } from '@bemedev/decompose';
-import {
   createInterval,
   createTimeout,
   type Interval2,
   type Timeout2,
 } from '@bemedev/interval2';
-import { sleep } from '@bemedev/sleep';
+import { createScheduler } from '@bemedev/scheduler';
+import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import equal from 'fast-deep-equal';
-import { isDescriber, type RecordS } from '~types';
+import { isDescriber, type RecordS, type StateValue } from '~types';
 import type {
-  _Send_F,
-  AddSubscriber_F,
-  AnyInterpreter,
-  Collected0,
-  CollectedPausable,
-  CollectedService,
-  CreateInterval2_F,
-  DiffNext,
-  ExecuteActivities_F,
-  Interpreter_F,
-  Mode,
-  PerformAction_F,
-  PerformActionLater_F,
-  PerformAfter_F,
-  PerformAlway_F,
-  PerformDelay_F,
-  PerformPredicate_F,
-  PerformTransition_F,
-  PerformTransitions_F,
-  Selector_F,
-  WorkingStatus,
+  _SyncSend_F,
+  AnySyncInterpreter,
+  SyncCollectedService,
+  SyncPerformAction_F,
+  SyncPerformAlway_F,
+  SyncPerformDelay_F,
+  SyncPerformPredicate_F,
+  SyncPerformTransition_F,
+  SyncPerformTransitions_F,
 } from './interpreter.types';
-
-import type { FinallyConfig } from '../actors/types';
-import _unknown from '#bemedev/features/common/castings/_unknown';
+import type { SyncMachine } from './machine';
 import type {
-  AllowedNames,
-  Fn,
-  PrimitiveObject,
-} from '#bemedev/globals/types';
+  AnySyncMachine,
+  SyncConfig,
+  SyncNode,
+  SyncNodeConfig,
+} from './types.types';
+import { switchV } from '#bemedev/features/functions/functions/switch';
 import { toEmitterSrc, type EmitterFunction2 } from '#emitters';
-import type { Machine } from '#machine';
-import type {
-  ActorsMapFrom,
-  AllPathsFrom,
-  AnyMachine,
-  ChildFunction2,
-  EventsFrom,
-  MachineOptionsFrom,
-  SimpleMachineOptions2,
-  TagFrom,
-} from '#machines';
-import { createScheduler } from '@bemedev/scheduler';
-import type { ChildConfig, EmitterConfig } from '../actors/types';
-import { createSubscriber, type SubscriberClass } from './subscriber';
+import type { AllowedNames, Equals, Fn } from '#bemedev/globals/types';
+import { toDelay } from '#delays';
+import { asyncfy } from '@bemedev/better-promise';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
@@ -140,7 +124,7 @@ import { createSubscriber, type SubscriberClass } from './subscriber';
  * @template : type {@linkcode PromiseeMap} [P] - The promisees map type, which maps promise names to their
  * @template Mo : type {@linkcode MachineOptions} - The machine options type, which includes various configurations for the machine. Default to {@linkcode MachineOptions}.
  *
- * @implements : {@linkcode AnyInterpreter}
+ * @implements : {@linkcode AnySyncInterpreter}
  *
  * @remarks
  * The `Interpreter` class is a core component of the state machine implementation,
@@ -152,8 +136,8 @@ import { createSubscriber, type SubscriberClass } from './subscriber';
  *
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
  */
-export class Interpreter<
-  const C extends Config = Config,
+export class SyncInterpreter<
+  const C extends SyncConfig = SyncConfig,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,
@@ -162,11 +146,11 @@ export class Interpreter<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> implements AnyInterpreter<E, A, Pc, Tc> {
+> implements AnySyncInterpreter<E, A, Pc, Tc> {
   /**
-   * The {@linkcode Machine} machine being interpreted.
+   * The {@linkcode SyncMachine} machine being interpreted.
    */
-  #machine: Machine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
+  #machine: SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
 
   /**
    * The current {@linkcode WorkingStatus} status of the this {@linkcode Interpreter} service.
@@ -176,12 +160,12 @@ export class Interpreter<
   /**
    * The current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service.
    */
-  #config: NodeConfig;
+  #config: SyncNodeConfig;
 
   /**
    * The {@linkcode RecordS}<{@linkcode NodeConfigWithInitials}> flat representation of all possible config states of this {@linkcode Interpreter} service.
    */
-  #flat!: RecordS<NodeConfig>;
+  #flat!: RecordS<SyncNodeConfig>;
 
   /**
    * The current {@linkcode StateValue}> of this {@linkcode Interpreter} service.
@@ -196,12 +180,12 @@ export class Interpreter<
   /**
    * The initial {@linkcode Node} of the inner {@linkcode Machine}.
    */
-  readonly #initialNode: Node<Eo, Pc, Tc, Ta>;
+  readonly #initialNode: SyncNode<Eo, Pc, Tc, Ta>;
 
   /**
    * The current {@linkcode Node} of this {@linkcode Interpreter} service.
    */
-  #node!: Node<Eo, Pc, Tc, Ta>;
+  #node!: SyncNode<Eo, Pc, Tc, Ta>;
 
   /**
    * an iiner ietrator to count the number of operations performed by this {@linkcode Interpreter} service.
@@ -216,7 +200,7 @@ export class Interpreter<
   /**
    * The initial {@linkcode NodeConfigWithInitials} of the inner {@linkcode Machine}.
    */
-  readonly #initialConfig: NodeConfig;
+  readonly #initialConfig: SyncNodeConfig;
 
   /**
    * The initial {@linkcode Pc} private context of this {@linkcode Interpreter} service.
@@ -325,13 +309,13 @@ export class Interpreter<
    * @param exact, whether to use exact intervals or not, default is false.
    */
   constructor(
-    machine: AnyMachine<E, A, Pc, Tc>,
+    machine: AnySyncMachine<E, A, Pc, Tc>,
     mode: Mode = 'strict',
     exact = true,
   ) {
     this.#machine = machine.renew;
     this.#config = this.#initialConfig = this.#machine.initialConfig;
-    this.#initialNode = this.#resolveNode(this.#initialConfig);
+    this.#initialNode = this.#resolveNode(this.#initialConfig) as any;
     this.#mode = mode;
     this.#exact = exact;
     this.#performConfig(true);
@@ -432,8 +416,8 @@ export class Interpreter<
     const value = nodeToValue(this.#config as any);
     const cb = () => (this.#value = value);
     this.#schedulerValue.schedule(cb, this.#sent);
-    this.#node = this.#resolveNode(this.#config);
-    const configForFlat = _unknown<NodeConfig>(this.#config);
+    this.#node = this.#resolveNode(this.#config) as any;
+    const configForFlat = _unknown<SyncNodeConfig>(this.#config);
     this.#flat = _any(flatMap(configForFlat, true));
   };
 
@@ -474,7 +458,7 @@ export class Interpreter<
    * @see {@linkcode Pc}
    * @see {@linkcode Tc}
    */
-  #resolveNode = (config: NodeConfig) => {
+  #resolveNode = (config: SyncNodeConfig) => {
     const options = this.#machine.options;
     const events = this.#machine.eventsMap;
     const actorsMap = this.#machine.actorsMap;
@@ -549,7 +533,7 @@ export class Interpreter<
    * Create a new {@linkcode Interpreter} instance with the same initial configuration as this instance.
    */
   get renew() {
-    const out = new Interpreter(this.#machine);
+    const out = new SyncInterpreter(this.#machine);
     out._ppC(this.#initialPpc);
     out._provideContext(this.#initialContext);
 
@@ -687,7 +671,8 @@ export class Interpreter<
   };
 
   #pauseChildren = (
-    filter: Parameters<Array<CollectedService>['filter']>[0] = () => true,
+    filter: Parameters<Array<SyncCollectedService>['filter']>[0] = () =>
+      true,
   ) => {
     this.#collectedChildren
       .filter(filter)
@@ -695,7 +680,8 @@ export class Interpreter<
   };
 
   #stopChildren = (
-    filter: Parameters<Array<CollectedService>['filter']>[0] = () => true,
+    filter: Parameters<Array<SyncCollectedService>['filter']>[0] = () =>
+      true,
   ) => {
     this.#collectedChildren.filter(filter).forEach(({ service, id }) => {
       service.stop();
@@ -711,7 +697,8 @@ export class Interpreter<
   };
 
   #resumeChildren = (
-    filter: Parameters<Array<CollectedService>['filter']>[0] = () => true,
+    filter: Parameters<Array<SyncCollectedService>['filter']>[0] = () =>
+      true,
   ) => {
     this.#collectedChildren
       .filter(filter)
@@ -721,7 +708,7 @@ export class Interpreter<
   /**
    * Start this {@linkcode Interpreter} service.
    */
-  start = async () => {
+  start = () => {
     this.#collectChildren();
     this.#collectPausables();
     this.#throwing();
@@ -787,7 +774,7 @@ export class Interpreter<
    * Performs all self transitions and activities of this {@linkcode Interpreter} service.
    * @remarks Throw if the number of self transitions exceeds {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
    */
-  protected _next = async () => {
+  protected _next = () => {
     // eslint-disable-next-line no-useless-assignment
     let check = false;
     do {
@@ -798,7 +785,7 @@ export class Interpreter<
         this.#selfTransitionsCounter >= DEFAULT_MAX_SELF_TRANSITIONS;
       if (checkCounter) return this.#throwMaxCounter();
       this.#throwing();
-      await this.#next();
+      this.#next();
 
       const currentValue = this.#value;
       check = !equal(previousValue, currentValue);
@@ -816,18 +803,6 @@ export class Interpreter<
     const pContext = cloneDeep(this.#pContext);
     return structuredClone({ pContext, ...this.#state });
   }
-
-  protected __performAction: PerformActionLater_F<Eo, Pc, Tc, Ta> =
-    action => {
-      this._iterate();
-      const out = withTimeout(
-        async () => action(this.#cloneState),
-        'Action timed out',
-        ...(this.longRuns ? [] : [DEFAULT_MAX_TIME_PROMISE]),
-      );
-
-      return out();
-    };
 
   #performScheduledAction = (scheduled?: ScheduledData<Pc, Tc>) => {
     if (!scheduled) return;
@@ -848,9 +823,7 @@ export class Interpreter<
     return this.__sendTo(sentEvent.to, sentEvent.event);
   };
 
-  protected __performResendAction = async (
-    resend?: EventArgObject<Eo>,
-  ) => {
+  protected __performResendAction = (resend?: EventArgObject<Eo>) => {
     if (!resend) return;
     const cannot = this.#cannotPerformEvents(resend);
     if (cannot) return;
@@ -866,7 +839,7 @@ export class Interpreter<
    *
    * @see {@linkcode TransitionConfig} for more information about transitions.
    */
-  protected __performForceSendAction = async (
+  protected __performForceSendAction = (
     forceSend?: EventArgObject<Eo>,
   ) => {
     if (!forceSend) return;
@@ -875,7 +848,7 @@ export class Interpreter<
     for (const { on } of values) {
       const type = eventToType(forceSend);
       const transitions = toArray.typed(on?.[type]);
-      await this.__performTransitions(...(transitions as any));
+      this.__performTransitions(...(transitions as any));
     }
   };
 
@@ -913,7 +886,7 @@ export class Interpreter<
     this.#timeoutActions.filter(f => f.id === id).forEach(this.#dispose);
   };
 
-  protected __performsExtendedActions = async ({
+  protected __performsExtendedActions = ({
     forceSend,
     resend,
     scheduled,
@@ -937,21 +910,21 @@ export class Interpreter<
 
     // ForceSendAction returns the result to make further actions
     const result =
-      (await this.__performForceSendAction(forceSend)) ??
-      (await this.__performResendAction(resend));
+      this.__performForceSendAction(forceSend) ??
+      this.__performResendAction(resend);
 
     return result;
   };
 
-  protected __executeAction: PerformAction_F<Eo, Pc, Tc, Ta> =
+  protected __executeAction: SyncPerformAction_F<Eo, Pc, Tc, Ta> =
     async action => {
       this.#makeBusy();
 
-      const { pContext, context, ...extendeds } =
-        await this.__performAction(action);
+      this._iterate();
+      const { pContext, context, ...extendeds } = action(this.#cloneState);
 
       this.#mergeContexts({ pContext, context });
-      await this.__performsExtendedActions(extendeds);
+      this.__performsExtendedActions(extendeds);
     };
 
   /**
@@ -968,27 +941,29 @@ export class Interpreter<
     } else throw error;
   }
 
-  protected __performActions = async (...actions: WithDescriber[]) => {
+  protected __performActions = (...actions: WithDescriber[]) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
 
     for (const fn of fns) {
-      await this.__executeAction(fn);
+      this.__executeAction(fn as any);
     }
   };
 
-  #performPredicate: PerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
-    this._iterate();
-    return predicate(this.#cloneState);
-  };
+  #performPredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
+    predicate => {
+      this._iterate();
+      return predicate(this.#cloneState);
+    };
 
-  #executePredicate: PerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
-    this.#makeBusy();
-    const out = this.#performPredicate(predicate);
+  #executePredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
+    predicate => {
+      this.#makeBusy();
+      const out = this.#performPredicate(predicate);
 
-    this.#makeWork();
+      this.#makeWork();
 
-    return out;
-  };
+      return out;
+    };
 
   #performPredicates = (...guards: GuardConfig[]) => {
     if (guards.length < 1) return true;
@@ -997,18 +972,6 @@ export class Interpreter<
       .filter(isDefined)
       .map(this.#executePredicate)
       .every(b => b);
-  };
-
-  #performDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
-    this._iterate();
-    return delay(this.#cloneState);
-  };
-
-  #executeDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
-    this.#makeBusy();
-    const out = this.#performDelay(delay);
-    this.#startStatus();
-    return out;
   };
 
   #mergeContexts: DirectMerge_F<Pc, Tc> = result => {
@@ -1022,146 +985,38 @@ export class Interpreter<
     return this.#schedulerContexts.schedule(cb, this.#sent);
   };
 
-  #executeActivities: ExecuteActivities_F = (from, _activities) => {
-    const entries = Object.entries(_activities);
-    const outs: string[] = [];
-
-    for (const [_delay, _activity] of entries) {
-      const id = `${from}::${_delay}`;
-      let index = -1;
-      const _interval = this._cachedIntervals.find((f, i) => {
-        const check = f.id === id;
-        if (check) index = i;
-        return check;
-      });
-
-      const buildCallback = () => {
-        const delayF = this.toDelayFn(_delay);
-        const check0 = !isDefined(delayF);
-        if (check0) return;
-        const interval = this.#executeDelay(delayF);
-
-        const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
-        if (check11) {
-          this._addWarning(`Delay (${_delay}) is too short`);
-          return;
-        }
-
-        const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
-        if (check12) {
-          this._addWarning(`Delay (${_delay}) is too long`);
-          return;
-        }
-
-        const activities = toArray.typed(_activity);
-
-        const callback = async () => {
-          for (const activity of activities) {
-            const check2 = typeof activity === 'string';
-            const check3 = isDescriber(activity);
-            const check4 = check2 || check3;
-
-            if (check4) {
-              await this.__performActions(activity);
-              continue;
-            }
-
-            const check5 = this.#performPredicates(
-              ...toArray.typed(activity.guards),
-            );
-            if (check5) {
-              const actions = toArray.typed(activity.actions);
-              await this.__performActions(...actions);
-            }
-          }
-        };
-
-        const promise = this.createInterval({
-          callback,
-          interval,
-          id,
-        });
-
-        this._cachedIntervals.push(promise);
-
-        return id;
-      };
-
-      if (_interval) {
-        const check =
-          _interval.state === 'idle' || _interval.state === 'paused';
-        if (check) {
-          this._cachedIntervals.splice(index, 1);
-          const result = buildCallback();
-          if (!result) return [];
-          outs.push(result);
-        } else outs.push(id);
-        continue;
-      }
-
-      const result = buildCallback();
-      if (!result) return [];
-
-      outs.push(result);
-    }
-
-    return outs;
-  };
-
   #exact: boolean;
 
-  protected createInterval: CreateInterval2_F = ({
-    callback,
-    id,
-    interval,
-  }) => {
-    const exact = this.#exact;
-    const out = createInterval({
-      callback,
-      id,
-      interval,
-      exact,
-    });
+  protected __performTransition: SyncPerformTransition_F = transition => {
+    const check = typeof transition == 'string';
+    if (check) {
+      const { diffEntries, diffExits } = this.#diffNext(transition);
+      this.__performActions(...toArray.typed(diffExits));
+      this.__performActions(...toArray.typed(diffEntries));
+      return transition;
+    }
 
-    return out;
+    const { guards, actions, target } = transition;
+    const { diffEntries, diffExits } = this.#diffNext(target);
+
+    const response = this.#performPredicates(
+      ...toArray<GuardConfig>(guards),
+    );
+
+    if (response) {
+      this.__performActions(...toArray.typed(diffExits));
+      this.__performActions(...toArray.typed(actions));
+      this.__performActions(...toArray.typed(diffEntries));
+      return target ?? false;
+    }
+    return false;
   };
 
-  /**
-   * Collection of all currents {@linkcode Interval2} intervals, related to current {@linkcode ActivityConfig}s of this {@linkcode Interpreter} service.
-   */
-  protected _cachedIntervals: Interval2[] = [];
-
-  protected __performTransition: PerformTransition_F =
-    async transition => {
-      const check = typeof transition == 'string';
-      if (check) {
-        const { diffEntries, diffExits } = this.#diffNext(transition);
-        await this.__performActions(...toArray.typed(diffExits));
-        await this.__performActions(...toArray.typed(diffEntries));
-        return transition;
-      }
-
-      const { guards, actions, target } = transition;
-      const { diffEntries, diffExits } = this.#diffNext(target);
-
-      const response = this.#performPredicates(
-        ...toArray<GuardConfig>(guards),
-      );
-
-      if (response) {
-        await this.__performActions(...toArray.typed(diffExits));
-        await this.__performActions(...toArray.typed(actions));
-        await this.__performActions(...toArray.typed(diffEntries));
-        return target ?? false;
-      }
-      return false;
-    };
-
-  protected __performTransitions: PerformTransitions_F = async (
+  protected __performTransitions: SyncPerformTransitions_F = (
     ...transitions
   ) => {
     for (const _transition of transitions) {
-      const transition = await this.__performTransition(_transition);
+      const transition = this.__performTransition(_transition);
       const check1 = typeof transition === 'string';
       if (check1) return transition;
     }
@@ -1197,9 +1052,9 @@ export class Interpreter<
     return;
   };
 
-  get #sending() {
-    return this.#status === 'sending';
-  }
+  // get #sending() {
+  //   return this.#status === 'sending';
+  // }
 
   get longRuns() {
     return this.#machine.longRuns;
@@ -1210,63 +1065,12 @@ export class Interpreter<
    * @param from - the config value from which the events are sent.
    * @returns true if the events cannot be performed, false otherwise.
    */
-  #cannotPerform = (from: string) => {
-    const check = this.#sending || !this.#isInsideValue(from);
-    return check;
-  };
+  // #cannotPerform = (from: string) => {
+  //   const check = this.#sending || !this.#isInsideValue(from);
+  //   return check;
+  // };
 
-  #performAfter: PerformAfter_F = (from, after) => {
-    const entries = Object.entries(after);
-    const promises: TimeoutPromise<string | false>[] = [];
-
-    entries.forEach(([_delay, transition]) => {
-      const delayF = this.toDelayFn(_delay);
-      const check0 = !isDefined(delayF);
-      if (check0) return;
-      const delay = this.#executeDelay(delayF);
-
-      const check1 = delay > DEFAULT_MAX_TIME_PROMISE;
-      if (check1) {
-        this._addWarning(`Delay ${_delay} is too long`);
-        return;
-      }
-
-      const transitions = toArray.typed(transition);
-
-      const _promise = async () => {
-        await sleep(delay);
-        if (this.#cannotPerform(from)) return false;
-
-        const func = () =>
-          this.__performTransitions(...(transitions as any));
-
-        const out = await func();
-
-        if (out === false) {
-          const message = `No transitions reached from "${from}" by delay "${_delay}" !`;
-
-          throw message;
-        }
-        return out;
-      };
-
-      const promise = withTimeout(
-        _promise,
-        from,
-        ...(this.longRuns ? [] : [DEFAULT_MAX_TIME_PROMISE]),
-      );
-
-      promises.push(promise);
-    });
-
-    const check5 = promises.length < 1;
-    if (check5) return;
-
-    const promise = anyPromises(from, ...promises);
-    return promise;
-  };
-
-  #performAlways: PerformAlway_F = alway => {
+  #performAlways: SyncPerformAlway_F = alway => {
     this.#changeEvent(transformEventArg(ALWAYS_EVENT));
     const always = toArray<TransitionConfig>(alway);
     return this.__performTransitions(...always);
@@ -1286,20 +1090,6 @@ export class Interpreter<
     return entries;
   }
 
-  get #collectedAfters() {
-    const entriesFlat = Object.entries(this.#flat);
-    const entries: [from: string, after: DelayedTransitions][] = [];
-
-    entriesFlat.forEach(([from, node]) => {
-      const after = node.after;
-      if (after) {
-        entries.push([from, after]);
-      }
-    });
-
-    return entries;
-  }
-
   get #collectedAlways() {
     const entriesFlat = Object.entries(this.#flat);
     const entries: [from: string, always: AlwaysConfig][] = [];
@@ -1313,6 +1103,125 @@ export class Interpreter<
 
     return entries;
   }
+
+  /**
+   * Collection of all currents {@linkcode Interval2} intervals, related to current {@linkcode ActivityConfig}s of this {@linkcode Interpreter} service.
+   */
+  protected _cachedIntervals: Interval2[] = [];
+
+  #performDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+    this._iterate();
+    return delay(this.#cloneState);
+  };
+
+  #executeDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+    this.#makeBusy();
+    const out = this.#performDelay(delay);
+    this.#startStatus();
+    return out;
+  };
+
+  protected createInterval: CreateInterval2_F = ({
+    callback,
+    id,
+    interval,
+  }) => {
+    const exact = this.#exact;
+    const out = createInterval({
+      callback,
+      id,
+      interval,
+      exact,
+    });
+
+    return out;
+  };
+
+  #executeActivities: ExecuteActivities_F = (from, _activities) => {
+    const entries = Object.entries(_activities);
+    const outs: string[] = [];
+
+    for (const [_delay, _activity] of entries) {
+      const id = `${from}::${_delay}`;
+      let index = -1;
+      const _interval = this._cachedIntervals.find((f, i) => {
+        const check = f.id === id;
+        if (check) index = i;
+        return check;
+      });
+
+      const buildCallback = () => {
+        const delayF = this.toDelayFn(_delay);
+        const check0 = !isDefined(delayF);
+        if (check0) return;
+        const interval = this.#executeDelay(delayF);
+
+        const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
+        if (check11) {
+          this._addWarning(`Delay (${_delay}) is too short`);
+          return;
+        }
+
+        const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
+        if (check12) {
+          this._addWarning(`Delay (${_delay}) is too long`);
+          return;
+        }
+
+        const activities = toArray.typed(_activity);
+
+        const callback = () => {
+          for (const activity of activities) {
+            const check2 = typeof activity === 'string';
+            const check3 = isDescriber(activity);
+            const check4 = check2 || check3;
+
+            if (check4) {
+              this.__performActions(activity);
+              continue;
+            }
+
+            const check5 = this.#performPredicates(
+              ...toArray.typed(activity.guards),
+            );
+            if (check5) {
+              const actions = toArray.typed(activity.actions);
+              this.__performActions(...actions);
+            }
+          }
+        };
+
+        const promise = this.createInterval({
+          callback,
+          interval,
+          id,
+        });
+
+        this._cachedIntervals.push(promise);
+
+        return id;
+      };
+
+      if (_interval) {
+        const check =
+          _interval.state === 'idle' || _interval.state === 'paused';
+        if (check) {
+          this._cachedIntervals.splice(index, 1);
+          const result = buildCallback();
+          if (!result) return [];
+          outs.push(result);
+        } else outs.push(id);
+        continue;
+      }
+
+      const result = buildCallback();
+      if (!result) return [];
+
+      outs.push(result);
+    }
+
+    return outs;
+  };
 
   get #currentActivities() {
     const collected = this.#collectedActivities.filter(([from]) =>
@@ -1368,17 +1277,10 @@ export class Interpreter<
    * Get all brut self transitions of the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service.
    */
   get #collectedSelfTransitions0() {
-    const entries = new Map<string, Collected0>();
+    const entries = new Map<string, () => string | false>();
 
     this.#collectedAlways.forEach(([from, always]) => {
-      entries.set(from, { always: () => this.#performAlways(always) });
-    });
-
-    this.#collectedAfters.forEach(([from, after]) => {
-      const inner = entries.get(from);
-      if (inner) {
-        inner.after = this.#performAfter(from, after);
-      } else entries.set(from, { after: this.#performAfter(from, after) });
+      entries.set(from, () => this.#performAlways(always));
     });
 
     return entries;
@@ -1403,36 +1305,17 @@ export class Interpreter<
       ([from]) => this.#isInsideValue(from),
     );
 
-    const out = entries.map(([from, { after, always }]) => {
-      const promise = async () => {
+    const out = entries.map(([, always]) => {
+      return () => {
         if (always) {
-          const target = await always();
+          const target = always();
           if (target !== false) return this.#performConfig(target);
         }
-
-        // const promises: TimeoutPromise<void>[] = [];
-        if (after) {
-          const _after = async () => {
-            await after()
-              .then(transition => {
-                if (transition !== false)
-                  return this.#performConfig(transition);
-              })
-              .catch(() =>
-                this._addWarning(
-                  `${from}::after - No transitions reached!`,
-                ),
-              );
-          };
-          await _after();
-        }
       };
-
-      return withTimeout(promise, 'self-transition');
     });
 
     if (out.length < 1) return;
-    return anyPromises('self-transition', ...out);
+    return () => out.forEach(f => f());
   }
 
   #collectedEmitterConfigs: [
@@ -1573,7 +1456,7 @@ export class Interpreter<
       .flat();
   };
 
-  #collectedChildren: CollectedService[] = [];
+  #collectedChildren: SyncCollectedService[] = [];
   #collectChildren = () => {
     type _Child = ChildConfig & {
       childFn: ChildFunction2<Eo, Pc, Tc, Ta>;
@@ -1608,7 +1491,7 @@ export class Interpreter<
       })
       .map(([from, ..._services]) => {
         const services = _services.map(({ service, on, contexts, id }) => {
-          const si = service as AnyInterpreter & {
+          const si = service as AnySyncInterpreter & {
             __subscribe: AddSubscriber_F;
           };
 
@@ -1693,10 +1576,10 @@ export class Interpreter<
     return instance;
   };
 
-  protected __performSelfTransitions = async () => {
+  protected __performSelfTransitions = () => {
     this.#makeBusy();
     const previousState = structuredClone(this.#state);
-    await this.__collectedSelfTransitions?.();
+    this.__collectedSelfTransitions?.();
     const nextState = structuredClone(this.#state);
     const check = !equal(previousState, nextState);
     if (check) this.#flush();
@@ -1774,12 +1657,8 @@ export class Interpreter<
   };
 
   #setStatus = (status: WorkingStatus) => {
-    const cb = () => {
-      this.#performStates({ status });
-      return (this.#status = status);
-    };
-
-    return this.#schedulerStatus.schedule(cb, this.#sent);
+    this.#performStates({ status });
+    this.#status = status;
   };
 
   #startingStatus = (): WorkingStatus => {
@@ -1842,7 +1721,7 @@ export class Interpreter<
     option: Parameters<(typeof this)['addOptions']>[0],
   ) => {
     const newMachine = this.#machine.provideOptions(option);
-    const out = new Interpreter(newMachine, this.#mode, this.#exact);
+    const out = new SyncInterpreter(newMachine, this.#mode, this.#exact);
     out._ppC(this.#initialPpc);
     out._provideContext(this.#initialContext);
     return out;
@@ -1984,7 +1863,7 @@ export class Interpreter<
     return flat2;
   };
 
-  protected __presend: _Send_F<Eo> = async event => {
+  protected __presend: _SyncSend_F<Eo> = event => {
     this.#sent = true;
     this.#changeEvent(event);
     this.#setStatus('sending');
@@ -1997,7 +1876,7 @@ export class Interpreter<
       const cannotContinue = !this.#isInsideValue2(sv, from);
       if (cannotContinue) continue;
 
-      const target = await this.__performTransitions(
+      const target = this.__performTransitions(
         ...toArray.typed(transitions),
       );
 
@@ -2046,15 +1925,15 @@ export class Interpreter<
    * @param _event - the {@linkcode EventArg} event to send.
    *
    */
-  protected __send = async (_event: EventArgObject<Eo>) => {
+  protected __send = (_event: EventArgObject<Eo>) => {
     const event = transformEventArg(_event);
-    const next = await this.__presend(event as any);
+    const next = this.__presend(event as any);
 
     if (isDefined(next)) {
       this.#config = next;
       this.#performConfig(true);
       this.#makeWork();
-      this._next();
+      return this._next();
     } else return this.#makeWork();
   };
 
@@ -2067,7 +1946,7 @@ export class Interpreter<
    * If the event cannot be performed, it will not be sent.
    * If the event is sent, it will be processed and the state will be updated.
    */
-  send = async (_event: EventArgObject<Eo>) => {
+  send = (_event: EventArgObject<Eo>) => {
     const check = this.#cannotPerformEvents(_event);
     if (check) return;
     return this.__send(_event);
@@ -2120,7 +1999,7 @@ export class Interpreter<
       return { sv: this.#value, diffEntries: [], diffExits: [] };
     }
 
-    const next = _unknown<NodeConfig>(
+    const next = _unknown<SyncNodeConfig>(
       initialConfig(_unknown(this.proposedNextConfig(target))),
     );
     const flatNext = flatMap(next);
@@ -2288,16 +2167,13 @@ export class Interpreter<
    *
    * @see {@linkcode send} for sending events to the current service.
    */
-  protected __sendTo = async <T extends EventObject>(
-    to: string,
-    event: T,
-  ) => {
+  protected __sendTo = <T extends EventObject>(to: string, event: T) => {
     const collector = this.#collectedChildren.filter(
       ({ from, id }) => this.#isInsideValue(from) && id === to,
     );
 
     for (const { service } of collector) {
-      await service.send(event);
+      service.send(event);
     }
   };
 
@@ -2330,31 +2206,53 @@ export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
  * @see {@linkcode PromiseesMapFrom}
  * @see {@linkcode MachineOptionsFrom}
  */
-export type InterpreterFrom<M extends AnyMachine> = Interpreter<
-  ConfigFrom<M>,
-  PrivateContextFrom<M>,
-  ContextFrom<M>,
-  EventsMapFrom<M>,
-  ActorsMapFrom<M>,
-  TagFrom<M>,
-  EventsFrom<M>,
-  AllPathsFrom<M>,
-  MachineOptionsFrom<M>
->;
+export type SyncInterpreterFrom<M extends AnySyncMachine> =
+  SyncInterpreter<
+    ConfigFrom<M>,
+    PrivateContextFrom<M>,
+    ContextFrom<M>,
+    EventsMapFrom<M>,
+    ActorsMapFrom<M>,
+    TagFrom<M>,
+    EventsFrom<M>,
+    AllPathsFrom<M>,
+    MachineOptionsFrom<M>
+  >;
+
+export type InterpreterOptions<
+  M extends AnySyncMachine,
+  P extends PrivateContextFrom<M> = PrivateContextFrom<M>,
+  C extends ContextFrom<M> = ContextFrom<M>,
+> = {
+  mode?: Mode;
+  exact?: boolean;
+} & OptionalDefinitions<P, C>;
+
+export type InterpretArgs<M extends AnySyncMachine> =
+  Equals<
+    InterpreterOptions<M>,
+    Partial<InterpreterOptions<M>>
+  > extends true
+    ? [machine: M, config?: InterpreterOptions<M>]
+    : [machine: M, config: InterpreterOptions<M>];
+
+export type Interpreter_F = <M extends AnySyncMachine>(
+  ...args: InterpretArgs<M>
+) => SyncInterpreterFrom<M>;
 
 /**
- * Creates an {@linkcode Interpreter} service from the given {@linkcode MachineConfig} machine.
+ * Creates an {@linkcode SyncInterpreter} service from the given {@linkcode AnySyncMachine} machine.
  *
- * @param machine - The {@linkcode MachineConfig} machine to create the interpreter from.
+ * @param machine - The {@linkcode AnySyncMachine} machine to create the interpreter from.
  * @param options - The options for the interpreter, including context, private context, mode, and exact.
- * @returns an {@linkcode Interpreter} service.
+ * @returns an {@linkcode SyncInterpreter} service.
  *
- * @see {@linkcode MachineConfig}
+ * @see {@linkcode SyncConfig}
  */
-export const interpret: Interpreter_F = (..._args) => {
+export const interpretSync: Interpreter_F = (..._args) => {
   const [machine, args] = _args;
   const { mode, exact, pContext, context } = _any(args ?? {});
-  const out: any = new Interpreter(machine, mode, exact);
+  const out: any = new SyncInterpreter(machine, mode, exact);
   out._providePrivateContext(pContext);
   out._provideContext(context);
   return out;

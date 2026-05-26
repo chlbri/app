@@ -31,6 +31,13 @@ export type DelayFunction3<
   T extends string = string,
 > = FnR<E, Pc, Tc, T, number>;
 
+export type DelayFunction33<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = FnR<E, Pc, Tc, T, number>;
+
 /**
  * Delay configuration map.
  * Maps a string key to a {@linkcode DelayFunction} function.

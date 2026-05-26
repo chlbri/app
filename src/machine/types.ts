@@ -165,7 +165,7 @@ export type TransformConfigDef<T extends ConfigDef> = BaseConfig &
  * @see {@linkcode ExtractActionsFromActivity} for extracting actions from activities.
  * @see {@linkcode ReduceArray} for reducing arrays to a single type.
  */
-type _GetKeyActionsFromFlat<Flat extends FlatMapN> = {
+export type _GetKeyActionsFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]:
     | ExtractActionKeysFromTransitions<
         Extract<Flat[key], TransitionsConfig>
