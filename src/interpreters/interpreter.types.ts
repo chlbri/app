@@ -234,15 +234,13 @@ export interface AnyInterpreter<
   _ppC: (pContext: Pc) => AnyMachine<E, A, Pc, Tc>;
   _provideContext: (context: Tc) => AnyMachine<E, A, Pc, Tc>;
 
-  subscribe: AddSubscriber_F<E, A, Tc, T>;
+  subscribe: AddSubscriber_F<E, A, Tc, T, any>;
 
   send: (event: any) => Promise<void>;
   toActionFn: (action: WithDescriber) => any;
   toPredicateFn: (guard: GuardConfig) => any;
-  toPromiseSrcFn: (src: string) => any;
   toDelayFn: (delay: string) => any;
   toChildFunction: (machine: string) => any;
-  toObservable: (emitter: string) => any;
   id?: string;
   from?: string;
 

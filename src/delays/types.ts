@@ -24,6 +24,13 @@ export type DelayFunction2<
   T extends string = string,
 > = number | DelayFunction3<E, Pc, Tc, T>;
 
+export type SyncDelayFunction<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = number | DelayFunction3<E, Pc, Tc, T>;
+
 export type DelayFunction3<
   E extends EventObject = EventObject,
   Pc = any,

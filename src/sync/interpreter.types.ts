@@ -1,4 +1,4 @@
-import type { Action22, WithDescriber } from '#actions';
+import type { SyncAction, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
 import type { AddSubscriber_F, Mode, WorkingStatus } from '#interpreters';
@@ -62,7 +62,7 @@ export type SyncPerformAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action: Action22<E, Pc, Tc, T>) => void;
+> = (action: SyncAction<E, Pc, Tc, T>) => void;
 
 export type SyncToPredicate_F<
   E extends EventObject = EventObject,

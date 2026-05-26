@@ -2,7 +2,7 @@ import { emptyFn } from '#fixtures';
 import { interpret } from '#interpreter';
 import { createMachine } from '#machine';
 import { createConfig } from '#machines';
-import { notU } from '#utils';
+import { notU, typings } from '#utils';
 import { type } from '@bemedev/typings';
 import { DELAY } from './constants';
 import { fakeDB } from './fakeDB';
@@ -108,7 +108,7 @@ export const machine21 = createMachine(
       SEND: 'never',
     }),
 
-    context: type(({ array }) => ({
+    context: typings.context(({ array }) => ({
       iterator: 'number',
       input: 'string',
       data: array('string'),

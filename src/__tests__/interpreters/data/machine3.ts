@@ -1,5 +1,6 @@
 import { createMachine } from '#machine';
 import { createConfig } from '#machines';
+import { typings } from '#utils';
 import { type } from '@bemedev/typings';
 
 export const config3 = createConfig({
@@ -68,7 +69,7 @@ export const machine3 = createMachine(
     pContext: type({
       data: 'string',
     }),
-    context: type({
+    context: typings.context({
       age: 'number',
     }),
     actorsMap: type({

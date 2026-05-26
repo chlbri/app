@@ -1,14 +1,6 @@
-import type { Action22 } from '#actions';
-import toArray from '#bemedev/features/arrays/castings/toArray';
+import type { SyncAction } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
-import commonT from '#bemedev/features/common/typings';
-import extract from '#bemedev/features/common/typings/extract';
-import { partialCall } from '#bemedev/features/functions/functions/partialCall';
-import byKey from '#bemedev/features/objects/typings/byKey';
-import keysOf from '#bemedev/features/objects/typings/keysOf';
-import type { AllowedNames, NotUndefined } from '#bemedev/globals/types';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
-import { DEFAULT_DELIMITER } from '#constants';
 import type { DelayFunction } from '#delays';
 import type {
   ActorsConfigMap,
@@ -17,64 +9,35 @@ import type {
   ToEventObject,
   ToEvents,
 } from '#events';
-import {
-  isDefinedS,
-  isNotDefinedS,
-  isNotValue,
-  isValue,
-  type DefinedValue,
-  type PredicateS,
-} from '#guards';
+import { type PredicateS } from '#guards';
 import {
   assignByKey,
   expandFnMap,
   getByKey,
   type AnyMachine,
-  type Elements,
-  type GetIO_F,
-  type MachineOptions2,
   type ScheduledData,
   type SimpleMachineOptions2,
 } from '#machines';
 import type { Register } from '#registry';
-import {
-  flatMap,
-  initialConfig,
-  isAtomic,
-  isCompound,
-  nodeToValue,
-  valueToNodeConfig,
-  type FlatMapN,
-  type State,
-  type StateExtended,
-  type StateP,
-  type StatePextended,
-  type StateValue,
-} from '#states';
-import { merge, reduceFnMap } from '#utils';
-import { decompose, type Decompose } from '@bemedev/decompose';
+import type { FlatMapN } from '#states';
+import { reduceFnMap } from '#utils';
 import type {
   inferT,
-  ObjectT,
   PrimitiveObject,
   PrimitiveObjectT,
-  Sh,
-  StandardKey,
   StandardOutput,
 } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
+import type { StdO2 } from '../common/machine';
+import { CommonMachine } from '../common/machine';
 import type {
   SyncAddOptions_F,
-  SyncAddOptionsParam_F,
+  SyncMachineOptions2,
   SyncSendAction_F,
   SyncTimeAction_F,
   SyncVoidAction_F,
 } from './machine.options.types';
-import type {
-  AnySyncMachine,
-  SyncConfig,
-  SyncNodeConfig,
-} from './types.types';
+import type { SyncConfig } from './types.types';
 
 /**
  * A class representing a state machine.
@@ -99,87 +62,7 @@ class SyncMachine<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> implements AnySyncMachine<E, A, Pc, Tc> {
-  /**
-   * The configuration of the machine for this {@linkcode Machine}.
-   *
-   * @see {@linkcode Config}
-   * @see {@linkcode C}
-   */
-  #config: C;
-
-  get __config() {
-    return _unknown<C>();
-  }
-
-  /**
-   * The flat map of the configuration for this {@linkcode Machine}.
-   *
-   * @see {@linkcode FlatMapN}
-   * @see {@linkcode Config}
-   * @see {@linkcode C}
-   */
-  #flat: FlatMapN<C, true>;
-
-  #decomposed: any;
-
-  get decomposed() {
-    return this.#decomposed as Decompose<
-      C,
-      { sep: '.'; start: false; object: 'both' }
-    >;
-  }
-
-  /**
-   * The map of events for this {@linkcode Machine}.
-   *
-   * @see {@linkcode EventsMap}
-   * @see {@linkcode E}
-   */
-  #eventsMap!: E;
-
-  /**
-   * The map of promisees for this {@linkcode Machine}.
-   *
-   * @see {@linkcode PromiseeMap}
-   * @see {@linkcode A}
-   */
-  #actorsMap!: A;
-
-  /**
-   * Public accessor for the events map for this {@linkcode Machine}.
-   *
-   * @see {@linkcode EventsMap}
-   * @see {@linkcode E}   */
-  get eventsMap() {
-    return this.#eventsMap;
-  }
-
-  /**
-   * Public accessor for the promisees map for this {@linkcode Machine}.
-   *
-   * @see {@linkcode PromiseeMap}
-   * @see {@linkcode A}
-   */
-  get actorsMap() {
-    return this.#actorsMap;
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the events map for this {@linkcode Machine} as a type.
-   *
-   * @see {@linkcode ToEvents}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __events() {
-    return _unknown<Eo>();
-  }
-
+> extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   /**
    * @deprecated
    * This property provides the action function for this {@linkcode Machine} as a type.
@@ -194,173 +77,11 @@ class SyncMachine<
    * @see {@linkcode Tc}
    */
   get __actionFn() {
-    return _unknown<Action22<Eo, Pc, Tc, Ta>>();
+    return _unknown<SyncAction<Eo, Pc, Tc, Ta>>();
   }
 
-  /**
-   * @deprecated
-   *
-   * This property provides any action key for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __actionKey() {
-    return this.#typingsByKey('actions');
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the action parameters of action function for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode E}
-   * @see {@linkcode Pc}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Tc}
-   */
-  get __actionParams() {
-    return _unknown<{ pContext: Pc; context: Tc; map: E }>();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the state extended for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode StateExtended}
-   * @see {@linkcode ToEvents}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
-   */
-  get __stateExtended() {
-    return _unknown<StateExtended<Eo, Pc, Tc, Ta>>();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides all possible paths for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __allPaths() {
-    return _unknown<AllPaths>();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the state for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode State}
-   * @see {@linkcode ToEventsR2}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode E}
-   * @see {@linkcode A}   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
-   */
-  get __state() {
-    return _unknown<State<Eo, Tc, Ta>>();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the decomposed state for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode State}
-   * @see {@linkcode Decompose}
-   * @see {@linkcode Eo}
-   * @see {@linkcode Tc}
-   * @see {@linkcode Ta}
-   */
-  get __decomposedState() {
-    return _unknown<
-      Decompose<
-        State<Eo, Tc, Ta>,
-        { sep: '.'; start: false; object: 'both' }
-      >
-    >();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the state payload for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode StateP}
-   * @see {@linkcode ToEventsR2}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
-   */
-  get __stateP() {
-    return _unknown<StateP<Eo, Tc, Ta>>();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides the extended state payload for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode StatePextended}
-   * @see {@linkcode ToEventsR2}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
-   */
-  get __statePextended() {
-    return _unknown<StatePextended<Eo, Pc, Tc, Ta>>();
-  }
-
-  #typingsByKey = <
-    K extends AllowedNames<
-      AnySyncMachine<E, A, Pc, Tc>,
-      object | undefined
-    >,
-  >(
-    key: K,
-  ) => {
-    const _this = commonT.dynamic(this);
-    const out1 = byKey(_this, key);
-    const out2 = extract(out1, {} as object);
-    const out3 = keysOf.union(out2);
-
-    return out3;
-  };
-
-  /**
-   * @deprecated
-   *
-   * This property provides any guard key for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __guardKey() {
-    return this.#typingsByKey('guards');
+  get flat() {
+    return this.__flat as FlatMapN<C, true>;
   }
 
   /**
@@ -385,17 +106,6 @@ class SyncMachine<
   /**
    * @deprecated
    *
-   * This property provides any delay key for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __delayKey() {
-    return this.#typingsByKey('delays');
-  }
-
-  /**
-   * @deprecated
-   *
    * This property provides the delay function for this {@linkcode Machine} as a type.
    *
    * @remarks Used for typing purposes only.
@@ -412,221 +122,7 @@ class SyncMachine<
     return _unknown<DelayFunction<Eo, Pc, Tc, Ta>>();
   }
 
-  /**
-   * @deprecated
-   *
-   * This property provides any {@linkcode DefinedValue} for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode DefinedValue}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
-   */
-  get __definedValue() {
-    return _unknown<DefinedValue<Pc, Tc>>();
-  }
-
-  /**
-   * @deprecated
-   *
-   * This property provides any child key for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __childKey() {
-    return this.#typingsByKey('children');
-  }
-
-  /**
-   * @deprecated
-   *
-   * Return this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   */
-  get __machine() {
-    return _unknown<this>();
-  }
-
-  get __tag() {
-    return _unknown<Ta>();
-  }
-  // #endregion
-
-  // #region private
-  #actions?: Mo['actions'];
-  #guards?: Mo['guards'];
-  #delays?: Mo['delays'];
-  #actors?: Mo['actors'];
-
-  /**
-   * Context for this {@linkcode Machine}.
-   *
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Tc}
-   */
-  #context!: Tc;
-
-  /**
-   * Private context for this {@linkcode Machine}.
-   *
-   * @see {@linkcode Pc}
-   */
-  #pContext!: Pc;
-
-  #tags: Ta[];
-
-  get tags() {
-    return this.#tags;
-  }
-
-  #initialKeys: string[] = [];
-
-  /**
-   * The initial node config of this {@linkcode Machine}.
-   */
-  #initialConfig: SyncNodeConfig;
-  // #endregion
-
-  /**
-   * Creates an instance of Machine.
-   *
-   * @param config : of type {@linkcode Config} [C] - The configuration for the machine.
-   *
-   * @remarks
-   * This constructor initializes the machine with the provided configuration.
-   * It flattens the configuration and prepares it for further operations ({@linkcode flat}).
-   */
-  constructor(config: C) {
-    this.#config = config;
-    this.#decomposed = decompose(config, {
-      start: false,
-      object: 'both',
-    });
-    this.#flat = flatMap(this.#config, true);
-
-    this.#tags = Object.values(this.#flat)
-      .map(({ tags }) => toArray.typed(tags))
-      .filter(d => !!d)
-      .flat() as any;
-    this.#initialConfig = initialConfig(this.#config);
-    this.#getInitialKeys();
-    this.longRuns = this.#config.__longRuns === true;
-  }
-
-  readonly longRuns: boolean;
-
-  /**
-   * The accessor configuration of the machine for this {@linkcode Machine}.
-   *
-   * @see {@linkcode Config}
-   * @see {@linkcode C}
-   */
-  get config() {
-    return this.#config;
-  }
-
-  /**
-   * The public accessor of the flat map of the configuration for this {@linkcode Machine}.
-   *
-   * @see {@linkcode FlatMapN}
-   * @see {@linkcode Config}
-   * @see {@linkcode C}
-   */
-  get flat() {
-    return this.#flat;
-  }
-
-  /**
-   * The accessor of context for this {@linkcode Machine}.
-   *
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Tc}
-   */
-  get context() {
-    const out = this.#elements.context;
-    return out;
-  }
-
-  /**
-   * The accessor of private context for this {@linkcode Machine}.
-   *
-   * @see {@linkcode Pc}
-   */
-  get pContext() {
-    const out = this.#elements.pContext;
-    return out;
-  }
-
-  get actions() {
-    return this.#actions;
-  }
-
-  get guards() {
-    return this.#guards;
-  }
-
-  get delays() {
-    return this.#delays;
-  }
-
-  get children() {
-    return this.#actors?.children;
-  }
-
-  get emitters() {
-    return this.#actors?.emitters;
-  }
-
   // #region Providers
-
-  #getInitialKeys = () => {
-    const entries = Object.entries(this.#flat);
-    entries.forEach(([key, { initial }]) => {
-      const check1 = initial !== undefined;
-      if (check1) {
-        const toPush = `${key}${DEFAULT_DELIMITER}${initial}`;
-        this.#initialKeys.push(toPush);
-      }
-    });
-  };
-
-  isInitial = (target: string) => {
-    return this.#initialKeys.includes(target);
-  };
-
-  retrieveParentFromInitial = (target: string): SyncNodeConfig => {
-    const check1 = this.isInitial(target);
-    const flat: any = this.#flat;
-    if (check1) {
-      const parent = target.substring(
-        0,
-        target.lastIndexOf(DEFAULT_DELIMITER),
-      );
-      const check2 = this.isInitial(parent);
-
-      if (check2) return this.retrieveParentFromInitial.bind(this)(parent);
-      return flat[parent];
-    }
-    return flat[target];
-  };
-
-  #addActions = (actions?: Mo['actions']) =>
-    (this.#actions = merge(this.#actions, actions));
-
-  #addGuards = (guards?: Mo['guards']) =>
-    (this.#guards = merge(this.#guards, guards));
-
-  #addDelays = (delays?: Mo['delays']) =>
-    (this.#delays = merge(this.#delays, delays));
-
-  #addChildren = (children?: NotUndefined<Mo['actors']>['children']) =>
-    (this.#actors = merge(this.#actors, { children }));
-
-  #addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
-    (this.#actors = merge(this.#actors, { emitters }));
 
   /**
    * Create options for the machine.
@@ -637,18 +133,18 @@ class SyncMachine<
    * Remark: Used for typings, when you're outside the Machine class.
    */
   createOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
-    const isValue = this.#isValue;
-    const isNotValue = this.#isNotValue;
-    const isDefined = this.#isDefined;
-    const isNotDefined = this.#isNotDefined;
+    const isValue = this.__isValue;
+    const isNotValue = this.__isNotValue;
+    const isDefined = this.__isDefined;
+    const isNotDefined = this.__isNotDefined;
     const voidAction = this.__voidAction;
     const sendTo = this.__sendTo;
 
     const _legacy = Object.freeze({
-      actions: cloneDeep(this.#actions),
-      guards: cloneDeep(this.#guards),
-      delays: cloneDeep(this.#delays),
-      actors: cloneDeep(this.#actors),
+      actions: cloneDeep(this.__elements.actions),
+      guards: cloneDeep(this.__elements.guards),
+      delays: cloneDeep(this.__elements.delays),
+      actors: cloneDeep(this.__elements.actions),
     }) as any;
 
     const out = helper(
@@ -660,8 +156,8 @@ class SyncMachine<
 
         assign: (key, fn) => {
           return _any(expandFnMap)(
-            this.#eventsMap,
-            this.#actorsMap,
+            this.__eventsMap,
+            this.__actorsMap,
             _any(key),
             fn,
           );
@@ -669,7 +165,7 @@ class SyncMachine<
 
         batch: (...fns) => {
           return ({ context, pContext, ...rest }) => {
-            const state = this.#cloneStateExtended({
+            const state = this.__cloneStateExtended({
               context,
               pContext,
               ...rest,
@@ -730,7 +226,7 @@ class SyncMachine<
 
         debounce: (fn, { id, ms = 100 }) => {
           return ({ context, pContext, ...rest }) => {
-            const state = this.#cloneStateExtended({
+            const state = this.__cloneStateExtended({
               context,
               pContext,
               ...rest,
@@ -767,86 +263,18 @@ class SyncMachine<
           };
         },
 
-        pauseActivity: this.#timeAction('pauseActivity'),
-        resumeActivity: this.#timeAction('resumeActivity'),
-        stopActivity: this.#timeAction('stopActivity'),
-        pauseTimer: this.#timeAction('pauseTimer'),
-        resumeTimer: this.#timeAction('resumeTimer'),
-        stopTimer: this.#timeAction('stopTimer'),
+        pauseActivity: this.__timeAction('pauseActivity'),
+        resumeActivity: this.__timeAction('resumeActivity'),
+        stopActivity: this.__timeAction('stopActivity'),
+        pauseTimer: this.__timeAction('pauseTimer'),
+        resumeTimer: this.__timeAction('resumeTimer'),
+        stopTimer: this.__timeAction('stopTimer'),
       },
       { _legacy },
     );
 
     return out;
   };
-
-  /**
-   * Provides options for the machine.
-   *
-   * @param option a function that provides options for the machine.
-   * Options can include actions, guards, delays, promises, and child machines.
-   */
-  addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
-    const out = this.createOptions(helper as any);
-
-    this.#addActions(out?.actions);
-    this.#addGuards(out?.guards);
-    this.#addDelays(out?.delays);
-    this.#addChildren(out?.actors?.children);
-    this.#addEmitters(out?.actors?.emitters);
-
-    return out as any;
-  };
-
-  /**
-   * Provides options for the machine.
-   *
-   * @param helper a function that provides options for the machine.
-   * Options can include actions, guards, delays, promises, and child machines.
-   * @returns a new instance of the machine with the provided options applied.
-   */
-  provideOptions = <T extends Mo>(
-    helper: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T>,
-  ) => {
-    const out = this.renew;
-    out.addOptions(helper);
-
-    return out;
-  };
-  // #endregion
-
-  /**
-   * Get all meaningful elements of the machine.
-   *
-   * @see {@linkcode Elements}
-   *
-   * @see type inferences :
-   *
-   * @see {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
-   */
-  get #elements(): Elements<C, E, A, Pc, Tc, Mo> {
-    const config = structuredClone(this.#config);
-    const pContext = cloneDeep(this.#pContext);
-    const context = structuredClone(this.#context);
-    const actions = cloneDeep(this.#actions);
-    const delays = cloneDeep(this.#delays);
-    const guards = cloneDeep(this.#guards);
-    const actorsMap = cloneDeep(this.#actorsMap);
-    const events = cloneDeep(this.#eventsMap);
-    const actors = cloneDeep(this.#actors);
-
-    return {
-      config,
-      pContext,
-      context,
-      actions,
-      guards,
-      delays,
-      actors,
-      events,
-      actorsMap,
-    };
-  }
 
   /**
    * Provides elements of the machine.
@@ -875,7 +303,7 @@ class SyncMachine<
    *
    *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
    */
-  #renew = (): this => {
+  protected __renew = (): this => {
     const {
       config,
       pContext,
@@ -887,41 +315,34 @@ class SyncMachine<
       events,
       actors,
       actorsMap,
-    } = this.#elements;
+    } = this.__elements;
 
     const out = new SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
       config,
     );
 
-    out.#pContext = pContext;
-    out.#context = context;
-    out.#eventsMap = events;
-    out.#actorsMap = actorsMap;
+    out.__pContext = pContext;
+    out.__context = context;
+    out.__eventsMap = events;
+    out.__actorsMap = actorsMap;
 
-    out.#addGuards(guards);
-    out.#addActions(actions);
-    out.#addDelays(delays);
-    out.#addChildren(actors?.children);
-    out.#addEmitters(actors?.emitters);
+    out.addOptions(
+      () =>
+        ({
+          guards,
+          actions,
+          delays,
+          actors,
+        }) as any,
+    );
+
+    // out.#addGuards(guards);
+    // out.#addActions(actions);
+    // out.#addDelays(delays);
+    // out.#addChildren(actors?.children);
+    // out.#addEmitters(actors?.emitters);
 
     return out as any;
-  };
-
-  /**
-   * Returns a new instance from this {@linkcode Machine} with all its {@linkcode Elements}.
-   */
-  get renew() {
-    const out = this.#renew();
-
-    return out;
-  }
-
-  addPrivateContext = (pContext: Pc) => {
-    this.#pContext = pContext;
-  };
-
-  addContext = (context: Tc) => {
-    this.#context = context;
   };
 
   /**
@@ -929,16 +350,16 @@ class SyncMachine<
    * @remarks used internally
    */
   _provideEvents = <T extends EventsMap>(map: T) => {
-    const { pContext, config, context, actorsMap } = this.#elements;
+    const { pContext, config, context, actorsMap } = this.__elements;
 
     const out = new SyncMachine<C, Pc, Tc, T, A>(config);
 
-    out.#pContext = pContext;
-    out.#context = context;
-    out.#eventsMap = map;
-    out.#actorsMap = actorsMap;
+    out.__pContext = pContext;
+    out.__context = context;
+    out.__eventsMap = map;
+    out.__actorsMap = actorsMap;
 
-    return out;
+    return out as any;
   };
 
   /**
@@ -946,119 +367,19 @@ class SyncMachine<
    * @remarks used internally
    */
   _provideActors = <T extends ActorsConfigMap>(map: T) => {
-    const { pContext, config, context, events } = this.#elements;
+    const { pContext, config, context, events } = this.__elements;
 
     const out = new SyncMachine<C, Pc, Tc, E, T>(config);
 
-    out.#pContext = pContext;
-    out.#context = context;
-    out.#eventsMap = events;
-    out.#actorsMap = map;
+    out.__pContext = pContext;
+    out.__context = context;
+    out.__eventsMap = events;
+    out.__actorsMap = map;
 
-    return out;
+    return out as any;
   };
-
-  /**
-   * Converts a {@linkcode StateValue} to a {@linkcode NodeConfigWithInitials} with the {@linkcode NodeConfigWithInitials} postConfig of this {@linkcode Machine}.
-   *
-   * @param from the {@linkcode StateValue} to convert.
-   * @returns the converted {@linkcode NodeConfigWithInitials}.
-   *
-   * @see {@linkcode valueToNodeConfig}
-   */
-  valueToConfig = (from: StateValue) => {
-    return valueToNodeConfig(this.#config, from);
-  };
-
-  /**
-   * The accessor of the initial node config of this {@linkcode Machine}.
-   */
-  get initialConfig() {
-    return this.#initialConfig;
-  }
-
-  /**
-   * The accessor of the initial {@linkcode StateValue} of this {@linkcode Machine}.
-   *
-   * @see {@linkcode nodeToValue}
-   */
-  get initialValue() {
-    return nodeToValue(this.#initialConfig as any);
-  }
-
-  /**
-   * Alias of {@linkcode valueToConfig} method.
-   */
-  toNode = this.valueToConfig;
-
-  get options() {
-    const guards = this.#guards;
-    const actions = this.#actions;
-    const delays = this.#delays;
-    const actors = this.#actors;
-
-    const out = _unknown<Mo>({
-      guards,
-      actions,
-      delays,
-      actors,
-    });
-
-    return out;
-  }
 
   // #region Options helper functions
-
-  /**
-   * Function helper to check if a value matches the provided values
-   *
-   * @see type inferences :
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode isValue}
-   */
-  get #isValue() {
-    return isValue<Eo, Pc, Tc, Ta>;
-  }
-
-  /**
-   * Function helper to check if a value is not one of the provided values.
-   *
-   * @see type inferences :
-   *
-   *  {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode isNotValue}
-   */
-  get #isNotValue() {
-    return isNotValue<Eo, Pc, Tc, Ta>;
-  }
-
-  /**
-   * Function helper to check if a value is defined
-   *
-   * @see type inferences :
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode isDefinedS}
-   */
-  get #isDefined() {
-    return isDefinedS<Eo, Pc, Tc, Ta>;
-  }
-
-  /**
-   * Function helper to check if a value is undefined or null
-   * @see type inferences :
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode isDefinedS}
-   */
-  get #isNotDefined() {
-    return isNotDefinedS<Eo, Pc, Tc, Ta>;
-  }
 
   /**
    * Function helper to send an event to a child service.
@@ -1078,9 +399,9 @@ class SyncMachine<
     _?: T,
   ) => {
     return fn => {
-      const fn2 = reduceFnMap(this.eventsMap, this.#actorsMap, fn);
+      const fn2 = reduceFnMap(this.__eventsMap, this.__actorsMap, fn);
       return ({ context, pContext, ...rest }) => {
-        const state = this.#cloneStateExtended({
+        const state = this.__cloneStateExtended({
           context,
           pContext,
           ...rest,
@@ -1107,8 +428,8 @@ class SyncMachine<
    */
   protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
     return ({ context, pContext, ...rest }) => {
-      const _fn = reduceFnMap(this.#eventsMap, this.#actorsMap, fn);
-      const state = this.#cloneStateExtended({
+      const _fn = reduceFnMap(this.__eventsMap, this.__actorsMap, fn);
+      const state = this.__cloneStateExtended({
         context,
         pContext,
         ...rest,
@@ -1119,51 +440,15 @@ class SyncMachine<
     };
   };
 
-  #timeAction = (name: string): SyncTimeAction_F<Eo, Pc, Tc, Ta> => {
+  protected __timeAction = (
+    name: string,
+  ): SyncTimeAction_F<Eo, Pc, Tc, Ta> => {
     return id =>
       ({ context, pContext }) => {
         return _any({ context, pContext, [name]: id });
       };
   };
-
-  #cloneStateExtended = (state: StateExtended<Eo, Pc, Tc, Ta>) => {
-    return structuredClone(state);
-  };
 }
-
-/**
- * Helper to retrieve entry or exit actions from a node.
- *
- * @see {@linkcode GetIO_F}
- * @see {@linkcode toArray.typed}
- * @see {@linkcode isAtomic}
- * @see {@linkcode isCompound}
- */
-const getIO: GetIO_F = (key, node) => {
-  if (!node) return [];
-  const out = toArray.typed(node?.[key]);
-
-  if (isAtomic(node)) return out;
-  const states = node.states;
-
-  if (isCompound(node)) {
-    const initial = states[node.initial];
-
-    out.push(...getIO(key, initial));
-  }
-
-  return out;
-};
-
-/**
- * Retrieves all entry actions from a node.
- */
-export const getEntries = partialCall.paramArray(getIO, 'entry');
-
-/**
- * Retrieves all exit actions from a node.
- */
-export const getExits = partialCall.paramArray(getIO, 'exit');
 
 export { type SyncMachine };
 
@@ -1176,8 +461,6 @@ export { type SyncMachine };
  *   Typically generated by the CLI into `app.gen.ts`.
  */
 
-export type StandardOutput2<T extends ObjectT> = Pick<Sh<T>, StandardKey>;
-
 export function createSyncMachine<
   Name extends keyof Register & string,
   Current extends Register[Name] = Register[Name],
@@ -1187,8 +470,7 @@ export function createSyncMachine<
   const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
     Current['pContext']
   >,
-  const Tc extends StandardOutput2<PrimitiveObjectT> =
-    StandardOutput2<PrimitiveObjectT>,
+  const Tc extends StdO2<PrimitiveObjectT> = StdO2<PrimitiveObjectT>,
   const E extends StandardOutput<
     Record<Current['events'], PrimitiveObject>
   > = StandardOutput<Record<Current['events'], PrimitiveObject>>,
@@ -1230,7 +512,7 @@ export function createSyncMachine<
   Tags,
   Eo,
   Current['paths']['all'],
-  MachineOptions2<_Pc, _Tc, Tags, Eo, Current['options']>
+  SyncMachineOptions2<_Pc, _Tc, Tags, Eo, Current['options']>
 > {
   const eventsMap = types?.eventsMap?.['~standard']?.types?.output ?? {};
   const actorsMap = types?.actorsMap?.['~standard']?.types?.output ?? {};

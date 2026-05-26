@@ -120,12 +120,12 @@ export interface AnyMachine<
   tags: string[];
   children: any;
   renew: any;
-  initialConfig: NodeConfig;
+  initialConfig: any;
   initialValue: StateValue;
 
   isInitial: Fn<[string], boolean>;
-  retrieveParentFromInitial: Fn<[string], NodeConfig>;
-  toNode: Fn<[StateValue], NodeConfig>;
+  retrieveParentFromInitial: Fn<[string], any>;
+  toNode: Fn<[StateValue], any>;
 }
 
 export type AssignAction_F<

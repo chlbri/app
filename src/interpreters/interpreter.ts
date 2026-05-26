@@ -162,7 +162,7 @@ export class Interpreter<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> implements AnyInterpreter<E, A, Pc, Tc> {
+> implements AnyInterpreter<E, A, Pc, Tc, Ta> {
   /**
    * The {@linkcode Machine} machine being interpreted.
    */
@@ -1851,7 +1851,6 @@ export class Interpreter<
   #subscribers = new Set<SubscriberClass<E, A, Tc, Ta, Eo>>();
   #innerSubscribers = new Set<SubscriberClass<E, A, Tc, Ta, Eo>>();
 
-  // @ts-expect-error Already used recursively
   subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (
     _subscriber,
     options,
