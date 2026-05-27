@@ -14,7 +14,6 @@ import {
   assignByKey,
   expandFnMap,
   getByKey,
-  type AnyMachine,
   type ScheduledData,
   type SimpleMachineOptions2,
 } from '#machines';
@@ -24,13 +23,11 @@ import { reduceFnMap } from '#utils';
 import type {
   inferT,
   PrimitiveObject,
-  PrimitiveObjectT,
-  Sh,
   StandardOutput,
 } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
-import type { StdO2 } from '../../common/machine';
 import { CommonMachine } from '../../common/machine';
+import type { SyncConfig } from '../types.types';
 import type {
   SyncAddOptions_F,
   SyncAddOptionsParam_F,
@@ -39,7 +36,6 @@ import type {
   SyncTimeAction_F,
   SyncVoidAction_F,
 } from './options.types';
-import type { SyncConfig } from '../types.types';
 
 /**
  * A class representing a state machine.
@@ -400,12 +396,8 @@ class SyncMachine<
    *
    * @see {@linkcode reduceFnMap}
    */
-  protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = <
-    T extends AnyMachine,
-  >(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _?: T,
-  ) => {
+  // @ts-expect-error cdcdf
+  protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = (_?) => {
     return fn => {
       const fn2 = reduceFnMap(this.__eventsMap, this.__actorsMap, fn);
       return ({ context, pContext, ...rest }) => {
@@ -484,7 +476,7 @@ export function createSyncMachine<
   const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
     Current['pContext']
   >,
-  const Tc extends StdO2<PrimitiveObjectT> = Sh<'never'>,
+  const Tc extends StandardOutput<PrimitiveObject> = never,
   const E extends StandardOutput<
     Record<Current['events'], PrimitiveObject>
   > = StandardOutput<Record<Current['events'], PrimitiveObject>>,

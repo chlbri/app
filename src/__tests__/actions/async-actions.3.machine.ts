@@ -1,5 +1,5 @@
 import { createMachine } from '#machine';
-import { type } from '@bemedev/typings';
+import { typings } from '#utils';
 
 export default createMachine(
   'src/__tests__/actions/async-actions.3.machine',
@@ -14,8 +14,11 @@ export default createMachine(
     },
   },
   {
-    context: type({
+    context: typings.context({
       name: 'string',
+    }),
+    eventsMap: typings.eventsMap({
+      LOAD: 'undefined',
     }),
   },
 );

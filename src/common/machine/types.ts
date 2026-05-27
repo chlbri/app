@@ -1,5 +1,6 @@
 import type { WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventsMap } from '#events';
+
 import type { StateValue } from '#states';
 import type { Fn } from '#utils';
 import type {
@@ -10,10 +11,40 @@ import type {
 } from '@bemedev/typings';
 import type { RecordS } from '~types';
 
-export type CommonConfig = {
+export type NoExtraKeysConfigDef<T extends ConfigDef> = T & {
+  [K in Exclude<keyof T, keyof ConfigDef>]: never;
+} & {
+  states?: {
+    [K in keyof T['states']]: T['states'][K] extends infer TK extends
+      ConfigDef
+      ? NoExtraKeysConfigDef<TK>
+      : never;
+  };
+};
+
+export type ConfigDef = {
+  readonly targets: string[];
+  readonly initial?: string;
+  readonly states?: RecordS<ConfigDef>;
+};
+
+export type TransformConfigDef<T extends ConfigDef> = {
+  readonly initial?: T['initial'];
+  readonly states?: {
+    [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
+      ConfigDef
+      ? TransformConfigDef<TK>
+      : never;
+  };
+};
+
+export type CommonConfig<
+  Paths extends NoExtraKeysConfigDef<ConfigDef> =
+    NoExtraKeysConfigDef<ConfigDef>,
+> = {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
-};
+} & TransformConfigDef<Paths>;
 
 /**
  * Simple representation of a machine with meaningful properties.

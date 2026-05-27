@@ -50,12 +50,7 @@ import { ActorsConfigMap, type EventObject } from '#events';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
 import type { PredicateS } from '#guards';
 import { withTimeout } from '@bemedev/better-promise';
-import type {
-  inferT,
-  PrimitiveObjectT,
-  Sh,
-  StandardOutput,
-} from '@bemedev/typings';
+import type { inferT, StandardOutput } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import type { StdO2 } from '../common/machine';
 import { type Register } from '../registry.types';
@@ -1305,10 +1300,10 @@ export function createMachine<
     Current['paths']['map']
   >,
   const Pc extends StdO2<Current['pContext']> = StdO2<Current['pContext']>,
-  const Tc extends StdO2<PrimitiveObjectT> = Sh<'never'>,
+  const Tc extends StandardOutput<PrimitiveObject> = never,
   const E extends StandardOutput<
     Record<Current['events'], PrimitiveObject>
-  > = StandardOutput<Record<Current['events'], PrimitiveObject>>,
+  > = StandardOutput<Record<Current['events'], never>>,
   const A extends StandardOutput<
     ActorsConfigMap<
       Current['options']['children'],
@@ -1323,10 +1318,7 @@ export function createMachine<
   _E extends inferT<E> = inferT<E>,
   _A extends inferT<A> = inferT<A>,
   _Pc extends inferT<Pc> = inferT<Pc>,
-  _Tc extends Extract<inferT<Tc>, PrimitiveObject> = Extract<
-    inferT<Tc>,
-    PrimitiveObject
-  >,
+  _Tc extends inferT<Tc> = inferT<Tc>,
   Tags extends Exclude<Current['tags'], undefined> = Exclude<
     Current['tags'],
     undefined

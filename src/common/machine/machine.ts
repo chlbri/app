@@ -436,7 +436,7 @@ export abstract class CommonMachine<
       .map(({ tags }) => toArray.typed(tags))
       .filter(Boolean)
       .flat() as any;
-    this.#initialConfig = initialConfig(this.#config);
+    this.#initialConfig = initialConfig(this.#config as any);
     this.#getInitialKeys();
     this.longRuns = this.#config.__longRuns === true;
   }
@@ -651,7 +651,7 @@ export abstract class CommonMachine<
    * @see {@linkcode valueToNodeConfig}
    */
   valueToConfig = (from: StateValue) => {
-    return valueToNodeConfig(this.#config, from);
+    return valueToNodeConfig(this.#config as any, from);
   };
 
   /**

@@ -1,6 +1,6 @@
-import { createSyncMachine } from '../../sync/machine/machine';
+import { createMachine } from '../../exports/machine';
 
-export default createSyncMachine(
+export default createMachine(
   'src/__tests__/actions/actions.2.machine',
   {
     initial: 'state1',
@@ -20,5 +20,8 @@ export default createSyncMachine(
         },
       },
     },
+  },
+  {
+    sync: 'sync',
   },
 );

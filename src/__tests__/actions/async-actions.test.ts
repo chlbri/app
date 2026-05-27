@@ -211,7 +211,9 @@ describe('Async action helpers', () => {
       },
     }));
 
-    const service = interpret(machine, { context: { dispatched: false } });
+    const service = interpret(machine, {
+      context: { dispatched: false },
+    } as any);
 
     test('#00 => start', service.start);
 
