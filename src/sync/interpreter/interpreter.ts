@@ -45,6 +45,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import equal from 'fast-deep-equal';
 import { isDescriber } from '~types';
+import type { SyncConfig } from '../types.types';
 import type {
   _SyncSend_F,
   SyncPerformAction_F,
@@ -53,21 +54,20 @@ import type {
   SyncPerformPredicate_F,
   SyncPerformTransition_F,
   SyncPerformTransitions_F,
-} from './interpreter.options.types';
-import type { AnySyncMachine, SyncConfig } from './types.types';
+} from './options.types';
 
-import { CommonInterpreter } from '../common/interpreter/interpreter';
-import type { AddSubscriber_F } from '../common/interpreter/types';
-import type { SyncMachine } from './machine';
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
-import { createScheduler } from '@bemedev/scheduler/sync';
-import { createSubscriber } from '../common/subscriber';
 import type {
   CreateInterval2_F,
   ExecuteActivities_F,
   Mode,
   OptionalDefinitions,
 } from '#common/interpreter';
+import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import { createScheduler } from '@bemedev/scheduler/sync';
+import { CommonInterpreter } from '../../common/interpreter/interpreter';
+import type { AddSubscriber_F } from '../../common/interpreter/types';
+import { createSubscriber } from '../../common/subscriber';
+import type { SyncMachine } from '../machine/machine';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
@@ -1023,21 +1023,20 @@ export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
  * @see {@linkcode PromiseesMapFrom}
  * @see {@linkcode MachineOptionsFrom}
  */
-export type SyncInterpreterFrom<M extends AnySyncMachine> =
-  SyncInterpreter<
-    ConfigFrom<M>,
-    PrivateContextFrom<M>,
-    ContextFrom<M>,
-    EventsMapFrom<M>,
-    ActorsMapFrom<M>,
-    TagFrom<M>,
-    EventsFrom<M>,
-    AllPathsFrom<M>,
-    MachineOptionsFrom<M>
-  >;
+export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
+  ConfigFrom<M>,
+  PrivateContextFrom<M>,
+  ContextFrom<M>,
+  EventsMapFrom<M>,
+  ActorsMapFrom<M>,
+  TagFrom<M>,
+  EventsFrom<M>,
+  AllPathsFrom<M>,
+  MachineOptionsFrom<M>
+>;
 
 export type InterpreterOptions<
-  M extends AnySyncMachine,
+  M extends AnyMachine,
   P extends PrivateContextFrom<M> = PrivateContextFrom<M>,
   C extends ContextFrom<M> = ContextFrom<M>,
 > = {
@@ -1045,7 +1044,7 @@ export type InterpreterOptions<
   exact?: boolean;
 } & OptionalDefinitions<P, C>;
 
-export type InterpretArgs<M extends AnySyncMachine> =
+export type InterpretArgs<M extends AnyMachine> =
   Equals<
     InterpreterOptions<M>,
     Partial<InterpreterOptions<M>>
@@ -1053,14 +1052,14 @@ export type InterpretArgs<M extends AnySyncMachine> =
     ? [machine: M, config?: InterpreterOptions<M>]
     : [machine: M, config: InterpreterOptions<M>];
 
-export type Interpreter_F = <M extends AnySyncMachine>(
+export type Interpreter_F = <M extends AnyMachine>(
   ...args: InterpretArgs<M>
 ) => SyncInterpreterFrom<M>;
 
 /**
- * Creates an {@linkcode SyncInterpreter} service from the given {@linkcode AnySyncMachine} machine.
+ * Creates an {@linkcode SyncInterpreter} service from the given {@linkcode AnyMachine} machine.
  *
- * @param machine - The {@linkcode AnySyncMachine} machine to create the interpreter from.
+ * @param machine - The {@linkcode AnyMachine} machine to create the interpreter from.
  * @param options - The options for the interpreter, including context, private context, mode, and exact.
  * @returns an {@linkcode SyncInterpreter} service.
  *

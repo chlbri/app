@@ -4,7 +4,7 @@ import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
 import type { AddSubscriber_F, Mode, WorkingStatus } from '#interpreters';
 import type { StateValue } from '#states';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { AnySyncMachine, SyncNodeConfig } from './types.types';
+import type { AnySyncMachine, SyncNodeConfig } from '../types.types';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
 import type { DelayFunction33 } from '#delays';
 

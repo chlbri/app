@@ -62,17 +62,6 @@ export type SyncConfig<
   readonly __longRuns?: boolean;
 } & TransformConfigDef<Paths>;
 
-export type SimpleSyncMachineOptions2 = Partial<
-  Record<'actions' | 'guards', any> &
-    Record<
-      'actors',
-      {
-        children?: RecordS<any>;
-        emitters?: RecordS<any>;
-      }
-    >
->;
-
 export interface AnySyncMachine<
   E extends EventsMap = EventsMap,
   A extends ActorsConfigMap = ActorsConfigMap,

@@ -29,8 +29,8 @@ import type {
   StandardOutput,
 } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
-import type { StdO2 } from '../common/machine';
-import { CommonMachine } from '../common/machine';
+import type { StdO2 } from '../../common/machine';
+import { CommonMachine } from '../../common/machine';
 import type {
   SyncAddOptions_F,
   SyncAddOptionsParam_F,
@@ -38,8 +38,8 @@ import type {
   SyncSendAction_F,
   SyncTimeAction_F,
   SyncVoidAction_F,
-} from './machine.options.types';
-import type { SyncConfig } from './types.types';
+} from './options.types';
+import type { SyncConfig } from '../types.types';
 
 /**
  * A class representing a state machine.

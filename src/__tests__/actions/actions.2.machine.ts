@@ -1,4 +1,4 @@
-import { createSyncMachine } from '../../sync/machine';
+import { createSyncMachine } from '../../sync/machine/machine';
 
 export default createSyncMachine(
   'src/__tests__/actions/actions.2.machine',
