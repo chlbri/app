@@ -117,7 +117,6 @@ import type { Machine } from '#machine';
 import type {
   ActorsMapFrom,
   AllPathsFrom,
-  AnyMachine,
   ChildFunction2,
   EventsFrom,
   MachineOptionsFrom,
@@ -130,6 +129,7 @@ import {
   createSubscriber,
   type SubscriberClass,
 } from '#common/subscriber';
+import type { AnyMachine } from '#common/machine';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.

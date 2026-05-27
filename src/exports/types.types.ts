@@ -1,4 +1,12 @@
-import type { CommonConfig, StdO2 } from '#common/machine';
+import type { Equals } from '#bemedev/features/common/types';
+import type {
+  ConfigFrom,
+  ContextFrom,
+  Mode,
+  OptionalDefinitions,
+  PrivateContextFrom,
+} from '#common/interpreter';
+import type { AnyMachine, CommonConfig, StdO2 } from '#common/machine';
 import type { IsAsyncConfig } from '#common/utils.types';
 import type {
   ActorsConfigMap,
@@ -7,6 +15,7 @@ import type {
   ToEventObject,
   ToEvents,
 } from '#events';
+import type { InterpreterFrom } from '#interpreter';
 import type { Machine } from '#machine';
 import type { Config as AsyncConfig, MachineOptions2 } from '#machines';
 import type { Register, RegisterOptions } from '#registry';
@@ -16,6 +25,7 @@ import type {
   PrimitiveObject,
   StandardOutput,
 } from '@bemedev/typings';
+import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 import type { SyncConfig } from '../sync/types.types';
 
@@ -121,3 +131,46 @@ export type CreateMachine_F = <
   Current['options'],
   Sync
 >;
+
+export type OutInterpreter<
+  M extends AnyMachine,
+  Sync extends 'sync' | undefined = undefined,
+  C extends ConfigFrom<M> = ConfigFrom<M>,
+> =
+  IsAsyncConfig<C> extends true
+    ? C extends AsyncConfig
+      ? InterpreterFrom<M>
+      : never
+    : C extends SyncConfig
+      ? Sync extends 'sync'
+        ? SyncInterpreterFrom<M>
+        : InterpreterFrom<M>
+      : never;
+
+type InterpreterOptions<
+  M extends AnyMachine,
+  Sync extends 'sync' | undefined,
+  C extends ConfigFrom<M> = ConfigFrom<M>,
+  Pc extends PrivateContextFrom<M> = PrivateContextFrom<M>,
+  Tc extends ContextFrom<M> = ContextFrom<M>,
+> = {
+  mode?: Mode;
+  exact?: boolean;
+} & OptionalDefinitions<Pc, Tc> &
+  (IsAsyncConfig<C> extends false ? { sync?: Sync } : EmptyObject);
+
+type InterpretArgs<
+  M extends AnyMachine,
+  Sync extends 'sync' | undefined,
+  I extends InterpreterOptions<M, Sync> = InterpreterOptions<M, Sync>,
+> =
+  Equals<I, Partial<I>> extends true
+    ? [machine: M, config?: I]
+    : [machine: M, config: I];
+
+export type CreateInterpreter_F = <
+  M extends AnyMachine,
+  Sync extends 'sync' | undefined = undefined,
+>(
+  ...args: InterpretArgs<M, Sync>
+) => OutInterpreter<M, Sync>;

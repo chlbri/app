@@ -3,6 +3,7 @@ import { createMachine as createAsyncMachine } from '#machine';
 import type { Fn } from '~types';
 import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
+export type { CreateMachine_F } from './types.types';
 
 export const createMachine: CreateMachine_F = (name, config, types) => {
   const check = !isAsyncConfig(config) && !!types && types.sync === 'sync';

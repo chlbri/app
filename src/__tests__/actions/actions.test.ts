@@ -1,6 +1,6 @@
 import { ALWAYS_EVENT, transformEventArg } from '#events';
 import { constructTests, defaultC } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '../../exports/interpret';
 import { interpretSync } from '../../sync/interpreter/interpreter';
 import _machine1 from './actions.1.machine';
 import _machine2 from './actions.2.machine';

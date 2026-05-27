@@ -28,7 +28,6 @@ import { type GuardConfig } from '#guards';
 import {
   type ActorsMapFrom,
   type AllPathsFrom,
-  type ConfigFrom,
   type ContextFrom,
   type EventsFrom,
   type EventsMapFrom,
@@ -44,7 +43,7 @@ import { createInterval, type Interval2 } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import equal from 'fast-deep-equal';
-import { isDescriber } from '~types';
+import { isDescriber, type KeyU } from '~types';
 import type { SyncConfig } from '../types.types';
 import type {
   _SyncSend_F,
@@ -717,7 +716,7 @@ export class SyncInterpreter<
     this.#machine.addPrivateContext(this.__initialPpc);
 
     this.__setStatus('starting');
-    return this.#machine;
+    return this.#machine as any;
   };
 
   /**
@@ -740,7 +739,7 @@ export class SyncInterpreter<
     this.#machine.addContext(this.__initialContext);
 
     this.__setStatus('starting');
-    return this.#machine;
+    return this.#machine as any;
   };
 
   /**
@@ -768,7 +767,7 @@ export class SyncInterpreter<
     );
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
-    return out;
+    return out as any;
   };
 
   subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (
@@ -1011,12 +1010,17 @@ export class SyncInterpreter<
 
 export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
 
+type SyncConfigFrom<T extends KeyU<'config'>> = Extract<
+  T['config'],
+  SyncConfig
+>;
+
 /**
  * Retrieves the {@linkcode Interpreter} service from the given {@linkcode AnyMachine} machine.
  *
  * @template : type {@linkcode AnyMachine} [M] - The type of the machine from which to retrieve the interpreter.
  *
- * @see {@linkcode ConfigFrom}
+ * @see {@linkcode SyncConfigFrom}
  * @see {@linkcode PrivateContextFrom}
  * @see {@linkcode ContextFrom}
  * @see {@linkcode EventsMapFrom}
@@ -1024,7 +1028,7 @@ export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
  * @see {@linkcode MachineOptionsFrom}
  */
 export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
-  ConfigFrom<M>,
+  SyncConfigFrom<M>,
   PrivateContextFrom<M>,
   ContextFrom<M>,
   EventsMapFrom<M>,

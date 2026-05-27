@@ -1,11 +1,19 @@
+import type { ActionResult, WithDescriber } from '#actions';
+import type { Primitive } from '#bemedev/features/common/types';
+import type { NOmit } from '#bemedev/features/objects/types';
+import type { NotUndefined } from '#bemedev/globals/types';
+import type { Pausable } from '#emitters';
 import type {
   ActorsConfigMap,
   EventArgObject,
   EventObject,
   EventsMap,
 } from '#events';
+import type { GuardConfig } from '#guards';
 import type { ActivityConfig, StateExtended, StateValue } from '#states';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Decompose } from '@bemedev/decompose';
+import type { Interval2, IntervalParams } from '@bemedev/interval2';
+import type { Equals, PrimitiveObject } from '@bemedev/typings';
 import type {
   Fn,
   FnMapR,
@@ -14,17 +22,9 @@ import type {
   MaybePromise,
   OptionalDefinition,
 } from '~types';
-import type { AnyMachine, CommonConfig } from '../machine/types';
-import type { SubscriberClass, SubscriberOptions } from '../subscriber';
-import type { ActionResult, WithDescriber } from '#actions';
-import type { GuardConfig } from '#guards';
-import type { Pausable } from '#emitters';
-import type { NOmit } from '#bemedev/features/objects/types';
-import type { Interval2, IntervalParams } from '@bemedev/interval2';
-import type { NotUndefined } from '#bemedev/globals/types';
 import type { SimpleMachineOptions2 } from '../machine';
-import type { Primitive } from '#bemedev/features/common/types';
-import type { Decompose } from '@bemedev/decompose';
+import type { AnyMachine } from '../machine/types';
+import type { SubscriberClass, SubscriberOptions } from '../subscriber';
 
 export type WorkingStatus =
   | 'idle'
@@ -179,10 +179,7 @@ export type DiffNext = {
  *
  * @see {@linkcode Config} for the structure of the machine config.
  */
-export type ConfigFrom<T extends KeyU<'config'>> = Extract<
-  T['config'],
-  CommonConfig
->;
+export type ConfigFrom<T extends KeyU<'config'>> = T['config'];
 
 /**
  * Getting private context from a machine.
@@ -459,3 +456,20 @@ export type ExtendedActionsParams<
   stopTimer: string;
   sentEvent: SendToEvent;
 }>;
+
+export type InterpreterOptions<
+  M extends AnyMachine,
+  P extends PrivateContextFrom<M> = PrivateContextFrom<M>,
+  C extends ContextFrom<M> = ContextFrom<M>,
+> = {
+  mode?: Mode;
+  exact?: boolean;
+} & OptionalDefinitions<P, C>;
+
+export type InterpretArgs<M extends AnyMachine> =
+  Equals<
+    InterpreterOptions<M>,
+    Partial<InterpreterOptions<M>>
+  > extends true
+    ? [machine: M, config?: InterpreterOptions<M>]
+    : [machine: M, config: InterpreterOptions<M>];
