@@ -126,7 +126,10 @@ import type {
 } from '#machines';
 import { createScheduler } from '@bemedev/scheduler';
 import type { ChildConfig, EmitterConfig } from '../actors/types';
-import { createSubscriber, type SubscriberClass } from './subscriber';
+import {
+  createSubscriber,
+  type SubscriberClass,
+} from '#common/subscriber';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
@@ -1191,7 +1194,7 @@ export class Interpreter<
 
       /* v8 ignore else -- @preserve */
       if (response) {
-        this.__performActions(...toArray.typed(final.actions));
+        return this.__performActions(...toArray.typed(final.actions));
       }
     }
     return;
@@ -1706,7 +1709,7 @@ export class Interpreter<
   #startInitialEntries = () => {
     const actions = getEntries(this.#initialConfig);
     if (actions.length < 1) return;
-    this.__performActions(...actions);
+    return this.__performActions(...actions);
   };
 
   /**
@@ -2053,7 +2056,7 @@ export class Interpreter<
       this.#config = next;
       this.#performConfig(true);
       this.#makeWork();
-      this._next();
+      return this._next();
     } else return this.#makeWork();
   };
 

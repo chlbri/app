@@ -26,6 +26,7 @@
     "paths": {
       "~types": ["./src/types/index.ts"],
       "#fixtures": ["./src/fixtures/index.ts"],
+      "#common/*": ["./src/common/*"],
       "#fixturesData": ["./src/__tests__/interpreters/data/index.ts"],
       "#utils": ["./src/utils/index.ts"],
       "#utils/*": ["./src/utils/*"],

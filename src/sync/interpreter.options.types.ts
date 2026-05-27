@@ -41,10 +41,8 @@ export interface AnySyncInterpreter<
   send: (event: any) => void;
   toActionFn: (action: WithDescriber) => any;
   toPredicateFn: (guard: GuardConfig) => any;
-  toPromiseSrcFn: (src: string) => any;
   toDelayFn: (delay: string) => any;
   toChildFunction: (machine: string) => any;
-  toObservable: (emitter: string) => any;
   id?: string;
   from?: string;
 

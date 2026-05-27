@@ -25,6 +25,7 @@ import type {
   inferT,
   PrimitiveObject,
   PrimitiveObjectT,
+  Sh,
   StandardOutput,
 } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
@@ -32,6 +33,7 @@ import type { StdO2 } from '../common/machine';
 import { CommonMachine } from '../common/machine';
 import type {
   SyncAddOptions_F,
+  SyncAddOptionsParam_F,
   SyncMachineOptions2,
   SyncSendAction_F,
   SyncTimeAction_F,
@@ -290,6 +292,12 @@ class SyncMachine<
    *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
    */
 
+  addOptions = (
+    helper: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, Mo>,
+  ): Mo | undefined => {
+    return super.addOptions(helper);
+  };
+
   /**
    * Renews the machine with the provided key and value.
    * @param key the key of the element to provide.
@@ -440,6 +448,12 @@ class SyncMachine<
     };
   };
 
+  provideOptions<T extends Mo>(
+    helper: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T>,
+  ) {
+    return super.provideOptions(helper);
+  }
+
   protected __timeAction = (
     name: string,
   ): SyncTimeAction_F<Eo, Pc, Tc, Ta> => {
@@ -470,7 +484,7 @@ export function createSyncMachine<
   const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
     Current['pContext']
   >,
-  const Tc extends StdO2<PrimitiveObjectT> = StdO2<PrimitiveObjectT>,
+  const Tc extends StdO2<PrimitiveObjectT> = Sh<'never'>,
   const E extends StandardOutput<
     Record<Current['events'], PrimitiveObject>
   > = StandardOutput<Record<Current['events'], PrimitiveObject>>,

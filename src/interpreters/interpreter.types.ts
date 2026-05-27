@@ -29,7 +29,10 @@ import type { Decompose } from '@bemedev/decompose';
 import type { Interval2, IntervalParams } from '@bemedev/interval2';
 import type { FnMapR, OptionalDefinition } from '~types';
 import { type InterpreterFrom } from './interpreter';
-import type { SubscriberClass, SubscriberOptions } from './subscriber';
+import type {
+  SubscriberClass,
+  SubscriberOptions,
+} from '#common/subscriber';
 
 export type WorkingStatus =
   | 'idle'

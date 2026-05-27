@@ -27,8 +27,8 @@ importers:
         specifier: ^1.6.1
         version: 1.6.1
       '@bemedev/scheduler':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^1.0.0
+        version: 1.0.0
       '@bemedev/sleep':
         specifier: ^0.2.2
         version: 0.2.2
@@ -239,6 +239,10 @@ packages:
 
   '@bemedev/scheduler@0.1.0':
     resolution: {integrity: sha512-VrfqgEG0XRUqmPFCqxvv20Pez4Uk+Zddpq+TILzErYllJgtL+ZgsPsx2091dSB9PE13bmcz5JG1nnHU+PRZcGw==}
+    engines: {node: '>=20'}
+
+  '@bemedev/scheduler@1.0.0':
+    resolution: {integrity: sha512-PfEhKm4/J+pOHkzx8ijkIeKqsE2XWA5lr9gDjzLWBIz3oat/Uv+G1ErNNVHwQeOgJgh+9pELaZGBIgwkmsDZGg==}
     engines: {node: '>=20'}
 
   '@bemedev/sequence@0.1.0':
@@ -2178,6 +2182,10 @@ snapshots:
   '@bemedev/rx-pausable@1.2.0': {}
 
   '@bemedev/scheduler@0.1.0':
+    dependencies:
+      '@bemedev/sleep': 0.2.2
+
+  '@bemedev/scheduler@1.0.0':
     dependencies:
       '@bemedev/sleep': 0.2.2
 

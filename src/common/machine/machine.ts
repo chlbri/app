@@ -19,7 +19,6 @@ import {
   isValue,
   type DefinedValue,
 } from '#guards';
-import type { AnyMachine, SimpleMachineOptions2 } from '#machines';
 import {
   flatMap,
   initialConfig,
@@ -38,20 +37,16 @@ import { decompose, type Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import type {
-  CommonAddOptions_F,
+  AnyMachine,
   CommonAddOptionsParam_F,
+  CommonConfig,
   CommonElements,
   GetIO_F,
+  SimpleMachineOptions2,
 } from './types';
 
 export abstract class CommonMachine<
-  const C extends {
-    readonly strict?: boolean;
-    readonly __longRuns?: boolean;
-  } = {
-    readonly strict?: boolean;
-    readonly __longRuns?: boolean;
-  },
+  const C extends CommonConfig = CommonConfig,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,
@@ -533,7 +528,9 @@ export abstract class CommonMachine<
   #addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
     (this.#actors = merge(this.#actors, { emitters }));
 
-  abstract createOptions: Fn;
+  abstract createOptions: (
+    helper: CommonAddOptionsParam_F<Mo>,
+  ) => Mo | undefined;
 
   /**
    * Provides options for the machine.
@@ -541,7 +538,7 @@ export abstract class CommonMachine<
    * @param option a function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    */
-  addOptions: CommonAddOptions_F<Mo> = helper => {
+  addOptions(helper: CommonAddOptionsParam_F<Mo>) {
     const out = this.createOptions(helper as any);
 
     this.#addActions(out?.actions);
@@ -550,8 +547,8 @@ export abstract class CommonMachine<
     this.#addChildren(out?.actors?.children);
     this.#addEmitters(out?.actors?.emitters);
 
-    return out as any;
-  };
+    return out;
+  }
 
   /**
    * Renews the machine with the provided key and value.
@@ -583,12 +580,13 @@ export abstract class CommonMachine<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
-  provideOptions = <T extends Mo>(helper: CommonAddOptionsParam_F<T>) => {
+  provideOptions<T extends Mo>(helper: CommonAddOptionsParam_F<T>) {
     const out = this.renew;
+    console.log('RENE');
     out.addOptions(helper);
 
     return out;
-  };
+  }
 
   /**
    * Get all meaningful elements of the machine.

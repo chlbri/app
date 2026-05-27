@@ -612,3 +612,5 @@ export type OptionalDefinition<
   V extends string,
   R extends _OptionalDefinition<P, V> = _OptionalDefinition<P, V>,
 > = R extends never | RecordS<never> ? EmptyObject : R;
+
+export type MaybePromise<T> = T | Promise<T>;

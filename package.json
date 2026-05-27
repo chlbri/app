@@ -143,7 +143,7 @@
     "@bemedev/decompose": "^2.2.0",
     "@bemedev/interval2": "^1.0.1",
     "@bemedev/pipe": "^1.6.1",
-    "@bemedev/scheduler": "^0.1.0",
+    "@bemedev/scheduler": "^1.0.0",
     "@bemedev/sleep": "^0.2.2",
     "@bemedev/typings": "^1.2.0",
     "clone-deep": "^4.0.1",

@@ -1,6 +1,6 @@
 import type { WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventsMap } from '#events';
-import type { SimpleMachineOptions2 } from '#machines';
+import type { StateValue } from '#states';
 import type { Fn } from '#utils';
 import type {
   ObjectT,
@@ -8,6 +8,58 @@ import type {
   Sh,
   StandardKey,
 } from '@bemedev/typings';
+import type { RecordS } from '~types';
+
+export type CommonConfig = {
+  readonly strict?: boolean;
+  readonly __longRuns?: boolean;
+};
+
+/**
+ * Simple representation of a machine with meaningful properties.
+ *
+ * @template :  {@linkcode EventsMap} [E] - type of the events map
+ * @template :  {@linkcode ActorsConfigMap} [A] - type of the actors configuration map
+ * @template :  any [Pc] - type of the private context
+ * @template :  {@linkcode PrimitiveObject} [Tc] - type of the context
+ *
+ * @see {@linkcode NodeConfigWithInitials}  for the structure of node configurations with initials.
+ * @see {@linkcode StateValue} for the type of state values.
+ * @see {@linkcode Fn} for creating functions
+ *
+ */
+export interface AnyMachine<
+  E extends EventsMap = EventsMap,
+  A extends ActorsConfigMap = ActorsConfigMap,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+> {
+  options: any;
+  config: CommonConfig;
+  flat: Record<string, any>;
+  context: Tc;
+  pContext: Pc;
+  eventsMap: E;
+  actorsMap: A;
+  __events: any;
+  __state: any;
+  __decomposedState: any;
+  addOptions: any;
+  actions: any;
+  guards: any;
+  delays: any;
+  __allPaths: string;
+  __tag: string;
+  tags: string[];
+  children: any;
+  renew: any;
+  initialConfig: any;
+  initialValue: StateValue;
+
+  isInitial: Fn<[string], boolean>;
+  retrieveParentFromInitial: Fn<[string], any>;
+  toNode: Fn<[StateValue], any>;
+}
 
 export type CommonAddOptionsParam_F<
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
@@ -41,6 +93,26 @@ export type CommonElements<
   delays?: Mo['delays'];
   actors?: Mo['actors'];
 };
+
+/**
+ * Second version of simple machine options.
+ *
+ * @see {@linkcode Partial}
+ * @see {@linkcode Record}
+ *
+ * @remarks
+ * This type is more flexible than {@linkcode SimpleMachineOptions}
+ */
+export type SimpleMachineOptions2 = Partial<
+  Record<'actions' | 'guards' | 'delays', any> &
+    Record<
+      'actors',
+      {
+        children?: RecordS<any>;
+        emitters?: RecordS<any>;
+      }
+    >
+>;
 
 export type GetIO_F = (
   key: 'exit' | 'entry',
