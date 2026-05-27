@@ -14,11 +14,7 @@ import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
-import type {
-  AnyMachine,
-  ContextFrom,
-  PrivateContextFrom,
-} from '#machines';
+import type { ContextFrom, PrivateContextFrom } from '#machines';
 import type { ActivityConfig, NodeConfig, StateValue } from '#states';
 import type {
   AlwaysConfig,
@@ -33,6 +29,7 @@ import type {
   SubscriberClass,
   SubscriberOptions,
 } from '#common/subscriber';
+import type { AnyMachine } from '#common/machine';
 
 export type WorkingStatus =
   | 'idle'

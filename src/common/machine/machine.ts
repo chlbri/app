@@ -42,6 +42,7 @@ import type {
   CommonConfig,
   CommonElements,
   GetIO_F,
+  MachineType,
   SimpleMachineOptions2,
 } from './types';
 
@@ -531,6 +532,8 @@ export abstract class CommonMachine<
   abstract createOptions: (
     helper: CommonAddOptionsParam_F<Mo>,
   ) => Mo | undefined;
+
+  abstract readonly TYPE: MachineType;
 
   /**
    * Provides options for the machine.

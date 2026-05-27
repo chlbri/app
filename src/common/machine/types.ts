@@ -46,6 +46,8 @@ export type CommonConfig<
   readonly __longRuns?: boolean;
 } & TransformConfigDef<Paths>;
 
+export type MachineType = 'sync' | 'async';
+
 /**
  * Simple representation of a machine with meaningful properties.
  *
@@ -67,6 +69,7 @@ export interface AnyMachine<
 > {
   options: any;
   config: CommonConfig;
+  TYPE: MachineType;
   flat: Record<string, any>;
   context: Tc;
   pContext: Pc;

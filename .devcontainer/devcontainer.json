@@ -48,7 +48,8 @@
         "github.copilot-chat",
         "anthropic.claude-code",
         "Gruntfuggly.todo-tree",
-        "TypeScriptTeam.native-preview"
+        "TypeScriptTeam.native-preview",
+        "rioj7.commandOnAllFiles"
       ]
     }
   }

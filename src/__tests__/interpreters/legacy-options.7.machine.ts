@@ -22,8 +22,8 @@ export default createMachine(
   {
     context: typings.context('number'),
     eventsMap: typings.eventsMap({
-      NEXT: 'never',
-      TRIPLE: 'never',
+      NEXT: 'undefined',
+      TRIPLE: 'undefined',
     }),
   },
 );

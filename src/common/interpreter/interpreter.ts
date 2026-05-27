@@ -511,7 +511,7 @@ export abstract class CommonInterpreter<
       ids.push(...this.__executeActivities(...args));
     }
 
-    return this._cachedIntervals.filter(({ id }) => ids.includes(id));
+    return this.__cachedIntervals.filter(({ id }) => ids.includes(id));
   }
 
   #performActivities = () => {
@@ -523,7 +523,7 @@ export abstract class CommonInterpreter<
    *
    */
   #pauseAllActivities = () => {
-    this._cachedIntervals.forEach(this.#pause);
+    this.__cachedIntervals.forEach(this.#pause);
   };
 
   /**
@@ -849,7 +849,7 @@ export abstract class CommonInterpreter<
   /**
    * Create a new {@linkcode Interpreter} instance with the same initial configuration as this instance.
    */
-  abstract renew: CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
+  abstract renew: any;
 
   /**
    * Helper to format inner errors and warnings.
@@ -969,7 +969,7 @@ export abstract class CommonInterpreter<
     this.__setStatus('busy');
     this.__subscribers.forEach(this.#unsubscribe);
     this.#stopChildren();
-    this._cachedIntervals.forEach(this.#dispose);
+    this.__cachedIntervals.forEach(this.#dispose);
     this.__timeoutActions.forEach(this.#dispose);
     this.#stopPausables();
     this.__setStatus('stopped');
@@ -1007,7 +1007,7 @@ export abstract class CommonInterpreter<
    */
   abstract provideOptions: (
     option: Parameters<(typeof this)['addOptions']>[0],
-  ) => CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
+  ) => any;
 
   subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (
     _subscriber,
@@ -1249,6 +1249,57 @@ export abstract class CommonInterpreter<
     return out;
   };
 
+  protected get __currentActivities() {
+    const collected = this.#collectedActivities.filter(([from]) =>
+      this.__isInsideValue(from),
+    );
+    const check = collected.length < 1;
+    if (check) return;
+
+    const ids: string[] = [];
+    for (const args of collected) {
+      ids.push(...this.__executeActivities(...args));
+    }
+
+    return this.__cachedIntervals.filter(({ id }) => ids.includes(id));
+  }
+
+  protected __performPauseActivityAction = (id?: string) => {
+    if (!id) return;
+    this.__currentActivities
+      ?.filter(f => f.id === id)
+      .forEach(this.#pause);
+  };
+
+  protected __performResumeActivityAction = (id?: string) => {
+    if (!id) return;
+    this.__currentActivities
+      ?.filter(f => f.id === id)
+      .forEach(this.#resume);
+  };
+
+  protected __performStopActivityAction = (id?: string) => {
+    if (!id) return;
+    this.__currentActivities
+      ?.filter(f => f.id === id)
+      .forEach(this.#dispose);
+  };
+
+  protected __performPauseTimerAction = (id?: string) => {
+    if (!id) return;
+    this.__timeoutActions.filter(f => f.id === id).forEach(this.#pause);
+  };
+
+  protected __performResumeTimerAction = (id?: string) => {
+    if (!id) return;
+    this.__timeoutActions.filter(f => f.id === id).forEach(this.#resume);
+  };
+
+  protected __performStopTimerAction = (id?: string) => {
+    if (!id) return;
+    this.__timeoutActions.filter(f => f.id === id).forEach(this.#dispose);
+  };
+
   /**
    * Calculates the difference between the current and next configuration.
    * @param target - the target state to calculate the difference.
@@ -1401,6 +1452,22 @@ export abstract class CommonInterpreter<
     return this.__send(_event);
   };
 
+  protected __performSendToAction = (sentEvent?: {
+    to: string;
+    event: any;
+  }) => {
+    if (!sentEvent) return;
+    return this.__sendTo(sentEvent.to, sentEvent.event);
+  };
+
+  protected __performResendAction = (resend?: EventArgObject<Eo>) => {
+    if (!resend) return;
+    const cannot = this.#cannotPerformEvents(resend);
+    if (cannot) return;
+
+    return this.send(resend);
+  };
+
   protected get __cloneState(): StateExtended<Eo, Pc, Tc, Ta> {
     const pContext = cloneDeep(this.__pContext);
     return structuredClone({ pContext, ...this.__state });
@@ -1451,7 +1518,7 @@ export abstract class CommonInterpreter<
   /**
    * Collection of all currents {@linkcode Interval2} intervals, related to current {@linkcode ActivityConfig}s of this {@linkcode Interpreter} service.
    */
-  protected _cachedIntervals: Interval2[] = [];
+  protected __cachedIntervals: Interval2[] = [];
 
   protected abstract __performFinally: (complete: FinallyConfig) => any;
 

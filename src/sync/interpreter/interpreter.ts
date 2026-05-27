@@ -4,18 +4,15 @@ import toArray from '#bemedev/features/arrays/castings/toArray';
 import _any from '#bemedev/features/common/castings/any';
 import isDefined from '#bemedev/features/common/castings/is/defined';
 import { switchV } from '#bemedev/features/functions/functions/switch';
-import type { AllowedNames, Equals, Fn } from '#bemedev/globals/types';
+import type { Equals } from '#bemedev/globals/types';
 import {
-  DEFAULT_DELIMITER,
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
 } from '#constants';
 import { type EmitterFunction2 } from '#emitters';
 import {
-  ALWAYS_EVENT,
   eventToType,
-  possibleEvents,
   transformEventArg,
   type ActorsConfigMap,
   type EventArgObject,
@@ -36,19 +33,16 @@ import {
   type PrivateContextFrom,
   type TagFrom,
 } from '#common/interpreter';
-import { initialConfig, nextSV, type ActivityConfig } from '#states';
+import { initialConfig, nextSV } from '#states';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
-import { IS_TEST, isStringEmpty } from '#utils';
 import { createInterval, type Interval2 } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
-import cloneDeep from 'clone-deep';
 import equal from 'fast-deep-equal';
 import { isDescriber, type KeyU } from '~types';
 import type { SyncConfig } from '../types.types';
 import type {
   _SyncSend_F,
   SyncPerformAction_F,
-  SyncPerformAlway_F,
   SyncPerformDelay_F,
   SyncPerformPredicate_F,
   SyncPerformTransition_F,
@@ -133,22 +127,6 @@ export class SyncInterpreter<
     this.__performConfig(true);
   }
 
-  protected __performSendToAction = (sentEvent?: {
-    to: string;
-    event: any;
-  }) => {
-    if (!sentEvent) return;
-    return this.__sendTo(sentEvent.to, sentEvent.event);
-  };
-
-  protected __performResendAction = (resend?: EventArgObject<Eo>) => {
-    if (!resend) return;
-    const cannot = this.#cannotPerformEvents(resend);
-    if (cannot) return;
-
-    return this.send(resend);
-  };
-
   get #machine() {
     return this.__machine as SyncMachine<
       C,
@@ -184,40 +162,6 @@ export class SyncInterpreter<
     }
   };
 
-  #performPauseActivityAction = (id?: string) => {
-    if (!id) return;
-    this.#currentActivities?.filter(f => f.id === id).forEach(this.#pause);
-  };
-
-  #performResumeActivityAction = (id?: string) => {
-    if (!id) return;
-    this.#currentActivities
-      ?.filter(f => f.id === id)
-      .forEach(this.#resume);
-  };
-
-  #performStopActivityAction = (id?: string) => {
-    if (!id) return;
-    this.#currentActivities
-      ?.filter(f => f.id === id)
-      .forEach(this.#dispose);
-  };
-
-  #performPauseTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.#pause);
-  };
-
-  #performResumeTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.#resume);
-  };
-
-  #performStopTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.#dispose);
-  };
-
   protected __performsExtendedActions = ({
     forceSend,
     resend,
@@ -233,12 +177,12 @@ export class SyncInterpreter<
     this.__performSendToAction(sentEvent);
 
     this.__performScheduledAction(scheduled);
-    this.#performPauseActivityAction(pauseActivity);
-    this.#performResumeActivityAction(resumeActivity);
-    this.#performStopActivityAction(stopActivity);
-    this.#performPauseTimerAction(pauseTimer);
-    this.#performResumeTimerAction(resumeTimer);
-    this.#performStopTimerAction(stopTimer);
+    this.__performPauseActivityAction(pauseActivity);
+    this.__performResumeActivityAction(resumeActivity);
+    this.__performStopActivityAction(stopActivity);
+    this.__performPauseTimerAction(pauseTimer);
+    this.__performResumeTimerAction(resumeTimer);
+    this.__performStopTimerAction(stopTimer);
 
     // ForceSendAction returns the result to make further actions
     const result =
@@ -259,20 +203,6 @@ export class SyncInterpreter<
       this.__mergeContexts({ pContext, context });
       this.__performsExtendedActions(extendeds);
     };
-
-  /**
-   * Throws if the number of self transitions exceeds {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
-   */
-  #throwMaxCounter() {
-    const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
-
-    /* v8 ignore else -- @preserve */
-    if (IS_TEST) {
-      this._addError(error);
-      this.__throwing();
-      this.stop();
-    } else throw error;
-  }
 
   protected __performActions = (...actions: WithDescriber[]) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
@@ -370,46 +300,12 @@ export class SyncInterpreter<
     return;
   };
 
-  // get #sending() {
-  //   return this.#status === 'sending';
-  // }
-
   get longRuns() {
     return this.#machine.longRuns;
   }
 
-  /**
-   * Checks if sent events cannot be performed.
-   * @param from - the config value from which the events are sent.
-   * @returns true if the events cannot be performed, false otherwise.
-   */
-  // #cannotPerform = (from: string) => {
-  //   const check = this.#sending || !this.#isInsideValue(from);
-  //   return check;
-  // };
-
-  #performAlways: SyncPerformAlway_F = alway => {
-    this.__changeEvent(transformEventArg(ALWAYS_EVENT));
-    const always = toArray<TransitionConfig>(alway);
-    return this.__performTransitions(...always);
-  };
-
   get #flat() {
     return this.#machine.flat;
-  }
-
-  get #collectedActivities() {
-    const entriesFlat = Object.entries(this.#flat);
-
-    const entries: [from: string, activities: ActivityConfig][] = [];
-
-    entriesFlat.forEach(([from, { activities }]) => {
-      if (activities) {
-        entries.push([from, activities]);
-      }
-    });
-
-    return entries;
   }
 
   get #collectedAlways() {
@@ -429,7 +325,7 @@ export class SyncInterpreter<
   /**
    * Collection of all currents {@linkcode Interval2} intervals, related to current {@linkcode ActivityConfig}s of this {@linkcode Interpreter} service.
    */
-  protected _cachedIntervals: Interval2[] = [];
+  protected __cachedIntervals: Interval2[] = [];
 
   #performDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this._iterate();
@@ -469,7 +365,7 @@ export class SyncInterpreter<
     for (const [_delay, _activity] of entries) {
       const id = `${from}::${_delay}`;
       let index = -1;
-      const _interval = this._cachedIntervals.find((f, i) => {
+      const _interval = this.__cachedIntervals.find((f, i) => {
         const check = f.id === id;
         if (check) index = i;
         return check;
@@ -522,7 +418,7 @@ export class SyncInterpreter<
           id,
         });
 
-        this._cachedIntervals.push(promise);
+        this.__cachedIntervals.push(promise);
 
         return id;
       };
@@ -531,7 +427,7 @@ export class SyncInterpreter<
         const check =
           _interval.state === 'idle' || _interval.state === 'paused';
         if (check) {
-          this._cachedIntervals.splice(index, 1);
+          this.__cachedIntervals.splice(index, 1);
           const result = buildCallback();
           if (!result) return [];
           outs.push(result);
@@ -548,21 +444,6 @@ export class SyncInterpreter<
     return outs;
   };
 
-  get #currentActivities() {
-    const collected = this.#collectedActivities.filter(([from]) =>
-      this.__isInsideValue(from),
-    );
-    const check = collected.length < 1;
-    if (check) return;
-
-    const ids: string[] = [];
-    for (const args of collected) {
-      ids.push(...this.__executeActivities(...args));
-    }
-
-    return this._cachedIntervals.filter(({ id }) => ids.includes(id));
-  }
-
   /**
    * Get all brut self transitions of the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service.
    */
@@ -570,7 +451,7 @@ export class SyncInterpreter<
     const entries = new Map<string, () => string | false>();
 
     this.#collectedAlways.forEach(([from, always]) => {
-      entries.set(from, () => this.#performAlways(always));
+      entries.set(from, () => this.__performAlways(always));
     });
 
     return entries;
@@ -644,24 +525,6 @@ export class SyncInterpreter<
               complete: () => this.__performFinally(complete),
             });
 
-            // // Branch on the interpreter's current status so that pausables
-            // // collected during an active session start immediately, while
-            // // those collected during initial start-up are left in 'stopped'
-            // // state and started by the subsequent #startPausables() call.
-            // switch (this.#status) {
-            //   case 'started':
-            //   case 'working':
-            //   case 'sending':
-            //   case 'busy':
-            //     pausable.start();
-            //     break;
-            //   case 'paused':
-            //     pausable.start();
-            //     pausable.pause();
-            //     break;
-            //   // 'idle' | 'starting' | 'stopped' → #startPausables() handles it
-            // }
-
             return {
               pausable,
               id,
@@ -684,62 +547,6 @@ export class SyncInterpreter<
     const check = !equal(previousState, nextState);
     if (check) this.__flush();
     this.__setStatus('working');
-  };
-
-  /**
-   * @deprecated
-   * A mapper function that returns a function to call a method on a value.
-   * @param key - the key of the method to be called on the value.
-   * @returns a function that calls the method on the value.
-   *
-   * @see {@linkcode AllowedNames} for more information about allowed names.
-   * @see {@linkcode Fn} for more information about function
-   */
-  #mapperFn = <T>(key: AllowedNames<T, Fn>) => {
-    return (value: T) => (value as any)[key]();
-  };
-
-  #pause = this.#mapperFn('pause');
-
-  #resume = this.#mapperFn('resume');
-
-  #dispose = this.#mapperFn('dispose');
-
-  /**
-   * @deprecated
-   * Used internally
-   */
-  _providePrivateContext = (pContext: Pc) => {
-    this.__initialPpc = this.__pContext = pContext;
-    this.__setStatus('busy');
-
-    this.#machine.addPrivateContext(this.__initialPpc);
-
-    this.__setStatus('starting');
-    return this.#machine as any;
-  };
-
-  /**
-   * @deprecated
-   * Used internally
-   *
-   * Alias of {@linkcode _providePrivateContext}
-   */
-  _ppC = this._providePrivateContext;
-
-  /**
-   * @deprecated
-   * Used internally
-   */
-  _provideContext = (context: Tc) => {
-    this.__initialContext = this.__context = context;
-    this.__performStates({ context });
-    this.__setStatus('busy');
-
-    this.#machine.addContext(this.__initialContext);
-
-    this.__setStatus('starting');
-    return this.#machine as any;
   };
 
   /**
@@ -791,106 +598,13 @@ export class SyncInterpreter<
     return subcriber as any;
   };
 
-  get state() {
-    return Object.freeze(cloneDeep(this.__state));
-  }
-
-  #errorsCollector = new Set<string>();
-  #warningsCollector = new Set<string>();
-
-  /**
-   * @deprecated
-   * Just use for testing
-   * @remarks returns nothing in prod
-   */
-  get _errorsCollector() {
-    /* v8 ignore else -- @preserve */
-    if (IS_TEST) {
-      return this.#errorsCollector;
-    }
-
-    /* v8 ignore start -- @preserve */
-    console.error('errorsCollector is not available in production');
-    return;
-    /* v8 ignore stop -- @preserve */
-  }
-
-  /**
-   * @deprecated
-   * Just use for testing
-   * @remarks returns nothing in prod
-   */
-  get _warningsCollector() {
-    /* v8 ignore else -- @preserve */
-    if (IS_TEST) {
-      return this.#warningsCollector;
-    }
-    /* v8 ignore start -- @preserve */
-    console.error('warningsCollector is not available in production');
-    return;
-    /* v8 ignore stop -- @preserve */
-  }
-
-  protected _addError = (...errors: string[]) => {
-    errors.forEach(error => this.#errorsCollector.add(error));
-  };
-
-  protected _addWarning = (...warnings: string[]) => {
-    warnings.forEach(warning => this.#warningsCollector.add(warning));
-  };
-
-  // #region Next
-
-  #extractTransitions = (event: Eo) => {
-    type FlatArray = [from: string, transitions: TransitionConfig[]][];
-    const entriesFlat = Object.entries(this.#flat);
-    const flat: FlatArray = [];
-    const flat2: FlatArray = [];
-
-    const type = event.type;
-    entriesFlat.forEach(([from, node]) => {
-      const on = node.on;
-      const trs = on?.[type];
-      if (trs) {
-        const transitions = toArray.typed(trs);
-        flat.push([from, transitions as any]);
-      }
-    });
-
-    flat.forEach(([from, transitions], _, all) => {
-      const canTake = all.every(
-        ([from2]) => !from2.startsWith(`${from}${DEFAULT_DELIMITER}`),
-      );
-      if (canTake) flat2.push([from, transitions]);
-    });
-
-    flat2.sort((a, b) => {
-      const from1 = a[0];
-      const from2 = b[0];
-
-      const split1 = from1
-        .split(DEFAULT_DELIMITER)
-        .filter(val => !isStringEmpty(val)).length;
-
-      const split2 = from2
-        .split(DEFAULT_DELIMITER)
-        .filter(val => !isStringEmpty(val)).length;
-
-      const splitsAreDifferents = split1 !== split2;
-      if (splitsAreDifferents) return split2 - split1;
-      return from2.localeCompare(from1);
-    });
-
-    return flat2;
-  };
-
   protected __presend: _SyncSend_F<Eo> = event => {
     this.__sent = true;
     this.__changeEvent(event);
     this.__setStatus('sending');
     let sv = this.__value;
 
-    const flat2 = this.#extractTransitions(event);
+    const flat2 = this.__extractTransitions(event);
     // #endregion
 
     for (const [from, transitions] of flat2) {
@@ -913,16 +627,6 @@ export class SyncInterpreter<
 
     this.__sent = false;
     return next;
-  };
-
-  get #possibleEvents() {
-    return possibleEvents(this.#flat);
-  }
-
-  #cannotPerformEvents = (_event: EventArgObject<Eo>) => {
-    const type = eventToType(_event);
-    const check = !this.#possibleEvents.includes(type);
-    return check;
   };
 
   /**
@@ -953,7 +657,7 @@ export class SyncInterpreter<
 
       const checkCounter =
         this.__selfTransitionsCounter >= DEFAULT_MAX_SELF_TRANSITIONS;
-      if (checkCounter) return this.#throwMaxCounter();
+      if (checkCounter) return this.__throwMaxCounter();
       this.__throwing();
       this.__preNext();
 

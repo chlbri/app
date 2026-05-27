@@ -105,6 +105,8 @@ class Machine<
    */
   #config: C;
 
+  TYPE = 'async' as const;
+
   get __config() {
     return _unknown<C>();
   }

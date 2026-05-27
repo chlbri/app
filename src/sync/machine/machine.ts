@@ -61,6 +61,7 @@ class SyncMachine<
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
+  TYPE = 'sync' as const;
   /**
    * @deprecated
    * This property provides the action function for this {@linkcode Machine} as a type.

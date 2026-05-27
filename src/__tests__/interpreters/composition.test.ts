@@ -77,7 +77,7 @@ describe('Composition', () => {
 
     describe('#01 => Mode', () => {
       test('#01 => mode is ""strict" by default', () => {
-        expect(service.isStrict).toBe(true);
+        expect(service.mode).toBe('strict');
       });
 
       test('#02 => Make it normal', () => {
@@ -85,7 +85,6 @@ describe('Composition', () => {
       });
 
       test('#03 => mode is "normal"', () => {
-        expect(service.isNormal).toBe(true);
         expect(service.mode).toBe('normal');
       });
 
@@ -94,7 +93,7 @@ describe('Composition', () => {
       });
 
       test('#05 => mode is "strict"', () => {
-        expect(service.isStrict).toBe(true);
+        expect(service.mode).toBe('strict');
       });
     });
 

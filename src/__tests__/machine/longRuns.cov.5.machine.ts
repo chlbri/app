@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/machine/longRuns.cov.5.machine',
@@ -9,5 +10,8 @@ export default createMachine(
       idle: { after: { DELAY: '/active' } },
       active: {},
     },
+  },
+  {
+    context: type('number'),
   },
 );
