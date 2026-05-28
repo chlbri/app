@@ -1,4 +1,5 @@
 import { createMachine } from '#machine';
+import { typings } from '#utils';
 
 export default createMachine(
   'src/__tests__/machine/longRuns.cov.3.machine',
@@ -9,5 +10,8 @@ export default createMachine(
         on: { TEST: { target: 'idle', actions: 'slowAction' } },
       },
     },
+  },
+  {
+    context: typings.context('number'),
   },
 );

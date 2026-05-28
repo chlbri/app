@@ -115,9 +115,11 @@ export class Interpreter<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   /**
+   * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.
+   *
    * The {@linkcode Machine} machine being interpreted.
    */
-  get #machine() {
+  get machine() {
     return this.__machine as unknown as Machine<
       C,
       Pc,
@@ -136,7 +138,7 @@ export class Interpreter<
    */
   get renew() {
     const out = new Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
-      this.#machine,
+      this.machine,
     );
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
@@ -220,7 +222,7 @@ export class Interpreter<
     forceSend?: EventArgObject<Eo>,
   ) => {
     if (!forceSend) return;
-    const values = Object.values(this.#machine.flat);
+    const values = Object.values(this.machine.flat);
 
     for (const { on } of values) {
       const type = eventToType(forceSend);
@@ -486,7 +488,7 @@ export class Interpreter<
   };
 
   get longRuns() {
-    return this.#machine.longRuns;
+    return this.machine.longRuns;
   }
 
   #performAfter: PerformAfter_F = (from, after) => {
@@ -541,7 +543,7 @@ export class Interpreter<
   };
 
   get #flat() {
-    return this.#machine.flat;
+    return this.machine.flat;
   }
 
   #performAlways: PerformAlway_F = alway => {
@@ -713,7 +715,7 @@ export class Interpreter<
    * Add options to the inner {@linkcode Machine} of this {@linkcode Interpreter} service.
    */
   get addOptions() {
-    return this.#machine.addOptions;
+    return super.addOptions as this['machine']['addOptions'];
   }
 
   /**
@@ -726,7 +728,7 @@ export class Interpreter<
   provideOptions = (
     option: Parameters<(typeof this)['addOptions']>[0],
   ) => {
-    const newMachine = this.#machine.provideOptions(option);
+    const newMachine = this.machine.provideOptions(option);
     const out = new Interpreter(newMachine, this.__mode, this.__exact);
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
@@ -737,8 +739,8 @@ export class Interpreter<
     _subscriber,
     options,
   ) => {
-    const eventsMap = this.#machine.eventsMap;
-    const actorsMap = this.#machine.actorsMap;
+    const eventsMap = this.machine.eventsMap;
+    const actorsMap = this.machine.actorsMap;
     const find = Array.from(this.__subscribers).find(
       f => f.id === options?.id,
     );
@@ -780,7 +782,7 @@ export class Interpreter<
     const next = switchV({
       condition: equal(this.__value, sv),
       truthy: undefined,
-      falsy: initialConfig(this.#machine.valueToConfig(sv)),
+      falsy: initialConfig(this.machine.valueToConfig(sv)),
     });
 
     this.__sent = false;

@@ -98,11 +98,30 @@ export class SyncInterpreter<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   /**
+   * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.
+   *
+   * The {@linkcode SyncMachine} machine being interpreted.
+   */
+  get machine() {
+    return this.__machine as SyncMachine<
+      C,
+      Pc,
+      Tc,
+      E,
+      A,
+      Ta,
+      Eo,
+      AllPaths,
+      Mo
+    >;
+  }
+
+  /**
    * Create a new {@linkcode Interpreter} instance with the same initial configuration as this instance.
    */
   get renew() {
     const out = new SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
-      this.#machine,
+      this.machine,
     );
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
@@ -127,20 +146,6 @@ export class SyncInterpreter<
     this.__performConfig(true);
   }
 
-  get #machine() {
-    return this.__machine as SyncMachine<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      Mo
-    >;
-  }
-
   /**
    * Force transition to performs inner actions despite the current state.
    * This is useful for sending events that are not part of the current state transitions.
@@ -153,7 +158,7 @@ export class SyncInterpreter<
     forceSend?: EventArgObject<Eo>,
   ) => {
     if (!forceSend) return;
-    const values = Object.values(this.#machine.flat);
+    const values = Object.values(this.machine.flat);
 
     for (const { on } of values) {
       const type = eventToType(forceSend);
@@ -301,11 +306,11 @@ export class SyncInterpreter<
   };
 
   get longRuns() {
-    return this.#machine.longRuns;
+    return this.machine.longRuns;
   }
 
   get #flat() {
-    return this.#machine.flat;
+    return this.machine.flat;
   }
 
   get #collectedAlways() {
@@ -550,10 +555,10 @@ export class SyncInterpreter<
   };
 
   /**
-   * Add options to the inner {@linkcode Machine} of this {@linkcode Interpreter} service.
+   * Add options to the inner {@linkcode SyncMachine} of this {@linkcode SyncInterpreter} service.
    */
   get addOptions() {
-    return this.#machine.addOptions;
+    return super.addOptions as this['machine']['addOptions'];
   }
 
   /**
@@ -566,7 +571,7 @@ export class SyncInterpreter<
   provideOptions = (
     option: Parameters<(typeof this)['addOptions']>[0],
   ) => {
-    const newMachine = this.#machine.provideOptions(option);
+    const newMachine = this.machine.provideOptions(option);
     const out = new SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
       newMachine,
       this.__mode,
@@ -581,8 +586,8 @@ export class SyncInterpreter<
     _subscriber,
     options,
   ) => {
-    const eventsMap = this.#machine.eventsMap;
-    const actorsMap = this.#machine.actorsMap;
+    const eventsMap = this.machine.eventsMap;
+    const actorsMap = this.machine.actorsMap;
     const find = Array.from(this.__subscribers).find(
       f => f.id === options?.id,
     );
@@ -622,7 +627,7 @@ export class SyncInterpreter<
     const next = switchV({
       condition: equal(this.__value, sv),
       truthy: undefined,
-      falsy: initialConfig(this.#machine.valueToConfig(sv)),
+      falsy: initialConfig(this.machine.valueToConfig(sv)),
     });
 
     this.__sent = false;
