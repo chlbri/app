@@ -1,5 +1,5 @@
-import type { WithDescriber } from '#actions';
-import type { ActorsConfigMap, EventsMap } from '#events';
+import type { Action2, WithDescriber } from '#actions';
+import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
 import type { StateValue } from '#states';
 import type { Fn } from '#utils';
@@ -119,7 +119,7 @@ export type CommonElements<
 > = {
   config: C;
   pContext: Pc;
-  events: E;
+  eventsMap: E;
   actorsMap: A;
   context: Tc;
   actions?: Mo['actions'];
@@ -156,3 +156,10 @@ export type GetIO_F = (
 type StandardOutput2<T extends ObjectT> = Pick<Sh<T>, StandardKey>;
 
 export type StdO2<T extends ObjectT> = StandardOutput2<T>;
+
+export type CommonTimeAction_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (name: string) => (id: string) => Action2<E, Pc, Tc, T>;

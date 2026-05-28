@@ -17,6 +17,13 @@ export type DelayFunction<
   T extends string = string,
 > = number | FnMap<E, Pc, Tc, T, number>;
 
+export type SyncDelayFunction<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = number | FnMap<E, Pc, Tc, T, number>;
+
 export type DelayFunction2<
   E extends EventObject = EventObject,
   Pc = any,
@@ -24,12 +31,12 @@ export type DelayFunction2<
   T extends string = string,
 > = number | DelayFunction3<E, Pc, Tc, T>;
 
-export type SyncDelayFunction<
+export type SyncDelayFunction2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = number | DelayFunction3<E, Pc, Tc, T>;
+> = number | SyncDelayFunction3<E, Pc, Tc, T>;
 
 export type DelayFunction3<
   E extends EventObject = EventObject,
@@ -38,7 +45,7 @@ export type DelayFunction3<
   T extends string = string,
 > = FnR<E, Pc, Tc, T, number>;
 
-export type DelayFunction33<
+export type SyncDelayFunction3<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,

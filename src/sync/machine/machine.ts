@@ -1,7 +1,7 @@
-import type { SyncAction } from '#actions';
+import type { SyncAction2 } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
-import type { DelayFunction } from '#delays';
+import type { SyncDelayFunction } from '#delays';
 import type {
   ActorsConfigMap,
   EventObject,
@@ -33,7 +33,6 @@ import type {
   SyncAddOptionsParam_F,
   SyncMachineOptions2,
   SyncSendAction_F,
-  SyncTimeAction_F,
   SyncVoidAction_F,
 } from './options.types';
 
@@ -76,7 +75,7 @@ class SyncMachine<
    * @see {@linkcode Tc}
    */
   get __actionFn() {
-    return _unknown<SyncAction<Eo, Pc, Tc, Ta>>();
+    return _unknown<SyncAction2<Eo, Pc, Tc, Ta>>();
   }
 
   get flat() {
@@ -118,7 +117,7 @@ class SyncMachine<
    * @see {@linkcode Tc}
    */
   get __delay() {
-    return _unknown<DelayFunction<Eo, Pc, Tc, Ta>>();
+    return _unknown<SyncDelayFunction<Eo, Pc, Tc, Ta>>();
   }
 
   // #region Providers
@@ -143,7 +142,7 @@ class SyncMachine<
       actions: cloneDeep(this.__elements.actions),
       guards: cloneDeep(this.__elements.guards),
       delays: cloneDeep(this.__elements.delays),
-      actors: cloneDeep(this.__elements.actions),
+      actors: cloneDeep(this.__elements.actors),
     }) as any;
 
     const out = helper(
@@ -155,8 +154,8 @@ class SyncMachine<
 
         assign: (key, fn) => {
           return _any(expandFnMap)(
-            this.__eventsMap,
-            this.__actorsMap,
+            this.__elements.eventsMap,
+            this.__elements.actorsMap,
             _any(key),
             fn,
           );
@@ -262,12 +261,12 @@ class SyncMachine<
           };
         },
 
-        pauseActivity: this.__timeAction('pauseActivity'),
-        resumeActivity: this.__timeAction('resumeActivity'),
-        stopActivity: this.__timeAction('stopActivity'),
-        pauseTimer: this.__timeAction('pauseTimer'),
-        resumeTimer: this.__timeAction('resumeTimer'),
-        stopTimer: this.__timeAction('stopTimer'),
+        pauseActivity: this.__timeAction('pauseActivity') as any,
+        resumeActivity: this.__timeAction('resumeActivity') as any,
+        stopActivity: this.__timeAction('stopActivity') as any,
+        pauseTimer: this.__timeAction('pauseTimer') as any,
+        resumeTimer: this.__timeAction('resumeTimer') as any,
+        stopTimer: this.__timeAction('stopTimer') as any,
       },
       { _legacy },
     );
@@ -289,9 +288,7 @@ class SyncMachine<
    *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
    */
 
-  addOptions = (
-    helper: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, Mo>,
-  ): Mo | undefined => {
+  addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
     return super.addOptions(helper);
   };
 
@@ -317,7 +314,7 @@ class SyncMachine<
       actions,
       delays,
 
-      events,
+      eventsMap,
       actors,
       actorsMap,
     } = this.__elements;
@@ -328,7 +325,7 @@ class SyncMachine<
 
     out.__pContext = pContext;
     out.__context = context;
-    out.__eventsMap = events;
+    out.__eventsMap = eventsMap;
     out.__actorsMap = actorsMap;
 
     out.addOptions(
@@ -340,12 +337,6 @@ class SyncMachine<
           actors,
         }) as any,
     );
-
-    // out.#addGuards(guards);
-    // out.#addActions(actions);
-    // out.#addDelays(delays);
-    // out.#addChildren(actors?.children);
-    // out.#addEmitters(actors?.emitters);
 
     return out as any;
   };
@@ -372,13 +363,13 @@ class SyncMachine<
    * @remarks used internally
    */
   _provideActors = <T extends ActorsConfigMap>(map: T) => {
-    const { pContext, config, context, events } = this.__elements;
+    const { pContext, config, context, eventsMap } = this.__elements;
 
     const out = new SyncMachine<C, Pc, Tc, E, T>(config);
 
     out.__pContext = pContext;
     out.__context = context;
-    out.__eventsMap = events;
+    out.__eventsMap = eventsMap;
     out.__actorsMap = map;
 
     return out as any;
@@ -397,10 +388,14 @@ class SyncMachine<
    *
    * @see {@linkcode reduceFnMap}
    */
-  // @ts-expect-error cdcdf
-  protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = (_?) => {
+  // @ts-expect-error intentional any for better inference
+  protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = () => {
     return fn => {
-      const fn2 = reduceFnMap(this.__eventsMap, this.__actorsMap, fn);
+      const fn2 = reduceFnMap(
+        this.__elements.eventsMap,
+        this.__elements.actorsMap,
+        fn,
+      );
       return ({ context, pContext, ...rest }) => {
         const state = this.__cloneStateExtended({
           context,
@@ -429,7 +424,11 @@ class SyncMachine<
    */
   protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
     return ({ context, pContext, ...rest }) => {
-      const _fn = reduceFnMap(this.__eventsMap, this.__actorsMap, fn);
+      const _fn = reduceFnMap(
+        this.__elements.eventsMap,
+        this.__elements.actorsMap,
+        fn,
+      );
       const state = this.__cloneStateExtended({
         context,
         pContext,
@@ -446,15 +445,6 @@ class SyncMachine<
   ) {
     return super.provideOptions(helper);
   }
-
-  protected __timeAction = (
-    name: string,
-  ): SyncTimeAction_F<Eo, Pc, Tc, Ta> => {
-    return id =>
-      ({ context, pContext }) => {
-        return _any({ context, pContext, [name]: id });
-      };
-  };
 }
 
 export { type SyncMachine };

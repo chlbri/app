@@ -1,9 +1,11 @@
 import toArray from '#bemedev/features/arrays/castings/toArray';
+import _any from '#bemedev/features/common/castings/any';
 import commonT from '#bemedev/features/common/typings';
 import extract from '#bemedev/features/common/typings/extract';
 import { partialCall } from '#bemedev/features/functions/functions/partialCall';
 import byKey from '#bemedev/features/objects/typings/byKey';
 import keysOf from '#bemedev/features/objects/typings/keysOf';
+
 import type {
   AllowedNames,
   Fn,
@@ -41,6 +43,7 @@ import type {
   CommonAddOptionsParam_F,
   CommonConfig,
   CommonElements,
+  CommonTimeAction_F,
   GetIO_F,
   MachineType,
   SimpleMachineOptions2,
@@ -65,10 +68,6 @@ export abstract class CommonMachine<
    */
   #config: C;
 
-  get __config() {
-    return _unknown<C>();
-  }
-
   get config() {
     return this.#config;
   }
@@ -86,13 +85,12 @@ export abstract class CommonMachine<
     return this.__flat;
   }
 
-  #decomposed: any;
-
   get decomposed() {
-    return this.#decomposed as Decompose<
-      C,
-      { sep: '.'; start: false; object: 'both' }
-    >;
+    return decompose(this.#config, {
+      sep: '.',
+      start: false,
+      object: 'both',
+    });
   }
 
   /**
@@ -427,10 +425,6 @@ export abstract class CommonMachine<
    */
   constructor(config: C) {
     this.#config = config;
-    this.#decomposed = decompose(config, {
-      start: false,
-      object: 'both',
-    });
     this.__flat = flatMap.low(this.#config as any, true);
 
     this.#tags = Object.values<any>(this.__flat)
@@ -619,7 +613,7 @@ export abstract class CommonMachine<
       guards,
       delays,
       actors,
-      events,
+      eventsMap: events,
       actorsMap,
     };
   }
@@ -760,11 +754,17 @@ export abstract class CommonMachine<
   protected abstract __sendTo: <M extends AnyMachine>(_?: M) => Fn;
 
   protected abstract __voidAction: Fn;
-  protected abstract __timeAction: Fn<[string], Fn<[string]>>;
   protected __cloneStateExtended = (
     state: StateExtended<Eo, Pc, Tc, Ta>,
   ) => {
     return structuredClone(state);
+  };
+
+  protected __timeAction: CommonTimeAction_F<Eo, Pc, Tc, Ta> = name => {
+    return id =>
+      ({ context, pContext }) => {
+        return _any({ context, pContext, [name]: id });
+      };
   };
 }
 

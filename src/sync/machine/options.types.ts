@@ -1,6 +1,6 @@
-import type { SyncAction } from '#actions';
+import type { SyncAction2 } from '#actions';
 import type { Ru, SubTypeLow } from '#bemedev/globals/types';
-import type { SyncDelayFunction } from '#delays';
+import type { SyncDelayFunction2 } from '#delays';
 import type { EmitterFunction2 } from '#emitters';
 import type { EventArg, EventArgAll, EventObject } from '#events';
 import type { DefinedValue, SyncPredicateS } from '#guards';
@@ -32,7 +32,7 @@ export type SyncFilterAction_F<
     : D[K] extends Ru
       ? (value: ValuesOf<D[K]>, all: D[K]) => boolean
       : never,
-) => SyncAction<E, Pc, Tc, T>;
+) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncEraseAction_F<
   E extends EventObject = EventObject,
@@ -48,7 +48,7 @@ export type SyncEraseAction_F<
   K extends keyof DD & string = keyof DD & string,
 >(
   key: K,
-) => SyncAction<E, Pc, Tc, T>;
+) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncDefineGuard_F<
   E extends EventObject = EventObject,
@@ -82,16 +82,16 @@ export type SyncAssignAction_F<
 >(
   key: K,
   fn: FnMap<E, Pc, Tc, T, F>,
-) => SyncAction<E, Pc, Tc, T>;
+) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncBatchAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <A extends (SyncAction<E, Pc, Tc, T> | undefined)[]>(
+> = <A extends (SyncAction2<E, Pc, Tc, T> | undefined)[]>(
   ...fns: A
-) => SyncAction<E, Pc, Tc, T>;
+) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncVoidAction_F<
   E extends EventObject = EventObject,
@@ -100,7 +100,7 @@ export type SyncVoidAction_F<
   T extends string = string,
 > = <F extends void | Promise<void> = void | Promise<void>>(
   fn: FnMap<E, Pc, Tc, T, F>,
-) => SyncAction<E, Pc, Tc, T>;
+) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncSendAction_F<
   E extends EventObject = EventObject,
@@ -116,34 +116,34 @@ export type SyncSendAction_F<
   },
 >(
   fn: FnMap<E, Pc, Tc, T, F>,
-) => SyncAction<E, Pc, Tc, T>;
+) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncDebounceAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <A extends SyncAction<E, Pc, Tc, T>>(
+> = <A extends SyncAction2<E, Pc, Tc, T>>(
   fn: A,
   options: {
     ms?: number;
     id: string;
   },
-) => SyncAction<E, Pc, Tc, T>;
+) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncResendAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (event: EventArgAll<E>) => SyncAction<E, Pc, Tc, T>;
+> = (event: EventArgAll<E>) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncTimeAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (id: string) => SyncAction<E, Pc, Tc, T>;
+> = (id: string) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncAddOption<
   E extends EventObject = EventObject,
@@ -220,9 +220,9 @@ export type SyncMachineOptions2<
   Eo extends EventObject = EventObject,
   O extends RegisterOptions = RegisterOptions,
 > = Partial<{
-  actions: Partial<Record<O['actions'], SyncAction<Eo, Pc, Tc, T>>>;
+  actions: Partial<Record<O['actions'], SyncAction2<Eo, Pc, Tc, T>>>;
   guards: Partial<Record<O['guards'], SyncPredicateS<Eo, Pc, Tc, T>>>;
-  delays: Partial<Record<O['delays'], SyncDelayFunction<Eo, Pc, Tc, T>>>;
+  delays: Partial<Record<O['delays'], SyncDelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
     children: Partial<
       Record<O['children'], ChildFunction2<Eo, Pc, Tc, T, any>>

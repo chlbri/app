@@ -1,7 +1,7 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
 import { _machine2, DELAY, fakeDB, machine2 } from '#fixturesData';
 import { interpret } from '#interpreters';
-import { getEntries, Machine } from '#machine';
+import { Machine } from '#machine';
 
 import { constructTests } from '#fixtures';
 import { nothing, reduceDescriber } from '#utils';
@@ -490,7 +490,6 @@ describe('machine coverage', () => {
       '__events',
       '__actionFn',
       '__actionKey',
-      '__config',
       '__childKey',
       '__tag',
       '__actionParams',
@@ -978,10 +977,6 @@ describe('machine coverage', () => {
         );
       });
     });
-  });
-
-  test('#05 => getEntries - coverage', () => {
-    expect(getEntries()).toStrictEqual([]);
   });
 
   describe('#06 => machine id is not defined', () => {

@@ -1,4 +1,4 @@
-import type { SyncAction, WithDescriber } from '#actions';
+import type { SyncAction2, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
 import type { AddSubscriber_F, Mode, WorkingStatus } from '#interpreters';
@@ -6,7 +6,7 @@ import type { StateValue } from '#states';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { AnySyncMachine, SyncNodeConfig } from '../types.types';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
-import type { DelayFunction33 } from '#delays';
+import type { SyncDelayFunction3 } from '#delays';
 
 export interface AnySyncInterpreter<
   E extends EventsMap = EventsMap,
@@ -60,7 +60,7 @@ export type SyncPerformAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action: SyncAction<E, Pc, Tc, T>) => void;
+> = (action: SyncAction2<E, Pc, Tc, T>) => void;
 
 export type SyncToPredicate_F<
   E extends EventObject = EventObject,
@@ -95,4 +95,4 @@ export type SyncPerformDelay_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (delay: DelayFunction33<E, Pc, Tc, T>) => number;
+> = (delay: SyncDelayFunction3<E, Pc, Tc, T>) => number;

@@ -83,7 +83,7 @@ export type Action2<
   T extends string = string,
 > = FnR<E, Pc, Tc, T, MaybeAsyncActionResult<Pc, Tc>>;
 
-export type SyncAction<
+export type SyncAction2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
