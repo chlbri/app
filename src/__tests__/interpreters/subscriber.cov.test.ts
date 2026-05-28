@@ -1,7 +1,7 @@
 import { machine1, type Machine1 } from '#fixturesData';
 import type { StatePFrom } from '#machines';
 import { describe, expect, test, vi } from 'vitest';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import type { State } from '#states';
 import type { EventObject } from '#events';
 import { defaultCheck, returnTrue } from '#guards';

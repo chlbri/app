@@ -35,7 +35,7 @@ import {
 } from '#common/interpreter';
 import { initialConfig, nextSV } from '#states';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
-import { createInterval, type Interval2 } from '@bemedev/interval2';
+import { createInterval } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
 import { isDescriber, type KeyU } from '~types';
@@ -198,7 +198,7 @@ export class SyncInterpreter<
   };
 
   protected __executeAction: SyncPerformAction_F<Eo, Pc, Tc, Ta> =
-    async action => {
+    action => {
       this.__setStatus('busy');
       this._iterate();
       const { pContext, context, ...extendeds } = action(
@@ -326,11 +326,6 @@ export class SyncInterpreter<
 
     return entries;
   }
-
-  /**
-   * Collection of all currents {@linkcode Interval2} intervals, related to current {@linkcode ActivityConfig}s of this {@linkcode Interpreter} service.
-   */
-  protected __cachedIntervals: Interval2[] = [];
 
   #performDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this._iterate();

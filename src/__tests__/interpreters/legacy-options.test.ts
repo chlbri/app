@@ -1,4 +1,4 @@
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _machine1 from './legacy-options.1.machine';
 import _machine2 from './legacy-options.2.machine';
 import _machine3 from './legacy-options.3.machine';

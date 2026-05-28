@@ -13,7 +13,6 @@ import type { Machine } from '#machine';
 import type { Config as AsyncConfig, MachineOptions2 } from '#machines';
 import type { Register, RegisterOptions } from '#registry';
 import type {
-  EmptyObject,
   inferT,
   PrimitiveObject,
   StandardOutput,
@@ -21,6 +20,7 @@ import type {
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 import type { SyncConfig } from '../sync/types.types';
+import type { EmptyObject } from '~types';
 
 export type OutMachine<
   C extends CommonConfig = CommonConfig,
@@ -71,7 +71,43 @@ export type OutMachine<
       >
     : never;
 
-export type CreateMachine_F = <
+export type CreateMachineNoName_F = <
+  const C extends CommonConfig,
+  const Pc extends StandardOutput<any> = StandardOutput<any>,
+  const Tc extends StandardOutput<PrimitiveObject> = never,
+  const E extends StandardOutput<Record<string, PrimitiveObject>> =
+    StandardOutput<Record<string, never>>,
+  const A extends StandardOutput<ActorsConfigMap> =
+    StandardOutput<ActorsConfigMap>,
+  _E extends inferT<E> = inferT<E>,
+  _A extends inferT<A> = inferT<A>,
+  _Pc extends inferT<Pc> = inferT<Pc>,
+  _Tc extends inferT<Tc> = inferT<Tc>,
+  Tags extends string = string,
+  Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
+  Sync extends 'sync' | undefined = undefined,
+>(
+  config: C,
+  types?: {
+    context?: Tc;
+    pContext?: Pc;
+    eventsMap?: E;
+    actorsMap?: A;
+  } & (IsAsyncConfig<C> extends false ? { sync?: Sync } : EmptyObject),
+) => OutMachine<
+  C,
+  _Pc,
+  _Tc,
+  _E,
+  _A,
+  Tags,
+  Eo,
+  string,
+  RegisterOptions,
+  Sync
+>;
+
+export type CreateMachineNamed_F = <
   Name extends keyof Register & string,
   Current extends Register[Name] = Register[Name],
   const C extends CommonConfig<Current['paths']['map']> = CommonConfig<
@@ -124,6 +160,8 @@ export type CreateMachine_F = <
   Current['options'],
   Sync
 >;
+
+export type CreateMachine_F = CreateMachineNamed_F & CreateMachineNoName_F;
 
 export type OutInterpreter<
   M extends AnyMachine,

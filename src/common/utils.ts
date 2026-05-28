@@ -1,11 +1,11 @@
 import { isFnPromise } from '#utils';
-import type { Fn } from '~types';
+import type { Fn, NodeConfig } from '~types';
 
 /**
  * Runtime validation function to check if a value is an async config.
  * An async config has an 'after' property or contains states with 'after'.
  */
-export function isAsyncConfig(value: unknown): boolean {
+export function isAsyncConfig(value: unknown): value is NodeConfig {
   if (!value || typeof value !== 'object') {
     return false;
   }

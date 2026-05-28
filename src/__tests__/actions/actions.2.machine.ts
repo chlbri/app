@@ -1,4 +1,4 @@
-import { createMachine } from '../../exports/machine';
+import { createMachine } from '../../exports/createMachine';
 
 export default createMachine(
   'src/__tests__/actions/actions.2.machine',

@@ -81,9 +81,7 @@ export abstract class CommonMachine<
    * @see {@linkcode Config}
    * @see {@linkcode C}
    */
-  get flat() {
-    return this.__flat;
-  }
+  abstract get flat(): any;
 
   get decomposed() {
     return decompose(this.#config, {
@@ -579,7 +577,6 @@ export abstract class CommonMachine<
    */
   provideOptions<T extends Mo>(helper: CommonAddOptionsParam_F<T>) {
     const out = this.renew;
-    console.log('RENE');
     out.addOptions(helper);
 
     return out;
@@ -630,14 +627,14 @@ export abstract class CommonMachine<
    * @deprecated
    * @remarks used internally
    */
-  abstract _provideEvents: <T extends EventsMap>(map: T) => CommonMachine;
+  abstract _provideEvents: <T extends EventsMap>(map: T) => AnyMachine;
   /**
    * @deprecated
    * @remarks used internally
    */
   abstract _provideActors: <T extends ActorsConfigMap>(
     map: T,
-  ) => CommonMachine;
+  ) => AnyMachine;
 
   /**
    * Converts a {@linkcode StateValue} to a {@linkcode NodeConfigWithInitials} with the {@linkcode NodeConfigWithInitials} postConfig of this {@linkcode Machine}.

@@ -1,6 +1,6 @@
 import { emptyFn } from '#fixtures';
-import { interpret } from '#interpreter';
-import { createMachine } from '#machine';
+import { interpret } from '#exports/interpret';
+import { createMachine } from '#exports/createMachine';
 import { createConfig } from '#machines';
 import { notU, typings } from '#utils';
 import { type } from '@bemedev/typings';

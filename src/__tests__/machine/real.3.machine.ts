@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { type, type inferO, type Keys } from '@bemedev/typings';
 import {
   any,

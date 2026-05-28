@@ -1,5 +1,5 @@
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _childMachine1 from './2ids.1.machine';
 import _machine2 from './2ids.2.machine';
 

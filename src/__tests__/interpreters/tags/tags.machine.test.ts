@@ -1,5 +1,5 @@
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { machine } from './tags.machine';
 
 describe('Machine Tag Interpreter', () => {

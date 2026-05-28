@@ -1,5 +1,5 @@
 import { type } from '@bemedev/typings';
-import { createMachine } from '../../exports/machine';
+import { createMachine } from '../../exports/createMachine';
 
 export default createMachine(
   'src/__tests__/actions/async-actions.2.machine',

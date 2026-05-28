@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { type } from '@bemedev/typings';
 import { record } from '@bemedev/typings/helpers';
 import * as v from 'valibot';

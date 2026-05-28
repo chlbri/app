@@ -54,6 +54,13 @@ export type Action<
   T extends string = string,
 > = FnMap<E, Pc, Tc, T, MaybeAsyncActionResult<Pc, Tc>>;
 
+export type SyncAction<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = FnMap<E, Pc, Tc, T, ActionResult<Pc, Tc>>;
+
 export type Action3<
   E extends EventObject = EventObject,
   Pc = any,
@@ -75,6 +82,13 @@ export type ActionMap<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = Partial<Record<string, Action<E, Pc, Tc, T>>>;
+
+export type SyncActionMap<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = Partial<Record<string, SyncAction<E, Pc, Tc, T>>>;
 
 export type Action2<
   E extends EventObject = EventObject,

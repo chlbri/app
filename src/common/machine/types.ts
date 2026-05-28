@@ -1,7 +1,7 @@
 import type { Action2, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
-import type { StateValue } from '#states';
+import type { NodeConfig, StateValue } from '#states';
 import type { Fn } from '#utils';
 import type {
   ObjectT,
@@ -41,7 +41,7 @@ export type TransformConfigDef<T extends ConfigDef> = {
 export type CommonConfig<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
     NoExtraKeysConfigDef<ConfigDef>,
-> = {
+> = NodeConfig & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
 } & TransformConfigDef<Paths>;
@@ -163,3 +163,11 @@ export type CommonTimeAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = (name: string) => (id: string) => Action2<E, Pc, Tc, T>;
+
+export type CommonCreateMachine_F = (
+  config: any,
+  types?: {
+    eventsMap?: any;
+    actorsMap?: any;
+  },
+) => any;

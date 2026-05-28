@@ -17,7 +17,6 @@ import {
   type EventArgObject,
   type EventObject,
   type EventsMap,
-  type ExtractSender,
 } from '#events';
 import { type GuardConfig } from '#guards';
 import {
@@ -29,26 +28,19 @@ import {
   type PrivateContextFrom,
 } from '#machines';
 import { initialConfig, nextSV } from '#states';
-import type {
-  AlwaysConfig,
-  DelayedTransitions,
-  TransitionConfig,
-} from '#transitions';
+import type { DelayedTransitions, TransitionConfig } from '#transitions';
 import {
   anyPromises,
   withTimeout,
   type TimeoutPromise,
 } from '@bemedev/better-promise';
 
-import { createInterval, type Interval2 } from '@bemedev/interval2';
 import { sleep } from '@bemedev/sleep';
 import equal from 'fast-deep-equal';
 import { isDescriber } from '~types';
 import type {
   _Send_F,
-  AddSubscriber_F,
   Collected0,
-  CreateInterval2_F,
   ExecuteActivities_F,
   Interpreter_F,
   Mode,
@@ -65,7 +57,6 @@ import type {
 import type { PrimitiveObject } from '#bemedev/globals/types';
 import { CommonInterpreter } from '#common/interpreter';
 import type { AnyMachine } from '#common/machine';
-import { createSubscriber } from '#common/subscriber';
 import { type EmitterFunction2 } from '#emitters';
 import type { Machine } from '#machine';
 import type {
@@ -400,27 +391,6 @@ export class Interpreter<
     return outs;
   };
 
-  protected createInterval: CreateInterval2_F = ({
-    callback,
-    id,
-    interval,
-  }) => {
-    const exact = this.__exact;
-    const out = createInterval({
-      callback,
-      id,
-      interval,
-      exact,
-    });
-
-    return out;
-  };
-
-  /**
-   * Collection of all currents {@linkcode Interval2} intervals, related to current {@linkcode ActivityConfig}s of this {@linkcode Interpreter} service.
-   */
-  protected __cachedIntervals: Interval2[] = [];
-
   protected __performTransition: PerformTransition_F =
     async transition => {
       const check = typeof transition == 'string';
@@ -486,10 +456,6 @@ export class Interpreter<
     }
     return;
   };
-
-  get longRuns() {
-    return this.machine.longRuns;
-  }
 
   #performAfter: PerformAfter_F = (from, after) => {
     const entries = Object.entries(after);
@@ -566,27 +532,13 @@ export class Interpreter<
     return entries;
   }
 
-  get #collectedAlways() {
-    const entriesFlat = Object.entries(this.#flat);
-    const entries: [from: string, always: AlwaysConfig][] = [];
-
-    entriesFlat.forEach(([from, node]) => {
-      const always = node.always;
-      if (always) {
-        entries.push([from, always]);
-      }
-    });
-
-    return entries;
-  }
-
   /**
    * Get all brut self transitions of the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service.
    */
   protected get __collectedSelfTransitions0() {
     const entries = new Map<string, Collected0>();
 
-    this.#collectedAlways.forEach(([from, always]) => {
+    this.__collectedAlways.forEach(([from, always]) => {
       entries.set(from, { always: () => this.#performAlways(always) });
     });
 
@@ -735,27 +687,6 @@ export class Interpreter<
     return out;
   };
 
-  subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (
-    _subscriber,
-    options,
-  ) => {
-    const eventsMap = this.machine.eventsMap;
-    const actorsMap = this.machine.actorsMap;
-    const find = Array.from(this.__subscribers).find(
-      f => f.id === options?.id,
-    );
-    if (find) return find;
-
-    const subcriber = createSubscriber(
-      eventsMap,
-      actorsMap,
-      _subscriber,
-      options,
-    );
-    this.__subscribers.add(subcriber);
-    return subcriber as any;
-  };
-
   // #region Next
 
   protected __presend: _Send_F<Eo> = async event => {
@@ -787,21 +718,6 @@ export class Interpreter<
 
     this.__sent = false;
     return next;
-  };
-
-  /**
-   * Creates a sender function for the given event type.
-   * @param type - the {@linkcode EventArgT} type of the event to send.
-   * @returns a function with the payload as Parameter that sends the event with the given type and payload.
-   *
-   * @see {@linkcode send} for sending events directly.
-   */
-  sender = <const T extends Eo['type']>(type: T) => {
-    return (...data: ExtractSender<Eo, T>) => {
-      const payload = data.length === 1 ? data[0] : {};
-      const event = { type, payload } as unknown as EventArgObject<Eo>;
-      return this.send(event);
-    };
   };
 
   /**

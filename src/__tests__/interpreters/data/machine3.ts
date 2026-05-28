@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { createConfig } from '#machines';
 import { typings } from '#utils';
 import { type } from '@bemedev/typings';
@@ -57,30 +57,26 @@ export const config3 = createConfig({
   },
 });
 
-export const machine3 = createMachine(
-  'src/__tests__/interpreters/data/machine3',
-  config3,
-  {
-    eventsMap: type({
-      EVENT: { password: 'string', username: 'string' },
-      EVENT2: 'boolean',
-      EVENT3: { login: 'string', pwd: 'string' },
-    }),
-    pContext: type({
-      data: 'string',
-    }),
-    context: typings.context({
-      age: 'number',
-    }),
-    actorsMap: type({
-      children: {
-        machine1: {
-          NEXT: 'boolean',
-        },
+export const machine3 = createMachine(config3, {
+  eventsMap: type({
+    EVENT: { password: 'string', username: 'string' },
+    EVENT2: 'boolean',
+    EVENT3: { login: 'string', pwd: 'string' },
+  }),
+  pContext: type({
+    data: 'string',
+  }),
+  context: typings.context({
+    age: 'number',
+  }),
+  actorsMap: type({
+    children: {
+      machine1: {
+        NEXT: 'boolean',
       },
-    }),
-  },
-);
+    },
+  }),
+});
 
 export type Machine3 = typeof machine3;
 

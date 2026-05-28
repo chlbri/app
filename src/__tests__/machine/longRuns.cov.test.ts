@@ -1,5 +1,5 @@
 import { DEFAULT_MAX_TIME_PROMISE } from '#constants';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _machineWithLong1 from './longRuns.cov.1.machine';
 import _machineWithoutLong2 from './longRuns.cov.2.machine';
 import _machine3 from './longRuns.cov.3.machine';

@@ -7,22 +7,52 @@ import type {
   ActionMap,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ActionResult,
+  SyncAction2,
+  SyncActionMap,
 } from '#actions';
 import { fromDescriber } from '~types';
 
-export type ToAction_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
-  events: E,
-  actorsMap: A,
-  action: WithDescriber,
-  actions?: ActionMap<Eo, Pc, Tc, T>,
-) => Action2<Eo, Pc, Tc, T> | undefined;
+export type ToAction_F = {
+  <
+    E extends EventsMap = EventsMap,
+    A extends ActorsConfigMap = ActorsConfigMap,
+    Pc = any,
+    Tc extends PrimitiveObject = PrimitiveObject,
+    T extends string = string,
+    Eo extends EventObject = EventObject,
+  >(
+    events: E,
+    actorsMap: A,
+    action: WithDescriber,
+    actions?: ActionMap<Eo, Pc, Tc, T>,
+  ): Action2<Eo, Pc, Tc, T> | undefined;
+
+  sync: <
+    E extends EventsMap = EventsMap,
+    A extends ActorsConfigMap = ActorsConfigMap,
+    Pc = any,
+    Tc extends PrimitiveObject = PrimitiveObject,
+    T extends string = string,
+    Eo extends EventObject = EventObject,
+  >(
+    events: E,
+    actorsMap: A,
+    action: WithDescriber,
+    actions?: SyncActionMap<Eo, Pc, Tc, T>,
+  ) => SyncAction2<Eo, Pc, Tc, T> | undefined;
+};
+
+const _toAction = (
+  events: any,
+  actorsMap: any,
+  action: any,
+  actions?: any,
+) => {
+  const name = fromDescriber(action);
+  const fn = actions?.[name];
+  const func = fn ? reduceFnMap(events, actorsMap, fn) : undefined;
+  return func;
+};
 
 /**
  * Converts an ActionConfig to a function that can be executed with the provided eventsMap and actorsMap.
@@ -35,14 +65,5 @@ export type ToAction_F = <
  * @see {@linkcode ActionResult}
  * @see {@linkcode reduceFnMap}
  */
-export const toAction: ToAction_F = (
-  events,
-  actorsMap,
-  action,
-  actions,
-) => {
-  const name = fromDescriber(action);
-  const fn = actions?.[name];
-  const func = fn ? reduceFnMap(events, actorsMap, fn) : undefined;
-  return func;
-};
+export const toAction: ToAction_F = _toAction as any;
+toAction.sync = _toAction;

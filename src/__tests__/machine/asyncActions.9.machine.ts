@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { asyncActionsTypings1 } from './asyncActions.1.machine';
 
 export default createMachine(

@@ -78,10 +78,9 @@ export type SyncAssignAction_F<
     { object: 'both'; start: false; sep: '.' }
   >,
   K extends keyof D = keyof D,
-  F extends D[K] | Promise<D[K]> = D[K] | Promise<D[K]>,
 >(
   key: K,
-  fn: FnMap<E, Pc, Tc, T, F>,
+  fn: FnMap<E, Pc, Tc, T, D[K]>,
 ) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncBatchAction_F<
@@ -98,9 +97,7 @@ export type SyncVoidAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <F extends void | Promise<void> = void | Promise<void>>(
-  fn: FnMap<E, Pc, Tc, T, F>,
-) => SyncAction2<E, Pc, Tc, T>;
+> = (fn: FnMap<E, Pc, Tc, T, void>) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncSendAction_F<
   E extends EventObject = EventObject,

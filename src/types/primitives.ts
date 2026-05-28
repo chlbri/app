@@ -17,7 +17,6 @@ import type {
   StatePextended,
 } from '#states';
 import { checkKeys } from '#utils';
-import type { EmptyObject } from '@bemedev/decompose';
 
 export type IsString_F = (value: unknown) => value is string;
 
@@ -366,6 +365,9 @@ export type FnMapR<
   R = any,
   Ex extends string = never,
 > = FnReduced<E, Tc, T, R> | _FnMapReduced<E, Tc, T, R, Ex>;
+
+// oxlint-disable-next-line typescript/no-empty-object-type
+export type EmptyObject = {};
 
 /**
  * A type that represents a record with string keys and values of type {@linkcode T}.

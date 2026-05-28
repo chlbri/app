@@ -1,5 +1,5 @@
 import { emptyFn } from '#fixtures';
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { type, type inferO } from '@bemedev/typings';
 import isOnline from 'is-online';
 import { asset, intermediary } from './machine1.machine.typings';

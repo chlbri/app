@@ -1593,10 +1593,12 @@ export abstract class CommonInterpreter<
     const actorsMap = this.__machine.actorsMap;
     const actions = this.__machine.actions;
 
-    return this.#returnWithWarning(
+    const out = this.#returnWithWarning(
       toAction<E, A, Pc, Tc, Ta, Eo>(events, actorsMap, action, actions),
       `Action (${reduceDescriber(action)}) is not defined`,
     );
+
+    return out;
   };
 
   toPredicateFn = (guard: GuardConfig) => {

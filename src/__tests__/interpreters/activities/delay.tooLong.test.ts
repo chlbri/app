@@ -1,6 +1,6 @@
 import { DEFAULT_MAX_TIME_PROMISE } from '#constants';
 import { constructTests, defaultC } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { machine } from './constants';
 
 vi.useFakeTimers();

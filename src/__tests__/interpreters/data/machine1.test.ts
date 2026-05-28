@@ -1,4 +1,4 @@
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { constructTests } from '#fixtures';
 import { DELAY } from './constants';
 import { machine1 } from './machine1';

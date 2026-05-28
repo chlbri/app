@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 
 export default createMachine(
   'src/__tests__/actions/async-actions.7.machine',

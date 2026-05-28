@@ -1,4 +1,4 @@
-import type { Action2 } from '#actions';
+import type { Action2, SyncAction2 } from '#actions';
 import type { Cast, PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
@@ -6,28 +6,54 @@ import type { Decompose } from '@bemedev/decompose';
 import { type FnMap } from '~types';
 import { assignByKey } from './subcriber';
 
-export type ExpandFnMap = <
-  Pc,
-  Tc = PrimitiveObject,
-  D = Decompose<
-    {
-      pContext: Pc;
-      context: Tc;
-    },
-    { sep: '.'; object: 'both'; start: false }
-  >,
-  K extends Extract<keyof D, string> = Extract<keyof D, string>,
-  R = D[K],
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
-  events: E,
-  actorsMap: A,
-  key: K,
-  fn: FnMap<Eo, Pc, Cast<Tc, PrimitiveObject>, T, R>,
-) => Action2<Eo, Pc, Cast<Tc, PrimitiveObject>, T>;
+export type ExpandFnMap_F = {
+  <
+    Pc,
+    Tc = PrimitiveObject,
+    D = Decompose<
+      {
+        pContext: Pc;
+        context: Tc;
+      },
+      { sep: '.'; object: 'both'; start: false }
+    >,
+    K extends Extract<keyof D, string> = Extract<keyof D, string>,
+    R = D[K],
+    E extends EventsMap = EventsMap,
+    A extends ActorsConfigMap = ActorsConfigMap,
+    T extends string = string,
+    Eo extends EventObject = EventObject,
+  >(
+    events: E,
+    actorsMap: A,
+    key: K,
+    fn: FnMap<Eo, Pc, Cast<Tc, PrimitiveObject>, T, R>,
+  ): Action2<Eo, Pc, Cast<Tc, PrimitiveObject>, T>;
+
+  sync: <
+    Pc,
+    Tc = PrimitiveObject,
+    D = Decompose<
+      {
+        pContext: Pc;
+        context: Tc;
+      },
+      { sep: '.'; object: 'both'; start: false }
+    >,
+    K extends Extract<keyof D, string> = Extract<keyof D, string>,
+    R = D[K],
+    E extends EventsMap = EventsMap,
+    A extends ActorsConfigMap = ActorsConfigMap,
+    T extends string = string,
+    Eo extends EventObject = EventObject,
+  >(
+    events: E,
+    actorsMap: A,
+    key: K,
+    fn: FnMap<Eo, Pc, Cast<Tc, PrimitiveObject>, T, R>,
+  ) => SyncAction2<Eo, Pc, Cast<Tc, PrimitiveObject>, T>;
+};
+
 /**
  *
  * @param events : type {@linkcode EventsMap} [E] - The events map.
@@ -41,7 +67,7 @@ export type ExpandFnMap = <
  * @see {@linkcode Decompose} for decomposing the private context and context into paths.
  *
  */
-export const expandFnMap: ExpandFnMap = (events, promisees, key, fn) => {
+export const expandFnMap: ExpandFnMap_F = (events, promisees, key, fn) => {
   const _fn = reduceFnMap(events, promisees, fn);
 
   return async ({ pContext, context, ...rest }) => {
@@ -50,6 +76,19 @@ export const expandFnMap: ExpandFnMap = (events, promisees, key, fn) => {
       context,
     };
     const result = await _fn({ pContext, context, ...rest });
+    return assignByKey(all, key, result);
+  };
+};
+
+expandFnMap.sync = (events, promisees, key, fn) => {
+  const _fn = reduceFnMap(events, promisees, fn);
+
+  return ({ pContext, context, ...rest }) => {
+    const all = {
+      pContext,
+      context,
+    };
+    const result = _fn({ pContext, context, ...rest });
     return assignByKey(all, key, result);
   };
 };
