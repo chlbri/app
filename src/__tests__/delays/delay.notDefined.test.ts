@@ -20,3 +20,5 @@ describe('#05 => Delay is not defined', () => {
   test(...useStateValue('idle'));
   describe(...useWarnings('Delay (DELAY) is not defined'));
 });
+
+afterAll(() => vi.useRealTimers());

@@ -130,3 +130,5 @@ describe('Integration testing for interpret, Children', () => {
     test(...useNotify());
   });
 });
+
+afterAll(() => vi.useRealTimers());

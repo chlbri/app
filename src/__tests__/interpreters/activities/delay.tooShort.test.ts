@@ -38,3 +38,5 @@ describe('Delay is too long', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

@@ -61,3 +61,5 @@ describe('ChangeDelay Edge', () => {
     it(...useIterator(20));
   });
 });
+
+afterAll(() => vi.useRealTimers());

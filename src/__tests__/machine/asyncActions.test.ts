@@ -391,3 +391,5 @@ describe('Machine createOptions - error handlers', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

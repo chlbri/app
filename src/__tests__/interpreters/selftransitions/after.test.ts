@@ -156,6 +156,17 @@ describe('after', () => {
     vi.useFakeTimers();
     const machine = _machine5;
 
+    const unhandledTest = (error: any) => {
+      const message =
+        error instanceof Error ? error.message : String(error);
+      expect(message).toBe('Timed out after 1000000 ms.');
+    };
+
+    beforeAll(() => {
+      process.on('uncaughtException', unhandledTest);
+      process.on('unhandledRejection', unhandledTest);
+    });
+
     machine.addOptions(() => ({
       delays: {
         DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5,

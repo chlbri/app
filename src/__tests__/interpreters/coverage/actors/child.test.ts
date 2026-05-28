@@ -211,3 +211,5 @@ describe('Coverage actors', () => {
     test(...stop());
   });
 });
+
+afterAll(() => vi.useRealTimers());

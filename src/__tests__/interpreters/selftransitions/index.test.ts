@@ -36,3 +36,5 @@ describe('Self Transitions', () => {
     expect(service.value).toEqual('active');
   });
 });
+
+afterAll(() => vi.useRealTimers());

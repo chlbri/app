@@ -60,3 +60,5 @@ describe('Performs send to itself actions', () => {
   test(...useIterator(7));
   test(...dispose());
 });
+
+afterAll(() => vi.useRealTimers());

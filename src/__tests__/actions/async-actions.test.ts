@@ -248,3 +248,5 @@ describe('Async action helpers', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

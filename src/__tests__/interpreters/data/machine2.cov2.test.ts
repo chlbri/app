@@ -232,3 +232,5 @@ describe('machine coverage', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

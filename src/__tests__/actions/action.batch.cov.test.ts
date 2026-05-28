@@ -52,3 +52,5 @@ describe('Machine batch action', () => {
     expect(service.context).toBe(10);
   });
 });
+
+afterAll(() => vi.useRealTimers());

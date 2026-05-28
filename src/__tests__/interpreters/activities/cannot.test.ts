@@ -47,3 +47,5 @@ describe('Cannot perform Activity', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

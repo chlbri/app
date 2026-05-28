@@ -30,3 +30,5 @@ describe('TESTS', () => {
   it(...waiter(10));
   it(...useIterator(40));
 });
+
+afterAll(() => vi.useRealTimers());

@@ -21,3 +21,5 @@ describe('Tests not defined emitters -> Machine1', () => {
     expect(log).toHaveBeenCalledWith('Emitter (interval) is not defined');
   });
 });
+
+afterAll(() => vi.useRealTimers());

@@ -123,3 +123,5 @@ describe('longRuns - no timeout limit for async actions and after', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

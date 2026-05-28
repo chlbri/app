@@ -84,3 +84,5 @@ describe('Performs activities on events', () => {
 
   test(...dispose(22));
 });
+
+afterAll(() => vi.useRealTimers());

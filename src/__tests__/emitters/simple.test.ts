@@ -112,3 +112,5 @@ describe('Simple Machine2 (from Machine1)', () => {
   test(...useContext(75));
   test(...stop());
 });
+
+afterAll(() => vi.useRealTimers());

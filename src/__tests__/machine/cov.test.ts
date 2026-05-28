@@ -1057,3 +1057,5 @@ test('#my', () => {
     ),
   );
 });
+
+afterAll(() => vi.useRealTimers());

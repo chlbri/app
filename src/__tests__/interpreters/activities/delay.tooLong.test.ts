@@ -44,3 +44,5 @@ describe('Delay is too long', () => {
   test(...stop());
   test(...waiter(1, 6));
 });
+
+afterAll(() => vi.useRealTimers());

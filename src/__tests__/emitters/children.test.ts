@@ -144,3 +144,5 @@ describe('Children', () => {
     test(...stop());
   });
 });
+
+afterAll(() => vi.useRealTimers());

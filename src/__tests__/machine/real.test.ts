@@ -1027,3 +1027,5 @@ describe('REAL LIFE TESTS', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

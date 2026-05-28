@@ -47,7 +47,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     testTimeout: 30000,
     typecheck: {
-      enabled: false,
+      enabled: true,
       ignoreSourceErrors: true,
     },
     coverage: {

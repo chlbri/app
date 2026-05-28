@@ -33,3 +33,5 @@ describe('machine1', () => {
   test(...stop());
   test(...dispose());
 });
+
+afterAll(() => vi.useRealTimers());

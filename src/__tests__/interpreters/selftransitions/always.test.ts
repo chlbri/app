@@ -86,3 +86,5 @@ describe('Integration testing for interpret, Children', () => {
     test(...useStateValue('result2'));
   });
 });
+
+afterAll(() => vi.useRealTimers());

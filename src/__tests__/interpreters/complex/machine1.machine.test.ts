@@ -303,3 +303,5 @@ describe('Complex machine 1', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

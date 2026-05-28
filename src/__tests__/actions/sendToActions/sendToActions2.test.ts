@@ -83,3 +83,5 @@ describe('cov => Performs send to itself actions', () => {
   test(...useIterator(1));
   test(...dispose());
 });
+
+afterAll(() => vi.useRealTimers());

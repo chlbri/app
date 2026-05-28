@@ -938,3 +938,5 @@ describe('Composition', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

@@ -90,3 +90,5 @@ describe('Error transitions testing)', () => {
     test(...useContext(15));
   });
 });
+
+afterAll(() => vi.useRealTimers());

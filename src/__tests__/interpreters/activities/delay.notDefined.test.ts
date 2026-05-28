@@ -66,3 +66,5 @@ describe('delay is not defined', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

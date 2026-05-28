@@ -144,3 +144,5 @@ describe('cov => Performs send to itself actions', () => {
 
   test('#36 => Dispose', service.dispose);
 });
+
+afterAll(() => vi.useRealTimers());
