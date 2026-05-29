@@ -1,5 +1,6 @@
-export * from '#interpreters';
-export * from '#machines';
+export * from '#exports/createMachine';
+export * from '#exports/interpret';
+export * from '#exports/types.types';
 export * from './registry.types';
 export type { Action2 } from '#actions';
 

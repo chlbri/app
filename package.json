@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "description": "A reprogramming method to code better",
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -36,6 +36,11 @@
     },
     "./bemedev-types": {
       "types": "./lib/libs/bemedev/globals/types.d.ts"
+    },
+    "./typings": {
+      "import": "./lib/utils/typings.js",
+      "require": "./lib/utils/typings.js",
+      "types": "./lib/utils/typings.d.ts"
     },
     "./constants": {
       "import": "./lib/constants/index.js",
