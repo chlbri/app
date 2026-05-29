@@ -21,7 +21,7 @@
       }
     },
     {
-      "label": "ci:admin",
+      "label": "ci",
       "type": "npm",
       "presentation": {
         "echo": true,
@@ -31,9 +31,9 @@
         "clear": false,
         "close": true
       },
-      "script": "ci:admin",
+      "script": "ci",
       "isBackground": true,
-      "detail": "ADMIN CI",
+      "detail": "CI",
       "hide": true,
       "dependsOn": "pull",
       "runOptions": {
