@@ -3,29 +3,31 @@ import type { PrimitiveObject } from '#bemedev/globals/types';
 import { type EventsMap } from '#events';
 import { type FlatMapN } from '#states';
 import { reduceFnMap } from '#utils';
-import { getByKey, assignByKey } from '@bemedev/decompose';
-
+import { assignByKey, getByKey } from '@bemedev/decompose';
 import type { Action } from '#actions';
 import type { DelayFunction } from '#delays';
 import { ActorsConfigMap, type EventObject } from '#events';
-
 import { _unknown } from '#bemedev/globals/utils/_unknown';
+import { expandFnMap } from '#common/functions';
+
 import {
   CommonMachine,
   type CommonCreateMachine_F,
   type ScheduledData,
   type SimpleMachineOptions2,
 } from '#common/machine';
+
 import type { PredicateS } from '#guards';
 import { withTimeout } from '@bemedev/better-promise';
 import cloneDeep from 'clone-deep';
-import { expandFnMap } from '#common/functions';
+
 import type {
   AddOptions_F,
   AddOptionsParam_F,
   SendAction_F,
   VoidAction_F,
 } from './machine.types';
+
 import type { Config } from './types';
 
 /**

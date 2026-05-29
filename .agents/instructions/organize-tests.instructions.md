@@ -133,14 +133,37 @@ describe('#02 => start', () => {
 
 ---
 
+## 2.5. Avoid single-test describe blocks
+
+**`describe` blocks must always contain at least 2 tests.** If a describe
+block would contain only one test, use that test directly instead of
+wrapping it in a describe.
+
+### ❌ Bad – unnecessary describe wrapper
+
+```ts
+describe('#01 => with null', () => {
+  test('#01 => returns false', () => expect(isFnMap(null)).toBe(false));
+});
+```
+
+### ✅ Good – test without wrapper
+
+```ts
+test('#01 => with null returns false', () =>
+  expect(isFnMap(null)).toBe(false));
+```
+
+---
+
 ## 3. Blank-line rules between tests
 
 The project uses **`printWidth: 75`** (`.prettierrc.yml`).
 
 A test is considered **single-line** only when the entire `test(…)` call —
-including the inline arrow body — fits within **75 characters**.  
-If the total length exceeds 75 chars, Prettier will break the arrow onto
-the next line, making it a multi-line test.
+including the inline arrow body — fits within **75 characters**. If the
+total length exceeds 75 chars, Prettier will break the arrow onto the next
+line, making it a multi-line test.
 
 Rules:
 
@@ -150,10 +173,10 @@ Rules:
 
 ### How to check
 
-Count the characters of the whole `test(…)` call on one line.  
-If it is ≤ 75 → single-line, no blank line needed between it and its
-neighbour (when that neighbour is also single-line).  
-If it is > 75 → multi-line; always put a blank line before and after it.
+Count the characters of the whole `test(…)` call on one line. If it is ≤ 75
+→ single-line, no blank line needed between it and its neighbour (when that
+neighbour is also single-line). If it is > 75 → multi-line; always put a
+blank line before and after it.
 
 ### ✅ Short tests (≤ 75 chars) — no blank line
 

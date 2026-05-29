@@ -63,7 +63,7 @@ export const isString: IsString_F = value => {
 };
 
 export const isDescriber = (arg: any): arg is Describer => {
-  const out = checkKeys(arg, ...DESCRIBER_KEYS);
+  const out = checkKeys.strict(arg, ...DESCRIBER_KEYS);
   return out;
 };
 

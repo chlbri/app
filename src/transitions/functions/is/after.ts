@@ -8,8 +8,8 @@ export const isAfter = <T extends string[] = string[]>(
   if (typeof value !== 'object' || value === null || Array.isArray(value))
     return false;
 
-  const valueKeys = Object.keys(value);
-  return valueKeys.every(v => isSingleOrArrayT<T>(v, ...keys));
+  const values = Object.values(value);
+  return values.every(v => isSingleOrArrayT<T>(v, ...keys));
 };
 
 isAfter.orUndefined = <T extends string[] = string[]>(

@@ -1255,8 +1255,6 @@ export abstract class CommonInterpreter<
     const collected = this.#collectedActivities.filter(([from]) =>
       this.__isInsideValue(from),
     );
-    const check = collected.length < 1;
-    if (check) return;
 
     const ids: string[] = [];
     for (const args of collected) {

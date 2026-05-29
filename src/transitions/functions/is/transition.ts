@@ -17,7 +17,7 @@ export const isTransitionConfigMap = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
 ): value is TransitionConfigMap<T[number]> => {
-  if (Array.isArray(value)) return false;
+  if (!value) return false;
   if (typeof value !== 'object') return false;
 
   const _value: any = value;
@@ -47,16 +47,6 @@ export const isTransitionConfigMap = <T extends string[] = string[]>(
   return true;
 };
 
-export const isTransitionConfigMapOrUndefined = <
-  T extends string[] = string[],
->(
-  value: unknown,
-  ...keys: T
-): value is TransitionConfigMap<T[number]> | undefined => {
-  if (value === undefined) return true;
-  return isTransitionConfigMap(value, ...keys);
-};
-
 export const isTransitionConfigMapTarget = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -64,16 +54,6 @@ export const isTransitionConfigMapTarget = <T extends string[] = string[]>(
   return (
     isTransitionConfigMap(value, ...keys) && value.target !== undefined
   );
-};
-
-export const isTransitionConfigMapTargetOrUndefined = <
-  T extends string[] = string[],
->(
-  value: unknown,
-  ...keys: T
-): value is TransitionConfigMapF<T[number]> | undefined => {
-  if (value === undefined) return true;
-  return isTransitionConfigMapTarget(value, ...keys);
 };
 
 export const isTransitionConfigMapActions = <
@@ -87,16 +67,6 @@ export const isTransitionConfigMapActions = <
   );
 };
 
-export const isTransitionConfigMapActionsOrUndefined = <
-  T extends string[] = string[],
->(
-  value: unknown,
-  ...keys: T
-): value is TransitionConfigMapA<T[number]> | undefined => {
-  if (value === undefined) return true;
-  return isTransitionConfigMapActions(value, ...keys);
-};
-
 export const isTransitionConfig = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -107,9 +77,7 @@ export const isTransitionConfig = <T extends string[] = string[]>(
   return isTransitionConfigMap(value, ...keys);
 };
 
-export const isTransitionConfigOrUndefined = <
-  T extends string[] = string[],
->(
+isTransitionConfig.orUndefined = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
 ): value is TransitionConfig<T[number]> | undefined => {
@@ -127,16 +95,6 @@ export const isTransitionConfigTarget = <T extends string[] = string[]>(
   return isTransitionConfigMapTarget(value, ...keys);
 };
 
-export const isTransitionConfigTargetOrUndefined = <
-  T extends string[] = string[],
->(
-  value: unknown,
-  ...keys: T
-): value is TransitionConfigF<T[number]> | undefined => {
-  if (value === undefined) return true;
-  return isTransitionConfigTarget(value, ...keys);
-};
-
 export const isTransitionArray = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -148,15 +106,12 @@ export const isTransitionArray = <T extends string[] = string[]>(
   const check1 = isTransitionConfig(pop, ...keys);
   if (!check1) return false;
 
-  const out = _value.every(v => {
+  return _value.every(v => {
     const check2 = isTransitionConfigMap(v, ...keys);
     if (!check2) return false;
     const guards = v.guards;
-    const check3 = checkGuards(guards);
-    if (!check3) return false;
-    return true;
+    return checkGuards(guards);
   });
-  return out;
 };
 
 export const isSingleOrArrayT = <T extends string[] = string[]>(

@@ -5,7 +5,7 @@ import {
   isSingleOrArrayT,
   isTransitionConfigMapActions,
 } from '../../transitions/functions/is/transition';
-import type { _EmitterConfig, EmitterConfig } from '../types';
+import type { _EmitterConfig, FinallyConfig } from '../types';
 
 export const isFinallyConfig1 = (value: unknown) => {
   const check1 = checkAction(value);
@@ -13,7 +13,9 @@ export const isFinallyConfig1 = (value: unknown) => {
   return isTransitionConfigMapActions(value) && value.target === undefined;
 };
 
-export const isFinallyConfig = (value: unknown) => {
+export const isFinallyConfig = (
+  value: unknown,
+): value is FinallyConfig => {
   if (Array.isArray(value)) {
     const _value = [...value];
     const pop = _value.pop();
@@ -34,7 +36,7 @@ export const isFinallyConfig = (value: unknown) => {
 
 isFinallyConfig.orUndefined = (
   value: unknown,
-): value is EmitterConfig | undefined => {
+): value is FinallyConfig | undefined => {
   if (value === undefined) return true;
   return isFinallyConfig(value);
 };
@@ -56,12 +58,4 @@ export const isEmitterConfig = <T extends string[] = string[]>(
   if (!isSingleOrArrayT(next, ...keys)) return false;
   if (!isSingleOrArrayT.orUndefined(error, ...keys)) return false;
   return isFinallyConfig.orUndefined(complete);
-};
-
-isEmitterConfig.orUndefined = <T extends string[] = string[]>(
-  value: unknown,
-  ...keys: T
-): value is EmitterConfig<T[number]> | undefined => {
-  if (value === undefined) return true;
-  return isEmitterConfig(value, ...keys);
 };
