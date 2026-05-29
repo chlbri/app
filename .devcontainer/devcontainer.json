@@ -51,7 +51,8 @@
         "Gruntfuggly.todo-tree",
         "TypeScriptTeam.native-preview",
         "rioj7.commandOnAllFiles",
-        "formulahendry.code-runner"
+        "formulahendry.code-runner",
+        "ms-azuretools.vscode-containers"
       ]
     }
   }
