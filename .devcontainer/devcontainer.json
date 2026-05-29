@@ -40,6 +40,7 @@
         "ms-vscode.vscode-typescript-next",
         "ms-vscode.js-debug",
         "oxc.oxc-vscode",
+        "bokuweb.vscode-ripgrep",
         "vitest.explorer",
         "ryanluker.vscode-coverage-gutters",
         "adam-bender.commit-message-editor",

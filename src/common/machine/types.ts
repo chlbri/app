@@ -1,4 +1,4 @@
-import type { Action2, WithDescriber } from '#actions';
+import type { Action2, ActionResult, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
 import type { NodeConfig, StateValue } from '#states';
@@ -171,3 +171,16 @@ export type CommonCreateMachine_F = (
     actorsMap?: any;
   },
 ) => any;
+
+/**
+ * Represents a scheduled action with its data and execution time.
+ *
+ * @template :  any [Pc] - type of the private context
+ * @template :  {@linkcode PrimitiveObject} [Tc] - type of the context
+ *
+ * @see {@linkcode ActionResult} for the result of the action.
+ */
+export type ScheduledData<
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+> = { data: ActionResult<Pc, Tc>; ms: number; id: string };

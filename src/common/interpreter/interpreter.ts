@@ -86,13 +86,13 @@ import type {
   MachineOptionsFrom,
   Mode,
   PrivateContextFrom,
-  ScheduledData,
   Selector_F,
   SimpleScheduler,
   TagFrom,
   WorkingStatus,
 } from './types';
 import { isPrimitive } from '#bemedev/globals/utils/is/primitive';
+import type { ScheduledData } from '../../machine';
 
 export abstract class CommonInterpreter<
   const C extends CommonConfig = CommonConfig,

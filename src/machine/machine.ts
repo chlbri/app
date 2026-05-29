@@ -13,6 +13,8 @@ import { _unknown } from '#bemedev/globals/utils/_unknown';
 import {
   CommonMachine,
   type CommonCreateMachine_F,
+  type ScheduledData,
+  type SimpleMachineOptions2,
 } from '#common/machine';
 import type { PredicateS } from '#guards';
 import { withTimeout } from '@bemedev/better-promise';
@@ -21,11 +23,10 @@ import { assignByKey, expandFnMap } from './functions';
 import type {
   AddOptions_F,
   AddOptionsParam_F,
-  ScheduledData,
   SendAction_F,
   VoidAction_F,
 } from './machine.types';
-import type { Config, SimpleMachineOptions2 } from './types';
+import type { Config } from './types';
 
 /**
  * A class representing a state machine.

@@ -22,7 +22,7 @@ import type {
   MaybePromise,
   OptionalDefinition,
 } from '~types';
-import type { SimpleMachineOptions2 } from '../machine';
+import type { ScheduledData, SimpleMachineOptions2 } from '../machine';
 import type { AnyMachine } from '../machine/types';
 import type { SubscriberClass, SubscriberOptions } from '../subscriber';
 
@@ -138,19 +138,6 @@ export type ExecuteActivities_F = (
   from: string,
   activity: ActivityConfig,
 ) => string[];
-
-/**
- * Represents a scheduled action with its data and execution time.
- *
- * @template :  any [Pc] - type of the private context
- * @template :  {@linkcode PrimitiveObject} [Tc] - type of the context
- *
- * @see {@linkcode ActionResult} for the result of the action.
- */
-export type ScheduledData<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = { data: ActionResult<Pc, Tc>; ms: number; id: string };
 
 export type SendToEvent<T = any> = {
   to: string;

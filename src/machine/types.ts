@@ -48,6 +48,7 @@ import type {
 } from '~types';
 import { RecordS } from './../types/primitives';
 import type { RegisterOptions } from '../registry.types';
+import type { CommonConfig } from '#common/machine';
 
 /**
  * Type representing the main JSON config.
@@ -74,10 +75,7 @@ export type MachineConfig = Describer | string;
 export type Config<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
     NoExtraKeysConfigDef<ConfigDef>,
-> = NodeConfig & {
-  readonly strict?: boolean;
-  readonly __longRuns?: boolean;
-} & TransformConfigDef<Paths>;
+> = CommonConfig<Paths>;
 
 export type ChildEvents<
   K extends string,
