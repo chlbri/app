@@ -2,7 +2,7 @@
   "name": "Node.js Library",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
   // 8 GB RAM for the container
-  "runArgs": ["--memory=8g", "--memory-swap=8g", "--cpus=2"],
+  "runArgs": ["--memory=8g", "--memory-swap=8g", "--cpus=3"],
   "hostRequirements": {
     "memory": "8gb"
   },
