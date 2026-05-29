@@ -1,15 +1,13 @@
-import type { PrimitiveObject } from '#bemedev/globals/types';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
-import { reduceFnMap } from '#utils';
 import type {
   Action2,
-  WithDescriber,
   ActionMap,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ActionResult,
-  SyncAction2,
-  SyncActionMap,
+  WithDescriber,
 } from '#actions';
+import type { PrimitiveObject } from '#bemedev/globals/types';
+import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import { reduceFnMap } from '#utils';
 import { fromDescriber } from '~types';
 
 export type ToAction_F = {
@@ -26,20 +24,6 @@ export type ToAction_F = {
     action: WithDescriber,
     actions?: ActionMap<Eo, Pc, Tc, T>,
   ): Action2<Eo, Pc, Tc, T> | undefined;
-
-  sync: <
-    E extends EventsMap = EventsMap,
-    A extends ActorsConfigMap = ActorsConfigMap,
-    Pc = any,
-    Tc extends PrimitiveObject = PrimitiveObject,
-    T extends string = string,
-    Eo extends EventObject = EventObject,
-  >(
-    events: E,
-    actorsMap: A,
-    action: WithDescriber,
-    actions?: SyncActionMap<Eo, Pc, Tc, T>,
-  ) => SyncAction2<Eo, Pc, Tc, T> | undefined;
 };
 
 const _toAction = (
@@ -66,4 +50,3 @@ const _toAction = (
  * @see {@linkcode reduceFnMap}
  */
 export const toAction: ToAction_F = _toAction as any;
-toAction.sync = _toAction;

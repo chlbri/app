@@ -1,4 +1,4 @@
-import { isAsyncConfig } from '#common/utils';
+import { isAsyncConfig } from '#common/functions/isAsyncConfig';
 import { createAsyncMachine } from '#machine';
 import { isNodeConfig } from '#states';
 import { createSyncMachine } from '../sync/machine';

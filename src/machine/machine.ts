@@ -3,7 +3,7 @@ import type { PrimitiveObject } from '#bemedev/globals/types';
 import { type EventsMap } from '#events';
 import { type FlatMapN } from '#states';
 import { reduceFnMap } from '#utils';
-import { getByKey } from '@bemedev/decompose';
+import { getByKey, assignByKey } from '@bemedev/decompose';
 
 import type { Action } from '#actions';
 import type { DelayFunction } from '#delays';
@@ -19,7 +19,7 @@ import {
 import type { PredicateS } from '#guards';
 import { withTimeout } from '@bemedev/better-promise';
 import cloneDeep from 'clone-deep';
-import { assignByKey, expandFnMap } from './functions';
+import { expandFnMap } from '#common/functions';
 import type {
   AddOptions_F,
   AddOptionsParam_F,

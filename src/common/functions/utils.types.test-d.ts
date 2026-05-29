@@ -1,5 +1,5 @@
 import type { Fn, FnMap, FnMapR } from '~types';
-import type { IsAsyncConfig, IsAsyncFnMap } from './utils.types';
+import type { IsAsyncConfig, IsAsyncFnMap } from './types';
 
 // ============================================================================
 // IsAsyncFnMap Tests

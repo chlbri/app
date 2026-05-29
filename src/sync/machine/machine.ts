@@ -1,17 +1,16 @@
 import type { SyncAction2 } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
-import type { CommonCreateMachine_F } from '#common/machine';
+import type {
+  CommonCreateMachine_F,
+  ScheduledData,
+  SimpleMachineOptions2,
+} from '#common/machine';
 import type { SyncDelayFunction } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type PredicateS } from '#guards';
-import {
-  assignByKey,
-  expandFnMap,
-  getByKey,
-  type ScheduledData,
-  type SimpleMachineOptions2,
-} from '#machines';
+import { getByKey, assignByKey } from '@bemedev/decompose';
+import { expandFnMap } from '#common/functions';
 import type { FlatMapN } from '#states';
 import { reduceFnMap } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';

@@ -2,9 +2,8 @@ import type { Action2, SyncAction2 } from '#actions';
 import type { Cast, PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
-import type { Decompose } from '@bemedev/decompose';
+import { assignByKey, type Decompose } from '@bemedev/decompose';
 import { type FnMap } from '~types';
-import { assignByKey } from './subcriber';
 
 export type ExpandFnMap_F = {
   <

@@ -1,6 +1,6 @@
 import type { ConfigFrom, InterpretArgs } from '#common/interpreter';
 import type { AnyMachine, CommonConfig, StdO2 } from '#common/machine';
-import type { IsAsyncConfig } from '#common/utils.types';
+import type { IsAsyncConfig } from '#common/functions/types';
 import type {
   ActorsConfigMap,
   EventObject,
