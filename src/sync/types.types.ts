@@ -26,26 +26,28 @@ export type SyncTransitionsConfig<Paths extends string = string> = {
   readonly actors?: RecordS<ActorConfig<Paths>>;
 };
 
-export type SyncCommonNodeConfig = BaseConfig & SyncTransitionsConfig;
+export type SyncCommonNodeConfig<Paths extends string = string> =
+  BaseConfig & SyncTransitionsConfig<Paths>;
 
-export type SyncNodeConfig = SyncCommonNodeConfig &
-  (
-    | {
-        readonly type?: 'atomic';
-        readonly initial?: never;
-        readonly states?: never;
-      }
-    | {
-        readonly type?: 'compound';
-        readonly initial: string;
-        readonly states: RecordS<SyncNodeConfig>;
-      }
-    | {
-        readonly type: 'parallel';
-        readonly initial?: never;
-        readonly states: RecordS<SyncNodeConfig>;
-      }
-  );
+export type SyncNodeConfig<Paths extends string = string> =
+  SyncCommonNodeConfig<Paths> &
+    (
+      | {
+          readonly type?: 'atomic';
+          readonly initial?: never;
+          readonly states?: never;
+        }
+      | {
+          readonly type?: 'compound';
+          readonly initial: string;
+          readonly states: RecordS<SyncNodeConfig<Paths>>;
+        }
+      | {
+          readonly type: 'parallel';
+          readonly initial?: never;
+          readonly states: RecordS<SyncNodeConfig<Paths>>;
+        }
+    );
 
 /**
  * Type representing the main JSON node config of a sync state machine.
@@ -57,7 +59,7 @@ export type SyncNodeConfig = SyncCommonNodeConfig &
 export type SyncConfig<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
     NoExtraKeysConfigDef<ConfigDef>,
-> = SyncNodeConfig & {
+> = SyncNodeConfig<Paths['targets'][number]> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
 } & TransformConfigDef<Paths>;

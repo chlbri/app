@@ -35,16 +35,13 @@ export const isTransitionConfigMap = <T extends string[] = string[]>(
 
   const check2 = isStringOrUndefined(description);
   if (!check2) return false;
-  const check3 = checkValues.orUndefined(target, ...keys);
-  if (!check3) return false;
   const check33 = isStringOrUndefined(target);
   if (!check33) return false;
+  const check3 = checkValues.orUndefined(target, ...keys);
+  if (!check3) return false;
   const check4 = checkActions.orUndefined(actions);
   if (!check4) return false;
-  const check5 = checkGuards.orUndefined(guards);
-  if (!check5) return false;
-
-  return true;
+  return checkGuards.orUndefined(guards);
 };
 
 export const isTransitionConfigMapTarget = <T extends string[] = string[]>(
@@ -75,14 +72,6 @@ export const isTransitionConfig = <T extends string[] = string[]>(
     return checkValues(value, ...keys);
   }
   return isTransitionConfigMap(value, ...keys);
-};
-
-isTransitionConfig.orUndefined = <T extends string[] = string[]>(
-  value: unknown,
-  ...keys: T
-): value is TransitionConfig<T[number]> | undefined => {
-  if (value === undefined) return true;
-  return isTransitionConfig(value, ...keys);
 };
 
 export const isTransitionConfigTarget = <T extends string[] = string[]>(

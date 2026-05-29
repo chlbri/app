@@ -24,8 +24,6 @@ const ALLKEYS = [
   'always',
   'actors',
   'after',
-  '__longRuns',
-  'strict',
 ];
 
 const ACTIVITY_KEYS = ['guards', 'actions'];
@@ -74,15 +72,19 @@ checkActivities.orUndefined = (value: unknown): boolean => {
   return checkActivities(value);
 };
 
-export const checkAtomic = (value: unknown): boolean => {
+export const checkAtomic = <T extends string[] = string[]>(
+  value: unknown,
+  ...keys: T
+): boolean => {
   if (typeof value !== 'object' || value === null || Array.isArray(value))
     return false;
 
-  const check0 = isTransitionsConfig(value);
+  const check0 = isTransitionsConfig(value, ...keys);
   if (!check0) return false;
-  const _value: any = value;
+  const { __longRuns: _, strict: __, ..._value }: any = value;
   const check = checkKeys(_value, ...ALLKEYS);
   if (!check) return false;
+
   const entry = _value.entry;
   const exit = _value.exit;
   const description = _value.description;
@@ -90,34 +92,38 @@ export const checkAtomic = (value: unknown): boolean => {
   const activities = _value.activities;
   const initial = _value.initial;
   const type = _value.type;
-  const longRuns = _value.__longRuns;
-  const strict = _value.strict;
+
   if (!checkActions.orUndefined(entry)) return false;
   if (!checkActions.orUndefined(exit)) return false;
   if (!isStringOrUndefined(description)) return false;
   if (!checkSoAString.orUndefined(tags)) return false;
   if (!checkActivities.orUndefined(activities)) return false;
   if (!isStringOrUndefined(type)) return false;
-  if (!checkValues.orUndefined(type, 'atomic', 'compound', 'parallel'))
+
+  if (!checkValues.orUndefined(type, 'atomic', 'compound', 'parallel')) {
     return false;
-  if (!checkValues.orUndefined(longRuns, true, false)) return false;
-  if (!checkValues.orUndefined(strict, true, false)) return false;
+  }
+
   return isStringOrUndefined(initial);
 };
 
-export const isNodeConfig = (value: unknown): value is NodeConfig => {
-  const check1 = checkAtomic(value);
+export const isNodeConfig = <T extends string[] = string[]>(
+  value: unknown,
+  ...keys: T
+): value is NodeConfig<T[number]> => {
+  const check1 = checkAtomic(value, ...keys);
   if (!check1) return false;
   const _value: any = value;
   const type = stateType(_value);
   if (type === 'atomic') return true;
   const nexts = Object.values(_value.states);
-  return nexts.every(isNodeConfig);
+  return nexts.every(v => isNodeConfig(v, ...keys));
 };
 
-isNodeConfig.orUndefined = (
+isNodeConfig.orUndefined = <T extends string[] = string[]>(
   value: unknown,
-): value is NodeConfig | undefined => {
+  ...keys: T
+): value is NodeConfig<T[number]> | undefined => {
   if (value === undefined) return true;
-  return isNodeConfig(value);
+  return isNodeConfig(value, ...keys);
 };

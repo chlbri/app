@@ -40,11 +40,3 @@ export const isChildConfig = <T extends string[] = string[]>(
 
   return valueContexts.every(isString);
 };
-
-isChildConfig.orUndefined = <T extends string[] = string[]>(
-  value: unknown,
-  ...keys: T
-): value is ReturnType<typeof isChildConfig> | undefined => {
-  if (value === undefined) return true;
-  return isChildConfig(value, ...keys);
-};

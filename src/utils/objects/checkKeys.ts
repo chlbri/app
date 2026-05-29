@@ -1,7 +1,6 @@
 export type CheckKeys_F = {
   <T extends object>(arg: T, ...keys: string[]): boolean;
   strict: <T extends object>(arg: T, ...keys: string[]) => boolean;
-  strictest: <T extends object>(arg: T, ...keys: string[]) => boolean;
 };
 
 /**
@@ -31,11 +30,4 @@ checkKeys.strict = (arg, ...keys) => {
     if (check) return false;
   }
   return true;
-};
-
-checkKeys.strictest = (arg, ...keys) => {
-  const argKeys = Object.keys(arg);
-  const check0 = argKeys.length === keys.length;
-  if (!check0) return false;
-  return checkKeys.strict(arg, ...keys);
 };

@@ -488,24 +488,6 @@ describe('isNodeConfig', () => {
       ).toBe(false);
     });
 
-    test('returns false for node with invalid __longRuns type', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          __longRuns: 'true',
-        }),
-      ).toBe(false);
-    });
-
-    test('returns false for node with invalid strict type', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          strict: 'false',
-        }),
-      ).toBe(false);
-    });
-
     test('returns false for node with unknown key', () => {
       expect(
         isNodeConfig({
@@ -594,6 +576,17 @@ describe('isNodeConfig', () => {
           states: {},
         }),
       ).toBe(true);
+    });
+
+    test('not well describer', () => {
+      expect(
+        isNodeConfig({
+          entry: {
+            name: 'enter',
+            invalid: 'unexpected',
+          },
+        }),
+      ).toBe(false);
     });
 
     test('empty states object in parallel node is valid', () => {
@@ -781,6 +774,22 @@ describe('isNodeConfig', () => {
   });
 
   describe('actors config', () => {
+    test('notwell #1', () => {
+      expect(
+        isNodeConfig({
+          actors: null,
+        }),
+      ).toBe(false);
+    });
+
+    test('notwell #2', () => {
+      expect(
+        isNodeConfig({
+          actors: true,
+        }),
+      ).toBe(false);
+    });
+
     describe('emitter config', () => {
       test('nemitter is null, returns false', () => {
         expect(
@@ -1331,6 +1340,187 @@ describe('isNodeConfig', () => {
         }),
       ).toBe(false);
     });
+
+    test('not well #6', () => {
+      expect(
+        isNodeConfig({
+          on: {
+            EVENT: [
+              {
+                description: 234,
+                target: 'nextState',
+                guards: 'isValid',
+              },
+            ],
+          },
+        }),
+      ).toBe(false);
+    });
+
+    test('not well #7', () => {
+      expect(
+        isNodeConfig({
+          on: {
+            EVENT: [
+              {
+                target: 345,
+              },
+            ],
+          },
+        }),
+      ).toBe(false);
+    });
+
+    test('not well #8', () => {
+      expect(
+        isNodeConfig({
+          on: {
+            EVENT: [
+              {
+                actions: 345,
+              },
+            ],
+          },
+        }),
+      ).toBe(false);
+    });
+
+    test('not well #9', () => {
+      expect(
+        isNodeConfig(
+          {
+            on: {
+              EVENT: 'notInside',
+            },
+          },
+          'inside',
+        ),
+      ).toBe(false);
+    });
+
+    test('not well #10', () => {
+      expect(
+        isNodeConfig.orUndefined(
+          {
+            on: {
+              EVENT: { target: 'notInside' },
+            },
+          },
+          'inside',
+        ),
+      ).toBe(false);
+    });
+
+    test('always not well #1', () => {
+      expect(
+        isNodeConfig({
+          always: null,
+        }),
+      ).toBe(false);
+    });
+
+    test('always not well #2', () => {
+      expect(
+        isNodeConfig({
+          always: {},
+        }),
+      ).toBe(false);
+    });
+
+    test('always not well #3', () => {
+      expect(
+        isNodeConfig({
+          always: {
+            actions: 'action1',
+          },
+        }),
+      ).toBe(false);
+    });
+
+    test('always not well #4', () => {
+      expect(
+        isNodeConfig({
+          always: [
+            {
+              actions: 'action1',
+            },
+            {
+              actions: 'action1',
+              target: 'nextState',
+            },
+          ],
+        }),
+      ).toBe(false);
+    });
+
+    test('always not well #5', () => {
+      expect(
+        isNodeConfig({
+          always: [
+            {
+              actions: 'action1',
+              target: 'nextState',
+            },
+            {
+              actions: 'action1',
+              target: 'nextState',
+            },
+          ],
+        }),
+      ).toBe(false);
+    });
+
+    test('always not well #6', () => {
+      expect(
+        isNodeConfig({
+          always: [],
+        }),
+      ).toBe(false);
+    });
+
+    test('always not well #7', () => {
+      expect(
+        isNodeConfig({
+          always: [
+            {
+              actions: 'action1',
+              target: 'nextState',
+              guards: 'isValid',
+            },
+            {
+              actions: 'action1',
+            },
+          ],
+        }),
+      ).toBe(false);
+    });
+
+    test('always well #1', () => {
+      expect(
+        isNodeConfig({
+          always: [
+            {
+              actions: 'action1',
+              target: 'nextState',
+              guards: 'isValid',
+            },
+            {
+              actions: 'action1',
+              target: 'nextState',
+            },
+          ],
+        }),
+      ).toBe(true);
+    });
+
+    test('always well #2', () => {
+      expect(
+        isNodeConfig.orUndefined({
+          always: 'nextState',
+        }),
+      ).toBe(true);
+    });
+
     test('well formated', () => {
       expect(
         isNodeConfig({

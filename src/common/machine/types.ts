@@ -41,7 +41,7 @@ export type TransformConfigDef<T extends ConfigDef> = {
 export type CommonConfig<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
     NoExtraKeysConfigDef<ConfigDef>,
-> = NodeConfig & {
+> = NodeConfig<Paths['targets'][number]> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
 } & TransformConfigDef<Paths>;
