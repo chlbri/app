@@ -1,9 +1,12 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import { _machine2, DELAY, fakeDB } from '#fixturesData';
+import {} from '#fixturesData';
 import { constructTests } from '#fixtures';
 import { interpret } from '#interpreters';
 import { nothing } from '#utils';
 import equal from 'fast-deep-equal';
+import { _machine2 } from './machine2';
+import { fakeDB } from './fakeDB';
+import { DELAY } from './constants';
 
 describe('machine coverage', () => {
   beforeAll(() => {
@@ -232,3 +235,5 @@ describe('machine coverage', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

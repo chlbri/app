@@ -1,6 +1,6 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { type StateValue } from '#states';
 import _machine1 from './real.1.machine';
 import _machine2 from './real.2.machine';
@@ -1027,3 +1027,5 @@ describe('REAL LIFE TESTS', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

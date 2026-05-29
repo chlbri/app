@@ -1,5 +1,5 @@
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _childMachine1 from './child.1.machine';
 import _machine2 from './child.2.machine';
 
@@ -211,3 +211,5 @@ describe('Coverage actors', () => {
     test(...stop());
   });
 });
+
+afterAll(() => vi.useRealTimers());

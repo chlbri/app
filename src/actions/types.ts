@@ -54,6 +54,20 @@ export type Action<
   T extends string = string,
 > = FnMap<E, Pc, Tc, T, MaybeAsyncActionResult<Pc, Tc>>;
 
+export type SyncAction<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = FnMap<E, Pc, Tc, T, ActionResult<Pc, Tc>>;
+
+export type Action3<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = FnMap<E, Pc, Tc, T, ActionResult<Pc, Tc>>;
+
 /**
  * Represents a collection of actions, where each action is identified by a string key.
  *
@@ -69,6 +83,13 @@ export type ActionMap<
   T extends string = string,
 > = Partial<Record<string, Action<E, Pc, Tc, T>>>;
 
+export type SyncActionMap<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = Partial<Record<string, SyncAction<E, Pc, Tc, T>>>;
+
 export type Action2<
   E extends EventObject = EventObject,
   Pc = any,
@@ -76,7 +97,7 @@ export type Action2<
   T extends string = string,
 > = FnR<E, Pc, Tc, T, MaybeAsyncActionResult<Pc, Tc>>;
 
-export type Action22<
+export type SyncAction2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,

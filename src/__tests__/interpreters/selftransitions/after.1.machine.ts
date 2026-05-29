@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { createConfig } from '#machines';
 
 const simpleConfig = createConfig({

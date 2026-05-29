@@ -1,5 +1,5 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { notU } from '#utils';
 import _raw_machine from './perform.bis.machine';
 
@@ -144,3 +144,5 @@ describe('cov => Performs send to itself actions', () => {
 
   test('#36 => Dispose', service.dispose);
 });
+
+afterAll(() => vi.useRealTimers());

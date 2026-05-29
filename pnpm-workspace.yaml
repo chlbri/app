@@ -4,3 +4,6 @@ minimumReleaseAgeExclude:
   - '@bemedev/typings@1.2.0'
   - '@bemedev/typings@1.1.6'
   - '@bemedev/typings@1.1.5'
+  - '@bemedev/interval2@1.0.1'
+  - '@bemedev/interval2@1.0.0'
+  - '@bemedev/scheduler@1.0.0'

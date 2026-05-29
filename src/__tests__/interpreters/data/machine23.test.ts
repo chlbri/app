@@ -216,3 +216,5 @@ describe('Machine 23 -> Tests for inner machines', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

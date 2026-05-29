@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { typings } from '#utils';
 
 export default createMachine(
@@ -22,8 +22,8 @@ export default createMachine(
   {
     context: typings.context('number'),
     eventsMap: typings.eventsMap({
-      NEXT: 'never',
-      TRIPLE: 'never',
+      NEXT: 'undefined',
+      TRIPLE: 'undefined',
     }),
   },
 );

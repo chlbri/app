@@ -1,6 +1,6 @@
 import { DEFAULT_MIN_ACTIVITY_TIME } from '#constants';
 import { constructTests, defaultC } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { machine } from './constants';
 
 vi.useFakeTimers();
@@ -38,3 +38,5 @@ describe('Delay is too long', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

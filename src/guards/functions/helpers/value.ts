@@ -1,6 +1,6 @@
 import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { EventObject } from '#events';
-import { getByKey } from '#machines';
+import { getByKey } from '@bemedev/decompose';
 import type { FnR } from '~types';
 import type { DefinedValue } from '../../types';
 

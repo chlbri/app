@@ -1,5 +1,5 @@
 import { interpret } from '#interpreters';
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { createConfig } from '#machines';
 import { notU } from '#utils';
 import { type } from '@bemedev/typings';
@@ -113,7 +113,6 @@ export const typings2 = {
 } as const;
 
 export const machine2 = createMachine(
-  'src/__tests__/interpreters/data/machine2',
   {
     actors: {
       machine1: {
@@ -181,11 +180,7 @@ const _config2 = createConfig({
   },
 });
 
-export const _machine2 = createMachine(
-  'src/__tests__/interpreters/data/machine2._2',
-  _config2,
-  typings2,
-).provideOptions(
+export const _machine2 = createMachine(_config2, typings2).provideOptions(
   ({
     isNotValue,
     isValue,

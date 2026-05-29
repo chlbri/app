@@ -1,5 +1,5 @@
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { notU } from '#utils';
 import { createPausable } from '@bemedev/rx-pausable';
 import { interval, map, take } from 'rxjs';
@@ -112,3 +112,5 @@ describe('Simple Machine2 (from Machine1)', () => {
   test(...useContext(75));
   test(...stop());
 });
+
+afterAll(() => vi.useRealTimers());

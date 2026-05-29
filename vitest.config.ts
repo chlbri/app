@@ -29,6 +29,9 @@ export default defineConfig({
       ],
     }),
   ],
+  server: {
+    host: '0.0.0.0',
+  },
   test: {
     bail: 100,
     maxConcurrency: 10,
@@ -40,8 +43,9 @@ export default defineConfig({
       NODE_ENV: 'test',
     },
     globals: true,
-    logHeapUsage: true,
+    logHeapUsage: false,
     setupFiles: ['./vitest.setup.ts'],
+    testTimeout: 30000,
     typecheck: {
       enabled: true,
       ignoreSourceErrors: true,

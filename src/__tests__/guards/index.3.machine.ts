@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 
 export default createMachine('src/__tests__/guards/index.3.machine', {
   initial: 'state1',

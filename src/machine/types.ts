@@ -48,6 +48,7 @@ import type {
 } from '~types';
 import { RecordS } from './../types/primitives';
 import type { RegisterOptions } from '../registry.types';
+import type { CommonConfig } from '#common/machine';
 
 /**
  * Type representing the main JSON config.
@@ -74,10 +75,7 @@ export type MachineConfig = Describer | string;
 export type Config<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
     NoExtraKeysConfigDef<ConfigDef>,
-> = NodeConfig & {
-  readonly strict?: boolean;
-  readonly __longRuns?: boolean;
-} & TransformConfigDef<Paths>;
+> = CommonConfig<Paths>;
 
 export type ChildEvents<
   K extends string,
@@ -92,7 +90,23 @@ export type ChildFunction<
   R extends { eventsMap: any } = { eventsMap: any },
 > = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
 
+export type SyncChildFunction<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
+
 export type ChildFunction2<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnR<E, Pc, Tc, T, R>;
+
+export type SyncChildFunction2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -123,7 +137,7 @@ export type NoExtraKeysConfigDef<T extends ConfigDef> = T & {
 };
 
 export type ConfigDef = {
-  readonly targets: string;
+  readonly targets: string[];
   readonly initial?: string;
   readonly states?: RecordS<ConfigDef>;
 };
@@ -143,7 +157,7 @@ export type NoExtraKeysConfig<T extends Config> = T & {
   states?: Record<string, NoExtraKeysConfigNode<NodeConfig>>;
 };
 export type TransformConfigDef<T extends ConfigDef> = BaseConfig &
-  TransitionsConfig<T['targets']> & {
+  TransitionsConfig<T['targets'][number]> & {
     readonly initial?: T['initial'];
     readonly states?: {
       [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
@@ -165,7 +179,7 @@ export type TransformConfigDef<T extends ConfigDef> = BaseConfig &
  * @see {@linkcode ExtractActionsFromActivity} for extracting actions from activities.
  * @see {@linkcode ReduceArray} for reducing arrays to a single type.
  */
-type _GetKeyActionsFromFlat<Flat extends FlatMapN> = {
+export type _GetKeyActionsFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]:
     | ExtractActionKeysFromTransitions<
         Extract<Flat[key], TransitionsConfig>

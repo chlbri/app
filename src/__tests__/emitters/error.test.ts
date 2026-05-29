@@ -1,6 +1,6 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { createPausable } from '@bemedev/rx-pausable';
 import { Subject } from 'rxjs';
 import _raw_machine from './error.machine';
@@ -90,3 +90,5 @@ describe('Error transitions testing)', () => {
     test(...useContext(15));
   });
 });
+
+afterAll(() => vi.useRealTimers());

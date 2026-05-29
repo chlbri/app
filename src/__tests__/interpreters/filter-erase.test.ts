@@ -1,5 +1,5 @@
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _machine1 from './filter-erase.1.machine';
 import _machine2 from './filter-erase.2.machine';
 import _machine3 from './filter-erase.3.machine';

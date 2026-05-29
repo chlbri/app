@@ -1,5 +1,5 @@
 import { constructTests, defaultC } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { DELAY, machine } from './constants';
 
 vi.useFakeTimers();
@@ -66,3 +66,5 @@ describe('delay is not defined', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

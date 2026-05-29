@@ -1,4 +1,4 @@
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _machine1 from './addOptions-return.1.machine';
 import _machine2 from './addOptions-return.2.machine';
 import _machine3 from './addOptions-return.3.machine';

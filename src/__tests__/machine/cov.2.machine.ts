@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 
 const idM = 'machineNotDefined' as const;
 

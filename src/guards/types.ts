@@ -57,6 +57,13 @@ export type PredicateS<
   T extends string = string,
 > = boolean | FnMap<E, Pc, Tc, T, boolean>;
 
+export type SyncPredicateS<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = boolean | FnMap<E, Pc, Tc, T, boolean>;
+
 export type PredicateS2<
   E extends EventObject = EventObject,
   Pc = any,

@@ -1,5 +1,5 @@
 import { constructTests, defaultC } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _child1 from './children.1.machine';
 import _parent2 from './children.2.machine';
 import _parent3 from './children.3.machine';
@@ -130,3 +130,5 @@ describe('Integration testing for interpret, Children', () => {
     test(...useNotify());
   });
 });
+
+afterAll(() => vi.useRealTimers());

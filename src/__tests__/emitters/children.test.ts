@@ -1,5 +1,5 @@
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import machineEmitter3 from './emitter3.machine';
 import { WAITERS } from './emitter1.machine';
 
@@ -144,3 +144,5 @@ describe('Children', () => {
     test(...stop());
   });
 });
+
+afterAll(() => vi.useRealTimers());

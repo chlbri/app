@@ -1,4 +1,4 @@
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _raw_machine from './action.batch.cov.machine';
 
 vi.useFakeTimers();
@@ -52,3 +52,5 @@ describe('Machine batch action', () => {
     expect(service.context).toBe(10);
   });
 });
+
+afterAll(() => vi.useRealTimers());

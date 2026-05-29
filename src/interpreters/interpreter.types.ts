@@ -14,11 +14,7 @@ import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
-import type {
-  AnyMachine,
-  ContextFrom,
-  PrivateContextFrom,
-} from '#machines';
+import type { ContextFrom, PrivateContextFrom } from '#machines';
 import type { ActivityConfig, NodeConfig, StateValue } from '#states';
 import type {
   AlwaysConfig,
@@ -29,7 +25,11 @@ import type { Decompose } from '@bemedev/decompose';
 import type { Interval2, IntervalParams } from '@bemedev/interval2';
 import type { FnMapR, OptionalDefinition } from '~types';
 import { type InterpreterFrom } from './interpreter';
-import type { SubscriberClass, SubscriberOptions } from './subscriber';
+import type {
+  SubscriberClass,
+  SubscriberOptions,
+} from '#common/subscriber';
+import type { AnyMachine } from '#common/machine';
 
 export type WorkingStatus =
   | 'idle'
@@ -234,15 +234,13 @@ export interface AnyInterpreter<
   _ppC: (pContext: Pc) => AnyMachine<E, A, Pc, Tc>;
   _provideContext: (context: Tc) => AnyMachine<E, A, Pc, Tc>;
 
-  subscribe: AddSubscriber_F<E, A, Tc, T>;
+  subscribe: AddSubscriber_F<E, A, Tc, T, any>;
 
   send: (event: any) => Promise<void>;
   toActionFn: (action: WithDescriber) => any;
   toPredicateFn: (guard: GuardConfig) => any;
-  toPromiseSrcFn: (src: string) => any;
   toDelayFn: (delay: string) => any;
   toChildFunction: (machine: string) => any;
-  toObservable: (emitter: string) => any;
   id?: string;
   from?: string;
 

@@ -1,7 +1,7 @@
 import { DEFAULT_MAX_TIME_PROMISE } from '#constants';
 import { constructTests, defaultC } from '#fixtures';
 import { returnFalse } from '#guards';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _machine1 from './after.1.machine';
 import _machine2 from './after.2.machine';
 import _machine3 from './after.3.machine';
@@ -155,6 +155,17 @@ describe('after', () => {
   describe('#05 => after transition - delay is too long', () => {
     vi.useFakeTimers();
     const machine = _machine5;
+
+    const unhandledTest = (error: any) => {
+      const message =
+        error instanceof Error ? error.message : String(error);
+      expect(message).toBe('Timed out after 1000000 ms.');
+    };
+
+    beforeAll(() => {
+      process.on('uncaughtException', unhandledTest);
+      process.on('unhandledRejection', unhandledTest);
+    });
 
     machine.addOptions(() => ({
       delays: {

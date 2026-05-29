@@ -83,44 +83,49 @@ export type BaseConfig = {
   readonly activities?: ActivityConfig;
 };
 
-export type CommonNodeConfig = BaseConfig & TransitionsConfig;
+export type CommonNodeConfig<Paths extends string = string> = BaseConfig &
+  TransitionsConfig<Paths>;
 
-export type NodeConfig = CommonNodeConfig &
-  (
-    | {
-        readonly type?: 'atomic';
-        readonly initial?: never;
-        readonly states?: never;
-      }
-    | {
-        readonly type?: 'compound';
-        readonly initial: string;
-        readonly states: RecordS<NodeConfig>;
-      }
-    | {
-        readonly type: 'parallel';
-        readonly initial?: never;
-        readonly states: RecordS<NodeConfig>;
-      }
-  );
+export type NodeConfig<Paths extends string = string> =
+  CommonNodeConfig<Paths> &
+    (
+      | {
+          readonly type?: 'atomic';
+          readonly initial?: never;
+          readonly states?: never;
+        }
+      | {
+          readonly type?: 'compound';
+          readonly initial: string;
+          readonly states: RecordS<NodeConfig<Paths>>;
+        }
+      | {
+          readonly type: 'parallel';
+          readonly initial?: never;
+          readonly states: RecordS<NodeConfig<Paths>>;
+        }
+    );
 
-export type NodeConfigAtomic = CommonNodeConfig & {
-  readonly type?: 'atomic';
-  readonly initial?: never;
-  readonly states?: never;
-};
+export type NodeConfigAtomic<Paths extends string = string> =
+  CommonNodeConfig<Paths> & {
+    readonly type?: 'atomic';
+    readonly initial?: never;
+    readonly states?: never;
+  };
 
-export type NodeConfigCompound = CommonNodeConfig & {
-  readonly type?: 'compound';
-  readonly initial: string;
-  readonly states: RecordS<NodeConfig>;
-};
+export type NodeConfigCompound<Paths extends string = string> =
+  CommonNodeConfig<Paths> & {
+    readonly type?: 'compound';
+    readonly initial: string;
+    readonly states: RecordS<NodeConfig<Paths>>;
+  };
 
-export type NodeConfigParallel = CommonNodeConfig & {
-  readonly type: 'parallel';
-  readonly initial?: never;
-  readonly states: RecordS<NodeConfig>;
-};
+export type NodeConfigParallel<Paths extends string = string> =
+  CommonNodeConfig<Paths> & {
+    readonly type: 'parallel';
+    readonly initial?: never;
+    readonly states: RecordS<NodeConfig<Paths>>;
+  };
 
 export type StateValue = string | StateValueMap;
 

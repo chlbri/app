@@ -1,4 +1,4 @@
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _machine1 from './asyncActions.1.machine';
 import _machine2 from './asyncActions.2.machine';
 import _machine3 from './asyncActions.3.machine';
@@ -391,3 +391,5 @@ describe('Machine createOptions - error handlers', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

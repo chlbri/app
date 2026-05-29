@@ -23,6 +23,7 @@ import { IS_TEST } from '#utils';
 import type { EmptyObject } from '@bemedev/decompose';
 import { sleep } from '@bemedev/sleep';
 import { buildIndex, buildInvite } from './invite';
+import type { CommonInterpreter } from '#common/interpreter';
 
 export * from './constants';
 export * from './invite';
@@ -270,7 +271,7 @@ export const constructTests = <
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 >(
-  service: Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>,
+  service: CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>,
   helper?: (option: Option<Eo, Pc, Tc>) => T,
   startIndex = 0,
 ): ConstructTestsResult<Eo, T, Ta> => {

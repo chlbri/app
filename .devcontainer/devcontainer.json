@@ -1,13 +1,13 @@
 {
   "name": "Node.js Library",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
   // 8 GB RAM for the container
-  "runArgs": ["--memory=8g", "--memory-swap=8g", "--cpus=2"],
+  "runArgs": ["--memory=8g", "--memory-swap=8g", "--cpus=3"],
   "hostRequirements": {
     "memory": "8gb"
   },
   // pnpm via corepack (ships with Node 24) + install deps
-  "postCreateCommand": "corepack use pnpm@latest && pnpm install --frozen-lockfile",
+  "postCreateCommand": "corepack use pnpm@latest && pnpm run ci:admin",
   // Forward vitest --ui port, also Ollama
   "forwardPorts": [51204, 11434],
   "portsAttributes": {
@@ -40,6 +40,7 @@
         "ms-vscode.vscode-typescript-next",
         "ms-vscode.js-debug",
         "oxc.oxc-vscode",
+        "bokuweb.vscode-ripgrep",
         "vitest.explorer",
         "ryanluker.vscode-coverage-gutters",
         "adam-bender.commit-message-editor",
@@ -48,7 +49,10 @@
         "github.copilot-chat",
         "anthropic.claude-code",
         "Gruntfuggly.todo-tree",
-        "TypeScriptTeam.native-preview"
+        "TypeScriptTeam.native-preview",
+        "rioj7.commandOnAllFiles",
+        "formulahendry.code-runner",
+        "ms-azuretools.vscode-containers"
       ]
     }
   }

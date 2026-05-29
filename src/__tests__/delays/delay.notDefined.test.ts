@@ -1,6 +1,6 @@
 import { DEFAULT_MAX_TIME_PROMISE } from '#constants';
 import { constructTests, defaultC } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import machine from './delay.notDefined.machine';
 
 vi.useFakeTimers();
@@ -20,3 +20,5 @@ describe('#05 => Delay is not defined', () => {
   test(...useStateValue('idle'));
   describe(...useWarnings('Delay (DELAY) is not defined'));
 });
+
+afterAll(() => vi.useRealTimers());

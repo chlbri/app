@@ -1,4 +1,4 @@
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { constructTests, defaultC } from '#fixtures';
 import { transformEventArg, ALWAYS_EVENT } from '#events';
 import _machine1 from './index.1.machine';

@@ -1,13 +1,12 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { type } from '@bemedev/typings';
 import { DELAY } from './constants';
+import { typings } from '#utils';
 
 // #region machine1
 export const machine1 = createMachine(
-  'src/__tests__/interpreters/data/machine1',
   {
     initial: 'idle',
-
     states: {
       idle: {
         activities: { DELAY: 'inc' },
@@ -18,7 +17,7 @@ export const machine1 = createMachine(
     },
   },
   {
-    context: type({
+    context: typings.context({
       iterator: 'number',
     }),
 

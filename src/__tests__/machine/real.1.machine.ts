@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { type } from '@bemedev/typings';
 
 const actions = { exit: 'inc', entry: 'inc' } as const;

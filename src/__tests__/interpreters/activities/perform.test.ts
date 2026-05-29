@@ -1,5 +1,5 @@
 import { DELAY } from '#fixturesData';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { constructTests } from '#fixtures';
 import _raw_machine from './perform.machine';
 
@@ -84,3 +84,5 @@ describe('Performs activities on events', () => {
 
   test(...dispose(22));
 });
+
+afterAll(() => vi.useRealTimers());

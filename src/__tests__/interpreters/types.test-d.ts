@@ -18,7 +18,7 @@ expectTypeOf<TTPrivate>().branded.toEqualTypeOf<{
 }>();
 
 type TTC = ContextFrom<Machine3>;
-expectTypeOf<TTC>().branded.toEqualTypeOf<{
+expectTypeOf<TTC>().toEqualTypeOf<{
   age: number;
 }>();
 

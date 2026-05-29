@@ -1,5 +1,5 @@
 import { emptyFn } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { sleep } from '@bemedev/sleep';
 import _machine1 from './async-actions.1.machine';
 import _machine2 from './async-actions.2.machine';
@@ -211,7 +211,9 @@ describe('Async action helpers', () => {
       },
     }));
 
-    const service = interpret(machine, { context: { dispatched: false } });
+    const service = interpret(machine, {
+      context: { dispatched: false },
+    } as any);
 
     test('#00 => start', service.start);
 
@@ -246,3 +248,5 @@ describe('Async action helpers', () => {
     });
   });
 });
+
+afterAll(() => vi.useRealTimers());

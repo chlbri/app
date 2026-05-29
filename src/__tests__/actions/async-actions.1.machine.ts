@@ -1,5 +1,5 @@
-import { createMachine } from '#machine';
-import { type } from '@bemedev/typings';
+import { createMachine } from '#exports/createMachine';
+import * as v from 'valibot';
 
 export default createMachine(
   'src/__tests__/actions/async-actions.1.machine',
@@ -14,8 +14,8 @@ export default createMachine(
     },
   },
   {
-    context: type({
-      name: 'string',
+    context: v.object({
+      name: v.string(),
     }),
   },
 );

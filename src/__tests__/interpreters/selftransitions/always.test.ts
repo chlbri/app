@@ -1,5 +1,5 @@
 import { constructTests, defaultC } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import _machine1 from './always.1.machine';
 import _machine2 from './always.2.machine';
 import _machine3 from './always.3.machine';
@@ -86,3 +86,5 @@ describe('Integration testing for interpret, Children', () => {
     test(...useStateValue('result2'));
   });
 });
+
+afterAll(() => vi.useRealTimers());

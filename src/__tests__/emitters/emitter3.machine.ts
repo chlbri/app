@@ -1,4 +1,4 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { notU, typings } from '#utils';
 import { createPausable } from '@bemedev/rx-pausable';
 import { type } from '@bemedev/typings';
@@ -42,7 +42,7 @@ export default createMachine(
       emitters: {
         interval1: {
           next: 'number',
-          error: 'never',
+          error: 'undefined',
         },
       },
     }),

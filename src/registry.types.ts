@@ -1,10 +1,9 @@
-import type { ConfigDef, NoExtraKeysConfigDef } from '#machines';
+import type { ConfigDef } from '#machines';
 
 export type RegisterOptions = Record<
-  'children' | 'emitters' | 'tags' | 'actions' | 'delays' | 'guards',
+  'children' | 'emitters' | 'tags' | 'actions' | 'guards' | 'delays',
   string
 >;
-
 /**
  * The Register interface is augmented by the CLI-generated `app.gen.ts` file.
  * It uses the TanStack Start pattern of `declare module` augmentation
@@ -16,7 +15,7 @@ export interface Register extends Record<
   string,
   {
     paths: {
-      map: NoExtraKeysConfigDef<ConfigDef>;
+      map: ConfigDef;
       all: string;
     };
 

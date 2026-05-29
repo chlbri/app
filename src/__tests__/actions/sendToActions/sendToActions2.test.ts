@@ -1,5 +1,5 @@
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import { notU } from '#utils';
 import _raw_machine from './sendToActions2.machine';
 
@@ -83,3 +83,5 @@ describe('cov => Performs send to itself actions', () => {
   test(...useIterator(1));
   test(...dispose());
 });
+
+afterAll(() => vi.useRealTimers());

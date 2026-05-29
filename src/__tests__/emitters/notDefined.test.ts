@@ -1,5 +1,5 @@
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreter';
+import { interpret } from '#exports/interpret';
 import machineEmitter1 from './emitter1.machine';
 
 describe('Tests not defined emitters -> Machine1', () => {
@@ -21,3 +21,5 @@ describe('Tests not defined emitters -> Machine1', () => {
     expect(log).toHaveBeenCalledWith('Emitter (interval) is not defined');
   });
 });
+
+afterAll(() => vi.useRealTimers());

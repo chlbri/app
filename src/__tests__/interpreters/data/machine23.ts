@@ -1,10 +1,9 @@
-import { createMachine } from '#machine';
+import { createMachine } from '#exports/createMachine';
 import { toFunction } from '#utils';
 import { machine2, typings2 } from './machine2';
 
 // #region machine23
 export const machine23 = createMachine(
-  'src/__tests__/interpreters/data/machine23',
   {
     initial: 'idle',
     states: {
