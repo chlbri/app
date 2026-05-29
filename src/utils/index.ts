@@ -21,6 +21,8 @@ export * from './parseTree';
 export * from './parseTree.types';
 export { buildPaths } from './parseTree.helpers';
 export * from './readonly';
+export * from './checkValues';
+export * from './soa';
 export * from './reduceDescribers';
 export * from './fn';
 

@@ -426,6 +426,7 @@ export abstract class CommonInterpreter<
     exact = true,
   ) {
     this.__machine = machine.renew;
+
     this.__config = this.#initialConfig = this.__machine.initialConfig;
     this.#initialNode = this.#resolveNode(this.#initialConfig) as any;
     this.__mode = mode;
@@ -473,6 +474,7 @@ export abstract class CommonInterpreter<
 
   protected get __collectedAlways() {
     const entriesFlat = Object.entries(this.#flat);
+
     const entries: [from: string, always: AlwaysConfig][] = [];
 
     entriesFlat.forEach(([from, node]) => {
@@ -1314,9 +1316,7 @@ export abstract class CommonInterpreter<
       return { sv: this.__value, diffEntries: [], diffExits: [] };
     }
 
-    const next = _any(
-      initialConfig(_unknown(this.proposedNextConfig(target))),
-    );
+    const next = initialConfig(this.proposedNextConfig(target));
     const flatNext = flatMap.low(next);
 
     const entriesCurrent = Object.entries(this.#flat);

@@ -42,7 +42,7 @@ export default createMachine(
       emitters: {
         interval1: {
           next: 'number',
-          error: 'never',
+          error: 'undefined',
         },
       },
     }),

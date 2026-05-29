@@ -3,7 +3,7 @@ import { flatMap } from '#states';
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
 import { buildPaths } from './parseTree.helpers';
 
-describe('heleprs', () => {
+describe('helpers', () => {
   describe('#01 => buildPaths', () => {
     const { acceptation, success } = createTests(buildPaths, {});
 

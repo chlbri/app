@@ -6,10 +6,6 @@ import type { Fn, NodeConfig } from '~types';
  * An async config has an 'after' property or contains states with 'after'.
  */
 export function isAsyncConfig(value: unknown): value is NodeConfig {
-  if (!value || typeof value !== 'object') {
-    return false;
-  }
-
   const obj = value as Record<string, unknown>;
 
   // Check if has direct 'after' property

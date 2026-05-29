@@ -6,7 +6,7 @@ import _machine2 from './2ids.2.machine';
 vi.useFakeTimers();
 
 describe('Coverage actors', () => {
-  describe('#03 => From describe 2 but, two different ids', () => {
+  describe('#01 => From describe 2 but, two different ids', () => {
     const DELAY = 350;
     const childMachine = _childMachine1.provideOptions(({ assign }) => ({
       actions: {

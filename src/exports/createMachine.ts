@@ -1,11 +1,16 @@
 import { isAsyncConfig } from '#common/utils';
 import { createAsyncMachine } from '#machine';
+import { isNodeConfig } from '#states';
 import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
 export type { CreateMachine_F } from './types.types';
 
+const ERROR = `[createMachine] Invalid configuration object. Please ensure the config is correctly structured.`;
+
 const builder = (config: any, types: any) => {
-  const check = !isAsyncConfig(config) && !!types && types.sync === 'sync';
+  const checkError = isNodeConfig(config);
+  if (!checkError) throw ERROR;
+  const check = !isAsyncConfig(config) && types?.sync === 'sync';
   const { sync: __, ...rest } = { sync: undefined, ...types };
   const fn = check ? createSyncMachine : createAsyncMachine;
   return fn(config, rest);

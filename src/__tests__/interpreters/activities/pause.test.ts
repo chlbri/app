@@ -134,5 +134,3 @@ describe('Pause activities on events', () => {
     test(...dispose(43));
   });
 });
-
-afterAll(() => vi.useRealTimers());

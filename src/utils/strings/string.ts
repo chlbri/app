@@ -10,3 +10,8 @@ import { isString } from '~types';
 export const isStringEmpty = (arg: unknown) => {
   return isString(arg) && arg.trim() === '';
 };
+
+export const isStringOrUndefined = (value: unknown): boolean => {
+  if (value === undefined) return true;
+  return typeof value === 'string';
+};

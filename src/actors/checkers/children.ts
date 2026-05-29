@@ -1,0 +1,50 @@
+import type { ChildConfig } from '#actor';
+import { isOn } from '#transitions';
+import { checkKeys, isStringOrUndefined } from '#utils';
+import { isString } from '~types';
+
+const CHILD_KEYS = ['on', 'contexts', 'description'] as const;
+
+export const isChildConfig = <T extends string[] = string[]>(
+  value: unknown,
+  ...keys: T
+): value is ChildConfig<T[number]> => {
+  if (typeof value !== 'object' || value === null || Array.isArray(value))
+    return false;
+
+  const _value: any = value;
+  const valueKeys = Object.keys(_value);
+  const check1 = checkKeys(_value, ...CHILD_KEYS);
+  if (!check1) return false;
+
+  const check2 = valueKeys.length > 0;
+  if (!check2) return false;
+  const on = _value.on;
+  const contexts = _value.contexts;
+  const description = _value.description;
+
+  if (!isStringOrUndefined(description)) return false;
+  const check3 = on === undefined && contexts === undefined;
+  if (check3) return false;
+
+  const check4 = isOn.orUndefined(on, ...keys);
+  if (!check4) return false;
+  if (contexts === undefined) return true;
+  if (
+    typeof contexts !== 'object' ||
+    contexts === null ||
+    Array.isArray(contexts)
+  )
+    return false;
+  const valueContexts = Object.values(contexts);
+
+  return valueContexts.every(isString);
+};
+
+isChildConfig.orUndefined = <T extends string[] = string[]>(
+  value: unknown,
+  ...keys: T
+): value is ReturnType<typeof isChildConfig> | undefined => {
+  if (value === undefined) return true;
+  return isChildConfig(value, ...keys);
+};
