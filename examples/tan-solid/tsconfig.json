@@ -1,0 +1,35 @@
+{
+  "include": ["**/*.ts", "**/*.tsx", "public/script*.js"],
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "target": "ES2022",
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "~/*": ["./src/*"],
+      "~features/*": ["./src/features/*"],
+      "~signals/*": ["./src/globals/ui/signals/*"],
+      "~directives/*": ["./src/globals/ui/directives/*"],
+      "#directives": ["./src/globals/ui/directives/index.ts"],
+      "~ui/*": ["./src/globals/ui/*"],
+      "#constants": ["./src/globals/constants/index.ts"],
+      "~services/*": ["./src/globals/services/*"],
+      "~types": ["./src/globals/types/index.ts"],
+      "~utils/*": ["./src/globals/utils/*"],
+      "~cn/*": ["./src/globals/ui/cn/*"],
+      "~cn-comp/*": ["./src/globals/ui/cn/components/ui/*"],
+      "~helpers/*": ["./src/helpers/*"],
+      "~seo": ["./src/globals/ui/helpers/seo.ts"]
+    },
+    "noEmit": true
+  }
+}

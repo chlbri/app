@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: "Branch to test"
+        required: false
+        type: string
+
+  push:
+    branches-ignore:
+      - master
+      - main
+      - canary
+      - beta
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout pnpm repo
+        uses: "chlbri/pnpmi-action@main"
+        with:
+          branch: ${{ inputs.branch }}
+
+      - name: lint
+        run: pnpm run lint
+
+      - name: Build
+        run: pnpm run pretest
+
+      - name: Test
+        run: pnpm run test:only
+
+      - name: Cleanup
+        run: pnpm run posttest
