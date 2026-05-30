@@ -1,7 +1,7 @@
 import { constructTests } from '#fixtures';
 import { interpret } from '#exports/interpret';
 import { decomposeSV } from '#utils';
-import { BLOCK_IMMO_INTERMEDIARY, machine } from './machine1.machine';
+import machine, { BLOCK_IMMO_INTERMEDIARY } from './machine1.machine';
 import {
   ASSET_1,
   INTERMEDIARY_1,

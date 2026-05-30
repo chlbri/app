@@ -22,7 +22,6 @@ export interface Register extends Record<
     events: string;
     options: RegisterOptions;
     pContext?: any;
-    tags?: string;
   }
   // oxlint-disable-next-line typescript/no-empty-object-type
 > {}

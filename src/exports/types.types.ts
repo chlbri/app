@@ -133,8 +133,8 @@ export type CreateMachineNamed_F = <
   _A extends inferT<A> = inferT<A>,
   _Pc extends inferT<Pc> = inferT<Pc>,
   _Tc extends inferT<Tc> = inferT<Tc>,
-  Tags extends Exclude<Current['tags'], undefined> = Exclude<
-    Current['tags'],
+  Tags extends Exclude<Current['options']['tags'], undefined> = Exclude<
+    Current['options']['tags'],
     undefined
   >,
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,

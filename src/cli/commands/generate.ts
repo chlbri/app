@@ -1,6 +1,6 @@
 import { array, command, flag, multioption, option, string } from 'cmd-ts';
 import { DEFAULT_EXCLUDES, DEFAULT_OUTPUT } from '../core/constants';
-import { generator } from '../core/generator';
+import { generator as handler } from '../core/generator';
 
 /**
  * CLI command: `app generate`
@@ -65,10 +65,18 @@ export const generate = command({
 
     dryRun: flag({
       long: 'dry-run',
+      short: 'd',
       description: 'Print output without writing to file',
     }),
+
+    cwd: option({
+      type: string,
+      long: 'cwd',
+      short: 'c',
+      defaultValue: () => process.cwd(),
+      description:
+        'The directory where to search files (defaults to current working directory). N.B: Not the ts root directory, but the directory where the glob pattern will be applied.',
+    }),
   },
-  handler: async ({ output, excludes, dryRun }) => {
-    return generator({ output, excludes, dryRun });
-  },
+  handler,
 });

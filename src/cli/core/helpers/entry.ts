@@ -24,7 +24,7 @@ const configPathsToType = (cp: ConfigPaths, indent = 0): string => {
       ? 'never'
       : cp.targets.map(t => `'${t}'`).join(' | ');
 
-  const lines: string[] = [`{ targets: (${targetUnion})[]; `];
+  const lines: string[] = [`{ targets: (${targetUnion}); `];
 
   if (cp.initial) {
     lines.push(`${nextPad}initial?: '${cp.initial}';`);
@@ -69,7 +69,6 @@ export const emitRegisterEntry = (
     `        guards:   ${setToUnion(tree.guards)};`,
     `      };`,
     `      pContext?: ${pContextType};`,
-    `      tags?: ${setToUnion(tree.tags)};`,
     `    };`,
   ].join('\n');
 };

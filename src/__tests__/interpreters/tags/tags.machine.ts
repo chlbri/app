@@ -1,7 +1,7 @@
 import { createMachine } from '#exports/createMachine';
 import { type } from '@bemedev/typings';
 
-export const machine = createMachine(
+export default createMachine(
   'src/__tests__/interpreters/tags/tags.machine',
   {
     initial: 'idle',

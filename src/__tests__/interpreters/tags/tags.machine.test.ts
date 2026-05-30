@@ -1,6 +1,6 @@
 import { constructTests } from '#fixtures';
 import { interpret } from '#exports/interpret';
-import { machine } from './tags.machine';
+import machine from './tags.machine';
 
 describe('Machine Tag Interpreter', () => {
   describe('#00 => Coverage', () => {

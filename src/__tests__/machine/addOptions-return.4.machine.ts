@@ -1,7 +1,7 @@
 import { createMachine } from '#exports/createMachine';
 import { type } from '@bemedev/typings';
 
-const machine = createMachine(
+export default createMachine(
   'src/__tests__/machine/addOptions-return.4.machine',
   {
     initial: 'idle',
@@ -22,5 +22,3 @@ const machine = createMachine(
     context: type('number'),
   },
 );
-
-export default machine;

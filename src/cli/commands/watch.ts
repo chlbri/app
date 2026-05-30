@@ -88,6 +88,7 @@ export const watch = command({
       defaultValue: () => DEFAULT_OUTPUT,
       description: 'Output file path (relative to project root)',
     }),
+
     excludes: multioption({
       type: array(string),
       long: 'excludes',
@@ -95,31 +96,32 @@ export const watch = command({
       defaultValue: () => DEFAULT_EXCLUDES,
       description: 'Directories to exclude',
     }),
+
+    cwd: option({
+      type: string,
+      long: 'cwd',
+      short: 'c',
+      defaultValue: () => process.cwd(),
+      description:
+        'The directory where to search files (defaults to current working directory). N.B: Not the ts root directory, but the directory where the glob pattern will be applied.',
+    }),
   },
-  handler: async ({ output, excludes }) => {
-    const cwd = process.cwd();
+  handler: async options => {
+    /** Initial generation */
+    const generate = () => generator(options);
+    await generate();
 
-    // Initial generation
-    await generator({ output, excludes, cwd });
-    const regenerate = async (path: string) => {
-      console.log(`\nChange detected: ${path}`);
-      await generator({ output, excludes, cwd });
-    };
-
-    // const paths = await Array.fromAsync(glob(MACHINE_GLOB));
-
-    const watcher2 = nodeWatch('./', {
+    const watcher2 = nodeWatch(options.cwd, {
       recursive: true,
       delay: 300,
       filter: DEFAULT_REGEX,
     }).on('change', async (event, path) => {
       if (typeof path !== 'string') return;
-
-      if (event === 'update') {
-        await createStarter(path);
+      else if (event === 'update') await createStarter(path);
+      else {
+        console.log(`\nChange detected: ${path}`);
+        await generate();
       }
-
-      await regenerate(path);
     });
 
     console.log(`\nWatching for changes in ${MACHINE_GLOB}...`);
