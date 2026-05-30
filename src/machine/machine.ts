@@ -341,9 +341,7 @@ export class Machine<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
-  provideOptions = <T extends Mo>(
-    helper: AddOptionsParam_F<Eo, Pc, Tc, Ta, T>,
-  ) => {
+  provideOptions = (helper: AddOptionsParam_F<Eo, Pc, Tc, Ta, Mo>) => {
     return super.provideOptions(helper);
   };
   // #endregion

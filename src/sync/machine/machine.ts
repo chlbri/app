@@ -281,6 +281,18 @@ export class SyncMachine<
   };
 
   /**
+   * Provides options for the machine.
+   *
+   * @param helper a function that provides options for the machine.
+   * Options can include actions, guards, delays, promises, and child machines.
+   * @returns a new instance of the machine with the provided options applied.
+   */
+  provideOptions = (helper: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, Mo>) => {
+    return super.provideOptions(helper);
+  };
+  // #endregion
+
+  /**
    * Renews the machine with the provided key and value.
    * @param key the key of the element to provide.
    * @param value the value of the element to provide.
@@ -426,12 +438,6 @@ export class SyncMachine<
       return _any({ context, pContext });
     };
   };
-
-  provideOptions<T extends Mo>(
-    helper: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T>,
-  ) {
-    return super.provideOptions(helper);
-  }
 }
 
 export const createSyncMachine: CommonCreateMachine_F = (

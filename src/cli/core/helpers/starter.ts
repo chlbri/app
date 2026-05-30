@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'fs/promises';
 import { basename, resolve } from 'path';
+import { LIB } from '../constants';
 
 const isMachineFile = (filePath: string) =>
   filePath.endsWith('.machine.ts') || filePath.endsWith('.fsm.ts');
@@ -30,7 +31,7 @@ export const createStarter = async (
   if (existing.trim().length > 0) return;
 
   const defaultName = getMachineName(filePath);
-  const defaultContent = `import { createMachine } from '@bemedev/app';\n\nexport default createMachine('${defaultName}', { initial: 'idle', states: { idle: {} } })\n`;
+  const defaultContent = `import { createMachine } from '${LIB}';\n\nexport default createMachine('${defaultName}', { initial: 'idle', states: { idle: {} } })\n`;
 
   await writeFile(absolutePath, defaultContent, 'utf8');
   console.log(`Created starter machine file: ${filePath}`);

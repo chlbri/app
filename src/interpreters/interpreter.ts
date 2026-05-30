@@ -681,7 +681,13 @@ export class Interpreter<
     option: Parameters<(typeof this)['addOptions']>[0],
   ) => {
     const newMachine = this.machine.provideOptions(option);
-    const out = new Interpreter(newMachine, this.__mode, this.__exact);
+
+    const out = new Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
+      newMachine,
+      this.__mode,
+      this.__exact,
+    );
+    
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
     return out;

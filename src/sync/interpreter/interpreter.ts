@@ -567,14 +567,16 @@ export class SyncInterpreter<
     option: Parameters<(typeof this)['addOptions']>[0],
   ) => {
     const newMachine = this.machine.provideOptions(option);
+
     const out = new SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
       newMachine,
       this.__mode,
       this.__exact,
     );
+
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
-    return out as any;
+    return out;
   };
 
   subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (

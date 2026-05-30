@@ -74,13 +74,14 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown",
+    "build": "pnpm rm:lib && pnpm run rolldown && pnpm run generate:lib",
     "_ci": "pnpm run config:off && pnpm run lint && pnpm run test",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "ci:admin": "CI_START=$(date +%s) && pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",
     "config": "pnpm install",
     "config:off": "pnpm run config --offline",
-    "generate": "tsx  src/cli/index.ts generate -c ./src/__tests__",
+    "generate:lib": "node lib/cli/index.js generate -c ./src/__tests__",
+    "generate": "tsx src/cli/index.ts generate -c ./src/__tests__",
     "generate:watch": "tsx src/cli/index.ts watch -c ./src/__tests__",
     "_lint": "oxlint",
     "lint:fix": "oxlint --fix",

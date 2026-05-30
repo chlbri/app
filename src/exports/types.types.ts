@@ -1,6 +1,6 @@
-import type { ConfigFrom, InterpretArgs } from '#common/interpreter';
-import type { AnyMachine, CommonConfig, StdO2 } from '#common/machine';
 import type { IsAsyncConfig } from '#common/functions/types';
+import type { ConfigFrom, InterpretArgs } from '#common/interpreter';
+import type { AnyMachine, CommonConfig } from '#common/machine';
 import type {
   ActorsConfigMap,
   EventObject,
@@ -11,16 +11,17 @@ import type {
 import type { InterpreterFrom } from '#interpreter';
 import type { Machine } from '#machine';
 import type { Config as AsyncConfig, MachineOptions2 } from '#machines';
-import type { Register, RegisterOptions } from '#registry';
+import type { RegisterOptions } from '#registry';
+import type { Register } from '@bemedev/app';
 import type {
   inferT,
   PrimitiveObject,
   StandardOutput,
 } from '@bemedev/typings';
+import type { EmptyObject } from '~types';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 import type { SyncConfig } from '../sync/types.types';
-import type { EmptyObject } from '~types';
 
 export type OutMachine<
   C extends CommonConfig = CommonConfig,
@@ -113,7 +114,9 @@ export type CreateMachineNamed_F = <
   const C extends CommonConfig<Current['paths']['map']> = CommonConfig<
     Current['paths']['map']
   >,
-  const Pc extends StdO2<Current['pContext']> = StdO2<Current['pContext']>,
+  const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
+    Current['pContext']
+  >,
   const Tc extends StandardOutput<PrimitiveObject> = never,
   const E extends StandardOutput<
     Record<Current['events'], PrimitiveObject>

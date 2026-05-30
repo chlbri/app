@@ -7,5 +7,6 @@ export const DEFAULT_EXCLUDES = [
   'dist/**',
   'temp/**',
 ];
+export const LIB = '@bemedev/app';
 export const END_WITHS = ['.machine.ts', '.fsm.ts'];
 export const DEFAULT_REGEX = /(?:\.machine\.ts|\.fsm\.ts)$/;
