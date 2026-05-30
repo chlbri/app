@@ -1,57 +1,19 @@
-import type { SyncAction2, WithDescriber } from '#actions';
+import type { SyncAction2 } from '#actions';
+import type { AnyInterpreter } from '#common/interpreter';
+import type { SyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
-import type { AddSubscriber_F, Mode, WorkingStatus } from '#interpreters';
-import type { StateValue } from '#states';
-import type { PrimitiveObject } from '@bemedev/typings';
-import type { AnySyncMachine, SyncNodeConfig } from '../types.types';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
-import type { SyncDelayFunction3 } from '#delays';
-
-export interface AnySyncInterpreter<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> {
-  mode: Mode;
-  eventsMap: EventsMap;
-  initialNode: any;
-  node: any;
-
-  makeStrict: () => void;
-  status: WorkingStatus;
-  initialConfig: SyncNodeConfig;
-  initialValue: StateValue;
-  config: SyncNodeConfig;
-  renew: any;
-  value: StateValue;
-  context: any;
-  start: () => void;
-  pause: () => void;
-  resume: () => void;
-  stop: () => void;
-  _providePrivateContext: (pContext: Pc) => AnySyncMachine<E, A, Pc, Tc>;
-  _ppC: (pContext: Pc) => AnySyncMachine<E, A, Pc, Tc>;
-  _provideContext: (context: Tc) => AnySyncMachine<E, A, Pc, Tc>;
-
-  subscribe: AddSubscriber_F<E, A, Tc, T>;
-
-  send: (event: any) => void;
-  toActionFn: (action: WithDescriber) => any;
-  toPredicateFn: (guard: GuardConfig) => any;
-  toDelayFn: (delay: string) => any;
-  toChildFunction: (machine: string) => any;
-  id?: string;
-  from?: string;
-
-  dispose: () => void;
-}
+import type { PrimitiveObject } from '@bemedev/typings';
+import type { SyncConfig, SyncNodeConfig } from '../types.types';
+import type { SimpleMachineOptions2 } from '#common/machine';
+import type { SyncAddOptionsParam_F } from '../machine/options.types';
+import type { EmptyObject } from '~types';
+import type { SyncInterpreter } from './interpreter';
 
 export type SyncCollectedService = {
   from: string;
-  service: AnySyncInterpreter;
+  service: AnyInterpreter;
   id: string;
 };
 
@@ -96,3 +58,18 @@ export type SyncPerformDelay_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = (delay: SyncDelayFunction3<E, Pc, Tc, T>) => number;
+
+export type SyncProvideMachineOptions_F<
+  C extends SyncConfig = SyncConfig,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  E extends EventsMap = EventsMap,
+  A extends ActorsConfigMap = ActorsConfigMap,
+  Ta extends string = string,
+  Eo extends EventObject = EventObject,
+  AllPaths extends string = string,
+  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  L extends SimpleMachineOptions2 = EmptyObject,
+> = <const T extends Mo>(
+  option: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
+) => SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;

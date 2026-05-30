@@ -37,7 +37,7 @@ import {
 
 import { sleep } from '@bemedev/sleep';
 import equal from 'fast-deep-equal';
-import { isDescriber } from '~types';
+import { isDescriber, type EmptyObject } from '~types';
 import type {
   _Send_F,
   Collected0,
@@ -106,7 +106,7 @@ export class Interpreter<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-  const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const L extends SimpleMachineOptions2 = EmptyObject,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   /**
    * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.

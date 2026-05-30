@@ -41,7 +41,7 @@ describe('delay is not defined', () => {
   test(...useStateValue('state2', 5));
 
   test('#06 => add delay', () => {
-    const d = service.addOptions(() => ({
+    service.addOptions(() => ({
       delays: { DELAY },
     }));
   });

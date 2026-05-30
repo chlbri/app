@@ -374,7 +374,7 @@ export type AddOptions_F<
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > = <const T extends Mo>(
   option: AddOptionsParam_F<E, Pc, Tc, Ta, T, L>,
-) => Mo;
+) => L & T;
 
 export type ProvideOptions_F<
   C extends Config = Config,

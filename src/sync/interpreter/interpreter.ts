@@ -47,6 +47,7 @@ import type {
   SyncPerformPredicate_F,
   SyncPerformTransition_F,
   SyncPerformTransitions_F,
+  SyncProvideMachineOptions_F,
 } from './options.types';
 
 import type {
@@ -61,6 +62,7 @@ import { CommonInterpreter } from '../../common/interpreter/interpreter';
 import type { AddSubscriber_F } from '../../common/interpreter/types';
 import { createSubscriber } from '../../common/subscriber';
 import type { SyncMachine } from '../machine/machine';
+import type { SyncAddOptions_F } from '../machine';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
@@ -96,6 +98,7 @@ export class SyncInterpreter<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   /**
    * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.
@@ -550,11 +553,11 @@ export class SyncInterpreter<
   };
 
   /**
-   * Add options to the inner {@linkcode SyncMachine} of this {@linkcode SyncInterpreter} service.
+   * Add options to the inner {@linkcode Machine} of this {@linkcode Interpreter} service.
    */
-  get addOptions() {
-    return super.addOptions as this['machine']['addOptions'];
-  }
+  addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+    return super.addOptions(helper) as any;
+  };
 
   /**
    * Provides options for the interpreter and returns a new interpreter instance.
@@ -563,20 +566,19 @@ export class SyncInterpreter<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new interpreter instance with the provided options applied.
    */
-  provideOptions = (
-    option: Parameters<(typeof this)['addOptions']>[0],
-  ) => {
-    const newMachine = this.machine.provideOptions(option);
-
-    const out = new SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
-      newMachine,
-      this.__mode,
-      this.__exact,
-    );
-
-    out._ppC(this.__initialPpc);
-    out._provideContext(this.__initialContext);
-    return out;
+  provideOptions: SyncProvideMachineOptions_F<
+    C,
+    Pc,
+    Tc,
+    E,
+    A,
+    Ta,
+    Eo,
+    AllPaths,
+    Mo,
+    L
+  > = option => {
+    return super.provideOptions(option) as any;
   };
 
   subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (

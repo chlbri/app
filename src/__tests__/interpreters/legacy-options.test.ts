@@ -229,7 +229,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // Second call to service.addOptions - access previous action via _legacy
       service.addOptions(({ batch }, { _legacy }) => {
-        const prev = _legacy.actions?.increment;
+        const prev = (_legacy as any).actions?.increment;
         expect(prev).toBeDefined();
         const params = Array(3).fill(prev);
 
@@ -270,7 +270,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // Second call to service.addOptions - access previous action via _legacy
       service.addOptions(({ batch }, { _legacy }) => {
-        const prev = _legacy.actions?.increment;
+        const prev = (_legacy as any).actions.increment;
         expect(prev).toBeDefined();
         const params = Array(2).fill(prev);
 
@@ -286,7 +286,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // Third call to service.addOptions - access previous action via _legacy
       service.addOptions(({ batch }, { _legacy }) => {
-        const prev = _legacy.actions?.increment;
+        const prev = (_legacy as any).actions.increment;
         expect(prev).toBeDefined();
 
         return {
@@ -314,7 +314,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // Second call - access and extend with isNegative using _legacy
       service.addOptions((_, { _legacy }) => {
-        const previousPredicates = _legacy.guards;
+        const previousPredicates = (_legacy as any).guards;
         expect(previousPredicates?.isPositive).toBeDefined();
 
         return {
@@ -345,8 +345,9 @@ describe.concurrent('Legacy Options Access', () => {
 
       // Second call - should see first
       service.addOptions(({ assign }, { _legacy }) => {
-        expect(_legacy.actions?.first).toBeDefined();
-        expect(_legacy.actions?.second).toBeUndefined();
+        const _actions = (_legacy as any).actions;
+        expect(_actions.first).toBeDefined();
+        expect(_actions.second).toBeUndefined();
 
         return {
           actions: {
@@ -439,8 +440,9 @@ describe.concurrent('Legacy Options Access', () => {
 
       const service3 = service2.provideOptions(
         ({ assign }, { _legacy }) => {
-          expect(_legacy.actions?.op1).toBeDefined();
-          expect(_legacy.actions?.op2).toBeUndefined();
+          const _actions = (_legacy as any).actions;
+          expect(_actions.op1).toBeDefined();
+          expect(_actions.op2).toBeUndefined();
 
           return {
             actions: {
@@ -452,9 +454,10 @@ describe.concurrent('Legacy Options Access', () => {
 
       const service4 = service3.provideOptions(
         ({ assign }, { _legacy }) => {
-          expect(_legacy.actions?.op1).toBeDefined();
-          expect(_legacy.actions?.op2).toBeDefined();
-          expect(_legacy.actions?.op3).toBeUndefined();
+          const _actions = (_legacy as any).actions;
+          expect(_actions.op1).toBeDefined();
+          expect(_actions.op2).toBeDefined();
+          expect(_actions.op3).toBeUndefined();
 
           return {
             actions: {

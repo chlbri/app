@@ -1,3 +1,5 @@
+const ANY = 'any';
+
 const serializePContextType = (node: any): string => {
   try {
     const kind = node.getKindName?.();
@@ -16,10 +18,10 @@ const serializePContextType = (node: any): string => {
       return objectToTypeString(node);
     }
 
-    return 'unknown';
+    return ANY;
   } catch (err) {
     console.warn('Error serializing pContext type:', err);
-    return 'unknown';
+    return ANY;
   }
 };
 
@@ -76,19 +78,16 @@ const valueNodeToTypeString = (node: any): string => {
     return `(${types.join(' | ')})[]`;
   }
 
-  return node.getText?.() ?? 'unknown';
+  return node.getText?.() ?? ANY;
 };
 
-export const extractPContextType = (
-  typingsArg: any,
-  _sourceFile: any,
-): string | null => {
+export const extractPContextType = (typingsArg: any): string => {
   try {
     if (
       !typingsArg ||
       typingsArg.getKindName?.() !== 'ObjectLiteralExpression'
     ) {
-      return null;
+      return ANY;
     }
 
     const props = typingsArg.getProperties?.() ?? [];
@@ -107,5 +106,5 @@ export const extractPContextType = (
     console.warn('Error extracting pContext type:', err);
   }
 
-  return null;
+  return ANY;
 };
