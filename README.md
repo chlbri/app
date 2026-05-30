@@ -280,20 +280,26 @@ export const myConfig = createConfig({
 
 ### Synchronous vs Asynchronous Machines
 
-By default, machines are asynchronous (all transitions and actions are wrapped in promises to naturally support async operations). If you require strict synchronous execution (e.g., for performance or integration with synchronous UI frameworks), you can opt into a synchronous machine via the `sync` typings configuration:
+By default, machines are asynchronous (all transitions and actions are
+wrapped in promises to naturally support async operations). If you require
+strict synchronous execution (e.g., for performance or integration with
+synchronous UI frameworks), you can opt into a synchronous machine via the
+`sync` typings configuration:
 
 ```typescript
 const syncMachine = createMachine(
   {
     initial: 'idle',
-    states: { idle: {} }
+    states: { idle: {} },
   },
   // Setting sync to 'sync' forces synchronous execution
-  typings({ sync: 'sync' })
+  typings({ sync: 'sync' }),
 );
 ```
 
-Synchronous machines throw a type error if you attempt to use async configurations. The `interpret` function automatically detects and runs synchronous machines without creating promises.
+Synchronous machines throw a type error if you attempt to use async
+configurations. The `interpret` function automatically detects and runs
+synchronous machines without creating promises.
 
 <br/>
 

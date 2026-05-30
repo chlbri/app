@@ -17,24 +17,33 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Interpreter**: Implement unified interpret function for sync and async contexts.
-- **Sync**: Introduce `SyncMachine` and related types for synchronous state management.
+- **Interpreter**: Implement unified interpret function for sync and async
+  contexts.
+- **Sync**: Introduce `SyncMachine` and related types for synchronous state
+  management.
 - **Actions**: Enhance `expandFnMap` to support synchronous actions.
 - **Hooks**: Add utility hooks for scroll, sleep, and window management.
-- **State Management**: Add interpreter and subscriber types for enhanced state management, and `ScheduledData` type.
+- **State Management**: Add interpreter and subscriber types for enhanced
+  state management, and `ScheduledData` type.
 - **Documentation**: Add project overview and conventions in `GEMINI.md`.
-- **Environment**: Enhance devcontainer configuration with increased CPU, additional extensions, and optimized type checks.
+- **Environment**: Enhance devcontainer configuration with increased CPU,
+  additional extensions, and optimized type checks.
 
 ### Updates
 
-- **Typings**: Update `@bemedev/typings` to version 1.2.0 and adjust CI scripts.
+- **Typings**: Update `@bemedev/typings` to version 1.2.0 and adjust CI
+  scripts.
 
 ### Refactors
 
-- **Machine**: Streamline machine class by removing deprecated properties and methods, rename private methods to protected.
-- **Interpreter**: Clean up imports and remove deprecated methods in `SyncInterpreter`.
-- **Checks**: Simplify `isNodeConfig` and related checks, remove unused strict and `__longRuns` properties.
-- **Guards**: Update `isAfter` function to use `Object.values` for key checks.
+- **Machine**: Streamline machine class by removing deprecated properties
+  and methods, rename private methods to protected.
+- **Interpreter**: Clean up imports and remove deprecated methods in
+  `SyncInterpreter`.
+- **Checks**: Simplify `isNodeConfig` and related checks, remove unused
+  strict and `__longRuns` properties.
+- **Guards**: Update `isAfter` function to use `Object.values` for key
+  checks.
 - **Utilities**: Reorganize async utilities and tests.
 
 - <u>Test coverage **_95.09%_**</u>

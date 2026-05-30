@@ -23,7 +23,7 @@ export type NoExtraKeysConfigDef<T extends ConfigDef> = T & {
 };
 
 export type ConfigDef = {
-  readonly targets: string[];
+  readonly targets: string;
   readonly initial?: string;
   readonly states?: RecordS<ConfigDef>;
 };
@@ -41,7 +41,7 @@ export type TransformConfigDef<T extends ConfigDef> = {
 export type CommonConfig<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
     NoExtraKeysConfigDef<ConfigDef>,
-> = NodeConfig<Paths['targets'][number]> & {
+> = NodeConfig<Paths['targets']> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
 } & TransformConfigDef<Paths>;

@@ -1,8 +1,0 @@
-allowBuilds:
-  '@parcel/watcher': true
-  esbuild: true
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - lefthook

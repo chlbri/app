@@ -6,6 +6,7 @@ import type {
   PrimitiveObject,
 } from '#bemedev/globals/types';
 import { Identify } from '#bemedev/globals/types';
+import type { CommonConfig } from '#common/machine';
 import type { DelayFunction2 } from '#delays';
 import type {
   EmitterDef,
@@ -23,7 +24,6 @@ import type {
   ExtractGuardsFromActivity,
   ExtractTagsFromFlat,
   FlatMapN,
-  NodeConfig,
   NodeConfigCompound,
   NodeConfigParallel,
 } from '#states';
@@ -38,17 +38,9 @@ import type {
 } from '#transitions';
 import type { Recompose } from '@bemedev/decompose';
 import type { Observable } from 'rxjs';
-import type {
-  Describer,
-  FnMap,
-  FnMapR,
-  FnR,
-  KeyU,
-  ReduceArray,
-} from '~types';
-import { RecordS } from './../types/primitives';
+import type { FnMap, FnMapR, FnR, KeyU, ReduceArray } from '~types';
 import type { RegisterOptions } from '../registry.types';
-import type { CommonConfig } from '#common/machine';
+import { RecordS } from './../types/primitives';
 
 /**
  * Type representing the main JSON config.
@@ -59,18 +51,10 @@ import type { CommonConfig } from '#common/machine';
 export type ConfigNode = NodeConfigCompound | NodeConfigParallel;
 
 /**
- * Type representing a describer for a child service.
- *
- * @see {@linkcode Describer} for more details.
- */
-export type MachineConfig = Describer | string;
-
-/**
  * Type representing the main JSON node config of a state machine.
  *
  * @see {@linkcode ConfigNode} for more details.
- * @see {@linkcode MachineConfig}
- * @see {@linkcode SingleOrArrayL}
+ * @see {@linkcode CommonConfig}
  */
 export type Config<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
@@ -137,25 +121,11 @@ export type NoExtraKeysConfigDef<T extends ConfigDef> = T & {
 };
 
 export type ConfigDef = {
-  readonly targets: string[];
+  readonly targets: string;
   readonly initial?: string;
   readonly states?: RecordS<ConfigDef>;
 };
-export type NoExtraKeysConfigNode<T extends NodeConfig> = T & {
-  [K in Exclude<keyof T, keyof NodeConfig>]: never;
-} & {
-  states?: {
-    [K in keyof T['states']]: T['states'][K] extends infer TK extends
-      NodeConfig
-      ? NoExtraKeysConfigNode<TK>
-      : never;
-  };
-};
-export type NoExtraKeysConfig<T extends Config> = T & {
-  [K in Exclude<keyof T, keyof Config>]: never;
-} & {
-  states?: Record<string, NoExtraKeysConfigNode<NodeConfig>>;
-};
+
 export type TransformConfigDef<T extends ConfigDef> = BaseConfig &
   TransitionsConfig<T['targets'][number]> & {
     readonly initial?: T['initial'];

@@ -10,6 +10,7 @@ import type { EventObject } from '#events';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { Transitions, TransitionsConfig } from '#transitions';
 import type {
+  EmptyObject,
   Identify,
   RecordS,
   ReduceArray,
@@ -225,11 +226,9 @@ type FlatMapNodeConfig<
             withChildren,
             `${Remaining}${key & string}/`
           >
-        : // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-          {};
+        : EmptyObject;
     }[keyof T['states']]
-  : // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    {};
+  : EmptyObject;
 
 export type FlatMapN<
   T extends NodeConfig = NodeConfig,

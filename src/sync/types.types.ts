@@ -59,7 +59,7 @@ export type SyncNodeConfig<Paths extends string = string> =
 export type SyncConfig<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
     NoExtraKeysConfigDef<ConfigDef>,
-> = SyncNodeConfig<Paths['targets'][number]> & {
+> = SyncNodeConfig<Paths['targets']> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
 } & TransformConfigDef<Paths>;
