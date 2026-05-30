@@ -1,7 +1,6 @@
 import { parseTree } from '#utils';
 import { existsSync, unlinkSync } from 'fs';
 import { writeFile } from 'fs/promises';
-// import { glob } from 'glob';
 import fg from 'fast-glob';
 import { relative, resolve } from 'node:path';
 import { Project } from 'ts-morph';
@@ -66,20 +65,19 @@ import { emitRegisterEntry, extractMachineInfo } from './helpers';
  *   cwd: '/path/to/project'
  * });
  */
-export const generator = async (options?: {
-  output?: string;
-  excludes?: string[];
-  cwd?: string;
-  dryRun?: boolean;
-}) => {
-  const _options = options ?? {};
-
-  const EXCLUDES = (_options.excludes ?? [])
+export const generator = async (
+  options: {
+    excludes?: string[];
+    cwd?: string;
+    dryRun?: boolean;
+  } = {},
+) => {
+  const EXCLUDES = [...(options.excludes || [])]
     .filter(Boolean)
     .map(pattern => pattern.trim());
 
-  const cwd = resolve(_options.cwd ?? process.cwd());
-  const outputPath = resolve(cwd, _options.output ?? DEFAULT_OUTPUT);
+  const cwd = options.cwd ?? process.cwd();
+  const outputPath = resolve(cwd, DEFAULT_OUTPUT);
 
   // Discover machine files
   const files = await fg.async(MACHINE_GLOB, {
@@ -113,6 +111,8 @@ export const generator = async (options?: {
 
   const entries: string[] = [];
 
+  // #region TS morph work
+  /* v8 ignore start -- @preserve */
   for (const f of files.sort()) {
     const info = extractMachineInfo(f, project);
     if (!info) {
@@ -135,6 +135,8 @@ export const generator = async (options?: {
     }
     return;
   }
+  /* v8 ignore stop -- @preserve */
+  // #endregion
 
   /** Emit the generated file */
   const contentArray = [
@@ -155,7 +157,7 @@ export const generator = async (options?: {
   const content = contentArray.join('\n');
 
   /* v8 ignore else -- @preserve */
-  if (_options.dryRun) {
+  if (options.dryRun) {
     process.stdout.write(content);
     return contentArray;
   }

@@ -32,9 +32,9 @@ export type OutMachine<
   Eo extends EventObject = EventObject,
   AllPaths extends string = string,
   Options extends RegisterOptions = RegisterOptions,
-  Sync extends 'sync' | undefined = undefined,
+  Sync extends true | undefined = undefined,
 > = C extends SyncConfig
-  ? Sync extends 'sync'
+  ? Sync extends true
     ? SyncMachine<
         C,
         Pc,
@@ -85,7 +85,7 @@ export type CreateMachineNoName_F = <
   _Tc extends inferT<Tc> = inferT<Tc>,
   Tags extends string = string,
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
-  Sync extends 'sync' | undefined = undefined,
+  Sync extends true | undefined = undefined,
 >(
   config: C,
   types?: {
@@ -138,7 +138,7 @@ export type CreateMachineNamed_F = <
     undefined
   >,
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
-  Sync extends 'sync' | undefined = undefined,
+  Sync extends true | undefined = undefined,
 >(
   _: Name,
   config: C,

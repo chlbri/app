@@ -9,7 +9,7 @@ export type { CreateMachine_F } from './types.types';
 const builder = (config: any, types: any) => {
   const checkError = isNodeConfig(config);
   if (!checkError) throw ERROR;
-  const check = !isAsyncConfig(config) && types?.sync === 'sync';
+  const check = !isAsyncConfig(config) && types?.sync === true;
   const { sync: __, ...rest } = { sync: undefined, ...types };
   const fn = check ? createSyncMachine : createAsyncMachine;
   return fn(config, rest);

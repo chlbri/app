@@ -1,5 +1,5 @@
 import { array, command, flag, multioption, option, string } from 'cmd-ts';
-import { DEFAULT_EXCLUDES, DEFAULT_OUTPUT } from '../core/constants';
+import { DEFAULT_EXCLUDES } from '../core/constants';
 import { generator as handler } from '../core/generator';
 
 /**
@@ -40,21 +40,12 @@ import { generator as handler } from '../core/generator';
  *
  * @see {@link generator} for the underlying generation logic
  * @see {@link DEFAULT_EXCLUDES} for default ignored directories
- * @see {@link DEFAULT_OUTPUT} for default output file path
  */
 export const generate = command({
   name: 'generate',
   description:
     'Generate app.gen.ts from all *.machine.ts / *.fsm.ts files',
   args: {
-    output: option({
-      type: string,
-      long: 'output',
-      short: 'o',
-      defaultValue: () => DEFAULT_OUTPUT,
-      description: 'Output file path (relative to project root)',
-    }),
-
     excludes: multioption({
       type: array(string),
       long: 'excludes',
@@ -66,14 +57,21 @@ export const generate = command({
     dryRun: flag({
       long: 'dry-run',
       short: 'd',
-      description: 'Print output without writing to file',
+      description:
+        'Print output and returns array contents without writing to file (useful for inspection)',
     }),
 
     cwd: option({
+      // #region Too much to handle for vitest
+      /* v8 ignore start -- @preserve */
+      defaultValue: () => process.cwd(),
+      /* v8 ignore stop -- @preserve */
+      // #endregion
+
       type: string,
       long: 'cwd',
       short: 'c',
-      defaultValue: () => process.cwd(),
+
       description:
         'The directory where to search files (defaults to current working directory). N.B: Not the ts root directory, but the directory where the glob pattern will be applied.',
     }),

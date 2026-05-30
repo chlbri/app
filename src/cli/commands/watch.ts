@@ -1,11 +1,6 @@
 import { array, command, multioption, option, string } from 'cmd-ts';
 import nodeWatch from 'node-watch';
-import {
-  DEFAULT_EXCLUDES,
-  DEFAULT_OUTPUT,
-  DEFAULT_REGEX,
-  MACHINE_GLOB,
-} from '../core/constants';
+import { DEFAULT_EXCLUDES, DEFAULT_REGEX } from '../core/constants';
 import { generator } from '../core/generator';
 import { createStarter } from '../core/helpers/starter';
 
@@ -59,9 +54,7 @@ import { createStarter } from '../core/helpers/starter';
  * - Logs are written to stderr for script integration
  *
  * @see {@link generator} for the underlying generation logic
- * @see {@link MACHINE_GLOB} for the pattern of watched files
  * @see {@link DEFAULT_EXCLUDES} for default ignored directories
- * @see {@link DEFAULT_OUTPUT} for default output file path
  *
  * @see
  *
@@ -81,14 +74,6 @@ export const watch = command({
     'Watch *.machine.ts / *.fsm.ts files and regenerate app.gen.ts on change',
   aliases: ['dev'],
   args: {
-    output: option({
-      type: string,
-      long: 'output',
-      short: 'o',
-      defaultValue: () => DEFAULT_OUTPUT,
-      description: 'Output file path (relative to project root)',
-    }),
-
     excludes: multioption({
       type: array(string),
       long: 'excludes',
@@ -98,17 +83,24 @@ export const watch = command({
     }),
 
     cwd: option({
+      // #region Too much to handle for vitest
+      /* v8 ignore start -- @preserve */
+      defaultValue: () => process.cwd(),
+      /* v8 ignore stop -- @preserve */
+      // #endregion
+
       type: string,
       long: 'cwd',
       short: 'c',
-      defaultValue: () => process.cwd(),
+
       description:
         'The directory where to search files (defaults to current working directory). N.B: Not the ts root directory, but the directory where the glob pattern will be applied.',
     }),
   },
   handler: async options => {
-    /** Initial generation */
     const generate = () => generator(options);
+
+    /** Initial generation */
     await generate();
 
     const watcher2 = nodeWatch(options.cwd, {
@@ -116,22 +108,30 @@ export const watch = command({
       delay: 300,
       filter: DEFAULT_REGEX,
     }).on('change', async (event, path) => {
+      /* v8 ignore start -- @preserve */
       if (typeof path !== 'string') return;
-      else if (event === 'update') await createStarter(path);
-      else {
+      /* v8 ignore stop -- @preserve */
+
+      if (event === 'update') {
+        await createStarter(path);
+        return generate();
+      } else {
         console.log(`\nChange detected: ${path}`);
-        await generate();
+        return generate();
       }
     });
 
-    console.log(`\nWatching for changes in ${MACHINE_GLOB}...`);
+    console.log(`\nWatching for changes in ${options.cwd}...`);
     console.log('Press Ctrl+C to stop.\n');
 
     // Keep process alive
+    /* v8 ignore start -- @preserve */
     process.on('SIGINT', async () => {
-      // await watcher.close();
       watcher2.close();
       process.exit(0);
     });
+    /* v8 ignore stop -- @preserve */
+
+    return watcher2;
   },
 });

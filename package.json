@@ -80,8 +80,8 @@
     "ci:admin": "CI_START=$(date +%s) && pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",
     "config": "pnpm install",
     "config:off": "pnpm run config --offline",
-    "generate": "pnpm dlx @bemedev/app-cli generate -o ./src/__tests__/app.gen.ts",
-    "generate:watch": "pnpm dlx @bemedev/app-cli watch -o ./src/__tests__/app.gen.ts",
+    "generate": "tsx  src/cli/index.ts generate -c ./src/__tests__",
+    "generate:watch": "tsx src/cli/index.ts watch -c ./src/__tests__",
     "_lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "lint": "pnpm run fmt && pnpm run lint:fix",
@@ -139,7 +139,8 @@
     "tsx": "^4.22.3",
     "typescript": "^6.0.3",
     "valibot": "^1.4.1",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.7",
+    "zx": "^8.8.5"
   },
   "dependencies": {
     "@bemedev/better-promise": "^0.1.1",
