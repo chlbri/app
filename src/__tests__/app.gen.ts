@@ -26,7 +26,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/actions.1.machine': {
@@ -51,7 +51,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/actions.2.machine': {
@@ -76,7 +76,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/async-actions.1.machine': {
@@ -99,7 +99,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/async-actions.2.machine': {
@@ -122,7 +122,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/async-actions.3.machine': {
@@ -145,7 +145,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/async-actions.4.machine': {
@@ -168,7 +168,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/async-actions.5.machine': {
@@ -191,7 +191,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/async-actions.6.machine': {
@@ -214,7 +214,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/async-actions.7.machine': {
@@ -237,7 +237,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/async-actions.8.machine': {
@@ -260,7 +260,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/sendToActions/sendToActions1.machine': {
@@ -285,7 +285,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/actions/sendToActions/sendToActions2.machine': {
@@ -310,7 +310,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/delays/delay.notDefined.machine': {
@@ -335,7 +335,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/emitters/emitter1.machine': {
@@ -360,7 +360,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/emitters/emitter3.machine': {
@@ -385,7 +385,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/emitters/error.machine': {
@@ -408,7 +408,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/guards/index.1.machine': {
@@ -433,7 +433,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'guard1';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/guards/index.2.machine': {
@@ -458,7 +458,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'guard1';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/guards/index.3.machine': {
@@ -483,7 +483,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'guard1';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/guards/index.4.machine': {
@@ -508,7 +508,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'returnTrue' | 'returnFalse' | 'returnTrue2' | 'returnFalse2';
       };
-      pContext?: { data: string };
+      pContext: { data: string };
     };
 
     'src/__tests__/interpreters/activities/pause.machine': {
@@ -533,7 +533,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/activities/perform.bis.machine': {
@@ -558,7 +558,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/activities/perform.machine': {
@@ -581,7 +581,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/children.1.machine': {
@@ -604,7 +604,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/children.2.machine': {
@@ -627,7 +627,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/children.3.machine': {
@@ -652,7 +652,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/children.4.machine': {
@@ -677,7 +677,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/children.5.machine': {
@@ -700,7 +700,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/complex/machine1.machine': {
@@ -734,7 +734,7 @@ declare module '@bemedev/app' {
         delays:   'CHECK_DELAY' | 'ADD_DELAY';
         guards:   'assetIsDefined' | 'mandatoryIsDefined' | 'intermediariesAreNotFull' | 'intermediaryIsNotAdded';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/composition.1.machine': {
@@ -759,7 +759,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   'condition' | 'limit';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/composition.2.machine': {
@@ -782,7 +782,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/composition.3.machine': {
@@ -805,7 +805,7 @@ declare module '@bemedev/app' {
         delays:   'NEXT';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/composition.4.machine': {
@@ -828,7 +828,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/actors/2ids.1.machine': {
@@ -846,7 +846,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY' | 'DELAY2';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/actors/2ids.2.machine': {
@@ -871,7 +871,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: { iter1: number; iter2: number; all: { iter1: number; iter2: number } };
+      pContext: { iter1: number; iter2: number; all: { iter1: number; iter2: number } };
     };
 
     'src/__tests__/interpreters/coverage/actors/child.1.machine': {
@@ -889,7 +889,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY' | 'DELAY2';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/actors/child.2.machine': {
@@ -914,7 +914,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: { iter1: number; iter2: number; all: { iter1: number; iter2: number } };
+      pContext: { iter1: number; iter2: number; all: { iter1: number; iter2: number } };
     };
 
     'src/__tests__/interpreters/coverage/actors/emitter.machine': {
@@ -939,7 +939,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.1.machine': {
@@ -962,7 +962,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.2.machine': {
@@ -985,7 +985,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.3.machine': {
@@ -1010,7 +1010,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'isPositive';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.4.machine': {
@@ -1033,7 +1033,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.5.machine': {
@@ -1056,7 +1056,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/index.machine': {
@@ -1081,7 +1081,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: unknown;
     };
 
     'src/__tests__/interpreters/filter-erase.1.machine': {
@@ -1106,7 +1106,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.2.machine': {
@@ -1131,7 +1131,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.3.machine': {
@@ -1156,7 +1156,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.4.machine': {
@@ -1181,7 +1181,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.5.machine': {
@@ -1204,7 +1204,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.6.machine': {
@@ -1229,7 +1229,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.1.machine': {
@@ -1252,7 +1252,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.10.machine': {
@@ -1275,7 +1275,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.11.machine': {
@@ -1298,7 +1298,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.12.machine': {
@@ -1321,7 +1321,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.13.machine': {
@@ -1344,7 +1344,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.14.machine': {
@@ -1367,7 +1367,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.2.machine': {
@@ -1390,7 +1390,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.3.machine': {
@@ -1417,7 +1417,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'isPositive' | 'isNegative';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.4.machine': {
@@ -1440,7 +1440,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.5.machine': {
@@ -1463,7 +1463,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.6.machine': {
@@ -1486,7 +1486,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.7.machine': {
@@ -1509,7 +1509,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.8.machine': {
@@ -1532,7 +1532,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.9.machine': {
@@ -1559,7 +1559,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'isPositive' | 'isNegative';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/after.1.machine': {
@@ -1584,7 +1584,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/after.2.machine': {
@@ -1611,7 +1611,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY1' | 'DELAY2';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/after.3.machine': {
@@ -1638,7 +1638,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY' | 'DELAY2';
         guards:   'returnFalse';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/after.4.machine': {
@@ -1663,7 +1663,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY2';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/after.5.machine': {
@@ -1688,7 +1688,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/always.1.machine': {
@@ -1715,7 +1715,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/always.2.machine': {
@@ -1742,7 +1742,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY3';
         guards:   'returnFalse';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/always.3.machine': {
@@ -1771,7 +1771,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'returnFalse';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/index.1.machine': {
@@ -1796,7 +1796,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/index.2.machine': {
@@ -1821,7 +1821,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/interpreters/tags/tags.machine': {
@@ -1848,7 +1848,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/addOptions-return.1.machine': {
@@ -1871,7 +1871,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/addOptions-return.2.machine': {
@@ -1894,7 +1894,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/addOptions-return.3.machine': {
@@ -1919,7 +1919,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   'isPositive';
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/addOptions-return.4.machine': {
@@ -1942,7 +1942,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.1.machine': {
@@ -1965,7 +1965,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.10.machine': {
@@ -1988,7 +1988,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.2.machine': {
@@ -2011,7 +2011,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.3.machine': {
@@ -2034,7 +2034,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.4.machine': {
@@ -2057,7 +2057,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.5.machine': {
@@ -2080,7 +2080,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.6.machine': {
@@ -2103,7 +2103,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.7.machine': {
@@ -2126,7 +2126,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.8.machine': {
@@ -2149,7 +2149,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/asyncActions.9.machine': {
@@ -2172,7 +2172,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/cov.1.machine': {
@@ -2214,7 +2214,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/cov.2.machine': {
@@ -2237,7 +2237,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/cov.3.machine': {
@@ -2260,7 +2260,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/longRuns.cov.1.machine': {
@@ -2283,7 +2283,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/longRuns.cov.2.machine': {
@@ -2306,7 +2306,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/longRuns.cov.3.machine': {
@@ -2329,7 +2329,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/longRuns.cov.4.machine': {
@@ -2352,7 +2352,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/longRuns.cov.5.machine': {
@@ -2377,7 +2377,7 @@ declare module '@bemedev/app' {
         delays:   'DELAY';
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/real.1.machine': {
@@ -2431,7 +2431,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/real.2.machine': {
@@ -2483,7 +2483,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
     'src/__tests__/machine/real.3.machine': {
@@ -2515,8 +2515,10 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext?: undefined;
+      pContext: any;
     };
 
   }
 }
+
+export {};

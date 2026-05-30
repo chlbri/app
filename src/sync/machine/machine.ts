@@ -1,6 +1,7 @@
 import type { SyncAction2 } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
+import { expandFnMap } from '#common/functions';
 import type {
   CommonCreateMachine_F,
   ScheduledData,
@@ -9,17 +10,16 @@ import type {
 import type { SyncDelayFunction } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type PredicateS } from '#guards';
-import { getByKey, assignByKey } from '@bemedev/decompose';
-import { expandFnMap } from '#common/functions';
 import type { FlatMapN } from '#states';
 import { reduceFnMap } from '#utils';
+import { assignByKey, getByKey } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import { CommonMachine } from '../../common/machine';
 import type { SyncConfig } from '../types.types';
 import type {
   SyncAddOptions_F,
-  SyncAddOptionsParam_F,
+  SyncProvideOptions_F,
   SyncSendAction_F,
   SyncVoidAction_F,
 } from './options.types';
@@ -47,6 +47,7 @@ export class SyncMachine<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   TYPE = 'sync' as const;
   /**
@@ -118,7 +119,7 @@ export class SyncMachine<
    *
    * Remark: Used for typings, when you're outside the Machine class.
    */
-  createOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
+  createOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     const isValue = this.__isValue;
     const isNotValue = this.__isNotValue;
     const isDefined = this.__isDefined;
@@ -276,8 +277,8 @@ export class SyncMachine<
    *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
    */
 
-  addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
-    return super.addOptions(helper);
+  addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+    return super.addOptions(helper) as any;
   };
 
   /**
@@ -287,9 +288,20 @@ export class SyncMachine<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
-  provideOptions = (helper: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, Mo>) => {
-    return super.provideOptions(helper);
-  };
+
+  provideOptions: SyncProvideOptions_F<
+    C,
+    Pc,
+    Tc,
+    E,
+    A,
+    Ta,
+    Eo,
+    AllPaths,
+    Mo,
+    L
+  > = helper => super.provideOptions(helper);
+
   // #endregion
 
   /**

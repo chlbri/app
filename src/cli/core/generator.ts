@@ -154,6 +154,7 @@ export const generator = async (
     `  }`,
     `}`,
     ``,
+    `export {};`,
   ];
   const content = contentArray.join('\n');
 

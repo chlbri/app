@@ -27,7 +27,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // Second call to addOptions - access previous action via _legacy
     machine.addOptions(({ batch }, { _legacy }) => {
-      const prev = _legacy.actions?.increment;
+      const prev = (_legacy as any).actions?.increment;
       expect(prev).toBeDefined();
 
       return {
@@ -61,7 +61,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // Second call to addOptions - access previous action via _legacy
     machine.addOptions(({ batch }, { _legacy }) => {
-      const prev = _legacy.actions?.increment;
+      const prev = (_legacy as any).actions.increment;
       expect(prev).toBeDefined();
 
       return {
@@ -95,7 +95,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // Second call - access and extend with isNegative using _legacy
     machine.addOptions((_, { _legacy }) => {
-      const previousPredicates = _legacy.guards;
+      const previousPredicates = (_legacy as any).guards;
       expect(previousPredicates?.isPositive).toBeDefined();
 
       return {
@@ -160,7 +160,7 @@ describe.concurrent('Legacy Options Access', () => {
         (_legacy as any).actions = {};
       }).toThrow();
 
-      return undefined;
+      return {};
     });
   });
 
@@ -176,8 +176,9 @@ describe.concurrent('Legacy Options Access', () => {
 
     // Second call - should see first
     machine.addOptions(({ assign }, { _legacy }) => {
-      expect(_legacy.actions?.first).toBeDefined();
-      expect(_legacy.actions?.second).toBeUndefined();
+      const _actions = (_legacy as any).actions;
+      expect(_actions.first).toBeDefined();
+      expect(_actions.second).toBeUndefined();
 
       return {
         actions: {
@@ -188,9 +189,10 @@ describe.concurrent('Legacy Options Access', () => {
 
     // Third call - should see first and second
     machine.addOptions(({ assign }, { _legacy }) => {
-      expect(_legacy.actions?.first).toBeDefined();
-      expect(_legacy.actions?.second).toBeDefined();
-      expect(_legacy.actions?.third).toBeUndefined();
+      const _actions = (_legacy as any).actions;
+      expect(_actions.first).toBeDefined();
+      expect(_actions.second).toBeDefined();
+      expect(_actions.third).toBeUndefined();
 
       return {
         actions: {

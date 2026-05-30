@@ -1,14 +1,17 @@
+import type { Action } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
 import type { PrimitiveObject } from '#bemedev/globals/types';
-import { type EventsMap } from '#events';
+import { _unknown } from '#bemedev/globals/utils/_unknown';
+import { expandFnMap } from '#common/functions';
+import type { DelayFunction } from '#delays';
+import {
+  ActorsConfigMap,
+  type EventObject,
+  type EventsMap,
+} from '#events';
 import { type FlatMapN } from '#states';
 import { reduceFnMap } from '#utils';
 import { assignByKey, getByKey } from '@bemedev/decompose';
-import type { Action } from '#actions';
-import type { DelayFunction } from '#delays';
-import { ActorsConfigMap, type EventObject } from '#events';
-import { _unknown } from '#bemedev/globals/utils/_unknown';
-import { expandFnMap } from '#common/functions';
 
 import {
   CommonMachine,
@@ -23,11 +26,12 @@ import cloneDeep from 'clone-deep';
 
 import type {
   AddOptions_F,
-  AddOptionsParam_F,
+  ProvideOptions_F,
   SendAction_F,
   VoidAction_F,
 } from './machine.types';
 
+import type { EmptyObject } from '~types';
 import type { Config } from './types';
 
 /**
@@ -54,6 +58,7 @@ export class Machine<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const L extends SimpleMachineOptions2 = EmptyObject,
 > extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   TYPE = 'async' as const;
 
@@ -135,7 +140,7 @@ export class Machine<
    *
    * Remark: Used for typings, when you're outside the Machine class.
    */
-  createOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
+  createOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     const isValue = this.__isValue;
     const isNotValue = this.__isNotValue;
     const isDefined = this.__isDefined;
@@ -320,7 +325,7 @@ export class Machine<
       { _legacy },
     );
 
-    return out;
+    return out as any;
   };
 
   /**
@@ -329,9 +334,8 @@ export class Machine<
    * @param option a function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    */
-
-  addOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo> = helper => {
-    return super.addOptions(helper);
+  addOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+    return super.addOptions(helper) as any;
   };
 
   /**
@@ -341,9 +345,19 @@ export class Machine<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
-  provideOptions = (helper: AddOptionsParam_F<Eo, Pc, Tc, Ta, Mo>) => {
-    return super.provideOptions(helper);
-  };
+  provideOptions: ProvideOptions_F<
+    C,
+    Pc,
+    Tc,
+    E,
+    A,
+    Ta,
+    Eo,
+    AllPaths,
+    Mo,
+    L
+  > = helper => super.provideOptions(helper);
+
   // #endregion
 
   /**

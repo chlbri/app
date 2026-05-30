@@ -11,8 +11,7 @@ import type {
 import type { InterpreterFrom } from '#interpreter';
 import type { Machine } from '#machine';
 import type { Config as AsyncConfig, MachineOptions2 } from '#machines';
-import type { RegisterOptions } from '#registry';
-import type { Register } from '@bemedev/app';
+import type { Register, RegisterOptions } from '#registry';
 import type {
   inferT,
   PrimitiveObject,

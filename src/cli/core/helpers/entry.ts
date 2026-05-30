@@ -68,7 +68,7 @@ export const emitRegisterEntry = (
     `        delays:   ${setToUnion(tree.delays)};`,
     `        guards:   ${setToUnion(tree.guards)};`,
     `      };`,
-    `      pContext?: ${pContextType};`,
+    `      pContext: ${pContextType};`,
     `    };`,
   ].join('\n');
 };

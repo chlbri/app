@@ -1,4 +1,7 @@
 import { createMachine } from '#exports/createMachine';
+import { type } from '@bemedev/typings';
+
+const context = type('number');
 
 export default createMachine(
   'src/__tests__/interpreters/coverage/index.machine',
@@ -19,5 +22,9 @@ export default createMachine(
       },
       final: {},
     },
+  },
+  {
+    context,
+    pContext: context,
   },
 );

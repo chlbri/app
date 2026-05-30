@@ -23,12 +23,13 @@ import type {
   EventObject,
   EventsMap,
 } from '#events';
-import type { FnMap, FnR, ValuesOf } from '~types';
+import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
 import type {
   Config,
   EventsMapFrom,
   SimpleMachineOptions2,
 } from './types';
+import type { Machine } from '#machine';
 /**
  * Options for async action helpers.
  * - `error`: called with the thrown error and current context snapshot when
@@ -352,6 +353,7 @@ export type AddOptionsParam_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > = (
   option: AddOption<E, Pc, Tc, T>,
   /**
@@ -359,17 +361,35 @@ export type AddOptionsParam_F<
    * Provides actions, guards, emitters, machines, promises, and delays.
    */
   legacyOptions: {
-    _legacy: LegacyOptions<Mo>;
+    _legacy: L;
   },
-) => Mo | undefined;
+) => Mo;
 
 export type AddOptions_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ta extends string = string,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> = (option: AddOptionsParam_F<E, Pc, Tc, T, Mo>) => Mo | undefined;
+  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+> = <const T extends Mo>(
+  option: AddOptionsParam_F<E, Pc, Tc, Ta, T, L>,
+) => Mo;
+
+export type ProvideOptions_F<
+  C extends Config = Config,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  E extends EventsMap = EventsMap,
+  A extends ActorsConfigMap = ActorsConfigMap,
+  Ta extends string = string,
+  Eo extends EventObject = EventObject,
+  AllPaths extends string = string,
+  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  L extends SimpleMachineOptions2 = EmptyObject,
+> = <const T extends Mo>(
+  option: AddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
+) => Machine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
 
 /**
  * Represents a scheduled action with its data and execution time.

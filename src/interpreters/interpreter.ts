@@ -52,6 +52,7 @@ import type {
   PerformPredicate_F,
   PerformTransition_F,
   PerformTransitions_F,
+  ProvideMachineOptions_F,
 } from './interpreter.types';
 
 import type { PrimitiveObject } from '#bemedev/globals/types';
@@ -61,6 +62,7 @@ import { type EmitterFunction2 } from '#emitters';
 import type { Machine } from '#machine';
 import type {
   ActorsMapFrom,
+  AddOptions_F,
   AllPathsFrom,
   EventsFrom,
   MachineOptionsFrom,
@@ -104,6 +106,7 @@ export class Interpreter<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   /**
    * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.
@@ -128,9 +131,12 @@ export class Interpreter<
    * Create a new {@linkcode Interpreter} instance with the same initial configuration as this instance.
    */
   get renew() {
-    const out = new Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
+    const out = new Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>(
       this.machine,
+      this.__mode,
+      this.__exact,
     );
+
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
 
@@ -666,9 +672,9 @@ export class Interpreter<
   /**
    * Add options to the inner {@linkcode Machine} of this {@linkcode Interpreter} service.
    */
-  get addOptions() {
-    return super.addOptions as this['machine']['addOptions'];
-  }
+  addOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+    return super.addOptions(helper) as any;
+  };
 
   /**
    * Provides options for the interpreter and returns a new interpreter instance.
@@ -677,20 +683,19 @@ export class Interpreter<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new interpreter instance with the provided options applied.
    */
-  provideOptions = (
-    option: Parameters<(typeof this)['addOptions']>[0],
-  ) => {
-    const newMachine = this.machine.provideOptions(option);
-
-    const out = new Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
-      newMachine,
-      this.__mode,
-      this.__exact,
-    );
-    
-    out._ppC(this.__initialPpc);
-    out._provideContext(this.__initialContext);
-    return out;
+  provideOptions: ProvideMachineOptions_F<
+    C,
+    Pc,
+    Tc,
+    E,
+    A,
+    Ta,
+    Eo,
+    AllPaths,
+    Mo,
+    L
+  > = option => {
+    return super.provideOptions(option) as any;
   };
 
   // #region Next

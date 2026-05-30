@@ -996,20 +996,23 @@ export abstract class CommonInterpreter<
   /**
    * Add options to the inner {@linkcode Machine} of this {@linkcode Interpreter} service.
    */
-  get addOptions() {
-    return this.__machine.addOptions;
+  addOptions(helper: Fn) {
+    this.__machine = this.__machine.provideOptions(helper);
+    return this.__machine.options;
   }
 
   /**
    * Provides options for the interpreter and returns a new interpreter instance.
    *
-   * @param option a function that provides options for the machine.
+   * @param helper a function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new interpreter instance with the provided options applied.
    */
-  abstract provideOptions: (
-    option: Parameters<(typeof this)['addOptions']>[0],
-  ) => any;
+  provideOptions(helper: Fn) {
+    const out = this.renew;
+    out.addOptions(helper);
+    return out as any;
+  }
 
   subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (
     _subscriber,

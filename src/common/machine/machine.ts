@@ -40,7 +40,6 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import type {
   AnyMachine,
-  CommonAddOptionsParam_F,
   CommonConfig,
   CommonElements,
   CommonTimeAction_F,
@@ -521,9 +520,7 @@ export abstract class CommonMachine<
   #addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
     (this.#actors = merge(this.#actors, { emitters }));
 
-  abstract createOptions: (
-    helper: CommonAddOptionsParam_F<Mo>,
-  ) => Mo | undefined;
+  abstract createOptions: (helper: Fn) => Mo | undefined;
 
   abstract readonly TYPE: MachineType;
 
@@ -533,8 +530,8 @@ export abstract class CommonMachine<
    * @param option a function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    */
-  addOptions(helper: CommonAddOptionsParam_F<Mo>) {
-    const out = this.createOptions(helper as any);
+  addOptions(helper: Fn) {
+    const out = this.createOptions(helper);
 
     this.#addActions(out?.actions);
     this.#addGuards(out?.guards);
@@ -575,11 +572,10 @@ export abstract class CommonMachine<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
-  provideOptions<T extends Mo>(helper: CommonAddOptionsParam_F<T>) {
+  provideOptions(helper: Fn) {
     const out = this.renew;
     out.addOptions(helper);
-
-    return out;
+    return out as any;
   }
 
   /**

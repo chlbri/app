@@ -14,7 +14,12 @@ import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
-import type { ContextFrom, PrivateContextFrom } from '#machines';
+import type {
+  AddOptionsParam_F,
+  Config,
+  ContextFrom,
+  PrivateContextFrom,
+} from '#machines';
 import type { ActivityConfig, NodeConfig, StateValue } from '#states';
 import type {
   AlwaysConfig,
@@ -23,13 +28,13 @@ import type {
 } from '#transitions';
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval2, IntervalParams } from '@bemedev/interval2';
-import type { FnMapR, OptionalDefinition } from '~types';
-import { type InterpreterFrom } from './interpreter';
+import type { EmptyObject, FnMapR, OptionalDefinition } from '~types';
+import { type Interpreter, type InterpreterFrom } from './interpreter';
 import type {
   SubscriberClass,
   SubscriberOptions,
 } from '#common/subscriber';
-import type { AnyMachine } from '#common/machine';
+import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 
 export type WorkingStatus =
   | 'idle'
@@ -281,3 +286,18 @@ export type CollectedService = {
   service: AnyInterpreter;
   id: string;
 };
+
+export type ProvideMachineOptions_F<
+  C extends Config = Config,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  E extends EventsMap = EventsMap,
+  A extends ActorsConfigMap = ActorsConfigMap,
+  Ta extends string = string,
+  Eo extends EventObject = EventObject,
+  AllPaths extends string = string,
+  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  L extends SimpleMachineOptions2 = EmptyObject,
+> = <const T extends Mo>(
+  option: AddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
+) => Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;

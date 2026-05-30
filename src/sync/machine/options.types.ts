@@ -2,7 +2,13 @@ import type { SyncAction2 } from '#actions';
 import type { Ru, SubTypeLow } from '#bemedev/globals/types';
 import type { SyncDelayFunction2 } from '#delays';
 import type { EmitterFunction2 } from '#emitters';
-import type { EventArg, EventArgAll, EventObject } from '#events';
+import type {
+  ActorsConfigMap,
+  EventArg,
+  EventArgAll,
+  EventObject,
+  EventsMap,
+} from '#events';
 import type { DefinedValue, SyncPredicateS } from '#guards';
 import type {
   AnyMachine,
@@ -12,7 +18,9 @@ import type {
 } from '#machines';
 import type { RegisterOptions } from '#registry';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { Decompose, FnMap, FnR, ValuesOf } from '~types';
+import type { Decompose, EmptyObject, FnMap, FnR, ValuesOf } from '~types';
+import type { SyncMachine } from './machine';
+import type { SyncConfig } from '../types.types';
 
 export type SyncFilterAction_F<
   E extends EventObject = EventObject,
@@ -174,23 +182,13 @@ export type SyncAddOption<
   // emitter: Emitter<E, P, Pc, Tc>;
 };
 
-/**
- * Type for the _legacy parameter containing previously defined options.
- */
-export type SyncLegacyOptions<
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> = Readonly<{
-  actions?: Mo['actions'];
-  guards?: Mo['guards'];
-  actors?: Mo['actors'];
-}>;
-
 export type SyncAddOptionsParam_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > = (
   option: SyncAddOption<E, Pc, Tc, T>,
   /**
@@ -198,17 +196,35 @@ export type SyncAddOptionsParam_F<
    * Provides actions, guards, emitters, machines, promises, and delays.
    */
   legacyOptions: {
-    _legacy: SyncLegacyOptions<Mo>;
+    _legacy: L;
   },
-) => Mo | undefined;
+) => Mo;
 
 export type SyncAddOptions_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ta extends string = string,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> = (option: SyncAddOptionsParam_F<E, Pc, Tc, T, Mo>) => Mo | undefined;
+  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+> = <const T extends Mo>(
+  option: SyncAddOptionsParam_F<E, Pc, Tc, Ta, T, L>,
+) => Mo;
+
+export type SyncProvideOptions_F<
+  C extends SyncConfig = SyncConfig,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  E extends EventsMap = EventsMap,
+  A extends ActorsConfigMap = ActorsConfigMap,
+  Ta extends string = string,
+  Eo extends EventObject = EventObject,
+  AllPaths extends string = string,
+  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  L extends SimpleMachineOptions2 = EmptyObject,
+> = <const T extends Mo>(
+  option: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
+) => SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
 
 export type SyncMachineOptions2<
   Pc = any,

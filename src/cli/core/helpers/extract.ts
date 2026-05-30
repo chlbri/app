@@ -66,11 +66,10 @@ export const extractMachineInfo = (
       return null;
     }
 
-    let pContextType = 'undefined';
+    let pContextType = 'any';
     if (args.length >= 3) {
       const typingsArg = args[2];
-      pContextType =
-        extractPContextType(typingsArg, sourceFile) ?? 'undefined';
+      pContextType = extractPContextType(typingsArg, sourceFile) ?? 'any';
     }
 
     return { name, config, pContextType };

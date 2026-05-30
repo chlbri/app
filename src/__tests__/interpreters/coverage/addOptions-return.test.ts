@@ -22,13 +22,6 @@ describe.concurrent('Interpreter addOptions return', () => {
     expect(typeof result?.actions?.increment).toBe('function');
   });
 
-  test('#02 => should return undefined when callback returns undefined', () => {
-    const machine = _machine2;
-    const service = interpret(machine, { context: 0 });
-    const result = service.addOptions(() => undefined as any);
-    expect(result).toBeUndefined();
-  });
-
   test('#03 => should return options with multiple properties', () => {
     const machine = _machine3;
 
