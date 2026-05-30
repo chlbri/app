@@ -52,12 +52,31 @@ export const evaluateNode = (node: any, sourceFile: any): any => {
           }
         }
       } else if (propKind === 'SpreadAssignment') {
-        throw new Error(
-          'Spread operators not supported in static config evaluation',
-        );
+        const expression = prop.getExpression?.();
+        if (expression) {
+          const spreadResult = evaluateNode(expression, sourceFile);
+          if (typeof spreadResult === 'object' && spreadResult !== null) {
+            Object.assign(result, spreadResult);
+          }
+        }
       }
     }
     return result;
+  }
+
+  if (kind === 'AsExpression' || kind === 'TypeAssertionExpression') {
+    const expression = node.getExpression?.();
+    if (expression) {
+      return evaluateNode(expression, sourceFile);
+    }
+  }
+
+  if (kind === 'CallExpression') {
+    const args = node.getArguments?.() ?? [];
+    if (args.length > 0) {
+      return evaluateNode(args[0], sourceFile);
+    }
+    return undefined;
   }
 
   if (kind === 'Identifier') {
