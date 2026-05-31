@@ -17,7 +17,7 @@ export const unhandledRejection = async (
     testFn();
     await sleep(timeout);
   } catch (error) {
-    handler(error);
+    handler(error, Promise.resolve());
   } finally {
     process.off('unhandledRejection', handler);
     process.off('uncaughtException', handler);

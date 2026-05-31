@@ -150,6 +150,22 @@ export type SyncTimeAction_F<
   T extends string = string,
 > = (id: string) => SyncAction2<E, Pc, Tc, T>;
 
+export type SyncAllActions_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> =
+  | SyncAssignAction_F<E, Pc, Tc, T>
+  | SyncVoidAction_F<E, Pc, Tc, T>
+  | SyncSendAction_F<E, Pc, Tc, T>
+  | SyncResendAction_F<E, Pc, Tc, T>
+  | SyncDebounceAction_F<E, Pc, Tc, T>
+  | SyncTimeAction_F<E, Pc, Tc, T>
+  | SyncBatchAction_F<E, Pc, Tc, T>
+  | SyncEraseAction_F<E, Pc, Tc, T>
+  | SyncFilterAction_F<E, Pc, Tc, T>;
+
 export type SyncAddOption<
   E extends EventObject = EventObject,
   Pc = any,

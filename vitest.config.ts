@@ -49,7 +49,7 @@ export default defineConfig({
     testTimeout: 30000,
     typecheck: {
       enabled: true,
-      ignoreSourceErrors: true,
+      ignoreSourceErrors: false,
     },
     coverage: {
       enabled: true,

@@ -274,13 +274,6 @@ export type DefineGuard_F<
   T extends string = string,
 > = (path: DefinedValue<Pc, Tc>) => FnR<E, Pc, Tc, T, boolean>;
 
-export type AllActions_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = AssignAction_F<E, Pc, Tc, T> | VoidAction_F<E, Pc, Tc, T>;
-
 export type DebounceAction_F<
   E extends EventObject = EventObject,
   Pc = any,
@@ -302,18 +295,6 @@ export type BatchAction_F<
 > = <A extends (Action2<E, Pc, Tc, T> | undefined)[]>(
   ...fns: A
 ) => Action2<E, Pc, Tc, T>;
-
-/**
- * Type for the _legacy parameter containing previously defined options.
- */
-export type LegacyOptions<
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> = Readonly<{
-  actions?: Mo['actions'];
-  guards?: Mo['guards'];
-  delays?: Mo['delays'];
-  actors?: Mo['actors'];
-}>;
 
 export type AddOption<
   E extends EventObject = EventObject,

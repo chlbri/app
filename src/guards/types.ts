@@ -1,5 +1,6 @@
 import type { WithDescriber, FromActionConfig } from '#actions';
 import type {
+  Equals,
   NotUndefined,
   PrimitiveObject,
 } from '#bemedev/globals/types';
@@ -151,12 +152,13 @@ type _DefinedValue<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
 > = KeysMatching<{
-  pContext: any extends NotUndefined<Pc>
+  pContext: Equals<any, Pc> extends true
     ? EmptyObject
     : NotUndefined<Pc> extends never
       ? EmptyObject
       : NotUndefined<Pc>;
-  context: PrimitiveObject extends Tc
+
+  context: Equals<PrimitiveObject, Tc> extends true
     ? EmptyObject
     : NotUndefined<Tc> extends never
       ? EmptyObject
