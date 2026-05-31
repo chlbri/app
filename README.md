@@ -8,8 +8,6 @@ model.
 The core idea: **write machines as pure data, wire implementations
 separately, generate types automatically.**
 
-## WARNING : Real hot-fix for previous version 1.1.0 where no dts where exported
-
 <br/>
 
 ## Philosophy
