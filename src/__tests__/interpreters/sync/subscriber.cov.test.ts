@@ -1,10 +1,10 @@
-import type { StatePFrom } from '#machines';
 import { describe, expect, test, vi } from 'vitest';
 import { interpret } from '#exports/interpret';
 import type { State } from '#states';
 import type { EventObject } from '#events';
 import { defaultCheck, returnTrue } from '#guards';
 import { machine1, type Machine1 } from './data';
+import type { StatePFrom } from '#common/interpreter';
 
 describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
   type TestContext = { iterator: number };

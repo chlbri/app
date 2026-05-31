@@ -1,7 +1,6 @@
 import type { Action3 } from '#actions';
 import type { ActorConfig } from '#actor';
 import type {
-  ChildFunction2,
   ConfigDef,
   NoExtraKeysConfigDef,
   TransformConfigDef,
@@ -17,6 +16,8 @@ import type {
   EventObject,
   EventsMap,
   Fn,
+  FnMap,
+  FnR,
   Identify,
   RecordS,
 } from '~types';
@@ -135,6 +136,14 @@ export type SyncEmitter<
   complete: SyncTransition<E, Pc, Tc, T>[];
 };
 
+export type ChildFunction2<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnR<E, Pc, Tc, T, R>;
+
 export type SyncChild<
   E extends EventObject = EventObject,
   Pc = any,
@@ -148,6 +157,22 @@ export type SyncChild<
   on: Identify<RecordS<SyncTransition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };
+
+export type SyncChildFunction<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
+
+export type SyncChildFunction2<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnR<E, Pc, Tc, T, R>;
 
 /**
  * Represents all transitions inside a state config with full defined functions.

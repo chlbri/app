@@ -172,6 +172,20 @@ export type StateFrom<T extends KeyU<'__state'>> = T['__state'];
 export type DecomposedStateFrom<T extends KeyU<'__decomposedState'>> =
   T['__decomposedState'];
 
+export type FnMapFrom<
+  T extends KeyU<
+    '__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'
+  >,
+  R = any,
+  Ex extends string = never,
+> = FnMapR<
+  Extract<T['__events'], EventObject>,
+  ContextFrom<T>,
+  Extract<T['__tag'], string>,
+  R,
+  Ex
+>;
+
 /**
  * Getting extended state from a machine.
  *

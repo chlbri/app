@@ -1,4 +1,4 @@
-import type { ConfigDef } from '#machines';
+import type { ConfigDef, NoExtraKeysConfigDef } from '#common/machine';
 
 export type RegisterOptions = Record<
   'children' | 'emitters' | 'tags' | 'actions' | 'guards' | 'delays',
@@ -15,7 +15,7 @@ export interface Register extends Record<
   string,
   {
     paths: {
-      map: ConfigDef;
+      map: NoExtraKeysConfigDef<ConfigDef>;
       all: string;
     };
 

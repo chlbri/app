@@ -1,11 +1,12 @@
-import type { Config3, Machine3 } from '#fixturesData';
 import type {
   ConfigFrom,
   ContextFrom,
   EventsFrom,
   EventsMapFrom,
   PrivateContextFrom,
-} from '#machines';
+} from '#common/interpreter';
+import type { Config3, Machine3 } from '#fixturesData';
+
 import type { EmptyObject } from '@bemedev/decompose';
 
 type TTConfig = ConfigFrom<Machine3>;

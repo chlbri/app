@@ -1,5 +1,6 @@
 import type { SyncAction2 } from '#actions';
 import type { Ru, SubTypeLow } from '#bemedev/globals/types';
+import type { EventsMapFrom } from '#common/interpreter';
 import type { SyncDelayFunction2 } from '#delays';
 import type { EmitterFunction2 } from '#emitters';
 import type {
@@ -10,17 +11,12 @@ import type {
   EventsMap,
 } from '#events';
 import type { DefinedValue, SyncPredicateS } from '#guards';
-import type {
-  AnyMachine,
-  EventsMapFrom,
-  SimpleMachineOptions2,
-} from '#machines';
+import type { AnyMachine, SimpleMachineOptions2 } from '#machines';
 import type { RegisterOptions } from '#registry';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { Decompose, EmptyObject, FnMap, FnR, ValuesOf } from '~types';
-import type { SyncMachine } from './machine';
 import type { SyncConfig } from '../types.types';
-import type { ChildFunction2 } from '#common/machine';
+import type { SyncMachine } from './machine';
 
 export type SyncFilterAction_F<
   E extends EventObject = EventObject,
@@ -242,6 +238,14 @@ export type SyncProvideOptions_F<
   option: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
 ) => SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
 
+export type SyncChildFunction2<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnR<E, Pc, Tc, T, R>;
+
 export type SyncMachineOptions2<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -254,7 +258,7 @@ export type SyncMachineOptions2<
   delays: Partial<Record<O['delays'], SyncDelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
     children: Partial<
-      Record<O['children'], ChildFunction2<Eo, Pc, Tc, T, any>>
+      Record<O['children'], SyncChildFunction2<Eo, Pc, Tc, T, any>>
     >;
     emitters: Partial<
       Record<O['emitters'], EmitterFunction2<Eo, Pc, Tc, T, any>>

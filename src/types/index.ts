@@ -98,7 +98,7 @@ export type {
 export * from '#exports/types.types';
 export type {
   AnyMachine,
-  ChildFunction,
+  CommonChildFunction as ChildFunction,
   ChildFunction2,
   ChildrenMap,
   CommonConfig,
@@ -111,6 +111,7 @@ export type {
   NoExtraKeysConfigDef,
   StdO2,
   TransformConfigDef,
+  ChildEvents,
 } from '#common/machine';
 
 export type {
@@ -154,9 +155,20 @@ export type {
   StatePFrom,
   StatePextendedFrom,
   TagFrom,
+  AnyInterpreter,
+  FnMapFrom,
 } from '#common/interpreter';
 
-export type { Machine, ChildConfigDef, AddOption } from '#machines';
+export type {
+  Machine,
+  ChildConfigDef,
+  AddOption,
+  Config,
+  AsyncChild,
+  AsyncOptions,
+  ChildConfigMap,
+} from '#machines';
+
 export type { SyncMachine, SyncAddOption } from '../sync/machine';
 
 export type {

@@ -5,7 +5,7 @@ import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toTransition } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { ChildConfig } from '../../actors/types';
-import type { Child } from '../types';
+import type { AsyncChild } from '../types';
 import { toChildSrc } from './src';
 
 export type ToChild_F = <
@@ -21,7 +21,7 @@ export type ToChild_F = <
   actorsMap: A,
   child: ChildConfig & { __id: string },
   options?: SimpleMachineOptions2,
-) => Child<Eo, Pc, Tc, T, R>;
+) => AsyncChild<Eo, Pc, Tc, T, R>;
 
 /**
  * Converts an emitter config to an emitter object with a source and transitions.

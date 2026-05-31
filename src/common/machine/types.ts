@@ -1,6 +1,7 @@
 import type { Action2, ActionResult, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
+import type { NotUndefined } from '#bemedev/globals/types';
 import type { NodeConfig, StateValue } from '#states';
 import type { Fn } from '#utils';
 import type {
@@ -190,9 +191,9 @@ export type ChildrenMap<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = RecordS<ChildFunction<E, Pc, Tc, T>>;
+> = RecordS<CommonChildFunction<E, Pc, Tc, T>>;
 
-export type ChildFunction<
+export type CommonChildFunction<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -207,3 +208,8 @@ export type ChildFunction2<
   T extends string = string,
   R extends { eventsMap: any } = { eventsMap: any },
 > = FnR<E, Pc, Tc, T, MaybePromise<R>>;
+
+export type ChildEvents<
+  K extends string,
+  A extends ActorsConfigMap = ActorsConfigMap,
+> = NotUndefined<A['children']>[K] extends infer P ? P : never;

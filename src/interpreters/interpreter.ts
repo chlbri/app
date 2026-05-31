@@ -19,14 +19,7 @@ import {
   type EventsMap,
 } from '#events';
 import { type GuardConfig } from '#guards';
-import {
-  type Config,
-  type ConfigFrom,
-  type ContextFrom,
-  type EventsMapFrom,
-  type ExtendedActionsParams,
-  type PrivateContextFrom,
-} from '#machines';
+import { type Config } from '#machines';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
 import {
@@ -55,19 +48,23 @@ import type {
   ProvideMachineOptions_F,
 } from './interpreter.types';
 
-import { CommonInterpreter } from '#common/interpreter';
-import type { AnyMachine } from '#common/machine';
+import {
+  CommonInterpreter,
+  type ActorsMapFrom,
+  type AllPathsFrom,
+  type ConfigFrom,
+  type ContextFrom,
+  type EventsFrom,
+  type EventsMapFrom,
+  type ExtendedActionsParams,
+  type MachineOptionsFrom,
+  type PrivateContextFrom,
+  type TagFrom,
+} from '#common/interpreter';
+import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 import { type EmitterFunction2 } from '#emitters';
 import type { Machine } from '#machine';
-import type {
-  ActorsMapFrom,
-  AddOptions_F,
-  AllPathsFrom,
-  EventsFrom,
-  MachineOptionsFrom,
-  SimpleMachineOptions2,
-  TagFrom,
-} from '#machines';
+import type { AddOptions_F } from '#machines';
 import { createScheduler } from '@bemedev/scheduler';
 import type { EmitterConfig, FinallyConfig } from '../actors/types';
 import type { PrimitiveObject } from '@bemedev/typings';

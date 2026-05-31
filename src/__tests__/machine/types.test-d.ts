@@ -1,16 +1,18 @@
 import type { Fn } from '#bemedev/globals/types';
+import type { ChildEvents } from '#common/machine';
 import { EventStrings } from '#events';
 import type { machine2 } from '#fixturesData';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
-  AddOptionsFrom,
-  ChildEvents,
   Config,
-  DecomposedStateFrom,
-  FnMapFrom,
   GetActorKeysFromConfig,
   GetEventsFromMachine,
 } from '../../machine/types';
+import type {
+  AddOptionsFrom,
+  DecomposedStateFrom,
+  FnMapFrom,
+} from '#common/interpreter';
 
 type TT2 = keyof Exclude<FnMapFrom<typeof machine2>, Fn>;
 expectTypeOf<TT2>().toEqualTypeOf<

@@ -1,32 +1,22 @@
-import type { Action2, WithDescriber, ActionResult } from '#actions';
+import type { Action2, ActionResult } from '#actions';
 
 import type { DefinedValue } from '#guards';
-import type {
-  NodeConfig,
-  StateExtended,
-  StatePextended,
-  StateValue,
-} from '#states';
+import type { StateExtended, StatePextended, StateValue } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 
 import type { Fn, Ru, SubTypeLow } from '#bemedev/globals/types';
+import type { EventsMapFrom } from '#common/interpreter';
 import type {
   ActorsConfigMap,
   EventArg,
   EventArgAll,
-  EventArgObject,
   EventObject,
   EventsMap,
 } from '#events';
-import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
-import type {
-  Config,
-  EventsMapFrom,
-  SimpleMachineOptions2,
-} from './types';
 import type { Machine } from '#machine';
-import type { ScheduledData } from '#common/machine';
 import type { PrimitiveObject } from '@bemedev/typings';
+import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
+import type { Config, SimpleMachineOptions2 } from './types';
 /**
  * Options for async action helpers.
  * - `error`: called with the thrown error and current context snapshot when
@@ -74,11 +64,6 @@ export type Elements<
   delays?: Mo['delays'];
   actors?: Mo['actors'];
 };
-
-export type GetIO_F = (
-  key: 'exit' | 'entry',
-  node?: NodeConfig,
-) => WithDescriber[];
 
 /**
  * Simple representation of a machine with meaningful properties.
@@ -373,23 +358,6 @@ export type SendToEvent<T = any> = {
   to: string;
   event: T;
 };
-
-export type ExtendedActionsParams<
-  Eo extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = Partial<{
-  scheduled: ScheduledData<Pc, Tc>;
-  resend: EventArgObject<Eo>;
-  forceSend: EventArgObject<Eo>;
-  pauseActivity: string;
-  resumeActivity: string;
-  stopActivity: string;
-  pauseTimer: string;
-  resumeTimer: string;
-  stopTimer: string;
-  sentEvent: SendToEvent;
-}>;
 
 export type TimeActionsTypes =
   | 'pauseActivity'

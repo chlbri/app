@@ -2,5 +2,4 @@ export * from './constants';
 export * from './functions';
 export * from './machine';
 export * from './machine.types';
-export * from '../registry.types';
 export * from './types';

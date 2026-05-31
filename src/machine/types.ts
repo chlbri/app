@@ -1,7 +1,12 @@
 import type { Action2, FromActionConfig } from '#actions';
-import type { Equals, Keys, NotUndefined } from '#bemedev/globals/types';
+import type { Equals, Keys } from '#bemedev/globals/types';
 import { Identify } from '#bemedev/globals/types';
-import type { ChildFunction2, CommonConfig } from '#common/machine';
+import type {
+  ChildEvents,
+  CommonConfig,
+  ConfigDef,
+  NoExtraKeysConfigDef,
+} from '#common/machine';
 import type { DelayFunction2 } from '#delays';
 import type {
   EmitterDef,
@@ -13,7 +18,6 @@ import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { PredicateS, PredicateS2 } from '#guards';
 import type {
   ActivityConfig,
-  BaseConfig,
   ExtractActionsFromActivity,
   ExtractDelaysFromActivity,
   ExtractGuardsFromActivity,
@@ -32,11 +36,12 @@ import type {
   TransitionsConfig,
 } from '#transitions';
 import type { Recompose } from '@bemedev/decompose';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { Observable } from 'rxjs';
-import type { FnMap, FnMapR, FnR, KeyU, ReduceArray } from '~types';
+import type { FnR, KeyU, MaybePromise, ReduceArray } from '~types';
 import type { RegisterOptions } from '../registry.types';
 import { RecordS } from './../types/primitives';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { ConfigFrom } from '#common/interpreter';
 
 /**
  * Type representing the main JSON config.
@@ -57,58 +62,9 @@ export type Config<
     NoExtraKeysConfigDef<ConfigDef>,
 > = CommonConfig<Paths>;
 
-export type ChildEvents<
-  K extends string,
-  A extends ActorsConfigMap = ActorsConfigMap,
-> = NotUndefined<A['children']>[K] extends infer P ? P : never;
-
-export type SyncChildFunction<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R extends { eventsMap: any } = { eventsMap: any },
-> = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
-
-export type SyncChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, R>;
-
 export type ExtractTagsFromConfig<T extends Config> = ExtractTagsFromFlat<
   FlatMapN<T>
 >;
-
-export type NoExtraKeysConfigDef<T extends ConfigDef> = T & {
-  [K in Exclude<keyof T, keyof ConfigDef>]: never;
-} & {
-  states?: {
-    [K in keyof T['states']]: T['states'][K] extends infer TK extends
-      ConfigDef
-      ? NoExtraKeysConfigDef<TK>
-      : never;
-  };
-};
-
-export type ConfigDef = {
-  readonly targets: string;
-  readonly initial?: string;
-  readonly states?: RecordS<ConfigDef>;
-};
-
-export type TransformConfigDef<T extends ConfigDef> = BaseConfig &
-  TransitionsConfig<T['targets'][number]> & {
-    readonly initial?: T['initial'];
-    readonly states?: {
-      [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
-        ConfigDef
-        ? TransformConfigDef<TK>
-        : never;
-    };
-  };
 
 /**
  * Type representing all action keys from a flat map of nodes.
@@ -317,7 +273,7 @@ export type GetEventsFromConfig<C extends Config> = GetEventsFromFlat<
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine.
  */
 export type GetEventsFromMachine<T extends KeyU<'config'>> =
-  GetEventsFromConfig<ConfigFrom<T>>;
+  GetEventsFromConfig<Extract<ConfigFrom<T>, Config>>;
 
 export type GetEmittersSrcKeyFromFlat<Flat extends FlatMapN> = Record<
   _GetEmitterSrcKeyFromFlat<Flat>,
@@ -365,7 +321,7 @@ export type GetEmittersSrcFromConfig<C extends Config> =
  * @see {@linkcode GetEmittersSrcFromConfig} for extracting promises from the machine.
  */
 export type GetEmittersSrcFromMachine<T extends KeyU<'config'>> =
-  GetEmittersSrcFromConfig<ConfigFrom<T>>;
+  GetEmittersSrcFromConfig<Extract<ConfigFrom<T>, Config>>;
 
 export type GetChildrenSrcKeysFromFlat<
   Flat extends FlatMapN,
@@ -386,6 +342,14 @@ export type GetChildrenSrcKeysFromFlat2<
       }
     : never;
 };
+
+export type ChildFunction2<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnR<E, Pc, Tc, T, MaybePromise<R>>;
 
 export type GetChildrenSrcFromFlat<
   Flat extends FlatMapN,
@@ -432,7 +396,7 @@ export type GetChildrenSrcFromConfig<C extends Config> =
  * @see {@linkcode GetChildrenSrcFromConfig} for extracting child machines from the machine.
  */
 export type GetChildrenSrcFromMachine<T extends KeyU<'config'>> =
-  GetChildrenSrcFromConfig<ConfigFrom<T>>;
+  GetChildrenSrcFromConfig<Extract<ConfigFrom<T>, Config>>;
 
 export type GetActorsFromFlat<
   Flat extends FlatMapN,
@@ -462,7 +426,7 @@ export type GetActorsFromMachine<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = GetActorsFromConfig<ConfigFrom<M>, E, A, Pc, Tc, T>;
+> = GetActorsFromConfig<Extract<ConfigFrom<M>, Config>, E, A, Pc, Tc, T>;
 
 export type GetActorsSrcKeysFromFlat<Flat extends FlatMapN> = {
   children: GetChildrenSrcKeysFromFlat<Flat>;
@@ -494,7 +458,7 @@ export type GetActorKeysFromConfig2<C extends Config> =
   GetActorsSrcKeysFromFlat2<FlatMapN<C>>;
 
 export type GetActorKeysFromMachine<T extends KeyU<'config'>> =
-  GetActorKeysFromConfig<ConfigFrom<T>>;
+  GetActorKeysFromConfig<Extract<ConfigFrom<T>, Config>>;
 
 export type ChildConfigDef = EventsMap;
 
@@ -503,7 +467,7 @@ export type ChildConfigMap<S extends string = string> = Record<
   ChildConfigDef
 >;
 
-export type Child<
+export type AsyncChild<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -516,23 +480,6 @@ export type Child<
   on: Identify<RecordS<Transition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };
-
-/**
- * Not used in the codebase, but provided for completeness.
- */
-export type FnMapFrom<
-  T extends KeyU<
-    '__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'
-  >,
-  R = any,
-  Ex extends string = never,
-> = FnMapR<
-  Extract<T['__events'], EventObject>,
-  ContextFrom<T>,
-  Extract<T['__tag'], string>,
-  R,
-  Ex
->;
 
 /**
  * The big one !
@@ -597,265 +544,6 @@ export type MachineOptions2<
     >;
   }>;
 }>;
-
-/**
- * Getting the options from a machine.
- *
- * @template : {@linkcode KeyU}<'options'> [T] - type of the machine options
- *
- * @see {@linkcode SimpleMachineOptions2} for the structure of the machine options.
- */
-export type MachineOptionsFrom<T extends KeyU<'options'>> = Extract<
-  T['options'],
-  SimpleMachineOptions2
->;
-
-/**
- * Alias of {@linkcode MachineOptionsFrom}.
- */
-export type MoF<T extends KeyU<'options'>> = MachineOptionsFrom<T>;
-
-/**
- * Getting config from a machine.
- *
- * @template : {@linkcode KeyU}<'config'> [T] - type of the machine pre-config
- *
- * @see {@linkcode Config} for the structure of the machine config.
- */
-export type ConfigFrom<T extends KeyU<'config'>> = Extract<
-  T['config'],
-  Config
->;
-
-/**
- * Getting private context from a machine.
- *
- * @template : {@linkcode KeyU}<'pContext'> [T] - type of the machine events map
- */
-export type PrivateContextFrom<T extends KeyU<'pContext'>> = T['pContext'];
-
-/**
- * Getting context from a machine.
- *
- * @template : {@linkcode KeyU}<'context'> [T] - type of the machine context
- *
- * @see {@linkcode PrimitiveObject} for the structure of the context.
- */
-export type ContextFrom<T extends KeyU<'context'>> = Extract<
-  T['context'],
-  PrimitiveObject
->;
-
-/**
- * Getting events map from a machine.
- *
- * @template : {@linkcode KeyU}<'eventsMap'> [T] - type of the machine events map
- *
- * @see {@linkcode EventsMap} for the structure of the events map.
- */
-export type EventsMapFrom<T extends KeyU<'eventsMap'>> = Extract<
-  T['eventsMap'],
-  EventsMap
->;
-
-/**
- * Getting state from a machine.
- *
- * @template : {@linkcode KeyU}<'__state'> [T] - type of the machine state
- *
- * @see {@linkcode StateFrom} for extracting the state from the machine.
- */
-export type StateFrom<T extends KeyU<'__state'>> = T['__state'];
-
-export type DecomposedStateFrom<T extends KeyU<'__decomposedState'>> =
-  T['__decomposedState'];
-
-/**
- * Getting extended state from a machine.
- *
- * @template : {@linkcode KeyU}<'__stateExtended'> [T] - type of the machine extended state
- *
- * @see {@linkcode StateExtendedFrom} for extracting the extended state from the machine.
- */
-export type StateExtendedFrom<T extends KeyU<'__stateExtended'>> =
-  T['__stateExtended'];
-
-/** * Getting stateP from a machine.
- * @template : {@linkcode KeyU}<'__stateP'> [T] - type of the machine stateP
- * @see {@linkcode StatePFrom} for extracting the stateP from the machine.
- */
-export type StatePFrom<T extends KeyU<'__stateP'>> = T['__stateP'];
-
-/**
- * Getting statePextended from a machine.
- *
- * @template : {@linkcode KeyU}<'__statePextended'> [T] - type of the machine statePextended
- *
- * @see {@linkcode StatePextendedFrom} for extracting the statePextended from the machine.
- */
-export type StatePextendedFrom<T extends KeyU<'__statePextended'>> =
-  T['__statePextended'];
-
-/**
- * Getting promisees map from a machine.
- *
- * @template : {@linkcode KeyU}<'promiseesMap'> [T] - type of the machine promisees map
- *
- * @see {@linkcode ActorsConfigMap} for the structure of the promisees map.
- */
-export type ActorsMapFrom<T extends KeyU<'actorsMap'>> = Extract<
-  T['actorsMap'],
-  ActorsConfigMap
->;
-
-export type TagsFrom<T extends KeyU<'tags'>> = T['tags'];
-export type TagFrom<T extends KeyU<'__tag'>> = T['__tag'];
-
-export type AllPathsFrom<T extends KeyU<'__allPaths'>> = T['__allPaths'];
-
-/**
- * Getting all events from a machine.
- *
- * @template : {@linkcode KeyU}<'__events'> [T] - type of the machine events
- *
- */
-export type EventsFrom<T extends KeyU<'__events'>> = Extract<
-  T['__events'],
-  EventObject
->;
-
-/**
- * Get all actions map from a machine.
- *
- * @template : {@linkcode KeyU}<'actions'> [T] - type of the machine actions
- *
- * @see {@linkcode ActionsMapFrom} for extracting actions from the machine.
- * @see {@linkcode NotUndefined}
- * @see {@linkcode ActionFnFrom} for extracting action functions from the machine.
- * @see {@linkcode ActionParamsFrom} for extracting action parameters from the machine.
- * @see {@linkcode ActionKeysFrom} for extracting action keys from the machine.
- */
-export type ActionsMapFrom<T extends KeyU<'actions'>> = NotUndefined<
-  T['actions']
->;
-
-export type AddOptionsFrom<T extends KeyU<'addOptions'>> = NotUndefined<
-  T['addOptions']
->;
-
-/**
- * Get the action function from a machine.
- *
- * @template : {@linkcode KeyU}<'__actionFn'> [T] - type of the machine action function
- *
- * @see {@linkcode NotUndefined} for ensuring the action function is not undefined.
- */
-export type ActionFnFrom<T extends KeyU<'__actionFn'>> = NotUndefined<
-  T['__actionFn']
->;
-
-/**
- * Get the action function parameters from a machine.
- *
- * @template : {@linkcode KeyU}<'__actionParams'> [T] - type of the machine action parameters
- *
- * @see {@linkcode NotUndefined} for ensuring the action parameters are not undefined.
- */
-export type ActionParamsFrom<T extends KeyU<'__actionParams'>> =
-  NotUndefined<T['__actionParams']>;
-
-/**
- * Get the action keys from a machine.
- *
- * @template : {@linkcode KeyU}<'actions'> [T] - type of the machine actions
- *
- * @see {@linkcode ActionsMapFrom} for extracting actions from the machine.
- */
-export type ActionKeysFrom<T extends KeyU<'__actionKey'>> =
-  T['__actionKey'];
-
-/**
- * Get all guards map from a machine.
- *
- * @template : {@linkcode KeyU}<'guards'> [T] - type of the machine guards map.
- *
- * @see {@linkcode NotUndefined}
- */
-export type PredicatesMapFrom<T extends KeyU<'guards'>> = NotUndefined<
-  T['guards']
->;
-
-/**
- * Get the predicate function from a machine.
- *
- * @template : {@linkcode KeyU}<'__predicate'> [T] - type of the machine predicate function
- *
- * @see {@linkcode NotUndefined} for ensuring the predicate function is not undefined.
- */
-export type PredicateSFrom<T extends KeyU<'__predicate'>> = NotUndefined<
-  T['__predicate']
->;
-
-/**
- * Get the guard keys from a machine.
- *
- * @template : {@linkcode KeyU}<'guards'> [T] - type of the machine machine guards map.
- *
- * @see {@linkcode NotUndefined} for ensuring the guards map is not undefined.
- * @see {@linkcode PredicatesMapFrom} for extracting guards from the machine.
- */
-export type GuardKeysFrom<T extends KeyU<'__guardKey'>> = T['__guardKey'];
-
-/**
- * Get all delays map from a machine.
- *
- * @template : {@linkcode KeyU}<'delays'> [T] - type of the machine delays map.
- *
- * @see {@linkcode NotUndefined} for ensuring the delays map is not undefined.
- */
-export type DelaysMapFrom<T extends KeyU<'delays'>> = NotUndefined<
-  T['delays']
->;
-
-/**
- * Get the delay keys from a machine.
- *
- * @template : {@linkcode KeyU}<'delays'> [T] - type of the machine delays map.
- *
- * @see {@linkcode NotUndefined} for ensuring the delays map is not undefined.
- * @see {@linkcode DelaysMapFrom} for extracting delays from the machine.
- */
-export type DelayKeysFrom<T extends KeyU<'__delayKey'>> = T['__delayKey'];
-
-/**
- * Get the delay function from a machine.
- *
- * @template : {@linkcode KeyU}<'__delay'> [T] - type of the machine delay function.
- *
- * @see {@linkcode NotUndefined} for ensuring the delay function is not undefined.
- */
-export type DelayFnFrom<T extends KeyU<'__delay'>> = NotUndefined<
-  T['__delay']
->;
-
-/**
- * Get the machines map from a machine.
- *
- * @template : {@linkcode KeyU}<'machines'> [T] - type of the machine machines map.
- *
- * @see {@linkcode NotUndefined} for ensuring the machines map is not undefined.
- */
-export type MachinesMapFrom<T extends KeyU<'machines'>> = NotUndefined<
-  T['machines']
->;
-
-/**
- * Get the childrend keys from a machine.
- *
- * @template : {@linkcode KeyU}<'__childKey'> [T] - type of the machine child keys.
- */
-export type ChildrenKeysFrom<T extends KeyU<'__childKey'>> =
-  T['__childKey'];
 
 /**
  * Simple representation machine options

@@ -4,7 +4,6 @@ import toArray from '#bemedev/features/arrays/castings/toArray';
 import _any from '#bemedev/features/common/castings/any';
 import isDefined from '#bemedev/features/common/castings/is/defined';
 import { switchV } from '#bemedev/features/functions/functions/switch';
-import type { Equals } from '#bemedev/globals/types';
 import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
@@ -53,16 +52,16 @@ import type {
 import type {
   CreateInterval2_F,
   ExecuteActivities_F,
+  InterpretArgs,
   Mode,
-  OptionalDefinitions,
 } from '#common/interpreter';
 import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
 import type { AddSubscriber_F } from '../../common/interpreter/types';
 import { createSubscriber } from '../../common/subscriber';
-import type { SyncMachine } from '../machine/machine';
 import type { SyncAddOptions_F } from '../machine';
+import type { SyncMachine } from '../machine/machine';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
@@ -741,23 +740,6 @@ export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
   AllPathsFrom<M>,
   MachineOptionsFrom<M>
 >;
-
-export type InterpreterOptions<
-  M extends AnyMachine,
-  P extends PrivateContextFrom<M> = PrivateContextFrom<M>,
-  C extends ContextFrom<M> = ContextFrom<M>,
-> = {
-  mode?: Mode;
-  exact?: boolean;
-} & OptionalDefinitions<P, C>;
-
-export type InterpretArgs<M extends AnyMachine> =
-  Equals<
-    InterpreterOptions<M>,
-    Partial<InterpreterOptions<M>>
-  > extends true
-    ? [machine: M, config?: InterpreterOptions<M>]
-    : [machine: M, config: InterpreterOptions<M>];
 
 export type Interpreter_F = <M extends AnyMachine>(
   ...args: InterpretArgs<M>

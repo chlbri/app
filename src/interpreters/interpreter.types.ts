@@ -1,20 +1,21 @@
 import type {
   Action2,
-  WithDescriber,
   ActionResult,
   MaybeAsyncActionResult,
+  WithDescriber,
 } from '#actions';
-import type { Equals, NOmit, Primitive } from '#bemedev/globals/types';
+import type { NOmit, Primitive } from '#bemedev/globals/types';
+import type { InterpretArgs } from '#common/interpreter';
+import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import type {
+  SubscriberClass,
+  SubscriberOptions,
+} from '#common/subscriber';
 import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
-import type {
-  AddOptionsParam_F,
-  Config,
-  ContextFrom,
-  PrivateContextFrom,
-} from '#machines';
+import type { AddOptionsParam_F, Config } from '#machines';
 import type { ActivityConfig, NodeConfig, StateValue } from '#states';
 import type {
   AlwaysConfig,
@@ -23,14 +24,9 @@ import type {
 } from '#transitions';
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval2, IntervalParams } from '@bemedev/interval2';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject, FnMapR, OptionalDefinition } from '~types';
 import { type Interpreter, type InterpreterFrom } from './interpreter';
-import type {
-  SubscriberClass,
-  SubscriberOptions,
-} from '#common/subscriber';
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
-import type { PrimitiveObject } from '@bemedev/typings';
 
 export type WorkingStatus =
   | 'idle'
@@ -46,23 +42,6 @@ export type Mode = 'normal' | 'strict';
 
 export type OptionalDefinitions<P, C> = OptionalDefinition<P, 'pContext'> &
   OptionalDefinition<C, 'context'>;
-
-export type InterpreterOptions<
-  M extends AnyMachine,
-  P extends PrivateContextFrom<M> = PrivateContextFrom<M>,
-  C extends ContextFrom<M> = ContextFrom<M>,
-> = {
-  mode?: Mode;
-  exact?: boolean;
-} & OptionalDefinitions<P, C>;
-
-export type InterpretArgs<M extends AnyMachine> =
-  Equals<
-    InterpreterOptions<M>,
-    Partial<InterpreterOptions<M>>
-  > extends true
-    ? [machine: M, config?: InterpreterOptions<M>]
-    : [machine: M, config: InterpreterOptions<M>];
 
 export type Interpreter_F = <M extends AnyMachine>(
   ...args: InterpretArgs<M>
