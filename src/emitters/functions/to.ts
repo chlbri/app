@@ -1,11 +1,11 @@
 import type { EmitterConfig } from '../../actors/types';
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { SimpleMachineOptions } from '#machines';
 import { toTransition } from '#transitions';
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import type { Emitter } from '../types';
 import { toEmitterSrc } from './src';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export type ToEmitter_F = <
   E extends EventsMap = EventsMap,

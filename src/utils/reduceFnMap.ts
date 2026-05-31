@@ -1,5 +1,4 @@
 import _any from '#bemedev/features/common/castings/any';
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import type {
   ActorsConfigMap,
   EventObject,
@@ -14,6 +13,7 @@ import {
   type FnReduced,
 } from '~types';
 import { nothing } from './nothing';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 type ToEventMap_F = <
   E extends EventsMap,

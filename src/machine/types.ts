@@ -1,12 +1,7 @@
 import type { Action2, FromActionConfig } from '#actions';
-import type {
-  Equals,
-  Keys,
-  NotUndefined,
-  PrimitiveObject,
-} from '#bemedev/globals/types';
+import type { Equals, Keys, NotUndefined } from '#bemedev/globals/types';
 import { Identify } from '#bemedev/globals/types';
-import type { CommonConfig } from '#common/machine';
+import type { ChildFunction2, CommonConfig } from '#common/machine';
 import type { DelayFunction2 } from '#delays';
 import type {
   EmitterDef,
@@ -41,6 +36,7 @@ import type { Observable } from 'rxjs';
 import type { FnMap, FnMapR, FnR, KeyU, ReduceArray } from '~types';
 import type { RegisterOptions } from '../registry.types';
 import { RecordS } from './../types/primitives';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Type representing the main JSON config.
@@ -66,14 +62,6 @@ export type ChildEvents<
   A extends ActorsConfigMap = ActorsConfigMap,
 > = NotUndefined<A['children']>[K] extends infer P ? P : never;
 
-export type ChildFunction<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R extends { eventsMap: any } = { eventsMap: any },
-> = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
-
 export type SyncChildFunction<
   E extends EventObject = EventObject,
   Pc = any,
@@ -82,14 +70,6 @@ export type SyncChildFunction<
   R extends { eventsMap: any } = { eventsMap: any },
 > = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
 
-export type ChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, R>;
-
 export type SyncChildFunction2<
   E extends EventObject = EventObject,
   Pc = any,
@@ -97,13 +77,6 @@ export type SyncChildFunction2<
   T extends string = string,
   R extends { eventsMap: any } = { eventsMap: any },
 > = FnR<E, Pc, Tc, T, R>;
-
-export type ChildrenMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = RecordS<ChildFunction<E, Pc, Tc, T>>;
 
 export type ExtractTagsFromConfig<T extends Config> = ExtractTagsFromFlat<
   FlatMapN<T>

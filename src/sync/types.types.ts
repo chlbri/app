@@ -1,13 +1,14 @@
 import type { Action3 } from '#actions';
 import type { ActorConfig } from '#actor';
-import type { EmitterFunction2 } from '#emitters';
-import type { Predicate } from '#guards';
 import type {
   ChildFunction2,
   ConfigDef,
   NoExtraKeysConfigDef,
   TransformConfigDef,
-} from '#machines';
+} from '#common/machine';
+import type { EmitterFunction2 } from '#emitters';
+import type { Predicate } from '#guards';
+
 import type { BaseConfig, StateType, StateValue } from '#states';
 import type { AlwaysConfig, DelayedTransitions } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';

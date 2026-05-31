@@ -1,7 +1,7 @@
-import { PrimitiveObject } from '#bemedev/globals/types';
+import type { ChildFunction2, ChildrenMap } from '#common/machine';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
-import type { ChildFunction2, ChildrenMap } from '../types';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export type ToChildSrc_F = <
   E extends EventsMap = EventsMap,

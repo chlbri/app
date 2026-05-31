@@ -10,31 +10,14 @@ import type {
   EventsMap,
 } from '#events';
 import type { GuardConfig } from '#guards';
-import type { ActivityConfig, StateExtended, StateValue } from '#states';
+import type { ActivityConfig, StateValue, WorkingStatus } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval2, IntervalParams } from '@bemedev/interval2';
 import type { Equals, PrimitiveObject } from '@bemedev/typings';
-import type {
-  Fn,
-  FnMapR,
-  FnR,
-  KeyU,
-  MaybePromise,
-  OptionalDefinition,
-} from '~types';
+import type { Fn, FnMapR, KeyU, OptionalDefinition } from '~types';
 import type { ScheduledData, SimpleMachineOptions2 } from '../machine';
 import type { AnyMachine } from '../machine/types';
 import type { SubscriberClass, SubscriberOptions } from '../subscriber';
-
-export type WorkingStatus =
-  | 'idle'
-  | 'starting'
-  | 'started'
-  | 'paused'
-  | 'working'
-  | 'sending'
-  | 'stopped'
-  | 'busy';
 
 export type Mode = 'normal' | 'strict';
 
@@ -112,22 +95,6 @@ export type CollectedService = {
   service: AnyInterpreter;
   id: string;
 };
-
-export type EmitterFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = (state: StateExtended<E, Pc, Tc, T>) => MaybePromise<Pausable<R>>;
-
-export type ChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, MaybePromise<R>>;
 
 export type SimpleScheduler = {
   schedule: Fn<[() => void, boolean?], any>;

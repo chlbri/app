@@ -1,12 +1,9 @@
 import type { WithDescriber, FromActionConfig } from '#actions';
-import type {
-  Equals,
-  NotUndefined,
-  PrimitiveObject,
-} from '#bemedev/globals/types';
+import type { Equals, NotUndefined } from '#bemedev/globals/types';
 import type { GUARD_TYPE } from '#constants';
 import type { EventObject } from '#events';
 import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { FnMap, FnR } from '~types';
 import type { RecordS, ReduceArray } from '~types';
 

@@ -1,5 +1,5 @@
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { EventObject } from '#events';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { FnMap, FnR } from '~types';
 
 /**

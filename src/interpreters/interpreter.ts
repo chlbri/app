@@ -55,7 +55,6 @@ import type {
   ProvideMachineOptions_F,
 } from './interpreter.types';
 
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import { CommonInterpreter } from '#common/interpreter';
 import type { AnyMachine } from '#common/machine';
 import { type EmitterFunction2 } from '#emitters';
@@ -71,6 +70,7 @@ import type {
 } from '#machines';
 import { createScheduler } from '@bemedev/scheduler';
 import type { EmitterConfig, FinallyConfig } from '../actors/types';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.

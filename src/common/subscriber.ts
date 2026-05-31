@@ -1,5 +1,4 @@
 import _any from '#bemedev/features/common/castings/any';
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { State } from '#states';
 import { nothing, toEventsMap } from '#utils';
@@ -7,6 +6,7 @@ import type { TimerState } from '@bemedev/interval2';
 import equal from 'fast-deep-equal';
 import { nanoid } from 'nanoid';
 import { FnMapR, isFunction } from '../types/primitives';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Subscriber class that manages the subscription state and provides methods

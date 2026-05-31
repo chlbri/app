@@ -1,10 +1,8 @@
-import type {
-  NotUndefined,
-  PrimitiveObject,
-} from '#bemedev/globals/types';
+import type { NotUndefined } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject } from '#events';
 import type { StateExtended } from '#states';
 import type { Transition } from '#transitions';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { RecordS } from '~types';
 
 export type Subscriber = {

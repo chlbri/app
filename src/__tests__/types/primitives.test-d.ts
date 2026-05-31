@@ -1,8 +1,4 @@
-import type {
-  Fn,
-  PrimitiveObject,
-  UnionToTuple,
-} from '#bemedev/globals/types';
+import type { Fn, UnionToTuple } from '#bemedev/globals/types';
 import type {
   ChangeProperties,
   KeyStrings,
@@ -14,6 +10,7 @@ import type {
   ValuesOf,
 } from '~types';
 import type { FilterArray } from '../../types/primitives';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export type ExtractLargeKeys<T> = string extends T
   ? never

@@ -9,7 +9,7 @@ import type {
   Sh,
   StandardKey,
 } from '@bemedev/typings';
-import type { RecordS } from '~types';
+import type { FnMap, FnR, MaybePromise, RecordS } from '~types';
 
 export type NoExtraKeysConfigDef<T extends ConfigDef> = T & {
   [K in Exclude<keyof T, keyof ConfigDef>]: never;
@@ -184,3 +184,26 @@ export type ScheduledData<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
 > = { data: ActionResult<Pc, Tc>; ms: number; id: string };
+
+export type ChildrenMap<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = RecordS<ChildFunction<E, Pc, Tc, T>>;
+
+export type ChildFunction<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
+
+export type ChildFunction2<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = FnR<E, Pc, Tc, T, MaybePromise<R>>;

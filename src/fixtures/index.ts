@@ -1,6 +1,6 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
 import _any from '#bemedev/features/common/castings/any';
-import type { Equals, PrimitiveObject } from '#bemedev/globals/types';
+import type { Equals } from '#bemedev/globals/types';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
 import { expandFn } from '#bemedev/globals/utils/expandFn';
 import { DEFAULT_NOTHING } from '#constants';
@@ -24,6 +24,7 @@ import type { EmptyObject } from '@bemedev/decompose';
 import { sleep } from '@bemedev/sleep';
 import { buildIndex, buildInvite } from './invite';
 import type { CommonInterpreter } from '#common/interpreter';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export * from './constants';
 export * from './invite';

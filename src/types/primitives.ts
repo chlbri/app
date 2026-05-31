@@ -4,7 +4,6 @@ import type {
   Fn,
   NOmit,
   NotUndefined,
-  PrimitiveObject,
   Ru,
   UnionToIntersection,
 } from '#bemedev/globals/types';
@@ -17,6 +16,7 @@ import type {
   StatePextended,
 } from '#states';
 import { checkKeys } from '#utils';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export type IsString_F = (value: unknown) => value is string;
 

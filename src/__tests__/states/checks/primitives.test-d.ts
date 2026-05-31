@@ -1,8 +1,5 @@
-import type {
-  Fn,
-  PrimitiveObject,
-  UnionToTuple,
-} from '#bemedev/globals/types';
+import type { Fn, UnionToTuple } from '#bemedev/globals/types';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   ChangeProperties,
   KeyStrings,

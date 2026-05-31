@@ -2,7 +2,6 @@ import type {
   AnyArray,
   IndexesOfArray,
   NotUndefined,
-  PrimitiveObject,
   Require,
   SoA,
 } from '#bemedev/globals/types';
@@ -24,6 +23,7 @@ import type {
   ReduceArray,
   SingleOrArrayL,
 } from '~types';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Represents the simpliest configuration map for a transition.

@@ -9,12 +9,7 @@ import type {
 } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 
-import type {
-  Fn,
-  PrimitiveObject,
-  Ru,
-  SubTypeLow,
-} from '#bemedev/globals/types';
+import type { Fn, Ru, SubTypeLow } from '#bemedev/globals/types';
 import type {
   ActorsConfigMap,
   EventArg,
@@ -30,6 +25,8 @@ import type {
   SimpleMachineOptions2,
 } from './types';
 import type { Machine } from '#machine';
+import type { ScheduledData } from '#common/machine';
+import type { PrimitiveObject } from '@bemedev/typings';
 /**
  * Options for async action helpers.
  * - `error`: called with the thrown error and current context snapshot when
@@ -371,19 +368,6 @@ export type ProvideOptions_F<
 > = <const T extends Mo>(
   option: AddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
 ) => Machine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
-
-/**
- * Represents a scheduled action with its data and execution time.
- *
- * @template :  any [Pc] - type of the private context
- * @template :  {@linkcode PrimitiveObject} [Tc] - type of the context
- *
- * @see {@linkcode ActionResult} for the result of the action.
- */
-export type ScheduledData<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = { data: ActionResult<Pc, Tc>; ms: number; id: string };
 
 export type SendToEvent<T = any> = {
   to: string;

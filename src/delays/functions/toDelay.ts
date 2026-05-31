@@ -1,6 +1,6 @@
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { DelayFunction3, DelayMap } from '../types';
 
 export type ToDelay_F = <

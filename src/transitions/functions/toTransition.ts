@@ -1,10 +1,10 @@
 import { toAction } from '#actions';
+import toArray from '#bemedev/features/arrays/castings/toArray';
 import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toPredicate, type GuardConfig } from '#guards';
 import type { SimpleMachineOptions } from '#machines';
 import type { Transition, TransitionConfig } from '#transitions';
-import toArray from '#bemedev/features/arrays/castings/toArray';
 
 export type ToTransition_F = <
   E extends EventsMap = EventsMap,

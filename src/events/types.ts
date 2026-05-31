@@ -1,7 +1,6 @@
 import type {
   Equals,
   NotUndefined,
-  PrimitiveObject,
   Unionize,
 } from '#bemedev/globals/types';
 import type { EmitterConfigMap } from '#emitters';
@@ -12,6 +11,7 @@ import type {
   INIT_EVENT,
   MAX_EXCEEDED_EVENT_TYPE,
 } from './constants';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Represents an event object with a type and payload.
@@ -143,18 +143,6 @@ export type ToEventObject<
 > = Exclude<
   T extends string ? { type: T; payload: EmptyObject } : T,
   { type: Ex }
->;
-
-export type EventToType<
-  T extends AllEvent,
-  Ex extends string = never,
-> = Exclude<
-  T extends {
-    type: infer U extends string;
-  }
-    ? U
-    : T,
-  Ex
 >;
 
 export type ExtractSender<

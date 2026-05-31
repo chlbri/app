@@ -5,9 +5,9 @@ import type {
   ActionResult,
   WithDescriber,
 } from '#actions';
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
+import type { PrimitiveObject } from '@bemedev/typings';
 import { fromDescriber } from '~types';
 
 export type ToAction_F = {

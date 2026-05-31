@@ -1,6 +1,5 @@
 import type { Action } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
 import { expandFnMap } from '#common/functions';
 import type { DelayFunction } from '#delays';
@@ -33,6 +32,7 @@ import type {
 
 import type { EmptyObject } from '~types';
 import type { Config } from './types';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * A class representing a state machine.

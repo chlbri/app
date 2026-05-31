@@ -4,12 +4,7 @@ import type {
   ActionResult,
   MaybeAsyncActionResult,
 } from '#actions';
-import type {
-  Equals,
-  NOmit,
-  Primitive,
-  PrimitiveObject,
-} from '#bemedev/globals/types';
+import type { Equals, NOmit, Primitive } from '#bemedev/globals/types';
 import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
@@ -35,6 +30,7 @@ import type {
   SubscriberOptions,
 } from '#common/subscriber';
 import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export type WorkingStatus =
   | 'idle'

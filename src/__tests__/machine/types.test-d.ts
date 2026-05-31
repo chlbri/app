@@ -1,6 +1,7 @@
-import type { Fn, PrimitiveObject } from '#bemedev/globals/types';
+import type { Fn } from '#bemedev/globals/types';
 import { EventStrings } from '#events';
 import type { machine2 } from '#fixturesData';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   AddOptionsFrom,
   ChildEvents,

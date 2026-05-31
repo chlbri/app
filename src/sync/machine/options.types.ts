@@ -12,7 +12,6 @@ import type {
 import type { DefinedValue, SyncPredicateS } from '#guards';
 import type {
   AnyMachine,
-  ChildFunction2,
   EventsMapFrom,
   SimpleMachineOptions2,
 } from '#machines';
@@ -21,6 +20,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import type { Decompose, EmptyObject, FnMap, FnR, ValuesOf } from '~types';
 import type { SyncMachine } from './machine';
 import type { SyncConfig } from '../types.types';
+import type { ChildFunction2 } from '#common/machine';
 
 export type SyncFilterAction_F<
   E extends EventObject = EventObject,

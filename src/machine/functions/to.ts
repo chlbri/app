@@ -1,12 +1,12 @@
-import type { ChildConfig } from '../../actors/types';
-import type { PrimitiveObject } from '#bemedev/globals/types';
+import _any from '#bemedev/features/common/castings/any';
+import { identify } from '#bemedev/features/functions/functions/identify';
+import type { SimpleMachineOptions2 } from '#common/machine';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toTransition } from '#transitions';
-import _any from '#bemedev/features/common/castings/any';
-import type { SimpleMachineOptions } from '#machines';
+import type { PrimitiveObject } from '@bemedev/typings';
+import type { ChildConfig } from '../../actors/types';
 import type { Child } from '../types';
 import { toChildSrc } from './src';
-import { identify } from '#bemedev/features/functions/functions/identify';
 
 export type ToChild_F = <
   E extends EventsMap = EventsMap,
@@ -20,7 +20,7 @@ export type ToChild_F = <
   events: E,
   actorsMap: A,
   child: ChildConfig & { __id: string },
-  options?: SimpleMachineOptions<Pc, Tc, T, Eo>,
+  options?: SimpleMachineOptions2,
 ) => Child<Eo, Pc, Tc, T, R>;
 
 /**
@@ -28,7 +28,7 @@ export type ToChild_F = <
  * @param events of type {@linkcode EventsMap}, the events map.
  * @param actorsMap of type {@linkcode ActorsConfigMap}, the actors map.
  * @param src of type {@linkcode EmitterSrcConfig}, the emitter configuration to convert.
- * @param emitters of type {@linkcode SimpleMachineOptions}, the machine options.
+ * @param emitters of type {@linkcode SimpleMachineOptions2}, the machine options.
  * @returns an emitter object with a source and transitions.
  *
  * @see {@linkcode toChildSrc} for converting the source.

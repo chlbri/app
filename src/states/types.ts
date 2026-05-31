@@ -2,13 +2,13 @@ import type { Action, WithDescriber, FromActionConfig } from '#actions';
 import type {
   Equals,
   Keys,
-  PrimitiveObject,
   SoA,
   UnionToIntersection,
 } from '#bemedev/globals/types';
 import type { EventObject } from '#events';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { Transitions, TransitionsConfig } from '#transitions';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,
   Identify,

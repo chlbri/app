@@ -1,8 +1,8 @@
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { EventObject } from '#events';
 import { getByKey } from '@bemedev/decompose';
 import type { FnR } from '~types';
 import type { DefinedValue } from '../../types';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export type IsValueS_F = <
   E extends EventObject = EventObject,

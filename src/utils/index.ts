@@ -25,5 +25,6 @@ export * from './checkValues';
 export * from './soa';
 export * from './reduceDescribers';
 export * from './fn';
+export * from './typings';
 
 export const deepEqual = <T>(a: T, b: T) => equal(a, b);

@@ -1,4 +1,3 @@
-import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { EventObject } from '#events';
 import { FnR } from '~types';
 import type {
@@ -8,6 +7,7 @@ import type {
   PredicateS2,
 } from '../../types';
 import { isNotValue, isValue } from './value';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export type IsDefinedS_F = <
   E extends EventObject = EventObject,
