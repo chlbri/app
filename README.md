@@ -1,8 +1,5 @@
 # @bemedev/app
 
-> [!WARNING] **v1.0.0 — Stable release.** This is a stable version; please
-> report issues and suggest improvements.
-
 A TypeScript library for building **finite state machines** with a fully
 type-safe, declarative API. It models states, transitions, context,
 asynchronous operations, and reactive streams through a unified **actors**
@@ -164,6 +161,7 @@ await service[Symbol.asyncDispose]();
 - [11. Tags](#11-tags)
   - [Tags in action callbacks](#tags-in-action-callbacks)
 - [12. Registry & Code Generation](#12-registry--code-generation)
+  - [CLI Binary Entry Point](#cli-binary-entry-point)
   - [12.1 Machine file convention](#121-machine-file-convention)
   - [12.2 CLI: generate](#122-cli-generate)
   - [12.3 CLI: watch / dev](#123-cli-watch--dev)
@@ -1286,6 +1284,24 @@ similar in purpose to TanStack Start.
 
 The pattern is inspired by TanStack Router's `declare module` augmentation.
 
+#### CLI Binary Entry Point
+
+The package includes a built-in CLI executable. After installation, invoke
+commands directly via `npx`:
+
+```bash
+npx @bemedev/app generate
+npx @bemedev/app watch
+```
+
+Or install globally to use the CLI without `npx`:
+
+```bash
+npm install -g @bemedev/app
+app generate
+app watch
+```
+
 ### 12.1 Machine file convention
 
 Name your machine files with the `.machine.ts` (or `.fsm.ts`) suffix:
@@ -1325,23 +1341,23 @@ export { machine };
 Run once to scan all machine files and produce `app.gen.ts`:
 
 ```bash
-# Default — writes to app.gen.ts at project root
-npx app-ts generate
+# Via npx (after npm install @bemedev/app)
+npx @bemedev/app generate
 
 # Custom output path
-npx app-ts generate --output src/app.gen.ts
+npx @bemedev/app generate --output src/app.gen.ts
 
 # Exclude additional directories
-npx app-ts generate --excludes temp build coverage
+npx @bemedev/app generate --excludes temp build coverage
 
 # Preview output without writing to disk
-npx app-ts generate --dry-run | less
+npx @bemedev/app generate --dry-run | less
 ```
 
 Or use the npm script defined in `package.json`:
 
 ```bash
-pnpm run generate:test
+pnpm run generate
 ```
 
 ### 12.3 CLI: watch / dev
@@ -1350,9 +1366,9 @@ Long-running watcher that regenerates `app.gen.ts` automatically on every
 machine file change. Ideal during development:
 
 ```bash
-npx app-ts watch
+npx @bemedev/app watch
 # or the alias:
-npx app-ts dev
+npx @bemedev/app dev
 
 # Alongside a dev server
 pnpm run dev &
@@ -1731,9 +1747,14 @@ points:
 ### CLI
 
 ```bash
-app-ts generate [--output path] [--excludes dirs...] [--dry-run]
-app-ts watch    [--output path] [--excludes dirs...]
-app-ts dev      [--output path] [--excludes dirs...]   # alias for watch
+npx @bemedev/app generate [--output path] [--excludes dirs...] [--dry-run]
+npx @bemedev/app watch    [--output path] [--excludes dirs...]
+npx @bemedev/app dev      [--output path] [--excludes dirs...]   # alias for watch
+
+# Or if installed globally:
+app generate [--output path] [--excludes dirs...] [--dry-run]
+app watch    [--output path] [--excludes dirs...]
+app dev      [--output path] [--excludes dirs...]   # alias for watch
 ```
 
 <br/>

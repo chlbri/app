@@ -10,6 +10,62 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <details>
 <summary>
+## **[1.1.0] - 31/05/2026** => _14:30_
+
+</summary>
+
+### Features
+
+- **CLI Binary**: Package now includes executable CLI entry point (`bin`
+  field), allowing direct invocation via `npx @bemedev/app` or global
+  installation
+- **CLI Commands**: Introduce `generate` and `watch` commands for machine
+  files with fast-glob pattern matching
+- **Sync Interpreter**: Implement synchronous interpreter for state machine
+  interpretation
+- **Sync Machine**: Add synchronous machine implementation for sync-only
+  state management
+- **Expression Evaluation**: Support spread operators and enhance
+  expression evaluation capabilities
+- **API Methods**: Enhance `addOptions` and `provideOptions` methods across
+  interpreters and machines
+
+### Fixes
+
+- **Error Handler**: Fixed error handler for unhandledRejection in Vitest
+  configuration
+- **Package Manager**: Fixed package manager initialization and import
+  handling in CLI generator
+- **CLI Paths**: Fixed file exclusion paths for CLI files in Vitest
+  configuration
+
+### Refactoring
+
+- **Tests**: Reorganized test structure with separate `async/` and `sync/`
+  test directories
+- **Examples**: Removed `examples/tan-solid/` directory for simplified
+  project maintenance
+- **CLI Constants**: Refactored to use centralized `LIB` variable for
+  consistency
+
+### Documentation
+
+- **DevContainer**: Enhanced container configuration with improved settings
+- **Types**: Updated type definitions and improved type safety for pContext
+
+### Dependencies
+
+- **fast-glob**: Added for advanced pattern matching in CLI commands
+- **Typings**: Updated @bemedev/typings dependency
+
+- <u>Test coverage **_99.89%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
 
 ## **[1.0.0] - 29/05/2026** => _22:26_
 

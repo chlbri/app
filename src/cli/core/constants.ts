@@ -1,4 +1,4 @@
-export const BIN = 'app';
+export const BIN = 'app-cli';
 export const DEFAULT_OUTPUT = 'app.gen.ts';
 export const MACHINE_GLOB = '**/*.{machine,fsm}.ts';
 export const DEFAULT_EXCLUDES = [

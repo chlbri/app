@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A reprogramming method to code better",
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -13,9 +13,9 @@
   },
   "license": "MIT",
   "type": "module",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "module": "lib/index.js",
+  "bin": {
+    "app-cli": "lib/cli/index.js"
+  },
   "exports": {
     ".": {
       "import": "./lib/index.js",
@@ -112,10 +112,7 @@
     "upgrade:fast": "pnpm up --latest"
   },
   "devDependencies": {
-    "@bemedev/app-cli": "^0.2.2",
-    "@bemedev/build-tests": "^0.1.2",
     "@bemedev/dev-utils": "^0.7.0",
-    "@bemedev/fsf": "^1.0.1",
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/sequence": "^0.1.0",
