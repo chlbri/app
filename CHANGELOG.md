@@ -16,7 +16,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 </summary>
 
 - Fix module declaration to use `~types` instead of `@bemedev/app`
-- Adjust build scripts to ensure type declaration generation in pretest phase
+- Adjust build scripts to ensure type declaration generation in pretest
+  phase
 - Update TypeScript configuration for proper module resolution
 - <u>Test coverage **_100%_**</u>
 
