@@ -189,6 +189,13 @@ export default createMachine('watch', { initial: 'idle', states: { idle: {} } })
       vi.spyOn(console, 'warn').mockImplementation(() => {});
       const result = await run(generate, ['-c', 'src/__tests__']);
       expect(result).toBeUndefined();
+      const GEN_FILE = 'src/__tests__/app.gen.ts';
+      // replace text @bemedev/app with ~types to match the new LIB constant
+      const expectedContent = readFileSync(GEN_FILE, 'utf-8').replace(
+        `declare module '${LIB}'`,
+        `declare module '~types'`,
+      );
+      writeFileSync(GEN_FILE, expectedContent, 'utf-8');
     });
   });
 });

@@ -6,7 +6,6 @@
     "declaration": true,
     "sourceMap": true,
     "outDir": "./lib",
-    "rootDir": ".",
     "resolveJsonModule": true,
     "strict": true,
     "noImplicitReturns": true,
@@ -51,8 +50,7 @@
       "#machines": ["./src/machine/index.ts"],
       "#registry": ["./src/registry.types.ts"],
       "#config": ["./src/config/index.ts"],
-      "#bemedev/*": ["./src/libs/bemedev/*"],
-      "@bemedev/app": ["./src/index.ts"]
+      "#bemedev/*": ["./src/libs/bemedev/*"]
     }
   }
 }

@@ -74,7 +74,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown && pnpm run generate:lib",
+    "build": "pnpm rm:lib && pnpm run rolldown",
     "_ci": "pnpm run config:off && pnpm run lint && pnpm run test",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "ci:admin": "CI_START=$(date +%s) && pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",
@@ -92,7 +92,7 @@
     "posttest": "pnpm run fmt",
     "prepare": "husky",
     "prepublishOnly": "",
-    "pretest": "pnpm run build",
+    "pretest": "pnpm run build && pnpm run generate:lib",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "rinit": "pnpm clean --lockfile && pnpm run rm && pnpm run config",

@@ -4,7 +4,7 @@
  *
  */
 
-declare module '@bemedev/app' {
+declare module '~types' {
   interface Register {
     'src/__tests__/actions/action.batch.cov.machine': {
       paths: {
