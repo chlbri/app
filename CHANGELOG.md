@@ -10,6 +10,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <details>
 <summary>
+
+## **[1.1.1] - 31/05/2026** => _17:20_
+
+</summary>
+
+- Fix module declaration to use `~types` instead of `@bemedev/app`
+- Adjust build scripts to ensure type declaration generation in pretest phase
+- Update TypeScript configuration for proper module resolution
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
 ## **[1.1.0] - 31/05/2026** => _14:30_
 
 </summary>

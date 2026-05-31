@@ -31,6 +31,14 @@
     "/^cd \"/Users/chlbri/Documents/github/NODE JS/Librairies bemedev/app-ts\" && node extract-machines\\.mjs$/": {
       "approve": true,
       "matchCommandLine": true
+    },
+    "/^bash /workspaces/app/\\.agents/skills/update-docs/scripts/check-version\\.sh$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^bash /workspaces/app/\\.agents/skills/update-docs/scripts/find-diff\\.sh$/": {
+      "approve": true,
+      "matchCommandLine": true
     }
   }
 }
