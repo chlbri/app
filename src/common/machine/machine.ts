@@ -398,8 +398,6 @@ export abstract class CommonMachine<
   #initialConfig: any;
   // #endregion
 
-  readonly longRuns: boolean;
-
   #getInitialKeys = () => {
     const entries = Object.entries<any>(this.__flat);
     entries.forEach(([key, { initial }]) => {
@@ -430,7 +428,6 @@ export abstract class CommonMachine<
       .flat() as any;
     this.#initialConfig = initialConfig(this.#config as any);
     this.#getInitialKeys();
-    this.longRuns = this.#config.__longRuns === true;
   }
 
   /**

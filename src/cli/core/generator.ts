@@ -66,18 +66,19 @@ import { emitRegisterEntry, extractMachineInfo } from './helpers';
  *   cwd: '/path/to/project'
  * });
  */
-export const generator = async (
-  options: {
-    excludes?: string[];
-    cwd?: string;
-    dryRun?: boolean;
-  } = {},
-) => {
-  const EXCLUDES = [...(options.excludes || [])]
+export const generator = async (options: {
+  excludes: string[];
+  cwd: string;
+  dryRun?: boolean;
+}) => {
+  console.warn(
+    `[app] Starting generation with options: ${JSON.stringify(options.excludes)}`,
+  );
+  const EXCLUDES = options.excludes
     .filter(Boolean)
     .map(pattern => pattern.trim());
 
-  const cwd = options.cwd ?? process.cwd();
+  const cwd = options.cwd;
   const outputPath = resolve(cwd, DEFAULT_OUTPUT);
 
   // Discover machine files
@@ -111,6 +112,7 @@ export const generator = async (
   }
 
   const entries: string[] = [];
+  const names = new Set<string>();
 
   // #region TS morph work
   /* v8 ignore start -- @preserve */
@@ -120,6 +122,13 @@ export const generator = async (
       console.warn(`[app] Skipping: ${relative(cwd, f)}`);
       continue;
     }
+    if (names.has(info.name)) {
+      console.warn(
+        `[app] Warning: Duplicate machine name '${info.name}' found in ${relative(cwd, f)}. Skipping this file.`,
+      );
+      continue;
+    }
+    names.add(info.name);
 
     const tree = parseTree(info.config);
     entries.push(emitRegisterEntry(info.name, tree, info.pContextType));

@@ -16,7 +16,6 @@ export default createMachine(
       idle: {
         on: {
           TEST: {
-            target: 'idle',
             actions: 'myAction',
           },
         },

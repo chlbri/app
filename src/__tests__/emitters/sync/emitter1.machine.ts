@@ -36,11 +36,13 @@ export default createMachine(
   },
   {
     context: typings.context('number'),
+    sync: true,
+
     actorsMap: typings.actorsMap({
       emitters: {
         interval: {
           next: 'number',
-          error: 'never',
+          error: 'undefined',
         },
       },
     }),

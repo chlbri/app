@@ -308,10 +308,6 @@ export class SyncInterpreter<
     return;
   };
 
-  get longRuns() {
-    return this.machine.longRuns;
-  }
-
   get #flat() {
     return this.machine.flat;
   }
@@ -408,6 +404,7 @@ export class SyncInterpreter<
             const check5 = this.#performPredicates(
               ...toArray.typed(activity.guards),
             );
+
             if (check5) {
               const actions = toArray.typed(activity.actions);
               this.__performActions(...actions);
@@ -451,7 +448,7 @@ export class SyncInterpreter<
    * Get all brut self transitions of the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service.
    */
   protected get __collectedSelfTransitions0() {
-    const entries = new Map<string, () => string | false>();
+    const entries = new Map<string, () => string>();
 
     this.#collectedAlways.forEach(([from, always]) => {
       entries.set(from, () => this.__performAlways(always));
@@ -467,9 +464,10 @@ export class SyncInterpreter<
 
     const out = entries.map(([, always]) => {
       return () => {
+        /* v8 ignore else -- @preserve */
         if (always) {
           const target = always();
-          if (target !== false) return this.__performConfig(target);
+          return this.__performConfig(target);
         }
       };
     });
@@ -611,10 +609,7 @@ export class SyncInterpreter<
     const flat2 = this.__extractTransitions(event);
     // #endregion
 
-    for (const [from, transitions] of flat2) {
-      const cannotContinue = !this.__isInsideValue2(sv, from);
-      if (cannotContinue) continue;
-
+    for (const [, transitions] of flat2) {
       const target = this.__performTransitions(
         ...toArray.typed(transitions),
       );

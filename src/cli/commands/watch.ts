@@ -1,6 +1,6 @@
 import { array, command, multioption, option, string } from 'cmd-ts';
 import nodeWatch from 'node-watch';
-import { DEFAULT_EXCLUDES, DEFAULT_REGEX } from '../core/constants';
+import { DEFAULT_REGEX } from '../core/constants';
 import { generator } from '../core/generator';
 import { createStarter } from '../core/helpers/starter';
 
@@ -54,7 +54,6 @@ import { createStarter } from '../core/helpers/starter';
  * - Logs are written to stderr for script integration
  *
  * @see {@link generator} for the underlying generation logic
- * @see {@link DEFAULT_EXCLUDES} for default ignored directories
  *
  * @see
  *
@@ -78,7 +77,6 @@ export const watch = command({
       type: array(string),
       long: 'excludes',
       short: 'e',
-      defaultValue: () => DEFAULT_EXCLUDES,
       description: 'Directories to exclude',
     }),
 

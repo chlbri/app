@@ -463,6 +463,25 @@ export class Interpreter<
     return;
   };
 
+  get #machine() {
+    return this.__machine as unknown as Machine<
+      C,
+      Pc,
+      Tc,
+      E,
+      A,
+      Ta,
+      Eo,
+      AllPaths,
+      Mo,
+      L
+    >;
+  }
+
+  get longRuns() {
+    return this.#machine.longRuns;
+  }
+
   #performAfter: PerformAfter_F = (from, after) => {
     const entries = Object.entries(after);
     const promises: TimeoutPromise<string | false>[] = [];

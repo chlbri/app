@@ -1,5 +1,4 @@
 import { array, command, flag, multioption, option, string } from 'cmd-ts';
-import { DEFAULT_EXCLUDES } from '../core/constants';
 import { generator as handler } from '../core/generator';
 
 /**
@@ -39,7 +38,6 @@ import { generator as handler } from '../core/generator';
  * ```
  *
  * @see {@link generator} for the underlying generation logic
- * @see {@link DEFAULT_EXCLUDES} for default ignored directories
  */
 export const generate = command({
   name: 'generate',
@@ -50,7 +48,7 @@ export const generate = command({
       type: array(string),
       long: 'excludes',
       short: 'e',
-      defaultValue: () => DEFAULT_EXCLUDES,
+      // defaultValue: () => DEFAULT_EXCLUDES,
       description: 'Directories to exclude',
     }),
 

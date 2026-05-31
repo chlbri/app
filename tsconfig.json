@@ -28,7 +28,9 @@
       "#fixtures": ["./src/fixtures/index.ts"],
       "#common/*": ["./src/common/*"],
       "#exports/*": ["./src/exports/*"],
-      "#fixturesData": ["./src/__tests__/interpreters/data/index.ts"],
+      "#fixturesData": [
+        "./src/__tests__/interpreters/async/data/index.ts"
+      ],
       "#utils": ["./src/utils/index.ts"],
       "#utils/*": ["./src/utils/*"],
       "#constants": ["./src/constants/index.ts"],

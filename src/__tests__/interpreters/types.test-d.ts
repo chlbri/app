@@ -1,3 +1,4 @@
+import type { Config3, Machine3 } from '#fixturesData';
 import type {
   ConfigFrom,
   ContextFrom,
@@ -6,7 +7,6 @@ import type {
   PrivateContextFrom,
 } from '#machines';
 import type { EmptyObject } from '@bemedev/decompose';
-import type { Config3, Machine3 } from './data/machine3';
 
 type TTConfig = ConfigFrom<Machine3>;
 

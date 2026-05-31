@@ -1,6 +1,6 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
 import { _machine2, DELAY, fakeDB, machine2 } from '#fixturesData';
-import { interpret } from '#interpreters';
+import { interpret } from '#exports/interpret';
 import { Machine } from '#machine';
 
 import { constructTests } from '#fixtures';

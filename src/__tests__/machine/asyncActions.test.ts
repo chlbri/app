@@ -6,9 +6,6 @@ import _machine4 from './asyncActions.4.machine';
 import _machine5 from './asyncActions.5.machine';
 import _machine6 from './asyncActions.6.machine';
 import _machine7 from './asyncActions.7.machine';
-import _machine8 from './asyncActions.8.machine';
-import _machine9 from './asyncActions.9.machine';
-import _machine10 from './asyncActions.10.machine';
 
 vi.useFakeTimers();
 
@@ -288,7 +285,7 @@ describe('Machine createOptions - error handlers', () => {
     describe('#01 => calls errorFn when fn throws', () => {
       const errorFn = vi.fn((state: any) => state);
 
-      const machine = _machine8.provideOptions(({ sendTo }) => {
+      const machine = _machine7.provideOptions(({ sendTo }) => {
         const _sendTo = sendTo();
         return {
           actions: {
@@ -334,7 +331,7 @@ describe('Machine createOptions - error handlers', () => {
         context: 0,
       }));
 
-      const machine = _machine9.provideOptions(({ sendTo }) => ({
+      const machine = _machine6.provideOptions(({ sendTo }) => ({
         actions: {
           myAction: sendTo()(
             async () => {
@@ -362,7 +359,7 @@ describe('Machine createOptions - error handlers', () => {
     describe('#03 => with max defined, still calls errorFn when fn throws', () => {
       const errorFn = vi.fn(() => payload);
 
-      const machine = _machine10.provideOptions(({ sendTo }) => ({
+      const machine = _machine5.provideOptions(({ sendTo }) => ({
         actions: {
           myAction: sendTo()(
             async () => {

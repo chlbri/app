@@ -11,12 +11,16 @@ export const unhandledRejection = async (
   timeout = 100,
 ) => {
   process.on('unhandledRejection', handler);
+  process.on('uncaughtException', handler);
 
   try {
     testFn();
     await sleep(timeout);
+  } catch (error) {
+    handler(error);
   } finally {
     process.off('unhandledRejection', handler);
+    process.off('uncaughtException', handler);
   }
 
   return handler;

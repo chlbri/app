@@ -151,10 +151,16 @@ type _DefinedValue<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
 > = KeysMatching<{
-  pContext: NotUndefined<Pc> extends never
+  pContext: any extends NotUndefined<Pc>
     ? EmptyObject
-    : NotUndefined<Pc>;
-  context: NotUndefined<Tc> extends never ? EmptyObject : NotUndefined<Tc>;
+    : NotUndefined<Pc> extends never
+      ? EmptyObject
+      : NotUndefined<Pc>;
+  context: PrimitiveObject extends Tc
+    ? EmptyObject
+    : NotUndefined<Tc> extends never
+      ? EmptyObject
+      : NotUndefined<Tc>;
 }>;
 
 /**

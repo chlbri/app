@@ -1998,29 +1998,6 @@ declare module '@bemedev/app' {
       pContext: any;
     };
 
-    'src/__tests__/machine/asyncActions.10.machine': {
-      paths: {
-        map: {
-          targets: '/idle';
-          initial?: 'idle';
-          states?: {
-            idle: { targets: '/' };
-          };
-        };
-        all: '/' | '/idle';
-      };
-      events: 'TEST';
-      options: {
-        children: never;
-        emitters: never;
-        tags: never;
-        actions: 'myAction';
-        delays: never;
-        guards: never;
-      };
-      pContext: any;
-    };
-
     'src/__tests__/machine/asyncActions.2.machine': {
       paths: {
         map: {
@@ -2137,52 +2114,6 @@ declare module '@bemedev/app' {
     };
 
     'src/__tests__/machine/asyncActions.7.machine': {
-      paths: {
-        map: {
-          targets: '/idle';
-          initial?: 'idle';
-          states?: {
-            idle: { targets: '/' };
-          };
-        };
-        all: '/' | '/idle';
-      };
-      events: 'TEST';
-      options: {
-        children: never;
-        emitters: never;
-        tags: never;
-        actions: 'myAction';
-        delays: never;
-        guards: never;
-      };
-      pContext: any;
-    };
-
-    'src/__tests__/machine/asyncActions.8.machine': {
-      paths: {
-        map: {
-          targets: '/idle';
-          initial?: 'idle';
-          states?: {
-            idle: { targets: '/' };
-          };
-        };
-        all: '/' | '/idle';
-      };
-      events: 'TEST';
-      options: {
-        children: never;
-        emitters: never;
-        tags: never;
-        actions: 'myAction';
-        delays: never;
-        guards: never;
-      };
-      pContext: any;
-    };
-
-    'src/__tests__/machine/asyncActions.9.machine': {
       paths: {
         map: {
           targets: '/idle';

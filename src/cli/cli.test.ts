@@ -10,9 +10,9 @@ import {
   writeFileSync,
 } from 'fs';
 import type { Watcher } from 'node-watch';
+import { dirname } from 'path';
 import { generate } from './commands/generate';
 import { watch } from './commands/watch';
-import { dirname } from 'path';
 import { LIB } from './core/constants';
 
 const OUPUT =
@@ -79,9 +79,13 @@ describe('CLI', () => {
   const DIR = dirname(CREATED_FILE);
   const fsmPath = `${DIR}/actions.fsm.ts`;
 
-  it('#00 => create watcher', async () => {
+  it('#00 => ', async () => {
     mkdirSync(DIR, { recursive: true });
     writeFileSync(fsmPath, ACTION_FSM_CONTENT);
+    await sleep(500);
+  });
+
+  it('#00 => create watcher', async () => {
     watcher = await run(watch, ['-c', DIR]);
     console.warn('watcher started');
   });
@@ -163,5 +167,28 @@ export default createMachine('watch', { initial: 'idle', states: { idle: {} } })
   it('#12 => unlink the dir', () => {
     rmdirSync(DIR);
     console.warn('__tests__ dir is deleted');
+    console.warn('');
+    console.warn('');
+  });
+
+  describe('#13 => coverage', () => {
+    it('#01 => dry-run all', async () => {
+      vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+      const result = await run(generate, [
+        '-e',
+        'notexist',
+        '-e',
+        'notexist2',
+        '--dry-run',
+      ]);
+      expect((result as any[]).length).toEqual(14);
+    });
+
+    it('#02 => full', async () => {
+      vi.spyOn(console, 'log').mockImplementation(() => {});
+      vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const result = await run(generate, ['-c', 'src/__tests__']);
+      expect(result).toBeUndefined();
+    });
   });
 });

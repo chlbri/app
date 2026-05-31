@@ -455,6 +455,22 @@ export class Machine<
     return out;
   };
 
+  readonly longRuns: boolean;
+
+  /**
+   * Creates an instance of Machine.
+   *
+   * @param config : of type {@linkcode Config} [C] - The configuration for the machine.
+   *
+   * @remarks
+   * This constructor initializes the machine with the provided configuration.
+   * It flattens the configuration and prepares it for further operations ({@linkcode flat}).
+   */
+  constructor(config: C) {
+    super(config);
+    this.longRuns = this.config.__longRuns === true;
+  }
+
   // #region Options helper functions
 
   /**

@@ -445,10 +445,6 @@ export abstract class CommonInterpreter<
     this.__throwing();
   }
 
-  get longRuns() {
-    return this.__machine.longRuns;
-  }
-
   /**
    * Changes the current {@linkcode ToEvents} event of this {@linkcode Interpreter} service.
    *

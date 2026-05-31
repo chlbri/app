@@ -389,15 +389,11 @@ export const constructTests = <
       sender: expandFn(
         type => {
           return (...___payload: any[]) => {
-            const __payload = _any(___payload);
-            const data = __payload[0] ?? 'no payload';
+            const invite = `#${index()} => send ${type} event with payload`;
 
-            const _payload = JSON.stringify(data).substring(0, 15);
-            const invite = `#${index()} => send ${type} event with payload : ${_payload}`;
-            const payload = __payload[0] ?? {};
-            const event: any = { type, payload };
             return tupleOf(invite, async () => {
-              service.send(event);
+              const sender = service.sender(type);
+              sender(...(___payload as any));
               await fakeWaiter(0);
             });
           };
