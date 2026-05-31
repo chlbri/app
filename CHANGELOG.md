@@ -15,8 +15,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-- Refactor: Migrate interpreter and machine types to common module exports for improved accessibility
-- Refactor: Rename internal CollectedService to CommonCollectedService for consistency
+- Refactor: Migrate interpreter and machine types to common module exports
+  for improved accessibility
+- Refactor: Rename internal CollectedService to CommonCollectedService for
+  consistency
 - Refactor: Update PrimitiveObject type imports to use @bemedev/typings
 - Fix: Adjust build script formatting
 - <u>Test coverage **_100%_**</u>
