@@ -78,19 +78,13 @@ export interface AnyInterpreter<
   dispose: () => void;
 }
 
-export type CommonCollectedService = {
-  from: string;
-  service: AnyInterpreter;
-  id: string;
-};
-
 export type CollectedPausable = {
   from: string;
   pausable: Pausable;
   id: string;
 };
 
-export type CollectedService = {
+export type CommonCollectedService = {
   from: string;
   service: AnyInterpreter;
   id: string;
@@ -216,7 +210,6 @@ export type ActorsMapFrom<T extends KeyU<'actorsMap'>> = Extract<
   ActorsConfigMap
 >;
 
-export type TagsFrom<T extends KeyU<'tags'>> = T['tags'];
 export type TagFrom<T extends KeyU<'__tag'>> = T['__tag'];
 
 export type AllPathsFrom<T extends KeyU<'__allPaths'>> = T['__allPaths'];

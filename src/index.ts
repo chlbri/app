@@ -1,7 +1,21 @@
 export * from '#exports/createMachine';
 export * from '#exports/interpret';
+export * from '#exports/interpret';
 export * from '#exports/types.types';
-export * from './registry.types';
+export * from '#common/machine';
+export * from '#common/interpreter';
+export * from './machine/machine';
+export * from './sync/machine';
+
+export type {
+  Interpreter_F,
+  SyncInterpreter,
+  SyncInterpreterFrom,
+  SyncCollectedService,
+} from './sync/interpreter';
+
+export { interpretSync } from './sync/interpreter';
+
 export type { Action2 } from '#actions';
 
 export type {
@@ -18,22 +32,6 @@ export type {
 } from '#events';
 
 export { INIT_EVENT, MAX_EXCEEDED_EVENT_TYPE } from '#events';
-
-export type {
-  StateP,
-  StateExtended,
-  StatePextended,
-  State,
-  StateType,
-  StateValue,
-  NodeConfig,
-  Node,
-  NodeConfigAtomic,
-  NodeConfigCompound,
-  NodeConfigParallel,
-  ActivityConfig,
-  FlatMapN,
-} from '#states';
 
 export type { DelayFunction2, DelayMap, DelayFunction } from '#delays';
 

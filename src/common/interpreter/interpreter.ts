@@ -76,7 +76,7 @@ import type {
   AllPathsFrom,
   AnyInterpreter,
   CollectedPausable,
-  CollectedService,
+  CommonCollectedService,
   ConfigFrom,
   ContextFrom,
   CreateInterval2_F,
@@ -625,7 +625,7 @@ export abstract class CommonInterpreter<
     return entries;
   };
 
-  protected __collectedChildren: CollectedService[] = [];
+  protected __collectedChildren: CommonCollectedService[] = [];
   #collectChildren = () => {
     type _Child = ChildConfig & {
       childFn: ChildFunction2<Eo, Pc, Tc, Ta>;
@@ -813,7 +813,8 @@ export abstract class CommonInterpreter<
   };
 
   #pauseChildren = (
-    filter: Parameters<Array<CollectedService>['filter']>[0] = () => true,
+    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
+      true,
   ) => {
     this.__collectedChildren
       .filter(filter)
@@ -821,7 +822,8 @@ export abstract class CommonInterpreter<
   };
 
   #stopChildren = (
-    filter: Parameters<Array<CollectedService>['filter']>[0] = () => true,
+    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
+      true,
   ) => {
     this.__collectedChildren.filter(filter).forEach(({ service, id }) => {
       service.stop();
@@ -837,7 +839,8 @@ export abstract class CommonInterpreter<
   };
 
   #resumeChildren = (
-    filter: Parameters<Array<CollectedService>['filter']>[0] = () => true,
+    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
+      true,
   ) => {
     this.__collectedChildren
       .filter(filter)

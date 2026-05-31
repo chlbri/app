@@ -16,9 +16,7 @@ export type ParseTreeContext = {
   __flat?: RecordS<NodeConfig>;
 };
 
-export type ConfigPaths = {
-  targets: string[];
-  initial?: string;
+export type ConfigPaths = ConfigPaths2 & {
   states?: RecordS<ConfigPaths>;
 };
 
