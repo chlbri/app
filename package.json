@@ -30,6 +30,10 @@
     "type": "git",
     "url": "https://github.com/chlbri/app"
   },
+  "workspaces": [
+    "packages/app",
+    "packages/app-vitest"
+  ],
   "type": "module",
   "scripts": {
     "vitest": "pnpm --filter='./packages/vitest'",
