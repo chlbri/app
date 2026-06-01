@@ -4,5 +4,11 @@
       ".continue/**/*.yaml"
     ],
     "https://www.schemastore.org/pnpm-workspace.json": "file:///Users/bri/Documents/GitHub/app/pnpm-workspace.yaml"
+  },
+  "chat.tools.terminal.autoApprove": {
+    "/^bash \\.\\./\\.\\./\\.agents/skills/update-docs/scripts/find-diff\\.sh$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
   }
 }

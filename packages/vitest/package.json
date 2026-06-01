@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-vitest",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Test helpers for @bemedev/app",
   "private": false,
   "author": {
@@ -69,7 +69,7 @@
     "upgrade:fast": "pnpm up --latest"
   },
   "devDependencies": {
-    "@bemedev/app": "workspace:*",
+    "@bemedev/app": "^1.1.4",
     "@bemedev/dev-utils": "^0.7.0",
     "@bemedev/rolldown-config": "^0.5.0",
     "@types/node": "^25.9.1",
@@ -86,8 +86,8 @@
     "vitest": "^4.1.8"
   },
   "peerDependencies": {
-    "@bemedev/app": "workspace:*",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8",
+    "@bemedev/app": "^1.1.4"
   },
   "packageManager": "pnpm@11.5.0+sha512.dbfcc4f81cf48597afd4bc391ffdf12c11f1a9fb83a395bfa6b0a2d9cc2fd8ffebafdb1ccbd529632153f793904c2615b7f09fe1a345473fd1c35845172a8eb1"
 }
