@@ -1,4 +1,4 @@
-import { createConfig } from '#machines';
+import { createConfig } from '#common/functions';
 import type { FlatMapN } from '#states';
 
 const config = createConfig({

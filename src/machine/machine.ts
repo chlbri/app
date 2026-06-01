@@ -31,14 +31,14 @@ import type {
 } from './machine.types';
 
 import type { EmptyObject } from '~types';
-import type { Config } from './types';
+import type { AsyncConfig } from './types';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * A class representing a state machine.
  * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
- * @template : {@linkcode Config} [C] - The configuration type of the machine.
+ * @template : {@linkcode AsyncConfig} [C] - The configuration type of the machine.
  * @template Pc : The private context type of the machine.
  * @template : {@linkcode PrimitiveObject} [Pc] - The context type of the machine.
  * @template : {@linkcode GetEventsFromConfig}<{@linkcode C}> [E] - The events map type derived from the configuration.
@@ -49,7 +49,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
  */
 
 export class Machine<
-  const C extends Config = Config,
+  const C extends AsyncConfig = AsyncConfig,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,
@@ -123,7 +123,7 @@ export class Machine<
    * The public accessor of the flat map of the configuration for this {@linkcode Machine}.
    *
    * @see {@linkcode FlatMapN}
-   * @see {@linkcode Config}
+   * @see {@linkcode AsyncConfig}
    * @see {@linkcode C}
    */
   get flat() {
@@ -371,7 +371,7 @@ export class Machine<
    *
    * @see type inferences :
    *
-   *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
+   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
    */
 
   /**
@@ -385,7 +385,7 @@ export class Machine<
    *
    * @see type inferences :
    *
-   *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
+   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
    */
   protected __renew = (): this => {
     const {
@@ -460,7 +460,7 @@ export class Machine<
   /**
    * Creates an instance of Machine.
    *
-   * @param config : of type {@linkcode Config} [C] - The configuration for the machine.
+   * @param config : of type {@linkcode AsyncConfig} [C] - The configuration for the machine.
    *
    * @remarks
    * This constructor initializes the machine with the provided configuration.

@@ -39,6 +39,7 @@
     "/^bash /workspaces/app/\\.agents/skills/update-docs/scripts/find-diff\\.sh$/": {
       "approve": true,
       "matchCommandLine": true
-    }
+    },
+    "npm pack": true
   }
 }

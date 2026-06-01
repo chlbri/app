@@ -16,7 +16,6 @@ import type {
 import type { FromGuard, GuardConfig, Predicate } from '#guards';
 
 import type { Emitter } from '#emitters';
-import type { AsyncChild } from '#machines';
 import type {
   Identify,
   RecordS,
@@ -24,6 +23,7 @@ import type {
   SingleOrArrayL,
 } from '~types';
 import type { PrimitiveObject } from '@bemedev/typings';
+import type { CommonChild } from '#common/machine';
 
 /**
  * Represents the simpliest configuration map for a transition.
@@ -479,5 +479,5 @@ export type Transitions<
   always: Transition<E, Pc, Tc, T>[];
   after: Identify<Transition<E, Pc, Tc, T>>[];
   emitters: Emitter<E, Pc, Tc, T>[];
-  children: AsyncChild<E, Pc, Tc, T>[];
+  children: CommonChild<E, Pc, Tc, T>[];
 };

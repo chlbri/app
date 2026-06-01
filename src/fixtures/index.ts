@@ -13,18 +13,19 @@ import type {
   ExtractSender,
 } from '#events';
 import type { Interpreter } from '#interpreter';
+
+import type { CommonInterpreter } from '#common/interpreter';
 import type {
-  Config,
+  CommonConfig,
   GetEventsFromConfig,
   SimpleMachineOptions2,
-} from '#machines';
+} from '#common/machine';
 import type { StateValue } from '#states';
 import { IS_TEST } from '#utils';
 import type { EmptyObject } from '@bemedev/decompose';
 import { sleep } from '@bemedev/sleep';
-import { buildIndex, buildInvite } from './invite';
-import type { CommonInterpreter } from '#common/interpreter';
 import type { PrimitiveObject } from '@bemedev/typings';
+import { buildIndex, buildInvite } from './invite';
 
 export * from './constants';
 export * from './invite';
@@ -62,7 +63,7 @@ type _ConstructStateValue_F = (
 ) => readonly [string, () => void];
 
 type ConstructStateValue_F = <
-  const C extends Config = Config,
+  const C extends CommonConfig = CommonConfig,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,
@@ -84,7 +85,7 @@ export const constructStateValue: ConstructStateValue_F = service => {
 };
 
 type ConstructContexts_F = <
-  const C extends Config = Config,
+  const C extends CommonConfig = CommonConfig,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = GetEventsFromConfig<C>,
@@ -126,7 +127,7 @@ export const constructContexts: ConstructContexts_F = (
 };
 
 type ConstructSend_F = <
-  const C extends Config = Config,
+  const C extends CommonConfig = CommonConfig,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = GetEventsFromConfig<C>,
@@ -261,7 +262,7 @@ type ConstructTestsResult2 = Record<
 };
 
 export const constructTests = <
-  const C extends Config = Config,
+  const C extends CommonConfig = CommonConfig,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

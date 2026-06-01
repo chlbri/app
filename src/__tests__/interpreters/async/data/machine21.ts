@@ -1,12 +1,12 @@
 import { emptyFn } from '#fixtures';
 import { interpret } from '#exports/interpret';
 import { createMachine } from '#exports/createMachine';
-import { createConfig } from '#machines';
 import { notU, typings } from '#utils';
 import { type } from '@bemedev/typings';
 import { DELAY } from './constants';
 import { fakeDB } from './fakeDB';
 import { machine1 } from './machine1';
+import { createConfig } from '#common/functions';
 
 // #region machine21
 

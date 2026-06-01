@@ -16,7 +16,7 @@ import type {
 import type { Machine } from '#machine';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
-import type { Config, SimpleMachineOptions2 } from './types';
+import type { AsyncConfig, SimpleMachineOptions2 } from './types';
 /**
  * Options for async action helpers.
  * - `error`: called with the thrown error and current context snapshot when
@@ -39,7 +39,7 @@ export type AsyncOptions<
 /**
  * Types for all meaningful elements of the machine.
  *
- * @template :  {@linkcode Config} [C] - type of the machine configuration
+ * @template :  {@linkcode AsyncConfig} [C] - type of the machine configuration
  * @template :  {@linkcode EventsMap} [E] - type of the events map
  * @template :  {@linkcode ActorsConfigMap} [A] - type of the actors configuration map
  * @template :  any [Pc] - type of the private context
@@ -47,7 +47,7 @@ export type AsyncOptions<
  * @template :  {@linkcode SimpleMachineOptions2} [Mo] - type of the machine options
  */
 export type Elements<
-  C extends Config = Config,
+  C extends AsyncConfig = AsyncConfig,
   E extends EventsMap = EventsMap,
   A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
@@ -85,7 +85,7 @@ export interface AnyMachine<
   Tc extends PrimitiveObject = PrimitiveObject,
 > {
   options: any;
-  config: Config;
+  config: AsyncConfig;
   flat: Record<string, any>;
   context: Tc;
   pContext: Pc;
@@ -340,7 +340,7 @@ export type AddOptions_F<
 ) => L & T;
 
 export type ProvideOptions_F<
-  C extends Config = Config,
+  C extends AsyncConfig = AsyncConfig,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,

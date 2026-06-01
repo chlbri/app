@@ -11,6 +11,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.1.3] - 01/06/2026** => _06:14_
+
+</summary>
+
+- Fix: Add explicit module entry points (main, types, module fields) in
+  package.json for improved module resolution
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.1.2] - 31/05/2026** => _19:26_
 
 </summary>

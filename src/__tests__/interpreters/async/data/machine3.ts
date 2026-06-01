@@ -1,5 +1,5 @@
 import { createMachine } from '#exports/createMachine';
-import { createConfig } from '#machines';
+import { createConfig } from '#common/functions';
 import { typings } from '#utils';
 import { type } from '@bemedev/typings';
 

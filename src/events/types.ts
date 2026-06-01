@@ -4,7 +4,7 @@ import type {
   Unionize,
 } from '#bemedev/globals/types';
 import type { EmitterConfigMap } from '#emitters';
-import type { ChildConfigMap } from '#machines';
+import type { ChildConfigMap } from '#common/machine';
 import { EmptyObject } from '@bemedev/decompose';
 import type {
   ALWAYS_EVENT,

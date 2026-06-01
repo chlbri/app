@@ -26,7 +26,6 @@ import {
 import { toDelay } from '#delays';
 import { toEmitterSrc } from '#emitters';
 import { toPredicate, type GuardConfig } from '#guards';
-import { getTags, toChildSrc } from '#machines';
 import {
   flatMap,
   initialConfig,
@@ -63,7 +62,7 @@ import {
   getEntries,
   getExits,
   type AnyMachine,
-  type ChildFunction2,
+  type CommonChildFunction2,
   type CommonConfig,
   type CommonMachine,
   type ScheduledData,
@@ -93,6 +92,7 @@ import type {
   TagFrom,
 } from './types';
 import { isPrimitive } from '#bemedev/globals/utils/is/primitive';
+import { getTags, toChildSrc } from '#common/functions';
 
 export abstract class CommonInterpreter<
   const C extends CommonConfig = CommonConfig,
@@ -628,7 +628,7 @@ export abstract class CommonInterpreter<
   protected __collectedChildren: CommonCollectedService[] = [];
   #collectChildren = () => {
     type _Child = ChildConfig & {
-      childFn: ChildFunction2<Eo, Pc, Tc, Ta>;
+      childFn: CommonChildFunction2<Eo, Pc, Tc, Ta>;
       id: string;
     };
 
@@ -744,7 +744,7 @@ export abstract class CommonInterpreter<
       });
   };
 
-  #executeChild = (child: ChildFunction2<Eo, Pc, Tc, Ta>) => {
+  #executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
     const instance = child(this.__cloneState);
     return instance;
   };

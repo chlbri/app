@@ -1,6 +1,7 @@
 import type { Action2, FromActionConfig } from '#actions';
 import type { Equals, Keys } from '#bemedev/globals/types';
 import { Identify } from '#bemedev/globals/types';
+import type { ConfigFrom } from '#common/interpreter';
 import type {
   ChildEvents,
   CommonConfig,
@@ -14,7 +15,7 @@ import type {
   EmitterReturn,
   EmittersMap,
 } from '#emitters';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { ActorsConfigMap, EventObject } from '#events';
 import type { PredicateS, PredicateS2 } from '#guards';
 import type {
   ActivityConfig,
@@ -41,7 +42,6 @@ import type { Observable } from 'rxjs';
 import type { FnR, KeyU, MaybePromise, ReduceArray } from '~types';
 import type { RegisterOptions } from '../registry.types';
 import { RecordS } from './../types/primitives';
-import type { ConfigFrom } from '#common/interpreter';
 
 /**
  * Type representing the main JSON config.
@@ -57,14 +57,13 @@ export type ConfigNode = NodeConfigCompound | NodeConfigParallel;
  * @see {@linkcode ConfigNode} for more details.
  * @see {@linkcode CommonConfig}
  */
-export type Config<
+export type AsyncConfig<
   Paths extends NoExtraKeysConfigDef<ConfigDef> =
     NoExtraKeysConfigDef<ConfigDef>,
 > = CommonConfig<Paths>;
 
-export type ExtractTagsFromConfig<T extends Config> = ExtractTagsFromFlat<
-  FlatMapN<T>
->;
+export type ExtractTagsFromConfig<T extends AsyncConfig> =
+  ExtractTagsFromFlat<FlatMapN<T>>;
 
 /**
  * Type representing all action keys from a flat map of nodes.
@@ -251,14 +250,14 @@ export type GetEventsFromFlat<Flat extends FlatMapN> = Record<
 /**
  * Get all events from a machine config.
  *
- * @template : {@linkcode Config} [C] - type of the machine config
+ * @template : {@linkcode AsyncConfig} [C] - type of the machine config
  * @returns A type representing all events from the machine config.
  *
  * @see {@linkcode FlatMapN} for the flat map structure.
  * @see {@linkcode GetEventsFromFlat} for extracting events from the flat map.
  * @see {@linkcode ConfigFrom} for extracting the config from the config.
  */
-export type GetEventsFromConfig<C extends Config> = GetEventsFromFlat<
+export type GetEventsFromConfig<C extends AsyncConfig> = GetEventsFromFlat<
   FlatMapN<C>
 >;
 
@@ -273,7 +272,7 @@ export type GetEventsFromConfig<C extends Config> = GetEventsFromFlat<
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine.
  */
 export type GetEventsFromMachine<T extends KeyU<'config'>> =
-  GetEventsFromConfig<Extract<ConfigFrom<T>, Config>>;
+  GetEventsFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
 
 export type GetEmittersSrcKeyFromFlat<Flat extends FlatMapN> = Record<
   _GetEmitterSrcKeyFromFlat<Flat>,
@@ -300,14 +299,14 @@ export type GetEmittersSrcFromFlat<
 /**
  * Get all emitters from a machine config.
  *
- * @template : {@linkcode Config} [C] - type of the machine config
+ * @template : {@linkcode AsyncConfig} [C] - type of the machine config
  * @returns A type representing all emitters from the machine config.
  *
  * @see {@linkcode FlatMapN} for the flat map structure.
  * @see {@linkcode GetEmittersSrcKeyFromFlat} for extracting promises from the flat map.
  * @see {@linkcode FlatMapN} for extracting the config from a machine config.
  */
-export type GetEmittersSrcFromConfig<C extends Config> =
+export type GetEmittersSrcFromConfig<C extends AsyncConfig> =
   GetEmittersSrcKeyFromFlat<FlatMapN<C>>;
 
 /**
@@ -321,7 +320,7 @@ export type GetEmittersSrcFromConfig<C extends Config> =
  * @see {@linkcode GetEmittersSrcFromConfig} for extracting promises from the machine.
  */
 export type GetEmittersSrcFromMachine<T extends KeyU<'config'>> =
-  GetEmittersSrcFromConfig<Extract<ConfigFrom<T>, Config>>;
+  GetEmittersSrcFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
 
 export type GetChildrenSrcKeysFromFlat<
   Flat extends FlatMapN,
@@ -375,14 +374,14 @@ export type GetChildrenSrcFromFlat<
 /**
  * Get all child machines from a machine config.
  *
- * @template : {@linkcode Config} [C] - type of the machine config
+ * @template : {@linkcode AsyncConfig} [C] - type of the machine config
  * @returns A type representing all child machines from the machine config.
  *
  * @see {@linkcode FlatMapN} for the flat map structure.
  * @see {@linkcode GetChildrenSrcKeysFromFlat} for extracting promises from the flat map.
  * @see {@linkcode FlatMapN} for extracting the config from a machine config.
  */
-export type GetChildrenSrcFromConfig<C extends Config> =
+export type GetChildrenSrcFromConfig<C extends AsyncConfig> =
   GetChildrenSrcKeysFromFlat<FlatMapN<C>>;
 
 /**
@@ -396,7 +395,7 @@ export type GetChildrenSrcFromConfig<C extends Config> =
  * @see {@linkcode GetChildrenSrcFromConfig} for extracting child machines from the machine.
  */
 export type GetChildrenSrcFromMachine<T extends KeyU<'config'>> =
-  GetChildrenSrcFromConfig<Extract<ConfigFrom<T>, Config>>;
+  GetChildrenSrcFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
 
 export type GetActorsFromFlat<
   Flat extends FlatMapN,
@@ -411,7 +410,7 @@ export type GetActorsFromFlat<
 };
 
 export type GetActorsFromConfig<
-  C extends Config,
+  C extends AsyncConfig,
   E extends EventObject = EventObject,
   A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
@@ -426,7 +425,14 @@ export type GetActorsFromMachine<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = GetActorsFromConfig<Extract<ConfigFrom<M>, Config>, E, A, Pc, Tc, T>;
+> = GetActorsFromConfig<
+  Extract<ConfigFrom<M>, AsyncConfig>,
+  E,
+  A,
+  Pc,
+  Tc,
+  T
+>;
 
 export type GetActorsSrcKeysFromFlat<Flat extends FlatMapN> = {
   children: GetChildrenSrcKeysFromFlat<Flat>;
@@ -451,21 +457,14 @@ export type GetActorsSrcKeysFromFlat2<
   pContext: Recomposer<G['contexts'][keyof G['contexts']]>;
 };
 
-export type GetActorKeysFromConfig<C extends Config> =
+export type GetActorKeysFromConfig<C extends AsyncConfig> =
   GetActorsSrcKeysFromFlat<FlatMapN<C>>;
 
-export type GetActorKeysFromConfig2<C extends Config> =
+export type GetActorKeysFromConfig2<C extends AsyncConfig> =
   GetActorsSrcKeysFromFlat2<FlatMapN<C>>;
 
 export type GetActorKeysFromMachine<T extends KeyU<'config'>> =
-  GetActorKeysFromConfig<Extract<ConfigFrom<T>, Config>>;
-
-export type ChildConfigDef = EventsMap;
-
-export type ChildConfigMap<S extends string = string> = Record<
-  S,
-  ChildConfigDef
->;
+  GetActorKeysFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
 
 export type AsyncChild<
   E extends EventObject = EventObject,
@@ -486,7 +485,7 @@ export type AsyncChild<
  *
  * Type representing the options for a machine configuration.
  *
- * @template : {@linkcode Config} [C] - type of the machine config
+ * @template : {@linkcode AsyncConfig} [C] - type of the machine config
  * @template : {@linkcode EventsMap} [E] - type of the events map
  * @template : {@linkcode ActorsConfigMap} [A] - type of the actors config map
  * @template Pc - type of the private context
@@ -511,7 +510,7 @@ export type AsyncChild<
  * @see {@linkcode Partial} - intern type to make all properties optional.
  */
 export type MachineOptions<
-  C extends Config = Config,
+  C extends AsyncConfig = AsyncConfig,
   A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,

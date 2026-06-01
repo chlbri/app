@@ -4,7 +4,7 @@ import { EventStrings } from '#events';
 import type { machine2 } from '#fixturesData';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
-  Config,
+  AsyncConfig,
   GetActorKeysFromConfig,
   GetEventsFromMachine,
 } from '../../machine/types';
@@ -67,7 +67,7 @@ const config = {
       },
     },
   },
-} as const satisfies Config;
+} as const satisfies AsyncConfig;
 
 type GAK1 = GetActorKeysFromConfig<typeof config>['children'];
 

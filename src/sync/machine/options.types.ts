@@ -11,12 +11,13 @@ import type {
   EventsMap,
 } from '#events';
 import type { DefinedValue, SyncPredicateS } from '#guards';
-import type { AnyMachine, SimpleMachineOptions2 } from '#machines';
+
 import type { RegisterOptions } from '#registry';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { Decompose, EmptyObject, FnMap, FnR, ValuesOf } from '~types';
 import type { SyncConfig } from '../types.types';
 import type { SyncMachine } from './machine';
+import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 
 export type SyncFilterAction_F<
   E extends EventObject = EventObject,

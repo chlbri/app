@@ -1,6 +1,6 @@
 import { interpret } from '#interpreters';
 import { createMachine } from '#exports/createMachine';
-import { createConfig } from '#machines';
+import { createConfig } from '#common/functions';
 import { notU } from '#utils';
 import { type } from '@bemedev/typings';
 import { DELAY } from './constants';

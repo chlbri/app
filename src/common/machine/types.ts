@@ -1,8 +1,8 @@
 import type { Action2, ActionResult, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
-import type { NotUndefined } from '#bemedev/globals/types';
-import type { NodeConfig, StateValue } from '#states';
+import type { Identify, NotUndefined } from '#bemedev/globals/types';
+import type { FlatMapN, NodeConfig, StateValue } from '#states';
 import type { Fn } from '#utils';
 import type {
   ObjectT,
@@ -11,6 +11,7 @@ import type {
   StandardKey,
 } from '@bemedev/typings';
 import type { FnMap, FnR, MaybePromise, RecordS } from '~types';
+import type { Transition } from '#transitions';
 
 export type NoExtraKeysConfigDef<T extends ConfigDef> = T & {
   [K in Exclude<keyof T, keyof ConfigDef>]: never;
@@ -201,7 +202,7 @@ export type CommonChildFunction<
   R extends { eventsMap: any } = { eventsMap: any },
 > = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
 
-export type ChildFunction2<
+export type CommonChildFunction2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -213,3 +214,59 @@ export type ChildEvents<
   K extends string,
   A extends ActorsConfigMap = ActorsConfigMap,
 > = NotUndefined<A['children']>[K] extends infer P ? P : never;
+
+/**
+ * Type representing all event types from a flat map of nodes.
+ * @template : {@linkcode FlatMapN} [Flat] - type of the flat map of nodes
+ * @returns A type representing all event types from this flat map.
+ *
+ */
+type _GetEventKeysFromFlat<Flat extends FlatMapN> = {
+  [key in keyof Flat]: Flat[key] extends { on: infer V } ? keyof V : never;
+}[keyof Flat];
+
+/**
+ * Provide a record of all events by key and {@linkcode PrimitiveObject} payload.
+ *
+ * @template : {@linkcode FlatMapN} [Flat] - type of the flat map of nodes
+ *
+ * @see {@linkcode _GetEventKeysFromFlat} for extracting event keys from the flat map.
+ */
+export type GetEventsFromFlat<Flat extends FlatMapN> = Record<
+  _GetEventKeysFromFlat<Flat>,
+  PrimitiveObject
+>;
+
+/**
+ * Get all events from a machine config.
+ *
+ * @template : {@linkcode AsyncConfig} [C] - type of the machine config
+ * @returns A type representing all events from the machine config.
+ *
+ * @see {@linkcode FlatMapN} for the flat map structure.
+ * @see {@linkcode GetEventsFromFlat} for extracting events from the flat map.
+ * @see {@linkcode ConfigFrom} for extracting the config from the config.
+ */
+export type GetEventsFromConfig<C extends CommonConfig> =
+  GetEventsFromFlat<FlatMapN<C>>;
+
+export type ChildConfigDef = EventsMap;
+
+export type ChildConfigMap<S extends string = string> = Record<
+  S,
+  ChildConfigDef
+>;
+
+export type CommonChild<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R extends { eventsMap: any } = { eventsMap: any },
+> = {
+  src: CommonChildFunction2<E, Pc, Tc, T, R>;
+  description?: string;
+  id: string;
+  on: Identify<RecordS<Transition<E, Pc, Tc, T>>>[];
+  contexts: string[];
+};

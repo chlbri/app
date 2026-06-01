@@ -1,9 +1,8 @@
 import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import type { ConfigNode } from '#machines';
-import type { StateValue } from '../types';
+import type { NodeConfig, StateValue } from '../types';
 import { isAtomic, isCompound } from './checks';
 
-export type NodeToValue_F = (body: ConfigNode) => StateValue;
+export type NodeToValue_F = (body: NodeConfig) => StateValue;
 
 /**
  * Converts a state machine config into a StateValue.

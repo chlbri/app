@@ -3,8 +3,8 @@ import toArray from '#bemedev/features/arrays/castings/toArray';
 import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toPredicate, type GuardConfig } from '#guards';
-import type { SimpleMachineOptions } from '#machines';
 import type { Transition, TransitionConfig } from '#transitions';
+import type { SimpleMachineOptions2 } from '#common/machine';
 
 export type ToTransition_F = <
   E extends EventsMap = EventsMap,
@@ -17,10 +17,7 @@ export type ToTransition_F = <
   events: E,
   actorsMap: A,
   config: TransitionConfig,
-  options?: Pick<
-    SimpleMachineOptions<Pc, Tc, T, Eo>,
-    'actions' | 'guards'
-  >,
+  options?: Pick<SimpleMachineOptions2, 'actions' | 'guards'>,
 ) => Transition<Eo, Pc, Tc, T>;
 
 /**

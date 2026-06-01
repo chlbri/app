@@ -15,7 +15,7 @@ import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
-import type { AddOptionsParam_F, Config } from '#machines';
+import type { AddOptionsParam_F, AsyncConfig } from '#machines';
 import type { ActivityConfig, NodeConfig, StateValue } from '#states';
 import type {
   AlwaysConfig,
@@ -263,7 +263,7 @@ export type CollectedService = {
 };
 
 export type ProvideMachineOptions_F<
-  C extends Config = Config,
+  C extends AsyncConfig = AsyncConfig,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,

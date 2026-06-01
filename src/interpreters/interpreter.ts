@@ -19,7 +19,7 @@ import {
   type EventsMap,
 } from '#events';
 import { type GuardConfig } from '#guards';
-import { type Config } from '#machines';
+import { type AsyncConfig } from '#machines';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
 import {
@@ -74,7 +74,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
  * It provides methods to start, stop, pause, and resume the machine, as well as to send events
  * and subscribe to state changes.
  *
- * @template : type {@linkcode Config} [C] - The configuration type of the machine.
+ * @template : type {@linkcode AsyncConfig} [C] - The configuration type of the machine.
  * @template : [Pc] - The private context type, which can be any type.
  * @template : type {@linkcode types} [Tc] - The context type.
  * @template : type {@linkcode EventsMap} [E] - The events map type, which maps event names to their
@@ -94,7 +94,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
  */
 export class Interpreter<
-  const C extends Config = Config,
+  const C extends AsyncConfig = AsyncConfig,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

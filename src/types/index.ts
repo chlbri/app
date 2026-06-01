@@ -99,7 +99,7 @@ export * from '#exports/types.types';
 export type {
   AnyMachine,
   CommonChildFunction as ChildFunction,
-  ChildFunction2,
+  CommonChildFunction2 as ChildFunction2,
   ChildrenMap,
   CommonConfig,
   CommonElements,
@@ -112,6 +112,10 @@ export type {
   StdO2,
   TransformConfigDef,
   ChildEvents,
+  ChildConfigDef,
+  ChildConfigMap,
+  GetEventsFromConfig,
+  GetEventsFromFlat,
 } from '#common/machine';
 
 export type {
@@ -161,12 +165,10 @@ export type {
 
 export type {
   Machine,
-  ChildConfigDef,
   AddOption,
-  Config,
+  AsyncConfig as Config,
   AsyncChild,
   AsyncOptions,
-  ChildConfigMap,
 } from '#machines';
 
 export type { SyncMachine, SyncAddOption } from '../sync/machine';

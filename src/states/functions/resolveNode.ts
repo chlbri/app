@@ -7,10 +7,10 @@ import { toChild } from '#machines';
 import { toTransition } from '#transitions';
 import toArray from '#bemedev/features/arrays/castings/toArray';
 import { identify } from '#bemedev/features/functions/functions/identify';
-import type { SimpleMachineOptions } from '#machines';
 import type { Node, NodeConfig } from '../types';
 import { stateType } from './stateType';
 import type { PrimitiveObject } from '@bemedev/typings';
+import type { SimpleMachineOptions2 } from '~types';
 
 export type ResolveNode_F = <
   E extends EventsMap = EventsMap,
@@ -23,7 +23,7 @@ export type ResolveNode_F = <
   events: E,
   actorsMap: A,
   config: NodeConfig,
-  options?: SimpleMachineOptions<Pc, Tc, T, Eo>,
+  options?: SimpleMachineOptions2,
 ) => Node<Eo, Pc, Tc, T>;
 
 /**

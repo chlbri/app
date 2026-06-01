@@ -10,7 +10,7 @@ import type {
 } from '#events';
 import type { InterpreterFrom } from '#interpreter';
 import type { Machine } from '#machine';
-import type { Config as AsyncConfig, MachineOptions2 } from '#machines';
+import type { AsyncConfig, MachineOptions2 } from '#machines';
 import type { Register, RegisterOptions } from '#registry';
 import type {
   inferT,
