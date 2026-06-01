@@ -1,0 +1,64 @@
+import { interpret } from '@bemedev/app';
+import { notU } from '@bemedev/app/utils';
+import { constructTests } from '#tester';
+import _raw_machine from './sendToActions1.machine';
+
+vi.useFakeTimers();
+
+describe('Performs send to itself actions', () => {
+  const machine = _raw_machine.provideOptions(
+    ({ assign, forceSend, resend }) => ({
+      actions: {
+        inc: assign(
+          'context.iterator',
+          ({ context }) => notU(context?.iterator) + 1,
+        ),
+
+        init: assign('context', () => ({
+          iterator: 0,
+        })),
+
+        dec: assign(
+          'context.iterator',
+          ({ context }) => notU(context?.iterator) - 1,
+        ),
+
+        forceSendInc: forceSend('INCREMENT'),
+        sendDec: resend('DECREMENT'),
+      },
+    }),
+  );
+
+  const service = interpret(machine, {
+    context: {},
+  });
+  const { useIterator, start, dispose, useStateValue, send } =
+    constructTests(
+      service,
+      ({ contexts: constructContexts }) => ({
+        useIterator: constructContexts(
+          ({ context }) => context?.iterator,
+          'iterator',
+        ),
+      }),
+      1,
+    );
+  // #endregion
+
+  test(...start());
+  test(...useStateValue('idle'));
+  test(...send('NEXT'));
+  test(...useStateValue('next'));
+  test(...useIterator(0));
+  test(...send('INCREMENT'));
+  test(...useIterator(2));
+  test(...send('INCREMENT.FORCE'));
+  test(...useIterator(5));
+  test(...send('INCREMENT'));
+  test(...useIterator(7));
+  test(...send('REDECREMENT'));
+  test(...useIterator(7));
+  test(...dispose());
+});
+
+afterAll(() => vi.useRealTimers());

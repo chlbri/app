@@ -11,6 +11,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.1.4] - 01/06/2026** => _20:05_
+
+</summary>
+
+- Dependencies: Update Vitest stack to `4.1.8` (`vitest`, `@vitest/ui`,
+  `@vitest/coverage-v8`)
+- Dependencies: Update Ox tooling (`oxfmt` to `0.53.0`, `oxlint` to
+  `1.68.0`)
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.1.3] - 01/06/2026** => _06:14_
 
 </summary>

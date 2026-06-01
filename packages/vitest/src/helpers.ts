@@ -1,18 +1,11 @@
-import { DEFAULT_NOTHING } from '@bemedev/app/constants';
-import { IS_TEST, sleep } from '@bemedev/app/utils';
+import { sleep } from '@bemedev/app/utils';
 import type { VitestUtils } from 'vitest';
 
-export const fakeWaiter = (ms = 0, times = 1) => {
+export const fakeWaiter = async (ms = 0, times = 1) => {
+  const check = vi.isFakeTimers();
   const duration = ms * times;
-  return sleep(duration);
-};
-
-export const asyncNothing = async () => {
-  if (IS_TEST) {
-    console.log(`${DEFAULT_NOTHING} call ${DEFAULT_NOTHING}`);
-    return DEFAULT_NOTHING;
-  }
-  return;
+  if (check) await vi.advanceTimersByTimeAsync(duration);
+  else await sleep(duration);
 };
 
 export const mockConsole = (vi: VitestUtils) => {

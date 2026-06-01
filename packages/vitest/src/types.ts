@@ -26,14 +26,8 @@ type CommonTestsResult = Record<
   ) => TestArr;
 } & {
   useStateValue: (value: StateValue, index?: number) => TestArr;
-  useWarnings: {
-    (...warnings: string[]): TestArr;
-    index: (index: number, ...warnings: string[]) => TestArr;
-  };
-  useErrors: {
-    (...warnings: string[]): TestArr;
-    index: (index: number, ...warnings: string[]) => TestArr;
-  };
+  useWarnings: (...warnings: string[]) => TestArr;
+  useErrors: (...warnings: string[]) => TestArr;
 };
 
 export type ConstructTestsResult<
@@ -46,19 +40,12 @@ export type ConstructTestsResult<
   } & (Equals<Ta, never> extends true
     ? EmptyObject
     : {
-        useTags: {
-          (...tags: Ta[]): TestArr;
-          index: (index: number, ...tags: Ta[]) => TestArr;
-        };
+        useTags: (...tags: Ta[]) => TestArr;
       });
 
 export type ConstructTestsResult2 = CommonTestsResult & {
   send: (_event: EventObject, index?: number) => TestArr;
-
-  useTags: {
-    (...tags: string[]): TestArr;
-    index: (index: number, ...tags: string[]) => TestArr;
-  };
+  useTags: (...tags: string[]) => TestArr;
 };
 
 type OptionTupleOf = (
@@ -91,13 +78,7 @@ export type Option<
   getIndex: (_index?: number) => string;
   tupleOf: OptionTupleOf;
 
-  sender: {
-    <const T extends Eo['type']>(
-      type: T,
-    ): (...data: ExtractSender<Eo, T>) => TestArr;
-
-    index: <const T extends Eo['type']>(
-      type: T,
-    ) => (...data: ExtractSender<Eo, T>) => TestArr;
-  };
+  sender: <const T extends Eo['type']>(
+    type: T,
+  ) => (...data: ExtractSender<Eo, T>) => TestArr;
 };

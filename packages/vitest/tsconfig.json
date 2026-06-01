@@ -23,6 +23,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "declarationMap": true,
-    "paths": {}
+    "paths": {
+      "#tester": ["./src/constructTests.ts"]
+    }
   }
 }

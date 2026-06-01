@@ -3,12 +3,18 @@
 Locate the commit that introduced the last documented version and collect
 every diff since then.
 
+Keep the package scope explicit for the full step:
+
+- Stay in `${PACKAGE_DIR}` for script execution
+- Prioritize changes under `${PACKAGE_DIR}` when reasoning over diffs
+
 ## Script
 
 Run [`../scripts/find-diff.sh`](../scripts/find-diff.sh):
 
 ```bash
-bash .claude/skills/update-docs/scripts/find-diff.sh
+cd "$PACKAGE_DIR"
+bash ../../.agents/skills/update-docs/scripts/find-diff.sh
 ```
 
 ## Fallback — deep reasoning
@@ -17,9 +23,9 @@ If the script cannot produce a usable diff (shallow clone, missing ref,
 detached HEAD, etc.), reason over:
 
 - New or modified files in `src/`
-- Changes in `package.json` (exports, dependencies, scripts)
+- Changes in `${PACKAGE_DIR}/package.json` (exports, dependencies, scripts)
 - Any untracked files compared to what is already documented in the latest
-  `CHANGELOG.md` entry
+  `${PACKAGE_DIR}/CHANGELOG.md` entry
 
 Use those inferred changes as the diff and continue to Step 3.
 

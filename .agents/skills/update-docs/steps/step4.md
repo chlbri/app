@@ -2,6 +2,8 @@
 
 Provide a structured summary of everything done during this run.
 
+Start the summary by stating the target package (`PACKAGE_DIR`).
+
 ## 1. Files changed
 
 List every file that was modified and one-line reason:
