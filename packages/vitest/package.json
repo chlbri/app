@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-vitest",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Test helpers for @bemedev/app",
   "private": false,
   "author": {
@@ -50,7 +50,6 @@
     "build:watch": "onchange --await-write-finish 1500 -d 10000 -v \"**/*.ts\" -- pnpm run build",
     "p-q": "pretty-quick",
     "posttest": "pnpm run fmt",
-    "prepare": "husky",
     "prepublishOnly": "",
     "pretest": "pnpm run build",
     "fmt": "oxfmt",
