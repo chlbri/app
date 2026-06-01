@@ -64,7 +64,7 @@ import {
 import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 import { type EmitterFunction2 } from '#emitters';
 import type { AsyncMachine } from '#machine';
-import type { AddOptions_F } from '#machines';
+import type { AsyncAddOptions_F } from '#machines';
 import { createScheduler } from '@bemedev/scheduler';
 import type { EmitterConfig, FinallyConfig } from '../actors/types';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -688,7 +688,7 @@ export class Interpreter<
   /**
    * Add options to the inner {@linkcode AsyncMachine} of this {@linkcode Interpreter} service.
    */
-  addOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
   };
 

@@ -10,7 +10,7 @@ import type {
 } from '#events';
 import type { InterpreterFrom } from '#interpreter';
 import type { AsyncMachine } from '#machine';
-import type { AsyncConfig, MachineOptions2 } from '#machines';
+import type { AsyncConfig, AsyncMachineOptions2 } from '#machines';
 import type { Register, RegisterOptions } from '#registry';
 import type {
   inferT,
@@ -55,7 +55,7 @@ export type OutMachine<
         Ta,
         Eo,
         AllPaths,
-        MachineOptions2<Pc, Tc, Ta, Eo, Options>
+        AsyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
       >
   : C extends AsyncConfig
     ? AsyncMachine<
@@ -67,7 +67,7 @@ export type OutMachine<
         Ta,
         Eo,
         AllPaths,
-        MachineOptions2<Pc, Tc, Ta, Eo, Options>
+        AsyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
       >
     : never;
 

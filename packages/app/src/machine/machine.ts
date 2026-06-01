@@ -24,10 +24,10 @@ import { withTimeout } from '@bemedev/better-promise';
 import cloneDeep from 'clone-deep';
 
 import type {
-  AddOptions_F,
-  ProvideOptions_F,
-  SendAction_F,
-  VoidAction_F,
+  AsyncAddOptions_F,
+  AsyncProvideOptions_F,
+  AsyncSendAction_F,
+  AsyncVoidAction_F,
 } from './machine.types';
 
 import type { EmptyObject } from '~types';
@@ -140,7 +140,7 @@ export class AsyncMachine<
    *
    * Remark: Used for typings, when you're outside the Machine class.
    */
-  createOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  createOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     const isValue = this.__isValue;
     const isNotValue = this.__isNotValue;
     const isDefined = this.__isDefined;
@@ -334,7 +334,7 @@ export class AsyncMachine<
    * @param option a function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    */
-  addOptions: AddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
   };
 
@@ -345,7 +345,7 @@ export class AsyncMachine<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
-  provideOptions: ProvideOptions_F<
+  provideOptions: AsyncProvideOptions_F<
     C,
     Pc,
     Tc,
@@ -490,7 +490,7 @@ export class AsyncMachine<
    *
    * @see {@linkcode reduceFnMap}
    */
-  protected __sendTo: SendAction_F<Eo, Pc, Tc, Ta> = () => {
+  protected __sendTo: AsyncSendAction_F<Eo, Pc, Tc, Ta> = () => {
     return (fn, options?) => {
       if (!options) {
         const fn2 = reduceFnMap(
@@ -559,9 +559,9 @@ export class AsyncMachine<
    *
    * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
-   * @see {@linkcode VoidAction_F}
+   * @see {@linkcode AsyncVoidAction_F}
    */
-  protected __voidAction: VoidAction_F<Eo, Pc, Tc, Ta> = (
+  protected __voidAction: AsyncVoidAction_F<Eo, Pc, Tc, Ta> = (
     fn,
     options?,
   ) => {

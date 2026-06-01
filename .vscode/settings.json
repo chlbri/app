@@ -9,6 +9,22 @@
     "/^bash \\.\\./\\.\\./\\.agents/skills/update-docs/scripts/find-diff\\.sh$/": {
       "approve": true,
       "matchCommandLine": true
+    },
+    "/^cd /Users/bri/Documents/GitHub/app/packages/app && bash \\.\\./\\.\\./\\.agents/skills/update-docs/scripts/check-version\\.sh$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cd /Users/bri/Documents/GitHub/app/vitest && bash \\.\\./\\.agents/skills/update-docs/scripts/check-version\\.sh$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cd /Users/bri/Documents/GitHub/app/vitest && bash \\.\\./\\.agents/skills/update-docs/scripts/find-diff\\.sh$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cd /Users/bri/Documents/GitHub/app/packages/vitest && bash \\.\\./\\.\\./\\.agents/skills/update-docs/scripts/check-version\\.sh$/": {
+      "approve": true,
+      "matchCommandLine": true
     }
   }
 }

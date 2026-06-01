@@ -1,5 +1,6 @@
 export * from './primitives';
 export * from '../registry.types';
+export * from '#exports/types.types';
 
 export type {
   ActorsConfigMap,
@@ -20,6 +21,7 @@ export type {
   ExtractSender,
   TransformEventArg,
   ToEventsR,
+  EventToType_F,
 } from '#events';
 
 export type {
@@ -43,6 +45,16 @@ export type {
   EndwA,
   SNC,
   WorkingStatus,
+  FlatMap_F,
+  GetChildren_F,
+  InitialConfig_F,
+  NextStateValue_F,
+  NodeToValue_F,
+  RecomposeConfig_F,
+  ResolveNode_F,
+  StateType_F,
+  StateValueMap,
+  ValueToNodeConfig_F,
 } from '#states';
 
 export type * from '../registry.types';
@@ -55,6 +67,7 @@ export type {
   SyncDelayFunction,
   SyncDelayFunction2,
   SyncDelayFunction3,
+  ToDelay_F,
 } from '#delays';
 
 export type {
@@ -69,6 +82,8 @@ export type {
   Pausable,
   Subscribable,
   Subscriber,
+  ToEmitterSrc_F,
+  ToEmitter_F,
 } from '#emitters';
 
 export type {
@@ -87,12 +102,18 @@ export type {
   PredicateS3,
   PredicateUnion,
   SyncPredicateS,
+  IsDefinedS_F,
+  IsValueS_F,
+  ToPredicate_F,
 } from '#guards';
 
 export type {
   PrimitiveObject,
   PrimitiveObjectMap,
   PrimitiveObjectT,
+  inferO,
+  inferSh,
+  inferT,
 } from '@bemedev/typings';
 
 export * from '#exports/types.types';
@@ -118,6 +139,10 @@ export type {
   GetEventsFromFlat,
   CommonChild,
   CommonConfigNode,
+  CommonAddOptionsParam_F,
+  CommonAddOptions_F,
+  CommonCreateMachine_F,
+  CommonTimeAction_F,
 } from '#common/machine';
 
 export type * from '#common/types.types';
@@ -126,6 +151,7 @@ export type * from '#common/functions/types';
 export type {
   SubscriberClass,
   SubscriberOptions,
+  CreateSubscriber_F,
 } from '#common/subscriber';
 
 export type {
@@ -171,16 +197,36 @@ export type {
   TagFrom,
   AnyInterpreter,
   FnMapFrom,
+  AddSubscriber_F,
+  CreateInterval2_F,
+  DirectMerge_F,
+  ExecuteActivities_F,
+  Selector_F,
 } from '#common/interpreter';
 
 export type {
-  AsyncMachine as Machine,
-  AddOption,
-  AsyncConfig as Config,
+  AsyncMachine,
+  AsyncAddOption,
+  AsyncConfig,
   AsyncChild,
   AsyncOptions,
-  ChildFunction2,
-  MachineOptions2,
+  AsyncChildFunction2,
+  AsyncMachineOptions2,
+  AsyncAddOptionsParam_F,
+  AsyncAddOptions_F,
+  AsyncAssignAction_F,
+  AsyncBatchAction_F,
+  AsyncDebounceAction_F,
+  AsyncDefineGuard_F,
+  AsyncEraseAction_F,
+  AsyncFilterAction_F,
+  AsyncProvideOptions_F,
+  AsyncResendAction_F,
+  AsyncSendAction_F,
+  AsyncTimeAction_F,
+  AsyncValueCheckerGuard_F,
+  AsyncVoidAction_F,
+  AsyncSimpleMachineOptions,
 } from '#machines';
 
 export type {
@@ -188,6 +234,21 @@ export type {
   SyncAddOption,
   SyncChildFunction2,
   SyncMachineOptions2,
+  SyncAddOptionsParam_F,
+  SyncAddOptions_F,
+  SyncAllActions_F,
+  SyncAssignAction_F,
+  SyncBatchAction_F,
+  SyncDebounceAction_F,
+  SyncDefineGuard_F,
+  SyncEraseAction_F,
+  SyncFilterAction_F,
+  SyncProvideOptions_F,
+  SyncResendAction_F,
+  SyncSendAction_F,
+  SyncTimeAction_F,
+  SyncValueCheckerGuard_F,
+  SyncVoidAction_F,
 } from '../sync/machine';
 
 export type {
@@ -195,6 +256,14 @@ export type {
   SyncInterpreter,
   SyncInterpreterFrom,
   SyncCollectedService,
+  SyncPerformAction_F,
+  SyncPerformAlway_F,
+  SyncPerformDelay_F,
+  SyncPerformPredicate_F,
+  SyncPerformTransition_F,
+  SyncPerformTransitions_F,
+  SyncProvideMachineOptions_F,
+  SyncToPredicate_F,
 } from '../sync/interpreter';
 
 export { Interpreter } from '#interpreters';
@@ -207,6 +276,16 @@ export type {
   ConfigPaths2,
   ParseTreeContext,
   NoExtraKeysConfigPaths,
+  CheckKeys_F,
+  DeleteFirst_F,
+  EscapeRexExp_F,
+  ParseTree_F,
+  RecomposeSV_F,
+  ReduceDescriber_F,
+  ReduceFnMap2_F,
+  ReduceFnMap_F,
+  ReplaceAll_F,
+  ToFunction_F,
 } from '#utils';
 
 export type {
@@ -215,6 +294,7 @@ export type {
   CommonActor,
   EmitterConfig,
   FinallyConfig,
+  ExtractSrcFromActor,
 } from '#actors';
 
 export type {
@@ -232,6 +312,7 @@ export type {
   TransitionConfigMapA,
   TransitionConfigMapF,
   Transitions,
+  ToTransition_F,
 } from '#transitions';
 
 export type {
@@ -246,4 +327,5 @@ export type {
   SyncAction2,
   SyncActionMap,
   WithDescriber,
+  ToAction_F,
 } from '#actions';

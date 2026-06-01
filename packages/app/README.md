@@ -180,6 +180,7 @@ await service[Symbol.asyncDispose]();
     - [`createMachine(config, types?)`](#createmachineconfig-types)
     - [`createConfig(config)`](#createconfigconfig-1)
   - [Machine methods](#machine-methods)
+  - [Utility helper exports](#utility-helper-exports)
   - [`interpret(machine, options?)`](#interpretmachine-options)
   - [Interpreter properties](#interpreter-properties)
   - [Interpreter methods](#interpreter-methods)
@@ -1623,6 +1624,25 @@ Returns a typed config object (no `Machine` instance created).
 | `.provideOptions(cb)` | No      | New `Machine`  | Wire implementations (immutable)   |
 | `.addOptions(cb)`     | **Yes** | Options object | Add / overwrite options at runtime |
 | `.clone()`            | No      | New `Machine`  | Deep clone the machine             |
+
+### Utility helper exports
+
+The root package now re-exports a small set of generic utility helpers from
+`./bemedev`:
+
+| Helper         | Purpose                                              |
+| -------------- | ---------------------------------------------------- |
+| `_any`         | Predicate helper that always returns `true`          |
+| `_unknown`     | Predicate helper for unknown checks                  |
+| `expandFn`     | Expands value/function inputs into executable forms  |
+| `identify`     | Identity helper for strong type inference            |
+| `partialCall`  | Partial application helper                           |
+| `partialCallO` | Object-oriented variant of partial application       |
+| `switchV`      | Value-based switching helper                         |
+| `switchValue`  | Typed switch helper for branching by value           |
+| `toArray`      | Normalizes value(s) into array form                  |
+| `trueO`        | Object predicate helper returning `true`             |
+| `tupleOf`      | Tuple constructor helper preserving literal typings  |
 
 ### `interpret(machine, options?)`
 

@@ -11,6 +11,28 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.1.5] - 01/06/2026** => _22:04_
+
+</summary>
+
+- Breaking: Rename async machine helper types to explicit `Async*` names
+  and remove legacy aliases from exported type surface
+- Add: Re-export core utility helpers (`expandFn`, `switchValue`,
+  `toArray`, `tupleOf`, and related helpers) from the package root
+  entrypoint
+- Update: Expand exported type utilities for events, guards, delays,
+  emitters, transitions, actions, and interpreter internals
+- Refactor: Move shared `ByKey_F` typing helper to common types and align
+  internal imports to shared machine/common modules
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.1.4] - 01/06/2026** => _20:05_
 
 </summary>

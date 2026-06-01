@@ -1,11 +1,12 @@
-import type { Action2, ActionResult } from '#actions';
+import type { Action2 } from '#actions';
 
 import type { DefinedValue } from '#guards';
-import type { StateExtended, StatePextended, StateValue } from '#states';
+import type { StatePextended } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 
-import type { Fn, Ru, SubTypeLow } from '#bemedev/globals/types';
+import type { Ru, SubTypeLow } from '#bemedev/globals/types';
 import type { EventsMapFrom } from '#common/interpreter';
+import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 import type {
   ActorsConfigMap,
   EventArg,
@@ -16,7 +17,7 @@ import type {
 import type { AsyncMachine } from '#machine';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
-import type { AsyncConfig, SimpleMachineOptions2 } from './types';
+import type { AsyncConfig } from './types';
 /**
  * Options for async action helpers.
  * - `error`: called with the thrown error and current context snapshot when
@@ -36,53 +37,7 @@ export type AsyncOptions<
   max?: number;
 };
 
-/**
- * Simple representation of a machine with meaningful properties.
- *
- * @template :  {@linkcode EventsMap} [E] - type of the events map
- * @template :  {@linkcode ActorsConfigMap} [A] - type of the actors configuration map
- * @template :  any [Pc] - type of the private context
- * @template :  {@linkcode PrimitiveObject} [Tc] - type of the context
- *
- * @see {@linkcode NodeConfigWithInitials}  for the structure of node configurations with initials.
- * @see {@linkcode StateValue} for the type of state values.
- * @see {@linkcode Fn} for creating functions
- *
- */
-export interface AnyMachine<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> {
-  options: any;
-  config: AsyncConfig;
-  flat: Record<string, any>;
-  context: Tc;
-  pContext: Pc;
-  eventsMap: E;
-  actorsMap: A;
-  __events: any;
-  __state: any;
-  __decomposedState: any;
-  addOptions: any;
-  actions: any;
-  guards: any;
-  delays: any;
-  __allPaths: string;
-  __tag: string;
-  tags: string[];
-  children: any;
-  renew: any;
-  initialConfig: any;
-  initialValue: StateValue;
-
-  isInitial: Fn<[string], boolean>;
-  retrieveParentFromInitial: Fn<[string], any>;
-  toNode: Fn<[StateValue], any>;
-}
-
-export type AssignAction_F<
+export type AsyncAssignAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -103,21 +58,21 @@ export type AssignAction_F<
     : []
 ) => Action2<E, Pc, Tc, T>;
 
-export type ResendAction_F<
+export type AsyncResendAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = (event: EventArgAll<E>) => Action2<E, Pc, Tc, T>;
 
-export type TimeAction_F<
+export type AsyncTimeAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = (id: string) => Action2<E, Pc, Tc, T>;
 
-export type VoidAction_F<
+export type AsyncVoidAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -132,20 +87,7 @@ export type VoidAction_F<
     : []
 ) => Action2<E, Pc, Tc, T>;
 
-export type ByKey_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <
-  S extends StateExtended<E, Pc, Tc, T>,
-  D = Decompose<S, { object: 'both'; start: false; sep: '.' }>,
-  K extends keyof D & string = keyof D & string,
->(
-  key: K,
-) => D[K];
-
-export type FilterAction_F<
+export type AsyncFilterAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -165,7 +107,7 @@ export type FilterAction_F<
       : never,
 ) => Action2<E, Pc, Tc, T>;
 
-export type EraseAction_F<
+export type AsyncEraseAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -181,12 +123,7 @@ export type EraseAction_F<
   key: K,
 ) => Action2<E, Pc, Tc, T>;
 
-export type DirectMerge_F<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = Fn<[result?: ActionResult<Pc, Tc>], void>;
-
-export type SendAction_F<
+export type AsyncSendAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -210,7 +147,7 @@ export type SendAction_F<
     : []
 ) => Action2<E, Pc, Tc, T>;
 
-export type ValueCheckerGuard_F<
+export type AsyncValueCheckerGuard_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -220,14 +157,14 @@ export type ValueCheckerGuard_F<
   ...values: any[]
 ) => FnR<E, Pc, Tc, T, boolean>;
 
-export type DefineGuard_F<
+export type AsyncDefineGuard_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = (path: DefinedValue<Pc, Tc>) => FnR<E, Pc, Tc, T, boolean>;
 
-export type DebounceAction_F<
+export type AsyncDebounceAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -240,7 +177,7 @@ export type DebounceAction_F<
   },
 ) => Action2<E, Pc, Tc, T>;
 
-export type BatchAction_F<
+export type AsyncBatchAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -249,39 +186,39 @@ export type BatchAction_F<
   ...fns: A
 ) => Action2<E, Pc, Tc, T>;
 
-export type AddOption<
+export type AsyncAddOption<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
-  isDefined: DefineGuard_F<E, Pc, Tc, T>;
-  isNotDefined: DefineGuard_F<E, Pc, Tc, T>;
-  isValue: ValueCheckerGuard_F<E, Pc, Tc, T>;
-  isNotValue: ValueCheckerGuard_F<E, Pc, Tc, T>;
-  assign: AssignAction_F<E, Pc, Tc, T>;
-  batch: BatchAction_F<E, Pc, Tc, T>;
-  filter: FilterAction_F<E, Pc, Tc, T>;
-  erase: EraseAction_F<E, Pc, Tc, T>;
-  voidAction: VoidAction_F<E, Pc, Tc, T>;
-  sendTo: SendAction_F<E, Pc, Tc, T>;
-  debounce: DebounceAction_F<E, Pc, Tc, T>;
-  resend: ResendAction_F<E, Pc, Tc, T>;
+  isDefined: AsyncDefineGuard_F<E, Pc, Tc, T>;
+  isNotDefined: AsyncDefineGuard_F<E, Pc, Tc, T>;
+  isValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  isNotValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  assign: AsyncAssignAction_F<E, Pc, Tc, T>;
+  batch: AsyncBatchAction_F<E, Pc, Tc, T>;
+  filter: AsyncFilterAction_F<E, Pc, Tc, T>;
+  erase: AsyncEraseAction_F<E, Pc, Tc, T>;
+  voidAction: AsyncVoidAction_F<E, Pc, Tc, T>;
+  sendTo: AsyncSendAction_F<E, Pc, Tc, T>;
+  debounce: AsyncDebounceAction_F<E, Pc, Tc, T>;
+  resend: AsyncResendAction_F<E, Pc, Tc, T>;
   /**
    * Force send action, performs the action regardless of the current state.
    */
-  forceSend: ResendAction_F<E, Pc, Tc, T>;
-  pauseActivity: TimeAction_F<E, Pc, Tc, T>;
-  resumeActivity: TimeAction_F<E, Pc, Tc, T>;
-  stopActivity: TimeAction_F<E, Pc, Tc, T>;
-  pauseTimer: TimeAction_F<E, Pc, Tc, T>;
-  resumeTimer: TimeAction_F<E, Pc, Tc, T>;
-  stopTimer: TimeAction_F<E, Pc, Tc, T>;
+  forceSend: AsyncResendAction_F<E, Pc, Tc, T>;
+  pauseActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
+  resumeActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
+  stopActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
+  pauseTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
+  resumeTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
+  stopTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
   // merge: DirectMerge_F<Pc, Tc>;
   // emitter: Emitter<E, P, Pc, Tc>;
 };
 
-export type AddOptionsParam_F<
+export type AsyncAddOptionsParam_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -289,7 +226,7 @@ export type AddOptionsParam_F<
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > = (
-  option: AddOption<E, Pc, Tc, T>,
+  option: AsyncAddOption<E, Pc, Tc, T>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.
@@ -299,7 +236,7 @@ export type AddOptionsParam_F<
   },
 ) => Mo;
 
-export type AddOptions_F<
+export type AsyncAddOptions_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -307,10 +244,10 @@ export type AddOptions_F<
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > = <const T extends Mo>(
-  option: AddOptionsParam_F<E, Pc, Tc, Ta, T, L>,
+  option: AsyncAddOptionsParam_F<E, Pc, Tc, Ta, T, L>,
 ) => L & T;
 
-export type ProvideOptions_F<
+export type AsyncProvideOptions_F<
   C extends AsyncConfig = AsyncConfig,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -322,10 +259,5 @@ export type ProvideOptions_F<
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   L extends SimpleMachineOptions2 = EmptyObject,
 > = <const T extends Mo>(
-  option: AddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
+  option: AsyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
 ) => AsyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
-
-export type SendToEvent<T = any> = {
-  to: string;
-  event: T;
-};

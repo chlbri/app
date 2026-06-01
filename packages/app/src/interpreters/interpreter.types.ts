@@ -15,7 +15,7 @@ import type { DelayFunction2, DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
-import type { AddOptionsParam_F, AsyncConfig } from '#machines';
+import type { AsyncAddOptionsParam_F, AsyncConfig } from '#machines';
 import type { ActivityConfig, NodeConfig, StateValue } from '#states';
 import type {
   AlwaysConfig,
@@ -274,5 +274,5 @@ export type ProvideMachineOptions_F<
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   L extends SimpleMachineOptions2 = EmptyObject,
 > = <const T extends Mo>(
-  option: AddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
+  option: AsyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
 ) => Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;

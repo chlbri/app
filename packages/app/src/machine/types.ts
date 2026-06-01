@@ -331,7 +331,7 @@ export type GetChildrenSrcKeysFromFlat2<
     : never;
 };
 
-export type ChildFunction2<
+export type AsyncChildFunction2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -348,7 +348,7 @@ export type GetChildrenSrcFromFlat<
   T extends string = string,
   G extends _GetChildKeysFromFlat<Flat> = _GetChildKeysFromFlat<Flat>,
 > = {
-  [key in G['src']]: ChildFunction2<
+  [key in G['src']]: AsyncChildFunction2<
     E,
     Pc,
     Tc,
@@ -462,58 +462,14 @@ export type AsyncChild<
   T extends string = string,
   R extends { eventsMap: any } = { eventsMap: any },
 > = {
-  src: ChildFunction2<E, Pc, Tc, T, R>;
+  src: AsyncChildFunction2<E, Pc, Tc, T, R>;
   description?: string;
   id: string;
   on: Identify<RecordS<Transition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };
 
-/**
- * The big one !
- *
- * Type representing the options for a machine configuration.
- *
- * @template : {@linkcode AsyncConfig} [C] - type of the machine config
- * @template : {@linkcode EventsMap} [E] - type of the events map
- * @template : {@linkcode ActorsConfigMap} [A] - type of the actors config map
- * @template Pc - type of the private context
- * @template : {@linkcode PrimitiveObject} [Tc] - type of the context
- * @template : {@linkcode FlatMapN} [Flat] - type of the flat map of nodes inside {@linkcode C}
- *
- * @returns A type representing the options for the machine configuration.
- * All options can be :
- * * `initials` - a record of initial states.
- * * `actions` - a partial record of actions, where keys are action names and values are action functions.
- * * `guards` - a partial record of guards, where keys are predicate names and values are predicate functions.
- * * `promises` - a partial record of promises, where keys are promise names and values are promise functions.
- * * `delays` - a partial record of delays, where keys are delay names and values are delay functions.
- * * `machines` - a partial record of child services, where keys are machine names and values are child services.
- *
- * @see {@linkcode GetInititalsFromFlat} for extracting initials from the flat map.
- * @see {@linkcode GetActionsFromFlat} for extracting actions from the flat map.
- * @see {@linkcode GetGuardsFromFlat} for extracting guards from the flat map.
- * @see {@linkcode GetPromiseSrcsFromFlat} for extracting promise sources from the flat map.
- * @see {@linkcode GetDelaysFromFlat} for extracting delays from the flat map.
- * @see {@linkcode GetMachinesFromConfig} for extracting child services from the machine config
- * @see {@linkcode Partial} - intern type to make all properties optional.
- */
-export type MachineOptions<
-  C extends AsyncConfig = AsyncConfig,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-  Flat extends FlatMapN<C, false> = FlatMapN<C, false>,
-> = Partial<{
-  actions: Partial<GetActionsFromFlat<Flat, Eo, Pc, Tc, T>>;
-  guards: Partial<GetGuardsFromFlat<Flat, Eo, Pc, Tc, T>>;
-  delays: Partial<GetDelaysFromFlat<Flat, Eo, Pc, Tc, T>>;
-  actors: Partial<GetActorsFromFlat<Flat, Eo, A, Pc, Tc, T>>;
-}>;
-
-export type MachineOptions2<
+export type AsyncMachineOptions2<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
@@ -525,7 +481,7 @@ export type MachineOptions2<
   delays: Partial<Record<O['delays'], DelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
     children: Partial<
-      Record<O['children'], ChildFunction2<Eo, Pc, Tc, T, any>>
+      Record<O['children'], AsyncChildFunction2<Eo, Pc, Tc, T, any>>
     >;
     emitters: Partial<
       Record<O['emitters'], EmitterFunction2<Eo, Pc, Tc, T, any>>
@@ -542,7 +498,7 @@ export type MachineOptions2<
  * @template : {@linkcode PrimitiveObject} [Tc] - type of the context
  *
  */
-export type SimpleMachineOptions<
+export type AsyncSimpleMachineOptions<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
@@ -552,30 +508,10 @@ export type SimpleMachineOptions<
   guards: Partial<RecordS<PredicateS2<Eo, Pc, Tc, T>>>;
   delays: Partial<RecordS<DelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
-    children: RecordS<ChildFunction2<Eo, Pc, Tc, T>>;
+    children: RecordS<AsyncChildFunction2<Eo, Pc, Tc, T>>;
     emitters: EmittersMap<Eo, Pc, Tc, T>;
   }>;
 }>;
-
-/**
- * Second version of simple machine options.
- *
- * @see {@linkcode Partial}
- * @see {@linkcode Record}
- *
- * @remarks
- * This type is more flexible than {@linkcode SimpleMachineOptions}
- */
-export type SimpleMachineOptions2 = Partial<
-  Record<'actions' | 'guards' | 'delays', any> &
-    Record<
-      'actors',
-      {
-        children?: RecordS<any>;
-        emitters?: RecordS<any>;
-      }
-    >
->;
 
 export type ExtractContextsKeyFromChild<
   T extends { contexts: Record<string, string> },

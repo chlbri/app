@@ -4,3 +4,16 @@ export * from '~types';
 export * from '#utils';
 export * from '#common/functions';
 export * from '#constants';
+export {
+  _any,
+  _unknown,
+  expandFn,
+  identify,
+  partialCall,
+  partialCallO,
+  switchV,
+  switchValue,
+  toArray,
+  trueO,
+  tupleOf,
+} from './bemedev';

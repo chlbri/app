@@ -9,8 +9,8 @@ import { identify } from '#bemedev/features/functions/functions/identify';
 import type { Node, NodeConfig } from '../types';
 import { stateType } from './stateType';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { SimpleMachineOptions2 } from '~types';
 import { toChild } from '#common/functions';
+import type { SimpleMachineOptions2 } from '#common/machine';
 
 export type ResolveNode_F = <
   E extends EventsMap = EventsMap,
