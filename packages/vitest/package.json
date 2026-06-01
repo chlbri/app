@@ -2,6 +2,7 @@
   "name": "@bemedev/app-vitest",
   "version": "0.0.1",
   "description": "Test helpers for @bemedev/app",
+  "private": false,
   "author": {
     "email": "bri_lvi@icloud.com",
     "name": "chlbri",
