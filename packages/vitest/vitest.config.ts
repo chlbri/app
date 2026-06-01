@@ -45,7 +45,6 @@ export default defineConfig({
     },
     globals: true,
     logHeapUsage: false,
-    setupFiles: ['./vitest.setup.ts'],
     testTimeout: 30000,
     typecheck: {
       enabled: true,

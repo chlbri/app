@@ -24,6 +24,5 @@
     "noEmit": true,
     "declarationMap": true,
     "paths": {}
-  },
-  "include": ["src", "vitest.setup.ts", "vitest.config.ts"]
+  }
 }
