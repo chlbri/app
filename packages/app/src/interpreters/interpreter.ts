@@ -1,14 +1,11 @@
 import { type WithDescriber } from '#actions';
-import _any from '#bemedev/features/common/castings/any';
 import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
 } from '#constants';
+import { _any } from '@bemedev/app-utils-bemedev';
 
-import toArray from '#bemedev/features/arrays/castings/toArray';
-import isDefined from '#bemedev/features/common/castings/is/defined';
-import { switchV } from '#bemedev/features/functions/functions/switch';
 import {
   ALWAYS_EVENT,
   eventToType,
@@ -22,6 +19,7 @@ import { type GuardConfig } from '#guards';
 import { type AsyncConfig } from '#machines';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
+import { isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
 import {
   anyPromises,
   withTimeout,
@@ -66,8 +64,8 @@ import { type AsyncEmitterFunction } from '#emitters';
 import type { AsyncMachine } from '#machine';
 import type { AsyncAddOptions_F } from '#machines';
 import { createScheduler } from '@bemedev/scheduler';
-import type { EmitterConfig, FinallyConfig } from '../actors/types';
 import type { PrimitiveObject } from '@bemedev/typings';
+import type { EmitterConfig, FinallyConfig } from '../actors/types';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.

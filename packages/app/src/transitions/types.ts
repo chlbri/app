@@ -4,7 +4,7 @@ import type {
   NotUndefined,
   Require,
   SoA,
-} from '#bemedev/globals/types';
+} from '@bemedev/app-utils-bemedev';
 import type { EventObject } from '#events';
 import type { Observable } from 'rxjs';
 import type {

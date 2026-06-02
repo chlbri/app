@@ -1,17 +1,13 @@
-import toArray from '#bemedev/features/arrays/castings/toArray';
-import _any from '#bemedev/features/common/castings/any';
-import commonT from '#bemedev/features/common/typings';
-import extract from '#bemedev/features/common/typings/extract';
-import { partialCall } from '#bemedev/features/functions/functions/partialCall';
-import byKey from '#bemedev/features/objects/typings/byKey';
-import keysOf from '#bemedev/features/objects/typings/keysOf';
+import {
+  _any,
+  byKey,
+  commonT,
+  extract,
+  keysOf,
+  partialCall,
+  toArray,
+} from '@bemedev/app-utils-bemedev';
 
-import type {
-  AllowedNames,
-  Fn,
-  NotUndefined,
-} from '#bemedev/globals/types';
-import { _unknown } from '#bemedev/globals/utils/_unknown';
 import { DEFAULT_DELIMITER } from '#constants';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import {
@@ -35,6 +31,12 @@ import {
   type StateValue,
 } from '#states';
 import { merge } from '#utils';
+import type {
+  AllowedNames,
+  Fn,
+  NotUndefined,
+} from '@bemedev/app-utils-bemedev';
+import { _unknown } from '@bemedev/app-utils-bemedev';
 import { decompose, type Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';

@@ -118,7 +118,7 @@
   },
   "scripts": {
     "build": "pnpm rm:lib && pnpm run rolldown",
-    "_ci": "pnpm run config:off && pnpm run lint && pnpm run test",
+    "_ci": "pnpm run lint && pnpm run test",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "ci:admin": "CI_START=$(date +%s) && pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",
     "config": "pnpm install",
@@ -152,6 +152,7 @@
     "upgrade:fast": "pnpm up --latest"
   },
   "devDependencies": {
+    "@bemedev/app-utils-bemedev": "workspace:*",
     "@bemedev/dev-utils": "^0.7.0",
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/rx-pausable": "^1.2.0",
@@ -180,6 +181,9 @@
     "vitest": "^4.1.8",
     "zx": "^8.8.5"
   },
+  "bundleDependencies": [
+    "@bemedev/app-utils-bemedev"
+  ],
   "dependencies": {
     "@bemedev/better-promise": "^0.1.1",
     "@bemedev/better-set": "^0.2.1",

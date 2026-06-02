@@ -4,7 +4,7 @@ import type { DefinedValue } from '#guards';
 import type { StatePextended } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 
-import type { Ru, SubTypeLow } from '#bemedev/globals/types';
+import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 import type { EventsMapFrom } from '#common/interpreter';
 import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 import type {

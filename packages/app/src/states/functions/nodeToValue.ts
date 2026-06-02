@@ -1,4 +1,4 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import type { NodeConfig, StateValue } from '../types';
 import { isAtomic, isCompound } from './checks';
 

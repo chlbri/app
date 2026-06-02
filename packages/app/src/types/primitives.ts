@@ -6,7 +6,7 @@ import type {
   NotUndefined,
   Ru,
   UnionToIntersection,
-} from '#bemedev/globals/types';
+} from '@bemedev/app-utils-bemedev';
 import type { DEFAULT_DELIMITER } from '#constants';
 import type { EventObject } from '#events';
 import type {

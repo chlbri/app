@@ -1,5 +1,5 @@
 import type { WithDescriber } from '#actions';
-import type { Require } from '#bemedev/globals/types';
+import type { Require } from '@bemedev/app-utils-bemedev';
 import type { SingleOrArrayT, TransitionConfigMapA } from '#transitions';
 
 export type CommonActor = {

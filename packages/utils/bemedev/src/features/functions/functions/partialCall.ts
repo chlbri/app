@@ -5,10 +5,7 @@ import { expandFn } from '../../../globals/utils/expandFn';
 type PartialCall_F = <
   const F extends Fn,
   const T extends Parts<Parameters<F>> = Parts<Parameters<F>>,
-  const U extends PartDiff<Parameters<F>, T> = PartDiff<
-    Parameters<F>,
-    T
-  >,
+  const U extends PartDiff<Parameters<F>, T> = PartDiff<Parameters<F>, T>,
 >(
   f: F,
   ...headArgs: T
@@ -26,10 +23,7 @@ type PartialCallArray_F = <
 type PartialCallBuild_F = <
   const F extends Fn,
   const T extends Parts<Parameters<F>> = Parts<Parameters<F>>,
-  const U extends PartDiff<Parameters<F>, T> = PartDiff<
-    Parameters<F>,
-    T
-  >,
+  const U extends PartDiff<Parameters<F>, T> = PartDiff<Parameters<F>, T>,
 >(
   f: F,
   ...headArgs: T
@@ -54,10 +48,10 @@ const _partialCall: PartialCall_F = __partialCall;
  */
 /**
  * partialCall variable - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -145,5 +139,3 @@ export const partialCall = expandFn(_partialCall, {
     return (...tailArgs) => f(...head, ...tailArgs);
   }) as PartialCallBuild_F,
 });
-
-    

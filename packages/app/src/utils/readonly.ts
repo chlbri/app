@@ -1,5 +1,5 @@
-import { DeepReadonly } from '#bemedev/globals/types';
-import { expandFn } from '#bemedev/globals/utils/expandFn';
+import { DeepReadonly } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-utils-bemedev';
 
 export const readonly = expandFn(
   <const T extends object>(obj: T): DeepReadonly<T> => {

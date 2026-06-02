@@ -14,10 +14,10 @@ import { AddString } from '../strings/types';
  */
 /**
  * TrueObject type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -33,10 +33,10 @@ export type TrueObject = Ru & {
  */
 /**
  * To type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -45,10 +45,10 @@ export type To = TrueObject;
 
 /**
  * NOmit type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -57,10 +57,10 @@ export type NOmit<T, K extends keyof T> = Omit<T, K>;
 
 /**
  * DeepOmit type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -75,10 +75,10 @@ export type DeepOmit<T, K extends Keys> = {
 
 /**
  * ReverseMap type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -89,10 +89,10 @@ export type ReverseMap<T extends Record<Keys, Keys>> = {
 
 /**
  * DeepReadonly type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -109,10 +109,10 @@ export type DeepReadonly<T> = T extends Primitive
 
 /**
  * DeepPartial type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -129,10 +129,10 @@ export type DeepPartial<T> = T extends Primitive
 
 /**
  * DeepRequired type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -147,10 +147,10 @@ export type DeepRequired<T extends object | undefined> = NotUndefined<{
 
 /**
  * NotReadonly type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -161,10 +161,10 @@ export type NotReadonly<T extends object> = {
 
 /**
  * DeepNotReadonly type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -201,10 +201,10 @@ export type DeepNotReadonly<T extends object> = {
 
 /**
  * ValuesOf type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -212,10 +212,10 @@ export type DeepNotReadonly<T extends object> = {
 export type ValuesOf<T, U = any> = Extract<T[keyof T], U>;
 /**
  * ObjectValuesOf type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -227,10 +227,10 @@ export type ObjectValuesOf<T> = Exclude<
 
 /**
  * ExpressO type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -241,10 +241,10 @@ export type ExpressO<T extends object> = {
 
 /**
  * DeepExpressO type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -267,10 +267,10 @@ type _RequiredLow<T extends object> =
 
 /**
  * RequiredLow type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -279,10 +279,10 @@ export type RequiredLow<T extends object> = ExpressO<_RequiredLow<T>>;
 
 /**
  * DeepRequiredLow type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -301,10 +301,10 @@ export type DeepRequiredLow<T extends object> =
 
 /**
  * Require type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -314,10 +314,10 @@ export type Require<T, K extends keyof T> = NOmit<T, K> &
 
 /**
  * RequiredBy type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -326,10 +326,10 @@ export type RequiredBy<T, U> = Required<PickBy<T, U>> & PickNotBy<T, U>;
 
 /**
  * Prop type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -338,10 +338,10 @@ export type Prop<T, K> = K extends keyof T ? T[K] : never;
 
 /**
  * PickNoInfer type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -350,10 +350,10 @@ export type PickNoInfer<T, S> = Pick<T, Extract<keyof T, S>>;
 
 /**
  * PickBy type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -364,10 +364,10 @@ export type PickBy<T, U> = {
 
 /**
  * PickKeysBy type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -376,10 +376,10 @@ export type PickKeysBy<T, U> = keyof PickBy<T, U>;
 
 /**
  * PickNotBy type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -390,10 +390,10 @@ export type PickNotBy<T, U> = {
 
 /**
  * PickKeysNotBy type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -402,10 +402,10 @@ export type PickKeysNotBy<T, U> = keyof PickNotBy<T, U>;
 
 /**
  * OnPropChangedMethods type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -419,10 +419,10 @@ export type OnPropChangedMethods<T, I extends keyof T = keyof T> = T & {
 
 /**
  * PartialUndefiny type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -432,10 +432,10 @@ export type PartialUndefiny<T> = PickNotBy<T, undefined> &
 
 /**
  * Nullify type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -454,10 +454,10 @@ type _OmitWithPartial<T, O extends string> = PartialUndefiny<
 
 /**
  * OmitRecursive type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -468,10 +468,10 @@ export type OmitRecursive<T, O extends string> = {
 
 /**
  * Unionize type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -486,17 +486,15 @@ type WithChildren<
   _withChildren extends boolean = false,
 > = _withChildren extends true ? T : Omit<T, _omit>;
 
-type DefaultK<S extends string, D extends string> = S extends ''
-  ? D
-  : S;
+type DefaultK<S extends string, D extends string> = S extends '' ? D : S;
 
 // #region type _FlatMapByKey
 /**
  * _FlatMapByKey type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -563,10 +561,10 @@ type NotFilterFlagsLow<Base, Condition> = {
 
 /**
  * AllowedNames type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -578,10 +576,10 @@ export type AllowedNames<Base, Condition> = FilterFlags<
 
 /**
  * NotAllowedNames type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -593,10 +591,10 @@ export type NotAllowedNames<Base, Condition> = NotFilterFlags<
 
 /**
  * AllowedNamesLow type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -608,10 +606,10 @@ export type AllowedNamesLow<Base, Condition> = FilterFlagsLow<
 
 /**
  * NotAllowedNamesLow type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -623,10 +621,10 @@ export type NotAllowedNamesLow<Base, Condition> = NotFilterFlagsLow<
 
 /**
  * SubType type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -638,10 +636,10 @@ export type SubType<Base extends object, Condition> = Pick<
 
 /**
  * DeepSubType type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -656,10 +654,10 @@ export type DeepSubType<Base extends object, Condition> = {
 
 /**
  * NotSubType type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -671,10 +669,10 @@ export type NotSubType<Base extends object, Condition> = Pick<
 
 /**
  * DeepNotSubType type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -689,10 +687,10 @@ export type DeepNotSubType<Base extends object, Condition> = {
 
 /**
  * SubTypeLow type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -704,10 +702,10 @@ export type SubTypeLow<Base extends object, Condition> = Pick<
 
 /**
  * NotSubTypeLow type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -725,10 +723,10 @@ interface _Never {
 
 /**
  * DeepNever type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -737,10 +735,10 @@ export type DeepNever = never | _Never;
 
 /**
  * Dn type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -749,10 +747,10 @@ export type Dn = DeepNever;
 
 /**
  * Neverify type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -761,10 +759,10 @@ export type Neverify<T> = T extends DeepNever ? never : T;
 
 /**
  * Ru type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -773,10 +771,10 @@ export type Ru = Record<Keys, unknown>;
 
 /**
  * Rn type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -785,10 +783,10 @@ export type Rn = Record<Keys, never>;
 
 /**
  * Ra type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -845,10 +843,10 @@ type RecursiveObjectKeys<T, Schema> = {
  */
 /**
  * NoExtraKeys type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -886,10 +884,10 @@ export type NoExtraKeys<T, Schema> = T & {
  */
 /**
  * NoExtraKeysStrict type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -901,10 +899,10 @@ export type NoExtraKeysStrict<T extends Schema, Schema> = NoExtraKeys<
 
 /**
  * StateValue type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -913,10 +911,10 @@ export type StateValue = string | StateValueMap;
 
 /**
  * StateValueMap interface - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -929,14 +927,12 @@ export interface StateValueMap {
 
 /**
  * Identitfy type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
 export type Identitfy<T> = T extends object ? T & { __id: string } : T;
-
-    

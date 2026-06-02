@@ -1,6 +1,6 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
 import { interpret } from '#exports/interpret';
 import { notU } from '#utils';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import _raw_machine from './perform.bis.machine';
 
 vi.useFakeTimers();

@@ -1,5 +1,5 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
 import { interpret } from '#exports/interpret';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import _raw_machine from './index.machine';
 
 describe('Coverage of interpretr #2', () => {

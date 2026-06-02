@@ -1,7 +1,7 @@
 import type { AsyncAction2, ActionResult, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
-import type { Identify, NotUndefined } from '#bemedev/globals/types';
+import type { Identitfy, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type {
   FlatMapN,
   NodeConfig,
@@ -275,6 +275,6 @@ export type CommonChild<
   src: CommonChildFunction2<E, Pc, Tc, T, R>;
   description?: string;
   id: string;
-  on: Identify<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
+  on: Identitfy<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };

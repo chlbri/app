@@ -1,9 +1,8 @@
 import type { ChildConfig } from '#actors';
-import _any from '#bemedev/features/common/castings/any';
-import { identify } from '#bemedev/features/functions/functions/identify';
 import type { SimpleMachineOptions2 } from '#common/machine';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toTransition } from '#transitions';
+import { _any, identify } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { SyncChild } from '../../types.types';
 import { toChildSrc } from './toSrc';

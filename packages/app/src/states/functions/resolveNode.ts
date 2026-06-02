@@ -1,16 +1,13 @@
 import { toAction } from '#actions';
-import _any from '#bemedev/features/common/castings/any';
-import type {} from '#bemedev/globals/types';
+import { toChild } from '#common/functions';
+import type { SimpleMachineOptions2 } from '#common/machine';
 import { toEmitter } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toTransition } from '#transitions';
-import toArray from '#bemedev/features/arrays/castings/toArray';
-import { identify } from '#bemedev/features/functions/functions/identify';
+import { _any, identify, toArray } from '@bemedev/app-utils-bemedev';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { Node, NodeConfig } from '../types';
 import { stateType } from './stateType';
-import type { PrimitiveObject } from '@bemedev/typings';
-import { toChild } from '#common/functions';
-import type { SimpleMachineOptions2 } from '#common/machine';
 
 export type ResolveNode_F = <
   E extends EventsMap = EventsMap,

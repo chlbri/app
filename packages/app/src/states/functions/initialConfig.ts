@@ -1,5 +1,5 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import type { Fn } from '#bemedev/globals/types';
+import type { Fn } from '@bemedev/app-utils-bemedev';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import type { NodeConfig } from '../types';
 import { isAtomic, isParallel } from './checks';
 

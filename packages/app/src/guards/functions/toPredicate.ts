@@ -1,13 +1,13 @@
-import isDefined from '#bemedev/features/common/castings/is/defined';
 import { GUARD_TYPE } from '#constants';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig } from '#guards';
 import type { StateExtended } from '#states';
 import { reduceFnMap } from '#utils';
+import { isDefined } from '@bemedev/app-utils-bemedev';
 import recursive, { type GuardDefUnion } from '@bemedev/boolean-recursive';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { isDescriber, isString } from '~types';
-import type { PredicateMap, AsyncPredicateS3 } from '../types';
+import type { AsyncPredicateS3, PredicateMap } from '../types';
 
 export type _ToPredicateF = <
   E extends EventsMap = EventsMap,

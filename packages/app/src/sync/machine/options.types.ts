@@ -1,5 +1,5 @@
 import type { SyncAction2 } from '#actions';
-import type { Ru, SubTypeLow } from '#bemedev/globals/types';
+import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 import type { EventsMapFrom } from '#common/interpreter';
 import type { SyncDelayFunction2 } from '#delays';
 import type { SyncEmitterFunction, SyncEmittersMap } from '#emitters';

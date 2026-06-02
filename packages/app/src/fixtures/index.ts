@@ -1,8 +1,8 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import _any from '#bemedev/features/common/castings/any';
-import type { Equals } from '#bemedev/globals/types';
-import { _unknown } from '#bemedev/globals/utils/_unknown';
-import { expandFn } from '#bemedev/globals/utils/expandFn';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
+import { _any } from '@bemedev/app-utils-bemedev';
+import type { Equals } from '@bemedev/app-utils-bemedev';
+import { _unknown } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-utils-bemedev';
 import { DEFAULT_NOTHING } from '#constants';
 import type {
   ActorsConfigMap,

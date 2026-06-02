@@ -1,4 +1,4 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import { interpret } from '#exports/interpret';
 import _raw_machine from './index.machine';
 

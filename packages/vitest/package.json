@@ -37,7 +37,7 @@
   },
   "scripts": {
     "build": "pnpm rm:lib && pnpm run rolldown",
-    "_ci": "pnpm run config:off && pnpm run lint && pnpm run test",
+    "_ci": "pnpm run lint && pnpm run test",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "ci:admin": "CI_START=$(date +%s) && pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",
     "config": "pnpm install",
@@ -69,7 +69,7 @@
     "upgrade:fast": "pnpm up --latest"
   },
   "devDependencies": {
-    "@bemedev/app": "^1.1.4",
+    "@bemedev/app": "workspace:*",
     "@bemedev/dev-utils": "^0.7.0",
     "@bemedev/rolldown-config": "^0.5.0",
     "@types/node": "^25.9.1",
@@ -87,7 +87,7 @@
   },
   "peerDependencies": {
     "vitest": "^4.1.8",
-    "@bemedev/app": "^1.1.4"
+    "@bemedev/app": "workspace:*"
   },
   "packageManager": "pnpm@11.5.0+sha512.dbfcc4f81cf48597afd4bc391ffdf12c11f1a9fb83a395bfa6b0a2d9cc2fd8ffebafdb1ccbd529632153f793904c2615b7f09fe1a345473fd1c35845172a8eb1"
 }

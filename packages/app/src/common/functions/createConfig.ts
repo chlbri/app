@@ -1,5 +1,5 @@
 import type { NodeConfig } from '#states';
-import _any from '#bemedev/features/common/castings/any';
+import { _any } from '@bemedev/app-utils-bemedev';
 
 export type CreateConfig_F = <const T extends NodeConfig>(config: T) => T;
 

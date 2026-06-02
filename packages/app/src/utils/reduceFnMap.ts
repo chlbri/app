@@ -1,4 +1,4 @@
-import _any from '#bemedev/features/common/castings/any';
+import { _any } from '@bemedev/app-utils-bemedev';
 import type {
   ActorsConfigMap,
   EventObject,

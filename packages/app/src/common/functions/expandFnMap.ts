@@ -1,5 +1,5 @@
 import type { AsyncAction2, SyncAction2 } from '#actions';
-import type { Cast } from '#bemedev/globals/types';
+import type { Cast } from '@bemedev/app-utils-bemedev';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
 import { assignByKey, type Decompose } from '@bemedev/decompose';

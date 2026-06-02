@@ -1,5 +1,5 @@
-import _any from '#bemedev/features/common/castings/any';
-import type { DeepPartial } from '#bemedev/globals/types';
+import { _any } from '@bemedev/app-utils-bemedev';
+import type { DeepPartial } from '@bemedev/app-utils-bemedev';
 import { deepmergeCustom } from 'deepmerge-ts';
 import equal from 'fast-deep-equal';
 

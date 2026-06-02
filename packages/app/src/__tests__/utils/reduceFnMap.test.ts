@@ -1,11 +1,10 @@
-import numbersT from '#bemedev/features/numbers/typings';
-import stringsT from '#bemedev/features/strings/typings';
 import {
   INIT_EVENT,
   MAX_EXCEEDED_EVENT_TYPE,
   type ActorsConfigMap,
   type EventsMap,
 } from '#events';
+import { numbersT, stringsT } from '@bemedev/app-utils-bemedev';
 import type { FnMap, FnMapR } from '~types';
 import {
   reduceFnMap,

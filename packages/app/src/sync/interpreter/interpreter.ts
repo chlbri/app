@@ -1,9 +1,16 @@
 import { type WithDescriber } from '#actions';
 import type { EmitterConfig, FinallyConfig } from '#actor';
-import toArray from '#bemedev/features/arrays/castings/toArray';
-import _any from '#bemedev/features/common/castings/any';
-import isDefined from '#bemedev/features/common/castings/is/defined';
-import { switchV } from '#bemedev/features/functions/functions/switch';
+import {
+  type ActorsMapFrom,
+  type AllPathsFrom,
+  type ContextFrom,
+  type EventsFrom,
+  type EventsMapFrom,
+  type ExtendedActionsParams,
+  type MachineOptionsFrom,
+  type PrivateContextFrom,
+  type TagFrom,
+} from '#common/interpreter';
 import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
@@ -20,20 +27,14 @@ import {
   type ExtractSender,
 } from '#events';
 import { type GuardConfig } from '#guards';
-
-import {
-  type ActorsMapFrom,
-  type AllPathsFrom,
-  type ContextFrom,
-  type EventsFrom,
-  type EventsMapFrom,
-  type ExtendedActionsParams,
-  type MachineOptionsFrom,
-  type PrivateContextFrom,
-  type TagFrom,
-} from '#common/interpreter';
 import { initialConfig, nextSV } from '#states';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
+import {
+  _any,
+  isDefined,
+  switchV,
+  toArray,
+} from '@bemedev/app-utils-bemedev';
 import { createInterval } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';

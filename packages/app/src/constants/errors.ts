@@ -1,4 +1,4 @@
-import type { UnionToIntersection } from '#bemedev/globals/types';
+import type { UnionToIntersection } from '@bemedev/app-utils-bemedev';
 import type { STR } from './types';
 
 const action = {

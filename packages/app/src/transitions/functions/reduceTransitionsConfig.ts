@@ -1,4 +1,4 @@
-import toArray from '#bemedev/features/arrays/castings/toArray';
+import { toArray } from '@bemedev/app-utils-bemedev';
 import { createBetterSet, type BetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { tap } from '@bemedev/pipe/extensions/common';

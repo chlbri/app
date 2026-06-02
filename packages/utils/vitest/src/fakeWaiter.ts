@@ -1,4 +1,4 @@
-import { sleep } from '@bemedev/app/utils';
+import { sleep } from '@bemedev/sleep';
 import type { VitestUtils } from 'vitest';
 
 export const fakeWaiter = async (vi: VitestUtils, ms = 0, times = 1) => {
@@ -7,5 +7,3 @@ export const fakeWaiter = async (vi: VitestUtils, ms = 0, times = 1) => {
   if (check) await vi.advanceTimersByTimeAsync(duration);
   else await sleep(duration);
 };
-
-

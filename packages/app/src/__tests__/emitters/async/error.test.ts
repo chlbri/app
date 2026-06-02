@@ -1,4 +1,4 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import { constructTests } from '#fixtures';
 import { interpret } from '#exports/interpret';
 import { createPausable } from '@bemedev/rx-pausable';

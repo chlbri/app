@@ -1,7 +1,7 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import { constructTests } from '#fixtures';
 import { interpret } from '#exports/interpret';
+import { constructTests } from '#fixtures';
 import { type StateValue } from '#states';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import _machine1 from './real.1.machine';
 import _machine2 from './real.2.machine';
 import _mainMachine3 from './real.3.sync.machine';

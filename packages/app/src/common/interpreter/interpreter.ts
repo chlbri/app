@@ -1,4 +1,3 @@
-import _any from '#bemedev/features/common/castings/any';
 import {
   ALWAYS_EVENT,
   eventToType,
@@ -11,13 +10,11 @@ import {
   type EventsMap,
   type ExtractSender,
 } from '#events';
+import { _any } from '@bemedev/app-utils-bemedev';
 
 import { toAction, type WithDescriber } from '#actions';
 import type { ChildConfig, EmitterConfig, FinallyConfig } from '#actor';
-import toArray from '#bemedev/features/arrays/castings/toArray';
-import isDefined from '#bemedev/features/common/castings/is/defined';
-import type { AllowedNames } from '#bemedev/globals/types';
-import { _unknown } from '#bemedev/globals/utils/_unknown';
+import { getTags, toChildSrc } from '#common/functions';
 import {
   DEFAULT_DELIMITER,
   DEFAULT_MAX_SELF_TRANSITIONS,
@@ -46,6 +43,12 @@ import {
   reduceDescriber,
   replaceAll,
 } from '#utils';
+import type { AllowedNames } from '@bemedev/app-utils-bemedev';
+import {
+  isDefined,
+  isPrimitive,
+  toArray,
+} from '@bemedev/app-utils-bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { assignByKey, getByKey } from '@bemedev/decompose';
 import {
@@ -91,8 +94,6 @@ import type {
   SimpleScheduler,
   TagFrom,
 } from './types';
-import { isPrimitive } from '#bemedev/globals/utils/is/primitive';
-import { getTags, toChildSrc } from '#common/functions';
 
 export abstract class CommonInterpreter<
   const C extends CommonConfig = CommonConfig,

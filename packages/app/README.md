@@ -1630,19 +1630,19 @@ Returns a typed config object (no `Machine` instance created).
 The root package now re-exports a small set of generic utility helpers from
 `./bemedev`:
 
-| Helper         | Purpose                                              |
-| -------------- | ---------------------------------------------------- |
-| `_any`         | Predicate helper that always returns `true`          |
-| `_unknown`     | Predicate helper for unknown checks                  |
-| `expandFn`     | Expands value/function inputs into executable forms  |
-| `identify`     | Identity helper for strong type inference            |
-| `partialCall`  | Partial application helper                           |
-| `partialCallO` | Object-oriented variant of partial application       |
-| `switchV`      | Value-based switching helper                         |
-| `switchValue`  | Typed switch helper for branching by value           |
-| `toArray`      | Normalizes value(s) into array form                  |
-| `trueO`        | Object predicate helper returning `true`             |
-| `tupleOf`      | Tuple constructor helper preserving literal typings  |
+| Helper         | Purpose                                             |
+| -------------- | --------------------------------------------------- |
+| `_any`         | Predicate helper that always returns `true`         |
+| `_unknown`     | Predicate helper for unknown checks                 |
+| `expandFn`     | Expands value/function inputs into executable forms |
+| `identify`     | Identity helper for strong type inference           |
+| `partialCall`  | Partial application helper                          |
+| `partialCallO` | Object-oriented variant of partial application      |
+| `switchV`      | Value-based switching helper                        |
+| `switchValue`  | Typed switch helper for branching by value          |
+| `toArray`      | Normalizes value(s) into array form                 |
+| `trueO`        | Object predicate helper returning `true`            |
+| `tupleOf`      | Tuple constructor helper preserving literal typings |
 
 ### `interpret(machine, options?)`
 

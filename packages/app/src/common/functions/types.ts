@@ -3,7 +3,7 @@ import type {
   Fn,
   Keys,
   NotUndefined,
-} from '#bemedev/globals/types';
+} from '@bemedev/app-utils-bemedev';
 import type { FnMap, FnMapR } from '~types';
 
 export type IsAsyncConfig<T> = T extends {

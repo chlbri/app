@@ -1,4 +1,4 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import { constructTests } from '#fixtures';
 import { interpret } from '#interpreters';
 import { nothing } from '#utils';

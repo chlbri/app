@@ -1,12 +1,11 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import {} from '#fixturesData';
 import { constructTests } from '#fixtures';
 import { interpret } from '#interpreters';
 import { nothing } from '#utils';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import equal from 'fast-deep-equal';
-import { _machine2 } from './machine2';
-import { fakeDB } from './fakeDB';
 import { DELAY } from './constants';
+import { fakeDB } from './fakeDB';
+import { _machine2 } from './machine2';
 
 describe('machine coverage', () => {
   beforeAll(() => {

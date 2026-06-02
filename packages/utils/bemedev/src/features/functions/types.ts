@@ -3,24 +3,22 @@ import type { UndefinedHelper } from '../common/types';
 
 /**
  * Fn type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export type Fn<Args extends any[] = any[], R = any> = (
-  ...args: Args
-) => R;
+export type Fn<Args extends any[] = any[], R = any> = (...args: Args) => R;
 
 /**
  * FnBasic type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -29,10 +27,10 @@ export type FnBasic<Main extends Fn, Tr extends object> = Tr & Main;
 
 /**
  * Checker type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -43,18 +41,16 @@ export type Checker<T = unknown> =
 
 /**
  * _Requirify type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
 export type _Requirify<T extends AnyArray> = Required<{
-  [K in keyof T]-?: undefined extends T[K]
-    ? T[K] | UndefinedHelper
-    : T[K];
+  [K in keyof T]-?: undefined extends T[K] ? T[K] | UndefinedHelper : T[K];
 }>;
 
 type _UndefinfyTuple<T extends AnyArray> = T extends readonly [
@@ -70,10 +66,10 @@ type _UndefinfyTuple<T extends AnyArray> = T extends readonly [
 
 /**
  * Parts type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -101,10 +97,10 @@ export type Parts<
  */
 /**
  * PartDiff type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -116,10 +112,10 @@ export type PartDiff<
 
 /**
  * TimeoutPromise interface - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -132,10 +128,10 @@ export interface TimeoutPromise<T = any> {
 
 /**
  * TypeFromTimeout type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -145,23 +141,24 @@ export type TypeFromTimeout<T extends TimeoutPromise> =
 
 /**
  * TypeFromTimeouts type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export type TypeFromTimeouts<T extends TimeoutPromise[]> =
-  TypeFromTimeout<T[number]>;
+export type TypeFromTimeouts<T extends TimeoutPromise[]> = TypeFromTimeout<
+  T[number]
+>;
 
 /**
  * CallBackError type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -170,10 +167,10 @@ export type CallBackError = (err: any) => void;
 
 /**
  * CallBackResult type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -182,10 +179,10 @@ export type CallBackResult<T = any> = (err: any, result: T) => void;
 
 /**
  * Callback type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -198,10 +195,10 @@ type GetResult<Cb extends Callback> = Parameters<Cb>['length'] extends 2
 
 /**
  * CbParams type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -210,10 +207,10 @@ export type CbParams = [...any[], Callback];
 
 /**
  * ResultFrom type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -224,5 +221,3 @@ export type ResultFrom<T> = T extends [
 ]
   ? Fn<Args, Promise<GetResult<Cb>>>
   : never;
-
-    

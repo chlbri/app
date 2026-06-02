@@ -1,4 +1,4 @@
-import type { Fn } from '#bemedev/globals/types';
+import type { Fn } from '@bemedev/app-utils-bemedev';
 
 export const isFnPromise = (
   value: unknown,

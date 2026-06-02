@@ -1,5 +1,5 @@
 import type { WithDescriber, FromActionConfig } from '#actions';
-import type { Equals, NotUndefined } from '#bemedev/globals/types';
+import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { GUARD_TYPE } from '#constants';
 import type { EventObject } from '#events';
 import type { EmptyObject, KeysMatching } from '@bemedev/decompose';

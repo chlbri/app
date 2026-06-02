@@ -50,8 +50,7 @@
       "#machine": ["./src/machine/machine.ts"],
       "#machines": ["./src/machine/index.ts"],
       "#registry": ["./src/registry.types.ts"],
-      "#config": ["./src/config/index.ts"],
-      "#bemedev/*": ["./src/libs/bemedev/*"]
+      "#config": ["./src/config/index.ts"]
     }
   }
 }

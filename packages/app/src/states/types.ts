@@ -8,7 +8,7 @@ import type {
   Keys,
   SoA,
   UnionToIntersection,
-} from '#bemedev/globals/types';
+} from '@bemedev/app-utils-bemedev';
 import type { EventObject } from '#events';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { AsyncTransitions, TransitionsConfig } from '#transitions';

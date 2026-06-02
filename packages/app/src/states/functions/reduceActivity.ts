@@ -1,4 +1,4 @@
-import toArray from '#bemedev/features/arrays/castings/toArray';
+import { toArray } from '@bemedev/app-utils-bemedev';
 import { reduceTransitions } from '#transitions';
 import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';

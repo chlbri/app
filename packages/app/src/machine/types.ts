@@ -1,6 +1,6 @@
 import type { AsyncAction2, FromActionConfig } from '#actions';
-import type { Equals, Keys } from '#bemedev/globals/types';
-import { Identify } from '#bemedev/globals/types';
+import type { Equals, Keys } from '@bemedev/app-utils-bemedev';
+import { Identitfy } from '@bemedev/app-utils-bemedev';
 import type { ConfigFrom } from '#common/interpreter';
 import type {
   ChildEvents,
@@ -465,7 +465,7 @@ export type AsyncChild<
   src: AsyncChildFunction2<E, Pc, Tc, T, R>;
   description?: string;
   id: string;
-  on: Identify<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
+  on: Identitfy<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };
 

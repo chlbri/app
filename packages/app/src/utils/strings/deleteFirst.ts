@@ -1,4 +1,4 @@
-import type { Fn } from '#bemedev/globals/types';
+import type { Fn } from '@bemedev/app-utils-bemedev';
 import { DEFAULT_DELIMITER } from '#constants';
 
 export type DeleteFirst_F = Fn<[arg: string, toDelete?: string], string>;

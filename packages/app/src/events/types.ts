@@ -2,7 +2,7 @@ import type {
   Equals,
   NotUndefined,
   Unionize,
-} from '#bemedev/globals/types';
+} from '@bemedev/app-utils-bemedev';
 import type { EmitterConfigMap } from '#emitters';
 import type { ChildConfigMap } from '#common/machine';
 import { EmptyObject } from '@bemedev/decompose';

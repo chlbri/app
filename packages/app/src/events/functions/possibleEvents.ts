@@ -1,5 +1,5 @@
-import isDefined from '#bemedev/features/common/castings/is/defined';
 import type { NodeConfig } from '#states';
+import { isDefined } from '@bemedev/app-utils-bemedev';
 import type { RecordS } from '~types';
 
 /**

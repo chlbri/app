@@ -1,4 +1,4 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import { _machine2, DELAY, fakeDB, machine2 } from '#fixturesData';
 import { interpret } from '#exports/interpret';
 import { AsyncMachine } from '#machine';

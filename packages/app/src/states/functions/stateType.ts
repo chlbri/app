@@ -1,4 +1,4 @@
-import type { Fn } from '#bemedev/globals/types';
+import type { Fn } from '@bemedev/app-utils-bemedev';
 import type { NodeConfig, StateType } from '../types';
 
 export type StateType_F = Fn<[state: NodeConfig], StateType>;

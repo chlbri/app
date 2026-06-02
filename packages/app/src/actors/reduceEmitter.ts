@@ -1,6 +1,6 @@
 import type { EmitterConfig } from '#actor';
-import toArray from '#bemedev/features/arrays/castings/toArray';
 import { reduceTransitions, type TransitionConfig } from '#transitions';
+import { toArray } from '@bemedev/app-utils-bemedev';
 
 export const reduceEmitter = (emitter: EmitterConfig) => {
   const completes = toArray<TransitionConfig>(emitter.complete);

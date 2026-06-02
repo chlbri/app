@@ -1,6 +1,4 @@
 import type { AsyncAction } from '#actions';
-import _any from '#bemedev/features/common/castings/any';
-import { _unknown } from '#bemedev/globals/utils/_unknown';
 import { expandFnMap } from '#common/functions';
 import type { AsyncDelayFunction } from '#delays';
 import {
@@ -10,6 +8,7 @@ import {
 } from '#events';
 import { type FlatMapN } from '#states';
 import { reduceFnMap } from '#utils';
+import { _any, _unknown } from '@bemedev/app-utils-bemedev';
 import { assignByKey, getByKey } from '@bemedev/decompose';
 
 import {
@@ -30,9 +29,9 @@ import type {
   AsyncVoidAction_F,
 } from './machine.types';
 
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject } from '~types';
 import type { AsyncConfig } from './types';
-import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * A class representing a state machine.

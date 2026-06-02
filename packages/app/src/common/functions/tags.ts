@@ -1,5 +1,5 @@
 import { flatMap, type NodeConfig } from '#states';
-import toArray from '#bemedev/features/arrays/castings/toArray';
+import { toArray } from '@bemedev/app-utils-bemedev';
 
 export const getTags = <T extends string = string>(node: NodeConfig) => {
   const flat = flatMap(node);

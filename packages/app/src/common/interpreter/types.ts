@@ -1,7 +1,7 @@
 import type { ActionResult, WithDescriber } from '#actions';
-import type { Primitive } from '#bemedev/features/common/types';
-import type { NOmit } from '#bemedev/features/objects/types';
-import type { NotUndefined } from '#bemedev/globals/types';
+import type { Primitive } from '@bemedev/app-utils-bemedev';
+import type { NOmit } from '@bemedev/app-utils-bemedev';
+import type { NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { Pausable } from '#emitters';
 import type {
   ActorsConfigMap,

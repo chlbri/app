@@ -1,5 +1,5 @@
 import type { WithDescriber } from '#actions';
-import toArray from '#bemedev/features/arrays/castings/toArray';
+import { toArray } from '@bemedev/app-utils-bemedev';
 import { DEFAULT_DELIMITER } from '#constants';
 import { flatMap, type ActivityConfig, type NodeConfig } from '#states';
 import type { _TransitionsConfig } from '#transitions';

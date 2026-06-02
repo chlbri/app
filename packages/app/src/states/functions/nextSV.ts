@@ -1,6 +1,3 @@
-import _any from '#bemedev/features/common/castings/any';
-import isDefined from '#bemedev/features/common/castings/is/defined';
-import trueObject from '#bemedev/features/objects/castings/trueObject';
 import { DEFAULT_DELIMITER } from '#constants';
 import {
   deleteFirst,
@@ -8,6 +5,7 @@ import {
   recomposeSV,
   replaceAll,
 } from '#utils';
+import { _any, isDefined, trueO } from '@bemedev/app-utils-bemedev';
 import { decompose, decomposeKeys, recompose } from '@bemedev/decompose';
 import { isString } from '~types';
 import type { StateValue } from '../types';
@@ -67,7 +65,7 @@ export const nextSV: NextStateValue_F = (from, target) => {
   if (check4) return from;
 
   const decomposed = _any(
-    decompose(trueObject.forceCast(from), {
+    decompose(trueO.forceCast(from), {
       start: false,
       object: 'key',
     }),

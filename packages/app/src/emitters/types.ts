@@ -1,4 +1,4 @@
-import type { NotUndefined } from '#bemedev/globals/types';
+import type { NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { ActorsConfigMap, EventObject } from '#events';
 import type { StateExtended } from '#states';
 import type { AsyncTransition } from '#transitions';

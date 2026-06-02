@@ -2,10 +2,10 @@ import type { UnionOmit, UnionToTuple } from '../../globals/types';
 
 /**
  * IndexesOfArray type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -39,10 +39,10 @@ type _TupleOf<
 
 /**
  * TupleOf type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -55,10 +55,10 @@ export type TupleOf<T = any, N extends number = number> = N extends N
 
 /**
  * ReverseArray type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -73,10 +73,10 @@ export type ReverseArray<T extends RuA> = T extends any
 
 /**
  * RuA type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -85,10 +85,10 @@ export type RuA = readonly unknown[];
 
 /**
  * AnyArray type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -97,10 +97,10 @@ export type AnyArray<T = unknown> = ReadonlyArray<T> | T[];
 
 /**
  * _NArrayOmit type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -112,10 +112,10 @@ export type _NArrayOmit<
 
 /**
  * NArrayOmit type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -130,10 +130,10 @@ export type NArrayOmit<
 
 /**
  * ExtractArray type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -149,10 +149,10 @@ export type ExtractArray<T extends AnyArray, U> = T extends readonly [
 
 /**
  * ExcludeArray type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -168,10 +168,10 @@ export type ExcludeArray<T extends AnyArray, U> = T extends readonly [
 
 /**
  * ReduceArray type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -179,10 +179,10 @@ export type ExcludeArray<T extends AnyArray, U> = T extends readonly [
 export type ReduceArray<T> = T extends AnyArray ? T[number] : T;
 /**
  * ReduceArrayS type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -191,10 +191,10 @@ export type ReduceArrayS<T> = T extends AnyArray ? T[0] : T;
 
 /**
  * ReduceDeepArray type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -206,10 +206,10 @@ export type ReduceDeepArray<T> =
 
 /**
  * ToArray type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -218,10 +218,10 @@ export type ToArray<T> = T extends AnyArray ? T : AnyArray<T>;
 
 /**
  * RecursiveArrayOf type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -234,10 +234,10 @@ type _SingleOrRecursiveArrayOf<T> = T | RecursiveArrayOf<T>;
 
 /**
  * Permutations type - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -260,5 +260,3 @@ export type Permutations<
           ]
     : never
   : never;
-
-    

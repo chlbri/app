@@ -19,10 +19,10 @@ type ParamsA<T> = [condition: boolean, first: T, second: T];
 
 /**
  * switchValue function - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -30,10 +30,10 @@ type ParamsA<T> = [condition: boolean, first: T, second: T];
 export function switchValue<T>(params: ParamsO<T>): T;
 /**
  * switchValue function - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -42,10 +42,10 @@ export function switchValue<T>(...args: ParamsA<T>): T;
 
 /**
  * switchValue function - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
@@ -64,16 +64,15 @@ export function switchValue<T>(condition: any, truthy?: T, falsy?: T) {
   });
 }
 
-switchValue.array = <T>(...params: ParamsA<T>) =>
-  switchValue(...params);
+switchValue.array = <T>(...params: ParamsA<T>) => switchValue(...params);
 switchValue.object = <T>(params: ParamsO<T>) => switchValue(params);
 
 /**
  * switchV variable - Auto-generated expression
- * 
+ *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.
  * Any manual changes will be overwritten during the next generation.
- * 
+ *
  * @generated
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)

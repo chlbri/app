@@ -1,4 +1,4 @@
-import type { DeepPartial } from '#bemedev/globals/types';
+import type { DeepPartial } from '@bemedev/app-utils-bemedev';
 import type { EventObject } from '#events';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { FnMap, FnR } from '~types';

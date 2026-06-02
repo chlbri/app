@@ -1,6 +1,6 @@
-import tupleOf from '#bemedev/features/arrays/castings/tuple';
-import { interpret } from '#interpreters';
 import { constructTests } from '#fixtures';
+import { interpret } from '#interpreters';
+import { tupleOf } from '@bemedev/app-utils-bemedev';
 import { DELAY } from './constants';
 import { fakeDB } from './fakeDB';
 import { machine23 } from './machine23';

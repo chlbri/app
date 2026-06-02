@@ -1,4 +1,4 @@
-import { partialCall } from '#bemedev/features/functions/functions/partialCall';
+import { partialCall } from '@bemedev/app-utils-bemedev';
 import type { SoA } from '@bemedev/typings';
 
 export const isSoa = <T = any>(
