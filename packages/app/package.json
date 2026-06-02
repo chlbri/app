@@ -49,6 +49,46 @@
       "import": "./lib/constants/index.js",
       "require": "./lib/constants/index.cjs",
       "types": "./lib/constants/index.d.ts"
+    },
+    "./states": {
+      "import": "./lib/states/index.js",
+      "require": "./lib/states/index.cjs",
+      "types": "./lib/states/index.d.ts"
+    },
+    "./actions": {
+      "import": "./lib/actions/index.js",
+      "require": "./lib/actions/index.cjs",
+      "types": "./lib/actions/index.d.ts"
+    },
+    "./guards": {
+      "import": "./lib/guards/index.js",
+      "require": "./lib/guards/index.cjs",
+      "types": "./lib/guards/index.d.ts"
+    },
+    "./delays": {
+      "import": "./lib/delays/index.js",
+      "require": "./lib/delays/index.cjs",
+      "types": "./lib/delays/index.d.ts"
+    },
+    "./emitters": {
+      "import": "./lib/emitter/index.js",
+      "require": "./lib/emitter/index.cjs",
+      "types": "./lib/emitter/index.d.ts"
+    },
+    "./events": {
+      "import": "./lib/events/index.js",
+      "require": "./lib/events/index.cjs",
+      "types": "./lib/events/index.d.ts"
+    },
+    "./transitions": {
+      "import": "./lib/transitions/index.js",
+      "require": "./lib/transitions/index.cjs",
+      "types": "./lib/transitions/index.d.ts"
+    },
+    "./registry": {
+      "import": "./lib/registry/index.js",
+      "require": "./lib/registry/index.cjs",
+      "types": "./lib/registry/index.d.ts"
     }
   },
   "maintainers": [
@@ -85,6 +125,7 @@
     "config:off": "pnpm run config --offline",
     "generate:lib": "node lib/cli/index.js generate -c ./src/__tests__",
     "generate": "tsx src/cli/index.ts generate -c ./src/__tests__",
+    "prepare": "husky",
     "generate:watch": "tsx src/cli/index.ts watch -c ./src/__tests__",
     "_lint": "oxlint",
     "lint:fix": "oxlint --fix",

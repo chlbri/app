@@ -10,7 +10,7 @@ import type { FnMap, FnR } from '~types';
  * @template : type {@linkcode PrimitiveObject} [Tc], the type of the context.
  * @returns : A number or a {@linkcode FnMap} function that returns a number.
  */
-export type DelayFunction<
+export type AsyncDelayFunction<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -24,12 +24,12 @@ export type SyncDelayFunction<
   T extends string = string,
 > = number | FnMap<E, Pc, Tc, T, number>;
 
-export type DelayFunction2<
+export type AsyncDelayFunction2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = number | DelayFunction3<E, Pc, Tc, T>;
+> = number | AsyncDelayFunction3<E, Pc, Tc, T>;
 
 export type SyncDelayFunction2<
   E extends EventObject = EventObject,
@@ -38,7 +38,7 @@ export type SyncDelayFunction2<
   T extends string = string,
 > = number | SyncDelayFunction3<E, Pc, Tc, T>;
 
-export type DelayFunction3<
+export type AsyncDelayFunction3<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -54,15 +54,22 @@ export type SyncDelayFunction3<
 
 /**
  * Delay configuration map.
- * Maps a string key to a {@linkcode DelayFunction} function.
+ * Maps a string key to a {@linkcode AsyncDelayFunction} function.
  * @template : type {@linkcode EventObject} [E] - The events map.
  * @template : [Pc] - The type of the private context.
  * @template : type {@linkcode PrimitiveObject} [Tc] - The type of the context.
- * @returns : A partial record where each key is a string and each value is a {@linkcode DelayFunction}.
+ * @returns : A partial record where each key is a string and each value is a {@linkcode AsyncDelayFunction}.
  */
-export type DelayMap<
+export type AsyncDelayMap<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = Partial<Record<string, DelayFunction<E, Pc, Tc, T>>>;
+> = Partial<Record<string, AsyncDelayFunction<E, Pc, Tc, T>>>;
+
+export type SyncDelayMap<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = Partial<Record<string, SyncDelayFunction<E, Pc, Tc, T>>>;

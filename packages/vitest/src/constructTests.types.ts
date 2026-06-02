@@ -9,6 +9,7 @@ import type {
 } from '@bemedev/app/types';
 import type { PrimitiveObject } from '@bemedev/app/bemedev';
 import type { ConstructTestsResult, Option } from './types';
+import type { VitestUtils } from 'vitest';
 
 export type ConstructTests_F = <
   const C extends CommonConfig = CommonConfig,
@@ -31,6 +32,7 @@ export type ConstructTests_F = <
       >
   >,
 >(
+  vi: VitestUtils,
   service: CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>,
   helper?: (option: Option<Eo, Pc, Tc>) => T,
   startIndex?: number,

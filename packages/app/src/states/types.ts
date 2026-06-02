@@ -1,4 +1,8 @@
-import type { Action, WithDescriber, FromActionConfig } from '#actions';
+import type {
+  AsyncAction,
+  WithDescriber,
+  FromActionConfig,
+} from '#actions';
 import type {
   Equals,
   Keys,
@@ -7,7 +11,7 @@ import type {
 } from '#bemedev/globals/types';
 import type { EventObject } from '#events';
 import type { FromGuard, GuardConfig } from '#guards';
-import type { Transitions, TransitionsConfig } from '#transitions';
+import type { AsyncTransitions, TransitionsConfig } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,
@@ -253,9 +257,9 @@ export type Node<
   id?: string;
   description?: string;
   type: StateType;
-  entry: Action<E, Pc, Tc, T>[];
-  exit: Action<E, Pc, Tc, T>[];
+  entry: AsyncAction<E, Pc, Tc, T>[];
+  exit: AsyncAction<E, Pc, Tc, T>[];
   tags: string[];
   states: Identify<Node<E, Pc, Tc, T>>[];
   initial?: string;
-} & Transitions<E, Pc, Tc, T>;
+} & AsyncTransitions<E, Pc, Tc, T>;

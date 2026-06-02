@@ -16,7 +16,7 @@ import type { Interval2, IntervalParams } from '@bemedev/interval2';
 import type { Equals, PrimitiveObject } from '@bemedev/typings';
 import type { Fn, FnMapR, KeyU, OptionalDefinition } from '~types';
 import type { ScheduledData, SimpleMachineOptions2 } from '../machine';
-import type { AnyMachine } from '../machine/types';
+import type { AnyMachine, MachineType } from '../machine/types';
 import type { SubscriberClass, SubscriberOptions } from '../subscriber';
 
 export type Mode = 'normal' | 'strict';
@@ -49,6 +49,7 @@ export interface AnyInterpreter<
   node: any;
   makeStrict: () => Mode;
   makeNormal: () => Mode;
+  readonly TYPE: MachineType;
 
   status: WorkingStatus;
   initialConfig: any;
@@ -383,6 +384,14 @@ export type MachineOptionsFrom<T extends KeyU<'options'>> = Extract<
   T['options'],
   SimpleMachineOptions2
 >;
+
+export type Contexts<
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+> = {
+  pContext?: Pc;
+  context?: Tc;
+};
 
 /**
  * Alias of {@linkcode MachineOptionsFrom}.

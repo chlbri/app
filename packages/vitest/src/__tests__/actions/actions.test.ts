@@ -8,7 +8,7 @@ describe('Interpret for actions', () => {
 
   describe('#01 => string', () => {
     const service = interpret(_machine1, { mode: 'normal' });
-    const { send, useStateValue, start } = constructTests(service);
+    const { send, useStateValue, start } = constructTests(vi, service);
     test(...start());
     test(...useStateValue('state2'));
 
@@ -47,7 +47,7 @@ describe('Interpret for actions', () => {
 
   describe('#02 => describer', () => {
     const service = interpret(_machine2);
-    const { send, useStateValue, start } = constructTests(service as any);
+    const { send, useStateValue, start } = constructTests(vi, service);
     test(...start());
     test(...useStateValue('state2'));
 

@@ -57,7 +57,7 @@ import {
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import equal from 'fast-deep-equal';
-import type { Fn, Pausable } from '~types';
+import type { Fn, MachineType, Pausable } from '~types';
 import {
   getEntries,
   getExits,
@@ -104,7 +104,12 @@ export abstract class CommonInterpreter<
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> implements AnyInterpreter<E, A, Pc, Tc, Ta, Eo> {
+>
+  implements
+    AnyInterpreter<E, A, Pc, Tc, Ta, Eo>,
+    Disposable,
+    AsyncDisposable
+{
   protected __machine: CommonMachine<
     C,
     Pc,
@@ -116,6 +121,8 @@ export abstract class CommonInterpreter<
     AllPaths,
     Mo
   >;
+
+  abstract readonly TYPE: MachineType;
 
   /**
    * The current {@linkcode WorkingStatus} status of the this {@linkcode Interpreter} service.

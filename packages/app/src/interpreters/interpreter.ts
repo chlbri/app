@@ -32,20 +32,18 @@ import { sleep } from '@bemedev/sleep';
 import equal from 'fast-deep-equal';
 import { isDescriber, type EmptyObject } from '~types';
 import type {
-  _Send_F,
-  Collected0,
-  ExecuteActivities_F,
+  _AsyncSend_F,
+  AsyncCollected0,
   AsyncInterpreter_F,
-  Mode,
-  PerformAction_F,
-  PerformActionLater_F,
-  PerformAfter_F,
-  PerformAlway_F,
-  PerformDelay_F,
-  PerformPredicate_F,
-  PerformTransition_F,
-  PerformTransitions_F,
-  ProvideMachineOptions_F,
+  AsyncPerformAction_F,
+  AsyncPerformActionLater_F,
+  AsyncPerformAfter_F,
+  AsyncPerformAlway_F,
+  AsyncPerformDelay_F,
+  AsyncPerformPredicate_F,
+  AsyncPerformTransition_F,
+  AsyncPerformTransitions_F,
+  AsyncProvideMachineOptions_F,
 } from './interpreter.types';
 
 import {
@@ -56,13 +54,15 @@ import {
   type ContextFrom,
   type EventsFrom,
   type EventsMapFrom,
+  type ExecuteActivities_F,
   type ExtendedActionsParams,
   type MachineOptionsFrom,
+  type Mode,
   type PrivateContextFrom,
   type TagFrom,
 } from '#common/interpreter';
 import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
-import { type EmitterFunction2 } from '#emitters';
+import { type AsyncEmitterFunction } from '#emitters';
 import type { AsyncMachine } from '#machine';
 import type { AsyncAddOptions_F } from '#machines';
 import { createScheduler } from '@bemedev/scheduler';
@@ -79,7 +79,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
  * @template : type {@linkcode types} [Tc] - The context type.
  * @template : type {@linkcode EventsMap} [E] - The events map type, which maps event names to their
  * @template : type {@linkcode PromiseeMap} [P] - The promisees map type, which maps promise names to their
- * @template Mo : type {@linkcode MachineOptions} - The machine options type, which includes various configurations for the machine. Default to {@linkcode MachineOptions}.
+ * @template Mo : type {@linkcode SimpleMachineOptions2} - The machine options type, which includes various configurations for the machine. Default to {@linkcode SimpleMachineOptions2}.
  *
  * @implements : {@linkcode AnyInterpreter}
  *
@@ -93,7 +93,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
  *
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
  */
-export class Interpreter<
+export class AsyncInterpreter<
   const C extends AsyncConfig = AsyncConfig,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
@@ -105,6 +105,7 @@ export class Interpreter<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const L extends SimpleMachineOptions2 = EmptyObject,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
+  readonly TYPE = 'async';
   /**
    * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.
    *
@@ -125,14 +126,21 @@ export class Interpreter<
   }
 
   /**
-   * Create a new {@linkcode Interpreter} instance with the same initial configuration as this instance.
+   * Create a new {@linkcode AsyncInterpreter} instance with the same initial configuration as this instance.
    */
   get renew() {
-    const out = new Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>(
-      this.machine,
-      this.__mode,
-      this.__exact,
-    );
+    const out = new AsyncInterpreter<
+      C,
+      Pc,
+      Tc,
+      E,
+      A,
+      Ta,
+      Eo,
+      AllPaths,
+      Mo,
+      L
+    >(this.machine, this.__mode, this.__exact);
 
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
@@ -164,7 +172,7 @@ export class Interpreter<
   }
 
   /**
-   * Performs all self transitions and activities of this {@linkcode Interpreter} service.
+   * Performs all self transitions and activities of this {@linkcode AsyncInterpreter} service.
    * @remarks Throw if the number of self transitions exceeds {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
    */
   protected _next = async () => {
@@ -192,7 +200,7 @@ export class Interpreter<
     this.__selfTransitionsCounter = 0;
   };
 
-  protected __performAction: PerformActionLater_F<Eo, Pc, Tc, Ta> =
+  protected __performAction: AsyncPerformActionLater_F<Eo, Pc, Tc, Ta> =
     action => {
       this._iterate();
       const out = withTimeout(
@@ -254,7 +262,7 @@ export class Interpreter<
     return result;
   };
 
-  protected __executeAction: PerformAction_F<Eo, Pc, Tc, Ta> =
+  protected __executeAction: AsyncPerformAction_F<Eo, Pc, Tc, Ta> =
     async action => {
       this.__setStatus('busy');
 
@@ -273,19 +281,21 @@ export class Interpreter<
     }
   };
 
-  #performPredicate: PerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
-    this._iterate();
-    return predicate(this.__cloneState);
-  };
+  #performPredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
+    predicate => {
+      this._iterate();
+      return predicate(this.__cloneState);
+    };
 
-  #executePredicate: PerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
-    this.__setStatus('busy');
-    const out = this.#performPredicate(predicate);
+  #executePredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
+    predicate => {
+      this.__setStatus('busy');
+      const out = this.#performPredicate(predicate);
 
-    this.__setStatus('working');
+      this.__setStatus('working');
 
-    return out;
-  };
+      return out;
+    };
 
   #performPredicates = (...guards: GuardConfig[]) => {
     if (guards.length < 1) return true;
@@ -296,12 +306,12 @@ export class Interpreter<
       .every(b => b);
   };
 
-  #performDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+  #performDelay: AsyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this._iterate();
     return delay(this.__cloneState);
   };
 
-  #executeDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+  #executeDelay: AsyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this.__setStatus('busy');
     const out = this.#performDelay(delay);
     this.__setStatus('started');
@@ -394,7 +404,7 @@ export class Interpreter<
     return outs;
   };
 
-  protected __performTransition: PerformTransition_F =
+  protected __performTransition: AsyncPerformTransition_F =
     async transition => {
       const check = typeof transition == 'string';
       if (check) {
@@ -420,7 +430,7 @@ export class Interpreter<
       return false;
     };
 
-  protected __performTransitions: PerformTransitions_F = async (
+  protected __performTransitions: AsyncPerformTransitions_F = async (
     ...transitions
   ) => {
     for (const _transition of transitions) {
@@ -479,7 +489,7 @@ export class Interpreter<
     return this.#machine.longRuns;
   }
 
-  #performAfter: PerformAfter_F = (from, after) => {
+  #performAfter: AsyncPerformAfter_F = (from, after) => {
     const entries = Object.entries(after);
     const promises: TimeoutPromise<string | false>[] = [];
 
@@ -534,7 +544,7 @@ export class Interpreter<
     return this.machine.flat;
   }
 
-  #performAlways: PerformAlway_F = alway => {
+  #performAlways: AsyncPerformAlway_F = alway => {
     this.__changeEvent(transformEventArg(ALWAYS_EVENT));
     const always = toArray<TransitionConfig>(alway);
     return this.__performTransitions(...always);
@@ -555,10 +565,10 @@ export class Interpreter<
   }
 
   /**
-   * Get all brut self transitions of the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service.
+   * Get all brut self transitions of the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode AsyncInterpreter} service.
    */
   protected get __collectedSelfTransitions0() {
-    const entries = new Map<string, Collected0>();
+    const entries = new Map<string, AsyncCollected0>();
 
     this.__collectedAlways.forEach(([from, always]) => {
       entries.set(from, { always: () => this.#performAlways(always) });
@@ -613,7 +623,7 @@ export class Interpreter<
 
   protected __collectPausables = () => {
     type _Emitter = EmitterConfig & {
-      emitterFn: EmitterFunction2<Eo, Pc, Tc, Ta>;
+      emitterFn: AsyncEmitterFunction<Eo, Pc, Tc, Ta>;
       id: string;
     };
     return this.__collectedEmitterConfigs
@@ -686,7 +696,7 @@ export class Interpreter<
   };
 
   /**
-   * Add options to the inner {@linkcode AsyncMachine} of this {@linkcode Interpreter} service.
+   * Add options to the inner {@linkcode AsyncMachine} of this {@linkcode AsyncInterpreter} service.
    */
   addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
@@ -699,7 +709,7 @@ export class Interpreter<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new interpreter instance with the provided options applied.
    */
-  provideOptions: ProvideMachineOptions_F<
+  provideOptions: AsyncProvideMachineOptions_F<
     C,
     Pc,
     Tc,
@@ -716,7 +726,7 @@ export class Interpreter<
 
   // #region Next
 
-  protected __presend: _Send_F<Eo> = async event => {
+  protected __presend: _AsyncSend_F<Eo> = async event => {
     this.__sent = true;
     this.__changeEvent(event);
     this.__setStatus('sending');
@@ -748,7 +758,7 @@ export class Interpreter<
   };
 
   /**
-   * Sends an event without cheching to the current {@linkcode Interpreter} service.
+   * Sends an event without cheching to the current {@linkcode AsyncInterpreter} service.
    *
    * @param _event - the {@linkcode EventArg} event to send.
    *
@@ -792,7 +802,7 @@ export class Interpreter<
 export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
 
 /**
- * Retrieves the {@linkcode Interpreter} service from the given {@linkcode AnyMachine} machine.
+ * Retrieves the {@linkcode AsyncInterpreter} service from the given {@linkcode AnyMachine} machine.
  *
  * @template : type {@linkcode AnyMachine} [M] - The type of the machine from which to retrieve the interpreter.
  *
@@ -803,7 +813,7 @@ export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
  * @see {@linkcode PromiseesMapFrom}
  * @see {@linkcode MachineOptionsFrom}
  */
-export type AsyncInterpreterFrom<M extends AnyMachine> = Interpreter<
+export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
   ConfigFrom<M>,
   PrivateContextFrom<M>,
   ContextFrom<M>,
@@ -816,18 +826,18 @@ export type AsyncInterpreterFrom<M extends AnyMachine> = Interpreter<
 >;
 
 /**
- * Creates an {@linkcode Interpreter} service from the given {@linkcode MachineConfig} machine.
+ * Creates an {@linkcode AsyncInterpreter} service from the given {@linkcode MachineConfig} machine.
  *
  * @param machine - The {@linkcode MachineConfig} machine to create the interpreter from.
  * @param options - The options for the interpreter, including context, private context, mode, and exact.
- * @returns an {@linkcode Interpreter} service.
+ * @returns an {@linkcode AsyncInterpreter} service.
  *
  * @see {@linkcode MachineConfig}
  */
 export const interpret: AsyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
   const { mode, exact, pContext, context } = _any(args ?? {});
-  const out: any = new Interpreter(machine, mode, exact);
+  const out: any = new AsyncInterpreter(machine, mode, exact);
   out._providePrivateContext(pContext);
   out._provideContext(context);
   return out;

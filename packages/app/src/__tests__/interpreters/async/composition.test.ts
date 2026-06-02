@@ -12,12 +12,12 @@ import { nothing } from '#utils';
 
 import { defaultCheck } from '#guards';
 import { interpret, TIME_TO_RINIT_SELF_COUNTER } from '#interpreter';
-import type { AnyInterpreter } from '#interpreters';
 import equal from 'fast-deep-equal';
 import _machine1 from './composition.1.machine';
 import _machine2 from './composition.2.machine';
 import _machine3 from './composition.3.machine';
 import _machine4 from './composition.4.machine';
+import type { AnyInterpreter } from '#common/interpreter';
 
 beforeAll(() => {
   vi.useFakeTimers();

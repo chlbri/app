@@ -48,7 +48,7 @@ export type MaybeAsyncActionResult<
   Tc extends PrimitiveObject = PrimitiveObject,
 > = ActionResult<Pc, Tc> | Promise<ActionResult<Pc, Tc>>;
 
-export type Action<
+export type AsyncAction<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -62,27 +62,20 @@ export type SyncAction<
   T extends string = string,
 > = FnMap<E, Pc, Tc, T, ActionResult<Pc, Tc>>;
 
-export type Action3<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnMap<E, Pc, Tc, T, ActionResult<Pc, Tc>>;
-
 /**
  * Represents a collection of actions, where each action is identified by a string key.
  *
  * @template : type {@linkcode EventObject}  [E], all events.
  * @template : [Pc], the type of the private context.
  * @template : type {@linkcode PrimitiveObject} [Tc], the type of the context.
- * @returns a partial record where each key is a string and each value is an {@linkcode Action}.
+ * @returns a partial record where each key is a string and each value is an {@linkcode AsyncAction}.
  */
-export type ActionMap<
+export type AsyncActionMap<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = Partial<Record<string, Action<E, Pc, Tc, T>>>;
+> = Partial<Record<string, AsyncAction<E, Pc, Tc, T>>>;
 
 export type SyncActionMap<
   E extends EventObject = EventObject,
@@ -91,7 +84,7 @@ export type SyncActionMap<
   T extends string = string,
 > = Partial<Record<string, SyncAction<E, Pc, Tc, T>>>;
 
-export type Action2<
+export type AsyncAction2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,

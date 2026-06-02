@@ -7,15 +7,25 @@ import type {
 } from '#bemedev/globals/types';
 import type { EventObject } from '#events';
 import type { Observable } from 'rxjs';
-import type { Action, WithDescriber, FromActionConfig } from '#actions';
+import type {
+  AsyncAction,
+  WithDescriber,
+  FromActionConfig,
+  SyncAction,
+} from '#actions';
 import type {
   ActorConfig,
   ChildConfig,
   EmitterConfig,
 } from '../actors/types';
-import type { FromGuard, GuardConfig, Predicate } from '#guards';
+import type {
+  FromGuard,
+  GuardConfig,
+  AsyncPredicate,
+  SyncPredicate,
+} from '#guards';
 
-import type { Emitter } from '#emitters';
+import type { AsyncEmitter } from '#emitters';
 import type {
   Identify,
   RecordS,
@@ -431,32 +441,58 @@ export type ExtractChildKeysFromTransitions<T extends TransitionsConfig> =
  * @template : [Pc] - The private context type for the transition.
  * @template : {@linkcode types} [Tc] - The context for the transition.
  *
- * @see {@linkcode Action} for the structure of actions in the transition.
- * @see {@linkcode Predicate} for the structure of guards in the transition.
+ * @see {@linkcode AsyncAction} for the structure of actions in the transition.
+ * @see {@linkcode AsyncPredicate} for the structure of guards in the transition.
  */
-export type Transition<
+export type AsyncTransition<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
   readonly target?: string;
-  readonly actions: Action<E, Pc, Tc, T>[];
-  readonly guards: Predicate<E, Pc, Tc, T>[];
+  readonly actions: AsyncAction<E, Pc, Tc, T>[];
+  readonly guards: AsyncPredicate<E, Pc, Tc, T>[];
   readonly description?: string;
 };
 
-export type Emiter4<
+export type SyncTransition<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
-  src: Observable<any>;
+  readonly target?: string;
+  readonly actions: SyncAction<E, Pc, Tc, T>[];
+  readonly guards: SyncPredicate<E, Pc, Tc, T>[];
+  readonly description?: string;
+};
+
+export type AsyncEmiter4<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R = any,
+> = {
+  src: Observable<R>;
   description?: string;
-  then: Transition<E, Pc, Tc, T>[];
-  catch: Transition<E, Pc, Tc, T>[];
-  finally: Transition<E, Pc, Tc, T>[];
+  then: AsyncTransition<E, Pc, Tc, T>[];
+  catch: AsyncTransition<E, Pc, Tc, T>[];
+  finally: AsyncTransition<E, Pc, Tc, T>[];
+};
+export type SyncEmiter4<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R = any,
+> = {
+  src: Observable<R>;
+  description?: string;
+  then: SyncTransition<E, Pc, Tc, T>[];
+  catch: SyncTransition<E, Pc, Tc, T>[];
+  finally: SyncTransition<E, Pc, Tc, T>[];
 };
 
 /**
@@ -466,18 +502,31 @@ export type Emiter4<
  * @template : [Pc] - The private context type for the transitions.
  * @template : {@linkcode PrimitiveObject} [Tc] - The context for the transitions
  *
- * @see {@linkcode Transition} for the structure of a single transition.
+ * @see {@linkcode AsyncTransition} for the structure of a single transition.
  * @see {@linkcode Identify} for identifying properties in the transitions.
  */
-export type Transitions<
+export type AsyncTransitions<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
-  on: Identify<Transition<E, Pc, Tc, T>>[];
-  always: Transition<E, Pc, Tc, T>[];
-  after: Identify<Transition<E, Pc, Tc, T>>[];
-  emitters: Emitter<E, Pc, Tc, T>[];
+  on: Identify<AsyncTransition<E, Pc, Tc, T>>[];
+  always: AsyncTransition<E, Pc, Tc, T>[];
+  after: Identify<AsyncTransition<E, Pc, Tc, T>>[];
+  emitters: AsyncEmitter<E, Pc, Tc, T>[];
+  children: CommonChild<E, Pc, Tc, T>[];
+};
+
+export type SyncTransitions<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = {
+  on: Identify<SyncTransition<E, Pc, Tc, T>>[];
+  always: SyncTransition<E, Pc, Tc, T>[];
+  after: Identify<SyncTransition<E, Pc, Tc, T>>[];
+  emitters: AsyncEmitter<E, Pc, Tc, T>[];
   children: CommonChild<E, Pc, Tc, T>[];
 };

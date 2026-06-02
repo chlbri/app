@@ -1,14 +1,18 @@
 import type { SyncAction2 } from '#actions';
 import type { AnyInterpreter } from '#common/interpreter';
+import type { SimpleMachineOptions2 } from '#common/machine';
 import type { SyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
-import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
+import type {
+  GuardConfig,
+  SyncPredicateS2,
+  SyncPredicateS3,
+} from '#guards';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { SyncConfig, SyncNodeConfig } from '../types.types';
-import type { SimpleMachineOptions2 } from '#common/machine';
-import type { SyncAddOptionsParam_F } from '../machine/options.types';
 import type { EmptyObject } from '~types';
+import type { SyncAddOptionsParam_F } from '../machine/options.types';
+import type { SyncConfig, SyncNodeConfig } from '../types.types';
 import type { SyncInterpreter } from './interpreter';
 
 export type SyncCollectedService = {
@@ -29,14 +33,14 @@ export type SyncToPredicate_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (predicate?: GuardConfig) => PredicateS2<E, Pc, Tc, T>;
+> = (predicate?: GuardConfig) => SyncPredicateS2<E, Pc, Tc, T>;
 
 export type SyncPerformPredicate_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (predicate: PredicateS3<E, Pc, Tc, T>) => boolean;
+> = (predicate: SyncPredicateS3<E, Pc, Tc, T>) => boolean;
 
 export type SyncPerformTransition_F = (
   transition: TransitionConfig,

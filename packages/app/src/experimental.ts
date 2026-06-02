@@ -1,4 +1,4 @@
-import type { Contexts } from '#interpreters';
+import type { Contexts } from '#common/interpreter';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { deepmerge } from 'deepmerge-ts';
 import type { Describer, Describer2 } from '~types';

@@ -6,13 +6,10 @@ import { fakeWaiter } from './helpers';
 import { buildIndex, buildInvite } from './invite';
 import type { ConstructTestsResult2, RejectionHandler } from './types';
 
-export * from './constants';
-export * from './constructTests.types';
-export * from './helpers';
-export * from './invite';
-export * from './types';
+export { ConstructTests_F };
 
 export const constructTests: ConstructTests_F = (
+  vi,
   service,
   helper,
   startIndex = 0,
@@ -60,7 +57,7 @@ export const constructTests: ConstructTests_F = (
 
           return tupleOf(invite, async () => {
             try {
-              await fakeWaiter(DELAY, times);
+              await fakeWaiter(vi, DELAY, times);
             } catch {
               // In case of fake timers, this can throw if the timers are not properly handled.
             }
@@ -99,7 +96,7 @@ export const constructTests: ConstructTests_F = (
           return tupleOf(invite, async () => {
             const sender = service.sender(type);
             sender(...(___payload as any));
-            await fakeWaiter(0);
+            await fakeWaiter(vi, 0);
           });
         };
       },
@@ -159,7 +156,7 @@ export const constructTests: ConstructTests_F = (
 
       return tupleOf(invite, async () => {
         service.send(_any(_event));
-        await fakeWaiter(0);
+        await fakeWaiter(vi, 0);
       });
     },
 
@@ -167,7 +164,7 @@ export const constructTests: ConstructTests_F = (
       const invite = `#${index(_index)} => Start the service`;
       return tupleOf(invite, async () => {
         service.start();
-        await fakeWaiter(0);
+        await fakeWaiter(vi, 0);
       });
     },
 

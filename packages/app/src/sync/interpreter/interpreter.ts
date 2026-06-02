@@ -9,7 +9,7 @@ import {
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
 } from '#constants';
-import { type EmitterFunction2 } from '#emitters';
+import { type AsyncEmitterFunction } from '#emitters';
 import {
   eventToType,
   transformEventArg,
@@ -73,7 +73,7 @@ import type { SyncMachine } from '../machine/machine';
  * @template : type {@linkcode types} [Tc] - The context type.
  * @template : type {@linkcode EventsMap} [E] - The events map type, which maps event names to their
  * @template : type {@linkcode PromiseeMap} [P] - The promisees map type, which maps promise names to their
- * @template Mo : type {@linkcode MachineOptions} - The machine options type, which includes various configurations for the machine. Default to {@linkcode MachineOptions}.
+ * @template Mo : type {@linkcode SimpleMachineOptions2} - The machine options type, which includes various configurations for the machine. Default to {@linkcode SimpleMachineOptions2}.
  *
  * @implements : {@linkcode AnySyncInterpreter}
  *
@@ -99,6 +99,7 @@ export class SyncInterpreter<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
+  readonly TYPE = 'sync';
   /**
    * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.
    *
@@ -477,7 +478,7 @@ export class SyncInterpreter<
 
   protected __collectPausables = () => {
     type _Emitter = EmitterConfig & {
-      emitterFn: EmitterFunction2<Eo, Pc, Tc, Ta>;
+      emitterFn: AsyncEmitterFunction<Eo, Pc, Tc, Ta>;
       id: string;
     };
     return this.__collectedEmitterConfigs
@@ -741,7 +742,7 @@ export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
   MachineOptionsFrom<M>
 >;
 
-export type Interpreter_F = <M extends AnyMachine>(
+export type SyncInterpreter_F = <M extends AnyMachine>(
   ...args: InterpretArgs<M>
 ) => SyncInterpreterFrom<M>;
 
@@ -754,7 +755,7 @@ export type Interpreter_F = <M extends AnyMachine>(
  *
  * @see {@linkcode SyncConfig}
  */
-export const interpretSync: Interpreter_F = (..._args) => {
+export const interpretSync: SyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
   const { mode, exact, pContext, context } = _any(args ?? {});
   const out: any = new SyncInterpreter(machine, mode, exact);

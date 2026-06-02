@@ -1,6 +1,6 @@
 import type {
-  Action2,
-  ActionMap,
+  AsyncAction2,
+  AsyncActionMap,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ActionResult,
   WithDescriber,
@@ -22,8 +22,8 @@ export type ToAction_F = {
     events: E,
     actorsMap: A,
     action: WithDescriber,
-    actions?: ActionMap<Eo, Pc, Tc, T>,
-  ): Action2<Eo, Pc, Tc, T> | undefined;
+    actions?: AsyncActionMap<Eo, Pc, Tc, T>,
+  ): AsyncAction2<Eo, Pc, Tc, T> | undefined;
 };
 
 const _toAction = (
@@ -43,7 +43,7 @@ const _toAction = (
  * @param events of type {@linkcode EventsMap}, events map to use for resolving the action.
  * @param actorsMap of type {@linkcode PromiseeMap}, the promisees map to use for resolving the action.
  * @param action of type {@linkcode WithDescriber}, action configuration to convert.
- * @param actions of type {@linkcode ActionMap}, The actions map containing functions to execute.
+ * @param actions of type {@linkcode AsyncActionMap}, The actions map containing functions to execute.
  *
  * @see {@linkcode PrimitiveObject}
  * @see {@linkcode ActionResult}

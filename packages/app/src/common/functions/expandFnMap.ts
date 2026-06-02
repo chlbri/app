@@ -1,4 +1,4 @@
-import type { Action2, SyncAction2 } from '#actions';
+import type { AsyncAction2, SyncAction2 } from '#actions';
 import type { Cast } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
@@ -28,7 +28,7 @@ export type ExpandFnMap_F = {
     actorsMap: A,
     key: K,
     fn: FnMap<Eo, Pc, Cast<Tc, PrimitiveObject>, T, R>,
-  ): Action2<Eo, Pc, Cast<Tc, PrimitiveObject>, T>;
+  ): AsyncAction2<Eo, Pc, Cast<Tc, PrimitiveObject>, T>;
 
   sync: <
     Pc,
@@ -60,7 +60,7 @@ export type ExpandFnMap_F = {
  * @param promisees  : type {@linkcode ActorsConfigMap} [P] - The promisees map.
  * @param key  : type {@linkcode Decompose} [D] - The key to assign the result to in the context and the private context.
  * @param fn  : type {@linkcode FnMap} [E, P, Pc, Tc, R] - The function to reduce the events and promisees and performs the action.
- * @returns a {@linkcode Action2} function.
+ * @returns a {@linkcode AsyncAction2} function.
  *
  * @see {@linkcode assignByKey} for assigning the result to the context and private context.
  * @see {@linkcode reduceFnMap} for reducing the events and promisees.

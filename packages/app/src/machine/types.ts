@@ -1,4 +1,4 @@
-import type { Action2, FromActionConfig } from '#actions';
+import type { AsyncAction2, FromActionConfig } from '#actions';
 import type { Equals, Keys } from '#bemedev/globals/types';
 import { Identify } from '#bemedev/globals/types';
 import type { ConfigFrom } from '#common/interpreter';
@@ -8,15 +8,15 @@ import type {
   ConfigDef,
   NoExtraKeysConfigDef,
 } from '#common/machine';
-import type { DelayFunction2 } from '#delays';
+import type { AsyncDelayFunction2 } from '#delays';
 import type {
   EmitterDef,
-  EmitterFunction2,
+  AsyncEmitterFunction,
   EmitterReturn,
-  EmittersMap,
+  AsyncEmittersMap,
 } from '#emitters';
 import type { ActorsConfigMap, EventObject } from '#events';
-import type { PredicateS, PredicateS2 } from '#guards';
+import type { AsyncPredicateS, AsyncPredicateS2 } from '#guards';
 import type {
   ActivityConfig,
   ExtractActionsFromActivity,
@@ -31,7 +31,7 @@ import type {
   ExtractDelayKeysFromTransitions,
   ExtractEmitterSrcKeyFromTransitions,
   ExtractGuardKeysFromTransitions,
-  Transition,
+  AsyncTransition,
   TransitionsConfig,
 } from '#transitions';
 import type { Recompose } from '@bemedev/decompose';
@@ -175,10 +175,10 @@ export type GetActionsFromFlat<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = Record<_GetKeyActionsFromFlat<Flat>, Action2<E, Pc, Tc, T>>;
+> = Record<_GetKeyActionsFromFlat<Flat>, AsyncAction2<E, Pc, Tc, T>>;
 
 /**
- * Provide a record of all guards by key and {@linkcode PredicateS} function.
+ * Provide a record of all guards by key and {@linkcode AsyncPredicateS} function.
  *
  * @template : {@linkcode FlatMapN} [Flat] - type of the flat map of nodes
  * @template : {@linkcode EventsMap} [E] - type of the events map
@@ -194,7 +194,7 @@ export type GetGuardsFromFlat<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = Record<_GetKeyGuardsFromFlat<Flat>, PredicateS<E, Pc, Tc, T>>;
+> = Record<_GetKeyGuardsFromFlat<Flat>, AsyncPredicateS<E, Pc, Tc, T>>;
 
 export type GetEmitterSrcsKeyFromFlat<
   Flat extends FlatMapN,
@@ -222,7 +222,7 @@ export type GetDelaysFromFlat<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = Record<_GetDelayKeysFromFlat<Flat>, DelayFunction2<E, Pc, Tc, T>>;
+> = Record<_GetDelayKeysFromFlat<Flat>, AsyncDelayFunction2<E, Pc, Tc, T>>;
 
 /**
  * Provide a record of all events by key and {@linkcode PrimitiveObject} payload.
@@ -276,7 +276,7 @@ export type GetEmittersSrcFromFlat<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
-  [key in _GetEmitterSrcKeyFromFlat<Flat>]: EmitterFunction2<
+  [key in _GetEmitterSrcKeyFromFlat<Flat>]: AsyncEmitterFunction<
     E,
     Pc,
     Tc,
@@ -465,7 +465,7 @@ export type AsyncChild<
   src: AsyncChildFunction2<E, Pc, Tc, T, R>;
   description?: string;
   id: string;
-  on: Identify<RecordS<Transition<E, Pc, Tc, T>>>[];
+  on: Identify<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };
 
@@ -476,15 +476,15 @@ export type AsyncMachineOptions2<
   Eo extends EventObject = EventObject,
   O extends RegisterOptions = RegisterOptions,
 > = Partial<{
-  actions: Partial<Record<O['actions'], Action2<Eo, Pc, Tc, T>>>;
-  guards: Partial<Record<O['guards'], PredicateS<Eo, Pc, Tc, T>>>;
-  delays: Partial<Record<O['delays'], DelayFunction2<Eo, Pc, Tc, T>>>;
+  actions: Partial<Record<O['actions'], AsyncAction2<Eo, Pc, Tc, T>>>;
+  guards: Partial<Record<O['guards'], AsyncPredicateS<Eo, Pc, Tc, T>>>;
+  delays: Partial<Record<O['delays'], AsyncDelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
     children: Partial<
       Record<O['children'], AsyncChildFunction2<Eo, Pc, Tc, T, any>>
     >;
     emitters: Partial<
-      Record<O['emitters'], EmitterFunction2<Eo, Pc, Tc, T, any>>
+      Record<O['emitters'], AsyncEmitterFunction<Eo, Pc, Tc, T, any>>
     >;
   }>;
 }>;
@@ -504,12 +504,12 @@ export type AsyncSimpleMachineOptions<
   T extends string = string,
   Eo extends EventObject = EventObject,
 > = Partial<{
-  actions: Partial<RecordS<Action2<Eo, Pc, Tc, T>>>;
-  guards: Partial<RecordS<PredicateS2<Eo, Pc, Tc, T>>>;
-  delays: Partial<RecordS<DelayFunction2<Eo, Pc, Tc, T>>>;
+  actions: Partial<RecordS<AsyncAction2<Eo, Pc, Tc, T>>>;
+  guards: Partial<RecordS<AsyncPredicateS2<Eo, Pc, Tc, T>>>;
+  delays: Partial<RecordS<AsyncDelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
     children: RecordS<AsyncChildFunction2<Eo, Pc, Tc, T>>;
-    emitters: EmittersMap<Eo, Pc, Tc, T>;
+    emitters: AsyncEmittersMap<Eo, Pc, Tc, T>;
   }>;
 }>;
 

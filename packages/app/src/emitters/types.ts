@@ -1,7 +1,7 @@
 import type { NotUndefined } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject } from '#events';
 import type { StateExtended } from '#states';
-import type { Transition } from '#transitions';
+import type { AsyncTransition } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { RecordS } from '~types';
 
@@ -64,18 +64,32 @@ export type EmitterConfigMap<S extends string = string> = Record<
   EmitterDef
 >;
 
-export type Emitter<
+export type AsyncEmitter<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   R = any,
 > = {
-  src: EmitterFunction2<E, Pc, Tc, T, R>;
+  src: AsyncEmitterFunction<E, Pc, Tc, T, R>;
   description?: string;
-  next: Transition<E, Pc, Tc, T>[];
-  error: Transition<E, Pc, Tc, T>[];
-  complete: Transition<E, Pc, Tc, T>[];
+  next: AsyncTransition<E, Pc, Tc, T>[];
+  error: AsyncTransition<E, Pc, Tc, T>[];
+  complete: AsyncTransition<E, Pc, Tc, T>[];
+};
+
+export type SyncEmitter<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  R = any,
+> = {
+  src: AsyncEmitterFunction<E, Pc, Tc, T, R>;
+  description?: string;
+  next: AsyncTransition<E, Pc, Tc, T>[];
+  error: AsyncTransition<E, Pc, Tc, T>[];
+  complete: AsyncTransition<E, Pc, Tc, T>[];
 };
 
 export type EmitterReturn<
@@ -87,7 +101,7 @@ export type EmitterReturn<
     : P
   : never;
 
-export type EmitterFunction2<
+export type AsyncEmitterFunction<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -95,9 +109,24 @@ export type EmitterFunction2<
   R = any,
 > = (state: StateExtended<E, Pc, Tc, T>) => Pausable<R>;
 
-export type EmittersMap<
+export type SyncEmitterFunction<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = RecordS<EmitterFunction2<E, Pc, Tc, T>>;
+  R = any,
+> = (state: StateExtended<E, Pc, Tc, T>) => Pausable<R>;
+
+export type AsyncEmittersMap<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = RecordS<AsyncEmitterFunction<E, Pc, Tc, T>>;
+
+export type SyncEmittersMap<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = RecordS<SyncEmitterFunction<E, Pc, Tc, T>>;

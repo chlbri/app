@@ -1,4 +1,4 @@
-import type { Action2 } from '#actions';
+import type { AsyncAction2 } from '#actions';
 
 import type { DefinedValue } from '#guards';
 import type { StatePextended } from '#states';
@@ -56,21 +56,21 @@ export type AsyncAssignAction_F<
   ...args: F extends Promise<D[K]>
     ? [AsyncOptions<Err, Pc, Tc, T, D[K] | void>]
     : []
-) => Action2<E, Pc, Tc, T>;
+) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncResendAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (event: EventArgAll<E>) => Action2<E, Pc, Tc, T>;
+> = (event: EventArgAll<E>) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncTimeAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (id: string) => Action2<E, Pc, Tc, T>;
+> = (id: string) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncVoidAction_F<
   E extends EventObject = EventObject,
@@ -85,7 +85,7 @@ export type AsyncVoidAction_F<
   ...args: F extends Promise<void>
     ? [AsyncOptions<Err, Pc, Tc, T, void>]
     : []
-) => Action2<E, Pc, Tc, T>;
+) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncFilterAction_F<
   E extends EventObject = EventObject,
@@ -105,7 +105,7 @@ export type AsyncFilterAction_F<
     : D[K] extends Ru
       ? (value: ValuesOf<D[K]>, all: D[K]) => boolean
       : never,
-) => Action2<E, Pc, Tc, T>;
+) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncEraseAction_F<
   E extends EventObject = EventObject,
@@ -121,7 +121,7 @@ export type AsyncEraseAction_F<
   K extends keyof DD & string = keyof DD & string,
 >(
   key: K,
-) => Action2<E, Pc, Tc, T>;
+) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncSendAction_F<
   E extends EventObject = EventObject,
@@ -145,7 +145,7 @@ export type AsyncSendAction_F<
   }>
     ? [AsyncOptions<Err, Pc, Tc, T, void>]
     : []
-) => Action2<E, Pc, Tc, T>;
+) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncValueCheckerGuard_F<
   E extends EventObject = EventObject,
@@ -169,22 +169,22 @@ export type AsyncDebounceAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <A extends Action2<E, Pc, Tc, T>>(
+> = <A extends AsyncAction2<E, Pc, Tc, T>>(
   fn: A,
   options: {
     ms?: number;
     id: string;
   },
-) => Action2<E, Pc, Tc, T>;
+) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncBatchAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <A extends (Action2<E, Pc, Tc, T> | undefined)[]>(
+> = <A extends (AsyncAction2<E, Pc, Tc, T> | undefined)[]>(
   ...fns: A
-) => Action2<E, Pc, Tc, T>;
+) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncAddOption<
   E extends EventObject = EventObject,

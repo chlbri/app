@@ -3,7 +3,7 @@ import toArray from '#bemedev/features/arrays/castings/toArray';
 import type { PrimitiveObject } from '#bemedev/globals/types';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toPredicate, type GuardConfig } from '#guards';
-import type { Transition, TransitionConfig } from '#transitions';
+import type { AsyncTransition, TransitionConfig } from '#transitions';
 import type { SimpleMachineOptions2 } from '#common/machine';
 
 export type ToTransition_F = <
@@ -18,7 +18,7 @@ export type ToTransition_F = <
   actorsMap: A,
   config: TransitionConfig,
   options?: Pick<SimpleMachineOptions2, 'actions' | 'guards'>,
-) => Transition<Eo, Pc, Tc, T>;
+) => AsyncTransition<Eo, Pc, Tc, T>;
 
 /**
  * Converts a transition configuration to a structured transition object with all functions.

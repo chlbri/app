@@ -1,8 +1,8 @@
-import type { Action } from '#actions';
+import type { AsyncAction } from '#actions';
 import _any from '#bemedev/features/common/castings/any';
 import { _unknown } from '#bemedev/globals/utils/_unknown';
 import { expandFnMap } from '#common/functions';
-import type { DelayFunction } from '#delays';
+import type { AsyncDelayFunction } from '#delays';
 import {
   ActorsConfigMap,
   type EventObject,
@@ -19,7 +19,7 @@ import {
   type SimpleMachineOptions2,
 } from '#common/machine';
 
-import type { PredicateS } from '#guards';
+import type { AsyncPredicateS } from '#guards';
 import { withTimeout } from '@bemedev/better-promise';
 import cloneDeep from 'clone-deep';
 
@@ -43,7 +43,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
  * @template : {@linkcode PrimitiveObject} [Pc] - The context type of the machine.
  * @template : {@linkcode GetEventsFromConfig}<{@linkcode C}> [E] - The events map type derived from the configuration.
  * @template : {@linkcode PromiseeMap} [P] - The promisees map type derived from the configuration.
- * @template : {@linkcode SimpleMachineOptions2} [Mo] - The options type for the machine, which includes actions, guards, delays, promises, and machines. Defaults to {@linkcode MachineOptions}<[{@linkcode C} , {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} ]>.
+ * @template : {@linkcode SimpleMachineOptions2} [Mo] - The options type for the machine, which includes actions, guards, delays, promises, and machines. Defaults to {@linkcode SimpleMachineOptions2}<[{@linkcode C} , {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} ]>.
  *
  * @implements {@linkcode AnyMachine}<{@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} >
  */
@@ -60,7 +60,7 @@ export class AsyncMachine<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const L extends SimpleMachineOptions2 = EmptyObject,
 > extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
-  TYPE = 'async' as const;
+  readonly TYPE = 'async';
 
   /**
    * @deprecated
@@ -76,7 +76,7 @@ export class AsyncMachine<
    * @see {@linkcode Tc}
    */
   get __actionFn() {
-    return _unknown<Action<Eo, Pc, Tc, Ta>>();
+    return _unknown<AsyncAction<Eo, Pc, Tc, Ta>>();
   }
 
   /**
@@ -86,7 +86,7 @@ export class AsyncMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode PredicateS}
+   * @see {@linkcode AsyncPredicateS}
    * @see {@linkcode ActorsConfigMap}
    * @see {@linkcode PrimitiveObject}
    * @see {@linkcode E}
@@ -95,7 +95,7 @@ export class AsyncMachine<
    * @see {@linkcode Tc}
    */
   get __predicate() {
-    return _unknown<PredicateS<Eo, Pc, Tc, Ta>>();
+    return _unknown<AsyncPredicateS<Eo, Pc, Tc, Ta>>();
   }
 
   /**
@@ -105,7 +105,7 @@ export class AsyncMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode DelayFunction}
+   * @see {@linkcode AsyncDelayFunction}
    * @see {@linkcode ActorsConfigMap}
    * @see {@linkcode PrimitiveObject}
    * @see {@linkcode E}
@@ -114,7 +114,7 @@ export class AsyncMachine<
    * @see {@linkcode Tc}
    */
   get __delay() {
-    return _unknown<DelayFunction<Eo, Pc, Tc, Ta>>();
+    return _unknown<AsyncDelayFunction<Eo, Pc, Tc, Ta>>();
   }
 
   // #endregion
@@ -371,7 +371,7 @@ export class AsyncMachine<
    *
    * @see type inferences :
    *
-   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
+   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
 
   /**
@@ -385,7 +385,7 @@ export class AsyncMachine<
    *
    * @see type inferences :
    *
-   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode MachineOptions} , {@linkcode Mo}
+   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
   protected __renew = (): this => {
     const {

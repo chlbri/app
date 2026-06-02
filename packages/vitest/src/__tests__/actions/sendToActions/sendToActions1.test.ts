@@ -34,6 +34,7 @@ describe('Performs send to itself actions', () => {
   });
   const { useIterator, start, dispose, useStateValue, send } =
     constructTests(
+      vi,
       service,
       ({ contexts: constructContexts }) => ({
         useIterator: constructContexts(

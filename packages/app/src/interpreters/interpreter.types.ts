@@ -1,263 +1,82 @@
-import type {
-  Action2,
-  ActionResult,
-  MaybeAsyncActionResult,
-  WithDescriber,
-} from '#actions';
-import type { NOmit, Primitive } from '#bemedev/globals/types';
+import type { AsyncAction2, MaybeAsyncActionResult } from '#actions';
 import type { InterpretArgs } from '#common/interpreter';
 import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
-import type {
-  SubscriberClass,
-  SubscriberOptions,
-} from '#common/subscriber';
-import type { DelayFunction2, DelayFunction3 } from '#delays';
-import type { Pausable } from '#emitters';
+import type { AsyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
-import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
+import type { AsyncPredicateS3 } from '#guards';
 import type { AsyncAddOptionsParam_F, AsyncConfig } from '#machines';
-import type {
-  ActivityConfig,
-  NodeConfig,
-  StateValue,
-  WorkingStatus,
-} from '#states';
+import type { NodeConfig } from '#states';
 import type {
   AlwaysConfig,
   DelayedTransitions,
   TransitionConfig,
 } from '#transitions';
-import type { Decompose } from '@bemedev/decompose';
-import type { Interval2, IntervalParams } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { EmptyObject, FnMapR } from '~types';
+import type { EmptyObject } from '~types';
 import {
+  type AsyncInterpreter,
   type AsyncInterpreterFrom,
-  type Interpreter,
 } from './interpreter';
-
-export type Mode = 'normal' | 'strict';
 
 export type AsyncInterpreter_F = <M extends AnyMachine>(
   ...args: InterpretArgs<M>
 ) => AsyncInterpreterFrom<M>;
 
-export type ToAction_F<
+export type AsyncPerformActionLater_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action?: WithDescriber) => Action2<E, Pc, Tc, T>;
+> = (action: AsyncAction2<E, Pc, Tc, T>) => MaybeAsyncActionResult<Pc, Tc>;
 
-export type PerformActionLater_F<
+export type AsyncPerformAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action: Action2<E, Pc, Tc, T>) => MaybeAsyncActionResult<Pc, Tc>;
+> = (action: AsyncAction2<E, Pc, Tc, T>) => Promise<void>;
 
-export type PerformAction_F<
+export type AsyncPerformPredicate_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action: Action2<E, Pc, Tc, T>) => Promise<void>;
+> = (predicate: AsyncPredicateS3<E, Pc, Tc, T>) => boolean;
 
-export type ToPredicate_F<
+export type AsyncPerformDelay_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (predicate?: GuardConfig) => PredicateS2<E, Pc, Tc, T>;
+> = (delay: AsyncDelayFunction3<E, Pc, Tc, T>) => number;
 
-export type PerformPredicate_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (predicate: PredicateS3<E, Pc, Tc, T>) => boolean;
-
-export type ToDelay_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (delay?: string) => DelayFunction2<E, Pc, Tc, T> | undefined;
-
-export type PerformDelay_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (delay: DelayFunction3<E, Pc, Tc, T>) => number;
-
-export type ExecuteActivities_F = (
-  from: string,
-  activity: ActivityConfig,
-) => string[];
-
-export type PerformAfter_F = (
+export type AsyncPerformAfter_F = (
   from: string,
   after: DelayedTransitions,
 ) => (() => Promise<string | false>) | undefined;
 
-export type TransitionAfterResult<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> =
-  | {
-      result: ActionResult<Pc, Tc>;
-      target: string;
-    }
-  | undefined;
-
-export type PerformAlway_F = (
+export type AsyncPerformAlway_F = (
   always: AlwaysConfig,
 ) => Promise<string | false>;
 
-export type Collected0 = {
+export type AsyncCollected0 = {
   after?: (() => Promise<string | false>) | undefined;
   always?: () => Promise<string | false>;
 };
 
-export type Contexts<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = {
-  pContext?: Pc;
-  context?: Tc;
-};
-
-export type PerformTransition_F = (
+export type AsyncPerformTransition_F = (
   transition: TransitionConfig,
 ) => Promise<string | false>;
 
-export type PerformTransitions_F = (
+export type AsyncPerformTransitions_F = (
   ...transitions: TransitionConfig[]
 ) => Promise<string | false>;
 
-export type SleepContexts_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
->(
-  ms?: number,
-) => Promise<ActionResult<Pc, Tc>>;
-
-export type _Send_F<E extends EventObject> = (
+export type _AsyncSend_F<E extends EventObject> = (
   event: E,
 ) => Promise<NodeConfig | undefined>;
 
-export type AddSubscriber_F<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> = (
-  subscriber: FnMapR<Eo, Tc, T, void>,
-  options?: SubscriberOptions<Eo, Tc, T>,
-) => SubscriberClass<E, A, Tc, T, Eo>;
-
-export type Subscribe_F<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> = (
-  subscriber: FnMapR<Eo, Tc, T, void>,
-  options?: SubscriberOptions<Eo, Tc, T>,
-) => SubscriberClass<E, A, Tc, T, Eo>;
-
-export type Selector_F<T = any> = 0 extends 1 & T
-  ? (key: string) => any
-  : T extends Primitive
-    ? undefined
-    : <
-        D extends Decompose<T, { start: false; object: 'both' }>,
-        K extends Extract<keyof D, string>,
-        R = D[K],
-      >(
-        selector: K,
-      ) => R;
-
-export interface AnyInterpreter<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> {
-  mode: Mode;
-  eventsMap: EventsMap;
-  initialNode: any;
-  node: any;
-
-  makeStrict: () => void;
-  status: WorkingStatus;
-  initialConfig: NodeConfig;
-  initialValue: StateValue;
-  config: NodeConfig;
-  renew: any;
-  value: StateValue;
-  context: any;
-  start: () => Promise<void>;
-  pause: () => void;
-  resume: () => void;
-  stop: () => void;
-  _providePrivateContext: (pContext: Pc) => AnyMachine<E, A, Pc, Tc>;
-  _ppC: (pContext: Pc) => AnyMachine<E, A, Pc, Tc>;
-  _provideContext: (context: Tc) => AnyMachine<E, A, Pc, Tc>;
-
-  subscribe: AddSubscriber_F<E, A, Tc, T, any>;
-
-  send: (event: any) => Promise<void>;
-  toActionFn: (action: WithDescriber) => any;
-  toPredicateFn: (guard: GuardConfig) => any;
-  toDelayFn: (delay: string) => any;
-  toChildFunction: (machine: string) => any;
-  id?: string;
-  from?: string;
-
-  dispose: () => void;
-}
-
-export type CreateInterval2_F = (
-  config: NOmit<IntervalParams, 'exact'>,
-) => Interval2;
-
-export type Subcription = { unsubscribe: () => void };
-
-export type Observer<T> = {
-  next: (value: T) => void;
-  error: (err: any) => void;
-  complete: () => void;
-};
-
-export type TimeOutAction = {
-  id: string;
-  timer: NodeJS.Timeout;
-};
-
-export type DiffNext = {
-  sv: StateValue;
-  diffEntries: WithDescriber[];
-  diffExits: WithDescriber[];
-};
-
-export type CollectedPausable = {
-  from: string;
-  pausable: Pausable;
-  id: string;
-};
-
-export type CollectedService = {
-  from: string;
-  service: AnyInterpreter;
-  id: string;
-};
-
-export type ProvideMachineOptions_F<
+export type AsyncProvideMachineOptions_F<
   C extends AsyncConfig = AsyncConfig,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -270,4 +89,4 @@ export type ProvideMachineOptions_F<
   L extends SimpleMachineOptions2 = EmptyObject,
 > = <const T extends Mo>(
   option: AsyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
-) => Interpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
+) => AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;

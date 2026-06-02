@@ -1,26 +1,17 @@
-import type { Action3 } from '#actions';
+import type { SyncAction } from '#actions';
 import type { ActorConfig } from '#actor';
 import type {
   ConfigDef,
   NoExtraKeysConfigDef,
   TransformConfigDef,
 } from '#common/machine';
-import type { EmitterFunction2 } from '#emitters';
-import type { Predicate } from '#guards';
+import type { AsyncEmitterFunction } from '#emitters';
+import type { AsyncPredicate } from '#guards';
 
-import type { BaseConfig, StateType, StateValue } from '#states';
+import type { BaseConfig, StateType } from '#states';
 import type { AlwaysConfig, DelayedTransitions } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type {
-  ActorsConfigMap,
-  EventObject,
-  EventsMap,
-  Fn,
-  FnMap,
-  FnR,
-  Identify,
-  RecordS,
-} from '~types';
+import type { EventObject, FnMap, FnR, Identify, RecordS } from '~types';
 
 export type SyncTransitionsConfig<Paths extends string = string> = {
   readonly on?: DelayedTransitions<Paths>;
@@ -66,49 +57,15 @@ export type SyncConfig<
   readonly __longRuns?: boolean;
 } & TransformConfigDef<Paths>;
 
-export interface AnySyncMachine<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> {
-  options: any;
-  config: SyncConfig;
-  flat: Record<string, any>;
-  context: Tc;
-  pContext: Pc;
-  eventsMap: E;
-  actorsMap: A;
-  __events: any;
-  __state: any;
-  __decomposedState: any;
-  delays: any;
-  addOptions: any;
-  actions: any;
-  guards: any;
-  __allPaths: string;
-  __tag: string;
-  tags: string[];
-  children: any;
-  renew: any;
-  initialConfig: SyncNodeConfig;
-  initialValue: StateValue;
-
-  isInitial: Fn<[string], boolean>;
-  retrieveParentFromInitial: Fn<[string], SyncNodeConfig>;
-  toNode: Fn<[StateValue], SyncNodeConfig>;
-}
-
 /**
  * Represents a transition in a state machine with full defined functions.
  *
- * @template : {@linkcode EventsMap} [E] - The events map used in the transition.
  * @template : {@linkcode PromiseeMap} [P] - The promisees map used in the transition.
  * @template : [Pc] - The private context type for the transition.
  * @template : {@linkcode types} [Tc] - The context for the transition.
  *
  * @see {@linkcode Action} for the structure of actions in the transition.
- * @see {@linkcode Predicate} for the structure of guards in the transition.
+ * @see {@linkcode AsyncPredicate} for the structure of guards in the transition.
  */
 export type SyncTransition<
   E extends EventObject = EventObject,
@@ -117,8 +74,8 @@ export type SyncTransition<
   T extends string = string,
 > = {
   readonly target?: string;
-  readonly actions: Action3<E, Pc, Tc, T>[];
-  readonly guards: Predicate<E, Pc, Tc, T>[];
+  readonly actions: SyncAction<E, Pc, Tc, T>[];
+  readonly guards: AsyncPredicate<E, Pc, Tc, T>[];
   readonly description?: string;
 };
 
@@ -129,7 +86,7 @@ export type SyncEmitter<
   T extends string = string,
   R = any,
 > = {
-  src: EmitterFunction2<E, Pc, Tc, T, R>;
+  src: AsyncEmitterFunction<E, Pc, Tc, T, R>;
   description?: string;
   next: SyncTransition<E, Pc, Tc, T>[];
   error: SyncTransition<E, Pc, Tc, T>[];
@@ -169,7 +126,6 @@ export type SyncChildFunction<
 /**
  * Represents all transitions inside a state config with full defined functions.
  *
- * @template : {@linkcode EventsMap} [E] - The events map used in the transitions.
  * @template : [Pc] - The private context type for the transitions.
  * @template : {@linkcode PrimitiveObject} [Tc] - The context for the transitions
  *
@@ -198,8 +154,8 @@ export type SyncNode<
   id?: string;
   description?: string;
   type: StateType;
-  entry: Action3<E, Pc, Tc, T>[];
-  exit: Action3<E, Pc, Tc, T>[];
+  entry: SyncAction<E, Pc, Tc, T>[];
+  exit: SyncAction<E, Pc, Tc, T>[];
   tags: string[];
   states: Identify<SyncNode<E, Pc, Tc, T>>[];
   initial?: string;

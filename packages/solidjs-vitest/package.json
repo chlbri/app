@@ -1,0 +1,133 @@
+{
+  "name": "@bemedev/app-solidjs-vitest",
+  "version": "0.0.1",
+  "description": "Middleware between @bemedev/app-ts and solidjs",
+  "keywords": [
+    "app",
+    "bemedev",
+    "middleware",
+    "reactivity",
+    "solidjs",
+    "vitest",
+    "state-machines"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
+    "url": "https://bemedev.vercel.app"
+  },
+  "maintainers": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "contributors": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chlbri/app"
+  },
+  "files": [
+    "lib",
+    "public"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "pnpm run rm:lib && pnpm run rolldown",
+    "ci": "CI_START=$(date +%s) && pnpm run config:off && pnpm run lint && pnpm run test && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
+    "ci:admin": "pnpm run rm && pnpm run upgrade && pnpm run ci",
+    "generate": "pnpm app-cli generate -c ./src/__tests__",
+    "clean": "pnpm run rm && pnpm run config",
+    "config": "pnpm install",
+    "config:off": "pnpm run config --offline",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "gen:app": "app generate -o ./src/",
+    "gen:app:watch": "pnpm run gen:app --watch",
+    "_lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "lint": "pnpm run fmt && pnpm run lint:fix",
+    "lint:watch": "onchange --await-write-finish 5500 \"**/*\" -- pnpm run lint",
+    "posttest": "pnpm run fmt",
+    "prepublishOnly": "",
+    "prepare": "husky",
+    "pretest": "pnpm run build && pnpm run size",
+    "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "p-q": "pretty-quick",
+    "rinit": "pnpm run rm && pnpm run config",
+    "rinit:off": "pnpm run rm && pnpm run config:off",
+    "rimraf": "pnpx rimraf -rf",
+    "rm": "pnpm run rimraf -- node_modules pnpm-lock.yaml",
+    "rm:lib": "pnpm run rimraf -- lib",
+    "rolldown": "rolldown -c",
+    "size": "size-limit",
+    "test": "pnpm run test:coverage",
+    "test:only": "pnpm run test:coverage --no-coverage",
+    "test:coverage": "vitest run",
+    "test:ui": "vitest ui",
+    "test:watch": "vitest",
+    "upgrade": "pnpm upgrade --latest",
+    "upgrade:safe": "pnpm run upgrade"
+  },
+  "devDependencies": {
+    "@bemedev/app": "workspace:*",
+    "@bemedev/app-vitest": "workspace:*",
+    "@bemedev/decompose": "2.2.0",
+    "@bemedev/dev-utils": "^0.7.0",
+    "@bemedev/sleep": "^0.2.2",
+    "@size-limit/file": "^12.1.0",
+    "@solidjs/testing-library": "^0.8.10",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^25.9.1",
+    "@vitest/coverage-v8": "^4.1.8",
+    "@vitest/ui": "4.1.8",
+    "glob": "^13.0.6",
+    "globals": "^17.6.0",
+    "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
+    "onchange": "^7.1.0",
+    "oxfmt": "^0.52.0",
+    "oxlint": "^1.67.0",
+    "prettier": "^3.8.3",
+    "pretty-quick": "^4.2.2",
+    "rolldown": "1.0.3",
+    "rolldown-plugin-dts": "^0.25.2",
+    "size-limit": "^12.1.0",
+    "solid-js": "^1.9.13",
+    "tslib": "^2.8.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vite-plugin-solid": "^2.11.12",
+    "vitest": "^4.1.8"
+  },
+  "peerDependencies": {
+    "@bemedev/app": "workspace:*",
+    "@bemedev/app-solidjs": "workspace:*",
+    "solid-js": "^1.9.12"
+  },
+  "size-limit": [
+    {
+      "path": "lib/*.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "lib/*.cjs",
+      "limit": "10 KB"
+    }
+  ],
+  "engines": {
+    "node": ">=24"
+  }
+}

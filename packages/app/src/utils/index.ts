@@ -1,11 +1,13 @@
+import equal from 'fast-deep-equal';
+
 export { decompose, decomposeSV, recompose } from '@bemedev/decompose';
+
 export type {
   Decompose,
   DecomposeKeys,
   DecomposeOptions,
 } from '@bemedev/decompose';
 
-import equal from 'fast-deep-equal';
 export * from './environment';
 export * from './merge';
 export * from './nothing';
@@ -26,6 +28,7 @@ export * from './soa';
 export * from './reduceDescribers';
 export * from './fn';
 export * from './typings';
-export { sleep } from '@bemedev/sleep';
+export * from '@bemedev/sleep';
 
 export const deepEqual = <T>(a: T, b: T) => equal(a, b);
+export * from 'nanoid';

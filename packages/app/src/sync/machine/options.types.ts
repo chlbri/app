@@ -2,7 +2,7 @@ import type { SyncAction2 } from '#actions';
 import type { Ru, SubTypeLow } from '#bemedev/globals/types';
 import type { EventsMapFrom } from '#common/interpreter';
 import type { SyncDelayFunction2 } from '#delays';
-import type { EmitterFunction2 } from '#emitters';
+import type { SyncEmitterFunction, SyncEmittersMap } from '#emitters';
 import type {
   ActorsConfigMap,
   EventArg,
@@ -10,14 +10,25 @@ import type {
   EventObject,
   EventsMap,
 } from '#events';
-import type { DefinedValue, SyncPredicateS } from '#guards';
+import type {
+  DefinedValue,
+  SyncPredicateS,
+  SyncPredicateS2,
+} from '#guards';
 
+import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 import type { RegisterOptions } from '#registry';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { Decompose, EmptyObject, FnMap, FnR, ValuesOf } from '~types';
+import type {
+  Decompose,
+  EmptyObject,
+  FnMap,
+  FnR,
+  RecordS,
+  ValuesOf,
+} from '~types';
 import type { SyncConfig } from '../types.types';
 import type { SyncMachine } from './machine';
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 
 export type SyncFilterAction_F<
   E extends EventObject = EventObject,
@@ -262,7 +273,31 @@ export type SyncMachineOptions2<
       Record<O['children'], SyncChildFunction2<Eo, Pc, Tc, T, any>>
     >;
     emitters: Partial<
-      Record<O['emitters'], EmitterFunction2<Eo, Pc, Tc, T, any>>
+      Record<O['emitters'], SyncEmitterFunction<Eo, Pc, Tc, T, any>>
     >;
+  }>;
+}>;
+
+/**
+ * Simple representation machine options
+ *
+ * @template : {@linkcode EventsMap} [E] - type of the events map
+ * @template : {@linkcode ActorsConfigMap} [A] - type of the actors config map
+ * @template Pc - type of the private context
+ * @template : {@linkcode PrimitiveObject} [Tc] - type of the context
+ *
+ */
+export type SyncSimpleMachineOptions<
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  Eo extends EventObject = EventObject,
+> = Partial<{
+  actions: Partial<RecordS<SyncAction2<Eo, Pc, Tc, T>>>;
+  guards: Partial<RecordS<SyncPredicateS2<Eo, Pc, Tc, T>>>;
+  delays: Partial<RecordS<SyncDelayFunction2<Eo, Pc, Tc, T>>>;
+  actors: Partial<{
+    children: RecordS<SyncChildFunction2<Eo, Pc, Tc, T>>;
+    emitters: SyncEmittersMap<Eo, Pc, Tc, T>;
   }>;
 }>;

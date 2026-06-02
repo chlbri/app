@@ -4,7 +4,7 @@ import type {
   DefinedValue,
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  PredicateS2,
+  AsyncPredicateS2,
 } from '../../types';
 import { isNotValue, isValue } from './value';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -21,7 +21,7 @@ export type IsDefinedS_F = <
 /**
  * Checks if the given path is defined (not undefined or null).
  * @param path : A {@linkcode DefinedValue}, the path to retrieve.
- * @returns A {@linkcode PredicateS2} function that returns true if the path is defined, false otherwise.
+ * @returns A {@linkcode AsyncPredicateS2} function that returns true if the path is defined, false otherwise.
  *
  * @see {@linkcode isNotValue} for more details.
  * @see {@linkcode EventObject}
@@ -36,7 +36,7 @@ export const isDefinedS: IsDefinedS_F = path => {
 /**
  * Checks if the given path is undefined or null.
  * @param path : A {@linkcode DefinedValue} , the path to retrieve.
- * @returns A {@linkcode PredicateS2} function that returns true if the path is undefined or null, false otherwise.
+ * @returns A {@linkcode AsyncPredicateS2} function that returns true if the path is undefined or null, false otherwise.
  *
  * @see {@linkcode isValue} for more details.
  * @see {@linkcode EventObject}

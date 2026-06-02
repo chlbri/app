@@ -12,7 +12,7 @@ import type {
   EventsMap,
   ExtractSender,
 } from '#events';
-import type { Interpreter } from '#interpreter';
+import type { AsyncInterpreter } from '#interpreter';
 
 import type { CommonInterpreter } from '#common/interpreter';
 import type {
@@ -69,7 +69,7 @@ type ConstructStateValue_F = <
   E extends EventsMap = EventsMap,
   A extends ActorsConfigMap = ActorsConfigMap,
 >(
-  service: Interpreter<C, Pc, Tc, E, A>,
+  service: AsyncInterpreter<C, Pc, Tc, E, A>,
 ) => _ConstructStateValue_F;
 
 export const constructStateValue: ConstructStateValue_F = service => {
@@ -92,7 +92,7 @@ type ConstructContexts_F = <
   A extends ActorsConfigMap = ActorsConfigMap,
   R = { context: Tc; pContext: Pc },
 >(
-  service: Interpreter<C, Pc, Tc, E, A>,
+  service: AsyncInterpreter<C, Pc, Tc, E, A>,
   selector?: (result: { context: Tc; pContext: Pc }) => R,
   name?: string,
 ) => (index: number, value?: R) => readonly [string, () => void];
@@ -133,7 +133,7 @@ type ConstructSend_F = <
   E extends EventsMap = GetEventsFromConfig<C>,
   A extends ActorsConfigMap = ActorsConfigMap,
 >(
-  service: Interpreter<C, Pc, Tc, E, A>,
+  service: AsyncInterpreter<C, Pc, Tc, E, A>,
 ) => (_event: EventArg<E>, index: number) => readonly [string, () => void];
 
 export const constructSend: ConstructSend_F = service => {

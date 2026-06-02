@@ -1,7 +1,7 @@
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { DelayFunction3, DelayMap } from '../types';
+import type { AsyncDelayFunction3, AsyncDelayMap } from '../types';
 
 export type ToDelay_F = <
   E extends EventsMap = EventsMap,
@@ -14,8 +14,8 @@ export type ToDelay_F = <
   events: E,
   actorsMap: A,
   delay: string,
-  delays?: DelayMap<Eo, Pc, Tc, T>,
-) => DelayFunction3<Eo, Pc, Tc, T> | undefined;
+  delays?: AsyncDelayMap<Eo, Pc, Tc, T>,
+) => AsyncDelayFunction3<Eo, Pc, Tc, T> | undefined;
 
 /**
  * Converts a delay configuration to a function that returns the delay in milliseconds.
@@ -25,7 +25,7 @@ export type ToDelay_F = <
  * @param events of type {@linkcode EventsMap} [E], the events map to use for resolving the delay.
  * @param actorsMap of type {@linkcode ActorsConfigMap} [A], the actors map to use for resolving the delay.
  * @param delay of type string,  The delay configuration.
- * @param delays of type {@linkcode DelayMap}, the map of delays containing functions to execute.
+ * @param delays of type {@linkcode AsyncDelayMap}, the map of delays containing functions to execute.
  * @returns a function that returns the delay in milliseconds or undefined if not found.
  *
  * @see {@linkcode PrimitiveObject}

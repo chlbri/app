@@ -7,7 +7,7 @@ import { reduceFnMap } from '#utils';
 import recursive, { type GuardDefUnion } from '@bemedev/boolean-recursive';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { isDescriber, isString } from '~types';
-import type { PredicateMap, PredicateS3 } from '../types';
+import type { PredicateMap, AsyncPredicateS3 } from '../types';
 
 export type _ToPredicateF = <
   E extends EventsMap = EventsMap,
@@ -39,7 +39,7 @@ export type ToPredicate_F = <
   guard: GuardConfig,
   guards?: PredicateMap<Eo, Pc, Tc, T>,
 ) => {
-  predicate?: PredicateS3<Eo, Pc, Tc, T> | undefined;
+  predicate?: AsyncPredicateS3<Eo, Pc, Tc, T> | undefined;
   errors: string[];
 };
 
@@ -108,7 +108,7 @@ const _toPredicate: _ToPredicateF = (
  * @returns an object containing the predicate function and any errors encountered during the conversion.
  *
  * @see {@linkcode PrimitiveObject}
- * @see {@linkcode PredicateS3}
+ * @see {@linkcode AsyncPredicateS3}
  * @see {@linkcode GuardDefUnion}
  * @see {@linkcode reduceFnMap}
  * @see {@linkcode isDescriber}

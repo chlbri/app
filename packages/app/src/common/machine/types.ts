@@ -1,4 +1,4 @@
-import type { Action2, ActionResult, WithDescriber } from '#actions';
+import type { AsyncAction2, ActionResult, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
 import type { Identify, NotUndefined } from '#bemedev/globals/types';
@@ -9,7 +9,7 @@ import type {
   NodeConfigParallel,
   StateValue,
 } from '#states';
-import type { Transition } from '#transitions';
+import type { AsyncTransition } from '#transitions';
 import type { Fn } from '#utils';
 import type {
   ObjectT,
@@ -79,7 +79,7 @@ export interface AnyMachine<
 > {
   options: any;
   config: CommonConfig;
-  TYPE: MachineType;
+  readonly TYPE: MachineType;
   flat: Record<string, any>;
   context: Tc;
   pContext: Pc;
@@ -172,7 +172,7 @@ export type CommonTimeAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (name: string) => (id: string) => Action2<E, Pc, Tc, T>;
+> = (name: string) => (id: string) => AsyncAction2<E, Pc, Tc, T>;
 
 export type CommonCreateMachine_F<T = any> = (
   config: any,
@@ -275,6 +275,6 @@ export type CommonChild<
   src: CommonChildFunction2<E, Pc, Tc, T, R>;
   description?: string;
   id: string;
-  on: Identify<RecordS<Transition<E, Pc, Tc, T>>>[];
+  on: Identify<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };

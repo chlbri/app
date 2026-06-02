@@ -48,7 +48,7 @@ export type FromGuard<T extends GuardConfig> = T extends WithDescriber
       ? FromGuard<ReduceArray<T['or']>>
       : never;
 
-export type PredicateS<
+export type AsyncPredicateS<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -62,47 +62,33 @@ export type SyncPredicateS<
   T extends string = string,
 > = boolean | FnMap<E, Pc, Tc, T, boolean>;
 
-export type PredicateS2<
+export type AsyncPredicateS2<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = boolean | PredicateS3<E, Pc, Tc, T>;
+> = boolean | AsyncPredicateS3<E, Pc, Tc, T>;
 
-export type PredicateS3<
+export type SyncPredicateS2<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = boolean | SyncPredicateS3<E, Pc, Tc, T>;
+
+export type AsyncPredicateS3<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = FnR<E, Pc, Tc, T, boolean>;
 
-export type PredicateUnion<
+export type SyncPredicateS3<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> =
-  | PredicateS<E, Pc, Tc, T>
-  | PredicateAnd<E, Pc, Tc, T>
-  | PredicateOr<E, Pc, Tc, T>;
-
-export type PredicateAnd<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
-  and: PredicateUnion<E, Pc, Tc, T>[];
-};
-
-export type PredicateOr<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
-  or: PredicateUnion<E, Pc, Tc, T>[];
-};
+> = FnR<E, Pc, Tc, T, boolean>;
 
 /**
  * Union of all predicate functions.
@@ -112,29 +98,75 @@ export type PredicateOr<
  *
  * @returns A union type that can be a single predicate function, a combination of guards with AND logic, or a combination of guards with OR logic.
  *
- * @see {@linkcode PredicateS2} for single predicate function.
- * @see {@linkcode PredicateAnd} for combining multiple guards with AND logic.
- * @see {@linkcode PredicateOr} for combining multiple guards with OR logic.
+ * @see {@linkcode AsyncPredicateS2} for single predicate function.
+ * @see {@linkcode AsyncPredicateAnd} for combining multiple guards with AND logic.
+ * @see {@linkcode AsyncPredicateOr} for combining multiple guards with OR logic.
  */
-export type Predicate<
+export type AsyncPredicate<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > =
-  | PredicateS2<E, Pc, Tc, T>
-  | PredicateAnd<E, Pc, Tc, T>
-  | PredicateOr<E, Pc, Tc, T>;
+  | AsyncPredicateS<E, Pc, Tc, T>
+  | AsyncPredicateAnd<E, Pc, Tc, T>
+  | AsyncPredicateOr<E, Pc, Tc, T>;
+
+export type AsyncPredicateAnd<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = {
+  and: AsyncPredicate<E, Pc, Tc, T>[];
+};
+
+export type AsyncPredicateOr<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = {
+  or: AsyncPredicate<E, Pc, Tc, T>[];
+};
+
+export type SyncPredicateAnd<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = {
+  and: SyncPredicate<E, Pc, Tc, T>[];
+};
+
+export type SyncPredicateOr<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = {
+  or: SyncPredicate<E, Pc, Tc, T>[];
+};
+
+export type SyncPredicate<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> =
+  | SyncPredicateS2<E, Pc, Tc, T>
+  | AsyncPredicateAnd<E, Pc, Tc, T>
+  | AsyncPredicateOr<E, Pc, Tc, T>;
 
 /**
- * Represents a map of guards, where each key is a string and each value is a {@linkcode Predicate}.
+ * Represents a map of guards, where each key is a string and each value is a {@linkcode AsyncPredicate}.
  *
  * @template : type {@linkcode EventsMap} [E], the events map to use for resolving the predicate.
  * @template : type {@linkcode PromiseeMap} [P], the promisees map to use for resolving the predicate.
  * @template : [Pc], the type of the private context.
  * @template : type {@linkcode PrimitiveObject} [Tc], the type of the context.
  *
- * @returns A partial record where each key is a string and each value is a {@linkcode PredicateS}.
+ * @returns A partial record where each key is a string and each value is a {@linkcode AsyncPredicateS}.
  *
  * @see {@linkcode RecordS} for single predicate function.
  */
@@ -143,7 +175,7 @@ export type PredicateMap<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = Partial<RecordS<PredicateS<E, Pc, Tc, T>>>;
+> = Partial<RecordS<AsyncPredicateS<E, Pc, Tc, T>>>;
 
 type _DefinedValue<
   Pc = any,
