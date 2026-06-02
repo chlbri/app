@@ -53,7 +53,7 @@
     "config:off": "pnpm run config --offline",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "gen:app": "app generate -o ./src/",
+    "gen:app": "app generate -c ./src/__tests__",
     "gen:app:watch": "pnpm run gen:app --watch",
     "_lint": "oxlint",
     "lint:fix": "oxlint --fix",

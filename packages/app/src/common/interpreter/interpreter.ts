@@ -106,10 +106,7 @@ export abstract class CommonInterpreter<
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 >
-  implements
-    AnyInterpreter<E, A, Pc, Tc, Ta, Eo>,
-    Disposable,
-    AsyncDisposable
+  implements AnyInterpreter, Disposable, AsyncDisposable
 {
   protected __machine: CommonMachine<
     C,

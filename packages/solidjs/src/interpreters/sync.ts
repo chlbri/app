@@ -19,16 +19,16 @@ import { defaultSelector } from '../default';
 import type { State_F } from '../types';
 
 export class SolidSyncInterpreter<
-  C extends SyncConfig,
-  Pc,
-  Tc extends PrimitiveObject,
-  E extends EventsMap,
-  A extends ActorsConfigMap,
-  Ta extends string,
-  Eo extends EventObject,
-  AllPaths extends string,
-  Mo extends SimpleMachineOptions2,
-  L extends SimpleMachineOptions2,
+  const C extends SyncConfig = SyncConfig,
+  const Pc = any,
+  const Tc extends PrimitiveObject = PrimitiveObject,
+  const E extends EventsMap = EventsMap,
+  const A extends ActorsConfigMap = ActorsConfigMap,
+  const Ta extends string = string,
+  const Eo extends EventObject = EventObject,
+  const AllPaths extends string = string,
+  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 >
   implements Disposable, AsyncDisposable
 {
@@ -84,10 +84,6 @@ export class SolidSyncInterpreter<
     this.#service.stop();
     untrack(this.#mainState[0]);
   };
-
-  get addOptions() {
-    return this.#service.addOptions;
-  }
 
   state: State_F<State<Eo, Tc, Ta>> = (
     accessor = defaultSelector,

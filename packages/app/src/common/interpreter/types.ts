@@ -35,14 +35,7 @@ export type AddSubscriber_F<
   options?: SubscriberOptions<Eo, Tc, T>,
 ) => SubscriberClass<E, A, Tc, T, Eo>;
 
-export interface AnyInterpreter<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> {
+export type AnyInterpreter = {
   mode: Mode;
   eventsMap: EventsMap;
   initialNode: any;
@@ -62,12 +55,11 @@ export interface AnyInterpreter<
   pause: () => void;
   resume: () => void;
   stop: () => void;
-  _providePrivateContext: (pContext: Pc) => AnyMachine<E, A, Pc, Tc>;
-  _ppC: (pContext: Pc) => AnyMachine<E, A, Pc, Tc>;
-  _provideContext: (context: Tc) => AnyMachine<E, A, Pc, Tc>;
+  _providePrivateContext: Fn;
+  _ppC: Fn;
+  _provideContext: Fn;
 
-  subscribe: AddSubscriber_F<E, A, Tc, T, Eo>;
-
+  subscribe: Fn;
   send: (event: any) => any;
   toActionFn: (action: WithDescriber) => any;
   toPredicateFn: (guard: GuardConfig) => any;
@@ -77,7 +69,7 @@ export interface AnyInterpreter<
   from?: string;
 
   dispose: () => void;
-}
+};
 
 export type CollectedPausable = {
   from: string;

@@ -116,7 +116,8 @@ export type CreateMachineNamed_F = <
   const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
     Current['pContext']
   >,
-  const Tc extends StandardOutput<PrimitiveObject> = never,
+  const Tc extends StandardOutput<PrimitiveObject> =
+    StandardOutput<PrimitiveObject>,
   const E extends StandardOutput<
     Record<Current['events'], PrimitiveObject>
   > = StandardOutput<Record<Current['events'], never>>,
