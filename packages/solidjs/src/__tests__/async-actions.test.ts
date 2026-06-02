@@ -160,7 +160,7 @@ describe('Async action helpers', () => {
     const service = interpret(machine);
     const solid = pipe(service);
 
-    test('#00 => start', solid.start);
+    test('#00 => start', service.start);
 
     test('#01 => send PING, side-effect runs after tick', async () => {
       solid.send('PING');
