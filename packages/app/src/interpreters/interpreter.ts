@@ -35,7 +35,7 @@ import type {
   _Send_F,
   Collected0,
   ExecuteActivities_F,
-  Interpreter_F,
+  AsyncInterpreter_F,
   Mode,
   PerformAction_F,
   PerformActionLater_F,
@@ -803,7 +803,7 @@ export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
  * @see {@linkcode PromiseesMapFrom}
  * @see {@linkcode MachineOptionsFrom}
  */
-export type InterpreterFrom<M extends AnyMachine> = Interpreter<
+export type AsyncInterpreterFrom<M extends AnyMachine> = Interpreter<
   ConfigFrom<M>,
   PrivateContextFrom<M>,
   ContextFrom<M>,
@@ -824,7 +824,7 @@ export type InterpreterFrom<M extends AnyMachine> = Interpreter<
  *
  * @see {@linkcode MachineConfig}
  */
-export const interpret: Interpreter_F = (..._args) => {
+export const interpret: AsyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
   const { mode, exact, pContext, context } = _any(args ?? {});
   const out: any = new Interpreter(machine, mode, exact);

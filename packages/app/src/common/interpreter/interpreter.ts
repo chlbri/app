@@ -1701,14 +1701,15 @@ export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
  * @see {@linkcode PromiseesMapFrom}
  * @see {@linkcode MachineOptionsFrom}
  */
-export type InterpreterFrom<M extends AnyMachine> = CommonInterpreter<
-  ConfigFrom<M>,
-  PrivateContextFrom<M>,
-  ContextFrom<M>,
-  EventsMapFrom<M>,
-  ActorsMapFrom<M>,
-  TagFrom<M>,
-  EventsFrom<M>,
-  AllPathsFrom<M>,
-  MachineOptionsFrom<M>
->;
+export type CommonInterpreterFrom<M extends AnyMachine> =
+  CommonInterpreter<
+    ConfigFrom<M>,
+    PrivateContextFrom<M>,
+    ContextFrom<M>,
+    EventsMapFrom<M>,
+    ActorsMapFrom<M>,
+    TagFrom<M>,
+    EventsFrom<M>,
+    AllPathsFrom<M>,
+    MachineOptionsFrom<M>
+  >;

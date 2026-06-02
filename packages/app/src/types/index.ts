@@ -178,7 +178,7 @@ export type {
   ExtendedActionsParams,
   GuardKeysFrom,
   InterpretArgs,
-  InterpreterFrom,
+  CommonInterpreterFrom,
   InterpreterOptions,
   MachineOptionsFrom,
   MachinesMapFrom,
@@ -266,7 +266,7 @@ export type {
   SyncToPredicate_F,
 } from '../sync/interpreter';
 
-export { Interpreter } from '#interpreters';
+export type { Interpreter, AsyncInterpreterFrom } from '#interpreters';
 
 export type {
   Decompose,

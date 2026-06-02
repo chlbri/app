@@ -16,7 +16,12 @@ import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, PredicateS2, PredicateS3 } from '#guards';
 import type { AsyncAddOptionsParam_F, AsyncConfig } from '#machines';
-import type { ActivityConfig, NodeConfig, StateValue } from '#states';
+import type {
+  ActivityConfig,
+  NodeConfig,
+  StateValue,
+  WorkingStatus,
+} from '#states';
 import type {
   AlwaysConfig,
   DelayedTransitions,
@@ -25,27 +30,17 @@ import type {
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval2, IntervalParams } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { EmptyObject, FnMapR, OptionalDefinition } from '~types';
-import { type Interpreter, type InterpreterFrom } from './interpreter';
-
-export type WorkingStatus =
-  | 'idle'
-  | 'starting'
-  | 'started'
-  | 'paused'
-  | 'working'
-  | 'sending'
-  | 'stopped'
-  | 'busy';
+import type { EmptyObject, FnMapR } from '~types';
+import {
+  type AsyncInterpreterFrom,
+  type Interpreter,
+} from './interpreter';
 
 export type Mode = 'normal' | 'strict';
 
-export type OptionalDefinitions<P, C> = OptionalDefinition<P, 'pContext'> &
-  OptionalDefinition<C, 'context'>;
-
-export type Interpreter_F = <M extends AnyMachine>(
+export type AsyncInterpreter_F = <M extends AnyMachine>(
   ...args: InterpretArgs<M>
-) => InterpreterFrom<M>;
+) => AsyncInterpreterFrom<M>;
 
 export type ToAction_F<
   E extends EventObject = EventObject,

@@ -8,7 +8,7 @@ import type {
   ToEventObject,
   ToEvents,
 } from '#events';
-import type { InterpreterFrom } from '#interpreter';
+import type { AsyncInterpreterFrom } from '#interpreter';
 import type { AsyncMachine } from '#machine';
 import type { AsyncConfig, AsyncMachineOptions2 } from '#machines';
 import type { Register, RegisterOptions } from '#registry';
@@ -172,12 +172,12 @@ export type OutInterpreter<
 > =
   IsAsyncConfig<C> extends true
     ? C extends AsyncConfig
-      ? InterpreterFrom<M>
+      ? AsyncInterpreterFrom<M>
       : never
     : C extends SyncConfig
       ? Sync extends 'sync'
         ? SyncInterpreterFrom<M>
-        : InterpreterFrom<M>
+        : AsyncInterpreterFrom<M>
       : never;
 
 export type CreateInterpreter_F = <M extends AnyMachine>(
