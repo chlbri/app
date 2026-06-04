@@ -7,7 +7,7 @@ import _machine4 from './async-actions.4.machine';
 import { pipe } from '../interpreters/pipe';
 
 vi.useFakeTimers();
-const emptyFn = () => {};
+const emptyFn = vi.fn(() => {});
 
 /**
  * Async action helpers tests.
@@ -77,6 +77,7 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine, { context: { name: '' } });
     const solid = pipe(service);
+    const name = solid.context(s => s.name);
 
     test('#00 => start', solid.start);
 
@@ -85,7 +86,7 @@ describe('Async action helpers', () => {
     });
 
     test('#02 => context.name starts empty (from solid)', () => {
-      expect(solid.state(s => s.context?.name)()).toBe('');
+      expect(name()).toBe('');
     });
 
     test('#03 => send LOAD, resolves with timeout set', async () => {
@@ -95,11 +96,13 @@ describe('Async action helpers', () => {
     });
 
     test('#04 => send LOAD, resolves with timeout set (from solid)', async () => {
-      expect(solid.context(s => s.name)()).toBe('Bob');
+      expect(name()).toBe('Bob');
     });
   });
 
   describe('#03 => assign — async fn + { error } handler on reject', () => {
+    const ERROR = 'ERROR';
+
     const machine = _machine3.provideOptions(({ assign }) => ({
       actions: {
         loadUser: assign(
@@ -109,7 +112,7 @@ describe('Async action helpers', () => {
             throw new Error('network failure');
           },
           {
-            error: () => '',
+            error: () => ERROR,
           },
         ),
       },
@@ -119,6 +122,7 @@ describe('Async action helpers', () => {
       context: { name: '' },
     });
     const solid = pipe(service);
+    const name = solid.context(s => s.name);
 
     test('#00 => start', solid.start);
 
@@ -127,17 +131,17 @@ describe('Async action helpers', () => {
     });
 
     test('#02 => context.name starts empty (from solid)', () => {
-      expect(solid.state(s => s.context?.name)()).toBe('');
+      expect(name()).toBe('');
     });
 
     test('#03 => send LOAD, error handler merges fallback result', async () => {
       service.send('LOAD');
       await vi.advanceTimersByTimeAsync(TINY_DELAY + 50);
-      expect(service.state.context?.name).toBe('');
+      expect(service.state.context?.name).toBe(ERROR);
     });
 
     test('#04 => send LOAD, error handler merges fallback result (from solid)', async () => {
-      expect(solid.context(s => s.name)()).toBe('');
+      expect(name()).toBe(ERROR);
     });
   });
 
