@@ -39,14 +39,15 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine, { context: { name: '' } });
     const solid = pipe(service);
+    const name = solid.context(s => s.name);
     test('#00 => start', solid.start);
 
     test('#01 => context.name starts empty', () => {
-      expect(service.state.context?.name).toBe('');
+      expect(service.state.context.name).toBe('');
     });
 
     test('#02 => context.name starts empty (from solid)', () => {
-      expect(solid.state(s => s.context?.name)()).toBe('');
+      expect(name()).toBe('');
     });
 
     test('#03 => send LOAD, await async assign', async () => {
@@ -56,7 +57,7 @@ describe('Async action helpers', () => {
     });
 
     test('#04 => send LOAD, await async assign (from solid)', async () => {
-      expect(solid.context(s => s.name)()).toBe('Alice');
+      expect(name()).toBe('Alice');
     });
   });
 

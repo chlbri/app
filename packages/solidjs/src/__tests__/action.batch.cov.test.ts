@@ -1,4 +1,4 @@
-import { interpret } from '#exports/interpret';
+import { interpret } from '@bemedev/app';
 import _raw_machine from './action.batch.cov.machine';
 
 vi.useFakeTimers();

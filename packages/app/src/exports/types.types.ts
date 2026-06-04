@@ -74,7 +74,8 @@ export type OutMachine<
 export type CreateMachineNoName_F = <
   const C extends CommonConfig,
   const Pc extends StandardOutput<any> = StandardOutput<any>,
-  const Tc extends StandardOutput<PrimitiveObject> = never,
+  const Tc extends StandardOutput<PrimitiveObject> =
+    StandardOutput<undefined>,
   const E extends StandardOutput<Record<string, PrimitiveObject>> =
     StandardOutput<Record<string, never>>,
   const A extends StandardOutput<ActorsConfigMap> =
@@ -117,7 +118,7 @@ export type CreateMachineNamed_F = <
     Current['pContext']
   >,
   const Tc extends StandardOutput<PrimitiveObject> =
-    StandardOutput<PrimitiveObject>,
+    StandardOutput<undefined>,
   const E extends StandardOutput<
     Record<Current['events'], PrimitiveObject>
   > = StandardOutput<Record<Current['events'], never>>,
