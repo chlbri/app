@@ -1,6 +1,6 @@
 import {
-    DEFAULT_MAX_SELF_TRANSITIONS,
-    DEFAULT_MIN_ACTIVITY_TIME,
+  DEFAULT_MAX_SELF_TRANSITIONS,
+  DEFAULT_MIN_ACTIVITY_TIME,
 } from '#constants';
 import { constructTests, defaultC, unhandledRejection } from '#fixtures';
 import { DELAY, fakeDB, machine21, machine3 } from '#fixturesData';
