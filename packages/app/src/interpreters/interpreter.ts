@@ -768,7 +768,7 @@ export class AsyncInterpreter<
     this.__sent = true;
     this.__changeEvent(event);
     this.__setStatus('sending');
-    let sv = this.__value;
+    let sv = structuredClone(this.__value);
 
     const flat2 = this.__extractTransitions(event);
     // #endregion
