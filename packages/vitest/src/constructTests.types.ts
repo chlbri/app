@@ -7,7 +7,7 @@ import type {
   ActorsConfigMap,
   EventObject,
 } from '@bemedev/app/types';
-import type { PrimitiveObject } from '@bemedev/app/bemedev';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { ConstructTestsResult, Option } from './types';
 import type { VitestUtils } from 'vitest';
 

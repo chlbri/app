@@ -71,6 +71,7 @@
     "@bemedev/app": "workspace:*",
     "@bemedev/dev-utils": "^0.7.0",
     "@bemedev/rolldown-config": "^0.5.0",
+    "@bemedev/typings": "^1.2.0",
     "@types/node": "^25.9.1",
     "@vitest/coverage-v8": "^4.1.8",
     "@vitest/ui": "^4.1.8",
@@ -86,6 +87,7 @@
   },
   "peerDependencies": {
     "vitest": "^4.1.8",
-    "@bemedev/app": "workspace:*"
+    "@bemedev/app": "workspace:*",
+    "@bemedev/typings": "^1.2.0"
   }
 }
