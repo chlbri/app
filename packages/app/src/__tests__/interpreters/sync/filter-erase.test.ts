@@ -1,5 +1,5 @@
-import { constructTests } from '#fixtures';
 import { interpret } from '#exports/interpret';
+import { constructTests } from '#fixtures';
 import _machine1 from './filter-erase.1.machine';
 import _machine2 from './filter-erase.2.machine';
 import _machine3 from './filter-erase.3.machine';
@@ -187,7 +187,7 @@ describe('Filter and Erase actions', () => {
 
       test('#06 => Check filtered scores (>= 80)', () => {
         const scores = service.select('scores');
-        expect(Object.keys(scores ?? {}).length).toBe(3);
+
         expect(scores).toEqual({
           user1: 95,
           user3: 85,

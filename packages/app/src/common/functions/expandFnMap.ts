@@ -1,8 +1,8 @@
 import type { AsyncAction2, SyncAction2 } from '#actions';
-import type { Cast } from '@bemedev/app-utils-bemedev';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { reduceFnMap } from '#utils';
-import { assignByKey, type Decompose } from '@bemedev/decompose';
+import type { Cast } from '@bemedev/app-utils-bemedev';
+import { recompose, type Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { type FnMap } from '~types';
 
@@ -62,7 +62,6 @@ export type ExpandFnMap_F = {
  * @param fn  : type {@linkcode FnMap} [E, P, Pc, Tc, R] - The function to reduce the events and promisees and performs the action.
  * @returns a {@linkcode AsyncAction2} function.
  *
- * @see {@linkcode assignByKey} for assigning the result to the context and private context.
  * @see {@linkcode reduceFnMap} for reducing the events and promisees.
  * @see {@linkcode Decompose} for decomposing the private context and context into paths.
  *
@@ -71,12 +70,8 @@ export const expandFnMap: ExpandFnMap_F = (events, promisees, key, fn) => {
   const _fn = reduceFnMap(events, promisees, fn);
 
   return async ({ pContext, context, ...rest }) => {
-    const all = {
-      pContext,
-      context,
-    };
     const result = await _fn({ pContext, context, ...rest });
-    return assignByKey(all, key, result);
+    return recompose({ [key]: result });
   };
 };
 
@@ -84,11 +79,7 @@ expandFnMap.sync = (events, promisees, key, fn) => {
   const _fn = reduceFnMap(events, promisees, fn);
 
   return ({ pContext, context, ...rest }) => {
-    const all = {
-      pContext,
-      context,
-    };
     const result = _fn({ pContext, context, ...rest });
-    return assignByKey(all, key, result);
+    return recompose({ [key]: result });
   };
 };

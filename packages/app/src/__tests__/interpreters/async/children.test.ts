@@ -89,6 +89,10 @@ describe('Integration testing for interpret, Children', () => {
   describe('#03 => Cover child->on', () => {
     const notify = vi.fn();
     const child = _child4;
+    const childService = interpret(child);
+    childService.subscribe(({ value }) => {
+      console.warn('State:', value);
+    });
 
     const parent = _parent5.provideOptions(({ sendTo, voidAction }) => ({
       actions: {
@@ -102,17 +106,17 @@ describe('Integration testing for interpret, Children', () => {
           };
         }),
       },
-      actors: { children: { child: () => interpret(child) } },
+      actors: { children: { child: () => childService } },
     }));
 
     const service = interpret(parent);
 
     let calls = 0;
-    const { send, useNotify, start } = constructTests(
+    const { send, useFailNotify, start, waiter } = constructTests(
       service,
-      ({ index, tupleOf }) => {
+      ({ index, tupleOf, waiter }) => {
         return {
-          useNotify: (fails = false) => {
+          useFailNotify: (fails = false) => {
             const invite = `#${index()} => Notify is used => ${fails ? '(fails)' : ''}`;
 
             return tupleOf(invite, () => {
@@ -120,14 +124,16 @@ describe('Integration testing for interpret, Children', () => {
               expect(notify).toBeCalledTimes(calls);
             });
           },
+          waiter: waiter(10),
         };
       },
     );
 
     test(...start());
-    test(...useNotify(true));
+    test(...useFailNotify(true));
     test(...send('NEXT'));
-    test(...useNotify());
+    test(...waiter(1000));
+    test(...useFailNotify());
   });
 });
 

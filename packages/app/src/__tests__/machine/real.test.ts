@@ -49,10 +49,8 @@ describe('REAL LIFE TESTS', () => {
 
     describe('TESTS', () => {
       const { start } = constructTests(service);
-
       test(...start(0));
-
-      // test(...useValue('idle', 1));
+      test(...useValue('idle', 1));
       test(...useIterator(2, 2));
       test(...useSend('NEXT', 3));
 
@@ -69,7 +67,6 @@ describe('REAL LIFE TESTS', () => {
       );
 
       test(...useIterator(8, 5));
-
       test(...useSend('NEXT', 6));
 
       test(
@@ -85,64 +82,45 @@ describe('REAL LIFE TESTS', () => {
       );
 
       test(...useIterator(11, 8));
-
       test(...useSend('NEXT', 9));
-
-      test(
-        ...useValue(
-          {
-            compound: 'idle',
-          },
-          10,
-        ),
-      );
-
-      test(...useIterator(18, 11));
-
+      test(...useValue('idle', 10));
+      test(...useIterator(24, 11));
       test(...useSend('PREVIOUS', 12));
-
-      test(
-        ...useValue(
-          {
-            compound: 'idle',
-          },
-          13,
-        ),
-      );
-
-      test(...useIterator(18, 14));
-
+      test(...useValue('idle', 13));
+      test(...useIterator(24, 14));
       test(...useSend('NEXT', 15));
 
       test(
         ...useValue(
           {
-            compound: 'next',
+            parallel: {
+              atomic: 'idle',
+              compound: 'idle',
+            },
           },
           16,
         ),
       );
 
-      test(...useIterator(20, 17));
-
+      test(...useIterator(30, 17));
       test(...useSend('PREVIOUS', 18));
-
-      test(...useValue({ compound: 'idle' }, 19));
-
-      test(...useIterator(22, 20));
-
+      test(...useValue({ compound: 'next' }, 19));
+      test(...useIterator(37, 20));
       test(...useSend('NEXT', 21));
 
       test(
         ...useValue(
           {
-            compound: 'next',
+            parallel: {
+              atomic: 'idle',
+              compound: 'idle',
+            },
           },
           22,
         ),
       );
 
-      test(...useIterator(24, 23));
+      test(...useIterator(44, 23));
     });
   });
 
@@ -189,6 +167,7 @@ describe('REAL LIFE TESTS', () => {
       test(...useValue('idle', 1));
       test(...useIterator(1, 2));
       test(...useSend('NEXT', 3));
+
       test(
         ...useValue(
           {
@@ -200,8 +179,10 @@ describe('REAL LIFE TESTS', () => {
           4,
         ),
       );
+
       test(...useIterator(7, 5));
       test(...useSend('NEXT', 6));
+
       test(
         ...useValue(
           {
@@ -215,10 +196,12 @@ describe('REAL LIFE TESTS', () => {
           7,
         ),
       );
+
       test(...useIterator(12, 8));
       test(...useSend('PREVIOUS', 9));
       test(...useIterator(14, 10));
       test(...useSend('NEXT', 11));
+
       test(
         ...useValue(
           {
@@ -232,10 +215,22 @@ describe('REAL LIFE TESTS', () => {
           12,
         ),
       );
+
       test(...useIterator(18, 13));
       test(...useSend('NEXT', 14));
-      test(...useValue('idle', 15));
-      test(...useIterator(25, 16));
+
+      test(
+        ...useValue(
+          {
+            parallel: {
+              atomic: 'idle',
+            },
+          },
+          15,
+        ),
+      );
+
+      test(...useIterator(27, 16));
 
       test('#26 => #Decomposed', () => {
         const expected = {
@@ -1027,5 +1022,3 @@ describe('REAL LIFE TESTS', () => {
     });
   });
 });
-
-afterAll(() => vi.useRealTimers());

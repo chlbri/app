@@ -13,7 +13,7 @@ import {
 import { _any } from '@bemedev/app-utils-bemedev';
 
 import { toAction, type WithDescriber } from '#actions';
-import type { ChildConfig, EmitterConfig, FinallyConfig } from '#actor';
+import type { ChildConfig, EmitterConfig } from '#actor';
 import { getTags, toChildSrc } from '#common/functions';
 import {
   DEFAULT_DELIMITER,
@@ -40,6 +40,7 @@ import {
   decomposeSV,
   IS_TEST,
   isStringEmpty,
+  merge,
   reduceDescriber,
   replaceAll,
 } from '#utils';
@@ -50,7 +51,7 @@ import {
   toArray,
 } from '@bemedev/app-utils-bemedev';
 import { asyncfy } from '@bemedev/better-promise';
-import { assignByKey, getByKey } from '@bemedev/decompose';
+import { getByKey } from '@bemedev/decompose';
 import {
   createInterval,
   createTimeout,
@@ -65,7 +66,6 @@ import {
   getEntries,
   getExits,
   type AnyMachine,
-  type CommonChildFunction2,
   type CommonConfig,
   type CommonMachine,
   type ScheduledData,
@@ -196,13 +196,13 @@ export abstract class CommonInterpreter<
   /**
    * The initial {@linkcode NodeConfigWithInitials} of the inner {@linkcode Machine}.
    */
-  readonly #initialConfig: any;
+  protected readonly __initialConfig: any;
 
   /**
    * The public accessor of initial {@linkcode NodeConfigWithInitials} of the inner {@linkcode Machine}.
    */
   get initialConfig() {
-    return this.#initialConfig;
+    return this.__initialConfig;
   }
 
   /**
@@ -432,8 +432,8 @@ export abstract class CommonInterpreter<
   ) {
     this.__machine = machine.renew;
 
-    this.__config = this.#initialConfig = this.__machine.initialConfig;
-    this.#initialNode = this.#resolveNode(this.#initialConfig) as any;
+    this.__config = this.__initialConfig = this.__machine.initialConfig;
+    this.#initialNode = this.#resolveNode(this.__initialConfig) as any;
     this.__mode = mode;
     this.__exact = exact;
 
@@ -463,9 +463,7 @@ export abstract class CommonInterpreter<
 
     return this.__schedulerEvent.schedule(cb, this.__sent);
   };
-  protected abstract __performTransitions: (
-    ...transitions: TransitionConfig[]
-  ) => any;
+  protected abstract __performTransitions: Fn;
 
   protected __performAlways = (alway: AlwaysConfig) => {
     this.__changeEvent(transformEventArg(ALWAYS_EVENT));
@@ -604,7 +602,7 @@ export abstract class CommonInterpreter<
     return entries;
   };
 
-  #collectedChildrenConfig: [
+  protected __collectedChildrenConfig: [
     from: string,
     ...children: (ChildConfig & { id: string })[],
   ][] = [];
@@ -626,142 +624,18 @@ export abstract class CommonInterpreter<
       }
     });
 
-    this.#collectedChildrenConfig.push(...entries);
+    this.__collectedChildrenConfig.push(...entries);
     return entries;
   };
 
   protected __collectedChildren: CommonCollectedService[] = [];
-  #collectChildren = () => {
-    type _Child = ChildConfig & {
-      childFn: CommonChildFunction2<Eo, Pc, Tc, Ta>;
-      id: string;
-    };
-
-    return this.#collectedChildrenConfig
-      .filter(([from]) => this.__isInsideValue(from))
-      .filter(([from]) => {
-        const froms = this.__collectedChildren.map(({ from }) => from);
-        return !froms.includes(from);
-      })
-      .map(([from, ..._children]) => {
-        const children = _children
-          .map(({ id, ...rest }) => {
-            return { childFn: this.toChildFn(id), ...rest, id };
-          })
-          .filter(({ childFn }) => !!childFn) as _Child[];
-
-        return [from, ...children] as const;
-      })
-      .map(([from, ..._children]) => {
-        const services = _children.map(({ childFn, ...rest }) => {
-          const service = this.#executeChild(childFn);
-          return {
-            service,
-            ...rest,
-          };
-        });
-
-        return [from, ...services] as const;
-      })
-      .map(([from, ..._services]) => {
-        const services = _services.map(({ service, on, contexts, id }) => {
-          const si = service as AnyInterpreter & {
-            __subscribe: AddSubscriber_F;
-          };
-
-          const checkOn = on !== undefined && Object.keys(on).length > 0;
-          if (checkOn) {
-            si.__subscribe(
-              payload => {
-                const type = eventToType(payload.event);
-
-                const event = {
-                  type: `${id}::on::${type}`,
-                  payload,
-                } satisfies EventObject;
-
-                this.#changeEvent(_any(event));
-                const transitions = toArray<TransitionConfig>(on?.[type]);
-                this.__performTransitions(...transitions);
-              },
-              {
-                equals: (a, b) => a.event.type === b.event.type,
-                id: `${id}::on`,
-              },
-            );
-          }
-
-          const checkContexts =
-            contexts !== undefined && Object.keys(contexts).length > 0;
-
-          if (checkContexts) {
-            si.__subscribe(
-              ({ context }) => {
-                const entries = Object.entries(contexts);
-                entries.forEach(([key, path]) => {
-                  const pContext =
-                    key === '.'
-                      ? structuredClone(context)
-                      : getByKey.low(context, key);
-
-                  if (path === '.')
-                    return this.__mergeContexts({ pContext });
-                  const cb = () => {
-                    return assignByKey.low(
-                      this.__pContext,
-                      path,
-                      pContext,
-                    );
-                  };
-                  this.__schedulerContexts.schedule(cb);
-                });
-              },
-              {
-                equals: (a, b) => {
-                  const ac = a.context;
-                  const bc = b.context;
-                  if (equal(ac, bc)) return true;
-                  const keys = Object.keys(contexts);
-
-                  for (const key of keys) {
-                    if (key === '.') return equal(ac, bc);
-                    const _a = getByKey.low(ac, key);
-                    const _b = getByKey.low(bc, key);
-                    if (!equal(_a, _b)) return false;
-                  }
-
-                  return true;
-                },
-                id: `${id}::contexts`,
-              },
-            );
-          }
-
-          return {
-            service: si,
-            id,
-            from,
-          };
-        });
-
-        this.__collectedChildren.push(...services);
-        return services;
-      });
-  };
-
-  #executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
-    const instance = child(this.__cloneState);
-    return instance;
-  };
 
   protected abstract __performSelfTransitions: () => any;
 
-  protected abstract __performActions: (
-    ...actions: WithDescriber[]
-  ) => any;
+  protected abstract __performActions: Fn;
 
-  #startInitialEntries = () => {
-    const actions = getEntries(this.#initialConfig);
+  protected __startInitialEntries = () => {
+    const actions = getEntries(this.__initialConfig);
     if (actions.length < 1) return;
     return this.__performActions(...actions);
   };
@@ -900,13 +774,13 @@ export abstract class CommonInterpreter<
   };
 
   start = () => {
-    this.#collectChildren();
+    this.__collectChildren();
     this.__collectPausables();
     this.__throwing();
     this.__setStatus('started');
     this.#startPausables();
     this.__flush();
-    this.#startInitialEntries();
+    this.__startInitialEntries();
     this.#startChildren();
     this.__throwing();
     this._next();
@@ -1201,6 +1075,8 @@ export abstract class CommonInterpreter<
     );
   };
 
+  protected abstract __collectChildren: Fn;
+
   /**
    * Set the current {@linkcode Mode} of this {@linkcode Interpreter} service to 'strict'.
    * In this mode, all errors are thrown and warnings are logged to the console.
@@ -1380,7 +1256,7 @@ export abstract class CommonInterpreter<
       return isOutside;
     };
 
-    this.#collectChildren();
+    this.__collectChildren();
     this.__collectPausables();
     this.__selfTransitionsCounter++;
     this.#pauseAllActivities();
@@ -1475,13 +1351,14 @@ export abstract class CommonInterpreter<
 
   protected get __cloneState(): StateExtended<Eo, Pc, Tc, Ta> {
     const pContext = cloneDeep(this.__pContext);
-    return structuredClone({ pContext, ...this.__state });
+    return { pContext, ...structuredClone(this.__state) };
   }
 
   protected __mergeContexts: DirectMerge_F<Pc, Tc> = result => {
     const cb = () => {
-      this.__pContext = (result?.pContext as any) ?? this.__pContext;
-      const context = (result?.context as any) ?? this.__context;
+      this.__pContext = merge(this.__pContext, _any(result?.pContext));
+      const context = merge(this.__context, _any(result?.context));
+
       this.__context = context;
       return this.__performStates({ context });
     };
@@ -1525,7 +1402,7 @@ export abstract class CommonInterpreter<
    */
   protected __cachedIntervals: Interval2[] = [];
 
-  protected abstract __performFinally: (complete: FinallyConfig) => any;
+  protected abstract __performFinally: Fn;
 
   get #sending() {
     return this.#status === 'sending';
@@ -1555,20 +1432,6 @@ export abstract class CommonInterpreter<
 
     this._addWarning(...messages);
     return;
-  };
-
-  /**
-   * Changes the current {@linkcode ToEvents} event of this {@linkcode Interpreter} service.
-   *
-   * @param event - the {@linkcode ToEventsR} event to change the current {@linkcode Interpreter} service state.
-   */
-  #changeEvent = (event: Eo) => {
-    const cb = () => {
-      this.__performStates({ event });
-      this.#event = event;
-    };
-
-    return this.__schedulerEvent.schedule(cb, this.__sent);
   };
 
   /**

@@ -1,6 +1,4 @@
 import type { SyncAction2 } from '#actions';
-import { _any } from '@bemedev/app-utils-bemedev';
-import { _unknown } from '@bemedev/app-utils-bemedev';
 import { expandFnMap } from '#common/functions';
 import type {
   CommonCreateMachine_F,
@@ -11,8 +9,14 @@ import type { SyncDelayFunction } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
-import { reduceFnMap } from '#utils';
-import { assignByKey, getByKey } from '@bemedev/decompose';
+import {
+  _merge,
+  isMergeUndefined,
+  MERGE_UNDEFINED,
+  reduceFnMap,
+} from '#utils';
+import { _any, _unknown } from '@bemedev/app-utils-bemedev';
+import { getByKey, recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import { CommonMachine } from '../../common/machine';
@@ -161,7 +165,10 @@ export class SyncMachine<
             let out: any;
             for (const fn of fns.filter(f => !!f)) {
               if (!out) out = fn(state);
-              else out = fn({ ...out, ...rest });
+              else {
+                const _state = Object.assign(out, rest);
+                out = _merge(out, fn(_state));
+              }
             }
             return out;
           };
@@ -183,31 +190,26 @@ export class SyncMachine<
               currentValue !== null &&
               typeof currentValue === 'object'
             ) {
+              if (isMergeUndefined(currentValue)) {
+                return MERGE_UNDEFINED as any;
+              }
               // Filter object properties
               filteredValue = Object.entries(currentValue).reduce(
                 (acc, [objKey, value]) => {
                   const check = predicate(value, currentValue);
                   if (check) acc[objKey] = value;
+                  else acc[objKey] = MERGE_UNDEFINED;
                   return acc;
                 },
                 {} as any,
               );
             }
 
-            return assignByKey({ context, pContext }, key, filteredValue);
+            return recompose({ [key]: filteredValue });
           };
         },
 
-        erase: key => {
-          return ({ context, pContext }) => {
-            const state = cloneDeep({
-              context,
-              pContext,
-            });
-            return assignByKey(state, key, undefined);
-          };
-        },
-
+        erase: key => () => recompose.low({ [key]: MERGE_UNDEFINED }),
         voidAction,
         sendTo,
 
@@ -218,8 +220,8 @@ export class SyncMachine<
               pContext,
               ...rest,
             });
-            const data = fn(state);
 
+            const data = fn(state);
             const scheduled: ScheduledData<Pc, Tc> = { data, ms, id };
 
             return _any({

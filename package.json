@@ -92,7 +92,7 @@
     "@bemedev/pipe": "^1.6.1",
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/rx-pausable": "^1.2.0",
-    "@bemedev/scheduler": "^1.0.0",
+    "@bemedev/scheduler": "^1.1.0",
     "@bemedev/sequence": "^1.0.0",
     "@bemedev/sleep": "^0.2.2",
     "@bemedev/typings": "^1.2.0",

@@ -31,7 +31,7 @@ export default createMachine(
 
     eventsMap: type({
       SET_DATA: { name: 'string', age: 'number', email: 'string' },
-      CLEAR_ALL: 'never',
+      CLEAR_ALL: 'undefined',
     }),
     sync: true,
   },

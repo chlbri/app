@@ -131,6 +131,7 @@ describe('Complex machine 1', () => {
 
   describe('#12 => Check context', () => {
     test('#01 => the asset is undefined', () => {
+      console.warn(service.select('asset'));
       expect(service.select('asset')).toBeUndefined();
     });
 

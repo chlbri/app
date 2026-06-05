@@ -34,7 +34,10 @@ export type AsyncPerformAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action: AsyncAction2<E, Pc, Tc, T>) => Promise<void>;
+> = (
+  from: string | false,
+  action: AsyncAction2<E, Pc, Tc, T>,
+) => Promise<void>;
 
 export type AsyncPerformPredicate_F<
   E extends EventObject = EventObject,
@@ -56,6 +59,7 @@ export type AsyncPerformAfter_F = (
 ) => (() => Promise<string | false>) | undefined;
 
 export type AsyncPerformAlway_F = (
+  from: string,
   always: AlwaysConfig,
 ) => Promise<string | false>;
 
@@ -65,10 +69,12 @@ export type AsyncCollected0 = {
 };
 
 export type AsyncPerformTransition_F = (
+  from: string | false,
   transition: TransitionConfig,
 ) => Promise<string | false>;
 
 export type AsyncPerformTransitions_F = (
+  from: string | false,
   ...transitions: TransitionConfig[]
 ) => Promise<string | false>;
 

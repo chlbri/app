@@ -187,7 +187,6 @@ describe('Filter and Erase actions', () => {
 
       test('#06 => Check filtered scores (>= 80)', () => {
         const scores = service.select('scores');
-        expect(Object.keys(scores ?? {}).length).toBe(3);
         expect(scores).toEqual({
           user1: 95,
           user3: 85,

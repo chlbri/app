@@ -45,6 +45,8 @@ import type {
 } from './interpreter.types';
 
 import {
+  AddSubscriber_F,
+  AnyInterpreter,
   CommonInterpreter,
   type ActorsMapFrom,
   type AllPathsFrom,
@@ -59,13 +61,23 @@ import {
   type PrivateContextFrom,
   type TagFrom,
 } from '#common/interpreter';
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import {
+  CommonChildFunction2,
+  getEntries,
+  type AnyMachine,
+  type SimpleMachineOptions2,
+} from '#common/machine';
 import { type AsyncEmitterFunction } from '#emitters';
 import type { AsyncMachine } from '#machine';
 import type { AsyncAddOptions_F } from '#machines';
+import { getByKey, recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { EmitterConfig, FinallyConfig } from '../actors/types';
+import type {
+  ChildConfig,
+  EmitterConfig,
+  FinallyConfig,
+} from '../actors/types';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
@@ -219,6 +231,7 @@ export class AsyncInterpreter<
    * @see {@linkcode TransitionConfig} for more information about transitions.
    */
   protected __performForceSendAction = async (
+    from: string | false,
     forceSend?: EventArgObject<Eo>,
   ) => {
     if (!forceSend) return;
@@ -227,22 +240,25 @@ export class AsyncInterpreter<
     for (const { on } of values) {
       const type = eventToType(forceSend);
       const transitions = toArray.typed(on?.[type]);
-      await this.__performTransitions(...(transitions as any));
+      await this.__performTransitions(from, ...(transitions as any));
     }
   };
 
-  protected __performsExtendedActions = async ({
-    forceSend,
-    resend,
-    scheduled,
-    pauseActivity,
-    resumeActivity,
-    stopActivity,
-    pauseTimer,
-    resumeTimer,
-    stopTimer,
-    sentEvent,
-  }: ExtendedActionsParams<Eo, Pc, Tc>) => {
+  protected __performsExtendedActions = async (
+    from: string | false,
+    {
+      forceSend,
+      resend,
+      scheduled,
+      pauseActivity,
+      resumeActivity,
+      stopActivity,
+      pauseTimer,
+      resumeTimer,
+      stopTimer,
+      sentEvent,
+    }: ExtendedActionsParams<Eo, Pc, Tc>,
+  ) => {
     this.__performSendToAction(sentEvent);
     this.__performScheduledAction(scheduled);
     this.__performPauseActivityAction(pauseActivity);
@@ -254,28 +270,35 @@ export class AsyncInterpreter<
 
     // ForceSendAction returns the result to make further actions
     const result =
-      (await this.__performForceSendAction(forceSend)) ??
+      (await this.__performForceSendAction(from, forceSend)) ??
       (await this.__performResendAction(resend));
 
     return result;
   };
 
-  protected __executeAction: AsyncPerformAction_F<Eo, Pc, Tc, Ta> =
-    async action => {
-      this.__setStatus('busy');
+  protected __executeAction: AsyncPerformAction_F<Eo, Pc, Tc, Ta> = async (
+    from,
+    action,
+  ) => {
+    this.__setStatus('busy');
 
-      const { pContext, context, ...extendeds } =
-        await this.__performAction(action);
+    const { pContext, context, ...extendeds } =
+      await this.__performAction(action);
 
-      this.__mergeContexts({ pContext, context });
-      await this.__performsExtendedActions(extendeds);
-    };
+    if (from !== false && this.__cannotPerform(from)) return;
+    this.__mergeContexts({ pContext, context });
+    await this.__performsExtendedActions(from, extendeds);
+  };
 
-  protected __performActions = async (...actions: WithDescriber[]) => {
+  protected __performActions = async (
+    from: string | false,
+    ...actions: WithDescriber[]
+  ) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
 
     for (const fn of fns) {
-      await this.__executeAction(fn);
+      await this.__executeAction(from, fn);
+      if (from !== false && this.__cannotPerform(from)) break;
     }
   };
 
@@ -356,7 +379,7 @@ export class AsyncInterpreter<
             const check4 = check2 || check3;
 
             if (check4) {
-              await this.__performActions(activity);
+              await this.__performActions(from, activity);
               continue;
             }
 
@@ -365,7 +388,7 @@ export class AsyncInterpreter<
             );
             if (check5) {
               const actions = toArray.typed(activity.actions);
-              await this.__performActions(...actions);
+              await this.__performActions(from, ...actions);
             }
           }
         };
@@ -402,37 +425,46 @@ export class AsyncInterpreter<
     return outs;
   };
 
-  protected __performTransition: AsyncPerformTransition_F =
-    async transition => {
-      const check = typeof transition == 'string';
-      if (check) {
-        const { diffEntries, diffExits } = this.__diffNext(transition);
-        await this.__performActions(...toArray.typed(diffExits));
-        await this.__performActions(...toArray.typed(diffEntries));
-        return transition;
-      }
+  protected __startInitialEntries = () => {
+    const actions = getEntries(this.__initialConfig);
+    if (actions.length < 1) return;
+    return this.__performActions(false, ...actions);
+  };
 
-      const { guards, actions, target } = transition;
-      const { diffEntries, diffExits } = this.__diffNext(target);
+  protected __performTransition: AsyncPerformTransition_F = async (
+    from,
+    transition,
+  ) => {
+    const check = typeof transition == 'string';
+    if (check) {
+      const { diffEntries, diffExits } = this.__diffNext(transition);
+      await this.__performActions(from, ...toArray.typed(diffExits));
+      await this.__performActions(from, ...toArray.typed(diffEntries));
+      return transition;
+    }
 
-      const response = this.#performPredicates(
-        ...toArray<GuardConfig>(guards),
-      );
+    const { guards, actions, target } = transition;
+    const { diffEntries, diffExits } = this.__diffNext(target);
 
-      if (response) {
-        await this.__performActions(...toArray.typed(diffExits));
-        await this.__performActions(...toArray.typed(actions));
-        await this.__performActions(...toArray.typed(diffEntries));
-        return target ?? false;
-      }
-      return false;
-    };
+    const response = this.#performPredicates(
+      ...toArray<GuardConfig>(guards),
+    );
+
+    if (response) {
+      await this.__performActions(from, ...toArray.typed(diffExits));
+      await this.__performActions(from, ...toArray.typed(actions));
+      await this.__performActions(from, ...toArray.typed(diffEntries));
+      return target ?? false;
+    }
+    return false;
+  };
 
   protected __performTransitions: AsyncPerformTransitions_F = async (
+    from,
     ...transitions
   ) => {
     for (const _transition of transitions) {
-      const transition = await this.__performTransition(_transition);
+      const transition = await this.__performTransition(from, _transition);
       const check1 = typeof transition === 'string';
       if (check1) return transition;
     }
@@ -440,7 +472,10 @@ export class AsyncInterpreter<
     return false;
   };
 
-  protected __performFinally = (_finally?: FinallyConfig) => {
+  protected __performFinally = (
+    from: string,
+    _finally?: FinallyConfig,
+  ) => {
     const check1 = _finally === undefined;
     if (check1) return;
 
@@ -452,7 +487,7 @@ export class AsyncInterpreter<
 
       const check4 = check2 || check3;
       if (check4) {
-        this.__performActions(final);
+        this.__performActions(from, final);
         continue;
       }
 
@@ -462,7 +497,10 @@ export class AsyncInterpreter<
 
       /* v8 ignore else -- @preserve */
       if (response) {
-        return this.__performActions(...toArray.typed(final.actions));
+        return this.__performActions(
+          from,
+          ...toArray.typed(final.actions),
+        );
       }
     }
     return;
@@ -510,7 +548,7 @@ export class AsyncInterpreter<
         if (this.__cannotPerform(from)) return false;
 
         const func = () =>
-          this.__performTransitions(...(transitions as any));
+          this.__performTransitions(from, ...(transitions as any));
 
         const out = await func();
 
@@ -542,10 +580,10 @@ export class AsyncInterpreter<
     return this.machine.flat;
   }
 
-  #performAlways: AsyncPerformAlway_F = alway => {
+  #performAlways: AsyncPerformAlway_F = (from, alway) => {
     this.__changeEvent(transformEventArg(ALWAYS_EVENT));
     const always = toArray<TransitionConfig>(alway);
-    return this.__performTransitions(...always);
+    return this.__performTransitions(from, ...always);
   };
 
   get #collectedAfters() {
@@ -569,7 +607,9 @@ export class AsyncInterpreter<
     const entries = new Map<string, AsyncCollected0>();
 
     this.__collectedAlways.forEach(([from, always]) => {
-      entries.set(from, { always: () => this.#performAlways(always) });
+      entries.set(from, {
+        always: () => this.#performAlways(from, always),
+      });
     });
 
     this.#collectedAfters.forEach(([from, after]) => {
@@ -654,7 +694,7 @@ export class AsyncInterpreter<
 
                 this.__changeEvent(_any(event));
                 const transitions = toArray<TransitionConfig>(next);
-                this.__performTransitions(...transitions);
+                this.__performTransitions(from, ...transitions);
               },
               error: payload => {
                 const event = {
@@ -664,9 +704,9 @@ export class AsyncInterpreter<
 
                 this.__changeEvent(_any(event));
                 const transitions = toArray<TransitionConfig>(error);
-                this.__performTransitions(...transitions);
+                this.__performTransitions(from, ...transitions);
               },
-              complete: () => this.__performFinally(complete),
+              complete: () => this.__performFinally(from, complete),
             });
 
             return {
@@ -738,6 +778,7 @@ export class AsyncInterpreter<
       if (cannotContinue) continue;
 
       const target = await this.__performTransitions(
+        from,
         ...toArray.typed(transitions),
       );
 
@@ -773,6 +814,125 @@ export class AsyncInterpreter<
     } else return this.__setStatus('working');
   };
 
+  protected __collectChildren = () => {
+    type _Child = ChildConfig & {
+      childFn: CommonChildFunction2<Eo, Pc, Tc, Ta>;
+      id: string;
+    };
+
+    return this.__collectedChildrenConfig
+      .filter(([from]) => this.__isInsideValue(from))
+      .filter(([from]) => {
+        const froms = this.__collectedChildren.map(({ from }) => from);
+        return !froms.includes(from);
+      })
+      .map(([from, ..._children]) => {
+        const children = _children
+          .map(({ id, ...rest }) => {
+            return { childFn: this.toChildFn(id), ...rest, id };
+          })
+          .filter(({ childFn }) => !!childFn) as _Child[];
+
+        return [from, ...children] as const;
+      })
+      .map(([from, ..._children]) => {
+        const services = _children.map(({ childFn, ...rest }) => {
+          const service = this.#executeChild(childFn);
+          return {
+            service,
+            ...rest,
+          };
+        });
+
+        return [from, ...services] as const;
+      })
+      .map(([from, ..._services]) => {
+        const services = _services.map(({ service, on, contexts, id }) => {
+          const si = service as AnyInterpreter & {
+            __subscribe: AddSubscriber_F;
+          };
+
+          const checkOn = on !== undefined && Object.keys(on).length > 0;
+          if (checkOn) {
+            si.__subscribe(
+              payload => {
+                const type = eventToType(payload.event);
+
+                const event = {
+                  type: `${id}::on::${type}`,
+                  payload,
+                } satisfies EventObject;
+
+                this.__changeEvent(_any(event));
+                const transitions = toArray<TransitionConfig>(on?.[type]);
+
+                return this.__performTransitions(from, ...transitions);
+              },
+              {
+                equals: (a, b) => a.event.type === b.event.type,
+                id: `${id}::on`,
+              },
+            );
+          }
+
+          const checkContexts =
+            contexts !== undefined && Object.keys(contexts).length > 0;
+
+          if (checkContexts) {
+            si.__subscribe(
+              ({ context }) => {
+                const entries = Object.entries(contexts);
+                entries.forEach(([key, path]) => {
+                  const pContext =
+                    key === '.'
+                      ? structuredClone(context)
+                      : getByKey.low(context, key);
+
+                  if (path === '.')
+                    return this.__mergeContexts({ pContext });
+                  return this.__mergeContexts(
+                    recompose({ [`pContext.${path}`]: pContext }),
+                  );
+                });
+              },
+              {
+                equals: (a, b) => {
+                  const ac = a.context;
+                  const bc = b.context;
+                  if (equal(ac, bc)) return true;
+                  const keys = Object.keys(contexts);
+
+                  for (const key of keys) {
+                    if (key === '.') return equal(ac, bc);
+                    const _a = getByKey.low(ac, key);
+                    const _b = getByKey.low(bc, key);
+                    if (!equal(_a, _b)) return false;
+                  }
+
+                  return true;
+                },
+                id: `${id}::contexts`,
+              },
+            );
+          }
+
+          return {
+            service: si,
+            id,
+            from,
+          };
+        });
+
+        this.__collectedChildren.push(...services);
+        return services;
+      });
+  };
+
+  #executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
+    const instance = child(this.__cloneState);
+    return instance;
+  };
+
   // #endregion
 
   /**
@@ -788,11 +948,14 @@ export class AsyncInterpreter<
     event: T,
   ) => {
     const collector = this.__collectedChildren.filter(
-      ({ from, id }) => this.__isInsideValue(from) && id === to,
+      ({ id }) => id === to,
     );
 
     for (const { service } of collector) {
+      console.warn('event', '=>', event);
+      console.warn(service.value);
       await service.send(event);
+      console.warn(service.value);
     }
   };
 }

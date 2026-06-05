@@ -7,10 +7,12 @@ export const realMachineTypings1 = {
   context: type('number'),
 
   eventsMap: type({
-    NEXT: 'never',
-    PREVIOUS: 'never',
+    NEXT: 'undefined',
+    PREVIOUS: 'undefined',
   }),
-};
+
+  sync: true,
+} as const;
 
 export default createMachine(
   'src/__tests__/machine/real.1.machine',

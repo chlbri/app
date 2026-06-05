@@ -1,5 +1,5 @@
 import { type WithDescriber } from '#actions';
-import type { EmitterConfig, FinallyConfig } from '#actor';
+import type { ChildConfig, EmitterConfig, FinallyConfig } from '#actor';
 import {
   type ActorsMapFrom,
   type AllPathsFrom,
@@ -56,13 +56,21 @@ import type {
   InterpretArgs,
   Mode,
 } from '#common/interpreter';
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import type {
+  AnyMachine,
+  CommonChildFunction2,
+  SimpleMachineOptions2,
+} from '#common/machine';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
-import type { AddSubscriber_F } from '../../common/interpreter/types';
+import type {
+  AddSubscriber_F,
+  AnyInterpreter,
+} from '../../common/interpreter/types';
 import { createSubscriber } from '../../common/subscriber';
 import type { SyncAddOptions_F } from '../machine';
 import type { SyncMachine } from '../machine/machine';
+import { getByKey, recompose } from '@bemedev/decompose';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
@@ -689,6 +697,125 @@ export class SyncInterpreter<
       this.__setStatus('working');
       return this._next();
     } else return this.__setStatus('working');
+  };
+
+  protected __collectChildren = () => {
+    type _Child = ChildConfig & {
+      childFn: CommonChildFunction2<Eo, Pc, Tc, Ta>;
+      id: string;
+    };
+
+    return this.__collectedChildrenConfig
+      .filter(([from]) => this.__isInsideValue(from))
+      .filter(([from]) => {
+        const froms = this.__collectedChildren.map(({ from }) => from);
+        return !froms.includes(from);
+      })
+      .map(([from, ..._children]) => {
+        const children = _children
+          .map(({ id, ...rest }) => {
+            return { childFn: this.toChildFn(id), ...rest, id };
+          })
+          .filter(({ childFn }) => !!childFn) as _Child[];
+
+        return [from, ...children] as const;
+      })
+      .map(([from, ..._children]) => {
+        const services = _children.map(({ childFn, ...rest }) => {
+          const service = this.#executeChild(childFn);
+          return {
+            service,
+            ...rest,
+          };
+        });
+
+        return [from, ...services] as const;
+      })
+      .map(([from, ..._services]) => {
+        const services = _services.map(({ service, on, contexts, id }) => {
+          const si = service as AnyInterpreter & {
+            __subscribe: AddSubscriber_F;
+          };
+
+          const checkOn = on !== undefined && Object.keys(on).length > 0;
+          if (checkOn) {
+            si.__subscribe(
+              payload => {
+                const type = eventToType(payload.event);
+
+                const event = {
+                  type: `${id}::on::${type}`,
+                  payload,
+                } satisfies EventObject;
+
+                this.__changeEvent(_any(event));
+                const transitions = toArray<TransitionConfig>(on?.[type]);
+
+                return this.__performTransitions(...transitions);
+              },
+              {
+                equals: (a, b) => a.event.type === b.event.type,
+                id: `${id}::on`,
+              },
+            );
+          }
+
+          const checkContexts =
+            contexts !== undefined && Object.keys(contexts).length > 0;
+
+          if (checkContexts) {
+            si.__subscribe(
+              ({ context }) => {
+                const entries = Object.entries(contexts);
+                entries.forEach(([key, path]) => {
+                  const pContext =
+                    key === '.'
+                      ? structuredClone(context)
+                      : getByKey.low(context, key);
+
+                  if (path === '.')
+                    return this.__mergeContexts({ pContext });
+                  return this.__mergeContexts(
+                    recompose({ [`pContext.${path}`]: pContext }),
+                  );
+                });
+              },
+              {
+                equals: (a, b) => {
+                  const ac = a.context;
+                  const bc = b.context;
+                  if (equal(ac, bc)) return true;
+                  const keys = Object.keys(contexts);
+
+                  for (const key of keys) {
+                    if (key === '.') return equal(ac, bc);
+                    const _a = getByKey.low(ac, key);
+                    const _b = getByKey.low(bc, key);
+                    if (!equal(_a, _b)) return false;
+                  }
+
+                  return true;
+                },
+                id: `${id}::contexts`,
+              },
+            );
+          }
+
+          return {
+            service: si,
+            id,
+            from,
+          };
+        });
+
+        this.__collectedChildren.push(...services);
+        return services;
+      });
+  };
+
+  #executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
+    const instance = child(this.__cloneState);
+    return instance;
   };
 
   // #endregion

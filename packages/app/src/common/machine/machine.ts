@@ -514,10 +514,10 @@ export abstract class CommonMachine<
     (this.#delays = merge(this.#delays, delays));
 
   #addChildren = (children?: NotUndefined<Mo['actors']>['children']) =>
-    (this.#actors = merge(this.#actors, { children }));
+    (this.#actors = merge(this.#actors, _any({ children })));
 
   #addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
-    (this.#actors = merge(this.#actors, { emitters }));
+    (this.#actors = merge(this.#actors, _any({ emitters })));
 
   abstract createOptions: (helper: Fn) => Mo | undefined;
 

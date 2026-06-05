@@ -7,9 +7,14 @@ import {
   type EventsMap,
 } from '#events';
 import { type FlatMapN } from '#states';
-import { reduceFnMap } from '#utils';
+import {
+  _merge,
+  isMergeUndefined,
+  MERGE_UNDEFINED,
+  reduceFnMap,
+} from '#utils';
 import { _any, _unknown } from '@bemedev/app-utils-bemedev';
-import { assignByKey, getByKey } from '@bemedev/decompose';
+import { getByKey, recompose } from '@bemedev/decompose';
 
 import {
   CommonMachine,
@@ -179,37 +184,24 @@ export class AsyncMachine<
           );
 
           return async ({ pContext, context, event, ...rest }) => {
-            const all = cloneDeep({ pContext, context });
+            const state = cloneDeep({ pContext, context });
 
             const execute = async () => {
-              const rawResult = await _fn({
-                pContext,
-                context,
-                event,
-                ...rest,
-              });
-              return assignByKey(all, _any(key), rawResult);
+              const rawResult = await _fn({ ...state, event, ...rest });
+              return recompose({ [key]: rawResult });
             };
 
             try {
               if (max !== undefined) {
-                const tp = withTimeout(
-                  execute,
-                  `assign-${String(key)}`,
-                  max,
-                );
+                const _key = String(key);
+                const tp = withTimeout(execute, `assign-${_key}`, max);
+
                 return await tp();
               }
               return await execute();
             } catch (e: any) {
-              const rawResult = errorFn({
-                context,
-                pContext,
-                payload: e,
-                ...rest,
-              });
-
-              return assignByKey(all, _any(key), rawResult);
+              const rawResult = errorFn({ ...state, payload: e, ...rest });
+              return recompose({ [key]: rawResult });
             }
           };
         },
@@ -225,7 +217,11 @@ export class AsyncMachine<
             let out: any;
             for (const fn of fns.filter(f => !!f)) {
               if (!out) out = await fn(state);
-              else out = await fn({ ...out, ...rest });
+              else {
+                const _state = Object.assign(out, rest);
+                const temp = await fn(_state);
+                out = _merge(out, temp);
+              }
             }
             return out;
           };
@@ -247,31 +243,26 @@ export class AsyncMachine<
               currentValue !== null &&
               typeof currentValue === 'object'
             ) {
+              if (isMergeUndefined(currentValue)) {
+                return MERGE_UNDEFINED as any;
+              }
               // Filter object properties
               filteredValue = Object.entries(currentValue).reduce(
                 (acc, [objKey, value]) => {
                   const check = predicate(value, currentValue);
                   if (check) acc[objKey] = value;
+                  else acc[objKey] = MERGE_UNDEFINED;
                   return acc;
                 },
                 {} as any,
               );
             }
 
-            return assignByKey({ context, pContext }, key, filteredValue);
+            return recompose({ [key]: filteredValue });
           };
         },
 
-        erase: key => {
-          return ({ context, pContext }) => {
-            const state = cloneDeep({
-              context,
-              pContext,
-            });
-            return assignByKey(state, key, undefined);
-          };
-        },
-
+        erase: key => () => recompose({ [key]: MERGE_UNDEFINED }),
         voidAction,
         sendTo,
 
@@ -282,8 +273,8 @@ export class AsyncMachine<
               pContext,
               ...rest,
             });
-            const data = await fn(state);
 
+            const data = await fn(state);
             const scheduled: ScheduledData<Pc, Tc> = { data, ms, id };
 
             return _any({

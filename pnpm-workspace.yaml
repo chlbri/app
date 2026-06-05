@@ -64,3 +64,4 @@ minimumReleaseAgeExclude:
   - oxlint@1.68.0
   - "@bemedev/app-vitest@0.0.2"
   - "@bemedev/app@1.1.4"
+  - '@bemedev/scheduler@1.1.0'

@@ -1,27 +1,8 @@
-import { _any } from '@bemedev/app-utils-bemedev';
 import type { DeepPartial } from '@bemedev/app-utils-bemedev';
 import { deepmergeCustom } from 'deepmerge-ts';
-import equal from 'fast-deep-equal';
+// import equal from 'fast-deep-equal';
 
-declare module 'deepmerge-ts' {
-  interface DeepMergeFunctionURItoKind<
-    Ts extends Readonly<ReadonlyArray<unknown>>,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Fs extends DeepMergeFunctionsURIs,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    M,
-  > {
-    readonly FilterUndefined: FilterOut<Ts, null | undefined>;
-  }
-}
-
-const _merge = deepmergeCustom<
-  unknown,
-  {
-    DeepMergeArraysURI: 'DeepMergeLeafURI';
-    DeepMergeFilterValuesURI: 'FilterUndefined';
-  }
->({
+export const _merge = deepmergeCustom({
   mergeArrays: false,
   mergeMaps: false,
   mergeRecords: (values, all, options) => {
@@ -32,6 +13,65 @@ const _merge = deepmergeCustom<
     );
   },
 });
+
+const UNEFINED_KEY = '##__FilterUndefined__';
+
+class MergeUndefined {
+  readonly [UNEFINED_KEY] = UNEFINED_KEY;
+}
+
+export const MERGE_UNDEFINED = new MergeUndefined();
+
+// create a function that transform MERGE_UNDEFINED to undefined in all cases deep nested array or object, recursive
+
+export const transformMergeUndefined = (value: any): any => {
+  if (value === MERGE_UNDEFINED) return undefined;
+
+  if (Array.isArray(value)) {
+    return value.map(transformMergeUndefined);
+  }
+
+  if (typeof value === 'object' && value !== null) {
+    const check1 = value[UNEFINED_KEY] === UNEFINED_KEY;
+    if (check1) return undefined;
+
+    return Object.fromEntries(
+      Object.entries(value).map(([key, value]) => [
+        key,
+        transformMergeUndefined(value),
+      ]),
+    );
+  }
+
+  return value;
+};
+
+export const isMergeUndefined = (value: any) => {
+  if (value === MERGE_UNDEFINED) return false;
+
+  const check1 =
+    value !== null &&
+    typeof value === 'object' &&
+    Object.keys(value).length === 1 &&
+    value[UNEFINED_KEY] === UNEFINED_KEY;
+
+  return check1;
+};
+
+export const compact = (value: any): any => {
+  const entries = Object.entries(value)
+    .filter(([, value]) => {
+      return value !== undefined;
+    })
+    .map(([, value]) => {
+      const check1 = value !== null && typeof value === 'object';
+      if (check1) {
+        return compact(value);
+      }
+      return value;
+    });
+  return Object.fromEntries(entries);
+};
 
 /**
  * A custom implement of `deepmerge-ts` ({@linkcode deepmergeCustom}) for better suitability with this library.
@@ -45,12 +85,13 @@ const _merge = deepmergeCustom<
  */
 export const merge = <T = any>(
   value: T,
-  ...mergers: (DeepPartial<NoInfer<T>> | NoInfer<T> | undefined)[]
+  ...mergers: DeepPartial<NoInfer<T> | undefined>[]
 ): T => {
   // #region Check performance
-  const check1 = mergers.every(merger => equal(merger, value));
-  if (check1) return value;
+
   // #endregion
 
-  return _any(_merge(value, ...mergers));
+  const out = transformMergeUndefined(_merge(value, ...mergers));
+
+  return out;
 };
