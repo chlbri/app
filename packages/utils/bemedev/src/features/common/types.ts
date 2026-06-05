@@ -72,39 +72,6 @@ export type SingleOrArray<T> = T | T[] | ReadonlyArray<T>;
 export type SoA<T> = SingleOrArray<T>;
 
 /**
- * PrimitiveObjectMap type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type PrimitiveObjectMap = {
-  [key: Keys]: SoRa<_PrimitiveObject>;
-};
-
-type _PrimitiveObject = Primitive | PrimitiveObjectMap;
-
-/**
- * A type that represents a primitive object, which can be a primitive value or an object
- *
- * @remark
- */
-/**
- * PrimitiveObject type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type PrimitiveObject = SoRa<_PrimitiveObject>;
-
-/**
  * NExtract type - Auto-generated expression
  *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.

@@ -12,7 +12,6 @@ import never from './never';
 import neverify from './neverify';
 import _null from './null';
 import partial from './partial/all';
-import primitive from './primitive/all';
 import readonly from './readonly/all';
 import required from './required/all';
 import symbol from './symbol';
@@ -40,7 +39,6 @@ export const typings = expandFn(_index, {
   any,
   required,
   readonly,
-  primitive,
   symbol,
   date,
   undefiny,

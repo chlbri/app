@@ -595,6 +595,9 @@ importers:
       '@bemedev/rolldown-config':
         specifier: ^0.5.0
         version: 0.5.0(glob@13.0.6)(rolldown@1.0.3)(rollup@4.61.1)(typescript@6.0.3)
+      '@bemedev/sleep':
+        specifier: ^0.2.2
+        version: 0.2.2
       '@bemedev/typings':
         specifier: ^1.2.0
         version: 1.2.0
