@@ -125,7 +125,6 @@
     "config:off": "pnpm run config --offline",
     "generate:lib": "node lib/cli/index.js generate -c ./src/__tests__",
     "generate": "tsx src/cli/index.ts generate -c ./src/__tests__",
-    "prepare": "husky",
     "generate:watch": "tsx src/cli/index.ts watch -c ./src/__tests__",
     "_lint": "oxlint",
     "lint:fix": "oxlint --fix",

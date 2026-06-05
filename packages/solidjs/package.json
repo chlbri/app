@@ -61,7 +61,6 @@
     "lint:watch": "onchange --await-write-finish 5500 \"**/*\" -- pnpm run lint",
     "posttest": "pnpm run fmt",
     "prepublishOnly": "",
-    "prepare": "husky",
     "pretest": "pnpm run build && pnpm run size",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
     "p-q": "pretty-quick",

@@ -1,14 +1,38 @@
-# Récupère le message de commit depuis le fichier passé en paramètre
+# Get the commit message from the file passed as argument
 commit_msg_file="$1"
 commit_msg=$(cat "$commit_msg_file")
 
-echo "Vérification du message de commit msg : $commit_msg"
+echo "Checking commit message: $commit_msg"
 
-# Vérifie si le message contient "_NO_CI"
-if echo "$commit_msg" | grep -q "\_NO\_CI"; then
-  echo "🚫 Tests ignorés : _NO_CI détecté dans le message de commit"
+# If the message contains "_NO_CI", skip CI
+if echo "$commit_msg" | grep -q "_NO_CI"; then
+  echo "🚫 CI skipped: _NO_CI detected in commit message"
   exit 0
 fi
 
-npm run ci
-echo "✅ Tests réussis 😎"
+pnpm run _ci
+git add .
+echo "✅ CI passed 😎"
+
+# Background process to stage, amend, and rerun CI until there are no further modifications
+(
+  # Wait for the current git commit to release the lock
+  while [ -f .git/index.lock ] || ls .git/refs/heads/*.lock >/dev/null 2>&1; do
+    sleep 0.1
+  done
+  
+  while true; do
+    if [ -n "$(git status --porcelain)" ]; then
+      echo "Changes detected after CI. Amending commit..."
+      git add .
+      git commit --amend --no-edit --no-verify
+      
+      echo "Rerunning CI..."
+      pnpm run ci
+    else
+      echo "No further changes detected. Stabilization achieved."
+      break
+    fi
+  done
+) &
+

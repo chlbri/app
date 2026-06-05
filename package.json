@@ -75,9 +75,12 @@
     "test:only:solidjs": "pnpm run solidjs -- run test:only",
     "test:only:solidjs-vitest": "pnpm run solidjs-vitest -- run test:only",
     "test:only": "pnpm run test:only:app && pnpm run test:only:vitest && pnpm run test:only:solidjs && pnpm run test:only:solidjs-vitest",
+    "_ci": "pnpm install && pnpm run -r build && pnpm run -r lint && pnpm run -r test:only",
+    "ci": "CI=$(date +%s) && pnpm run _ci && echo \"\n✅ CI takes $(($(date +%s) - CI))s\n\"",
     "ci:admin": "CI_ADMIN=$(date +%s) && pnpm run rm && pnpm run up && pnpm install && pnpm run -r build && pnpm run -r lint && pnpm run -r test:only && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_ADMIN))s\n\"",
     "rm": "pnpx rimraf **/node_modules **/pnpm-lock.yaml",
-    "up": "pnpm update --latest"
+    "up": "pnpm update --latest",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@bemedev/better-promise": "^0.1.1",
