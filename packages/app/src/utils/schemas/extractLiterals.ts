@@ -1,11 +1,18 @@
 import * as v from 'valibot';
 
-export const extractLiterals = <
-  const TSchema extends ReadonlyArray<
-    v.LiteralSchema<string | number | boolean, any>
-  >,
->(
+type Literal = v.LiteralSchema<string | number | boolean, any>;
+
+type RL = ReadonlyArray<Literal>;
+
+export type ExtractLiteralsOutput<T extends RL> = T extends [
+  infer L extends Literal,
+  ...infer Rest extends RL,
+]
+  ? [L['literal'], ...ExtractLiteralsOutput<Rest>]
+  : [];
+
+export const extractLiterals = <const TSchema extends RL>(
   schema: v.UnionSchema<TSchema, any>,
-): TSchema[number]['literal'][] => {
-  return schema.options.map(o => o.literal);
+): ExtractLiteralsOutput<TSchema> => {
+  return schema.options.map(o => o.literal) as any;
 };
