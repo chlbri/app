@@ -1,6 +1,7 @@
 export * from '#exports/types.types';
 export * from '../registry.types';
 export * from './primitives';
+export * from './standard';
 
 export type {
   ActorsConfigMap,
