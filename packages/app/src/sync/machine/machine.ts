@@ -454,7 +454,7 @@ export class SyncMachine<
   };
 }
 
-export const createSyncMachine: CommonCreateMachine_F<SyncMachine> = (
+export const createSyncMachine: CommonCreateMachine_F = (
   config,
   types,
 ) => {

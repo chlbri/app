@@ -1,4 +1,10 @@
 import * as v from 'valibot';
+import type { RefineStringArray } from '~types';
+import type {
+  AlwaysConfig,
+  ArrayTransitions,
+  ArrayTransitionsF,
+} from '../types';
 import {
   TransitionConfigF_Schema,
   TransitionConfig_Schema,
@@ -7,12 +13,6 @@ import {
   TransitionConfigMapFGSchema,
   TransitionConfigMapGSchema,
 } from './map';
-import type {
-  AlwaysConfig,
-  ArrayTransitions,
-  RefineStringArray,
-} from '~types';
-import { TargetSchema } from './utils';
 
 export const ArrayTransitions_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
@@ -35,8 +35,8 @@ export const ArrayTransitions_Schema = <T extends ReadonlyArray<string>>(
 export const ArrayTransitionsF_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ): v.BaseSchema<
-  ArrayTransitions<RefineStringArray<T>>,
-  ArrayTransitions<RefineStringArray<T>>,
+  ArrayTransitionsF<RefineStringArray<T>>,
+  ArrayTransitionsF<RefineStringArray<T>>,
   any
 > => {
   return v.pipe(
@@ -55,7 +55,7 @@ export const SingleOrArrayT_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
   return v.union([
-    TransitionConfigF_Schema(...paths),
+    TransitionConfig_Schema(...paths),
     ArrayTransitions_Schema(...paths),
   ]);
 };
@@ -76,5 +76,5 @@ export const AlwaysConfig_Schema = <T extends ReadonlyArray<string>>(
 export const DelayedTransitions_Config = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
-  return v.record(TargetSchema(paths), ArrayTransitions_Schema(...paths));
+  return v.record(v.string(), SingleOrArrayT_Schema(...paths));
 };

@@ -1,25 +1,19 @@
 import { isAsyncConfig } from '#common/functions/isAsyncConfig';
 import { createAsyncMachine } from '#machine';
-import { NodeConfig_Schema } from '#states';
-import { _any } from '@bemedev/app-utils-bemedev';
+import { getTargetsFromConfig, NodeConfig_Schema } from '#states';
 import * as v from 'valibot';
 import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
 export type { CreateMachine_F } from './types.types';
 
 const builder = (config: any, types: any) => {
-  console.warn(
-    'pass',
-    JSON.stringify(
-      v.safeParse(NodeConfig_Schema(), config).issues?.length,
-      null,
-      2,
-    ),
-  );
-  // const _config = v.parse(NodeConfig_Schema(), config);
+  const config1 = v.safeParse(NodeConfig_Schema(), config);
+  const targets = getTargetsFromConfig(config);
+  const config2 = v.safeParse(NodeConfig_Schema(...targets), config1);
+  console.warn('issues', config2.issues);
   const check = !isAsyncConfig(config) && types?.sync === true;
   const { sync: __, ...rest } = { sync: undefined, ...types };
-  const fn = check ? _any(createSyncMachine) : _any(createAsyncMachine);
+  const fn = check ? createSyncMachine : createAsyncMachine;
   return fn(config, rest);
 };
 

@@ -30,8 +30,8 @@ export const NodeConfig_Schema = <
 > => {
   return v.union([
     NodeConfigActomic_Schema(...paths),
-    v.lazy(() => NodeConfigParallel_Schema(...paths)),
     v.lazy(() => NodeConfigCompound_Schema(...paths)),
+    v.lazy(() => NodeConfigParallel_Schema(...paths)),
   ]) as any;
 };
 
@@ -68,7 +68,7 @@ export const NodeConfigCompound_Schema = <
 ) => {
   return v.strictObject({
     ...CommonNodeConfig_Schema(...paths).entries,
-    type: v.literal('parallel'),
+    type: v.optional(v.literal('compound')),
     initial: v.string(),
     states: v.record(
       v.string(),

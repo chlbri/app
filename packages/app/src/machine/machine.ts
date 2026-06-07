@@ -614,7 +614,7 @@ export class AsyncMachine<
   };
 }
 
-export const createAsyncMachine: CommonCreateMachine_F<AsyncMachine> = (
+export const createAsyncMachine: CommonCreateMachine_F = (
   config,
   types,
 ) => {

@@ -172,10 +172,7 @@ export type SingleOrArrayT<Paths = string> =
  * @see {@linkcode Require}
  */
 export type AlwaysConfig<Paths = string> =
-  | readonly [
-      ...Require<TransitionConfigMapF<Paths>, 'guards'>[],
-      TransitionConfigF<Paths>,
-    ]
+  | ArrayTransitionsF<Paths>
   | TransitionConfigF<Paths>;
 
 /**
