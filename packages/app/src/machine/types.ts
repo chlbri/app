@@ -1,6 +1,4 @@
 import type { AsyncAction2, FromActionConfig } from '#actions';
-import type { Equals, Keys } from '@bemedev/app-utils-bemedev';
-import { Identitfy } from '@bemedev/app-utils-bemedev';
 import type { ConfigFrom } from '#common/interpreter';
 import type {
   ChildEvents,
@@ -10,10 +8,10 @@ import type {
 } from '#common/machine';
 import type { AsyncDelayFunction2 } from '#delays';
 import type {
-  EmitterDef,
   AsyncEmitterFunction,
-  EmitterReturn,
   AsyncEmittersMap,
+  EmitterDef,
+  EmitterReturn,
 } from '#emitters';
 import type { ActorsConfigMap, EventObject } from '#events';
 import type { AsyncPredicateS, AsyncPredicateS2 } from '#guards';
@@ -26,17 +24,18 @@ import type {
   FlatMapN,
 } from '#states';
 import type {
+  AsyncTransition,
   ExtractActionKeysFromTransitions,
   ExtractChildKeysFromTransitions,
   ExtractDelayKeysFromTransitions,
   ExtractEmitterSrcKeyFromTransitions,
   ExtractGuardKeysFromTransitions,
-  AsyncTransition,
   TransitionsConfig,
 } from '#transitions';
+import type { Equals, Keys } from '@bemedev/app-utils-bemedev';
+import { Identitfy } from '@bemedev/app-utils-bemedev';
 import type { Recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { Observable } from 'rxjs';
 import type { FnR, KeyU, MaybePromise, ReduceArray } from '~types';
 import type { RegisterOptions } from '../registry.types';
 import { RecordS } from '../types/primitives';
@@ -195,15 +194,6 @@ export type GetGuardsFromFlat<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = Record<_GetKeyGuardsFromFlat<Flat>, AsyncPredicateS<E, Pc, Tc, T>>;
-
-export type GetEmitterSrcsKeyFromFlat<
-  Flat extends FlatMapN,
-  A extends ActorsConfigMap = ActorsConfigMap,
-> = {
-  [key in _GetEmitterSrcKeyFromFlat<Flat>]: Observable<
-    EmitterReturn<key, A>
-  >;
-};
 
 /**
  * Provide a record of all delays by key and {@linkcode DelayFunction} function.

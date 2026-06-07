@@ -29,6 +29,7 @@ export type ActivityMap =
   | {
       guards?: SingleOrArrayL<GuardConfig>;
       actions: SingleOrArrayL<WithDescriber>;
+      description?: string;
     }
   | WithDescriber;
 
@@ -37,6 +38,7 @@ export type ActivityArray =
       ...{
         guards: SingleOrArrayL<GuardConfig>;
         actions: SingleOrArrayL<WithDescriber>;
+        description?: string;
       }[],
       ActivityMap,
     ]

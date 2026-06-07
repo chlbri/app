@@ -1,5 +1,6 @@
 export * from '#exports/types.types';
 export * from '../registry.types';
+export * from './edges';
 export * from './primitives';
 export * from './standard';
 
@@ -12,10 +13,10 @@ export type {
   EventArgObject,
   EventArgT,
   EventObject,
-  EventsMap,
-  EventsR,
   EventStrings,
   EventToType_F,
+  EventsMap,
+  EventsR,
   ExtractSender,
   InitEvent,
   MaxExceededEvent,
@@ -30,10 +31,10 @@ export type {
   ActivityConfig,
   ActivityMap,
   BaseConfig,
-  EndwA,
   EndWithAlways,
-  FlatMap_F,
+  EndwA,
   FlatMapN,
+  FlatMap_F,
   GetChildren_F,
   InitialConfig_F,
   NextStateValue_F,
@@ -87,12 +88,11 @@ export type {
   SyncEmitter,
   SyncEmitterFunction,
   SyncEmittersMap,
-  ToEmitter_F,
   ToEmitterSrc_F,
+  ToEmitter_F,
 } from '#emitters';
 
 export type {
-  _ToPredicateF,
   AsyncPredicate,
   AsyncPredicateAnd,
   AsyncPredicateOr,
@@ -115,15 +115,16 @@ export type {
   SyncPredicateS2,
   SyncPredicateS3,
   ToPredicate_F,
+  _ToPredicateF,
 } from '#guards';
 
 export type {
-  inferO,
-  inferSh,
-  inferT,
   PrimitiveObject,
   PrimitiveObjectMap,
   PrimitiveObjectT,
+  inferO,
+  inferSh,
+  inferT,
 } from '@bemedev/typings';
 
 export type {
@@ -132,8 +133,8 @@ export type {
   ChildConfigMap,
   ChildEvents,
   ChildrenMap,
-  CommonAddOptions_F,
   CommonAddOptionsParam_F,
+  CommonAddOptions_F,
   CommonChild,
   CommonChildFunction,
   CommonChildFunction2,
@@ -146,13 +147,13 @@ export type {
   ConfigDef,
   GetEventsFromConfig,
   GetEventsFromFlat,
+  GetIO_F,
   MachineType,
   NoExtraKeysConfigDef,
   ScheduledData,
   SimpleMachineOptions2,
   StdO2,
   TransformConfigDef,
-  GetIO_F,
 } from '#common/machine';
 
 export * from '#exports/types.types';
@@ -183,6 +184,7 @@ export type {
   CommonInterpreterFrom,
   ConfigFrom,
   ContextFrom,
+  Contexts,
   CreateInterval2_F,
   DecomposedStateFrom,
   DelayFnFrom,
@@ -200,8 +202,8 @@ export type {
   InterpreterOptions,
   MachineOptionsFrom,
   MachinesMapFrom,
-  Mode,
   MoF,
+  Mode,
   OptionalDefinitions,
   PredicateSFrom,
   PredicatesMapFrom,
@@ -211,18 +213,17 @@ export type {
   SimpleScheduler,
   StateExtendedFrom,
   StateFrom,
-  StatePextendedFrom,
   StatePFrom,
+  StatePextendedFrom,
   TagFrom,
-  Contexts,
 } from '#common/interpreter';
 
 export * from '#sync/types.types';
 
 export type {
   AsyncAddOption,
-  AsyncAddOptions_F,
   AsyncAddOptionsParam_F,
+  AsyncAddOptions_F,
   AsyncAssignAction_F,
   AsyncBatchAction_F,
   AsyncChild,
@@ -246,8 +247,8 @@ export type {
 
 export type {
   SyncAddOption,
-  SyncAddOptions_F,
   SyncAddOptionsParam_F,
+  SyncAddOptions_F,
   SyncAllActions_F,
   SyncAssignAction_F,
   SyncBatchAction_F,
@@ -269,8 +270,8 @@ export type {
 export type {
   SyncCollectedService,
   SyncInterpreter,
-  SyncInterpreter_F,
   SyncInterpreterFrom,
+  SyncInterpreter_F,
   SyncPerformAction_F,
   SyncPerformAlway_F,
   SyncPerformDelay_F,
@@ -283,8 +284,8 @@ export type {
 
 export type {
   AsyncInterpreter,
-  AsyncInterpreter_F,
   AsyncInterpreterFrom,
+  AsyncInterpreter_F,
   AsyncPerformAfter_F,
   AsyncPerformAlway_F,
   AsyncProvideMachineOptions_F,
@@ -300,8 +301,8 @@ export type {
   EscapeRexExp_F,
   Fn,
   NoExtraKeysConfigPaths,
-  ParseTree_F,
   ParseTreeContext,
+  ParseTree_F,
   RecomposeSV_F,
   ReduceDescriber_F,
   ReduceFnMap2_F,

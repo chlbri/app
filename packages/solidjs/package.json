@@ -83,7 +83,7 @@
     "@bemedev/app": "workspace:*",
     "@bemedev/app-vitest": "workspace:*",
     "@bemedev/decompose": "2.2.0",
-    "@bemedev/dev-utils": "^0.7.0",
+    "@bemedev/dev-utils": "^0.8.0",
     "@bemedev/sleep": "^0.2.2",
     "@size-limit/file": "^12.1.0",
     "@solidjs/testing-library": "^0.8.10",

@@ -92,7 +92,7 @@ export type TransitionConfigMapA<Paths = string> = Require<
 >;
 
 export type TransitionConfigA<Paths = string> =
-  | Require<TransitionConfigMapA<Paths>, 'actions'>
+  | TransitionConfigMapA<Paths>
   | Paths;
 
 export type TransitionConfigMapF<Paths = string> = Require<
@@ -101,8 +101,13 @@ export type TransitionConfigMapF<Paths = string> = Require<
 >;
 
 export type TransitionConfigF<Paths = string> =
-  | Require<TransitionConfigMapF<Paths>, 'target'>
+  | TransitionConfigMapF<Paths>
   | Paths;
+
+export type TransitionConfigMapG<Paths = string> = Require<
+  TransitionConfigMapF<Paths> | TransitionConfigMapA<Paths>,
+  'guards'
+>;
 
 export type TransitionConfigMap<Paths = string> =
   | TransitionConfigMapF<Paths>
@@ -142,6 +147,11 @@ export type _TransitionConfig<Paths = string> =
 export type ArrayTransitions<Paths = string> = readonly [
   ...Require<TransitionConfigMap<Paths>, 'guards'>[],
   TransitionConfig<Paths>,
+];
+
+export type ArrayTransitionsF<Paths = string> = readonly [
+  ...Require<TransitionConfigMapF<Paths>, 'guards'>[],
+  TransitionConfigF<Paths>,
 ];
 
 /**

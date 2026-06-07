@@ -1,15 +1,22 @@
 import { isAsyncConfig } from '#common/functions/isAsyncConfig';
 import { createAsyncMachine } from '#machine';
-import { isNodeConfig } from '#states';
+import { NodeConfig_Schema } from '#states';
 import { _any } from '@bemedev/app-utils-bemedev';
+import * as v from 'valibot';
 import { createSyncMachine } from '../sync/machine';
-import { ERROR } from './constants';
 import type { CreateMachine_F } from './types.types';
 export type { CreateMachine_F } from './types.types';
 
 const builder = (config: any, types: any) => {
-  const checkError = isNodeConfig(config);
-  if (!checkError) throw ERROR;
+  console.warn(
+    'pass',
+    JSON.stringify(
+      v.safeParse(NodeConfig_Schema(), config).issues?.length,
+      null,
+      2,
+    ),
+  );
+  // const _config = v.parse(NodeConfig_Schema(), config);
   const check = !isAsyncConfig(config) && types?.sync === true;
   const { sync: __, ...rest } = { sync: undefined, ...types };
   const fn = check ? _any(createSyncMachine) : _any(createAsyncMachine);

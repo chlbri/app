@@ -1,4 +1,4 @@
 import { PrimitiveObjectSchema } from '#utils/schemas';
-import { MapSchema } from '#utils/schemas/map';
+import * as v from 'valibot';
 
-export const EventsMapSchema = MapSchema(PrimitiveObjectSchema);
+export const EventsMapSchema = v.record(v.string(), PrimitiveObjectSchema);

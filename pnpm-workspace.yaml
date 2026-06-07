@@ -15,3 +15,4 @@ nodeLinker: hoisted
 minimumReleaseAge: 300
 
 minimumReleaseAgeExclude:
+  - '@bemedev/dev-utils@0.8.0'

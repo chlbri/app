@@ -29,6 +29,7 @@ import { buildIndex, buildInvite } from './invite';
 
 export * from './constants';
 export * from './invite';
+export * from './valibot';
 export * from './unhandledRejection';
 
 type TestArr = readonly [string, () => void];

@@ -152,7 +152,7 @@
   },
   "devDependencies": {
     "@bemedev/app-utils-bemedev": "workspace:*",
-    "@bemedev/dev-utils": "^0.7.0",
+    "@bemedev/dev-utils": "^0.8.0",
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/sequence": "^1.0.0",

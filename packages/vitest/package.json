@@ -69,7 +69,7 @@
   },
   "devDependencies": {
     "@bemedev/app": "workspace:*",
-    "@bemedev/dev-utils": "^0.7.0",
+    "@bemedev/dev-utils": "^0.8.0",
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/sleep": "^0.2.2",
     "@bemedev/typings": "^1.2.0",

@@ -1,6 +1,10 @@
 import type { WithDescriber } from '#actions';
+import type {
+  DelayedTransitions,
+  SingleOrArrayT,
+  TransitionConfigMapA,
+} from '#transitions';
 import type { Require } from '@bemedev/app-utils-bemedev';
-import type { SingleOrArrayT, TransitionConfigMapA } from '#transitions';
 
 export type CommonActor = {
   readonly description?: string;
@@ -38,11 +42,11 @@ export type ExtractSrcFromActor<T extends { src: string }> = T['src'];
 export type _ChildConfig<Paths = string> = CommonActor &
   (
     | {
-        readonly on: Record<string, SingleOrArrayT<Paths>>;
+        readonly on: DelayedTransitions<Paths>;
         readonly contexts?: Record<string, string>;
       }
     | {
-        readonly on?: Record<string, SingleOrArrayT<Paths>>;
+        readonly on?: DelayedTransitions<Paths>;
         readonly contexts: Record<string, string>;
       }
   );

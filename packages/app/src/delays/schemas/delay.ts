@@ -1,3 +1,3 @@
-import { ActorConfigSchema } from '#actions';
+import { ActionConfig_Schema } from '#actions';
 
-export const DelayConfigSchema = ActorConfigSchema;
+export const DelayConfigSchema = ActionConfig_Schema;
