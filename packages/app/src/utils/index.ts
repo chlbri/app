@@ -11,6 +11,7 @@ export type {
 export * from './environment';
 export * from './merge';
 export * from './nothing';
+export * from './betterTimeout';
 export * from './objects';
 export * from './reduceFnMap';
 export * from './constructEventMap';
