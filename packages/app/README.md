@@ -123,6 +123,7 @@ await service[Symbol.asyncDispose]();
 - [1. Machine Configuration](#1-machine-configuration)
   - [`createConfig(config)`](#createconfigconfig)
   - [Synchronous vs Asynchronous Machines](#synchronous-vs-asynchronous-machines)
+  - [Strict Configuration Type Checking (NoExtraKeysConfig)](#strict-configuration-type-checking-noextrakeysconfig)
 - [2. Typings System](#2-typings-system)
   - [Primitives](#primitives)
   - [Object schemas](#object-schemas)
@@ -175,6 +176,7 @@ await service[Symbol.asyncDispose]();
   - [14.1 `BetterSet<T>`](#141-bettersett)
   - [14.2 `parseTree`](#142-parsetree)
   - [14.3 `reduceGuards`](#143-reduceguards)
+  - [14.4 `betterTimeout`](#144-bettertimeout)
 - [15. API Reference](#15-api-reference)
   - [Machine creation](#machine-creation)
     - [`createMachine(config, types?)`](#createmachineconfig-types)
@@ -292,13 +294,35 @@ const syncMachine = createMachine(
     states: { idle: {} },
   },
   // Setting sync to 'sync' forces synchronous execution
-  typings({ sync: 'sync' }),
+  { sync: 'sync' }),
 );
 ```
 
 Synchronous machines throw a type error if you attempt to use async
 configurations. The `interpret` function automatically detects and runs
 synchronous machines without creating promises.
+
+### Strict Configuration Type Checking (`NoExtraKeysConfig`)
+
+To ensure your machine configs are free of spelling errors and invalid
+configuration keys, `@bemedev/app` enforces compile-time strictness. If you
+add any unrecognized options at the root or within state configuration
+blocks, TypeScript will raise an error.
+
+For example, typing `init` instead of `initial` will produce a compilation
+error:
+
+```typescript
+const machine = createMachine({
+  init: 'idle', // ❌ Type error: Object literal may only specify known properties...
+  states: {
+    idle: {},
+  },
+});
+```
+
+This ensures that state hierarchies, actions, and guards are always defined
+using correct keywords.
 
 <br/>
 
@@ -312,121 +336,90 @@ synchronous machines without creating promises.
 <summary>Expand</summary>
 
 TypeScript cannot always infer complex generic types from nested object
-literals alone. `@bemedev/app` ships a lightweight **typings DSL** (similar
-in spirit to Valibot schemas) that lets you describe any TypeScript type as
-a plain value the machine can read at build time.
+literals alone. `@bemedev/app` relies on `@bemedev/typings` to let you
+describe TypeScript types as plain schema values that the machine can read
+at compile and build time.
 
-The `typings(...)` call is the standard way to attach types to a machine:
+### Schema Builders
 
-```typescript
-import { createMachine, typings, inferT } from '@bemedev/app';
-
-const machine = createMachine(config, typings({ ... }));
-```
-
-### Primitives
+Type schemas are built using `type` from `@bemedev/typings`, along with
+structural helpers (e.g. from `@bemedev/typings/helpers` or dynamically
+within the `type` callback):
 
 ```typescript
-typings({ context: 'string' }); // context: string
-typings({ context: 'number' }); // context: number
-typings({ context: 'boolean' }); // context: boolean
-typings({ context: 'primitive' }); // events with no payload
-```
+import { type } from '@bemedev/typings';
+import {
+  array,
+  partial,
+  optional,
+  record,
+  union,
+  litterals,
+} from '@bemedev/typings/helpers';
 
-### Object schemas
-
-```typescript
-const user = typings.any({
-  name: 'string',
-  age: 'number',
-  email: typings.maybe('string'), // string | undefined
-});
-type User = inferT<typeof user>;
-// { name: string; age: number; email?: string }
-```
-
-### Collections
-
-```typescript
-typings.array('string'); // string[]
-typings.tuple('number', 'string'); // [number, string]
-typings.record('number'); // Record<string, number>
-typings.record('boolean', 'a', 'b'); // { a: boolean; b: boolean }
-```
-
-### Advanced types
-
-```typescript
-// Literal union
-typings.litterals('idle', 'loading', 'done');
-// → 'idle' | 'loading' | 'done'
-
-// Union
-typings.union('string', 'number');
-// → string | number
-
-// Intersection
-typings.intersection({ a: 'string' }, { b: 'number' });
-// → { a: string } & { b: number }
-
-// Discriminated union
-typings.discriminatedUnion(
-  'type',
-  { type: typings.litterals('circle'), radius: 'number' },
-  { type: typings.litterals('rect'), width: 'number', height: 'number' },
+// Define schemas
+const user = type(({ partial }) =>
+  partial({
+    name: 'string',
+    age: 'number',
+  }),
 );
-
-// All fields optional
-typings.partial({ name: 'string', age: 'number' });
-// → { name?: string; age?: number }
-
-// Single-or-array
-typings.soa('string');
-// → string | string[]
-
-// Escape hatch — any TypeScript type
-typings.custom<MyComplexType>();
-
-// StateValue
-typings.sv;
-// → resolves to StateValue (the type of service.value)
 ```
 
-### Full machine typings example
+### Supported Schemas
+
+- **Primitives**: `'string'`, `'number'`, `'boolean'`, `'undefined'`,
+  `'never'`.
+- **Objects**: `partial({ ... })` for optional fields, `any({ ... })` for
+  strict objects.
+- **Collections**: `array(...)` for arrays, `record(...)` for maps,
+  `tuple(...)` for tuples.
+- **Unions & Literals**: `union(...)` and `litterals(...)`.
+
+### Full Machine Typings Example
+
+To attach types, supply them as the third argument to `createMachine`:
 
 ```typescript
+import { createMachine } from '@bemedev/app';
+import { type } from '@bemedev/typings';
+
 const machine = createMachine(
+  'auth-machine',
   {
-    /* config */
-  },
-  typings({
-    // Public context (exposed via service.context)
-    context: {
-      items: typings.array('string'),
-      error: typings.maybe('string'),
-      count: 'number',
+    initial: 'idle',
+    states: {
+      idle: { on: { FETCH: '/loading' } },
+      loading: {},
     },
+  },
+  {
+    // Public context (exposed via service.context)
+    context: type(({ partial, array }) =>
+      partial({
+        items: array('string'),
+        error: optional('string'),
+        count: 'number',
+      }),
+    ),
 
     // Private context (not exposed to subscribers)
-    pContext: { token: typings.maybe('string') },
+    pContext: type(({ partial }) =>
+      partial({
+        token: 'string',
+      }),
+    ),
 
     // All events the machine can receive
-    eventsMap: {
-      FETCH: 'primitive',
-      SUCCESS: { data: typings.array('string') },
-      ERROR: { message: 'string', code: 'number' },
-    },
+    eventsMap: type(({ partial, array }) => ({
+      FETCH: 'never',
+      SUCCESS: { data: array('string') },
+      ERROR: { message: 'string' },
+    })),
 
-    // Actor type maps
-    actorsMap: {
-      emitters: {
-        dataStream: { next: 'string', error: 'string' },
-      },
-      children: {
-        authService: { LOGIN: 'primitive', LOGOUT: 'primitive' },
-      },
-    },
-  }),
+    // Force synchronous execution if true
+    sync: true,
+  },
 );
 ```
 
@@ -1591,6 +1584,28 @@ reduceGuards(
 // → ['isLoggedIn', 'isAdmin', 'hasRole', 'isOwner', 'isActive']
 ```
 
+### 14.4 `betterTimeout`
+
+A callback-based timeout helper designed to prevent long-running or hung
+async operations. It executes a callback after a specified delay, but
+throws a `MAX_EXCEEDED` error to the `onError` handler if the delay exceeds
+a specified `maxTime` threshold limit.
+
+```typescript
+import { betterTimeout } from '@bemedev/app/utils';
+
+betterTimeout({
+  callback: () => {
+    console.log('Task finished successfully');
+  },
+  onError: err => {
+    console.error('Task timed out:', err.message); // "MAX_EXCEEDED"
+  },
+  ms: 3000,
+  maxTime: 2000, // exceeds maxTime -> triggers onError with MAX_EXCEEDED error
+});
+```
+
 <br/>
 
 </details>
@@ -1731,22 +1746,18 @@ type EmitterObserver<T> = {
 
 ### Typings utilities
 
-| Utility                                | Produces                            |
-| -------------------------------------- | ----------------------------------- |
-| `typings.litterals(...values)`         | Literal union                       |
-| `typings.union(...types)`              | Union type                          |
-| `typings.array(type)`                  | Array type                          |
-| `typings.tuple(...types)`              | Tuple type                          |
-| `typings.any(schema)`                  | Object schema                       |
-| `typings.record(type, ...keys?)`       | Record type                         |
-| `typings.intersection(...schemas)`     | Intersection type                   |
-| `typings.discriminatedUnion(key, ...)` | Discriminated union                 |
-| `typings.maybe(type)`                  | `T \| undefined`                    |
-| `typings.partial(schema)`              | All fields optional                 |
-| `typings.custom<T>()`                  | Escape hatch — any TypeScript type  |
-| `typings.soa(type)`                    | `T \| T[]`                          |
-| `typings.sv`                           | `StateValue`                        |
-| `inferT<Schema>`                       | Extract TypeScript type from schema |
+`@bemedev/app` re-exports key type utilities from `@bemedev/typings`:
+
+| Utility            | Source             | Purpose                                                 |
+| ------------------ | ------------------ | ------------------------------------------------------- |
+| `inferT<Schema>`   | `@bemedev/typings` | Extracts TypeScript type from a schema definition       |
+| `inferO<Schema>`   | `@bemedev/typings` | Extracts TypeScript type from object schema definitions |
+| `inferSh<Schema>`  | `@bemedev/typings` | Extracts schema shape                                   |
+| `Fn<Args, Return>` | `@bemedev/typings` | Helper for strongly-typed functions                     |
+
+For schema building, import builders directly from
+`@bemedev/typings/helpers` (e.g. `array`, `record`, `partial`, `litterals`,
+`union`, `optional`).
 
 ### Advanced Exported Types
 
@@ -1785,14 +1796,14 @@ app dev      [--output path] [--excludes dirs...]   # alias for watch
 
 ## Changelog
 
-[View CHANGELOG.md](https://github.com/chlbri/app-ts/blob/main/CHANGELOG.md)
+[View CHANGELOG.md](https://github.com/chlbri/app/blob/main/CHANGELOG.md)
 
 <br/>
 
 ## Contributing
 
 Contributions are welcome! Please open an issue or pull request on
-[GitHub](https://github.com/chlbri/app-ts).
+[GitHub](https://github.com/chlbri/app).
 
 <br/>
 

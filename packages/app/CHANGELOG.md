@@ -11,6 +11,38 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.2.0] - 08/06/2026** => _21:30_
+
+</summary>
+
+### Features
+
+- **betterTimeout**: Add custom timeout utility that rejects with a
+  specific `MAX_EXCEEDED` error or custom error handler
+- **NoExtraKeysConfig**: Implement compile-time type validation enforcing
+  strict object shape constraints on state machine configurations
+- **Valibot Schemas**: Integrate `valibot` schema definitions for runtime
+  validation of states, transitions, actions, and guards
+- **Asynchronous Delays**: Add asynchronous delay options support to the
+  interpreter
+
+### Refactor
+
+- **Simplified Machine Types**: Remove generic events and actors maps from
+  root machine and interpreter definitions to simplify type hierarchy and
+  internals
+- **Standardized Schemas**: Align naming conventions for internal
+  transition and state validation schemas
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.1.5] - 01/06/2026** => _22:04_
 
 </summary>
