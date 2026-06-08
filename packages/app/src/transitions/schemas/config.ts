@@ -5,14 +5,14 @@ import {
 } from './map';
 import { TargetSchema } from './utils';
 
-export const TransitionConfigA_Schema = <T extends ReadonlyArray<string>>(
-  ...paths: T
-) => {
-  return v.union([
-    TargetSchema(paths),
-    TransitionConfigMapA_Schema(...paths),
-  ]);
-};
+// export const TransitionConfigA_Schema = <T extends ReadonlyArray<string>>(
+//   ...paths: T
+// ) => {
+//   return v.union([
+//     TargetSchema(paths),
+//     TransitionConfigMapA_Schema(...paths),
+//   ]);
+// };
 
 export const TransitionConfigF_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T

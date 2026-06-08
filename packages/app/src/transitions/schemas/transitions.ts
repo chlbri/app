@@ -1,6 +1,7 @@
+import { recordV } from '#utils/schemas';
 import * as v from 'valibot';
-import { AlwaysConfig_Schema, DelayedTransitions_Config } from './edges';
 import { ActorConfig_Schema } from '../../actors/schemas';
+import { AlwaysConfig_Schema, DelayedTransitions_Config } from './edges';
 
 export const Transitions_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
@@ -11,6 +12,6 @@ export const Transitions_Schema = <T extends ReadonlyArray<string>>(
     on,
     always: v.optional(AlwaysConfig_Schema(...paths)),
     after: on,
-    actors: v.optional(v.record(v.string(), ActorConfig_Schema(...paths))),
+    actors: v.optional(recordV(v.string(), ActorConfig_Schema(...paths))),
   });
 };

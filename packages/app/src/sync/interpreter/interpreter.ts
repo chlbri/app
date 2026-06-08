@@ -28,7 +28,11 @@ import {
 } from '#events';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
-import type { AlwaysConfig, TransitionConfig } from '#transitions';
+import type {
+  AlwaysConfig,
+  TransitionConfig,
+  DelayedTransitions,
+} from '#transitions';
 import {
   _any,
   isDefined,
@@ -36,6 +40,7 @@ import {
   toArray,
 } from '@bemedev/app-utils-bemedev';
 import { createInterval } from '@bemedev/interval2';
+import { betterTimeout } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
 import { isDescriber, type KeyU } from '~types';
@@ -335,6 +340,66 @@ export class SyncInterpreter<
     return entries;
   }
 
+  #performAfter = (from: string, after: DelayedTransitions) => {
+    const entries = Object.entries(after);
+
+    return () => {
+      entries.forEach(([_delay, transition]) => {
+        const delayF = this.toDelayFn(_delay);
+        const check0 = !isDefined(delayF);
+        if (check0) return;
+        const delay = this.#executeDelay(delayF);
+
+        const check1 = delay > DEFAULT_MAX_TIME_PROMISE;
+        /* v8 ignore else -- @preserve */
+        if (check1) {
+          this._addWarning(`Delay ${_delay} is too long`);
+          return;
+        }
+
+        const transitions = toArray.typed(transition);
+
+        betterTimeout({
+          callback: () => {
+            if (this.__cannotPerform(from)) return;
+
+            const target = this.__performTransitions(
+              ...(transitions as any),
+            );
+
+            if (target === false) {
+              this._addWarning(
+                `No transitions reached from "${from}" by delay "${_delay}" !`,
+              );
+            } else {
+              this.__performConfig(target);
+              this._next();
+            }
+          },
+          onError: () => {
+            this._addWarning('MAX_TIMEOUT REACHED !!');
+          },
+          ms: delay,
+          maxTime: DEFAULT_MAX_TIME_PROMISE,
+        });
+      });
+    };
+  };
+
+  get #collectedAfters() {
+    const entriesFlat = Object.entries(this.#flat);
+    const entries: [from: string, after: DelayedTransitions][] = [];
+
+    entriesFlat.forEach(([from, node]) => {
+      const after = node.after;
+      if (after) {
+        entries.push([from, after]);
+      }
+    });
+
+    return entries;
+  }
+
   #performDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this._iterate();
     return delay(this.__cloneState);
@@ -453,14 +518,29 @@ export class SyncInterpreter<
     return outs;
   };
 
-  /**
-   * Get all brut self transitions of the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service.
-   */
   protected get __collectedSelfTransitions0() {
-    const entries = new Map<string, () => string>();
+    const entries = new Map<
+      string,
+      {
+        always?: () => string | false;
+        after?: () => void;
+      }
+    >();
 
     this.#collectedAlways.forEach(([from, always]) => {
-      entries.set(from, () => this.__performAlways(always));
+      const inner = entries.get(from);
+      if (inner) inner.always = () => this.__performAlways(always);
+      else {
+        entries.set(from, { always: () => this.__performAlways(always) });
+      }
+    });
+
+    this.#collectedAfters.forEach(([from, after]) => {
+      const inner = entries.get(from);
+      if (inner) inner.after = this.#performAfter(from, after);
+      else {
+        entries.set(from, { after: this.#performAfter(from, after) });
+      }
     });
 
     return entries;
@@ -471,13 +551,15 @@ export class SyncInterpreter<
       ([from]) => this.__isInsideValue(from),
     );
 
-    const out = entries.map(([, always]) => {
+    const out = entries.map(([, { always, after }]) => {
       return () => {
         /* v8 ignore else -- @preserve */
         if (always) {
           const target = always();
-          return this.__performConfig(target);
+          if (target) return this.__performConfig(target);
         }
+
+        after?.();
       };
     });
 

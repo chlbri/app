@@ -1,8 +1,9 @@
 import * as v from 'valibot';
 import { CommonActorSchema } from './common';
 import { DelayedTransitions_Config } from '../../transitions/schemas/edges';
+import { recordV } from '#utils/schemas';
 
-export const ContextsSchema = v.record(v.string(), v.string());
+export const ContextsSchema = recordV(v.string(), v.string());
 export const ChildConfig_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) =>

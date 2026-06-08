@@ -25,14 +25,10 @@ export function betterTimeout({
 
   setTimeout(() => {
     try {
-      if (isExceeded) {
-        throw new Error('MAX_EXCEEDED');
-      }
+      if (isExceeded) throw new Error('MAX_EXCEEDED');
       callback();
     } catch (error) {
-      if (onError) {
-        onError(error);
-      }
+      onError?.(error);
     }
   }, delay);
 }

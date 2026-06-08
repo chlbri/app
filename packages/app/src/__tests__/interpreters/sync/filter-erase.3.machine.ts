@@ -1,4 +1,5 @@
 import { createMachine } from '#exports/createMachine';
+import { recordV } from '#utils/schemas';
 import { type } from '@bemedev/typings';
 import { record } from '@bemedev/typings/helpers';
 import * as v from 'valibot';
@@ -27,7 +28,7 @@ export default createMachine(
   {
     // Can implement typings with valibot validators
     context: v.object({
-      scores: v.record(v.string(), v.number()),
+      scores: recordV(v.string(), v.number()),
     }),
 
     eventsMap: type({

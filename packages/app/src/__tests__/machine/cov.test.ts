@@ -488,6 +488,8 @@ describe('#02 => Typings', () => {
     '__delay',
     '__definedValue',
     '__machine',
+    'actorsMap',
+    'eventsMap',
   ] as const satisfies (keyof AsyncMachine)[];
 
   array.forEach((key, index) => {

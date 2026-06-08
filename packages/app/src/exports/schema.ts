@@ -3,6 +3,7 @@ import {
   CommonNodeConfigEntries,
   NodeConfig_Schema,
 } from '#states';
+import { recordV } from '#utils/schemas';
 import * as v from 'valibot';
 import type { NodeConfig, RefineStringArray } from '~types';
 
@@ -23,7 +24,7 @@ export const Config_Schema = <
         __longRuns: v.optional(v.boolean()),
 
         states: v.optional(
-          v.record(
+          recordV(
             v.string('Keys of states must be of type "string"'),
             NodeConfig_Schema(...paths),
           ),
@@ -31,7 +32,7 @@ export const Config_Schema = <
       },
       ({ path = [] }) => {
         const key = path.map(({ key }) => key).join('.');
-        return `Unexpected key ${key} in node config`;
+        return `Unexpected key '${key}' in node config`;
       },
     ),
     checkNodeType,

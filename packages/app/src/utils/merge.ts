@@ -58,21 +58,6 @@ export const isMergeUndefined = (value: any) => {
   return check1;
 };
 
-export const compact = (value: any): any => {
-  const entries = Object.entries(value)
-    .filter(([, value]) => {
-      return value !== undefined;
-    })
-    .map(([, value]) => {
-      const check1 = value !== null && typeof value === 'object';
-      if (check1) {
-        return compact(value);
-      }
-      return value;
-    });
-  return Object.fromEntries(entries);
-};
-
 /**
  * A custom implement of `deepmerge-ts` ({@linkcode deepmergeCustom}) for better suitability with this library.
  * @param value The value to merge into.

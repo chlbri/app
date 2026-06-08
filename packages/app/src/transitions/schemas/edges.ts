@@ -13,6 +13,7 @@ import {
   TransitionConfigMapFG_Schema,
   TransitionConfigMapG_Schema,
 } from './map';
+import { NotArray_Schema, recordV } from '#utils/schemas';
 
 export const ArrayTransitions_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
@@ -77,5 +78,9 @@ export const AlwaysConfig_Schema = <T extends ReadonlyArray<string>>(
 export const DelayedTransitions_Config = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
-  return v.record(v.string(), SingleOrArrayT_Schema(...paths));
+  return v.pipe(
+    v.any(),
+    NotArray_Schema,
+    recordV(v.string(), SingleOrArrayT_Schema(...paths)),
+  );
 };

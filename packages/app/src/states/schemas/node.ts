@@ -1,4 +1,5 @@
 import { ActionConfig_Schema } from '#actions';
+import { recordV } from '#utils/schemas';
 import { SoaLSchema } from '#utils/schemas/soa';
 import * as v from 'valibot';
 import type { NodeConfig, RefineStringArray } from '~types';
@@ -16,8 +17,8 @@ export const CommonNodeConfigEntries = <
     entry: v.optional(SoaLSchema(ActionConfig_Schema)),
     exit: v.optional(SoaLSchema(ActionConfig_Schema)),
     tags: v.optional(SoaLSchema(v.string())),
-    activities: v.optional(v.record(v.string(), ActivityConfig_Schema)),
     initial: v.optional(v.string()),
+    activities: v.optional(recordV(v.string(), ActivityConfig_Schema)),
 
     type: v.optional(
       v.union([
@@ -67,7 +68,7 @@ export const NodeConfig_Schema = <
       {
         ...CommonNodeConfigEntries(...paths),
         states: v.optional(
-          v.record(
+          recordV(
             v.string(),
             v.lazy(() => NodeConfig_Schema(...paths)),
           ),
@@ -75,7 +76,7 @@ export const NodeConfig_Schema = <
       },
       ({ path = [] }) => {
         const key = path.map(({ key }) => key).join('.');
-        return `Unexpected key ${key} in node config`;
+        return `Unexpected key '${key}' in node config`;
       },
     ),
     checkNodeType,

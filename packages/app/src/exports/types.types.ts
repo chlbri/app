@@ -1,4 +1,3 @@
-import type { IsAsyncConfig } from '#common/functions/types';
 import type { InterpretArgs } from '#common/interpreter';
 import type {
   AnyMachine,
@@ -23,7 +22,6 @@ import type {
   PrimitiveObject,
   StandardOutput,
 } from '@bemedev/typings';
-import type { EmptyObject } from '~types';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 
@@ -85,7 +83,8 @@ export type CreateMachineNoName_F = <
     pContext?: Pc;
     eventsMap?: E;
     actorsMap?: A;
-  } & (IsAsyncConfig<C> extends false ? { sync?: Sync } : EmptyObject),
+    sync?: Sync;
+  },
 ) => OutMachine<
   C,
   _Pc,
@@ -142,7 +141,8 @@ export type CreateMachineNamed_F = <
     pContext?: Pc;
     eventsMap?: E;
     actorsMap?: A;
-  } & { sync?: Sync },
+    sync?: Sync;
+  },
 ) => OutMachine<
   C,
   _Pc,
