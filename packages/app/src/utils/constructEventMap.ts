@@ -2,7 +2,7 @@ import { isChildConfig, isEmitterConfig } from '#actors';
 import { type NodeConfig3 } from '#states';
 
 export const constructEvents = (node: NodeConfig3) => {
-  const out: string[] = [];
+  const out = [];
 
   const on = node.on;
   if (on) {
