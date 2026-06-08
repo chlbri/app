@@ -5,6 +5,7 @@ import type {
   CommonConfig,
   CommonConfig2,
   CommonConfig3,
+  NoExtraKeysConfig,
 } from '#common/machine';
 import type {
   ActorsConfigMap,
@@ -78,7 +79,7 @@ export type CreateMachineNoName_F = <
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
   Sync extends true | undefined = undefined,
 >(
-  config: C,
+  config: NoExtraKeysConfig<C>,
   types?: {
     context?: Tc;
     pContext?: Pc;
@@ -135,7 +136,7 @@ export type CreateMachineNamed_F = <
   Sync extends true | undefined = undefined,
 >(
   _: Name,
-  config: C,
+  config: NoExtraKeysConfig<C>,
   types?: {
     context?: Tc;
     pContext?: Pc;

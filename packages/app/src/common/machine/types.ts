@@ -95,6 +95,17 @@ export type CommonConfig3<Paths extends string = string> =
     readonly __longRuns?: boolean;
   };
 
+export type NoExtraKeysConfig<T extends CommonConfig3> = T & {
+  [K in Exclude<keyof T, keyof CommonConfig3>]: never;
+} & {
+  readonly states?: {
+    [K in keyof T['states']]?: T['states'][K] extends infer TK extends
+      CommonConfig3
+      ? NoExtraKeysConfig<TK>
+      : never;
+  };
+};
+
 export type MachineType = 'sync' | 'async';
 
 /**
