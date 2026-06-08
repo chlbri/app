@@ -25,7 +25,7 @@ const _ActivityArray = v.pipe(
   v.array(ActivityMap_Schema),
   v.check(a => a.length > 0),
   v.check(a => {
-    const [_, ...rest] = a.reverse();
+    const [_, ...rest] = [...a].reverse();
     const schema = ActivityMapG_Schema;
     const fn = (value: unknown) => v.safeParse(schema, value).success;
     return rest.every(fn);
@@ -33,6 +33,6 @@ const _ActivityArray = v.pipe(
 ) as unknown as v.BaseSchema<ActivityArray, ActivityArray, any>;
 
 export const ActivityConfig_Schema = v.union([
-  _ActivityArray,
   ActivityMap_Schema,
+  _ActivityArray,
 ]);

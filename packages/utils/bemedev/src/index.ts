@@ -15,6 +15,5 @@ export { default as extract } from '#bemedev/features/common/typings/extract';
 export { default as byKey } from '#bemedev/features/objects/typings/byKey';
 export { default as keysOf } from '#bemedev/features/objects/typings/keysOf';
 export { isPrimitive } from '#bemedev/globals/utils/is/primitive';
-export { isPrimitiveObject } from '#bemedev/globals/utils/is/primitive.object';
 export { default as numbersT } from '#bemedev/features/numbers/typings';
 export { default as stringsT } from '#bemedev/features/strings/typings';

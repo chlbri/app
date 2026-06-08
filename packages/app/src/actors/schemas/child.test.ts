@@ -3,8 +3,9 @@ import { ChildConfig_Schema } from './child';
 
 describe('TESTS', () => {
   describe('#02 => ChildConfig_Schema', () => {
-    const { acceptation, success } =
-      createValibotTests(ChildConfig_Schema);
+    const { acceptation, success } = createValibotTests(
+      ChildConfig_Schema(),
+    );
 
     describe('#01 => Acceptation', acceptation);
 

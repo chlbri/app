@@ -1,16 +1,15 @@
 import { isAsyncConfig } from '#common/functions/isAsyncConfig';
 import { createAsyncMachine } from '#machine';
-import { getTargetsFromConfig, NodeConfig_Schema } from '#states';
+import { getTargetsFromConfig } from '#states';
 import * as v from 'valibot';
 import { createSyncMachine } from '../sync/machine';
+import { Config_Schema } from './schema';
 import type { CreateMachine_F } from './types.types';
 export type { CreateMachine_F } from './types.types';
 
-const builder = (config: any, types: any) => {
-  const config1 = v.safeParse(NodeConfig_Schema(), config);
-  const targets = getTargetsFromConfig(config);
-  const config2 = v.safeParse(NodeConfig_Schema(...targets), config1);
-  console.warn('issues', config2.issues);
+const builder = (_config: any, types: any) => {
+  const targets = getTargetsFromConfig(_config);
+  const config = v.parse(Config_Schema(...targets), _config);
   const check = !isAsyncConfig(config) && types?.sync === true;
   const { sync: __, ...rest } = { sync: undefined, ...types };
   const fn = check ? createSyncMachine : createAsyncMachine;

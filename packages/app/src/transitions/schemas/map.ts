@@ -4,7 +4,7 @@ import { SoaLSchema } from '#utils/schemas/soa';
 import * as v from 'valibot';
 import { TargetSchema } from './utils';
 
-export const _TransitionConfigMapSchema = <
+export const _TransitionConfigMap_Schema = <
   T extends ReadonlyArray<string>,
 >(
   ...paths: T
@@ -19,7 +19,7 @@ export const _TransitionConfigMapSchema = <
   });
 };
 
-export const TransitionConfigMapASchema = <
+export const TransitionConfigMapA_Schema = <
   const T extends ReadonlyArray<string>,
 >(
   ...paths: T
@@ -34,7 +34,7 @@ export const TransitionConfigMapASchema = <
   });
 };
 
-export const TransitionConfigMapFSchema = <
+export const TransitionConfigMapF_Schema = <
   const T extends ReadonlyArray<string>,
 >(
   ...paths: T
@@ -49,40 +49,42 @@ export const TransitionConfigMapFSchema = <
   });
 };
 
-export const TransitionConfigMapGSchema = <
+export const TransitionConfigMap_Schema = <
+  T extends ReadonlyArray<string>,
+>(
+  ...paths: T
+) => {
+  return v.union([
+    TransitionConfigMapA_Schema(...paths),
+    TransitionConfigMapF_Schema(...paths),
+  ]);
+};
+
+export const TransitionConfigMapG_Schema = <
   const T extends ReadonlyArray<string>,
 >(
   ...paths: T
 ) => {
   const out = v.union([
     v.strictObject({
-      ...v.omit(TransitionConfigMapASchema(...paths), ['guards']).entries,
+      ...v.omit(TransitionConfigMapA_Schema(...paths), ['guards']).entries,
       guards: SoaLSchema(GuardConfig_Schema),
     }),
     v.strictObject({
-      ...v.omit(TransitionConfigMapFSchema(...paths), ['guards']).entries,
+      ...v.omit(TransitionConfigMapF_Schema(...paths), ['guards']).entries,
       guards: SoaLSchema(GuardConfig_Schema),
     }),
   ]);
 
   return out;
 };
-export const TransitionConfigMapFGSchema = <
+export const TransitionConfigMapFG_Schema = <
   const T extends ReadonlyArray<string>,
 >(
   ...paths: T
 ) => {
   return v.strictObject({
-    ...v.omit(TransitionConfigMapFSchema(...paths), ['guards']).entries,
+    ...v.omit(TransitionConfigMapF_Schema(...paths), ['guards']).entries,
     guards: SoaLSchema(GuardConfig_Schema),
   });
-};
-
-export const TransitionConfigMapSchema = <T extends ReadonlyArray<string>>(
-  ...paths: T
-) => {
-  return v.union([
-    TransitionConfigMapASchema(...paths),
-    TransitionConfigMapFSchema(...paths),
-  ]);
 };

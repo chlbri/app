@@ -1,9 +1,9 @@
 import type { SyncAction } from '#actions';
 import type { ActorConfig } from '#actor';
 import type {
-  ConfigDef,
-  NoExtraKeysConfigDef,
-  TransformConfigDef,
+  TargetDef,
+  NoExtraKeysTargetDef,
+  TransformTargetDef,
 } from '#common/machine';
 import type { AsyncEmitterFunction } from '#emitters';
 import type { AsyncPredicate } from '#guards';
@@ -50,12 +50,12 @@ export type SyncNodeConfig<Paths extends string = string> =
  * @see {@linkcode SingleOrArrayL}
  */
 export type SyncConfig<
-  Paths extends NoExtraKeysConfigDef<ConfigDef> =
-    NoExtraKeysConfigDef<ConfigDef>,
+  Paths extends NoExtraKeysTargetDef<TargetDef> =
+    NoExtraKeysTargetDef<TargetDef>,
 > = SyncNodeConfig<Paths['targets']> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
-} & TransformConfigDef<Paths>;
+} & TransformTargetDef<Paths>;
 
 /**
  * Represents a transition in a state machine with full defined functions.

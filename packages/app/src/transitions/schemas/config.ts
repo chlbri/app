@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import {
-  TransitionConfigMapASchema,
-  TransitionConfigMapFSchema,
+  TransitionConfigMapA_Schema,
+  TransitionConfigMapF_Schema,
 } from './map';
 import { TargetSchema } from './utils';
 
@@ -10,7 +10,7 @@ export const TransitionConfigA_Schema = <T extends ReadonlyArray<string>>(
 ) => {
   return v.union([
     TargetSchema(paths),
-    TransitionConfigMapASchema(...paths),
+    TransitionConfigMapA_Schema(...paths),
   ]);
 };
 
@@ -19,7 +19,7 @@ export const TransitionConfigF_Schema = <T extends ReadonlyArray<string>>(
 ) => {
   return v.union([
     TargetSchema(paths),
-    TransitionConfigMapFSchema(...paths),
+    TransitionConfigMapF_Schema(...paths),
   ]);
 };
 
@@ -28,7 +28,7 @@ export const TransitionConfig_Schema = <T extends ReadonlyArray<string>>(
 ) => {
   return v.union([
     TargetSchema(paths),
-    TransitionConfigMapASchema(...paths),
-    TransitionConfigMapFSchema(...paths),
+    TransitionConfigMapA_Schema(...paths),
+    TransitionConfigMapF_Schema(...paths),
   ]);
 };

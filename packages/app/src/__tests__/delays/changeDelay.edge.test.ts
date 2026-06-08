@@ -1,6 +1,5 @@
 import { DEFAULT_MAX_TIME_PROMISE } from '#constants';
-import { DELAY } from '#fixturesData';
-import { hook } from './fixtures';
+import { hook, DELAY } from './fixtures';
 
 vi.useFakeTimers();
 

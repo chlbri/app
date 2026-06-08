@@ -27,7 +27,7 @@ export const FinallyConfigSchema = v.union([
     v.array(_FinallyConfigSchema),
     v.check(val => val.length > 0),
     v.check(val => {
-      const [_, ...rest] = val.reverse();
+      const [_, ...rest] = [...val].reverse();
 
       const fn = (value: unknown) => {
         return v.safeParse(_FG_Schema, value).success;

@@ -26,20 +26,15 @@ export type FinallyConfig =
         | readonly [...Require<F, 'guards'>[], F | WithDescriber]
     : never;
 
-export type _EmitterConfig<Paths = string> = CommonActor & {
+export type EmitterConfig<Paths = string> = CommonActor & {
   readonly next: SingleOrArrayT<Paths>;
   readonly error?: SingleOrArrayT<Paths>;
   readonly complete?: FinallyConfig;
 };
 
-export type EmitterConfig<Paths = string> =
-  _EmitterConfig<Paths> extends infer E
-    ? E & { [K in Exclude<keyof E, keyof _EmitterConfig<Paths>>]: never }
-    : never;
-
 export type ExtractSrcFromActor<T extends { src: string }> = T['src'];
 
-export type _ChildConfig<Paths = string> = CommonActor &
+export type ChildConfig<Paths = string> = CommonActor &
   (
     | {
         readonly on: DelayedTransitions<Paths>;
@@ -50,11 +45,6 @@ export type _ChildConfig<Paths = string> = CommonActor &
         readonly contexts: Record<string, string>;
       }
   );
-
-export type ChildConfig<Paths = string> =
-  _ChildConfig<Paths> extends infer C
-    ? C & { [K in Exclude<keyof C, keyof _ChildConfig<Paths>>]: never }
-    : never;
 
 export type ActorConfig<Paths = string> =
   | EmitterConfig<Paths>

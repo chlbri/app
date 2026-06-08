@@ -5,5 +5,8 @@ import { EmitterConfig_Schema } from './emitter';
 export const ActorConfig_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
-  return v.union([ChildConfig_Schema, EmitterConfig_Schema(...paths)]);
+  return v.union([
+    ChildConfig_Schema(...paths),
+    EmitterConfig_Schema(...paths),
+  ]);
 };

@@ -3,8 +3,8 @@ import type { ConfigFrom } from '#common/interpreter';
 import type {
   ChildEvents,
   CommonConfig,
-  ConfigDef,
-  NoExtraKeysConfigDef,
+  TargetDef,
+  NoExtraKeysTargetDef,
 } from '#common/machine';
 import type { AsyncDelayFunction2 } from '#delays';
 import type {
@@ -46,8 +46,8 @@ import { RecordS } from '../types/primitives';
  * @see {@linkcode CommonConfig}
  */
 export type AsyncConfig<
-  Paths extends NoExtraKeysConfigDef<ConfigDef> =
-    NoExtraKeysConfigDef<ConfigDef>,
+  Paths extends NoExtraKeysTargetDef<TargetDef> =
+    NoExtraKeysTargetDef<TargetDef>,
 > = CommonConfig<Paths>;
 
 export type ExtractTagsFromConfig<T extends AsyncConfig> =

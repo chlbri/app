@@ -56,7 +56,7 @@ export class SolidSyncInterpreter<
     this.#mainState = createSignal(this.#initialState);
 
     this.subscribe(next => {
-      this.#setState(prev => merge(prev, next));
+      this.#setState(prev => merge(prev, next as any));
     });
   }
 

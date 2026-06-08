@@ -1,9 +1,10 @@
-import { DELAY } from '#fixturesData';
+// import { DELAY } from '#fixturesData';
 import { interpret } from '#exports/interpret';
 import { createMachine } from '#exports/createMachine';
 import { constructTests } from '#fixtures';
 import { type } from '@bemedev/typings';
 
+export const DELAY = 60;
 export const machine1 = createMachine(
   {
     initial: 'idle',

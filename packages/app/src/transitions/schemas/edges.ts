@@ -10,8 +10,8 @@ import {
   TransitionConfig_Schema,
 } from './config';
 import {
-  TransitionConfigMapFGSchema,
-  TransitionConfigMapGSchema,
+  TransitionConfigMapFG_Schema,
+  TransitionConfigMapG_Schema,
 } from './map';
 
 export const ArrayTransitions_Schema = <T extends ReadonlyArray<string>>(
@@ -25,13 +25,14 @@ export const ArrayTransitions_Schema = <T extends ReadonlyArray<string>>(
     v.array(TransitionConfig_Schema(...paths)),
     v.check(a => a.length > 0),
     v.check(a => {
-      const [_, ...rest] = a.reverse();
-      const schema = TransitionConfigMapGSchema(...paths);
+      const [_, ...rest] = [...a].reverse();
+      const schema = TransitionConfigMapG_Schema(...paths);
       const fn = (value: unknown) => v.safeParse(schema, value).success;
       return rest.every(fn);
     }),
   ) as any;
 };
+
 export const ArrayTransitionsF_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ): v.BaseSchema<
@@ -43,8 +44,8 @@ export const ArrayTransitionsF_Schema = <T extends ReadonlyArray<string>>(
     v.array(TransitionConfigF_Schema(...paths)),
     v.check(a => a.length > 0),
     v.check(a => {
-      const [_, ...rest] = a.reverse();
-      const schema = TransitionConfigMapFGSchema(...paths);
+      const [_, ...rest] = [...a].reverse();
+      const schema = TransitionConfigMapFG_Schema(...paths);
       const fn = (value: unknown) => v.safeParse(schema, value).success;
       return rest.every(fn);
     }),
@@ -55,8 +56,8 @@ export const SingleOrArrayT_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
   return v.union([
-    TransitionConfig_Schema(...paths),
     ArrayTransitions_Schema(...paths),
+    TransitionConfig_Schema(...paths),
   ]);
 };
 

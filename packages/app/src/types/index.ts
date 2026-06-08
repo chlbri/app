@@ -144,20 +144,20 @@ export type {
   CommonElements,
   CommonMachine,
   CommonTimeAction_F,
-  ConfigDef,
+  TargetDef as ConfigDef,
   GetEventsFromConfig,
   GetEventsFromFlat,
   GetIO_F,
   MachineType,
+  NoExtraKeysTargetDef,
   NoExtraKeysConfigDef,
   ScheduledData,
   SimpleMachineOptions2,
   StdO2,
-  TransformConfigDef,
+  TransformTargetDef,
 } from '#common/machine';
 
 export * from '#exports/types.types';
-
 export type * from '#common/functions/types';
 export type * from '#common/types.types';
 

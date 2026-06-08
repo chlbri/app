@@ -5,7 +5,7 @@ import {
   isSingleOrArrayT,
   isTransitionConfigMapActions,
 } from '../../transitions/functions/is/transition';
-import type { _EmitterConfig, FinallyConfig } from '../types';
+import type { EmitterConfig, FinallyConfig } from '../types';
 
 export const isFinallyConfig1 = (value: unknown) => {
   const check1 = checkAction(value);
@@ -44,7 +44,7 @@ isFinallyConfig.orUndefined = (
 export const isEmitterConfig = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
-): value is _EmitterConfig<T[number]> => {
+): value is EmitterConfig<T[number]> => {
   if (typeof value !== 'object' || value === null || Array.isArray(value))
     return false;
 

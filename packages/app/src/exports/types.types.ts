@@ -17,7 +17,7 @@ import type {
   PrimitiveObject,
   StandardOutput,
 } from '@bemedev/typings';
-import type { EmptyObject } from '~types';
+import type { EmptyObject, NoExtraKeysConfigDef } from '~types';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 import type { SyncConfig } from '../sync/types.types';
@@ -88,7 +88,7 @@ export type CreateMachineNoName_F = <
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
   Sync extends true | undefined = undefined,
 >(
-  config: C,
+  config: NoExtraKeysConfigDef<C>,
   types?: {
     context?: Tc;
     pContext?: Pc;
@@ -145,7 +145,7 @@ export type CreateMachineNamed_F = <
   Sync extends true | undefined = undefined,
 >(
   _: Name,
-  config: C,
+  config: NoExtraKeysConfigDef<C>,
   types?: {
     context?: Tc;
     pContext?: Pc;

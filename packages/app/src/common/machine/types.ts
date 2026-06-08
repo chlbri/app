@@ -1,7 +1,6 @@
-import type { AsyncAction2, ActionResult, WithDescriber } from '#actions';
+import type { ActionResult, AsyncAction2, WithDescriber } from '#actions';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
-import type { Identitfy, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type {
   FlatMapN,
   NodeConfig,
@@ -9,52 +8,97 @@ import type {
   NodeConfigParallel,
   StateValue,
 } from '#states';
-import type { AsyncTransition } from '#transitions';
+import type { AsyncTransition, TransitionsConfig } from '#transitions';
 import type { Fn } from '#utils';
+import type { Identitfy, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type {
   ObjectT,
   PrimitiveObject,
   Sh,
   StandardKey,
 } from '@bemedev/typings';
-import type { FnMap, FnR, MaybePromise, RecordS } from '~types';
+import type {
+  EmptyObject,
+  FnMap,
+  FnR,
+  MaybePromise,
+  RecordS,
+} from '~types';
 
-export type NoExtraKeysConfigDef<T extends ConfigDef> = T & {
-  [K in Exclude<keyof T, keyof ConfigDef>]: never;
+export type NoExtraKeysTargetDef<T extends TargetDef> = T & {
+  [K in Exclude<keyof T, keyof TargetDef>]: never;
 } & {
   states?: {
     [K in keyof T['states']]: T['states'][K] extends infer TK extends
-      ConfigDef
-      ? NoExtraKeysConfigDef<TK>
+      TargetDef
+      ? NoExtraKeysTargetDef<TK>
       : never;
   };
 };
 
-export type ConfigDef = {
+export type TargetDef = {
   readonly targets: string;
   readonly initial?: string;
-  readonly states?: RecordS<ConfigDef>;
+  readonly states?: RecordS<TargetDef>;
 };
 
-export type TransformConfigDef<T extends ConfigDef> = {
-  readonly initial?: T['initial'];
-  readonly states?: {
-    [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
-      ConfigDef
-      ? TransformConfigDef<TK>
-      : never;
-  };
-};
+export type TransformTargetDef<T extends TargetDef> =
+  (undefined extends T['initial']
+    ? EmptyObject
+    : {
+        readonly initial: T['initial'];
+      }) &
+    (undefined extends T['states']
+      ? EmptyObject
+      : {
+          readonly states: {
+            [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
+              TargetDef
+              ? TransformTargetDef<TK>
+              : never;
+          };
+        });
+
+export type TransformTargetDef2<
+  N extends NodeConfig,
+  T extends TargetDef,
+> = (undefined extends T['initial']
+  ? N
+  : Omit<N, 'initial'> & {
+      readonly initial: T['initial'];
+    } & TransitionsConfig<T['targets']>) &
+  (undefined extends T['states']
+    ? EmptyObject
+    : {
+        readonly states: {
+          [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
+            TargetDef
+            ? TransformTargetDef<TK>
+            : never;
+        };
+      });
 
 export type CommonConfigNode = NodeConfigCompound | NodeConfigParallel;
 
 export type CommonConfig<
-  Paths extends NoExtraKeysConfigDef<ConfigDef> =
-    NoExtraKeysConfigDef<ConfigDef>,
+  Paths extends NoExtraKeysTargetDef<TargetDef> =
+    NoExtraKeysTargetDef<TargetDef>,
 > = NodeConfig<Paths['targets']> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
-} & TransformConfigDef<Paths>;
+} & TransformTargetDef<Paths>;
+
+export type NoExtraKeysConfigDef<T extends CommonConfig = CommonConfig> =
+  T & {
+    [K in Exclude<keyof T, keyof CommonConfig>]?: never;
+  } & {
+    states?: {
+      [K in keyof T['states']]: T['states'][K] extends infer TK extends
+        CommonConfig
+        ? NoExtraKeysConfigDef<TK>
+        : never;
+    };
+  };
 
 export type MachineType = 'sync' | 'async';
 

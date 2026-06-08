@@ -2205,7 +2205,7 @@ declare module '~types' {
       };
         all: '/' | '/idle';
       };
-      events: never;
+      events: 'NENE' | 'NN';
       options: {
         children: never;
         emitters: never;

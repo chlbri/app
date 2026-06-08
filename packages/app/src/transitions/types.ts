@@ -1,6 +1,8 @@
 import type {
   AnyArray,
+  Equals,
   IndexesOfArray,
+  NOmit,
   NotUndefined,
   Require,
   SoA,
@@ -35,6 +37,12 @@ import type {
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { CommonChild } from '#common/machine';
 
+// type TargetDef = {
+//   readonly targets: string;
+//   readonly initial?: string;
+//   readonly states?: RecordS<TargetDef>;
+// };
+
 /**
  * Represents the simpliest configuration map for a transition.
  * Used as Helper
@@ -45,6 +53,59 @@ export type _TransitionConfigMap<Paths = string> = {
   readonly actions?: SingleOrArrayL<WithDescriber>;
   readonly guards?: SingleOrArrayL<GuardConfig>;
   readonly description?: string;
+};
+
+export type TransformTransitionMapConfig<
+  T extends _TransitionConfigMap,
+  Paths extends string = string,
+> = NOmit<T, 'target'> &
+  (Equals<Partial<Pick<T, 'target'>>, Pick<T, 'target'>> extends true
+    ? { target?: Paths }
+    : { target: Paths });
+
+export type TransformTransitionConfig<
+  T extends TransitionConfig,
+  Paths extends string = string,
+> = T extends _TransitionConfigMap
+  ? TransformTransitionMapConfig<T, Paths>
+  : Paths;
+
+export type TransformTransitionArrayConfig<
+  T extends
+    | ReadonlyArray<TransitionConfig>
+    | ArrayTransitionsF
+    | ArrayTransitions,
+  Paths extends string = string,
+> = T extends readonly [
+  infer S extends TransitionConfig,
+  ...infer R extends ReadonlyArray<TransitionConfig>,
+]
+  ? readonly [
+      TransformTransitionConfig<S, Paths>,
+      ...TransformTransitionArrayConfig<R, Paths>,
+    ]
+  : [];
+
+export type TransformTransitionSOAConfig<
+  T extends
+    | SingleOrArrayT
+    | AlwaysConfig
+    | ReadonlyArray<TransitionConfig>,
+  Paths extends string = string,
+> = T extends TransitionConfig
+  ? TransformTransitionConfig<T, Paths>
+  : T extends
+        | ReadonlyArray<TransitionConfig>
+        | ArrayTransitionsF
+        | ArrayTransitions
+    ? TransformTransitionArrayConfig<T, Paths>
+    : never;
+
+export type TransformRecordTransitionsConfig<
+  T extends DelayedTransitions,
+  Paths extends string = string,
+> = {
+  [K in keyof T]: TransformTransitionSOAConfig<T[K], Paths>;
 };
 
 /**
