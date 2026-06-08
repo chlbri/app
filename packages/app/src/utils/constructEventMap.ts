@@ -1,13 +1,15 @@
 import { isChildConfig, isEmitterConfig } from '#actors';
-import { NodeConfig2 } from '#states';
+import { type NodeConfig3 } from '#states';
 
-export const constructEvents = (node: NodeConfig2) => {
+export const constructEvents = (node: NodeConfig3) => {
   const out: string[] = [];
+
   const on = node.on;
   if (on) {
     const keys = Object.keys(on);
     out.push(...keys);
   }
+
   const actors = node.actors;
   if (actors) {
     const entries = Object.entries(actors);
