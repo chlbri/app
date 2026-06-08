@@ -81,8 +81,8 @@
     "upgrade:safe": "pnpm run upgrade"
   },
   "devDependencies": {
-    "@bemedev/app": "workspace:*",
-    "@bemedev/app-vitest": "workspace:*",
+    "@bemedev/app": "workspace:^",
+    "@bemedev/app-vitest": "workspace:^",
     "@bemedev/decompose": "2.2.0",
     "@bemedev/dev-utils": "^0.8.0",
     "@bemedev/sleep": "^0.2.2",
@@ -113,8 +113,8 @@
     "vitest": "^4.1.8"
   },
   "peerDependencies": {
-    "@bemedev/app": "workspace:*",
-    "@bemedev/app-solidjs": "workspace:*",
+    "@bemedev/app": "workspace:^",
+    "@bemedev/app-solidjs": "workspace:^",
     "solid-js": "^1.9.12"
   },
   "size-limit": [

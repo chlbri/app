@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A reprogramming method to code better",
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -151,7 +151,7 @@
     "upgrade:fast": "pnpm up --latest"
   },
   "devDependencies": {
-    "@bemedev/app-utils-bemedev": "workspace:*",
+    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "^0.8.0",
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/rx-pausable": "^1.2.0",
