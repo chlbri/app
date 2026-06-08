@@ -5,6 +5,51 @@
 <details>
 <summary>
 
+## **[1.2.2] - 08/06/2026** => _22:15_
+
+</summary>
+
+### Refactor
+
+- **Stricter Type Signatures**: Update type signature of `ConstructTests_F`
+  to use stricter `CommonConfig3` type from `@bemedev/app`
+- **Standardize Imports**: Update `PrimitiveObject` imports to resolve
+  directly from `@bemedev/app/types` instead of `@bemedev/app/bemedev`
+- **Pretest Hook**: Add `pnpm run generate` to the `pretest` script to
+  ensure types are generated prior to test execution
+
+### Dependencies
+
+- **Dev Dependencies**: Update `@types/node` to `^25.9.2`, `oxfmt` to
+  `^0.54.0`, `oxlint` to `^1.69.0`, and `rolldown` to `1.1.0`
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
+## **[1.2.1] - 08/06/2026** => _21:44_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Protocols**: Update workspace protocols to range specifiers
+  (`workspace:^`) for workspace package references
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.0] - 08/06/2026** => _21:30_
 
 </summary>

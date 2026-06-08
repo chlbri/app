@@ -1,8 +1,9 @@
 import { ActionConfig_Schema } from '#actions';
+import type { NodeConfig2 } from '#states';
 import { recordV } from '#utils/schemas';
 import { SoaLSchema } from '#utils/schemas/soa';
 import * as v from 'valibot';
-import type { NodeConfig, RefineStringArray } from '~types';
+import type { RefineStringArray } from '~types';
 import { Transitions_Schema } from '../../transitions/schemas/transitions';
 import { ActivityConfig_Schema } from './activity';
 
@@ -59,8 +60,8 @@ export const NodeConfig_Schema = <
 >(
   ...paths: T
 ): v.BaseSchema<
-  NodeConfig<RefineStringArray<T>>,
-  NodeConfig<RefineStringArray<T>>,
+  NodeConfig2<RefineStringArray<T>>,
+  NodeConfig2<RefineStringArray<T>>,
   any
 > => {
   return v.pipe(

@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A reprogramming method to code better",
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -117,7 +117,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown",
+    "build": "pnpm rm:lib && pnpm run rolldown && chmod +x lib/cli/index.js",
     "_ci": "pnpm run lint && pnpm run test",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "ci:admin": "CI_START=$(date +%s) && pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",

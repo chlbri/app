@@ -1,4 +1,5 @@
-import type { Equals, Fn, PrimitiveObject } from '@bemedev/app/bemedev';
+import type { PrimitiveObject } from '@bemedev/app/types';
+import type { Equals, Fn } from '@bemedev/app/bemedev';
 import type {
   EmptyObject,
   EventArgObject,

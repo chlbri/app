@@ -11,6 +11,53 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.2.2] - 08/06/2026** => _22:15_
+
+</summary>
+
+### Features
+
+- **Strict Schema Verification**: Update `Config_Schema` and
+  `NodeConfig_Schema` to use stricter `NodeConfig2` type mapping
+- **Strict Parsing Context**: Update `ParseTreeContext` type definitions to
+  use the new `NodeConfig3` type to align with stricter validation
+  constraints
+- **Export Stricter Config Types**: Add `NodeConfig2`, `NodeConfig3` and
+  `CommonConfig2`, `CommonConfig3` exports to the package root
+
+### Fixes
+
+- **CLI Binary Permissions**: Update build script to execute
+  `chmod +x lib/cli/index.js` to ensure CLI binary has execution
+  permissions
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
+## **[1.2.1] - 08/06/2026** => _21:44_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Protocols**: Update workspace protocols to use range
+  specifiers (`workspace:^`) for workspace-managed packages
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.0] - 08/06/2026** => _21:30_
 
 </summary>

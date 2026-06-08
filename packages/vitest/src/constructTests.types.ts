@@ -2,7 +2,7 @@ import type {
   CommonInterpreter,
   SimpleMachineOptions2,
   RecordS,
-  CommonConfig,
+  CommonConfig3,
   EventsMap,
   ActorsConfigMap,
   EventObject,
@@ -12,7 +12,7 @@ import type { ConstructTestsResult, Option } from './types';
 import type { VitestUtils } from 'vitest';
 
 export type ConstructTests_F = <
-  const C extends CommonConfig = CommonConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

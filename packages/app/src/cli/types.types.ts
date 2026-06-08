@@ -1,5 +1,5 @@
 import type { BetterSet } from '@bemedev/better-set';
-import type { NodeConfig, RecordS } from '~types';
+import type { NodeConfig3, RecordS } from '~types';
 
 export type ParseTreeContext = {
   actions: BetterSet<string>;
@@ -12,7 +12,7 @@ export type ParseTreeContext = {
   events: BetterSet<string>;
   pContextKeys: BetterSet<string>;
   tags: BetterSet<string>;
-  __flat?: RecordS<NodeConfig>;
+  __flat?: RecordS<NodeConfig3>;
 };
 export type ConfigPaths2 = {
   targets: string[];
