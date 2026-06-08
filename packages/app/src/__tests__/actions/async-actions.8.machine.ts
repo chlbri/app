@@ -8,7 +8,7 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          INC: { actions: 'inc', target: '/idle' },
+          INC: { actions: 'inc' },
         },
       },
     },

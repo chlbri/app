@@ -1,6 +1,9 @@
 import type { SyncAction2 } from '#actions';
 import type { AnyInterpreter } from '#common/interpreter';
-import type { SimpleMachineOptions2 } from '#common/machine';
+import type {
+  CommonConfig3,
+  SimpleMachineOptions2,
+} from '#common/machine';
 import type { SyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type {
@@ -12,7 +15,7 @@ import type { AlwaysConfig, TransitionConfig } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject } from '~types';
 import type { SyncAddOptionsParam_F } from '../machine/options.types';
-import type { SyncConfig, SyncNodeConfig } from '../types.types';
+import type { SyncNodeConfig } from '../types.types';
 import type { SyncInterpreter } from './interpreter';
 
 export type SyncCollectedService = {
@@ -64,7 +67,7 @@ export type SyncPerformDelay_F<
 > = (delay: SyncDelayFunction3<E, Pc, Tc, T>) => number;
 
 export type SyncProvideMachineOptions_F<
-  C extends SyncConfig = SyncConfig,
+  C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,

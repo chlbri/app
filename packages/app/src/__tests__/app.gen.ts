@@ -9,8 +9,8 @@ declare module '~types' {
     'src/__tests__/actions/action.batch.cov.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -32,8 +32,8 @@ declare module '~types' {
     'src/__tests__/actions/actions.1.machine': {
       paths: {
         map: { targets: ('/state1' | '/state2'); 
-        initial?: 'state1';
-        states?: {
+        initial: 'state1';
+        states: {
           'state1': { targets: ('/' | '/state2'); 
           };
           'state2': { targets: ('/' | '/state1'); 
@@ -57,8 +57,8 @@ declare module '~types' {
     'src/__tests__/actions/actions.2.machine': {
       paths: {
         map: { targets: ('/state1' | '/state2'); 
-        initial?: 'state1';
-        states?: {
+        initial: 'state1';
+        states: {
           'state1': { targets: ('/' | '/state2'); 
           };
           'state2': { targets: ('/' | '/state1'); 
@@ -82,8 +82,8 @@ declare module '~types' {
     'src/__tests__/actions/async-actions.1.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -105,8 +105,8 @@ declare module '~types' {
     'src/__tests__/actions/async-actions.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -128,8 +128,8 @@ declare module '~types' {
     'src/__tests__/actions/async-actions.3.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -151,8 +151,8 @@ declare module '~types' {
     'src/__tests__/actions/async-actions.4.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -174,8 +174,8 @@ declare module '~types' {
     'src/__tests__/actions/async-actions.5.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -197,8 +197,8 @@ declare module '~types' {
     'src/__tests__/actions/async-actions.6.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -220,8 +220,8 @@ declare module '~types' {
     'src/__tests__/actions/async-actions.7.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -243,8 +243,8 @@ declare module '~types' {
     'src/__tests__/actions/async-actions.8.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -266,8 +266,8 @@ declare module '~types' {
     'src/__tests__/actions/sendToActions/sendToActions1.machine': {
       paths: {
         map: { targets: ('/idle' | '/next'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/next'); 
           };
           'next': { targets: ('/' | '/idle'); 
@@ -291,8 +291,8 @@ declare module '~types' {
     'src/__tests__/actions/sendToActions/sendToActions2.machine': {
       paths: {
         map: { targets: ('/idle' | '/next'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/next'); 
           };
           'next': { targets: ('/' | '/idle'); 
@@ -316,8 +316,8 @@ declare module '~types' {
     'src/__tests__/delays/delay.notDefined.machine': {
       paths: {
         map: { targets: ('/idle' | '/active'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/active'); 
@@ -341,8 +341,8 @@ declare module '~types' {
     'src/__tests__/emitters/emitter1.machine': {
       paths: {
         map: { targets: ('/inactive' | '/active'); 
-        initial?: 'inactive';
-        states?: {
+        initial: 'inactive';
+        states: {
           'active': { targets: ('/' | '/inactive'); 
           };
           'inactive': { targets: ('/' | '/active'); 
@@ -366,8 +366,8 @@ declare module '~types' {
     'src/__tests__/emitters/emitter3.machine': {
       paths: {
         map: { targets: ('/inactive' | '/active'); 
-        initial?: 'inactive';
-        states?: {
+        initial: 'inactive';
+        states: {
           'active': { targets: ('/' | '/inactive'); 
           };
           'inactive': { targets: ('/' | '/active'); 
@@ -391,8 +391,8 @@ declare module '~types' {
     'src/__tests__/emitters/error.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -414,8 +414,8 @@ declare module '~types' {
     'src/__tests__/guards/index.1.machine': {
       paths: {
         map: { targets: ('/state1' | '/state2'); 
-        initial?: 'state1';
-        states?: {
+        initial: 'state1';
+        states: {
           'state1': { targets: ('/' | '/state2'); 
           };
           'state2': { targets: ('/' | '/state1'); 
@@ -439,8 +439,8 @@ declare module '~types' {
     'src/__tests__/guards/index.2.machine': {
       paths: {
         map: { targets: ('/state1' | '/state2'); 
-        initial?: 'state1';
-        states?: {
+        initial: 'state1';
+        states: {
           'state1': { targets: ('/' | '/state2'); 
           };
           'state2': { targets: ('/' | '/state1'); 
@@ -464,8 +464,8 @@ declare module '~types' {
     'src/__tests__/guards/index.3.machine': {
       paths: {
         map: { targets: ('/state1' | '/state2'); 
-        initial?: 'state1';
-        states?: {
+        initial: 'state1';
+        states: {
           'state1': { targets: ('/' | '/state2'); 
           };
           'state2': { targets: ('/' | '/state1'); 
@@ -489,8 +489,8 @@ declare module '~types' {
     'src/__tests__/guards/index.4.machine': {
       paths: {
         map: { targets: ('/state1' | '/state2'); 
-        initial?: 'state1';
-        states?: {
+        initial: 'state1';
+        states: {
           'state1': { targets: ('/' | '/state2'); 
           };
           'state2': { targets: ('/' | '/state1'); 
@@ -514,8 +514,8 @@ declare module '~types' {
     'src/__tests__/interpreters/activities/pause.machine': {
       paths: {
         map: { targets: ('/idle' | '/next'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/next'); 
           };
           'next': { targets: ('/' | '/idle'); 
@@ -539,8 +539,8 @@ declare module '~types' {
     'src/__tests__/interpreters/activities/perform.bis.machine': {
       paths: {
         map: { targets: ('/idle' | '/next'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/next'); 
           };
           'next': { targets: ('/' | '/idle'); 
@@ -564,8 +564,8 @@ declare module '~types' {
     'src/__tests__/interpreters/activities/perform.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -587,8 +587,8 @@ declare module '~types' {
     'src/__tests__/interpreters/children.1.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -610,8 +610,8 @@ declare module '~types' {
     'src/__tests__/interpreters/children.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -633,8 +633,8 @@ declare module '~types' {
     'src/__tests__/interpreters/children.3.machine': {
       paths: {
         map: { targets: ('/idle' | '/working'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/working'); 
           };
           'working': { targets: ('/' | '/idle'); 
@@ -658,8 +658,8 @@ declare module '~types' {
     'src/__tests__/interpreters/children.4.machine': {
       paths: {
         map: { targets: ('/active' | '/inactive'); 
-        initial?: 'active';
-        states?: {
+        initial: 'active';
+        states: {
           'active': { targets: ('/' | '/inactive'); 
           };
           'inactive': { targets: ('/' | '/active'); 
@@ -683,8 +683,8 @@ declare module '~types' {
     'src/__tests__/interpreters/children.5.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -706,15 +706,15 @@ declare module '~types' {
     'src/__tests__/interpreters/complex/machine1.machine': {
       paths: {
         map: { targets: ('/idle' | '/checking' | '/working' | '/working/idle' | '/working/adding'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'checking': { targets: ('/' | '/idle' | '/working' | '/working/idle' | '/working/adding'); 
           };
           'idle': { targets: ('/' | '/checking' | '/working' | '/working/idle' | '/working/adding'); 
           };
           'working': { targets: ('/' | '/idle' | '/checking' | '/working/idle' | '/working/adding'); 
-            initial?: 'idle';
-            states?: {
+            initial: 'idle';
+            states: {
               'adding': { targets: ('/' | '/idle' | '/checking' | '/working' | '/working/idle'); 
               };
               'idle': { targets: ('/' | '/idle' | '/checking' | '/working' | '/working/adding'); 
@@ -740,8 +740,8 @@ declare module '~types' {
     'src/__tests__/interpreters/composition.1.machine': {
       paths: {
         map: { targets: ('/idle' | '/working'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/working'); 
           };
           'working': { targets: ('/' | '/idle'); 
@@ -765,8 +765,8 @@ declare module '~types' {
     'src/__tests__/interpreters/composition.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -788,8 +788,8 @@ declare module '~types' {
     'src/__tests__/interpreters/composition.3.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -811,8 +811,8 @@ declare module '~types' {
     'src/__tests__/interpreters/composition.4.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -852,8 +852,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/actors/2ids.2.machine': {
       paths: {
         map: { targets: ('/idle' | '/working'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/working'); 
           };
           'working': { targets: ('/' | '/idle'); 
@@ -895,8 +895,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/actors/child.2.machine': {
       paths: {
         map: { targets: ('/idle' | '/working'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/working'); 
           };
           'working': { targets: ('/' | '/idle'); 
@@ -920,8 +920,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/actors/emitter.machine': {
       paths: {
         map: { targets: ('/inactive' | '/active'); 
-        initial?: 'inactive';
-        states?: {
+        initial: 'inactive';
+        states: {
           'active': { targets: ('/' | '/inactive'); 
           };
           'inactive': { targets: ('/' | '/active'); 
@@ -945,8 +945,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/addOptions-return.1.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -968,8 +968,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/addOptions-return.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -991,8 +991,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/addOptions-return.3.machine': {
       paths: {
         map: { targets: ('/idle' | '/positive'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/positive'); 
           };
           'positive': { targets: ('/' | '/idle'); 
@@ -1016,8 +1016,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/addOptions-return.4.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1039,8 +1039,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/addOptions-return.5.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1062,8 +1062,8 @@ declare module '~types' {
     'src/__tests__/interpreters/coverage/index.machine': {
       paths: {
         map: { targets: ('/idle' | '/final'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'final': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/final'); 
@@ -1087,8 +1087,8 @@ declare module '~types' {
     'src/__tests__/interpreters/filter-erase.1.machine': {
       paths: {
         map: { targets: ('/state1' | '/state2'); 
-        initial?: 'state1';
-        states?: {
+        initial: 'state1';
+        states: {
           'state1': { targets: ('/' | '/state2'); 
           };
           'state2': { targets: ('/' | '/state1'); 
@@ -1112,8 +1112,8 @@ declare module '~types' {
     'src/__tests__/interpreters/filter-erase.2.machine': {
       paths: {
         map: { targets: ('/idle' | '/filtered'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'filtered': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/filtered'); 
@@ -1137,8 +1137,8 @@ declare module '~types' {
     'src/__tests__/interpreters/filter-erase.3.machine': {
       paths: {
         map: { targets: ('/idle' | '/filtered'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'filtered': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/filtered'); 
@@ -1162,8 +1162,8 @@ declare module '~types' {
     'src/__tests__/interpreters/filter-erase.4.machine': {
       paths: {
         map: { targets: ('/idle' | '/cleared'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'cleared': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/cleared'); 
@@ -1187,8 +1187,8 @@ declare module '~types' {
     'src/__tests__/interpreters/filter-erase.5.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1210,8 +1210,8 @@ declare module '~types' {
     'src/__tests__/interpreters/filter-erase.6.machine': {
       paths: {
         map: { targets: ('/idle' | '/cleared'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'cleared': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/cleared'); 
@@ -1235,8 +1235,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.1.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1258,8 +1258,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.10.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1281,8 +1281,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.11.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1304,8 +1304,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.12.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1327,8 +1327,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.13.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1350,8 +1350,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.14.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1373,8 +1373,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1396,8 +1396,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.3.machine': {
       paths: {
         map: { targets: ('/idle' | '/positive' | '/negative'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/positive' | '/negative'); 
           };
           'negative': { targets: ('/' | '/idle' | '/positive'); 
@@ -1423,8 +1423,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.4.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1446,8 +1446,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.5.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1469,8 +1469,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.6.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1492,8 +1492,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.7.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1515,8 +1515,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.8.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1538,8 +1538,8 @@ declare module '~types' {
     'src/__tests__/interpreters/legacy-options.9.machine': {
       paths: {
         map: { targets: ('/idle' | '/positive' | '/negative'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/positive' | '/negative'); 
           };
           'negative': { targets: ('/' | '/idle' | '/positive'); 
@@ -1565,8 +1565,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/after.1.machine': {
       paths: {
         map: { targets: ('/idle' | '/active'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/active'); 
@@ -1590,8 +1590,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/after.2.machine': {
       paths: {
         map: { targets: ('/idle' | '/result1' | '/result2'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/result1' | '/result2'); 
           };
           'result1': { targets: ('/' | '/idle' | '/result2'); 
@@ -1617,8 +1617,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/after.3.machine': {
       paths: {
         map: { targets: ('/idle' | '/result1' | '/result2'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/result1' | '/result2'); 
           };
           'result1': { targets: ('/' | '/idle' | '/result2'); 
@@ -1644,8 +1644,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/after.4.machine': {
       paths: {
         map: { targets: ('/idle' | '/active'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/active'); 
@@ -1669,8 +1669,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/after.5.machine': {
       paths: {
         map: { targets: ('/idle' | '/active'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/active'); 
@@ -1694,8 +1694,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/always.1.machine': {
       paths: {
         map: { targets: ('/idle' | '/active' | '/notActive'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle' | '/notActive'); 
           };
           'idle': { targets: ('/' | '/active' | '/notActive'); 
@@ -1721,8 +1721,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/always.2.machine': {
       paths: {
         map: { targets: ('/idle' | '/active' | '/notActive'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle' | '/notActive'); 
           };
           'idle': { targets: ('/' | '/active' | '/notActive'); 
@@ -1748,8 +1748,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/always.3.machine': {
       paths: {
         map: { targets: ('/idle' | '/result1' | '/result2' | '/result3'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/result1' | '/result2' | '/result3'); 
           };
           'result1': { targets: ('/' | '/idle' | '/result2' | '/result3'); 
@@ -1777,8 +1777,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/index.1.machine': {
       paths: {
         map: { targets: ('/idle' | '/active'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/active'); 
@@ -1802,8 +1802,8 @@ declare module '~types' {
     'src/__tests__/interpreters/selftransitions/index.2.machine': {
       paths: {
         map: { targets: ('/idle' | '/active'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/active'); 
@@ -1827,8 +1827,8 @@ declare module '~types' {
     'src/__tests__/interpreters/tags/tags.machine': {
       paths: {
         map: { targets: ('/idle' | '/working' | '/final'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'final': { targets: ('/' | '/idle' | '/working'); 
           };
           'idle': { targets: ('/' | '/working' | '/final'); 
@@ -1854,8 +1854,8 @@ declare module '~types' {
     'src/__tests__/machine/addOptions-return.1.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1877,8 +1877,8 @@ declare module '~types' {
     'src/__tests__/machine/addOptions-return.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1900,8 +1900,8 @@ declare module '~types' {
     'src/__tests__/machine/addOptions-return.3.machine': {
       paths: {
         map: { targets: ('/idle' | '/positive'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/positive'); 
           };
           'positive': { targets: ('/' | '/idle'); 
@@ -1925,8 +1925,8 @@ declare module '~types' {
     'src/__tests__/machine/addOptions-return.4.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1948,8 +1948,8 @@ declare module '~types' {
     'src/__tests__/machine/asyncActions.1.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1971,8 +1971,8 @@ declare module '~types' {
     'src/__tests__/machine/asyncActions.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -1994,8 +1994,8 @@ declare module '~types' {
     'src/__tests__/machine/asyncActions.3.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2017,8 +2017,8 @@ declare module '~types' {
     'src/__tests__/machine/asyncActions.4.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2040,8 +2040,8 @@ declare module '~types' {
     'src/__tests__/machine/asyncActions.5.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2063,8 +2063,8 @@ declare module '~types' {
     'src/__tests__/machine/asyncActions.6.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2086,8 +2086,8 @@ declare module '~types' {
     'src/__tests__/machine/asyncActions.7.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2109,19 +2109,19 @@ declare module '~types' {
     'src/__tests__/machine/cov.1.machine': {
       paths: {
         map: { targets: ('/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
           };
           'state1': { targets: ('/' | '/idle' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
-            initial?: 'state11';
-            states?: {
+            initial: 'state11';
+            states: {
               'state11': { targets: ('/' | '/idle' | '/state1' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
-                initial?: 'state111';
-                states?: {
+                initial: 'state111';
+                states: {
                   'state111': { targets: ('/' | '/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
-                    initial?: 'state1111';
-                    states?: {
+                    initial: 'state1111';
+                    states: {
                       'state1111': { targets: ('/' | '/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state112'); 
                       };
                     };
@@ -2151,8 +2151,8 @@ declare module '~types' {
     'src/__tests__/machine/cov.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2174,8 +2174,8 @@ declare module '~types' {
     'src/__tests__/machine/cov.3.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2197,15 +2197,15 @@ declare module '~types' {
     'src/__tests__/machine/longRuns.cov.1.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
       };
         all: '/' | '/idle';
       };
-      events: 'NENE' | 'NN';
+      events: never;
       options: {
         children: never;
         emitters: never;
@@ -2220,8 +2220,8 @@ declare module '~types' {
     'src/__tests__/machine/longRuns.cov.2.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2243,8 +2243,8 @@ declare module '~types' {
     'src/__tests__/machine/longRuns.cov.3.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2266,8 +2266,8 @@ declare module '~types' {
     'src/__tests__/machine/longRuns.cov.4.machine': {
       paths: {
         map: { targets: ('/idle'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/'); 
           };
         };
@@ -2289,8 +2289,8 @@ declare module '~types' {
     'src/__tests__/machine/longRuns.cov.5.machine': {
       paths: {
         map: { targets: ('/idle' | '/active'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'active': { targets: ('/' | '/idle'); 
           };
           'idle': { targets: ('/' | '/active'); 
@@ -2314,11 +2314,11 @@ declare module '~types' {
     'src/__tests__/machine/real.1.machine': {
       paths: {
         map: { targets: ('/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'compound': { targets: ('/' | '/idle' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
-            initial?: 'idle';
-            states?: {
+            initial: 'idle';
+            states: {
               'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
               };
               'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
@@ -2328,10 +2328,10 @@ declare module '~types' {
           'idle': { targets: ('/' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
           };
           'parallel': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
-            states?: {
+            states: {
               'atomic': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
-                initial?: 'idle';
-                states?: {
+                initial: 'idle';
+                states: {
                   'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
                   };
                   'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
@@ -2339,8 +2339,8 @@ declare module '~types' {
                 };
               };
               'compound': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound/idle' | '/parallel/compound/next'); 
-                initial?: 'idle';
-                states?: {
+                initial: 'idle';
+                states: {
                   'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/next'); 
                   };
                   'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle'); 
@@ -2368,15 +2368,15 @@ declare module '~types' {
     'src/__tests__/machine/real.2.machine': {
       paths: {
         map: { targets: ('/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
           };
           'parallel': { targets: ('/' | '/idle' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
-            states?: {
+            states: {
               'atomic': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
-                initial?: 'idle';
-                states?: {
+                initial: 'idle';
+                states: {
                   'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
                   };
                   'next': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
@@ -2384,11 +2384,11 @@ declare module '~types' {
                 };
               };
               'compound': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
-                initial?: 'idle';
-                states?: {
+                initial: 'idle';
+                states: {
                   'compound': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
-                    initial?: 'idle';
-                    states?: {
+                    initial: 'idle';
+                    states: {
                       'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/next'); 
                       };
                       'next': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle'); 
@@ -2420,13 +2420,13 @@ declare module '~types' {
     'src/__tests__/machine/real.3.machine': {
       paths: {
         map: { targets: ('/idle' | '/working' | '/working/idle' | '/working/register'); 
-        initial?: 'idle';
-        states?: {
+        initial: 'idle';
+        states: {
           'idle': { targets: ('/' | '/working' | '/working/idle' | '/working/register'); 
           };
           'working': { targets: ('/' | '/idle' | '/working/idle' | '/working/register'); 
-            initial?: 'idle';
-            states?: {
+            initial: 'idle';
+            states: {
               'idle': { targets: ('/' | '/idle' | '/working' | '/working/register'); 
               };
               'register': { targets: ('/' | '/idle' | '/working' | '/working/idle'); 

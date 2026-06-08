@@ -1,7 +1,7 @@
-import type { NodeConfig } from '#states';
+import type { NodeConfig2 } from '#states';
 import { _any } from '@bemedev/app-utils-bemedev';
 
-export type CreateConfig_F = <const T extends NodeConfig>(config: T) => T;
+export type CreateConfig_F = <const T extends NodeConfig2>(config: T) => T;
 
 /**
  * Creates a machine configuration.

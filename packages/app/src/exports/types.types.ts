@@ -1,6 +1,11 @@
 import type { IsAsyncConfig } from '#common/functions/types';
-import type { ConfigFrom, InterpretArgs } from '#common/interpreter';
-import type { AnyMachine, CommonConfig } from '#common/machine';
+import type { InterpretArgs } from '#common/interpreter';
+import type {
+  AnyMachine,
+  CommonConfig,
+  CommonConfig2,
+  CommonConfig3,
+} from '#common/machine';
 import type {
   ActorsConfigMap,
   EventObject,
@@ -10,20 +15,19 @@ import type {
 } from '#events';
 import type { AsyncInterpreterFrom } from '#interpreter';
 import type { AsyncMachine } from '#machine';
-import type { AsyncConfig, AsyncMachineOptions2 } from '#machines';
+import type { AsyncMachineOptions2 } from '#machines';
 import type { Register, RegisterOptions } from '#registry';
 import type {
   inferT,
   PrimitiveObject,
   StandardOutput,
 } from '@bemedev/typings';
-import type { EmptyObject, NoExtraKeysConfigDef } from '~types';
+import type { EmptyObject } from '~types';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
-import type { SyncConfig } from '../sync/types.types';
 
 export type OutMachine<
-  C extends CommonConfig = CommonConfig,
+  C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,
@@ -33,46 +37,32 @@ export type OutMachine<
   AllPaths extends string = string,
   Options extends RegisterOptions = RegisterOptions,
   Sync extends true | undefined = undefined,
-> = C extends SyncConfig
-  ? Sync extends true
-    ? SyncMachine<
-        C,
-        Pc,
-        Tc,
-        E,
-        A,
-        Ta,
-        Eo,
-        AllPaths,
-        SyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
-      >
-    : AsyncMachine<
-        C,
-        Pc,
-        Tc,
-        E,
-        A,
-        Ta,
-        Eo,
-        AllPaths,
-        AsyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
-      >
-  : C extends AsyncConfig
-    ? AsyncMachine<
-        C,
-        Pc,
-        Tc,
-        E,
-        A,
-        Ta,
-        Eo,
-        AllPaths,
-        AsyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
-      >
-    : never;
+> = Sync extends true
+  ? SyncMachine<
+      C,
+      Pc,
+      Tc,
+      E,
+      A,
+      Ta,
+      Eo,
+      AllPaths,
+      SyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
+    >
+  : AsyncMachine<
+      C,
+      Pc,
+      Tc,
+      E,
+      A,
+      Ta,
+      Eo,
+      AllPaths,
+      AsyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
+    >;
 
 export type CreateMachineNoName_F = <
-  const C extends CommonConfig,
+  const C extends CommonConfig2,
   const Pc extends StandardOutput<any> = StandardOutput<any>,
   const Tc extends StandardOutput<PrimitiveObject> =
     StandardOutput<undefined>,
@@ -88,7 +78,7 @@ export type CreateMachineNoName_F = <
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
   Sync extends true | undefined = undefined,
 >(
-  config: NoExtraKeysConfigDef<C>,
+  config: C,
   types?: {
     context?: Tc;
     pContext?: Pc;
@@ -145,13 +135,13 @@ export type CreateMachineNamed_F = <
   Sync extends true | undefined = undefined,
 >(
   _: Name,
-  config: NoExtraKeysConfigDef<C>,
+  config: C,
   types?: {
     context?: Tc;
     pContext?: Pc;
     eventsMap?: E;
     actorsMap?: A;
-  } & (IsAsyncConfig<C> extends false ? { sync?: Sync } : EmptyObject),
+  } & { sync?: Sync },
 ) => OutMachine<
   C,
   _Pc,
@@ -167,20 +157,9 @@ export type CreateMachineNamed_F = <
 
 export type CreateMachine_F = CreateMachineNamed_F & CreateMachineNoName_F;
 
-export type OutInterpreter<
-  M extends AnyMachine,
-  Sync extends M['TYPE'] = M['TYPE'],
-  C extends ConfigFrom<M> = ConfigFrom<M>,
-> =
-  IsAsyncConfig<C> extends true
-    ? C extends AsyncConfig
-      ? AsyncInterpreterFrom<M>
-      : never
-    : C extends SyncConfig
-      ? Sync extends 'sync'
-        ? SyncInterpreterFrom<M>
-        : AsyncInterpreterFrom<M>
-      : never;
+export type OutInterpreter<M extends AnyMachine> = M['TYPE'] extends 'sync'
+  ? SyncInterpreterFrom<M>
+  : AsyncInterpreterFrom<M>;
 
 export type CreateInterpreter_F = <M extends AnyMachine>(
   ...args: InterpretArgs<M>

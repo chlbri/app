@@ -39,7 +39,6 @@ import { createInterval } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
 import { isDescriber, type KeyU } from '~types';
-import type { SyncConfig } from '../types.types';
 import type {
   _SyncSend_F,
   SyncPerformAction_F,
@@ -59,6 +58,7 @@ import type {
 import type {
   AnyMachine,
   CommonChildFunction2,
+  CommonConfig3,
   SimpleMachineOptions2,
 } from '#common/machine';
 import { createScheduler } from '@bemedev/scheduler/sync';
@@ -97,7 +97,7 @@ import { getByKey, recompose } from '@bemedev/decompose';
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
  */
 export class SyncInterpreter<
-  const C extends SyncConfig = SyncConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,
@@ -841,10 +841,7 @@ export class SyncInterpreter<
 
 export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
 
-type SyncConfigFrom<T extends KeyU<'config'>> = Extract<
-  T['config'],
-  SyncConfig
->;
+type SyncConfigFrom<T extends KeyU<'config'>> = T['config'];
 
 /**
  * Retrieves the {@linkcode Interpreter} service from the given {@linkcode AnyMachine} machine.

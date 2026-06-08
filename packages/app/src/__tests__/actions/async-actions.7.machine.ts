@@ -7,7 +7,7 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          DISPATCH: { actions: 'dispatchEvent', target: '/idle' },
+          DISPATCH: { actions: 'dispatchEvent' },
         },
       },
     },

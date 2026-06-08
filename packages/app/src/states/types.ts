@@ -1,17 +1,17 @@
 import type {
   AsyncAction,
-  WithDescriber,
   FromActionConfig,
+  WithDescriber,
 } from '#actions';
+import type { EventObject } from '#events';
+import type { FromGuard, GuardConfig } from '#guards';
+import type { AsyncTransitions, TransitionsConfig } from '#transitions';
 import type {
   Equals,
   Keys,
   SoA,
   UnionToIntersection,
 } from '@bemedev/app-utils-bemedev';
-import type { EventObject } from '#events';
-import type { FromGuard, GuardConfig } from '#guards';
-import type { AsyncTransitions, TransitionsConfig } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,
@@ -23,7 +23,7 @@ import type {
 
 export type StateType = 'atomic' | 'compound' | 'parallel';
 
-export type SNC = NodeConfig;
+export type SNC = NodeConfig2;
 
 export type ActivityMap =
   | {
@@ -93,7 +93,7 @@ export type BaseConfig = {
 export type CommonNodeConfig<Paths extends string = string> = BaseConfig &
   TransitionsConfig<Paths>;
 
-export type NodeConfig<Paths extends string = string> =
+export type NodeConfig2<Paths extends string = string> =
   CommonNodeConfig<Paths> &
     (
       | {
@@ -104,34 +104,74 @@ export type NodeConfig<Paths extends string = string> =
       | {
           readonly type?: 'compound';
           readonly initial: string;
-          readonly states: RecordS<NodeConfig<Paths>>;
+          readonly states: RecordS<NodeConfig2<Paths>>;
         }
       | {
           readonly type: 'parallel';
           readonly initial?: never;
-          readonly states: RecordS<NodeConfig<Paths>>;
+          readonly states: RecordS<NodeConfig2<Paths>>;
         }
     );
 
-export type NodeConfigAtomic<Paths extends string = string> =
+export type NodeConfig3<Paths extends string = string> =
+  CommonNodeConfig<Paths> & {
+    readonly type?: StateType;
+    readonly initial?: string;
+    readonly states?: RecordS<NodeConfig3<Paths>>;
+  };
+
+export type TargetDef = {
+  readonly targets: string;
+  readonly initial?: string;
+  readonly states?: RecordS<TargetDef>;
+};
+
+export type NodeConfig<T extends TargetDef> = CommonNodeConfig<
+  T['targets']
+> &
+  (undefined extends T['states']
+    ? {
+        readonly type?: 'atomic';
+        readonly initial?: never;
+        readonly states?: never;
+      }
+    : {
+        readonly states: {
+          [key in keyof T['states']]: T['states'][key] extends infer TK extends
+            TargetDef
+            ? NodeConfig<TK>
+            : CommonNodeConfig & {
+                readonly type?: 'atomic';
+                readonly initial?: never;
+                readonly states?: never;
+              };
+        };
+      } & (undefined extends T['initial']
+        ? {
+            readonly type: 'parallel';
+            readonly initial?: never;
+          }
+        : Pick<T, 'initial'> & { type?: 'compound' }));
+
+export type NodeConfigAtomic2<Paths extends string = string> =
   CommonNodeConfig<Paths> & {
     readonly type?: 'atomic';
     readonly initial?: never;
     readonly states?: never;
   };
 
-export type NodeConfigCompound<Paths extends string = string> =
+export type NodeConfigCompound2<Paths extends string = string> =
   CommonNodeConfig<Paths> & {
     readonly type?: 'compound';
     readonly initial: string;
-    readonly states: RecordS<NodeConfig<Paths>>;
+    readonly states: RecordS<NodeConfig2<Paths>>;
   };
 
-export type NodeConfigParallel<Paths extends string = string> =
+export type NodeConfigParallel2<Paths extends string = string> =
   CommonNodeConfig<Paths> & {
     readonly type: 'parallel';
     readonly initial?: never;
-    readonly states: RecordS<NodeConfig<Paths>>;
+    readonly states: RecordS<NodeConfig2<Paths>>;
   };
 
 export type StateValue = string | StateValueMap;
@@ -214,7 +254,7 @@ export type StatePextended<
 // #endregion
 
 type FlatMapNodeConfig<
-  T extends NodeConfig,
+  T extends NodeConfig3,
   withChildren extends boolean = true,
   Remaining extends string = '/',
 > = 'states' extends keyof T
@@ -224,8 +264,8 @@ type FlatMapNodeConfig<
         : Omit<T['states'][key], 'states'>;
     } & {
       [key in keyof T['states']]: T['states'][key] extends infer S extends
-        NodeConfig & {
-          states: RecordS<NodeConfig>;
+        NodeConfig2 & {
+          states: RecordS<NodeConfig2>;
         }
         ? FlatMapNodeConfig<
             S,
@@ -237,7 +277,7 @@ type FlatMapNodeConfig<
   : EmptyObject;
 
 export type FlatMapN<
-  T extends NodeConfig = NodeConfig,
+  T extends NodeConfig3 = NodeConfig3,
   withChildren extends boolean = true,
 > = UnionToIntersection<FlatMapNodeConfig<T, withChildren>> & {
   readonly '/': T;

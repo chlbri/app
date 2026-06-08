@@ -1,7 +1,7 @@
 import type { Fn } from '@bemedev/app-utils-bemedev';
-import type { NodeConfig, StateType } from '../types';
+import type { NodeConfig2, StateType } from '../types';
 
-export type StateType_F = Fn<[state: NodeConfig], StateType>;
+export type StateType_F = Fn<[state: NodeConfig2], StateType>;
 
 /**
  * Determines the type of state based on its configuration.

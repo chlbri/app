@@ -42,7 +42,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import type {
   AnyMachine,
-  CommonConfig,
+  CommonConfig3,
   CommonElements,
   CommonTimeAction_F,
   GetIO_F,
@@ -51,7 +51,7 @@ import type {
 } from './types';
 
 export abstract class CommonMachine<
-  const C extends CommonConfig = CommonConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

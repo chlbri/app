@@ -88,7 +88,6 @@ export const config21 = createConfig({
 });
 
 export const machine21 = createMachine(
-  'src/__tests__/interpreters/data/machine21',
   {
     actors: {
       machine1: {

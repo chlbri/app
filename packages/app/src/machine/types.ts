@@ -3,7 +3,6 @@ import type { ConfigFrom } from '#common/interpreter';
 import type {
   ChildEvents,
   CommonConfig,
-  TargetDef,
   NoExtraKeysTargetDef,
 } from '#common/machine';
 import type { AsyncDelayFunction2 } from '#delays';
@@ -22,6 +21,7 @@ import type {
   ExtractGuardsFromActivity,
   ExtractTagsFromFlat,
   FlatMapN,
+  TargetDef,
 } from '#states';
 import type {
   AsyncTransition,

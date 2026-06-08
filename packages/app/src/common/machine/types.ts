@@ -3,10 +3,13 @@ import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
 import type {
   FlatMapN,
+  NodeConfig2,
   NodeConfig,
-  NodeConfigCompound,
-  NodeConfigParallel,
+  NodeConfigCompound2,
+  NodeConfigParallel2,
   StateValue,
+  TargetDef,
+  NodeConfig3,
 } from '#states';
 import type { AsyncTransition, TransitionsConfig } from '#transitions';
 import type { Fn } from '#utils';
@@ -36,12 +39,6 @@ export type NoExtraKeysTargetDef<T extends TargetDef> = T & {
   };
 };
 
-export type TargetDef = {
-  readonly targets: string;
-  readonly initial?: string;
-  readonly states?: RecordS<TargetDef>;
-};
-
 export type TransformTargetDef<T extends TargetDef> =
   (undefined extends T['initial']
     ? EmptyObject
@@ -60,7 +57,7 @@ export type TransformTargetDef<T extends TargetDef> =
         });
 
 export type TransformTargetDef2<
-  N extends NodeConfig,
+  N extends NodeConfig2,
   T extends TargetDef,
 > = (undefined extends T['initial']
   ? N
@@ -78,26 +75,24 @@ export type TransformTargetDef2<
         };
       });
 
-export type CommonConfigNode = NodeConfigCompound | NodeConfigParallel;
+export type CommonConfigNode = NodeConfigCompound2 | NodeConfigParallel2;
 
-export type CommonConfig<
-  Paths extends NoExtraKeysTargetDef<TargetDef> =
-    NoExtraKeysTargetDef<TargetDef>,
-> = NodeConfig<Paths['targets']> & {
-  readonly strict?: boolean;
-  readonly __longRuns?: boolean;
-} & TransformTargetDef<Paths>;
+export type CommonConfig<Paths extends TargetDef = TargetDef> =
+  NodeConfig<Paths> & {
+    readonly strict?: boolean;
+    readonly __longRuns?: boolean;
+  };
 
-export type NoExtraKeysConfigDef<T extends CommonConfig = CommonConfig> =
-  T & {
-    [K in Exclude<keyof T, keyof CommonConfig>]?: never;
-  } & {
-    states?: {
-      [K in keyof T['states']]: T['states'][K] extends infer TK extends
-        CommonConfig
-        ? NoExtraKeysConfigDef<TK>
-        : never;
-    };
+export type CommonConfig2<Paths extends string = string> =
+  NodeConfig2<Paths> & {
+    readonly strict?: boolean;
+    readonly __longRuns?: boolean;
+  };
+
+export type CommonConfig3<Paths extends string = string> =
+  NodeConfig3<Paths> & {
+    readonly strict?: boolean;
+    readonly __longRuns?: boolean;
   };
 
 export type MachineType = 'sync' | 'async';
@@ -122,7 +117,7 @@ export interface AnyMachine<
   Tc extends PrimitiveObject = PrimitiveObject,
 > {
   options: any;
-  config: CommonConfig;
+  config: CommonConfig3;
   readonly TYPE: MachineType;
   flat: Record<string, any>;
   context: Tc;
@@ -299,7 +294,7 @@ export type GetEventsFromFlat<Flat extends FlatMapN> = Record<
  * @see {@linkcode GetEventsFromFlat} for extracting events from the flat map.
  * @see {@linkcode ConfigFrom} for extracting the config from the config.
  */
-export type GetEventsFromConfig<C extends CommonConfig> =
+export type GetEventsFromConfig<C extends CommonConfig3> =
   GetEventsFromFlat<FlatMapN<C>>;
 
 export type ChildConfigDef = EventsMap;

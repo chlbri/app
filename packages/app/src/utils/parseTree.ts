@@ -1,4 +1,4 @@
-import { type NodeConfig } from '#states';
+import { type NodeConfig2 } from '#states';
 import { createBetterSet, type BetterSet } from '@bemedev/better-set';
 import type { RecordS } from '~types';
 import { buildPaths, traverse } from './parseTree.helpers';
@@ -9,8 +9,8 @@ import type {
 } from './parseTree.types';
 
 type Output = {
-  __config: NodeConfig;
-  flat: RecordS<NodeConfig>;
+  __config: NodeConfig2;
+  flat: RecordS<NodeConfig2>;
   paths: {
     map: NoExtraKeysConfigPaths<ConfigPaths>;
     all: string[];
@@ -27,7 +27,7 @@ type Output = {
   tags: BetterSet<string>;
 };
 
-export type ParseTree_F = (config: NodeConfig) => Output;
+export type ParseTree_F = (config: NodeConfig2) => Output;
 
 export const parseTree: ParseTree_F = config => {
   const __config = config;

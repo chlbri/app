@@ -1,7 +1,7 @@
 import { createBetterSet } from '../../bemedev';
-import type { NodeConfig } from '../types';
+import type { NodeConfig2 } from '../types';
 
-const _getTargetsFromConfig = (node: NodeConfig, remain = '/') => {
+const _getTargetsFromConfig = (node: NodeConfig2, remain = '/') => {
   const out = createBetterSet<string>();
   out.add('/');
   const { states } = node;
@@ -25,6 +25,6 @@ const _getTargetsFromConfig = (node: NodeConfig, remain = '/') => {
  *
  * @see {@linkcode getTargetsFromConfig} for the implementation.
  */
-export const getTargetsFromConfig = (node: NodeConfig) => {
+export const getTargetsFromConfig = (node: NodeConfig2) => {
   return _getTargetsFromConfig(node, '/');
 };

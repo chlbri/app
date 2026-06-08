@@ -1,9 +1,9 @@
 import type { Fn } from '@bemedev/app-utils-bemedev';
 import { tupleOf } from '@bemedev/app-utils-bemedev';
-import type { NodeConfig } from '../types';
+import type { NodeConfig2 } from '../types';
 import { isAtomic, isParallel } from './checks';
 
-export type InitialConfig_F = Fn<[body: NodeConfig], NodeConfig>;
+export type InitialConfig_F = Fn<[body: NodeConfig2], NodeConfig2>;
 
 /**
  * Returns the initial configuration of a state machine.

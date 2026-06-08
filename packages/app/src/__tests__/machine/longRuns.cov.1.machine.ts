@@ -6,15 +6,9 @@ export default createMachine(
     __longRuns: true,
     initial: 'idle',
     states: {
-      idle: {
-        on: {
-          NN: '/idle',
-        },
-      },
+      idle: {},
     },
-    on: {
-      NENE: '/idle',
-    },
+    on: {},
   },
   {
     context: type('number'),

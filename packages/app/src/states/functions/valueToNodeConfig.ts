@@ -3,17 +3,17 @@ import { replaceAll } from '#utils';
 import { decomposeSV, type StateValue } from '@bemedev/decompose';
 import { isString } from '~types';
 
-import type { NodeConfig } from '../types';
+import type { NodeConfig2 } from '../types';
 import { flatMap } from './flatMap';
 import { getChildren } from './getChildren';
 import { getParents } from './getParents';
 import { recomposeConfig } from './recompose';
 
 export type ValueToNodeConfig_F = <T extends StateValue>(
-  body: NodeConfig,
+  body: NodeConfig2,
   from: T,
   initial?: boolean,
-) => NodeConfig;
+) => NodeConfig2;
 
 /**
  * Converts a state value to a node configuration based on the provided body and from value.
@@ -33,7 +33,7 @@ export type ValueToNodeConfig_F = <T extends StateValue>(
  * @see {@linkcode DEFAULT_DELIMITER} for the default delimiter used in state paths
  */
 export const valueToNodeConfig: ValueToNodeConfig_F = (body, from) => {
-  const flatBody = flatMap(body as NodeConfig, false);
+  const flatBody = flatMap(body as NodeConfig2, false);
   const keysFlatBody = Object.keys(flatBody);
   const fromIsString = isString(from);
   if (fromIsString) {

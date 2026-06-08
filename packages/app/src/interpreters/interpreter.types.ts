@@ -1,11 +1,15 @@
 import type { AsyncAction2, MaybeAsyncActionResult } from '#actions';
 import type { InterpretArgs } from '#common/interpreter';
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import type {
+  AnyMachine,
+  CommonConfig3,
+  SimpleMachineOptions2,
+} from '#common/machine';
 import type { AsyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { AsyncPredicateS3 } from '#guards';
-import type { AsyncAddOptionsParam_F, AsyncConfig } from '#machines';
-import type { NodeConfig } from '#states';
+import type { AsyncAddOptionsParam_F } from '#machines';
+import type { NodeConfig2 } from '#states';
 import type {
   AlwaysConfig,
   DelayedTransitions,
@@ -80,10 +84,10 @@ export type AsyncPerformTransitions_F = (
 
 export type _AsyncSend_F<E extends EventObject> = (
   event: E,
-) => Promise<NodeConfig | undefined>;
+) => Promise<NodeConfig2 | undefined>;
 
 export type AsyncProvideMachineOptions_F<
-  C extends AsyncConfig = AsyncConfig,
+  C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,

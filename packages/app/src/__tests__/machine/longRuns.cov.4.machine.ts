@@ -8,7 +8,7 @@ export default createMachine(
     initial: 'idle',
     states: {
       idle: {
-        on: { TEST: { target: '/idle', actions: 'slowAction' } },
+        on: { TEST: { target: '/', actions: 'slowAction' } },
       },
     },
   },

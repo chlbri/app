@@ -66,7 +66,7 @@ import {
   getEntries,
   getExits,
   type AnyMachine,
-  type CommonConfig,
+  type CommonConfig3,
   type CommonMachine,
   type ScheduledData,
   type SimpleMachineOptions2,
@@ -96,7 +96,7 @@ import type {
 } from './types';
 
 export abstract class CommonInterpreter<
-  const C extends CommonConfig = CommonConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

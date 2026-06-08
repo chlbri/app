@@ -1,6 +1,7 @@
 import type { SyncAction2 } from '#actions';
 import { expandFnMap } from '#common/functions';
 import type {
+  CommonConfig3,
   CommonCreateMachine_F,
   ScheduledData,
   SimpleMachineOptions2,
@@ -20,7 +21,6 @@ import { getByKey, recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import { CommonMachine } from '../../common/machine';
-import type { SyncConfig } from '../types.types';
 import type {
   SyncAddOptions_F,
   SyncProvideOptions_F,
@@ -42,7 +42,7 @@ import type {
  * @implements {@linkcode AnyMachine}<{@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} >
  */
 export class SyncMachine<
-  const C extends SyncConfig = SyncConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

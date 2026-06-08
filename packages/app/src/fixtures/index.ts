@@ -16,7 +16,7 @@ import type { AsyncInterpreter } from '#interpreter';
 
 import type { CommonInterpreter } from '#common/interpreter';
 import type {
-  CommonConfig,
+  CommonConfig3,
   GetEventsFromConfig,
   SimpleMachineOptions2,
 } from '#common/machine';
@@ -64,7 +64,7 @@ type _ConstructStateValue_F = (
 ) => readonly [string, () => void];
 
 type ConstructStateValue_F = <
-  const C extends CommonConfig = CommonConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,
@@ -86,7 +86,7 @@ export const constructStateValue: ConstructStateValue_F = service => {
 };
 
 type ConstructContexts_F = <
-  const C extends CommonConfig = CommonConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = GetEventsFromConfig<C>,
@@ -128,7 +128,7 @@ export const constructContexts: ConstructContexts_F = (
 };
 
 type ConstructSend_F = <
-  const C extends CommonConfig = CommonConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = GetEventsFromConfig<C>,
@@ -263,7 +263,7 @@ type ConstructTestsResult2 = Record<
 };
 
 export const constructTests = <
-  const C extends CommonConfig = CommonConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

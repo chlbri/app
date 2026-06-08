@@ -18,6 +18,7 @@ import { getByKey, recompose } from '@bemedev/decompose';
 
 import {
   CommonMachine,
+  type CommonConfig3,
   type CommonCreateMachine_F,
   type ScheduledData,
   type SimpleMachineOptions2,
@@ -36,7 +37,6 @@ import type {
 
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject } from '~types';
-import type { AsyncConfig } from './types';
 
 /**
  * A class representing a state machine.
@@ -53,7 +53,7 @@ import type { AsyncConfig } from './types';
  */
 
 export class AsyncMachine<
-  const C extends AsyncConfig = AsyncConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

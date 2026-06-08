@@ -1,4 +1,4 @@
-import type { TargetDef, NoExtraKeysTargetDef } from '#common/machine';
+import type { TargetDef } from '#states';
 
 export type RegisterOptions = Record<
   'children' | 'emitters' | 'tags' | 'actions' | 'guards' | 'delays',
@@ -15,7 +15,7 @@ export interface Register extends Record<
   string,
   {
     paths: {
-      map: NoExtraKeysTargetDef<TargetDef>;
+      map: TargetDef;
       all: string;
     };
 

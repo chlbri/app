@@ -1,14 +1,10 @@
 import type { SyncAction } from '#actions';
 import type { ActorConfig } from '#actor';
-import type {
-  TargetDef,
-  NoExtraKeysTargetDef,
-  TransformTargetDef,
-} from '#common/machine';
+import type { NoExtraKeysTargetDef } from '#common/machine';
 import type { AsyncEmitterFunction } from '#emitters';
 import type { AsyncPredicate } from '#guards';
 
-import type { BaseConfig, StateType } from '#states';
+import type { BaseConfig, StateType, TargetDef } from '#states';
 import type { AlwaysConfig, DelayedTransitions } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EventObject, FnMap, FnR, Identify, RecordS } from '~types';
@@ -55,7 +51,7 @@ export type SyncConfig<
 > = SyncNodeConfig<Paths['targets']> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
-} & TransformTargetDef<Paths>;
+};
 
 /**
  * Represents a transition in a state machine with full defined functions.

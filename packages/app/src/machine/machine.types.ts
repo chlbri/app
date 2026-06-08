@@ -4,9 +4,12 @@ import type { DefinedValue } from '#guards';
 import type { StatePextended } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 
-import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 import type { EventsMapFrom } from '#common/interpreter';
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import type {
+  AnyMachine,
+  CommonConfig3,
+  SimpleMachineOptions2,
+} from '#common/machine';
 import type {
   ActorsConfigMap,
   EventArg,
@@ -15,9 +18,9 @@ import type {
   EventsMap,
 } from '#events';
 import type { AsyncMachine } from '#machine';
+import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
-import type { AsyncConfig } from './types';
 /**
  * Options for async action helpers.
  * - `error`: called with the thrown error and current context snapshot when
@@ -248,7 +251,7 @@ export type AsyncAddOptions_F<
 ) => L & T;
 
 export type AsyncProvideOptions_F<
-  C extends AsyncConfig = AsyncConfig,
+  C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,

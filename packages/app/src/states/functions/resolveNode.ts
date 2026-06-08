@@ -6,7 +6,7 @@ import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { toTransition } from '#transitions';
 import { _any, identify, toArray } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { Node, NodeConfig } from '../types';
+import type { Node, NodeConfig2 } from '../types';
 import { stateType } from './stateType';
 
 export type ResolveNode_F = <
@@ -19,7 +19,7 @@ export type ResolveNode_F = <
 >(
   events: E,
   actorsMap: A,
-  config: NodeConfig,
+  config: NodeConfig2,
   options?: SimpleMachineOptions2,
 ) => Node<Eo, Pc, Tc, T>;
 

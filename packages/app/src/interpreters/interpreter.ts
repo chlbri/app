@@ -16,7 +16,6 @@ import {
   type EventsMap,
 } from '#events';
 import { type GuardConfig } from '#guards';
-import { type AsyncConfig } from '#machines';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
 import { isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
@@ -65,6 +64,7 @@ import {
   CommonChildFunction2,
   getEntries,
   type AnyMachine,
+  type CommonConfig3,
   type SimpleMachineOptions2,
 } from '#common/machine';
 import { type AsyncEmitterFunction } from '#emitters';
@@ -104,7 +104,7 @@ import type {
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
  */
 export class AsyncInterpreter<
-  const C extends AsyncConfig = AsyncConfig,
+  const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
   const E extends EventsMap = EventsMap,

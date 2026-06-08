@@ -27,11 +27,11 @@ const configPathsToType = (cp: ConfigPaths, indent = 0): string => {
   const lines: string[] = [`{ targets: (${targetUnion}); `];
 
   if (cp.initial) {
-    lines.push(`${nextPad}initial?: '${cp.initial}';`);
+    lines.push(`${nextPad}initial: '${cp.initial}';`);
   }
 
   if (cp.states && Object.keys(cp.states).length > 0) {
-    lines.push(`${nextPad}states?: {`);
+    lines.push(`${nextPad}states: {`);
 
     for (const [stateName, stateConfig] of Object.entries(cp.states)) {
       const stateType = configPathsToType(stateConfig, indent + 4);

@@ -1,8 +1,8 @@
 import { tupleOf } from '@bemedev/app-utils-bemedev';
-import type { NodeConfig, StateValue } from '../types';
+import type { NodeConfig2, StateValue } from '../types';
 import { isAtomic, isCompound } from './checks';
 
-export type NodeToValue_F = (body: NodeConfig) => StateValue;
+export type NodeToValue_F = (body: NodeConfig2) => StateValue;
 
 /**
  * Converts a state machine config into a StateValue.

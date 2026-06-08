@@ -1,5 +1,4 @@
 import type { SyncAction2 } from '#actions';
-import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 import type { EventsMapFrom } from '#common/interpreter';
 import type { SyncDelayFunction2 } from '#delays';
 import type { SyncEmitterFunction, SyncEmittersMap } from '#emitters';
@@ -15,8 +14,13 @@ import type {
   SyncPredicateS,
   SyncPredicateS2,
 } from '#guards';
+import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import type {
+  AnyMachine,
+  CommonConfig3,
+  SimpleMachineOptions2,
+} from '#common/machine';
 import type { RegisterOptions } from '#registry';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
@@ -27,7 +31,6 @@ import type {
   RecordS,
   ValuesOf,
 } from '~types';
-import type { SyncConfig } from '../types.types';
 import type { SyncMachine } from './machine';
 
 export type SyncFilterAction_F<
@@ -236,7 +239,7 @@ export type SyncAddOptions_F<
 ) => Mo;
 
 export type SyncProvideOptions_F<
-  C extends SyncConfig = SyncConfig,
+  C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,

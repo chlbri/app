@@ -1,4 +1,4 @@
-import type { NodeConfig } from '#states';
+import type { NodeConfig2 } from '#states';
 import type { Project } from 'ts-morph';
 import { evaluateNode } from './evaluate';
 import { extractPContextType } from './pContext';
@@ -24,7 +24,7 @@ const findCreateMachineCall = (callNode: any): any | null => {
 export const extractMachineInfo = (
   sourceFilePath: string,
   project: Project,
-): { name: string; config: NodeConfig; pContextType: string } | null => {
+): { name: string; config: NodeConfig2; pContextType: string } | null => {
   try {
     const sourceFile = project.getSourceFile(sourceFilePath);
     if (!sourceFile) return null;
@@ -56,7 +56,7 @@ export const extractMachineInfo = (
     const name = nameText.slice(1, -1);
 
     const configArg = args[1];
-    let config: NodeConfig;
+    let config: NodeConfig2;
     try {
       config = evaluateNode(configArg, sourceFile);
     } catch (err: any) {

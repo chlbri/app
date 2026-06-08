@@ -1,7 +1,7 @@
 import { isChildConfig, isEmitterConfig } from '#actors';
-import { NodeConfig } from '#states';
+import { NodeConfig2 } from '#states';
 
-export const constructEvents = (node: NodeConfig) => {
+export const constructEvents = (node: NodeConfig2) => {
   const out: string[] = [];
   const on = node.on;
   if (on) {

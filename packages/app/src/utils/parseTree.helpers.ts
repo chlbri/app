@@ -1,7 +1,7 @@
 import type { WithDescriber } from '#actions';
 import { toArray } from '@bemedev/app-utils-bemedev';
 import { DEFAULT_DELIMITER } from '#constants';
-import { flatMap, type ActivityConfig, type NodeConfig } from '#states';
+import { flatMap, type ActivityConfig, type NodeConfig2 } from '#states';
 import type { _TransitionsConfig } from '#transitions';
 import { recompose } from '@bemedev/decompose';
 import { pipe } from '@bemedev/pipe';
@@ -25,7 +25,7 @@ import { reduceDescribers } from './reduceDescribers';
 // `targets` is all state paths in the machine; `initial` is only set for compound nodes;
 // `states` is recursively built for each child state.
 export const buildPaths = pipe(
-  (flat: RecordS<NodeConfig>) => Object.entries(flat),
+  (flat: RecordS<NodeConfig2>) => Object.entries(flat),
   entries => {
     return entries.map(
       pipe(
@@ -143,7 +143,7 @@ const processActions = pipe(
 );
 
 // Process all nodes in flat structure
-export const traverseOne = (ctx: ParseTreeContext, node: NodeConfig) => {
+export const traverseOne = (ctx: ParseTreeContext, node: NodeConfig2) => {
   processActions(ctx, node.entry);
   processActions(ctx, node.exit);
   processActivity(ctx, node.activities);
@@ -156,7 +156,7 @@ export const traverseOne = (ctx: ParseTreeContext, node: NodeConfig) => {
     v => ctx.tags.add(...v),
   )();
 };
-export const traverse = (ctx: ParseTreeContext, node: NodeConfig) => {
+export const traverse = (ctx: ParseTreeContext, node: NodeConfig2) => {
   pipe(
     () => node,
     flatMap,

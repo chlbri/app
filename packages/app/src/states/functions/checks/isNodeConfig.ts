@@ -7,7 +7,11 @@ import {
   checkValues,
   isStringOrUndefined,
 } from '#utils';
-import type { ActivityConfig, ActivityMap, NodeConfig } from '../../types';
+import type {
+  ActivityConfig,
+  ActivityMap,
+  NodeConfig2,
+} from '../../types';
 import { stateType } from '../stateType';
 
 const ALLKEYS = [
@@ -110,7 +114,7 @@ export const checkAtomic = <T extends string[] = string[]>(
 export const isNodeConfig = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
-): value is NodeConfig<T[number]> => {
+): value is NodeConfig2<T[number]> => {
   const check1 = checkAtomic(value, ...keys);
   if (!check1) return false;
   const _value: any = value;
@@ -123,7 +127,7 @@ export const isNodeConfig = <T extends string[] = string[]>(
 isNodeConfig.orUndefined = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
-): value is NodeConfig<T[number]> | undefined => {
+): value is NodeConfig2<T[number]> | undefined => {
   if (value === undefined) return true;
   return isNodeConfig(value, ...keys);
 };
