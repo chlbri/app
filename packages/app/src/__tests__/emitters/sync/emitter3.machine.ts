@@ -27,10 +27,12 @@ export default createMachine(
               actions: ['assigN'],
             },
             description: 'Interval emitter for active state',
-            complete: {
-              name: 'mockCompleteAction',
-              description: 'Mock complete action',
-            },
+            complete: [
+              {
+                name: 'mockCompleteAction',
+                description: 'Mock complete action',
+              },
+            ],
           },
         },
       },

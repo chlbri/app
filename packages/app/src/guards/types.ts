@@ -1,11 +1,14 @@
-import type { WithDescriber, FromActionConfig } from '#actions';
-import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
+import type {
+  FromActionConfig,
+  NoExtraKeysWithDescriber,
+  WithDescriber,
+} from '#actions';
 import type { GUARD_TYPE } from '#constants';
 import type { EventObject } from '#events';
+import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { FnMap, FnR } from '~types';
-import type { RecordS, ReduceArray } from '~types';
+import type { FnMap, FnR, RecordS, ReduceArray } from '~types';
 
 type gType = typeof GUARD_TYPE;
 type and = gType['and'];
@@ -29,6 +32,34 @@ export type GuardOr = {
  * @see {@linkcode GuardOr} for more details.
  */
 export type GuardConfig = GuardUnion;
+
+export type NoExtraKeysGuardConfig<T> = T extends WithDescriber
+  ? NoExtraKeysWithDescriber<T>
+  : T extends GuardAnd
+    ? { readonly and: NoExtraKeysGuardConfigArray<T['and']> } & Record<
+        Exclude<keyof T, 'and'>,
+        never
+      >
+    : T extends GuardOr
+      ? { readonly or: NoExtraKeysGuardConfigArray<T['or']> } & Record<
+          Exclude<keyof T, 'or'>,
+          never
+        >
+      : never;
+
+export type NoExtraKeysGuardConfigArray<
+  T extends ReadonlyArray<GuardConfig>,
+> = T extends [
+  infer S extends GuardConfig,
+  ...infer R extends ReadonlyArray<GuardConfig>,
+]
+  ? readonly [NoExtraKeysGuardConfig<S>, ...NoExtraKeysGuardConfigArray<R>]
+  : [];
+
+export type NoExtraKeysGuardConfigSoA<T> =
+  T extends ReadonlyArray<GuardConfig>
+    ? NoExtraKeysGuardConfigArray<T>
+    : NoExtraKeysGuardConfig<T>;
 
 /**
  * Retrieves the name of the action if it is a describer, otherwise returns the action itself.

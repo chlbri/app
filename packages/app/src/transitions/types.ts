@@ -1,4 +1,19 @@
 import type {
+  AsyncAction,
+  FromActionConfig,
+  NoExtraKeysWithDescriberSoa,
+  SyncAction,
+  WithDescriber,
+} from '#actions';
+import type { EventObject } from '#events';
+import type {
+  AsyncPredicate,
+  FromGuard,
+  GuardConfig,
+  NoExtraKeysGuardConfigSoA,
+  SyncPredicate,
+} from '#guards';
+import type {
   AnyArray,
   Equals,
   IndexesOfArray,
@@ -7,35 +22,22 @@ import type {
   Require,
   SoA,
 } from '@bemedev/app-utils-bemedev';
-import type { EventObject } from '#events';
 import type { Observable } from 'rxjs';
-import type {
-  AsyncAction,
-  WithDescriber,
-  FromActionConfig,
-  SyncAction,
-} from '#actions';
 import type {
   ActorConfig,
   ChildConfig,
   EmitterConfig,
 } from '../actors/types';
-import type {
-  FromGuard,
-  GuardConfig,
-  AsyncPredicate,
-  SyncPredicate,
-} from '#guards';
 
+import type { CommonChild } from '#common/machine';
 import type { AsyncEmitter } from '#emitters';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   Identify,
   RecordS,
   ReduceArray,
   SingleOrArrayL,
 } from '~types';
-import type { PrimitiveObject } from '@bemedev/typings';
-import type { CommonChild } from '#common/machine';
 
 // type TargetDef = {
 //   readonly targets: string;
@@ -61,6 +63,14 @@ export type NoExtraKeysTransitionConfig<
 > = T extends string
   ? T
   : T & {
+      [key in Extract<keyof T, 'actions'>]: NoExtraKeysWithDescriberSoa<
+        T[key]
+      >;
+    } & {
+      [key in Extract<keyof T, 'guards'>]: NoExtraKeysGuardConfigSoA<
+        T[key]
+      >;
+    } & {
       [key in Exclude<keyof T, keyof _TransitionConfigMap>]?: never;
     };
 

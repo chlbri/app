@@ -802,7 +802,7 @@ export type Ra = Record<Keys, any>;
  * @template T - The type to extract recursive keys from.
  * @template Schema - The schema type to compare against.
  */
-type RecursiveObjectKeys<T, Schema> = {
+export type RecursiveObjectKeys<T, Schema> = {
   [K in keyof T & keyof Schema]: T[K] extends TrueObject ? K : never;
 }[keyof T & keyof Schema];
 
@@ -851,14 +851,11 @@ type RecursiveObjectKeys<T, Schema> = {
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export type NoExtraKeys<T, Schema> = T & {
-  [K in Exclude<keyof T, keyof Schema>]: never;
-} & {
-  [K in RecursiveObjectKeys<T, Schema>]: NoExtraKeys<
-    NotUndefined<T[K]>,
-    NotUndefined<Schema[K]>
-  >;
-};
+export type NoExtraKeys<T, Schema> = T extends Primitive
+  ? T
+  : T & {
+      [K in Exclude<keyof T, keyof Schema>]?: never;
+    };
 
 /**
  * A stricter version of {@linkcode NoExtraKeys} that also validates

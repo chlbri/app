@@ -1,11 +1,16 @@
 import type { WithDescriber } from '#actions';
 import type {
   DelayedTransitions,
+  NoExtraKeysTransitionConfig,
   NoExtraKeysTransitionConfigSoA,
   SingleOrArrayT,
   TransitionConfigMapA,
 } from '#transitions';
-import type { NOmit, Require } from '@bemedev/app-utils-bemedev';
+import type {
+  NoExtraKeys,
+  NOmit,
+  Require,
+} from '@bemedev/app-utils-bemedev';
 import type { Describer } from '~types';
 
 export type CommonActor = {
@@ -22,12 +27,14 @@ export type FinallyConfigArray = readonly [
 type _NoExtraKeysFinallyConfig<T> = T extends string
   ? T
   : T extends Describer
-    ? T & {
-        [K in Exclude<keyof T, keyof Describer>]?: never;
-      }
-    : T & {
-        [K in Exclude<keyof T, keyof _FinallyConfig>]?: never;
-      };
+    ? NoExtraKeys<T, Describer>
+    : T extends _FinallyConfig
+      ? NoExtraKeysTransitionConfig<T> &
+          Record<
+            Exclude<keyof T, 'guards' | 'actions' | 'description'>,
+            never
+          >
+      : never;
 
 export type NoExtraKeysFinallyConfigArray<
   T extends ReadonlyArray<_FinallyConfig | WithDescriber>,

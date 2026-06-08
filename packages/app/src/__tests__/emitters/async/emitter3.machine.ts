@@ -25,6 +25,7 @@ export default createMachine(
           interval1: {
             next: {
               actions: [{ name: 'assigN', description: 'dsdsdds' }],
+              guards: '',
             },
             description: 'Interval emitter for active state',
             complete: {

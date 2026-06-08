@@ -1,8 +1,7 @@
-import type { DeepPartial } from '@bemedev/app-utils-bemedev';
 import type { EventObject } from '#events';
+import type { DeepPartial, NoExtraKeys } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { FnMap, FnR } from '~types';
-import type { Describer, FromDescriber } from '~types';
+import type { Describer, FnMap, FnR, FromDescriber } from '~types';
 
 /**
  * JSON configuration for an action.
@@ -10,6 +9,29 @@ import type { Describer, FromDescriber } from '~types';
  * @see {@linkcode Describer} for more details.
  */
 export type WithDescriber = string | Describer;
+
+export type NoExtraKeysWithDescriber<T> = T extends string
+  ? T
+  : NoExtraKeys<T, Describer>;
+
+export type NoExtraKeysWithDescriberArray<
+  T extends ReadonlyArray<WithDescriber>,
+> = T extends readonly [
+  infer Head extends WithDescriber,
+  ...infer Tail extends ReadonlyArray<WithDescriber>,
+]
+  ? readonly [
+      NoExtraKeysWithDescriber<Head>,
+      ...NoExtraKeysWithDescriberArray<Tail>,
+    ]
+  : [];
+
+export type NoExtraKeysWithDescriberSoa<T> =
+  T extends ReadonlyArray<WithDescriber>
+    ? NoExtraKeysWithDescriberArray<T>
+    : T extends WithDescriber[]
+      ? NoExtraKeysWithDescriber<T[number]>[]
+      : NoExtraKeysWithDescriber<T>;
 
 /**
  * Retrieves the name of the action if it is a describer, otherwise returns the action itself.
