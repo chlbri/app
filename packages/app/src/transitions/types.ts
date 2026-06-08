@@ -15,9 +15,7 @@ import type {
 } from '#guards';
 import type {
   AnyArray,
-  Equals,
   IndexesOfArray,
-  NOmit,
   NotUndefined,
   Require,
   SoA,
@@ -98,59 +96,6 @@ export type NoExtraKeysTransitionConfigSoA<T> = T extends
         | TransitionConfigMapG
     ? NoExtraKeysTransitionConfig<T>
     : _TransitionConfigMap | string;
-
-export type TransformTransitionMapConfig<
-  T extends _TransitionConfigMap,
-  Paths extends string = string,
-> = NOmit<T, 'target'> &
-  (Equals<Partial<Pick<T, 'target'>>, Pick<T, 'target'>> extends true
-    ? { target?: Paths }
-    : { target: Paths });
-
-export type TransformTransitionConfig<
-  T extends TransitionConfig,
-  Paths extends string = string,
-> = T extends _TransitionConfigMap
-  ? TransformTransitionMapConfig<T, Paths>
-  : Paths;
-
-export type TransformTransitionArrayConfig<
-  T extends
-    | ReadonlyArray<TransitionConfig>
-    | ArrayTransitionsF
-    | ArrayTransitions,
-  Paths extends string = string,
-> = T extends readonly [
-  infer S extends TransitionConfig,
-  ...infer R extends ReadonlyArray<TransitionConfig>,
-]
-  ? readonly [
-      TransformTransitionConfig<S, Paths>,
-      ...TransformTransitionArrayConfig<R, Paths>,
-    ]
-  : [];
-
-export type TransformTransitionSOAConfig<
-  T extends
-    | SingleOrArrayT
-    | AlwaysConfig
-    | ReadonlyArray<TransitionConfig>,
-  Paths extends string = string,
-> = T extends TransitionConfig
-  ? TransformTransitionConfig<T, Paths>
-  : T extends
-        | ReadonlyArray<TransitionConfig>
-        | ArrayTransitionsF
-        | ArrayTransitions
-    ? TransformTransitionArrayConfig<T, Paths>
-    : never;
-
-export type TransformRecordTransitionsConfig<
-  T extends DelayedTransitions,
-  Paths extends string = string,
-> = {
-  [K in keyof T]: TransformTransitionSOAConfig<T[K], Paths>;
-};
 
 /**
  * Extracts actions from a transition configuration.
