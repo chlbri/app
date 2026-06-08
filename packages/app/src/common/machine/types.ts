@@ -1,4 +1,5 @@
 import type { ActionResult, AsyncAction2, WithDescriber } from '#actions';
+import type { NoExtraKeysActorConfig } from '#actors';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 
 import type {
@@ -11,7 +12,11 @@ import type {
   TargetDef,
   NodeConfig3,
 } from '#states';
-import type { AsyncTransition, TransitionsConfig } from '#transitions';
+import type {
+  AsyncTransition,
+  NoExtraKeysTransitionConfigSoA,
+  TransitionsConfig,
+} from '#transitions';
 import type { Fn } from '#utils';
 import type { Identitfy, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type {
@@ -103,6 +108,19 @@ export type NoExtraKeysConfig<T extends CommonConfig3> = T & {
       CommonConfig3
       ? NoExtraKeysConfig<TK>
       : never;
+  };
+} & {
+  readonly on?: {
+    [key in keyof T['on']]?: NoExtraKeysTransitionConfigSoA<T['on'][key]>;
+  };
+  readonly after?: {
+    [key in keyof T['after']]?: NoExtraKeysTransitionConfigSoA<
+      T['after'][key]
+    >;
+  };
+  readonly always?: NoExtraKeysTransitionConfigSoA<T['always']>;
+  readonly actors?: {
+    [key in keyof T['actors']]?: NoExtraKeysActorConfig<T['actors'][key]>;
   };
 };
 

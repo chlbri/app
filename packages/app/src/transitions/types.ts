@@ -50,10 +50,44 @@ import type { CommonChild } from '#common/machine';
 export type _TransitionConfigMap<Paths = string> = {
   readonly target?: Paths;
   // readonly internal?: boolean;
+  //TODO: No extrakeys for guards and actions
   readonly actions?: SingleOrArrayL<WithDescriber>;
   readonly guards?: SingleOrArrayL<GuardConfig>;
   readonly description?: string;
 };
+
+export type NoExtraKeysTransitionConfig<
+  T extends _TransitionConfigMap | string,
+> = T extends string
+  ? T
+  : T & {
+      [key in Exclude<keyof T, keyof _TransitionConfigMap>]?: never;
+    };
+
+export type NoExtraKeysTransitionConfigArray<
+  T extends ReadonlyArray<_TransitionConfigMap | string>,
+> = T extends readonly [
+  infer S extends _TransitionConfigMap | string,
+  ...infer R extends ReadonlyArray<_TransitionConfigMap | string>,
+]
+  ? readonly [
+      NoExtraKeysTransitionConfig<S>,
+      ...NoExtraKeysTransitionConfigArray<R>,
+    ]
+  : [];
+
+export type NoExtraKeysTransitionConfigSoA<T> = T extends
+  | ArrayTransitionsF
+  | ArrayTransitions
+  ? NoExtraKeysTransitionConfigArray<T>
+  : T extends
+        | string
+        | TransitionConfigMapA
+        | TransitionConfigMapF
+        | TransitionConfigMapFG
+        | TransitionConfigMapG
+    ? NoExtraKeysTransitionConfig<T>
+    : _TransitionConfigMap | string;
 
 export type TransformTransitionMapConfig<
   T extends _TransitionConfigMap,
@@ -165,14 +199,18 @@ export type TransitionConfigF<Paths = string> =
   | TransitionConfigMapF<Paths>
   | Paths;
 
-export type TransitionConfigMapG<Paths = string> = Require<
-  TransitionConfigMapF<Paths> | TransitionConfigMapA<Paths>,
-  'guards'
->;
-
 export type TransitionConfigMap<Paths = string> =
   | TransitionConfigMapF<Paths>
   | TransitionConfigMapA<Paths>;
+
+export type TransitionConfigMapG<Paths = string> = Require<
+  TransitionConfigMap<Paths>,
+  'guards'
+>;
+export type TransitionConfigMapFG<Paths = string> = Require<
+  TransitionConfigMapF<Paths>,
+  'guards'
+>;
 
 /**
  * A better version {@linkcode _TransitionConfigMap}.
@@ -206,12 +244,12 @@ export type _TransitionConfig<Paths = string> =
  * @see {@linkcode Require}
  */
 export type ArrayTransitions<Paths = string> = readonly [
-  ...Require<TransitionConfigMap<Paths>, 'guards'>[],
+  ...TransitionConfigMapG<Paths>[],
   TransitionConfig<Paths>,
 ];
 
 export type ArrayTransitionsF<Paths = string> = readonly [
-  ...Require<TransitionConfigMapF<Paths>, 'guards'>[],
+  ...TransitionConfigMapFG<Paths>[],
   TransitionConfigF<Paths>,
 ];
 

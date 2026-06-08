@@ -24,7 +24,7 @@ export default createMachine(
         actors: {
           interval1: {
             next: {
-              actions: ['assigN'],
+              actions: [{ name: 'assigN', description: 'dsdsdds' }],
             },
             description: 'Interval emitter for active state',
             complete: {
