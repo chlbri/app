@@ -408,11 +408,15 @@ export abstract class CommonInterpreter<
     return this.#event;
   }
 
-  /**
-   * The accessor of the map of events from the inner {@linkcode Machine}.
-   */
   get eventsMap() {
     return this.__machine.eventsMap;
+  }
+
+  /**
+   * The accessor of the list of events from the inner {@linkcode Machine}.
+   */
+  get eventsList() {
+    return this.__machine.eventsList;
   }
 
   get tags() {
@@ -892,21 +896,14 @@ export abstract class CommonInterpreter<
     return out as any;
   }
 
-  subscribe: AddSubscriber_F<Tc, Ta, Eo> = (
-    _subscriber,
-    options,
-  ) => {
+  subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.__machine.eventsList;
     const find = Array.from(this.__subscribers).find(
       f => f.id === options?.id,
     );
     if (find) return find;
 
-    const subscriber = createSubscriber(
-      _subscriber,
-      options,
-      ...events,
-    );
+    const subscriber = createSubscriber(_subscriber, options, ...events);
     this.__subscribers.add(subscriber as any);
     return subscriber as any;
   };
@@ -918,11 +915,7 @@ export abstract class CommonInterpreter<
   ) => {
     const events = this.__machine.eventsList;
 
-    const subscriber = createSubscriber(
-      _subscriber,
-      options,
-      ...events,
-    );
+    const subscriber = createSubscriber(_subscriber, options, ...events);
     this.#innerSubscribers.add(subscriber as any);
     return subscriber as any;
   };
@@ -1062,11 +1055,7 @@ export abstract class CommonInterpreter<
     const options = this.__machine.options;
     const events = this.__machine.eventsList;
 
-    return resolveNode<Pc, Tc, Ta, Eo>(
-      config,
-      options as any,
-      ...events,
-    );
+    return resolveNode<Pc, Tc, Ta, Eo>(config, options as any, ...events);
   };
 
   protected abstract __collectChildren: Fn;
@@ -1490,11 +1479,7 @@ export abstract class CommonInterpreter<
     const machines = this.__machine.children;
 
     return this.#returnWithWarning(
-      toChildSrc<Pc, Tc, Ta>(
-        machine,
-        machines as any,
-        ...events,
-      ),
+      toChildSrc<Pc, Tc, Ta>(machine, machines as any, ...events),
       `Machine (${reduceDescriber(machine)}) is not defined`,
     );
   };
@@ -1503,10 +1488,7 @@ export abstract class CommonInterpreter<
     const emitters = this.__machine.emitters;
 
     return this.#returnWithWarning(
-      toEmitterSrc<Pc, Tc, Ta>(
-        emitter,
-        emitters as any,
-      ),
+      toEmitterSrc<Pc, Tc, Ta>(emitter, emitters as any),
       `Emitter (${reduceDescriber(emitter)}) is not defined`,
     );
   };

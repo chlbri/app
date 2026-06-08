@@ -121,29 +121,14 @@ export abstract class CommonMachine<
   }
 
   /**
-   * The map of events for this {@linkcode Machine}.
+   * Public accessor for the events map for this {@linkcode Machine}.
    *
    * @see {@linkcode EventsMap}
    * @see {@linkcode E}
    */
-  __eventsMap!: E;
-
-  /**
-   * Public accessor for the events map for this {@linkcode Machine}.
-   *
-   * @see {@linkcode EventsMap}
-   * @see {@linkcode E}   */
   get eventsMap() {
-    return this.__eventsMap;
+    return _unknown<E>();
   }
-
-  /**
-   * The map of promisees for this {@linkcode Machine}.
-   *
-   * @see {@linkcode PromiseeMap}
-   * @see {@linkcode A}
-   */
-  protected __actorsMap!: A;
 
   /**
    * Public accessor for the promisees map for this {@linkcode Machine}.
@@ -152,7 +137,7 @@ export abstract class CommonMachine<
    * @see {@linkcode A}
    */
   get actorsMap() {
-    return this.__actorsMap;
+    return _unknown<A>();
   }
 
   /**
@@ -593,15 +578,13 @@ export abstract class CommonMachine<
    *
    * @see {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2}, {@linkcode Mo}
    */
-  protected get __elements(): CommonElements<C, E, A, Pc, Tc, Mo> {
+  protected get __elements(): CommonElements<C, Pc, Tc, Mo> {
     const config = structuredClone(this.#config);
     const pContext = cloneDeep(this.__pContext);
     const context = structuredClone(this.__context);
     const actions = cloneDeep(this.#actions);
     const guards = cloneDeep(this.#guards);
     const delays = cloneDeep(this.#delays);
-    const actorsMap = cloneDeep(this.__actorsMap);
-    const events = cloneDeep(this.__eventsMap);
     const actors = cloneDeep(this.#actors);
 
     return {
@@ -612,8 +595,6 @@ export abstract class CommonMachine<
       guards,
       delays,
       actors,
-      eventsMap: events,
-      actorsMap,
     };
   }
 
@@ -624,19 +605,6 @@ export abstract class CommonMachine<
   addContext = (context: Tc) => {
     this.__context = context;
   };
-
-  /**
-   * @deprecated
-   * @remarks used internally
-   */
-  abstract _provideEvents: <T extends EventsMap>(map: T) => AnyMachine;
-  /**
-   * @deprecated
-   * @remarks used internally
-   */
-  abstract _provideActors: <T extends ActorsConfigMap>(
-    map: T,
-  ) => AnyMachine;
 
   /**
    * Converts a {@linkcode StateValue} to a {@linkcode NodeConfigWithInitials} with the {@linkcode NodeConfigWithInitials} postConfig of this {@linkcode Machine}.

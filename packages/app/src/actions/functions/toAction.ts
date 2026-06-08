@@ -21,11 +21,7 @@ export type ToAction_F = {
   ): AsyncAction2<Eo, Pc, Tc, T> | undefined;
 };
 
-const _toAction = (
-  action: any,
-  actions: any,
-  ...events: string[]
-) => {
+const _toAction = (action: any, actions: any, ...events: string[]) => {
   const name = fromDescriber(action);
   const fn = actions?.[name];
   const func = fn ? reduceFnMap(fn, ...events) : undefined;

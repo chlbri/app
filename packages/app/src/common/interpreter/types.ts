@@ -35,6 +35,7 @@ export type AddSubscriber_F<
 
 export type AnyInterpreter = {
   mode: Mode;
+  eventsList: string[];
   eventsMap: EventsMap;
   initialNode: any;
   node: any;

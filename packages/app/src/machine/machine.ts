@@ -369,18 +369,8 @@ export class AsyncMachine<
    *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
   protected __renew = (): this => {
-    const {
-      config,
-      pContext,
-      context,
-      guards,
-      actions,
-      delays,
-
-      eventsMap,
-      actors,
-      actorsMap,
-    } = this.__elements;
+    const { config, pContext, context, guards, actions, delays, actors } =
+      this.__elements;
 
     const out = new AsyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
       config,
@@ -388,8 +378,6 @@ export class AsyncMachine<
 
     out.__pContext = pContext;
     out.__context = context;
-    out.__eventsMap = eventsMap;
-    out.__actorsMap = actorsMap;
 
     out.addOptions(
       () =>
@@ -402,44 +390,6 @@ export class AsyncMachine<
     );
 
     return out as any;
-  };
-
-  /**
-   * @deprecated
-   * @remarks used internally
-   */
-  _provideEvents = <T extends EventsMap>(map: T) => {
-    const { pContext, config, context, actorsMap } = this.__elements;
-
-    const out = new AsyncMachine<C, Pc, Tc, T, A, Ta, Eo, AllPaths, Mo>(
-      config,
-    );
-
-    out.__pContext = pContext;
-    out.__context = context;
-    out.__eventsMap = map;
-    out.__actorsMap = actorsMap;
-
-    return out;
-  };
-
-  /**
-   * @deprecated
-   * @remarks used internally
-   */
-  _provideActors = <T extends ActorsConfigMap>(map: T) => {
-    const { pContext, config, context, eventsMap } = this.__elements;
-
-    const out = new AsyncMachine<C, Pc, Tc, E, T, Ta, Eo, AllPaths, Mo>(
-      config,
-    );
-
-    out.__pContext = pContext;
-    out.__context = context;
-    out.__eventsMap = eventsMap;
-    out.__actorsMap = map;
-
-    return out;
   };
 
   readonly longRuns: boolean;
@@ -593,16 +543,6 @@ export class AsyncMachine<
   };
 }
 
-export const createAsyncMachine: CommonCreateMachine_F = (
-  config,
-  types,
-) => {
-  const eventsMap = types?.eventsMap?.['~standard']?.types?.output ?? {};
-  const actorsMap = types?.actorsMap?.['~standard']?.types?.output ?? {};
-
-  const out = new AsyncMachine(config)
-    ._provideEvents(eventsMap)
-    ._provideActors(actorsMap);
-
-  return out;
+export const createAsyncMachine: CommonCreateMachine_F = config => {
+  return new AsyncMachine(config);
 };

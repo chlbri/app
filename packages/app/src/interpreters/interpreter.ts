@@ -848,7 +848,7 @@ export class AsyncInterpreter<
       })
       .map(([from, ..._services]) => {
         const services = _services.map(({ service, on, contexts, id }) => {
-          const si = service as AnyInterpreter & {
+          const si = service as unknown as AnyInterpreter & {
             __subscribe: AddSubscriber_F;
           };
 

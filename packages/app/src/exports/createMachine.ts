@@ -1,4 +1,3 @@
-import { isAsyncConfig } from '#common/functions/isAsyncConfig';
 import { createAsyncMachine } from '#machine';
 import { getTargetsFromConfig } from '#states';
 import * as v from 'valibot';
@@ -10,10 +9,9 @@ export type { CreateMachine_F } from './types.types';
 const builder = (_config: any, types: any) => {
   const targets = getTargetsFromConfig(_config);
   const config = v.parse(Config_Schema(...targets), _config);
-  const check = !isAsyncConfig(config) && types?.sync === true;
-  const { sync: __, ...rest } = { sync: undefined, ...types };
+  const check = types?.sync === true;
   const fn = check ? createSyncMachine : createAsyncMachine;
-  return fn(config, rest);
+  return fn(config);
 };
 
 // @ts-expect-error - This file is meant to be used in both sync and async contexts, so some types may not align perfectly.

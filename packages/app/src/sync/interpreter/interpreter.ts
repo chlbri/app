@@ -588,21 +588,14 @@ export class SyncInterpreter<
     return super.provideOptions(option) as any;
   };
 
-  subscribe: AddSubscriber_F<Tc, Ta, Eo> = (
-    _subscriber,
-    options,
-  ) => {
+  subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.machine.eventsList;
     const find = Array.from(this.__subscribers).find(
       f => f.id === options?.id,
     );
     if (find) return find;
 
-    const subscriber = createSubscriber(
-      _subscriber,
-      options,
-      ...events,
-    );
+    const subscriber = createSubscriber(_subscriber, options, ...events);
     this.__subscribers.add(subscriber as any);
     return subscriber as any;
   };

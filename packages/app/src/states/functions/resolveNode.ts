@@ -36,11 +36,7 @@ export type ResolveNode_F = <
  * @see {@linkcode identify} for identifying properties in the configuration
  *
  */
-export const resolveNode: ResolveNode_F = (
-  config,
-  options,
-  ...events
-) => {
+export const resolveNode: ResolveNode_F = (config, options, ...events) => {
   // #region functions for mapping
   const aMapper = (action: any) => {
     return toAction(action, options?.actions, ...events);

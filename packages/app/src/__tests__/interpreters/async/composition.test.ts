@@ -95,15 +95,12 @@ describe('Composition', () => {
       });
     });
 
-    test('#02 => Events Map', () => {
-      expect(service.eventsMap).toStrictEqual({
-        EVENT: {
-          password: 'string',
-          username: 'string',
-        },
-        EVENT2: 'boolean',
-        EVENT3: { login: 'string', pwd: 'string' },
-      });
+    test('#02 => Events List', () => {
+      expect(service.eventsList).toStrictEqual([
+        'EVENT',
+        'EVENT2',
+        'EVENT3',
+      ]);
     });
 
     describe('#04 => nodes', () => {

@@ -37,11 +37,7 @@ export type ToPredicate_F = <
   errors: string[];
 };
 
-const _toPredicate: _ToPredicateF = (
-  guard,
-  _guards,
-  ...events
-) => {
+const _toPredicate: _ToPredicateF = (guard, _guards, ...events) => {
   const errors: string[] = [];
 
   if (isDescriber(guard)) {
@@ -109,11 +105,7 @@ const _toPredicate: _ToPredicateF = (
  * @see {@linkcode GUARD_TYPE}
  * @see {@linkcode recursive}
  */
-export const toPredicate: ToPredicate_F = (
-  guard,
-  guards,
-  ...events
-) => {
+export const toPredicate: ToPredicate_F = (guard, guards, ...events) => {
   const { func, errors } = _toPredicate(guard, guards, ...events);
 
   if (!func) return { errors };

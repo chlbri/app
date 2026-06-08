@@ -5,10 +5,7 @@ import {
 } from '#events';
 import { numbersT, stringsT } from '@bemedev/app-utils-bemedev';
 import type { FnMap, FnMapR } from '~types';
-import {
-  reduceFnMap,
-  reduceFnMapReduced,
-} from '../../utils/reduceFnMap';
+import { reduceFnMap, reduceFnMapReduced } from '../../utils/reduceFnMap';
 
 describe('reduceFnMap tests', () => {
   describe('#02 => reduceFnMap', () => {

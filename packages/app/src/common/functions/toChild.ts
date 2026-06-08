@@ -35,11 +35,7 @@ export const toChild: ToChild_F = (child, options, ...events) => {
     return toTransition(config, options, ...events);
   };
 
-  const src = toChildSrc(
-    child.__id,
-    options?.actors?.children,
-    ...events,
-  );
+  const src = toChildSrc(child.__id, options?.actors?.children, ...events);
 
   const on = identify(child.on).map(tMapper);
   const contexts = Object.keys(child.contexts || {});

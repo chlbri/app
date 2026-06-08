@@ -31,27 +31,16 @@ export type ToEmitter_F = <
  * @see {@linkcode toArray.typed} for the type of the context.
  * @see {@linkcode ToEmitter_F} for more details
  */
-export const toEmitter: ToEmitter_F = (
-  emitter,
-  options,
-  ...events
-) => {
-  const src = toEmitterSrc(
-    emitter.__id,
-    options?.actors?.emitters,
-  );
+export const toEmitter: ToEmitter_F = (emitter, options, ...events) => {
+  const src = toEmitterSrc(emitter.__id, options?.actors?.emitters);
 
   const next = toArray
     .typed(emitter.next)
-    .map(config =>
-      toTransition(config as any, options, ...events),
-    );
+    .map(config => toTransition(config as any, options, ...events));
 
   const error = toArray
     .typed(emitter.error)
-    .map(config =>
-      toTransition(config as any, options, ...events),
-    );
+    .map(config => toTransition(config as any, options, ...events));
 
   const complete = toArray.typed(emitter.complete).map(config => {
     const check1 = typeof config === 'object' && 'actions' in config;

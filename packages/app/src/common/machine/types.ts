@@ -189,16 +189,12 @@ export type CommonElements<
     readonly strict?: boolean;
     readonly __longRuns?: boolean;
   },
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > = {
   config: C;
   pContext: Pc;
-  eventsMap: E;
-  actorsMap: A;
   context: Tc;
   actions?: Mo['actions'];
   guards?: Mo['guards'];
@@ -242,13 +238,7 @@ export type CommonTimeAction_F<
   T extends string = string,
 > = (name: string) => (id: string) => AsyncAction2<E, Pc, Tc, T>;
 
-export type CommonCreateMachine_F<T = any> = (
-  config: any,
-  types?: {
-    eventsMap?: any;
-    actorsMap?: any;
-  },
-) => T;
+export type CommonCreateMachine_F<T = any> = (config: any) => T;
 
 /**
  * Represents a scheduled action with its data and execution time.

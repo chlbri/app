@@ -22,11 +22,7 @@ export type ToChildSrc_F = <
  * @param events of type {@linkcode string[]}, list of events of the machine.
  * @returns an emitter object with an id, or undefined if the emitter is not found.
  */
-export const toChildSrc: ToChildSrc_F = (
-  child,
-  children,
-  ...events
-) => {
+export const toChildSrc: ToChildSrc_F = (child, children, ...events) => {
   const fn = children?.[child];
   const func = fn ? reduceFnMap(fn as any, ...events) : undefined;
   return func as any;

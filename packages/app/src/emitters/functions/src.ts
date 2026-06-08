@@ -13,9 +13,6 @@ export type ToEmitterSrc_F = <
   emitters?: AsyncEmittersMap<Eo, Pc, Tc, T>,
 ) => AsyncEmitterFunction<Eo, Pc, Tc, T, R> | undefined;
 
-export const toEmitterSrc: ToEmitterSrc_F = (
-  emitter,
-  emitters,
-) => {
+export const toEmitterSrc: ToEmitterSrc_F = (emitter, emitters) => {
   return emitters?.[emitter] as any;
 };

@@ -2,10 +2,7 @@ import { toPredicate } from '../../guards/functions/toPredicate';
 
 describe('toPredicate - coverage', () => {
   test('toPredicate - and', () => {
-    const out = toPredicate(
-      { and: ['non-exist2', 'non-exist1'] },
-      {},
-    );
+    const out = toPredicate({ and: ['non-exist2', 'non-exist1'] }, {});
 
     expect(out).toStrictEqual({
       errors: [
@@ -16,10 +13,7 @@ describe('toPredicate - coverage', () => {
   });
 
   test('toPredicate - or', () => {
-    const out = toPredicate(
-      { or: ['non-exist2', 'non-exist1'] },
-      {},
-    );
+    const out = toPredicate({ or: ['non-exist2', 'non-exist1'] }, {});
 
     expect(out).toStrictEqual({
       errors: [
