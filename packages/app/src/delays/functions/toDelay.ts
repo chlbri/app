@@ -1,41 +1,37 @@
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { EventObject } from '#events';
 import { reduceFnMap } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { AsyncDelayFunction3, AsyncDelayMap } from '../types';
 
 export type ToDelay_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Eo extends EventObject = EventObject,
 >(
-  events: E,
-  actorsMap: A,
   delay: string,
-  delays?: AsyncDelayMap<Eo, Pc, Tc, T>,
+  delays: AsyncDelayMap<Eo, Pc, Tc, T> | undefined,
+  ...events: string[]
 ) => AsyncDelayFunction3<Eo, Pc, Tc, T> | undefined;
 
 /**
  * Converts a delay configuration to a function that returns the delay in milliseconds.
  * If the delay is a number, it returns a function that returns that number.
- * If the delay is a function, it reduces the function map with the provided events and actors.
+ * If the delay is a function, it reduces the function map with the provided events list.
  *
- * @param events of type {@linkcode EventsMap} [E], the events map to use for resolving the delay.
- * @param actorsMap of type {@linkcode ActorsConfigMap} [A], the actors map to use for resolving the delay.
  * @param delay of type string,  The delay configuration.
  * @param delays of type {@linkcode AsyncDelayMap}, the map of delays containing functions to execute.
+ * @param events of type {@linkcode string[]}, list of events of the machine.
  * @returns a function that returns the delay in milliseconds or undefined if not found.
  *
  * @see {@linkcode PrimitiveObject}
  * @see {@linkcode reduceFnMap}
  */
-export const toDelay: ToDelay_F = (events, actorsMap, delay, delays) => {
+export const toDelay: ToDelay_F = (delay, delays, ...events) => {
   const fn = delays?.[delay];
   const check = typeof fn === 'number';
   if (check) return () => fn;
 
-  const func = fn ? reduceFnMap(events, actorsMap, fn) : undefined;
+  const func = fn ? reduceFnMap(fn, ...events) : undefined;
   return func;
 };

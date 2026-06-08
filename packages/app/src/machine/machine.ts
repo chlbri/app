@@ -168,20 +168,11 @@ export class AsyncMachine<
 
         assign: (key, fn, options?) => {
           if (!options) {
-            return _any(expandFnMap)(
-              this.__elements.eventsMap,
-              this.__elements.actorsMap,
-              _any(key),
-              fn,
-            );
+            return _any(expandFnMap)(_any(key), fn, ...this.__eventsList);
           }
 
           const { error: errorFn, max } = options;
-          const _fn = reduceFnMap(
-            this.__elements.eventsMap,
-            this.__elements.actorsMap,
-            fn as any,
-          );
+          const _fn = reduceFnMap(fn as any, ...this.__eventsList);
 
           return async ({ pContext, context, event, ...rest }) => {
             const state = cloneDeep({ pContext, context });
@@ -483,11 +474,7 @@ export class AsyncMachine<
   protected __sendTo: AsyncSendAction_F<Eo, Pc, Tc, Ta> = () => {
     return (fn, options?) => {
       if (!options) {
-        const fn2 = reduceFnMap(
-          this.__elements.eventsMap,
-          this.__elements.actorsMap,
-          fn,
-        );
+        const fn2 = reduceFnMap(fn, ...this.__eventsList);
         return ({ context, pContext, ...rest }) => {
           const state = this.__cloneStateExtended({
             context,
@@ -514,7 +501,7 @@ export class AsyncMachine<
         });
 
         const execute = async () => {
-          const fn2 = reduceFnMap(this.eventsMap, this.__actorsMap, fn);
+          const fn2 = reduceFnMap(fn, ...this.__eventsList);
           const { event, to } = (await fn2(state)) as any;
           const sentEvent = { to, event };
           return _any({ ...out, sentEvent });
@@ -557,11 +544,7 @@ export class AsyncMachine<
   ) => {
     if (!options) {
       return ({ context, pContext, ...rest }) => {
-        const _fn = reduceFnMap(
-          this.__elements.eventsMap,
-          this.__elements.actorsMap,
-          fn,
-        );
+        const _fn = reduceFnMap(fn, ...this.__eventsList);
         const state = this.__cloneStateExtended({
           context,
           pContext,
@@ -585,11 +568,7 @@ export class AsyncMachine<
       });
 
       const execute = async () => {
-        const _fn = reduceFnMap(
-          this.__elements.eventsMap,
-          this.__elements.actorsMap,
-          fn,
-        );
+        const _fn = reduceFnMap(fn, ...this.__eventsList);
         await _fn(state);
         return out;
       };

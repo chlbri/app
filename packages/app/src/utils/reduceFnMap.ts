@@ -1,10 +1,5 @@
 import { _any } from '@bemedev/app-utils-bemedev';
-import type {
-  ActorsConfigMap,
-  EventObject,
-  EventsMap,
-  ToEventsR,
-} from '#events';
+import type { EventObject } from '#events';
 import {
   isFunction,
   type FnMap,
@@ -15,69 +10,30 @@ import {
 import { nothing } from './nothing';
 import type { PrimitiveObject } from '@bemedev/typings';
 
-type ToEventMap_F = <
-  E extends EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
->(
-  events: E,
-  actors: A,
-) => ToEventsR<E, A>;
-
-export const toEventsMap: ToEventMap_F = (events, _actors) => {
-  const emitters = Object.entries(_actors.emitters || {}).reduce(
-    (acc, [key, value]: [string, any]) => {
-      acc[`${key}::next`] = value.next;
-      acc[`${key}::error`] = value.error;
-      return acc;
-    },
-    {} as any,
-  );
-
-  const children = Object.entries(_actors.children || {}).reduce(
-    (acc, [key, value]: [string, any]) => {
-      Object.entries(value).forEach(([childKey, childValue]) => {
-        acc[`${key}::on::${childKey}`] = childValue;
-      });
-      return acc;
-    },
-    {} as any,
-  );
-
-  return { ...events, ...emitters, ...children };
-};
-
 export type ReduceFnMap_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   R = any,
   Eo extends EventObject = EventObject,
 >(
-  events: E,
-  actorsMap: A,
   fn: FnMap<Eo, Pc, Tc, T, R>,
+  ...events: string[]
 ) => FnR<Eo, Pc, Tc, T, R>;
 
 /**
  * Reduces a function map to a single function that processes events.
- * @param events the events map.
- * @param actorsMap the promisees map.
  * @param fn the function map to reduce.
+ * @param events the list of expected events to match against.
  * @returns a function that takes a context and an event, returning the result of the function map.
  *
  * @see {@linkcode ReduceFnMap_F} for the type definition.
- * @see {@linkcode toEventsMap} for converting events and promisees to a map.
  * @see {@linkcode isFunction} for checking if a value is a function.
  * @see {@linkcode nothing} for the default else function.
  */
-export const reduceFnMap: ReduceFnMap_F = (events, actors, fn) => {
+export const reduceFnMap: ReduceFnMap_F = (fn, ...events) => {
   const check1 = isFunction(fn);
   if (check1) return fn;
-
-  const map = toEventsMap(events, actors);
-  const keys = Object.keys(map);
 
   return ({ event, ...rest }) => {
     const check5 = typeof event === 'string';
@@ -86,7 +42,7 @@ export const reduceFnMap: ReduceFnMap_F = (events, actors, fn) => {
 
     const { payload, type } = event;
 
-    for (const key of keys) {
+    for (const key of events) {
       const check2 = type === key;
       const func = _any(fn)[key];
       const check3 = !!func;
@@ -100,27 +56,22 @@ export const reduceFnMap: ReduceFnMap_F = (events, actors, fn) => {
 };
 
 export type ReduceFnMap2_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   R = any,
   Eo extends EventObject = EventObject,
 >(
-  events: E,
-  actorsMap: A,
   fn: FnMapR<Eo, Tc, T, R>,
+  ...events: string[]
 ) => FnReduced<Eo, Tc, T, R>;
 
 /**
  * Reduces a function map to a single function that processes events with a context.
- * @param events the events map.
- * @param promisees the promisees map.
  * @param fn the function map to reduce.
+ * @param events the list of expected events to match against.
  * @returns a function that takes a context and an event, returning the result of the function map.
  *
  * @see {@linkcode ReduceFnMap2_F} for the type definition.
- * @see {@linkcode toEventsMap} for converting events and promisees to a map.
  * @see {@linkcode isFunction} for checking if a value is a function.
  * @see {@linkcode nothing} for the default else function.
  *
@@ -129,16 +80,9 @@ export type ReduceFnMap2_F = <
  *
  * Similar to {@linkcode reduceFnMap}, but it does not take a private context.
  */
-export const reduceFnMapReduced: ReduceFnMap2_F = (
-  events,
-  promisees,
-  fn,
-) => {
+export const reduceFnMapReduced: ReduceFnMap2_F = (fn, ...events) => {
   const check1 = isFunction(fn);
   if (check1) return _any(fn);
-
-  const map = toEventsMap(events, promisees);
-  const keys = Object.keys(map);
 
   return ({ event, ...rest }) => {
     const check5 = typeof event === 'string';
@@ -149,7 +93,7 @@ export const reduceFnMapReduced: ReduceFnMap2_F = (
 
     const { payload, type } = event;
 
-    for (const key of keys) {
+    for (const key of events) {
       const check2 = type === key;
       const func = _any(fn)[key];
       const check3 = !!func;

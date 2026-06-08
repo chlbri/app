@@ -665,8 +665,8 @@ export abstract class CommonInterpreter<
   #stop = this.#mapperFn('stop');
   #dispose = this.#mapperFn('dispose');
 
-  protected __subscribers = new Set<SubscriberClass<E, A, Tc, Ta, Eo>>();
-  #innerSubscribers = new Set<SubscriberClass<E, A, Tc, Ta, Eo>>();
+  protected __subscribers = new Set<SubscriberClass<Tc, Ta, Eo>>();
+  #innerSubscribers = new Set<SubscriberClass<Tc, Ta, Eo>>();
 
   /**
    * Flushes all subscribers and map subscribers of this {@linkcode Interpreter} service.
@@ -892,43 +892,39 @@ export abstract class CommonInterpreter<
     return out as any;
   }
 
-  subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (
+  subscribe: AddSubscriber_F<Tc, Ta, Eo> = (
     _subscriber,
     options,
   ) => {
-    const eventsMap = this.__machine.eventsMap;
-    const actorsMap = this.__machine.actorsMap;
+    const events = this.__machine.eventsList;
     const find = Array.from(this.__subscribers).find(
       f => f.id === options?.id,
     );
     if (find) return find;
 
-    const subcriber = createSubscriber(
-      eventsMap,
-      actorsMap,
+    const subscriber = createSubscriber(
       _subscriber,
       options,
+      ...events,
     );
-    this.__subscribers.add(subcriber);
-    return subcriber as any;
+    this.__subscribers.add(subscriber as any);
+    return subscriber as any;
   };
 
   // @ts-expect-error Already used recursively
-  private __subscribe: AddSubscriber_F<E, A, Tc, Ta, Eo> = (
+  private __subscribe: AddSubscriber_F<Tc, Ta, Eo> = (
     _subscriber,
     options,
   ) => {
-    const eventsMap = this.__machine.eventsMap;
-    const actorsMap = this.__machine.actorsMap;
+    const events = this.__machine.eventsList;
 
     const subscriber = createSubscriber(
-      eventsMap,
-      actorsMap,
       _subscriber,
       options,
+      ...events,
     );
-    this.#innerSubscribers.add(subscriber);
-    return subscriber;
+    this.#innerSubscribers.add(subscriber as any);
+    return subscriber as any;
   };
 
   get state() {
@@ -1064,14 +1060,12 @@ export abstract class CommonInterpreter<
    */
   #resolveNode = (config: any) => {
     const options = this.__machine.options;
-    const events = this.__machine.eventsMap;
-    const actorsMap = this.__machine.actorsMap;
+    const events = this.__machine.eventsList;
 
-    return resolveNode<E, A, Pc, Tc, Ta, Eo>(
-      events,
-      actorsMap,
+    return resolveNode<Pc, Tc, Ta, Eo>(
       config,
       options as any,
+      ...events,
     );
   };
 
@@ -1457,12 +1451,11 @@ export abstract class CommonInterpreter<
   _ppC = this._providePrivateContext;
 
   toActionFn = (action: WithDescriber) => {
-    const events = this.__machine.eventsMap;
-    const actorsMap = this.__machine.actorsMap;
+    const events = this.__machine.eventsList;
     const actions = this.__machine.actions;
 
     const out = this.#returnWithWarning(
-      toAction<E, A, Pc, Tc, Ta, Eo>(events, actorsMap, action, actions),
+      toAction<Pc, Tc, Ta, Eo>(action, actions, ...events),
       `Action (${reduceDescriber(action)}) is not defined`,
     );
 
@@ -1470,56 +1463,47 @@ export abstract class CommonInterpreter<
   };
 
   toPredicateFn = (guard: GuardConfig) => {
-    const events = this.__machine.eventsMap;
-    const actorsMap = this.__machine.actorsMap;
+    const events = this.__machine.eventsList;
     const guards = this.__machine.guards;
 
-    const { predicate, errors } = toPredicate<E, A, Pc, Tc, Ta, Eo>(
-      events,
-      actorsMap,
+    const { predicate, errors } = toPredicate<Pc, Tc, Ta, Eo>(
       guard,
       guards,
+      ...events,
     );
 
     return this.#returnWithWarning(predicate, ...errors);
   };
 
   toDelayFn = (delay: string) => {
-    const events = this.__machine.eventsMap;
-    const actorsMap = this.__machine.actorsMap;
+    const events = this.__machine.eventsList;
     const delays = this.__machine.delays;
 
     return this.#returnWithWarning(
-      toDelay<E, A, Pc, Tc, Ta, Eo>(events, actorsMap, delay, delays),
+      toDelay<Pc, Tc, Ta, Eo>(delay, delays, ...events),
       `Delay (${delay}) is not defined`,
     );
   };
 
   toChildFn = (machine: string) => {
-    const events = this.__machine.eventsMap;
-    const actorsMap = this.__machine.actorsMap;
+    const events = this.__machine.eventsList;
     const machines = this.__machine.children;
 
     return this.#returnWithWarning(
-      toChildSrc<E, A, Pc, Tc, Ta>(
-        events,
-        actorsMap,
+      toChildSrc<Pc, Tc, Ta>(
         machine,
         machines as any,
+        ...events,
       ),
       `Machine (${reduceDescriber(machine)}) is not defined`,
     );
   };
 
   toEmitterSrc = (emitter: string) => {
-    const events = this.__machine.eventsMap;
-    const actorsMap = this.__machine.actorsMap;
     const emitters = this.__machine.emitters;
 
     return this.#returnWithWarning(
-      toEmitterSrc<E, A, Pc, Tc, Ta>(
-        events,
-        actorsMap,
+      toEmitterSrc<Pc, Tc, Ta>(
         emitter,
         emitters as any,
       ),

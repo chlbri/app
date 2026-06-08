@@ -25,15 +25,13 @@ export type OptionalDefinitions<P, C> = OptionalDefinition<P, 'pContext'> &
   OptionalDefinition<C, 'context'>;
 
 export type AddSubscriber_F<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Eo extends EventObject = EventObject,
 > = (
   subscriber: FnMapR<Eo, Tc, T, void>,
   options?: SubscriberOptions<Eo, Tc, T>,
-) => SubscriberClass<E, A, Tc, T, Eo>;
+) => SubscriberClass<Tc, T, Eo>;
 
 export type AnyInterpreter = {
   mode: Mode;

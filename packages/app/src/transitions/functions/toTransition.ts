@@ -1,6 +1,6 @@
 import { toAction } from '#actions';
 import type { SimpleMachineOptions2 } from '#common/machine';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { EventObject } from '#events';
 import { toPredicate, type GuardConfig } from '#guards';
 import type { AsyncTransition, TransitionConfig } from '#transitions';
 
@@ -8,26 +8,22 @@ import { toArray } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 export type ToTransition_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Eo extends EventObject = EventObject,
 >(
-  events: E,
-  actorsMap: A,
   config: TransitionConfig,
-  options?: Pick<SimpleMachineOptions2, 'actions' | 'guards'>,
+  options: Pick<SimpleMachineOptions2, 'actions' | 'guards'> | undefined,
+  ...events: string[]
 ) => AsyncTransition<Eo, Pc, Tc, T>;
 
 /**
  * Converts a transition configuration to a structured transition object with all functions.
  *
- * @param events - The events map used for action and guard resolution.
- * @param actorsMap - The actors map used for action and guard resolution.
  * @param config - The transition configuration to convert.
  * @param options - Optional machine options that may include actions and guards configurations.
+ * @param events - The events list used for action and guard resolution.
  * @returns A structured transition object with target, actions, guards, and optional description.
  *
  * @see {@linkcode ToTransition_F} for more details
@@ -37,10 +33,9 @@ export type ToTransition_F = <
  * @see {@linkcode toArray} for ensuring typed arrays
  */
 export const toTransition: ToTransition_F = (
-  events,
-  actorsMap,
   config,
   options,
+  ...events
 ) => {
   const isString = typeof config === 'string';
   if (isString) return { target: config };
@@ -48,9 +43,9 @@ export const toTransition: ToTransition_F = (
 
   const actions = toArray
     .typed(config.actions)
-    .map(action => toAction(events, actorsMap, action, options?.actions));
+    .map(action => toAction(action, options?.actions, ...events));
   const guards = toArray<GuardConfig>(config.guards).map(guard =>
-    toPredicate(events, actorsMap, guard, options?.guards),
+    toPredicate(guard, options?.guards, ...events),
   );
 
   const out = { target, actions, guards } as any;

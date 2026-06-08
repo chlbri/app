@@ -30,7 +30,7 @@ import {
   type StatePextended,
   type StateValue,
 } from '#states';
-import { merge } from '#utils';
+import { constructEvents, merge } from '#utils';
 import type {
   AllowedNames,
   Fn,
@@ -71,6 +71,12 @@ export abstract class CommonMachine<
 
   get config() {
     return this.#config;
+  }
+
+  protected readonly __eventsList: string[];
+
+  get eventsList() {
+    return this.__eventsList;
   }
 
   protected __flat: any;
@@ -430,6 +436,7 @@ export abstract class CommonMachine<
       .flat() as any;
     this.#initialConfig = initialConfig(this.#config as any);
     this.#getInitialKeys();
+    this.__eventsList = constructEvents(this.#config as any);
   }
 
   /**

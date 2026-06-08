@@ -1,25 +1,19 @@
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { EventObject } from '#events';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { AsyncEmitterFunction, AsyncEmittersMap } from '../types';
 
 export type ToEmitterSrc_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Eo extends EventObject = EventObject,
   R = any,
 >(
-  events: E,
-  actorsMap: A,
   emitter: string,
   emitters?: AsyncEmittersMap<Eo, Pc, Tc, T>,
 ) => AsyncEmitterFunction<Eo, Pc, Tc, T, R> | undefined;
 
 export const toEmitterSrc: ToEmitterSrc_F = (
-  _events,
-  _actorsMap,
   emitter,
   emitters,
 ) => {

@@ -952,10 +952,7 @@ export class AsyncInterpreter<
     );
 
     for (const { service } of collector) {
-      console.warn('event', '=>', event);
-      console.warn(service.value);
       await service.send(event);
-      console.warn(service.value);
     }
   };
 }

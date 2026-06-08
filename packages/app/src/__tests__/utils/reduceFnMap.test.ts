@@ -1,7 +1,6 @@
 import {
   INIT_EVENT,
   MAX_EXCEEDED_EVENT_TYPE,
-  type ActorsConfigMap,
   type EventsMap,
 } from '#events';
 import { numbersT, stringsT } from '@bemedev/app-utils-bemedev';
@@ -9,35 +8,17 @@ import type { FnMap, FnMapR } from '~types';
 import {
   reduceFnMap,
   reduceFnMapReduced,
-  toEventsMap,
 } from '../../utils/reduceFnMap';
 
-describe('#01 => reducers', () => {
-  describe('#01 => toEventsMap', () => {
-    test('#02 => works with empty actors object', () => {
-      // Arrange
-      const events: EventsMap = {
-        EVENT1: stringsT.type,
-      };
-      const actors: ActorsConfigMap = {};
-
-      // Act
-      const result = toEventsMap(events, actors);
-
-      // Assert
-      expect(result).toEqual(events);
-    });
-  });
-
+describe('reduceFnMap tests', () => {
   describe('#02 => reduceFnMap', () => {
     test('#01 => returns function directly if it is already a function', () => {
       // Arrange
       const events: EventsMap = {};
-      const actors: ActorsConfigMap = {};
       const directFn = () => 'result';
 
       // Act
-      const result = reduceFnMap(events, actors, directFn);
+      const result = reduceFnMap(directFn, ...Object.keys(events));
 
       // Assert
       expect(result).toBe(directFn);
@@ -58,7 +39,6 @@ describe('#01 => reducers', () => {
       const events: EventsMap = {
         EVENT1: stringsT.type,
       };
-      const actors: ActorsConfigMap = {};
       const elseSpy = vi.fn().mockReturnValue('else result');
 
       const fnMap: FnMap<any, any, any, any, string> = {
@@ -67,7 +47,7 @@ describe('#01 => reducers', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMap(events, actors, fnMap);
+      const reducedFn = reduceFnMap(fnMap, ...Object.keys(events));
       const result = reducedFn({
         event: INIT_EVENT,
         context: {},
@@ -95,7 +75,6 @@ describe('#01 => reducers', () => {
         EVENT1: stringsT.type,
         EVENT2: { data: numbersT.type },
       };
-      const actors: ActorsConfigMap = {};
 
       const event1Fn = vi.fn().mockReturnValue('event1 result');
       const event2Fn = vi.fn().mockReturnValue('event2 result');
@@ -108,7 +87,7 @@ describe('#01 => reducers', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMap(events, actors, fnMap);
+      const reducedFn = reduceFnMap(fnMap, ...Object.keys(events));
       const result1 = reducedFn({
         event: { type: 'EVENT1', payload: 'test' },
         context: {},
@@ -169,14 +148,13 @@ describe('#01 => reducers', () => {
       const events: EventsMap = {
         EVENT1: stringsT.type,
       };
-      const actors: ActorsConfigMap = {};
 
       const fnMap: FnMap<any, any, any, any, any> = {
         EVENT1: () => 'event1 result',
       };
 
       // Act
-      const reducedFn = reduceFnMap(events, actors, fnMap);
+      const reducedFn = reduceFnMap(fnMap, ...Object.keys(events));
       const result = reducedFn({
         event: { type: 'UNKNOWN', payload: null },
         context: {},
@@ -195,11 +173,10 @@ describe('#01 => reducers', () => {
     test('#01 => returns function directly if it is already a function', () => {
       // Arrange
       const events: EventsMap = {};
-      const actors: ActorsConfigMap = {};
       const directFn = () => 'result';
 
       // Act
-      const result = reduceFnMapReduced(events, actors, directFn);
+      const result = reduceFnMapReduced(directFn, ...Object.keys(events));
 
       // Assert
       expect(result).toBe(directFn);
@@ -219,7 +196,6 @@ describe('#01 => reducers', () => {
       const events: EventsMap = {
         EVENT1: stringsT.type,
       };
-      const actors: ActorsConfigMap = {};
       const elseSpy = vi.fn().mockReturnValue('else result');
 
       const fnMap: FnMapR<any, any, any, string> = {
@@ -228,7 +204,7 @@ describe('#01 => reducers', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(events, actors, fnMap);
+      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
       const result = reducedFn({
         context: {},
         event: INIT_EVENT,
@@ -254,7 +230,6 @@ describe('#01 => reducers', () => {
         EVENT1: stringsT.type,
         EVENT2: { data: numbersT.type },
       };
-      const actors: ActorsConfigMap = {};
 
       const event1Fn = vi.fn().mockReturnValue('event1 result');
       const event2Fn = vi.fn().mockReturnValue('event2 result');
@@ -267,7 +242,7 @@ describe('#01 => reducers', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(events, actors, fnMap);
+      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
       const result1 = reducedFn({
         context: {},
         event: { type: 'EVENT1', payload: 'test' },
@@ -322,14 +297,13 @@ describe('#01 => reducers', () => {
       const events: EventsMap = {
         EVENT1: stringsT.type,
       };
-      const actors: ActorsConfigMap = {};
 
       const fnMap: FnMapR<any, any, any, any> = {
         EVENT1: () => 'event1 result',
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(events, actors, fnMap);
+      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
       const result = reducedFn({
         context: {},
         event: { type: 'UNKNOWN', payload: null },

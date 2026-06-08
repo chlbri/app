@@ -2,7 +2,7 @@ import { toAction } from '#actions';
 import { toChild } from '#common/functions';
 import type { SimpleMachineOptions2 } from '#common/machine';
 import { toEmitter } from '#emitters';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { EventObject } from '#events';
 import { toTransition } from '#transitions';
 import { _any, identify, toArray } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -10,26 +10,22 @@ import type { Node, NodeConfig2 } from '../types';
 import { stateType } from './stateType';
 
 export type ResolveNode_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Eo extends EventObject = EventObject,
 >(
-  events: E,
-  actorsMap: A,
   config: NodeConfig2,
   options?: SimpleMachineOptions2,
+  ...events: string[]
 ) => Node<Eo, Pc, Tc, T>;
 
 /**
  * Resolves a node configuration into a full node with all functions.
  *
- * @param events - The events map used for action and transition resolution.
- * @param actorsMap - The actors map used for actor resolution.
  * @param config - The node configuration to resolve.
  * @param options - Optional machine options that may include actions and actors configurations.
+ * @param events - The list of events of the machine.
  * @returns A structured representation of the node with its properties and transitions.
  *
  * @see {@linkcode ResolveNode_F} for more details
@@ -41,18 +37,17 @@ export type ResolveNode_F = <
  *
  */
 export const resolveNode: ResolveNode_F = (
-  events,
-  actorsMap,
   config,
   options,
+  ...events
 ) => {
   // #region functions for mapping
   const aMapper = (action: any) => {
-    return toAction(events, actorsMap, action, options?.actions);
+    return toAction(action, options?.actions, ...events);
   };
 
   const tMapper = (config: any) => {
-    return toTransition(events, actorsMap, config, options);
+    return toTransition(config, options, ...events);
   };
   // #endregion
 
@@ -64,7 +59,7 @@ export const resolveNode: ResolveNode_F = (
   const exit = toArray.typed(config.exit).map(aMapper);
 
   const states = identify(config.states).map(config =>
-    resolveNode(events, actorsMap, config, options),
+    resolveNode(config, options, ...events),
   );
 
   const on = identify(config.on).map(tMapper);
@@ -74,11 +69,11 @@ export const resolveNode: ResolveNode_F = (
 
   const emitters = actors
     .filter(actor => 'next' in actor)
-    .map(emitter => toEmitter(events, actorsMap, emitter, options));
+    .map(emitter => toEmitter(emitter, options, ...events));
 
   const children = actors
     .filter(actor => 'on' in actor || 'contexts' in actor)
-    .map(child => toChild(events, actorsMap, child, options));
+    .map(child => toChild(child, options, ...events));
 
   const out = _any({
     type,

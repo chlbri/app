@@ -1,6 +1,6 @@
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { EventObject } from '#events';
 import type { State } from '#states';
-import { nothing, toEventsMap } from '#utils';
+import { nothing } from '#utils';
 import { _any } from '@bemedev/app-utils-bemedev';
 import type { TimerState } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -12,23 +12,18 @@ import { FnMapR, isFunction } from '../types/primitives';
  * Subscriber class that manages the subscription state and provides methods
  * to handle state changes and unsubscribe.
  *
- * @template : {@linkcode EventsMap} [E] - Type of the events map
- * @template : {@linkcode ActorsConfigMap} [A] - Type of the actors map
  * @template : {@linkcode PrimitiveObject} [Tc] - Type of the context
  * @template : [R] - Type of the return value
  *
  */
 class SubscriberClass<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Eo extends EventObject = EventObject,
   St extends State<Eo, Tc, T> = State<Eo, Tc, T>,
 > {
   #subscriber: FnMapR<Eo, Tc, T, void>;
-  #eventsMap: E;
-  #actorsMap: A;
+  #events: string[];
 
   #state: TimerState = 'idle';
 
@@ -45,22 +40,19 @@ class SubscriberClass<
 
   /**
    * Creates an instance of SubscriberMapClass.
-   * @param eventsMap - {@linkcode EventsMap} [E] - The events map.
-   * @param promiseesMap - {@linkcode PromiseeMap} [P] - The promisees map.
    * @param subscriber - The {@linkcode FnSubReduced} subscriber function or object.
    * @param equals - Function to compare two {@linkcode State}s for equality (optional).
    * @param _id - Unique identifier for the subscriber (optional).
+   * @param events - The events list.
    */
   constructor(
-    eventsMap: E,
-    actorsMap: A,
     subscriber: FnMapR<Eo, Tc, T, void>,
     equals: (a: St, b: St) => boolean = equal,
     private _id = nanoid(),
+    events: string[] = [],
   ) {
     this.#subscriber = subscriber;
-    this.#eventsMap = eventsMap;
-    this.#actorsMap = actorsMap;
+    this.#events = events;
     this.#equals = equals;
 
     this.#state = 'active';
@@ -71,18 +63,14 @@ class SubscriberClass<
    * @returns A function that reduces the state based on the subscriber's logic.
    *
    * @see {@linkcode isFunction} to check if the subscriber is a function.
-   * @see {@linkcode toEventsMap} to convert the events and promisees maps
-   * to a unified map.
    * @see {@linkcode nothing} to provide a default action if no event matches.
-   * @see {@linkcode t} to ensure type safety in the returned function.
    */
   get #reduceFn() {
     const sub = this.#subscriber;
     const check1 = isFunction(sub);
     if (check1) return _any(sub);
 
-    const map = toEventsMap(this.#eventsMap, this.#actorsMap);
-    const keys = Object.keys(map);
+    const keys = this.#events;
 
     return ({ event, ...rest }: St) => {
       const _else = sub.else ?? nothing;
@@ -114,7 +102,6 @@ class SubscriberClass<
    * This function checks if the subscriber can perform its action,
    * compares the previous and next states using the provided equality function,
    * and if they are not equal, it calls the subscriber with the next state.
-   * If the states are equal or if the subscriber cannot perform its action,
    */
   fn = (previous: St, next: St) => {
     if (this.#cannotPerform) return;
@@ -155,43 +142,32 @@ export type SubscriberOptions<
 };
 
 export type CreateSubscriber_F = <
-  E extends EventsMap = EventsMap,
-  const A extends ActorsConfigMap = ActorsConfigMap,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   const Eo extends EventObject = EventObject,
 >(
-  eventsMap: E,
-  actorsMap: A,
   subscriber: FnMapR<Eo, Tc, T, void>,
   options?: SubscriberOptions<Eo, Tc, T>,
-) => SubscriberClass<E, A, Tc, T, Eo>;
+  ...events: string[]
+) => SubscriberClass<Tc, T, Eo>;
 
 /**
  * Creates a new instance of SubscriberMapClass.
  *
- * @param eventsMap : {@linkcode EventsMap} [E] - The events map.
- * @param actorsMap : {@linkcode ActorsConfigMap} [A] - The actors map.
  * @param subscriber - The subscriber function that will be called with the {@linkcode State}.
  * @param options - Optional parameters for the subscriber, including equality function and ID.
+ * @param events - List of events of the machine.
  * @returns A new instance of {@linkcode SubscriberClass} that manages the subscription state and provides methods to handle state changes and unsubscribe.
- *
- * @remarks
- * This function maps the provided events and actors.
- *
- * This allows for efficient subscription management and state handling depending on the events and actors.
  */
 export const createSubscriber: CreateSubscriber_F = (
-  eventsMap,
-  actorsMap,
   subscriber,
   options,
+  ...events
 ) => {
   return new SubscriberClass(
-    eventsMap,
-    actorsMap,
     subscriber,
     options?.equals,
     options?.id,
+    events,
   );
 };

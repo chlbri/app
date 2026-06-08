@@ -1,5 +1,5 @@
 import type { SimpleMachineOptions2 } from '#common/machine';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { EventObject } from '#events';
 import { toTransition } from '#transitions';
 import { toArray } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -8,26 +8,22 @@ import type { AsyncEmitter } from '../types';
 import { toEmitterSrc } from './src';
 
 export type ToEmitter_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   R = any,
   Eo extends EventObject = EventObject,
 >(
-  events: E,
-  actorsMap: A,
   emitter: EmitterConfig & { __id: string },
-  options?: SimpleMachineOptions2,
+  options: SimpleMachineOptions2 | undefined,
+  ...events: string[]
 ) => AsyncEmitter<Eo, Pc, Tc, T, R>;
 
 /**
  * Converts an emitter config to an emitter object with a source and transitions.
- * @param events of type {@linkcode EventsMap}, the events map.
- * @param actorsMap of type {@linkcode ActorsConfigMap}, the actors map.
- * @param src of type {@linkcode EmitterSrcConfig}, the emitter configuration to convert.
- * @param emitters of type {@linkcode SimpleMachineOptions}, the machine options.
+ * @param emitter of type {@linkcode EmitterConfig}, the emitter config.
+ * @param options of type {@linkcode SimpleMachineOptions2}, the machine options.
+ * @param events of type {@linkcode string[]}, list of events of the machine.
  * @returns an emitter object with a source and transitions.
  *
  * @see {@linkcode toEmitterSrc} for converting the source.
@@ -36,14 +32,11 @@ export type ToEmitter_F = <
  * @see {@linkcode ToEmitter_F} for more details
  */
 export const toEmitter: ToEmitter_F = (
-  events,
-  actorsMap,
   emitter,
   options,
+  ...events
 ) => {
   const src = toEmitterSrc(
-    events,
-    actorsMap,
     emitter.__id,
     options?.actors?.emitters,
   );
@@ -51,20 +44,20 @@ export const toEmitter: ToEmitter_F = (
   const next = toArray
     .typed(emitter.next)
     .map(config =>
-      toTransition(events, actorsMap, config as any, options),
+      toTransition(config as any, options, ...events),
     );
 
   const error = toArray
     .typed(emitter.error)
     .map(config =>
-      toTransition(events, actorsMap, config as any, options),
+      toTransition(config as any, options, ...events),
     );
 
   const complete = toArray.typed(emitter.complete).map(config => {
     const check1 = typeof config === 'object' && 'actions' in config;
-    if (check1) return toTransition(events, actorsMap, config, options);
+    if (check1) return toTransition(config, options, ...events);
 
-    return toTransition(events, actorsMap, { actions: config }, options);
+    return toTransition({ actions: config }, options, ...events);
   });
 
   const out = {

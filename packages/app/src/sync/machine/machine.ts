@@ -147,10 +147,9 @@ export class SyncMachine<
 
         assign: (key, fn) => {
           return _any(expandFnMap.sync)(
-            this.__elements.eventsMap,
-            this.__elements.actorsMap,
             _any(key),
             fn,
+            ...this.__eventsList,
           );
         },
 
@@ -404,11 +403,7 @@ export class SyncMachine<
    */
   protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = () => {
     return fn => {
-      const fn2 = reduceFnMap(
-        this.__elements.eventsMap,
-        this.__elements.actorsMap,
-        fn,
-      );
+      const fn2 = reduceFnMap(fn, ...this.__eventsList);
       return ({ context, pContext, ...rest }) => {
         const state = this.__cloneStateExtended({
           context,
@@ -437,11 +432,7 @@ export class SyncMachine<
    */
   protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
     return ({ context, pContext, ...rest }) => {
-      const _fn = reduceFnMap(
-        this.__elements.eventsMap,
-        this.__elements.actorsMap,
-        fn,
-      );
+      const _fn = reduceFnMap(fn, ...this.__eventsList);
       const state = this.__cloneStateExtended({
         context,
         pContext,

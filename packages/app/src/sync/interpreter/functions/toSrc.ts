@@ -1,40 +1,34 @@
 import type { ChildrenMap } from '#common/machine';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { EventObject } from '#events';
 import { reduceFnMap } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { SyncChildFunction2 } from '../../machine/options.types';
 
 export type ToChildSrc_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Eo extends EventObject = EventObject,
   R extends { eventsMap: any } = { eventsMap: any },
 >(
-  events: E,
-  actorsMap: A,
   child: string,
-  children?: ChildrenMap<Eo, Pc, Tc, T>,
+  children: ChildrenMap<Eo, Pc, Tc, T> | undefined,
+  ...events: string[]
 ) => SyncChildFunction2<Eo, Pc, Tc, T, R> | undefined;
 
 /**
  * Converts a child configuration to a child machine object.
- * @param _child of type {@linkcode EmitterSrcConfig}, the machine configuration to convert.
- * @param children of type {@linkcode EmitterMap}, the map of emitters to look up the emitter configuration.
+ * @param child of type {@linkcode string}, the child identifier to convert.
+ * @param children of type {@linkcode ChildrenMap}, the map of children to look up.
+ * @param events of type {@linkcode string[]}, list of events of the machine.
  * @returns an emitter object with an id, or undefined if the emitter is not found.
- *
- * @see {@linkcode EventsMap} for the events map
- * @see {@linkcode ActorsConfigMap} for the actors map
  */
 export const toChildSrc: ToChildSrc_F = (
-  events,
-  actorsMap,
   child,
   children,
+  ...events
 ) => {
   const fn = children?.[child];
-  const func = fn ? reduceFnMap(events, actorsMap, fn as any) : undefined;
+  const func = fn ? reduceFnMap(fn as any, ...events) : undefined;
   return func as any;
 };

@@ -90,9 +90,6 @@ describe('Integration testing for interpret, Children', () => {
     const notify = vi.fn();
     const child = _child4;
     const childService = interpret(child);
-    childService.subscribe(({ value }) => {
-      console.warn('State:', value);
-    });
 
     const parent = _parent5.provideOptions(({ sendTo, voidAction }) => ({
       actions: {

@@ -1,5 +1,5 @@
 import type { CommonChild, SimpleMachineOptions2 } from '#common/machine';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { EventObject } from '#events';
 import { toTransition } from '#transitions';
 import { _any, identify } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -7,26 +7,22 @@ import type { ChildConfig } from '../../actors/types';
 import { toChildSrc } from './toChildSrc';
 
 export type ToChild_F = <
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   R extends { eventsMap: any } = { eventsMap: any },
   Eo extends EventObject = EventObject,
 >(
-  events: E,
-  actorsMap: A,
   child: ChildConfig & { __id: string },
-  options?: SimpleMachineOptions2,
+  options: SimpleMachineOptions2 | undefined,
+  ...events: string[]
 ) => CommonChild<Eo, Pc, Tc, T, R>;
 
 /**
  * Converts an emitter config to an emitter object with a source and transitions.
- * @param events of type {@linkcode EventsMap}, the events map.
- * @param actorsMap of type {@linkcode ActorsConfigMap}, the actors map.
- * @param src of type {@linkcode EmitterSrcConfig}, the emitter configuration to convert.
- * @param emitters of type {@linkcode SimpleMachineOptions2}, the machine options.
+ * @param child of type {@linkcode ChildConfig}, the child configuration to convert.
+ * @param options of type {@linkcode SimpleMachineOptions2}, the machine options.
+ * @param events of type {@linkcode string[]}, list of events of the machine.
  * @returns an emitter object with a source and transitions.
  *
  * @see {@linkcode toChildSrc} for converting the source.
@@ -34,16 +30,15 @@ export type ToChild_F = <
  * @see {@linkcode toArray} for the type of the context.
  * @see {@linkcode ToChild_F} for more details
  */
-export const toChild: ToChild_F = (events, actorsMap, child, options) => {
+export const toChild: ToChild_F = (child, options, ...events) => {
   const tMapper = (config: any) => {
-    return toTransition(events, actorsMap, config, options);
+    return toTransition(config, options, ...events);
   };
 
   const src = toChildSrc(
-    events,
-    actorsMap,
     child.__id,
     options?.actors?.children,
+    ...events,
   );
 
   const on = identify(child.on).map(tMapper);
