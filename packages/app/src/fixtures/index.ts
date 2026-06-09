@@ -1,8 +1,3 @@
-import { tupleOf } from '@bemedev/app-utils-bemedev';
-import { _any } from '@bemedev/app-utils-bemedev';
-import type { Equals } from '@bemedev/app-utils-bemedev';
-import { _unknown } from '@bemedev/app-utils-bemedev';
-import { expandFn } from '@bemedev/app-utils-bemedev';
 import { DEFAULT_NOTHING } from '#constants';
 import type {
   ActorsConfigMap,
@@ -13,8 +8,14 @@ import type {
   ExtractSender,
 } from '#events';
 import type { AsyncInterpreter } from '#interpreter';
+import type { Equals } from '@bemedev/app-utils-bemedev';
+import {
+  _any,
+  _unknown,
+  expandFn,
+  tupleOf,
+} from '@bemedev/app-utils-bemedev';
 
-import type { CommonInterpreter } from '#common/interpreter';
 import type {
   CommonConfig3,
   GetEventsFromConfig,
@@ -25,12 +26,13 @@ import { IS_TEST } from '#utils';
 import type { EmptyObject } from '@bemedev/decompose';
 import { sleep } from '@bemedev/sleep';
 import type { PrimitiveObject } from '@bemedev/typings';
+import type { SyncInterpreter } from '~types';
 import { buildIndex, buildInvite } from './invite';
 
 export * from './constants';
 export * from './invite';
-export * from './valibot';
 export * from './unhandledRejection';
+export * from './valibot';
 
 type TestArr = readonly [string, () => void];
 
@@ -273,8 +275,11 @@ export const constructTests = <
   const Eo extends EventObject = EventObject,
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 >(
-  service: CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>,
+  service:
+    | SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>
+    | AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>,
   helper?: (option: Option<Eo, Pc, Tc>) => T,
   startIndex = 0,
 ): ConstructTestsResult<Eo, T, Ta> => {

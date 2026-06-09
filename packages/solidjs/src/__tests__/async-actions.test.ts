@@ -5,8 +5,10 @@ import _machine2 from './async-actions.2.machine';
 import _machine3 from './async-actions.3.machine';
 import _machine4 from './async-actions.4.machine';
 import { pipe } from '../interpreters/pipe';
+import { runWithOwner, getOwner } from 'solid-js';
 
 vi.useFakeTimers();
+vi.spyOn(console, 'warn').mockImplementation(() => {});
 const emptyFn = vi.fn(() => {});
 
 /**
@@ -39,7 +41,8 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine, { context: { name: '' } });
     const solid = pipe(service);
-    const name = solid.context(s => s.name);
+    const owner = getOwner();
+    const name = runWithOwner(owner, () => solid.context(s => s.name));
     test('#00 => start', solid.start);
 
     test('#01 => context.name starts empty', () => {
@@ -47,7 +50,7 @@ describe('Async action helpers', () => {
     });
 
     test('#02 => context.name starts empty (from solid)', () => {
-      expect(name()).toBe('');
+      expect(name?.()).toBe('');
     });
 
     test('#03 => send LOAD, await async assign', async () => {
@@ -57,7 +60,7 @@ describe('Async action helpers', () => {
     });
 
     test('#04 => send LOAD, await async assign (from solid)', async () => {
-      expect(name()).toBe('Alice');
+      expect(name?.()).toBe('Alice');
     });
   });
 

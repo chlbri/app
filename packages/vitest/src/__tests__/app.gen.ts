@@ -6,7 +6,7 @@
 
 declare module '@bemedev/app' {
   interface Register {
-    'src/__tests__/actions/action.batch.cov.machine': {
+    'src/__tests__/actions/action.batch.cov': {
       paths: {
         map: {
           targets: '/idle';
@@ -315,6 +315,54 @@ declare module '@bemedev/app' {
         actions: 'init' | 'dec' | 'inc' | 'sendDec' | 'forceSendInc';
         delays: never;
         guards: never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/constructTests.machine': {
+      paths: {
+        map: {
+          targets: '/state1' | '/state2';
+          initial: 'state1';
+          states: {
+            state1: { targets: '/' | '/state2' };
+            state2: { targets: '/' | '/state1' };
+          };
+        };
+        all: '/' | '/state1' | '/state2';
+      };
+      events: 'NEXT' | 'PREVIOUS';
+      options: {
+        children: never;
+        emitters: never;
+        tags: 'tag1' | 'tag2' | 'tag3';
+        actions: 'activity1';
+        delays: 'myActivity';
+        guards: never;
+      };
+      pContext: any;
+    };
+
+    'excedd.fsm': {
+      paths: {
+        map: {
+          targets: '/idle' | '/working';
+          initial: 'idle';
+          states: {
+            idle: { targets: '/' | '/working' };
+            working: { targets: '/' | '/idle' };
+          };
+        };
+        all: '/' | '/idle' | '/working';
+      };
+      events: 'ADD_CONDITION' | 'REMOVE_CONDITION';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'addCondition' | 'removeCondition' | 'inc';
+        delays: 'DELAY';
+        guards: 'condition' | 'limit';
       };
       pContext: any;
     };

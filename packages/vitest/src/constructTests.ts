@@ -16,8 +16,8 @@ export const constructTests: ConstructTests_F = (
 ) => {
   let _index = startIndex;
   const index = (__index?: number) => {
-    if (__index !== undefined) return __index + '';
-    const out = buildIndex(_index, Math.max(100, _index + 5));
+    const num = __index ?? _index;
+    const out = buildIndex(num, Math.max(100, num + 5));
     _index++;
     return out;
   };
@@ -34,14 +34,14 @@ export const constructTests: ConstructTests_F = (
             [
               buildInvite(
                 `${warning} should be in service.${type}`,
-                index,
-                Math.max(100, warnings.length),
+                index + 1,
+                Math.max(100, warnings.length + 5),
               ),
               warning,
             ] as const,
         );
 
-        test.each([...cases])('#%$ => %s', (_, warning) => {
+        test.each([...cases])('%s', (_, warning) => {
           expect(service[type]).toContain(warning);
         });
       });
@@ -88,6 +88,7 @@ export const constructTests: ConstructTests_F = (
       },
 
       getIndex: index,
+      service,
 
       sender: type => {
         return (...___payload: any[]) => {
@@ -152,7 +153,7 @@ export const constructTests: ConstructTests_F = (
 
     send: (_event, _index) => {
       const event = JSON.stringify(_event);
-      const invite = `#${index(_index)}=> send ${event}`;
+      const invite = `#${index(_index)} => send ${event}`;
 
       return tupleOf(invite, async () => {
         service.send(_any(_event));

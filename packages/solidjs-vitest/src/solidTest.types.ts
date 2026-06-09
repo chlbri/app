@@ -1,15 +1,17 @@
 import type {
+  SolidAsyncInterpreter,
+  SolidSyncInterpreter,
+} from '@bemedev/app-solidjs';
+import type {
   ActorsConfigMap,
   CommonConfig3,
   EventObject,
   EventsMap,
   PrimitiveObject,
   SimpleMachineOptions2,
-  SyncInterpreter,
 } from '@bemedev/app/types';
-import { SolidInterpreter } from './common';
 
-export class SolidSyncInterpreter<
+export type SolidTest_F = <
   const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
   const Tc extends PrimitiveObject = PrimitiveObject,
@@ -20,23 +22,10 @@ export class SolidSyncInterpreter<
   const AllPaths extends string = string,
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> extends SolidInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
-  readonly TYPE = 'sync';
-
-  constructor(
-    protected __service: SyncInterpreter<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      Mo,
-      L
-    >,
-  ) {
-    super(__service);
-  }
-}
+>(
+  solid:
+    | SolidSyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>
+    | SolidAsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>,
+) => (typeof solid)['TYPE'] extends 'sync'
+  ? SolidSyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>
+  : SolidAsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>;

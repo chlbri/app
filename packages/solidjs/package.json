@@ -47,7 +47,7 @@
     "_ci": "pnpm run lint && pnpm run test",
     "ci": "CI_START=$(date +%s) && pnpm run config:off && pnpm run lint && pnpm run test && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "ci:admin": "pnpm run rm && pnpm run upgrade && pnpm run ci",
-    "generate": "pnpm app-cli generate -c ./src/__tests__",
+    "generate": "app-cli generate -c ./src/__tests__",
     "clean": "pnpm run rm && pnpm run config",
     "config": "pnpm install",
     "config:off": "pnpm run config --offline",

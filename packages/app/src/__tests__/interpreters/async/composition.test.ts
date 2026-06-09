@@ -1,6 +1,7 @@
 import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MIN_ACTIVITY_TIME,
+  TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
 import { constructTests, defaultC, unhandledRejection } from '#fixtures';
 import { DELAY, fakeDB, machine21, machine3 } from '#fixturesData';
@@ -10,7 +11,7 @@ import { _any, _unknown, tupleOf } from '@bemedev/app-utils-bemedev';
 
 import type { AnyInterpreter } from '#common/interpreter';
 import { defaultCheck } from '#guards';
-import { interpret, TIME_TO_RINIT_SELF_COUNTER } from '#interpreter';
+import { interpret } from '#interpreter';
 import equal from 'fast-deep-equal';
 import _machine1 from './composition.1.machine';
 import _machine2 from './composition.2.machine';

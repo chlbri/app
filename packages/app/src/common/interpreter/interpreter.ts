@@ -18,7 +18,6 @@ import { getTags, toChildSrc } from '#common/functions';
 import {
   DEFAULT_DELIMITER,
   DEFAULT_MAX_SELF_TRANSITIONS,
-  DEFAULT_MIN_ACTIVITY_TIME,
 } from '#constants';
 import { toDelay } from '#delays';
 import { toEmitterSrc } from '#emitters';
@@ -119,6 +118,10 @@ export abstract class CommonInterpreter<
     AllPaths,
     Mo
   >;
+
+  get machine() {
+    return this.__machine;
+  }
 
   abstract readonly TYPE: MachineType;
 
@@ -1520,8 +1523,6 @@ export abstract class CommonInterpreter<
   };
   // #endregion
 }
-
-export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
 
 /**
  * Retrieves the {@linkcode Interpreter} service from the given {@linkcode AnyMachine} machine.

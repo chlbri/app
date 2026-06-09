@@ -1,6 +1,6 @@
 import { interpret } from '@bemedev/app';
 import { notU } from '@bemedev/app/utils';
-import { constructTests } from '#tester';
+import { constructTests } from '../../../constructTests.js';
 import _raw_machine from './sendToActions2.machine';
 
 vi.useFakeTimers();

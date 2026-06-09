@@ -15,6 +15,7 @@ import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
+  TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
 import { type AsyncEmitterFunction } from '#emitters';
 import {
@@ -30,9 +31,10 @@ import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
 import type {
   AlwaysConfig,
-  TransitionConfig,
   DelayedTransitions,
+  TransitionConfig,
 } from '#transitions';
+import { betterTimeout } from '#utils';
 import {
   _any,
   isDefined,
@@ -40,7 +42,6 @@ import {
   toArray,
 } from '@bemedev/app-utils-bemedev';
 import { createInterval } from '@bemedev/interval2';
-import { betterTimeout } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
 import { isDescriber, type KeyU } from '~types';
@@ -66,6 +67,7 @@ import type {
   CommonConfig3,
   SimpleMachineOptions2,
 } from '#common/machine';
+import { getByKey, recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
 import type {
@@ -75,7 +77,6 @@ import type {
 import { createSubscriber } from '../../common/subscriber';
 import type { SyncAddOptions_F } from '../machine';
 import type { SyncMachine } from '../machine/machine';
-import { getByKey, recompose } from '@bemedev/decompose';
 
 /**
  * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
@@ -911,8 +912,6 @@ export class SyncInterpreter<
     }
   };
 }
-
-export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
 
 type SyncConfigFrom<T extends KeyU<'config'>> = T['config'];
 

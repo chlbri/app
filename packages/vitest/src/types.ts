@@ -1,4 +1,11 @@
-import type { PrimitiveObject } from '@bemedev/app/types';
+import type {
+  ActorsConfigMap,
+  CommonConfig3,
+  CommonInterpreter,
+  EventsMap,
+  PrimitiveObject,
+  SimpleMachineOptions2,
+} from '@bemedev/app/types';
 import type { Equals, Fn } from '@bemedev/app/bemedev';
 import type {
   EmptyObject,
@@ -70,14 +77,21 @@ type ConstructContexts_F<
 ) => (value?: R, index?: number) => readonly [string, () => void];
 
 export type Option<
-  Eo extends EventObject = EventObject,
+  C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
+  E extends EventsMap = EventsMap,
+  A extends ActorsConfigMap = ActorsConfigMap,
+  Ta extends string = string,
+  Eo extends EventObject = EventObject,
+  AllPaths extends string = string,
+  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > = {
   waiter: ConstructWaiter_F;
   contexts: ConstructContexts_F<Pc, Tc>;
   getIndex: (_index?: number) => string;
   tupleOf: OptionTupleOf;
+  service: CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
 
   sender: <const T extends Eo['type']>(
     type: T,

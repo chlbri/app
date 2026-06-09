@@ -1,3 +1,4 @@
+import { SolidAsyncInterpreter } from './async';
 import type { Pipe_F } from './pipe.types';
 import { SolidSyncInterpreter } from './sync';
 import { _any } from '@bemedev/app/bemedev';
@@ -9,5 +10,5 @@ export const pipe: Pipe_F = service => {
   if (check) {
     return _any(new SolidSyncInterpreter(_any(service)));
   }
-  return _any(new SolidSyncInterpreter(_any(service)));
+  return _any(new SolidAsyncInterpreter(_any(service)));
 };

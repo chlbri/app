@@ -23,5 +23,6 @@ export default createMachine(
   },
   {
     context: type('number'),
+    sync: true,
   },
 );

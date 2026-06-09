@@ -8,7 +8,7 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          LOAD: { actions: 'loadUser', target: '/idle' },
+          LOAD: { actions: 'loadUser', target: '/' },
         },
       },
     },

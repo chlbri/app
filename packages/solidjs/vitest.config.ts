@@ -8,9 +8,9 @@ export default defineConfig({
   plugins: [
     aliasTs(tsconfig as any),
     exclude({
-      ignoreCoverageFiles: [],
+      ignoreCoverageFiles: ['**/index.ts', '**/__tests__/**'],
     }),
-    solidPlugin(),
+    solidPlugin({ solid: {}, dev: true }),
   ],
   server: {
     host: '0.0.0.0',

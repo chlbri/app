@@ -13,3 +13,5 @@ export const DEFAULT_MIN_ACTIVITY_TIME = 10;
  * The default maximum number of milliseconds to wait for an activity to complete.
  */
 export const DEFAULT_MAX_SELF_TRANSITIONS = 100;
+
+export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;

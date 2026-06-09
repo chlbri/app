@@ -3,10 +3,11 @@ import { toArray } from '@bemedev/app/bemedev';
 import { DEFAULT_DELIMITER } from '@bemedev/app/constants';
 import type {
   ActorsConfigMap,
-  AsyncConfig,
-  AsyncInterpreter,
+  CommonConfig3,
+  CommonInterpreter,
   EventObject,
   EventsMap,
+  MachineType,
   PrimitiveObject,
   SimpleMachineOptions2,
   State,
@@ -18,26 +19,22 @@ import { createMemo, createSignal, untrack, type Signal } from 'solid-js';
 import { defaultSelector } from '../default';
 import type { State_F } from '../types';
 
-export class SolidAsyncInterpreter<
-  C extends AsyncConfig,
-  Pc,
-  Tc extends PrimitiveObject,
-  E extends EventsMap,
-  A extends ActorsConfigMap,
-  Ta extends string,
-  Eo extends EventObject,
-  AllPaths extends string,
-  Mo extends SimpleMachineOptions2,
-  L extends SimpleMachineOptions2,
+export abstract class SolidInterpreter<
+  const C extends CommonConfig3 = CommonConfig3,
+  const Pc = any,
+  const Tc extends PrimitiveObject = PrimitiveObject,
+  const E extends EventsMap = EventsMap,
+  const A extends ActorsConfigMap = ActorsConfigMap,
+  const Ta extends string = string,
+  const Eo extends EventObject = EventObject,
+  const AllPaths extends string = string,
+  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 >
   implements Disposable, AsyncDisposable
 {
-  #service: AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>;
+  abstract TYPE: MachineType;
+  // __service: AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>;
   #mainState: Signal<State<Eo, Tc, Ta>>;
-
-  get options() {
-    return this.#service.machine.options;
-  }
 
   get #setState() {
     return this.#mainState[1];
@@ -49,45 +46,57 @@ export class SolidAsyncInterpreter<
   readonly #initialState: State<Eo, Tc, Ta>;
 
   constructor(
-    service: AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>,
+    protected __service: CommonInterpreter<
+      C,
+      Pc,
+      Tc,
+      E,
+      A,
+      Ta,
+      Eo,
+      AllPaths,
+      Mo
+    >,
   ) {
-    this.#service = service;
-    this.#initialState = service.state;
+    this.#initialState = __service.state;
     this.#mainState = createSignal(this.#initialState);
 
     this.subscribe(next => {
-      this.#setState(prev => merge(prev, next as any));
+      this.#setState(prev => {
+        const merged = merge(prev, next as any);
+        if (next.tags === undefined) {
+          merged.tags = undefined;
+        }
+        return merged;
+      });
     });
   }
 
   get subscribe() {
-    return this.#service.subscribe;
+    return this.__service.subscribe;
   }
 
   get send() {
-    return this.#service.send;
+    return this.__service.send;
   }
 
   get start() {
-    return this.#service.start;
+    return this.__service.start;
   }
 
   get pause() {
-    return this.#service.pause;
+    return this.__service.pause;
   }
 
   get resume() {
-    return this.#service.resume;
+    return this.__service.resume;
   }
 
   stop = () => {
-    this.#service.stop();
+    this.__service.stop();
+    this.#setState(prev => ({ ...prev, status: 'stopped' }));
     untrack(this.#mainState[0]);
   };
-
-  get addOptions() {
-    return this.#service.addOptions;
-  }
 
   state: State_F<State<Eo, Tc, Ta>> = (
     accessor = defaultSelector,
@@ -140,17 +149,17 @@ export class SolidAsyncInterpreter<
   );
 
   matches = (...values: string[]) => {
-    const dps = this.dps()();
-    return createMemo(() => values.every(value => dps.includes(value)));
+    const dps = this.dps();
+    return () => values.every(value => dps().includes(value));
   };
 
   contains = (...values: string[]) => {
-    const dps = this.dps()();
-    return createMemo(() => values.some(value => dps.includes(value)));
+    const dps = this.dps();
+    return () => values.some(value => dps().includes(value));
   };
 
   dispose = () => {
-    this.#service.dispose();
+    this.__service.dispose();
     (this.#mainState as any) = undefined;
   };
 

@@ -8,7 +8,7 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          PING: { actions: 'ping', target: '/idle' },
+          PING: { actions: 'ping' },
         },
       },
     },

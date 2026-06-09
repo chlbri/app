@@ -3,6 +3,7 @@ import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
+  TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
 import { _any } from '@bemedev/app-utils-bemedev';
 
@@ -956,8 +957,6 @@ export class AsyncInterpreter<
     }
   };
 }
-
-export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;
 
 /**
  * Retrieves the {@linkcode AsyncInterpreter} service from the given {@linkcode AnyMachine} machine.

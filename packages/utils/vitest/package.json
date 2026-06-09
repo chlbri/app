@@ -43,7 +43,7 @@
     "p-q": "pretty-quick",
     "posttest": "pnpm run fmt",
     "prepublishOnly": "",
-    "pretest": "pnpm run build",
+    "pretest": "pnpm run build && pnpm run generate",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "rm:lib": "pnpx rimraf ./lib",

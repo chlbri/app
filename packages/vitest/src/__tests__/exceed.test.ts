@@ -2,56 +2,13 @@ import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MIN_ACTIVITY_TIME,
   TIME_TO_RINIT_SELF_COUNTER,
-} from '#constants';
-import { createMachine } from '#exports/createMachine';
-import { interpret } from '#exports/interpret';
-import { constructTests, unhandledRejection } from '#fixtures';
-import { type } from '@bemedev/typings';
-
-beforeAll(() => {
-  vi.useFakeTimers();
-});
+} from '@bemedev/app/constants';
+import _machine1 from './exceed.fsm';
+import { interpret } from '@bemedev/app';
+import { constructTests } from '../constructTests';
 
 describe('#03 => Exceed selfTransitionsCounter', () => {
-  const machine = createMachine(
-    'src/__tests__/interpreters/composition.1.machine',
-    {
-      on: {
-        ADD_CONDITION: { actions: 'addCondition' },
-        REMOVE_CONDITION: { actions: 'removeCondition' },
-      },
-      initial: 'idle',
-      states: {
-        idle: {
-          entry: 'inc',
-          always: {
-            guards: ['condition', 'limit'],
-            target: '/working',
-          },
-        },
-        working: {
-          entry: 'inc',
-          always: {
-            guards: ['condition', 'limit'],
-            target: '/idle',
-          },
-        },
-      },
-    },
-    {
-      eventsMap: type({
-        ADD_CONDITION: 'never',
-        REMOVE_CONDITION: 'never',
-      }),
-
-      context: type({
-        iterator: 'number',
-        condition: 'boolean',
-      }),
-
-      sync: true,
-    },
-  ).provideOptions(({ isValue, assign }) => ({
+  const machine = _machine1.provideOptions(({ isValue, assign }) => ({
     actions: {
       addCondition: ({ pContext, context }) => ({
         pContext,
@@ -88,6 +45,7 @@ describe('#03 => Exceed selfTransitionsCounter', () => {
     });
 
     const { start, useWaiter, useErrors } = constructTests(
+      vi,
       service,
       ({ waiter }) => ({
         useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
@@ -113,19 +71,12 @@ describe('#03 => Exceed selfTransitionsCounter', () => {
   });
 
   describe('#01 => mode is strict', () => {
-    test('#00 => Start throws error', async () => {
-      const service = interpret(machine, {
-        context: { condition: false, iterator: 0 },
-        mode: 'strict',
-      });
-
-      unhandledRejection(service.start, val => {
-        if (val instanceof Error) {
-          expect(val.message).toBe(error);
-        }
-      });
-
-      await vi.advanceTimersByTimeAsync(TIME_TO_RINIT_SELF_COUNTER);
+    const service = interpret(machine, {
+      context: { condition: false, iterator: 0 },
+      mode: 'strict',
     });
+
+    const { unhandledRejection } = constructTests(vi, service);
+    test(...unhandledRejection(service.start, error));
   });
 });

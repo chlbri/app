@@ -1,6 +1,6 @@
 import { interpret } from '@bemedev/app';
 import { notU } from '@bemedev/app/utils';
-import { constructTests } from '#tester';
+import { constructTests } from '../../../constructTests.js';
 import _raw_machine from './sendToActions1.machine';
 
 vi.useFakeTimers();
@@ -46,6 +46,7 @@ describe('Performs send to itself actions', () => {
     );
   // #endregion
 
+  test(...useIterator());
   test(...start());
   test(...useStateValue('idle'));
   test(...send('NEXT'));

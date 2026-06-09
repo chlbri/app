@@ -10,8 +10,8 @@ declare module '@bemedev/app' {
       paths: {
         map: {
           targets: '/idle';
-          initial?: 'idle';
-          states?: {
+          initial: 'idle';
+          states: {
             idle: { targets: '/' };
           };
         };
@@ -29,60 +29,12 @@ declare module '@bemedev/app' {
       pContext: any;
     };
 
-    'src/__tests__/actions/actions.1.machine': {
-      paths: {
-        map: {
-          targets: '/state1' | '/state2';
-          initial?: 'state1';
-          states?: {
-            state1: { targets: '/' | '/state2' };
-            state2: { targets: '/' | '/state1' };
-          };
-        };
-        all: '/' | '/state1' | '/state2';
-      };
-      events: 'NEXT';
-      options: {
-        children: never;
-        emitters: never;
-        tags: never;
-        actions: 'action1';
-        delays: never;
-        guards: never;
-      };
-      pContext: any;
-    };
-
-    'src/__tests__/actions/actions.2.machine': {
-      paths: {
-        map: {
-          targets: '/state1' | '/state2';
-          initial?: 'state1';
-          states?: {
-            state1: { targets: '/' | '/state2' };
-            state2: { targets: '/' | '/state1' };
-          };
-        };
-        all: '/' | '/state1' | '/state2';
-      };
-      events: 'NEXT';
-      options: {
-        children: never;
-        emitters: never;
-        tags: never;
-        actions: 'action1';
-        delays: never;
-        guards: never;
-      };
-      pContext: any;
-    };
-
     'src/__tests__/actions/async-actions.1.machine': {
       paths: {
         map: {
           targets: '/idle';
-          initial?: 'idle';
-          states?: {
+          initial: 'idle';
+          states: {
             idle: { targets: '/' };
           };
         };
@@ -104,8 +56,8 @@ declare module '@bemedev/app' {
       paths: {
         map: {
           targets: '/idle';
-          initial?: 'idle';
-          states?: {
+          initial: 'idle';
+          states: {
             idle: { targets: '/' };
           };
         };
@@ -127,8 +79,8 @@ declare module '@bemedev/app' {
       paths: {
         map: {
           targets: '/idle';
-          initial?: 'idle';
-          states?: {
+          initial: 'idle';
+          states: {
             idle: { targets: '/' };
           };
         };
@@ -150,8 +102,8 @@ declare module '@bemedev/app' {
       paths: {
         map: {
           targets: '/idle';
-          initial?: 'idle';
-          states?: {
+          initial: 'idle';
+          states: {
             idle: { targets: '/' };
           };
         };
@@ -163,6 +115,82 @@ declare module '@bemedev/app' {
         emitters: never;
         tags: never;
         actions: 'ping';
+        delays: never;
+        guards: never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/interpreters/common.machine': {
+      paths: {
+        map: {
+          targets:
+            | '/idle'
+            | '/active'
+            | '/active/speed_low'
+            | '/active/speed_high'
+            | '/final';
+          initial: 'idle';
+          states: {
+            active: {
+              targets:
+                | '/'
+                | '/idle'
+                | '/active/speed_low'
+                | '/active/speed_high'
+                | '/final';
+              initial: 'speed_low';
+              states: {
+                speed_high: {
+                  targets:
+                    | '/'
+                    | '/idle'
+                    | '/active'
+                    | '/active/speed_low'
+                    | '/final';
+                };
+                speed_low: {
+                  targets:
+                    | '/'
+                    | '/idle'
+                    | '/active'
+                    | '/active/speed_high'
+                    | '/final';
+                };
+              };
+            };
+            final: {
+              targets:
+                | '/'
+                | '/idle'
+                | '/active'
+                | '/active/speed_low'
+                | '/active/speed_high';
+            };
+            idle: {
+              targets:
+                | '/'
+                | '/active'
+                | '/active/speed_low'
+                | '/active/speed_high'
+                | '/final';
+            };
+          };
+        };
+        all:
+          | '/'
+          | '/idle'
+          | '/active'
+          | '/active/speed_low'
+          | '/active/speed_high'
+          | '/final';
+      };
+      events: 'START' | 'INC' | 'ACCELERATE' | 'STOP' | 'DECELERATE';
+      options: {
+        children: never;
+        emitters: never;
+        tags: 'idle_tag' | 'active_tag' | 'low_tag' | 'high_tag';
+        actions: 'increment';
         delays: never;
         guards: never;
       };
