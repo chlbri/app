@@ -3,7 +3,6 @@ packages:
   - "packages/vitest"
   - "packages/__tests__/project1"
   - "packages/solidjs"
-  - "packages/solidjs-vitest"
   - "packages/utils/bemedev"
   - "packages/utils/vitest"
 
@@ -15,4 +14,4 @@ nodeLinker: hoisted
 minimumReleaseAge: 300
 
 minimumReleaseAgeExclude:
-  - '@bemedev/dev-utils@0.8.0'
+  - "@bemedev/dev-utils@0.8.0"

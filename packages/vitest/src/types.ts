@@ -1,18 +1,18 @@
-import type {
-  ActorsConfigMap,
-  CommonConfig3,
-  CommonInterpreter,
-  EventsMap,
-  PrimitiveObject,
-  SimpleMachineOptions2,
-} from '@bemedev/app/types';
 import type { Equals, Fn } from '@bemedev/app/bemedev';
 import type {
+  ActorsConfigMap,
+  AsyncInterpreter,
+  CommonConfig3,
   EmptyObject,
   EventArgObject,
   EventObject,
+  EventsMap,
   ExtractSender,
+  MachineType,
+  PrimitiveObject,
+  SimpleMachineOptions2,
   StateValue,
+  SyncInterpreter,
 } from '@bemedev/app/types';
 import type { ProcessEventMap } from 'process';
 
@@ -86,12 +86,16 @@ export type Option<
   Eo extends EventObject = EventObject,
   AllPaths extends string = string,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Type extends MachineType = 'async',
 > = {
   waiter: ConstructWaiter_F;
   contexts: ConstructContexts_F<Pc, Tc>;
   getIndex: (_index?: number) => string;
   tupleOf: OptionTupleOf;
-  service: CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
+  service: Type extends 'async'
+    ? SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>
+    : AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>;
 
   sender: <const T extends Eo['type']>(
     type: T,

@@ -28,6 +28,20 @@ export type ConstructTests_F = <
   service:
     | SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>
     | AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>,
-  helper?: (option: Option<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>) => T,
+  helper?: (
+    option: Option<
+      C,
+      Pc,
+      Tc,
+      E,
+      A,
+      Ta,
+      Eo,
+      AllPaths,
+      Mo,
+      L,
+      (typeof service)['TYPE']
+    >,
+  ) => T,
   startIndex?: number,
 ) => ConstructTestsResult<Eo, T, Ta>;
