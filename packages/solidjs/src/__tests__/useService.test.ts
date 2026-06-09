@@ -30,7 +30,9 @@ describe('Integration with @bemedev/app machine and interpret', () => {
 
     test('#006 => sends INC event', () => service.send('INC'));
     test('#007 => count should be 1', () => expect(count()).toBe(1));
-    test('#008 => stops the service', service.stop);
-    test('#009 => disposes the root context', dispose);
+    test('#008 => sends INC event', () => service.send('INC'));
+    test('#009 => count should be 1', () => expect(count()).toBe(2));
+    test('#010 => stops the service', service.stop);
+    test('#011 => disposes the root context', dispose);
   });
 });
