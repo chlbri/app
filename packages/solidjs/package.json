@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-solidjs",
-  "version": "0.1.0",
+  "version": "1.2.4",
   "description": "Middleware between @bemedev/app-ts and solidjs",
   "keywords": [
     "app",

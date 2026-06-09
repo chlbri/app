@@ -7,7 +7,7 @@ describe('Machines', () => {
   describe('trafficLightMachine', () => {
     const service = interpret(trafficLightMachine);
 
-    const { start, send, stop, useStateValue } = constructTests(service);
+    const { start, send, stop, useStateValue } = constructTests(vi, service);
 
     test(...start());
     test(...useStateValue('red'));
@@ -22,7 +22,7 @@ describe('Machines', () => {
 
   describe('toggleMachine', () => {
     const service = interpret(toggleMachine);
-    const { start, send, stop, useStateValue } = constructTests(service);
+    const { start, send, stop, useStateValue } = constructTests(vi, service);
 
     test(...start());
     test(...useStateValue('off'));

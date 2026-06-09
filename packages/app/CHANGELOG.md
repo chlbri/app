@@ -11,6 +11,33 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.2.4] - 09/06/2026** => _19:38_
+
+</summary>
+
+### Features
+
+- **Machine Property**: Add `machine` getter to `CommonInterpreter` class
+  returning the underlying machine instance
+
+### Refactor
+
+- **Centralized Constants**: Move `TIME_TO_RINIT_SELF_COUNTER` constant
+  from interpreter modules to centralized
+  `packages/app/src/constants/numbers.ts` file
+- **Interpreter Generics**: Refactor `constructTests` utility signature in
+  fixtures to accept `SyncInterpreter` or `AsyncInterpreter` with explicit
+  type parameters, improving type safety and inference
+
+- <u>Test coverage **_99.89%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.2] - 08/06/2026** => _22:15_
 
 </summary>

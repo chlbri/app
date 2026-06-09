@@ -49,8 +49,6 @@ import type {
  */
 export type _TransitionConfigMap<Paths = string> = {
   readonly target?: Paths;
-  // readonly internal?: boolean;
-  //TODO: No extrakeys for guards and actions
   readonly actions?: SingleOrArrayL<WithDescriber>;
   readonly guards?: SingleOrArrayL<GuardConfig>;
   readonly description?: string;

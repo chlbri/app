@@ -5,6 +5,39 @@
 <details>
 <summary>
 
+## **[1.2.4] - 09/06/2026** => _19:38_
+
+</summary>
+
+### Features
+
+- **Service Exposer**: Update `constructTests` utility options parameter to
+  expose `service` directly in the callback helper, allowing custom helpers
+  to access the interpreter service instance
+
+### Refactor
+
+- **Strict Interpreters**: Replace `CommonInterpreter` usages with explicit
+  `SyncInterpreter` or `AsyncInterpreter` in `ConstructTests_F` and options
+  parameters for better type safety
+- **Console Mocking Removal**: Remove unused `mockConsole` test helper
+  utility from helper modules
+
+### Tests
+
+- **Index Generation**: Add unit test suite for `buildIndex` helper
+- **Integration Expansion**: Add integration test coverage for `exceed`
+  self transitions limits and various `constructTests` configurations
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.2] - 08/06/2026** => _22:15_
 
 </summary>

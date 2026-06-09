@@ -147,8 +147,8 @@ importers:
         specifier: workspace:^
         version: link:../../app
       '@bemedev/app-vitest':
-        specifier: ^1.2.2
-        version: 1.2.2(@bemedev/app@packages+app)(@bemedev/typings@1.2.0)(vitest@4.1.8)
+        specifier: workspace:^
+        version: link:../../vitest
       tsx:
         specifier: ^4.22.4
         version: 4.22.4
@@ -673,14 +673,6 @@ packages:
   '@bcoe/v8-coverage@1.0.2':
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
-
-  '@bemedev/app-vitest@1.2.2':
-    resolution: {integrity: sha512-YOA+oQhJ1Ocy0qHnei/48mCvztexcNOQDIBAqrz4OeY/zstaQPCAyRKKvO6O/CHmdbsREBNScol1zfEkdoppUw==}
-    engines: {node: '>=24'}
-    peerDependencies:
-      '@bemedev/app': ^1.2.2
-      '@bemedev/typings': ^1.2.0
-      vitest: ^4.1.8
 
   '@bemedev/better-promise@0.1.1':
     resolution: {integrity: sha512-+4i7ktfladsdRMOcri4K28iqzKzbkrRpbMQlqUa6XGhdTBZj0prv2dPD5NB91406Cj7Nml04OHdt9IMe0BUxrA==}
@@ -3211,12 +3203,6 @@ snapshots:
       '@babel/helper-validator-identifier': 8.0.0-rc.6
 
   '@bcoe/v8-coverage@1.0.2': {}
-
-  '@bemedev/app-vitest@1.2.2(@bemedev/app@packages+app)(@bemedev/typings@1.2.0)(vitest@4.1.8)':
-    dependencies:
-      '@bemedev/app': link:packages/app
-      '@bemedev/typings': 1.2.0
-      vitest: 4.1.8(@types/node@25.9.2)(@vitest/coverage-v8@4.1.8)(@vitest/ui@4.1.8)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.2)(esbuild@0.28.0)(tsx@4.22.4))
 
   '@bemedev/better-promise@0.1.1': {}
 

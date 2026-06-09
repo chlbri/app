@@ -1,7 +1,7 @@
 import { interpret } from '@bemedev/app';
 import { createRoot } from 'solid-js';
 import { describe, expect, test } from 'vitest';
-import { useService } from '../index';
+import { useService } from '../useService';
 import _machine from './common.machine';
 
 describe('Integration with @bemedev/app machine and interpret', () => {
@@ -18,6 +18,19 @@ describe('Integration with @bemedev/app machine and interpret', () => {
   createRoot(dispose => {
     const count = useService(service, s => s.context.count);
     const value = useService(service, s => s.value);
+    const all = useService(service);
+
+    test('#000 => ALL, service not started yet', () => {
+      const expected = {
+        status: 'starting',
+        context: { count: 0 },
+        event: { type: 'machine$$init', payload: {} },
+        value: 'idle',
+        tags: ['idle_tag'],
+      };
+
+      expect(all()).toEqual(expected);
+    });
 
     test('#001 => count should be 0', () => expect(count()).toBe(0));
     test('#002 => state is "idle"', () => expect(value()).toBe('idle'));

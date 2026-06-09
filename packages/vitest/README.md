@@ -3,8 +3,8 @@
 Declarative test sequence generator for `@bemedev/app` state machines
 inside **Vitest**.
 
-`@bemedev/app-vitest` allows you to express your state machine integration
-tests as a list of sequentially run, declarative test tuples, removing the
+`@bemedev/app-vitest` allows you to write state machine integration tests
+as a list of sequentially run, declarative test assertions, removing the
 boilerplate of manual await-tick-assert cycles.
 
 <br/>
@@ -12,9 +12,9 @@ boilerplate of manual await-tick-assert cycles.
 ## Installation
 
 ```bash
-npm install @bemedev/app-vitest
+npm install @bemedev/app-vitest --save-dev
 # or
-pnpm add @bemedev/app-vitest
+pnpm add @bemedev/app-vitest -D
 ```
 
 > **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 1.2.0 · Vitest ≥ 4.0.0
@@ -50,14 +50,15 @@ describe('My Machine Integration', () => {
 
 ### `constructTests(vi, service, helper?, startIndex?)`
 
-| Parameter    | Type          | Description                                                                                    |
-| ------------ | ------------- | ---------------------------------------------------------------------------------------------- |
-| `vi`         | `VitestUtils` | The Vitest `vi` utility object (required for fake timer management).                           |
-| `service`    | `Interpreter` | The interpreter service instance under test.                                                   |
-| `helper`     | `Function`    | Optional callback to define custom helpers (e.g. context selector assertions, custom senders). |
-| `startIndex` | `number`      | Optional starting sequence index (defaults to `0`).                                            |
+| Parameter    | Type          | Description                                                                                   |
+| ------------ | ------------- | --------------------------------------------------------------------------------------------- |
+| `vi`         | `VitestUtils` | The Vitest `vi` utility object (required for fake timer management).                          |
+| `service`    | `Interpreter` | The interpreter service instance under test (Sync or Async).                                  |
+| `helper`     | `Function`    | Optional callback to define custom helpers (e.g. context assertions or custom event senders). |
+| `startIndex` | `number`      | Optional starting sequence index (defaults to `0`).                                           |
 
-Returns an object containing built-in test-assert tuple functions:
+Returns an object containing built-in assertions and any custom helpers
+returned by the `helper` callback.
 
 #### Built-in Assertion Helpers
 
@@ -65,26 +66,28 @@ Every function returns a `TestArr` (tuple of
 `[inviteString, testCallback]`) designed to be spread directly into
 Vitest's `test(...)` function:
 
-- **`start(index?)`**: Asserts that the service starts successfully and
-  enters its initial state.
-- **`stop(index?)`**: Asserts that the service stops cleanly.
-- **`dispose(index?)`**: Asserts that the service is disposed cleanly.
-- **`pause(index?)`**: Pauses all active timers and activities.
-- **`resume(index?)`**: Resumes all paused timers and activities.
+- **`start(index?)`**: Starts the service and awaits initial task
+  settlement.
+- **`stop(index?)`**: Stops the service cleanly.
+- **`dispose(index?)`**: Alias for `stop(index?)`.
+- **`pause(index?)`**: Pauses the interpreter service activities and
+  timers.
+- **`resume(index?)`**: Resumes the interpreter service.
+- **`send(event, index?)`**: Sends an event to the service and awaits
+  transition settlement.
 - **`useStateValue(value, index?)`**: Asserts that the current active state
   value matches `value`.
-- **`send(event, index?)`**: Sends an event to the service and waits for
-  the transition to settle.
 - **`useTags(...tags)`**: Asserts that the current state carries the
   specified active tags.
 - **`useWarnings(...warnings)`**: Asserts that the service has logged the
-  specified warning messages in its internal warning collector.
+  specified warning messages in its warning collector.
 - **`useErrors(...errors)`**: Asserts that the service has logged the
-  specified error messages in its internal error collector.
+  specified error messages in its error collector.
 - **`changeIndex(fn)`**: Modifies the running test sequence index
   dynamically.
-- **`unhandledRejection(testFn, error, timeout?)`**: Asserts that the
-  asynchronous callback `testFn` rejects with the expected `error` message.
+- **`unhandledRejection(testFn, error, timeout?)`**: Asserts that running
+  `testFn` rejects with the expected `error` message (setup for
+  `unhandledRejection` and `uncaughtException`).
 
 ---
 
@@ -97,7 +100,7 @@ factories to create customized, type-safe assertions:
 const { wait, sendFetch, checkCount } = constructTests(
   vi,
   service,
-  ({ waiter, sender, contexts }) => ({
+  ({ waiter, sender, contexts, service }) => ({
     // 1. A custom delay helper (automatically advances fake timers if active)
     wait: waiter(500),
 
@@ -112,6 +115,8 @@ const { wait, sendFetch, checkCount } = constructTests(
 
 #### Helper Factories:
 
+- **`service`**: The underlying interpreter service instance (Sync or
+  Async) under test.
 - **`waiter(defaultDelay?)`**: Returns a function to wait for a delay in
   milliseconds. If Vitest fake timers are active, it automatically advances
   them using `vi.advanceTimersByTimeAsync()`.
