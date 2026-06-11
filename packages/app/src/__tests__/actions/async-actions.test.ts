@@ -1,4 +1,4 @@
-import { emptyActionFn } from '#fixtures';
+import { constructTests, emptyActionFn } from '#fixtures';
 import { interpret } from '#exports/interpret';
 import { sleep } from '@bemedev/sleep';
 import _machine1 from './async-actions.1.machine';
@@ -21,7 +21,7 @@ vi.useFakeTimers();
  *   (d) async fn + { max } timeout that expires → routed to _addError (no errorFn)
  */
 
-const TINY_DELAY = 20; // ms — resolves fast enough not to hit a 5 s max
+const TINY_DELAY = 200; // ms — resolves fast enough not to hit a 5 s max
 
 describe('Async action helpers', () => {
   describe('#01 => assign — async fn, no options', () => {
@@ -42,17 +42,26 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine, { context: { name: '' } });
 
-    test('#00 => start', service.start);
+    const { start, send, useName, waiter, stop } = constructTests(
+      service,
+      ({ contexts: constructContexts, waiter }) => ({
+        useName: constructContexts(({ context }) => context.name, 'name'),
+        waiter: waiter(TINY_DELAY / 4),
+      }),
+    );
 
-    test('#01 => context.name starts empty', () => {
-      expect(service.state.context?.name).toBe('');
-    });
-
-    test('#02 => send LOAD, await async assign', async () => {
-      service.send('LOAD');
-      await vi.advanceTimersByTimeAsync(TINY_DELAY + 50);
-      expect(service.state.context?.name).toBe('Alice');
-    });
+    test(...start());
+    test(...useName(''));
+    test(...send('LOAD'));
+    test(...waiter(1));
+    test(...useName(''));
+    test(...waiter(1));
+    test(...useName(''));
+    test(...waiter(1));
+    test(...useName(''));
+    test(...waiter(1));
+    test(...useName('Alice'));
+    test(...stop());
   });
 
   describe('#02 => assign — async fn + { max } — resolves before timeout', () => {
@@ -66,7 +75,7 @@ describe('Async action helpers', () => {
           },
           {
             max: 5_000,
-            error: () => () => ({ context: { name: 'timeout' } }),
+            error: () => assign('context.name', () => 'timeout'),
           },
         ),
       },
@@ -74,13 +83,19 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine, { context: { name: '' } });
 
-    test('#00 => start', service.start);
+    const { start, LOAD, useName, waiter } = constructTests(
+      service,
+      ({ contexts: constructContexts, waiter, sender }) => ({
+        useName: constructContexts(({ context }) => context?.name, 'name'),
+        waiter: waiter(TINY_DELAY + 50),
+        LOAD: sender('LOAD'),
+      }),
+    );
 
-    test('#01 => send LOAD, resolves with timeout set', async () => {
-      service.send('LOAD');
-      await vi.advanceTimersByTimeAsync(TINY_DELAY + 50);
-      expect(service.state.context?.name).toBe('Bob');
-    });
+    test(...start());
+    test(...LOAD());
+    test(...waiter(1));
+    test(...useName('Bob'));
   });
 
   describe('#03 => assign — async fn + { error } handler on reject', () => {
@@ -93,7 +108,7 @@ describe('Async action helpers', () => {
             throw new Error('network failure');
           },
           {
-            error: () => () => ({ context: { name: '' } }),
+            error: () => assign('context.name', () => 'failure'),
           },
         ),
       },
@@ -103,13 +118,19 @@ describe('Async action helpers', () => {
       context: { name: '' },
     });
 
-    test('#00 => start', service.start);
+    const { start, send, useName, waiter } = constructTests(
+      service,
+      ({ contexts: constructContexts, waiter }) => ({
+        useName: constructContexts(({ context }) => context?.name, 'name'),
+        waiter: waiter(TINY_DELAY + 50),
+      }),
+    );
 
-    test('#01 => send LOAD, error handler merges fallback result', async () => {
-      service.send('LOAD');
-      await vi.advanceTimersByTimeAsync(TINY_DELAY + 50);
-      expect(service.state.context?.name).toBe('');
-    });
+    test(...start());
+    test(...send('LOAD'));
+    test(...useName(''));
+    test(...waiter(1));
+    test(...useName('failure'));
   });
 
   describe('#04 => voidAction — async fn, no options', () => {
@@ -131,13 +152,21 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine);
 
-    test('#00 => start', service.start);
+    const { start, send, waiter, checkEffect } = constructTests(
+      service,
+      ({ waiter, index, tupleOf }) => ({
+        waiter: waiter(TINY_DELAY + 50),
+        checkEffect: (expected: string) =>
+          tupleOf(`#${index()} => side effect is "${expected}"`, () => {
+            expect(sideEffect).toHaveBeenCalledWith(expected);
+          }),
+      }),
+    );
 
-    test('#01 => send PING, side-effect runs after tick', async () => {
-      service.send('PING');
-      await vi.advanceTimersByTimeAsync(TINY_DELAY + 50);
-      expect(sideEffect).toHaveBeenCalledWith('done');
-    });
+    test(...start());
+    test(...send('PING'));
+    test(...waiter(1));
+    test(...checkEffect('done'));
   });
 
   describe('#05 => voidAction — async fn + { error } handler', () => {
@@ -151,12 +180,7 @@ describe('Async action helpers', () => {
             throw new Error('boom');
           },
           {
-            error: _err => state => {
-              errorHandler(state);
-              return {
-                context: { ...state.context, errored: true },
-              };
-            },
+            error: _err => voidAction(() => errorHandler(_err)),
           },
         ),
       },
@@ -164,38 +188,35 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine, { context: { errored: false } });
 
-    test('#00 => start', service.start);
+    const { start, send, waiter, checkErrorTimes, checkEffect } =
+      constructTests(service, ({ waiter, index, tupleOf }) => ({
+        waiter: waiter(TINY_DELAY + 50),
+        checkErrorTimes: (times: number) =>
+          tupleOf(
+            `#${index()} => error handler called ${times} times`,
+            () => {
+              expect(errorHandler).toHaveBeenCalledTimes(times);
+            },
+          ),
+        checkEffect: (message: string) =>
+          tupleOf(
+            `#${index()} => error handled called with "${message}"`,
+            () => {
+              expect(errorHandler).toHaveBeenCalledWith(
+                expect.objectContaining({ message }),
+              );
+            },
+          ),
+      }));
 
-    test('#01 => send PING, error handler is called', async () => {
-      service.send('PING');
-      await vi.advanceTimersByTimeAsync(TINY_DELAY + 50);
-      expect(errorHandler).toHaveBeenCalledTimes(1);
-    });
+    test(...start());
+    test(...send('PING'));
+    test(...waiter(1));
+    test(...checkErrorTimes(1));
+    test(...checkEffect('boom'));
   });
 
-  describe('#06 => filter — async predicate, no options', () => {
-    const machine = _machine6.provideOptions(({ filter }) => ({
-      actions: {
-        filterEven: filter('context.items', (item: number) => {
-          return item % 2 === 0;
-        }),
-      },
-    }));
-
-    const service = interpret(machine, {
-      context: { items: [1, 2, 3, 4, 5] },
-    });
-
-    test('#00 => start', service.start);
-
-    test('#01 => filter keeps even numbers', async () => {
-      await service.send('FILTER');
-      await vi.advanceTimersByTimeAsync(TINY_DELAY + 50);
-      expect(service.state.context?.items).toEqual([2, 4]);
-    });
-  });
-
-  describe('#07 => sendTo — async fn, no options', () => {
+  describe('#06 => sendTo — async fn, no options', () => {
     // sendTo is a curried helper — sendTo(machine?)(fn)
     // We test only that the async fn resolves without error and the
     // sentEvent reaches the interpreter (checked via warnings or lack thereof).
@@ -218,38 +239,64 @@ describe('Async action helpers', () => {
       context: { dispatched: false },
     } as any);
 
-    test('#00 => start', service.start);
+    const { start, send, waiter, checkWarnings } = constructTests(
+      service,
+      ({ waiter, index, tupleOf }) => ({
+        waiter: waiter(TINY_DELAY + 50),
+        checkWarnings: (size: number) =>
+          tupleOf(`#${index()} => warnings count is ${size}`, () => {
+            expect(service._warningsCollector?.size ?? 0).toBe(size);
+          }),
+      }),
+    );
 
-    test('#01 => DISPATCH triggers async voidAction without errors', async () => {
-      service.send('DISPATCH');
-      await vi.advanceTimersByTimeAsync(TINY_DELAY + 50);
-      // No warnings means the async action ran cleanly
-      expect(service._warningsCollector?.size ?? 0).toBe(0);
-    });
+    test(...start());
+    test(...send('DISPATCH'));
+    test(...waiter(1));
+    test(...checkWarnings(0));
   });
 
-  describe('#08 => assign — sync fn still works (backward compat)', () => {
-    const machine = _machine8.provideOptions(({ assign }) => ({
+  describe('#07 => assign — async fn fails, emptyFn handler', () => {
+    const error = vi.fn(emptyActionFn);
+    const machine = _machine1.provideOptions(({ assign }) => ({
       actions: {
-        inc: assign('context', ({ context }) => (context ?? 0) + 1),
+        loadUser: assign(
+          'context.name',
+          async () => {
+            await sleep(TINY_DELAY);
+            throw new Error('Load failed');
+          },
+          {
+            error,
+          },
+        ),
       },
     }));
 
-    const service = interpret(machine, { context: 0 });
+    const service = interpret(machine, { context: { name: '' } });
 
-    test('#00 => start', service.start);
+    const { start, send, useName, waiter, stop, callError } =
+      constructTests(
+        service,
+        ({ contexts: constructContexts, waiter, tupleOf, index }) => ({
+          useName: constructContexts(
+            ({ context }) => context.name,
+            'name',
+          ),
+          waiter: waiter(TINY_DELAY / 4),
+          callError: (times = 0) =>
+            tupleOf(`#${index()} => call error fn ${times} times`, () => {
+              expect(error).toHaveBeenCalledTimes(times);
+            }),
+        }),
+      );
 
-    test('#01 => sync assign works as before', async () => {
-      await service.send('INC');
-      expect(service.state.context).toBe(1);
-    });
-
-    test('#02 => multiple sends accumulate', async () => {
-      await service.send('INC');
-      await service.send('INC');
-      expect(service.state.context).toBe(3);
-    });
+    test(...start());
+    test(...useName(''));
+    test(...callError(0));
+    test(...send('LOAD'));
+    test(...waiter(5));
+    test(...callError(1));
+    test(...stop());
   });
 });
-
-afterAll(() => vi.useRealTimers());

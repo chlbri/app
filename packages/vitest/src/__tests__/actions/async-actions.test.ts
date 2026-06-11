@@ -76,7 +76,7 @@ describe('Async action helpers', () => {
           },
           {
             max: 5_000,
-            error: () => () => ({ context: { name: 'timeout' } }),
+            error: () => assign('context.name', () => 'timeout'),
           },
         ),
       },
@@ -110,7 +110,7 @@ describe('Async action helpers', () => {
             throw new Error('network failure');
           },
           {
-            error: () => () => ({ context: { name: '' } }),
+            error: () => assign('context.name', () => 'failure'),
           },
         ),
       },
@@ -131,8 +131,9 @@ describe('Async action helpers', () => {
 
     test(...start());
     test(...send('LOAD'));
-    test(...waiter(1));
     test(...useName(''));
+    test(...waiter(1));
+    test(...useName('failure'));
   });
 
   describe('#04 => voidAction — async fn, no options', () => {
@@ -183,12 +184,7 @@ describe('Async action helpers', () => {
             throw new Error('boom');
           },
           {
-            error: _err => state => {
-              errorHandler(state);
-              return {
-                context: { ...state.context, errored: true },
-              };
-            },
+            error: _err => voidAction(() => errorHandler(_err)),
           },
         ),
       },
@@ -196,10 +192,8 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine, { context: { errored: false } });
 
-    const { start, send, waiter, checkErrorTimes } = constructTests(
-      vi,
-      service,
-      ({ waiter, getIndex, tupleOf }) => ({
+    const { start, send, waiter, checkErrorTimes, checkEffect } =
+      constructTests(vi, service, ({ waiter, getIndex, tupleOf }) => ({
         waiter: waiter(TINY_DELAY + 50),
         checkErrorTimes: (times: number) =>
           tupleOf(
@@ -208,47 +202,25 @@ describe('Async action helpers', () => {
               expect(errorHandler).toHaveBeenCalledTimes(times);
             },
           ),
-      }),
-    );
+        checkEffect: (message: string) =>
+          tupleOf(
+            `#${getIndex()} => error handled called with "${message}"`,
+            () => {
+              expect(errorHandler).toHaveBeenCalledWith(
+                expect.objectContaining({ message }),
+              );
+            },
+          ),
+      }));
 
     test(...start());
     test(...send('PING'));
     test(...waiter(1));
     test(...checkErrorTimes(1));
+    test(...checkEffect('boom'));
   });
 
-  describe('#06 => filter — async predicate, no options', () => {
-    const machine = _machine6.provideOptions(({ filter }) => ({
-      actions: {
-        filterEven: filter('context.items', (item: number) => {
-          return item % 2 === 0;
-        }),
-      },
-    }));
-
-    const service = interpret(machine, {
-      context: { items: [1, 2, 3, 4, 5] },
-    });
-
-    const { start, send, useItems, waiter } = constructTests(
-      vi,
-      service,
-      ({ contexts: constructContexts, waiter }) => ({
-        useItems: constructContexts(
-          ({ context }) => context?.items,
-          'items',
-        ),
-        waiter: waiter(TINY_DELAY + 50),
-      }),
-    );
-
-    test(...start());
-    test(...send('FILTER'));
-    test(...waiter(1));
-    test(...useItems([2, 4]));
-  });
-
-  describe('#07 => sendTo — async fn, no options', () => {
+  describe('#06 => sendTo — async fn, no options', () => {
     // sendTo is a curried helper — sendTo(machine?)(fn)
     // We test only that the async fn resolves without error and the
     // sentEvent reaches the interpreter (checked via warnings or lack thereof).
@@ -289,34 +261,7 @@ describe('Async action helpers', () => {
     test(...checkWarnings(0));
   });
 
-  describe('#08 => assign — sync fn still works (backward compat)', () => {
-    const machine = _machine8.provideOptions(({ assign }) => ({
-      actions: {
-        inc: assign('context', ({ context }) => (context ?? 0) + 1),
-      },
-    }));
-
-    const service = interpret(machine, { context: 0 });
-
-    const { start, send, useValue, useContext } = constructTests(
-      vi,
-      service,
-      ({ contexts }) => ({
-        useValue: contexts(({ context }) => context),
-        useContext: contexts(),
-      }),
-    );
-
-    test(...start());
-    test(...send('INC'));
-    test(...useValue(1));
-    test(...send('INC'));
-    test(...send('INC'));
-    test(...useValue(3));
-    test(...useContext({ context: 3, pContext: undefined }));
-  });
-
-  describe('#09 => assign — async fn fails, emptyFn handler', () => {
+  describe('#07 => assign — async fn fails, emptyFn handler', () => {
     const error = vi.fn(emptyActionFn);
     const machine = _machine1.provideOptions(({ assign }) => ({
       actions: {

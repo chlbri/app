@@ -5,6 +5,7 @@ import type { StateExtended } from '#states';
 import { reduceFnMap } from '#utils';
 import { isDefined } from '@bemedev/app-utils-bemedev';
 import recursive, { type GuardDefUnion } from '@bemedev/boolean-recursive';
+import asyncRecursive from '@bemedev/boolean-recursive/async';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { isDescriber, isString } from '~types';
 import type { AsyncPredicateS3, PredicateMap } from '../types';
