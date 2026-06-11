@@ -13,3 +13,5 @@ export const defaultT = {
 } as const;
 
 export const emptyFn = () => {};
+
+export const emptyActionFn = () => () => ({});

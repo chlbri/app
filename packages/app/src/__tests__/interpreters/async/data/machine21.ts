@@ -1,4 +1,4 @@
-import { emptyFn } from '#fixtures';
+import { emptyActionFn } from '#fixtures';
 import { interpret } from '#exports/interpret';
 import { createMachine } from '#exports/createMachine';
 import { notU, typings } from '#utils';
@@ -144,7 +144,7 @@ export const machine21 = createMachine(
       send: sendTo(machine1)(
         async () => ({ to: 'machine1', event: 'NEXT' }),
         {
-          error: emptyFn,
+          error: emptyActionFn,
         },
       ),
       insertData: assign('context.data', ({ context }) =>

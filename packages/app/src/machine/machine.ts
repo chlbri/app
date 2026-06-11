@@ -191,8 +191,12 @@ export class AsyncMachine<
               }
               return await execute();
             } catch (e: any) {
-              const rawResult = errorFn({ ...state, payload: e, ...rest });
-              return recompose({ [key]: rawResult });
+              const errorAction = errorFn(e);
+              return await errorAction({
+                ...state,
+                event,
+                ...rest,
+              } as any);
             }
           };
         },
@@ -464,14 +468,13 @@ export class AsyncMachine<
           }
           return await execute();
         } catch (e: any) {
-          errorFn({
+          const errorAction = errorFn(e);
+          return await errorAction({
             context,
             pContext,
-            payload: e,
+            event,
             ...rest,
-          });
-
-          return out;
+          } as any);
         }
       };
     };
@@ -530,14 +533,13 @@ export class AsyncMachine<
         }
         return await execute();
       } catch (e: any) {
-        errorFn({
+        const errorAction = errorFn(e);
+        return await errorAction({
           context,
           pContext,
-          payload: e,
+          event,
           ...rest,
-        });
-
-        return out;
+        } as any);
       }
     };
   };

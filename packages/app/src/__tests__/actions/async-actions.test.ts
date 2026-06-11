@@ -1,4 +1,4 @@
-import { emptyFn } from '#fixtures';
+import { emptyActionFn } from '#fixtures';
 import { interpret } from '#exports/interpret';
 import { sleep } from '@bemedev/sleep';
 import _machine1 from './async-actions.1.machine';
@@ -34,7 +34,7 @@ describe('Async action helpers', () => {
             return 'Alice';
           },
           {
-            error: emptyFn,
+            error: emptyActionFn,
           },
         ),
       },
@@ -64,7 +64,10 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             return 'Bob';
           },
-          { max: 5_000, error: () => 'timeout' },
+          {
+            max: 5_000,
+            error: () => () => ({ context: { name: 'timeout' } }),
+          },
         ),
       },
     }));
@@ -90,7 +93,7 @@ describe('Async action helpers', () => {
             throw new Error('network failure');
           },
           {
-            error: () => '',
+            error: () => () => ({ context: { name: '' } }),
           },
         ),
       },
@@ -120,7 +123,7 @@ describe('Async action helpers', () => {
             sideEffect('done');
           },
           {
-            error: emptyFn,
+            error: emptyActionFn,
           },
         ),
       },
@@ -148,7 +151,7 @@ describe('Async action helpers', () => {
             throw new Error('boom');
           },
           {
-            error: state => {
+            error: _err => state => {
               errorHandler(state);
               return {
                 context: { ...state.context, errored: true },
@@ -205,7 +208,7 @@ describe('Async action helpers', () => {
             // side-effect only: proves async voidAction still works here
           },
           {
-            error: emptyFn,
+            error: emptyActionFn,
           },
         ),
       },

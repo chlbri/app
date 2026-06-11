@@ -1,4 +1,4 @@
-import { emptyFn } from '#fixtures';
+import { emptyActionFn } from '#fixtures';
 import { createMachine } from '#exports/createMachine';
 import { type, type inferO } from '@bemedev/typings';
 import isOnline from 'is-online';
@@ -160,7 +160,7 @@ export default createMachine(
     setOnlineStatus: assign(
       'context.internetStatus',
       () => isOnline({ timeout: CHECK_DELAY / 2 }),
-      { error: emptyFn },
+      { error: emptyActionFn },
     ),
 
     addIntermediary: assign(
@@ -171,7 +171,7 @@ export default createMachine(
           context: { intermediaries = [] },
         }) => [...intermediaries, payload],
       },
-      { error: emptyFn },
+      { error: emptyActionFn },
     ),
 
     'error.addIntermediary': assign(

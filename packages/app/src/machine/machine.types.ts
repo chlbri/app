@@ -1,7 +1,6 @@
 import type { AsyncAction2 } from '#actions';
 
 import type { DefinedValue } from '#guards';
-import type { StatePextended } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 
 import type { EventsMapFrom } from '#common/interpreter';
@@ -30,13 +29,12 @@ import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
  *   `TimeoutPromise`. When omitted, no timeout is applied.
  */
 export type AsyncOptions<
-  Err extends PrimitiveObject = PrimitiveObject,
+  Eo extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  R = any,
 > = {
-  error: (state: StatePextended<Err, Pc, Tc, T>) => R;
+  error: ErrorFn<Eo, Pc, Tc, T>;
   max?: number;
 };
 
@@ -59,13 +57,10 @@ export type AsyncAssignAction_F<
   >,
   K extends keyof D = keyof D,
   F extends D[K] | Promise<D[K]> = D[K] | Promise<D[K]>,
-  Err extends PrimitiveObject = PrimitiveObject,
 >(
   key: K,
   fn: FnMap<E, Pc, Tc, T, F>,
-  ...args: F extends Promise<D[K]>
-    ? [AsyncOptions<Err, Pc, Tc, T, D[K] | void>]
-    : []
+  ...args: F extends Promise<D[K]> ? [AsyncOptions<E, Pc, Tc, T>] : []
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncResendAction_F<
@@ -87,14 +82,9 @@ export type AsyncVoidAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <
-  F extends void | Promise<void> = void | Promise<void>,
-  Err extends PrimitiveObject = PrimitiveObject,
->(
+> = <F extends void | Promise<void> = void | Promise<void>>(
   fn: FnMap<E, Pc, Tc, T, F>,
-  ...args: F extends Promise<void>
-    ? [AsyncOptions<Err, Pc, Tc, T, void>]
-    : []
+  ...args: F extends Promise<void> ? [AsyncOptions<E, Pc, Tc, T>] : []
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncFilterAction_F<
@@ -146,14 +136,13 @@ export type AsyncSendAction_F<
     | Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }> =
     | { to: string; event: EventArg<EventsMapFrom<M>> }
     | Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }>,
-  Err extends PrimitiveObject = PrimitiveObject,
 >(
   fn: FnMap<E, Pc, Tc, T, F>,
   ...args: F extends Promise<{
     to: string;
     event: EventArg<EventsMapFrom<M>>;
   }>
-    ? [AsyncOptions<Err, Pc, Tc, T, void>]
+    ? [AsyncOptions<E, Pc, Tc, T>]
     : []
 ) => AsyncAction2<E, Pc, Tc, T>;
 

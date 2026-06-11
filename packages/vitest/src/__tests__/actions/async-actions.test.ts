@@ -1,6 +1,6 @@
 import { interpret, sleep } from '@bemedev/app';
 import { constructTests } from '../../constructTests.js';
-import { emptyFn } from '../../constants';
+import { emptyActionFn } from '../../constants';
 import _machine1 from './async-actions.1.machine';
 import _machine2 from './async-actions.2.machine';
 import _machine3 from './async-actions.3.machine';
@@ -34,7 +34,7 @@ describe('Async action helpers', () => {
             return 'Alice';
           },
           {
-            error: emptyFn,
+            error: emptyActionFn,
           },
         ),
       },
@@ -74,7 +74,10 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             return 'Bob';
           },
-          { max: 5_000, error: () => 'timeout' },
+          {
+            max: 5_000,
+            error: () => () => ({ context: { name: 'timeout' } }),
+          },
         ),
       },
     }));
@@ -107,7 +110,7 @@ describe('Async action helpers', () => {
             throw new Error('network failure');
           },
           {
-            error: () => '',
+            error: () => () => ({ context: { name: '' } }),
           },
         ),
       },
@@ -143,7 +146,7 @@ describe('Async action helpers', () => {
             sideEffect('done');
           },
           {
-            error: emptyFn,
+            error: emptyActionFn,
           },
         ),
       },
@@ -180,7 +183,7 @@ describe('Async action helpers', () => {
             throw new Error('boom');
           },
           {
-            error: state => {
+            error: _err => state => {
               errorHandler(state);
               return {
                 context: { ...state.context, errored: true },
@@ -258,7 +261,7 @@ describe('Async action helpers', () => {
             // side-effect only: proves async voidAction still works here
           },
           {
-            error: emptyFn,
+            error: emptyActionFn,
           },
         ),
       },
@@ -314,7 +317,7 @@ describe('Async action helpers', () => {
   });
 
   describe('#09 => assign — async fn fails, emptyFn handler', () => {
-    const error = vi.fn(emptyFn);
+    const error = vi.fn(emptyActionFn);
     const machine = _machine1.provideOptions(({ assign }) => ({
       actions: {
         loadUser: assign(

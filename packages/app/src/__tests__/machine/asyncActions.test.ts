@@ -14,7 +14,8 @@ describe('Machine createOptions - error handlers', () => {
     const theError = 'assign error';
 
     describe('#01 => calls errorFn when fn throws', () => {
-      const errorFn = vi.fn((state: any) => state);
+      const errorAction = vi.fn((state: any) => state);
+      const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine1.provideOptions(({ assign }) => ({
         actions: {
@@ -48,22 +49,26 @@ describe('Machine createOptions - error handlers', () => {
       });
 
       test('#04 => errorFn receives the thrown error as first arg', () => {
-        expect(errorFn).toHaveBeenCalledWith({
+        expect(errorFn).toHaveBeenCalledWith('assign error');
+      });
+
+      test('#05 => errorAction receives the extended state', () => {
+        expect(errorAction).toHaveBeenCalledWith({
           context: 42,
           pContext: undefined,
-          payload: 'assign error',
           status: 'busy',
           tags: undefined,
           value: 'idle',
+          event: { type: 'TEST', payload: {} },
         });
       });
     });
 
     describe('#02 => errorFn return value affects the state', () => {
-      const errorFn = vi.fn((state: any) => ({
-        ...state,
+      const errorAction = vi.fn((_state: any) => ({
         context: -1,
       }));
+      const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine2.provideOptions(({ assign }) => ({
         actions: {
@@ -83,14 +88,7 @@ describe('Machine createOptions - error handlers', () => {
 
       test('#01 => error handler modifies context', async () => {
         await service.send('TEST');
-        expect(service.context).toEqual({
-          context: -1,
-          pContext: undefined,
-          payload: 'assign error',
-          status: 'busy',
-          tags: undefined,
-          value: 'idle',
-        });
+        expect(service.context).toEqual(-1);
       });
 
       test('#02 => errorFn is called once', () => {
@@ -99,7 +97,8 @@ describe('Machine createOptions - error handlers', () => {
     });
 
     describe('#03 => with max defined, still calls errorFn when fn throws', () => {
-      const errorFn = vi.fn((state: any) => state);
+      const errorAction = vi.fn((state: any) => state);
+      const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine3.provideOptions(({ assign }) => ({
         actions: {
@@ -131,7 +130,8 @@ describe('Machine createOptions - error handlers', () => {
     const theError = 'void error';
 
     describe('#01 => calls errorFn when fn throws', () => {
-      const errorFn = vi.fn(() => theError);
+      const errorAction = vi.fn(() => ({}));
+      const errorFn = vi.fn(() => errorAction);
 
       const machine = _machine4.provideOptions(({ voidAction }) => ({
         actions: {
@@ -162,26 +162,25 @@ describe('Machine createOptions - error handlers', () => {
       });
 
       test('#04 => errorFn receives the thrown error as first arg', () => {
-        expect(errorFn).toHaveBeenCalledWith({
+        expect(errorFn).toHaveBeenCalledWith('void error');
+      });
+
+      test('#05 => errorAction receives extended state and returns empty object', () => {
+        expect(errorAction).toHaveBeenCalledWith({
           context: 10,
           pContext: undefined,
-          payload: 'void error',
           status: 'busy',
           tags: undefined,
           value: 'idle',
+          event: { type: 'TEST', payload: {} },
         });
-      });
-
-      test('#05 => errorFn receives context snapshot as second arg', () => {
-        expect(errorFn).toHaveReturnedWith(theError);
+        expect(errorAction).toHaveReturnedWith({});
       });
     });
 
     describe('#02 => errorFn return value affects the state', () => {
-      const errorFn = vi.fn((state: any) => ({
-        ...state,
-        context: -99,
-      }));
+      const errorAction = vi.fn((_state: any) => ({}));
+      const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine5.provideOptions(({ voidAction }) => ({
         actions: {
@@ -210,7 +209,8 @@ describe('Machine createOptions - error handlers', () => {
     });
 
     describe('#03 => with max defined, still calls errorFn when fn throws', () => {
-      const errorFn = vi.fn((state: any) => state);
+      const errorAction = vi.fn((state: any) => state);
+      const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine6.provideOptions(({ voidAction }) => ({
         actions: {
@@ -248,7 +248,7 @@ describe('Machine createOptions - error handlers', () => {
             {
               TEST: () => passFn(theData),
             },
-            { error: () => ({}), max: 5000 },
+            { error: () => () => ({}), max: 5000 },
           ),
         },
       }));
@@ -283,7 +283,8 @@ describe('Machine createOptions - error handlers', () => {
     };
 
     describe('#01 => calls errorFn when fn throws', () => {
-      const errorFn = vi.fn((state: any) => state);
+      const errorAction = vi.fn((state: any) => state);
+      const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine7.provideOptions(({ sendTo }) => {
         const _sendTo = sendTo();
@@ -317,19 +318,24 @@ describe('Machine createOptions - error handlers', () => {
       });
 
       test('#04 => errorFn receives the thrown error as first arg', () => {
-        expect(errorFn).toHaveBeenCalledWith(state);
+        expect(errorFn).toHaveBeenCalledWith('sendTo error');
       });
 
-      test('#05 => errorFn receives context snapshot as second arg', () => {
-        expect(errorFn).toHaveNthReturnedWith(1, state);
+      test('#05 => errorAction receives extended state', () => {
+        expect(errorAction).toHaveBeenCalledWith({
+          context: 5,
+          pContext: undefined,
+          status: 'busy',
+          tags: undefined,
+          value: 'idle',
+          event: { type: 'TEST', payload: {} },
+        });
       });
     });
 
     describe('#02 => errorFn return value affects the state', () => {
-      const errorFn = vi.fn((state: any) => ({
-        ...state,
-        context: 0,
-      }));
+      const errorAction = vi.fn((_state: any) => ({}));
+      const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine6.provideOptions(({ sendTo }) => ({
         actions: {
@@ -357,7 +363,8 @@ describe('Machine createOptions - error handlers', () => {
     });
 
     describe('#03 => with max defined, still calls errorFn when fn throws', () => {
-      const errorFn = vi.fn(() => payload);
+      const errorAction = vi.fn(() => ({}));
+      const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine5.provideOptions(({ sendTo }) => ({
         actions: {
@@ -382,8 +389,8 @@ describe('Machine createOptions - error handlers', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
 
-      test('#03 => errorFn receives the thrown error', () => {
-        expect(errorFn).toHaveNthReturnedWith(1, payload);
+      test('#03 => errorAction returns empty object', () => {
+        expect(errorAction).toHaveNthReturnedWith(1, {});
       });
     });
   });

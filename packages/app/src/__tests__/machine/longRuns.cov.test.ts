@@ -45,7 +45,7 @@ describe('longRuns - no timeout limit for async actions and after', () => {
         slowAction: voidAction(
           () =>
             new Promise<void>(resolve => setTimeout(resolve, BEYOND_MAX)),
-          { error: () => {} },
+          { error: () => () => ({}) },
         ),
       },
     }));
@@ -78,7 +78,7 @@ describe('longRuns - no timeout limit for async actions and after', () => {
                 resolve();
               }, BEYOND_MAX),
             ),
-          { error: () => {} },
+          { error: () => () => ({}) },
         ),
       },
     }));
