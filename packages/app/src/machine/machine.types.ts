@@ -40,6 +40,13 @@ export type AsyncOptions<
   max?: number;
 };
 
+export type ErrorFn<
+  Eo extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = <Err>(err: Err) => AsyncAction2<Eo, Pc, Tc, T>;
+
 export type AsyncAssignAction_F<
   E extends EventObject = EventObject,
   Pc = any,
