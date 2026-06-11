@@ -1454,7 +1454,7 @@ export abstract class CommonInterpreter<
     return out;
   };
 
-  toPredicateFn = (guard: GuardConfig) => {
+  toPredicateFn = (guard: GuardConfig): any => {
     const events = this.__machine.eventsList;
     const guards = this.__machine.guards;
 

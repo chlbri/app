@@ -1,12 +1,7 @@
 import { _any } from '@bemedev/app-utils-bemedev';
 import type { EventObject } from '#events';
-import {
-  isFunction,
-  type FnMap,
-  type FnMapR,
-  type FnR,
-  type FnReduced,
-} from '~types';
+import { isFunction } from '../types/primitives';
+import type { FnMap, FnMapR, FnR, FnReduced } from '~types';
 import { nothing } from './nothing';
 import type { PrimitiveObject } from '@bemedev/typings';
 

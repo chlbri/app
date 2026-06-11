@@ -16,6 +16,7 @@ import {
   type EventObject,
   type EventsMap,
 } from '#events';
+import { toPredicate } from '../guards/functions/toPredicate';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
@@ -319,13 +320,30 @@ export class AsyncInterpreter<
       return out;
     };
 
-  #performPredicates = (...guards: GuardConfig[]) => {
+  override toPredicateFn = (guard: GuardConfig) => {
+    const events = this.__machine.eventsList;
+    const guards = this.__machine.guards;
+
+    const { predicate, errors } = toPredicate.async<Pc, Tc, Ta, Eo>(
+      guard,
+      guards,
+      ...events,
+    );
+
+    if (isDefined(predicate)) return predicate;
+    this._addWarning(...errors);
+    return;
+  };
+
+  #performPredicates = async (...guards: GuardConfig[]) => {
     if (guards.length < 1) return true;
-    return guards
-      .map(this.toPredicateFn)
-      .filter(isDefined)
-      .map(this.#executePredicate)
-      .every(b => b);
+    const predicates = guards.map(this.toPredicateFn).filter(isDefined);
+
+    for (const predicate of predicates) {
+      const out = await this.#executePredicate(predicate);
+      if (!out) return false;
+    }
+    return true;
   };
 
   #performDelay: AsyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
@@ -384,7 +402,7 @@ export class AsyncInterpreter<
               continue;
             }
 
-            const check5 = this.#performPredicates(
+            const check5 = await this.#performPredicates(
               ...toArray.typed(activity.guards),
             );
             if (check5) {
@@ -447,7 +465,7 @@ export class AsyncInterpreter<
     const { guards, actions, target } = transition;
     const { diffEntries, diffExits } = this.__diffNext(target);
 
-    const response = this.#performPredicates(
+    const response = await this.#performPredicates(
       ...toArray<GuardConfig>(guards),
     );
 
@@ -473,7 +491,7 @@ export class AsyncInterpreter<
     return false;
   };
 
-  protected __performFinally = (
+  protected __performFinally = async (
     from: string,
     _finally?: FinallyConfig,
   ) => {
@@ -488,11 +506,11 @@ export class AsyncInterpreter<
 
       const check4 = check2 || check3;
       if (check4) {
-        this.__performActions(from, final);
+        await this.__performActions(from, final);
         continue;
       }
 
-      const response = this.#performPredicates(
+      const response = await this.#performPredicates(
         ...toArray.typed(final.guards),
       );
 

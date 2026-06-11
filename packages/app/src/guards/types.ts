@@ -8,7 +8,13 @@ import type { EventObject } from '#events';
 import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { FnMap, FnR, RecordS, ReduceArray } from '~types';
+import type {
+  FnMap,
+  FnR,
+  MaybePromise,
+  RecordS,
+  ReduceArray,
+} from '~types';
 
 type gType = typeof GUARD_TYPE;
 type and = gType['and'];
@@ -84,7 +90,7 @@ export type AsyncPredicateS<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = boolean | FnMap<E, Pc, Tc, T, boolean>;
+> = boolean | FnMap<E, Pc, Tc, T, MaybePromise<boolean>>;
 
 export type SyncPredicateS<
   E extends EventObject = EventObject,
@@ -112,7 +118,7 @@ export type AsyncPredicateS3<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = FnR<E, Pc, Tc, T, boolean>;
+> = FnR<E, Pc, Tc, T, MaybePromise<boolean>>;
 
 export type SyncPredicateS3<
   E extends EventObject = EventObject,

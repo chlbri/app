@@ -117,6 +117,7 @@ export type {
   SyncPredicateS,
   SyncPredicateS2,
   SyncPredicateS3,
+  ToPredicate,
   ToPredicate_F,
   _ToPredicateF,
 } from '#guards';

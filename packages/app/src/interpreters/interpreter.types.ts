@@ -16,7 +16,7 @@ import type {
   TransitionConfig,
 } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { EmptyObject } from '~types';
+import type { EmptyObject, MaybePromise } from '~types';
 import {
   type AsyncInterpreter,
   type AsyncInterpreterFrom,
@@ -48,7 +48,7 @@ export type AsyncPerformPredicate_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (predicate: AsyncPredicateS3<E, Pc, Tc, T>) => boolean;
+> = (predicate: AsyncPredicateS3<E, Pc, Tc, T>) => MaybePromise<boolean>;
 
 export type AsyncPerformDelay_F<
   E extends EventObject = EventObject,

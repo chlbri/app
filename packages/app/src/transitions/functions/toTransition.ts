@@ -1,7 +1,8 @@
 import { toAction } from '#actions';
 import type { SimpleMachineOptions2 } from '#common/machine';
 import type { EventObject } from '#events';
-import { toPredicate, type GuardConfig } from '#guards';
+import { toPredicate } from '#guards';
+import { type GuardConfig } from '#guards';
 import type { AsyncTransition, TransitionConfig } from '#transitions';
 
 import { toArray } from '@bemedev/app-utils-bemedev';
