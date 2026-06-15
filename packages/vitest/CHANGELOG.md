@@ -5,6 +5,29 @@
 <details>
 <summary>
 
+## **[1.2.5] - 15/06/2026** => _01:01_
+
+</summary>
+
+### Features
+
+- **`emptyActionFn`**: Add `emptyActionFn` test helper constant supporting
+  the new curried error action structure
+
+### Refactor
+
+- **Test Suite Alignment**: Refactor test suites to align with
+  `@bemedev/app`'s new curried error handler pattern
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.4] - 09/06/2026** => _19:38_
 
 </summary>

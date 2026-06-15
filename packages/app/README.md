@@ -741,8 +741,9 @@ actions: {
 <details>
 <summary>Expand</summary>
 
-Guards are **pure predicates** that gate transitions. They receive the
-current state snapshot and return a boolean.
+Guards are **predicates** that gate transitions. They receive the current
+state snapshot and return a `boolean` (or `Promise<boolean>` in async
+machines).
 
 ```typescript
 machine.provideOptions(({ isValue, isNotValue }) => ({
@@ -751,16 +752,28 @@ machine.provideOptions(({ isValue, isNotValue }) => ({
     isEmpty: isValue('context.items', []),
     hasToken: isNotValue('context.pContext.token', undefined),
 
-    // Custom predicate
+    // Synchronous custom predicate
     isAuthenticated: ({ context }) =>
       context.token !== undefined && !isExpired(context.token),
 
     // Predicate with event payload
     isValidInput: ({ event }) =>
       event.type === 'SUBMIT' && event.payload.value.length > 0,
+
+    // Async predicate — only available in AsyncInterpreter
+    // A rejected promise resolves to false (error-safe)
+    hasPermission: async ({ context }) => {
+      const res = await fetch(`/api/permissions/${context.userId}`);
+      return res.ok;
+    },
   },
 }));
 ```
+
+> **Async guards** are fully supported in `AsyncInterpreter`. Predicates
+> are evaluated sequentially and short-circuit on the first `false`
+> (fail-fast). A predicate that throws or rejects is treated as `false`.
+> Sync machines do **not** support async guards.
 
 ### Using guards in config
 

@@ -11,6 +11,47 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.2.5] - 15/06/2026** => _00:58_
+
+</summary>
+
+### Features
+
+- **Async Predicate Evaluation**: Guards can now return `Promise<boolean>`
+  in addition to `boolean`. The `AsyncInterpreter` evaluates all predicates
+  sequentially using `await`, enabling async data fetches, token
+  validation, and other async checks directly in guard functions
+- **`toPredicate.async`**: Expose `_toPredicate.async` and
+  `toPredicate.async` variants via `expandFn`, allowing async AND/OR guard
+  composition with full error-safety (rejected promises resolve to `false`)
+- **`MaybePromise<boolean>` in types**: `AsyncPredicateS`,
+  `AsyncPredicateS3`, and `AsyncPerformPredicate_F` now accept
+  `MaybePromise<boolean>` instead of `boolean`, aligning the type surface
+  with runtime behaviour
+
+### Refactor
+
+- **Error Handler Signatures**: `errorFn` in async machine actions now
+  follows a two-step curried signature — `errorFn(error)` returns an action
+  function `(state) => Promise<result>`, making error handlers composable
+  and consistent with the action pipeline
+- **`#performPredicates` made async**: The private predicate runner in
+  `AsyncInterpreter` is now `async` and short-circuits on the first `false`
+  result (fail-fast semantics)
+- **`__performFinally` made async**: The finally handler in
+  `AsyncInterpreter` now properly `await`s actions and predicate checks
+- **`toPredicateFn` override**: `AsyncInterpreter` overrides
+  `toPredicateFn` to use `toPredicate.async` instead of the sync variant
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.4] - 09/06/2026** => _19:38_
 
 </summary>

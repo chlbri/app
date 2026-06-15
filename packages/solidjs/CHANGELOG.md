@@ -5,6 +5,24 @@
 <details>
 <summary>
 
+## **[1.2.5] - 15/06/2026** => _01:01_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump workspace dependencies to align with
+  `@bemedev/app` version `1.2.5`
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.4] - 09/06/2026** => _19:37_
 
 </summary>
