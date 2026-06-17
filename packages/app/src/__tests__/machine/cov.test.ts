@@ -1,7 +1,7 @@
 import { tupleOf } from '@bemedev/app-utils-bemedev';
 import { _machine2, DELAY, fakeDB, machine2 } from '#fixturesData';
 import { interpret } from '#exports/interpret';
-import { AsyncMachine } from '#machine';
+import { AsyncMachine } from '../../asyncMachine/machine';
 
 import { constructTests } from '#fixtures';
 import { nothing, reduceDescriber } from '#utils';

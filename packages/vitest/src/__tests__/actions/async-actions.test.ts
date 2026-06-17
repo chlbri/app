@@ -34,7 +34,7 @@ describe('Async action helpers', () => {
             return 'Alice';
           },
           {
-            error: emptyActionFn,
+            catch: emptyActionFn,
           },
         ),
       },
@@ -76,7 +76,7 @@ describe('Async action helpers', () => {
           },
           {
             max: 5_000,
-            error: () => assign('context.name', () => 'timeout'),
+            catch: () => assign('context.name', () => 'timeout'),
           },
         ),
       },
@@ -110,7 +110,7 @@ describe('Async action helpers', () => {
             throw new Error('network failure');
           },
           {
-            error: () => assign('context.name', () => 'failure'),
+            catch: () => assign('context.name', () => 'failure'),
           },
         ),
       },
@@ -147,7 +147,7 @@ describe('Async action helpers', () => {
             sideEffect('done');
           },
           {
-            error: emptyActionFn,
+            catch: emptyActionFn,
           },
         ),
       },
@@ -184,7 +184,7 @@ describe('Async action helpers', () => {
             throw new Error('boom');
           },
           {
-            error: _err => voidAction(() => errorHandler(_err)),
+            catch: _err => voidAction(() => errorHandler(_err)),
           },
         ),
       },
@@ -233,7 +233,7 @@ describe('Async action helpers', () => {
             // side-effect only: proves async voidAction still works here
           },
           {
-            error: emptyActionFn,
+            catch: emptyActionFn,
           },
         ),
       },
@@ -272,7 +272,7 @@ describe('Async action helpers', () => {
             throw new Error('Load failed');
           },
           {
-            error,
+            catch: error,
           },
         ),
       },
@@ -307,5 +307,80 @@ describe('Async action helpers', () => {
     test(...waiter(5));
     test(...callError(1));
     test(...stop());
+  });
+
+  describe('#08 => assign — async fn + then handler', () => {
+    const machine = _machine8.provideOptions(({ assign }) => ({
+      actions: {
+        inc: assign(
+          'context',
+          async ({ context }) => {
+            await sleep(TINY_DELAY);
+            return context + 1;
+          },
+          {
+            catch: emptyActionFn,
+            then: assign('context', ({ context }) => context + 10),
+          },
+        ),
+      },
+    }));
+
+    const service = interpret(machine, { context: 0 });
+
+    const { start, send, useValue, waiter } = constructTests(
+      vi,
+      service,
+      ({ contexts: constructContexts, waiter }) => ({
+        useValue: constructContexts(({ context }) => context, 'context'),
+        waiter: waiter(TINY_DELAY + 50),
+      }),
+    );
+
+    test(...start());
+    test(...useValue(0));
+    test(...send('INC'));
+    test(...waiter(1));
+    test(...useValue(11));
+  });
+
+  describe('#09 => voidAction — async fn + then handler', () => {
+    let sideEffect = 0;
+    const machine = _machine8.provideOptions(({ voidAction, assign }) => ({
+      actions: {
+        inc: voidAction(
+          async () => {
+            await sleep(TINY_DELAY);
+            sideEffect = 1;
+          },
+          {
+            catch: emptyActionFn,
+            then: assign('context', ({ context }) => context + 5),
+          },
+        ),
+      },
+    }));
+
+    const service = interpret(machine, { context: 0 });
+
+    const { start, send, useValue, waiter, checkEffect } = constructTests(
+      vi,
+      service,
+      ({ contexts: constructContexts, waiter, tupleOf, getIndex }) => ({
+        useValue: constructContexts(({ context }) => context, 'context'),
+        waiter: waiter(TINY_DELAY + 50),
+        checkEffect: (expected: number) =>
+          tupleOf(`#${getIndex()} => sideEffect is ${expected}`, () => {
+            expect(sideEffect).toBe(expected);
+          }),
+      }),
+    );
+
+    test(...start());
+    test(...useValue(0));
+    test(...send('INC'));
+    test(...waiter(1));
+    test(...useValue(5));
+    test(...checkEffect(1));
   });
 });

@@ -141,7 +141,7 @@ await service[Symbol.asyncDispose]();
   - [5.3 batch](#53-batch)
   - [5.4 filter & erase](#54-filter--erase)
   - [5.5 resend & forceSend](#55-resend--forcesend)
-  - [5.6 Async actions & errorFn](#56-async-actions--errorfn)
+  - [5.6 Async actions & AsyncOptions](#56-async-actions--asyncoptions)
 - [6. Guards](#6-guards)
   - [Using guards in config](#using-guards-in-config)
   - [AND/OR guard composition](#andor-guard-composition)
@@ -698,30 +698,47 @@ actions: {
 }
 ```
 
-### 5.6 Async actions & errorFn
+### 5.6 Async actions & AsyncOptions
 
-All action helpers accept `async` functions. The interpreter's action
-pipeline is fully async and awaits each step sequentially.
+All action helpers (`assign`, `voidAction`, `sendTo`) accept `async`
+functions. The interpreter's action pipeline is fully async and awaits each
+step sequentially.
 
-An optional `errorFn` handles rejections inline — if absent, errors flow to
-the internal `_addError` channel (no uncaught rejection):
+You can configure execution behavior by passing an options object as the
+last argument:
+
+- `catch`: A curried function `(err) => Action` that handles rejections
+  inline. If omitted, errors flow to the interpreter's internal `_addError`
+  channel.
+- `then`: An optional action to execute sequentially after successful
+  resolution.
+- `max`: An optional timeout in milliseconds. If execution exceeds this, it
+  is aborted.
 
 ```typescript
 actions: {
-  // Async assign — context is updated after the promise resolves
-  loadUser: assign<'user', User, ApiError>(
+  // Async assign with inline catch and then chaining
+  loadUser: assign(
     'context.user',
     async ({ event }) => {
       const res = await fetch(`/api/users/${event.payload.id}`);
       return res.json();
     },
-    // errorFn: merge the error into context instead of throwing
-    (err, state) => ({
-      context: { ...state.context, error: err.message },
-    }),
+    {
+      // Handle rejection by assigning the error message to context
+      catch: (err) => assign('context.error', () => err.message),
+
+      // Chain another action after successful user loading
+      then: voidAction(({ context }) => {
+        console.log(`User ${context.user.name} loaded successfully!`);
+      }),
+
+      // Enforce a 5-second timeout limit
+      max: 5000,
+    },
   ),
 
-  // Async void — no errorFn → error goes to _addError
+  // Async void — no options → errors propagate to the interpreter
   trackAnalytics: voidAction(
     async ({ context }) => {
       await analytics.track('state_change', { userId: context.userId });

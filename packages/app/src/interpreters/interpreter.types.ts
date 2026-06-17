@@ -8,7 +8,7 @@ import type {
 import type { AsyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { AsyncPredicateS3 } from '#guards';
-import type { AsyncAddOptionsParam_F } from '#machines';
+import type { AsyncAddOptionsParam_F } from '../asyncMachine';
 import type { NodeConfig2 } from '#states';
 import type {
   AlwaysConfig,

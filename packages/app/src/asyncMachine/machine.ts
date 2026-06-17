@@ -171,7 +171,7 @@ export class AsyncMachine<
             return _any(expandFnMap)(_any(key), fn, ...this.__eventsList);
           }
 
-          const { error: errorFn, max } = options;
+          const { catch: errorFn, then: thenFn, max } = options;
           const _fn = reduceFnMap(fn as any, ...this.__eventsList);
 
           return async ({ pContext, context, event, ...rest }) => {
@@ -183,13 +183,29 @@ export class AsyncMachine<
             };
 
             try {
+              let res: any;
               if (max !== undefined) {
                 const _key = String(key);
                 const tp = withTimeout(execute, `assign-${_key}`, max);
 
-                return await tp();
+                res = await tp();
+              } else {
+                res = await execute();
               }
-              return await execute();
+
+              if (thenFn) {
+                const nextContext = _merge(context, res?.context);
+                const nextPContext = _merge(pContext, res?.pContext);
+                const thenRes = await thenFn({
+                  ...rest,
+                  event,
+                  context: nextContext,
+                  pContext: nextPContext,
+                } as any);
+                return _merge(res, thenRes);
+              }
+
+              return res;
             } catch (e: any) {
               const errorAction = errorFn(e);
               return await errorAction({
@@ -443,7 +459,7 @@ export class AsyncMachine<
         };
       }
 
-      const { error: errorFn, max } = options;
+      const { catch: errorFn, max } = options;
 
       return async ({ context, pContext, event, ...rest }) => {
         const out = _any({ context, pContext });
@@ -509,7 +525,7 @@ export class AsyncMachine<
       };
     }
 
-    const { error: errorFn, max } = options;
+    const { catch: errorFn, then: thenFn, max } = options;
 
     return async ({ context, pContext, event, ...rest }) => {
       const out = _any({ context, pContext });
@@ -527,11 +543,25 @@ export class AsyncMachine<
       };
 
       try {
+        let res: any;
         if (max !== undefined) {
           const tp = withTimeout(execute, 'voidAction', max);
-          return await tp();
+          res = await tp();
+        } else {
+          res = await execute();
         }
-        return await execute();
+
+        if (thenFn) {
+          const thenRes = await thenFn({
+            ...rest,
+            event,
+            context,
+            pContext,
+          } as any);
+          return _merge(res, thenRes);
+        }
+
+        return res;
       } catch (e: any) {
         const errorAction = errorFn(e);
         return await errorAction({

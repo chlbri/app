@@ -26,7 +26,7 @@ describe('Machine createOptions - error handlers', () => {
                 throw theError;
               },
             },
-            { error: errorFn },
+            { catch: errorFn },
           ),
         },
       }));
@@ -77,7 +77,7 @@ describe('Machine createOptions - error handlers', () => {
             async () => {
               throw theError;
             },
-            { error: errorFn },
+            { catch: errorFn },
           ),
         },
       }));
@@ -107,7 +107,7 @@ describe('Machine createOptions - error handlers', () => {
             async () => {
               throw theError;
             },
-            { error: errorFn, max: 5000 },
+            { catch: errorFn, max: 5000 },
           ),
         },
       }));
@@ -139,7 +139,7 @@ describe('Machine createOptions - error handlers', () => {
             async () => {
               throw theError;
             },
-            { error: errorFn },
+            { catch: errorFn },
           ),
         },
       }));
@@ -189,7 +189,7 @@ describe('Machine createOptions - error handlers', () => {
               console.log('Event that caused the error:', event);
               throw theError;
             },
-            { error: errorFn },
+            { catch: errorFn },
           ),
         },
       }));
@@ -220,7 +220,7 @@ describe('Machine createOptions - error handlers', () => {
                 throw theError;
               },
             },
-            { error: errorFn, max: 5000 },
+            { catch: errorFn, max: 5000 },
           ),
         },
       }));
@@ -248,7 +248,7 @@ describe('Machine createOptions - error handlers', () => {
             {
               TEST: () => passFn(theData),
             },
-            { error: () => () => ({}), max: 5000 },
+            { catch: () => () => ({}), max: 5000 },
           ),
         },
       }));
@@ -294,7 +294,7 @@ describe('Machine createOptions - error handlers', () => {
               async () => {
                 throw payload;
               },
-              { error: errorFn },
+              { catch: errorFn },
             ),
           },
         };
@@ -343,7 +343,7 @@ describe('Machine createOptions - error handlers', () => {
             async () => {
               throw payload;
             },
-            { error: errorFn },
+            { catch: errorFn },
           ),
         },
       }));
@@ -372,7 +372,7 @@ describe('Machine createOptions - error handlers', () => {
             async () => {
               throw payload;
             },
-            { error: errorFn, max: 5000 },
+            { catch: errorFn, max: 5000 },
           ),
         },
       }));
@@ -391,6 +391,73 @@ describe('Machine createOptions - error handlers', () => {
 
       test('#03 => errorAction returns empty object', () => {
         expect(errorAction).toHaveNthReturnedWith(1, {});
+      });
+    });
+  });
+
+  describe('#04 => then handlers', () => {
+    describe('#01 => assign with then handler', () => {
+      const catchFn = vi.fn();
+      const machine = _machine1.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign(
+            'context',
+            async () => {
+              return 10;
+            },
+            {
+              catch: catchFn,
+              then: assign('context', ({ context }) => context + 100),
+            },
+          ),
+        },
+      }));
+
+      const service = interpret(machine, {
+        context: 5,
+      });
+
+      test('#01 => service context is updated by both main action and then handler', async () => {
+        await service.send('TEST');
+        expect(service.context).toBe(110);
+      });
+
+      test('#02 => catchFn is not called', () => {
+        expect(catchFn).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('#02 => voidAction with then handler', () => {
+      const catchFn = vi.fn();
+      let effectCalled = false;
+      const machine = _machine1.provideOptions(
+        ({ voidAction, assign }) => ({
+          actions: {
+            myAction: voidAction(
+              async () => {
+                effectCalled = true;
+              },
+              {
+                catch: catchFn,
+                then: assign('context', ({ context }) => context + 50),
+              },
+            ),
+          },
+        }),
+      );
+
+      const service = interpret(machine, {
+        context: 5,
+      });
+
+      test('#01 => voidAction executes effect and triggers then handler', async () => {
+        await service.send('TEST');
+        expect(effectCalled).toBe(true);
+        expect(service.context).toBe(55);
+      });
+
+      test('#02 => catchFn is not called', () => {
+        expect(catchFn).not.toHaveBeenCalled();
       });
     });
   });

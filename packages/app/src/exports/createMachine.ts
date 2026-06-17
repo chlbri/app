@@ -1,4 +1,4 @@
-import { createAsyncMachine } from '#machine';
+import { createAsyncMachine } from '../asyncMachine/machine';
 import { getTargetsFromConfig } from '#states';
 import * as v from 'valibot';
 import { createSyncMachine } from '../sync/machine';

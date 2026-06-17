@@ -160,7 +160,7 @@ export default createMachine(
     setOnlineStatus: assign(
       'context.internetStatus',
       () => isOnline({ timeout: CHECK_DELAY / 2 }),
-      { error: emptyActionFn },
+      { catch: emptyActionFn },
     ),
 
     addIntermediary: assign(
@@ -171,7 +171,7 @@ export default createMachine(
           context: { intermediaries = [] },
         }) => [...intermediaries, payload],
       },
-      { error: emptyActionFn },
+      { catch: emptyActionFn },
     ),
 
     'error.addIntermediary': assign(

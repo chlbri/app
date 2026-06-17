@@ -17,7 +17,7 @@ npm install @bemedev/app-vitest --save-dev
 pnpm add @bemedev/app-vitest -D
 ```
 
-> **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 1.2.0 · Vitest ≥ 4.0.0
+> **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 1.3.0 · Vitest ≥ 4.0.0
 
 <br/>
 

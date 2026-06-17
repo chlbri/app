@@ -25,7 +25,7 @@ describe('Performs activities on events', () => {
   const service = interpret(machine, {
     exact: true,
     context: { iterator: 0 },
-  });
+  }).renew;
 
   const { send, waiter, useIterator, start, dispose } = constructTests(
     service,

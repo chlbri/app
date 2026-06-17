@@ -70,8 +70,8 @@ import {
   type SimpleMachineOptions2,
 } from '#common/machine';
 import { type AsyncEmitterFunction } from '#emitters';
-import type { AsyncMachine } from '#machine';
-import type { AsyncAddOptions_F } from '#machines';
+import type { AsyncMachine } from '../asyncMachine/machine';
+import type { AsyncAddOptions_F } from '../asyncMachine';
 import { getByKey, recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import type { PrimitiveObject } from '@bemedev/typings';

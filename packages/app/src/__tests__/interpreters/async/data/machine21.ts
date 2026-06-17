@@ -144,7 +144,7 @@ export const machine21 = createMachine(
       send: sendTo(machine1)(
         async () => ({ to: 'machine1', event: 'NEXT' }),
         {
-          error: emptyActionFn,
+          catch: emptyActionFn,
         },
       ),
       insertData: assign('context.data', ({ context }) =>

@@ -11,6 +11,39 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.3.0] - 17/06/2026** => _18:45_
+
+</summary>
+
+### Breaking Changes
+
+- **Update options type parameters**: Rename `error` parameter to `catch`
+  in option parameter schemas for `assign`, `voidAction`, and `sendTo`
+  helpers, aligning it with the native Promise `.catch` syntax.
+- **Refactor engine structure**: Move engine implementation from
+  `src/machine/` to `src/asyncMachine/` and update internal exports.
+
+### Features
+
+- **Add `then` chaining support**: Implement the `then` option in `assign`
+  and `voidAction` helper options to support executing sequential actions
+  after a promise resolves.
+
+### Refactor
+
+- **Update path mappings**: Re-point path aliases `#machine` and
+  `#machines` in `tsconfig.json` to the new `src/asyncMachine/` directory
+  and update related imports.
+
+- <u>Test coverage **_99.82%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.5] - 15/06/2026** => _00:58_
 
 </summary>

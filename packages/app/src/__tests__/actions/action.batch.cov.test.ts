@@ -27,7 +27,7 @@ describe('Machine batch action', () => {
           _legacy.actions.inc2,
 
           assign('context', async ({ context }) => context + 3, {
-            error: () => () => ({ context: 4 }),
+            catch: () => () => ({ context: 4 }),
           }),
 
           voidAction(() =>

@@ -16,7 +16,7 @@ import type {
   EventObject,
   EventsMap,
 } from '#events';
-import type { AsyncMachine } from '#machine';
+import type { AsyncMachine } from './machine';
 import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
@@ -34,7 +34,8 @@ export type AsyncOptions<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
-  error: ErrorFn<Eo, Pc, Tc, T>;
+  catch: ErrorFn<Eo, Pc, Tc, T>;
+  then?: AsyncAction2<Eo, Pc, Tc, T>;
   max?: number;
 };
 

@@ -47,8 +47,8 @@
       "#events": ["./src/events/index.ts"],
       "#transitions": ["./src/transitions/index.ts"],
       "#emitters": ["./src/emitters/index.ts"],
-      "#machine": ["./src/machine/machine.ts"],
-      "#machines": ["./src/machine/index.ts"],
+      "#machine": ["./src/asyncMachine/machine.ts"],
+      "#machines": ["./src/asyncMachine/index.ts"],
       "#registry": ["./src/registry.types.ts"],
       "#config": ["./src/config/index.ts"]
     }

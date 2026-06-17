@@ -247,7 +247,7 @@ export type {
   AsyncTimeAction_F,
   AsyncValueCheckerGuard_F,
   AsyncVoidAction_F,
-} from '#machines';
+} from '../asyncMachine';
 
 export type {
   SyncAddOption,

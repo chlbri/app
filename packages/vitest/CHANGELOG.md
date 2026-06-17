@@ -5,6 +5,34 @@
 <details>
 <summary>
 
+## **[1.3.0] - 17/06/2026** => _18:45_
+
+</summary>
+
+### Features
+
+- **Test new options**: Add test cases verifying `assign` and `voidAction`
+  helpers with the new `then` sequential chaining handler.
+
+### Refactor
+
+- **Align test cases with catch**: Update async action tests to use the
+  renamed `catch` option instead of `error`.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump workspace dependencies to align with
+  `@bemedev/app` version `1.3.0`
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.2.5] - 15/06/2026** => _01:01_
 
 </summary>

@@ -14,8 +14,8 @@ import type {
   ToEvents,
 } from '#events';
 import type { AsyncInterpreterFrom } from '#interpreter';
-import type { AsyncMachine } from '#machine';
-import type { AsyncMachineOptions2 } from '#machines';
+import type { AsyncMachine } from '../asyncMachine/machine';
+import type { AsyncMachineOptions2 } from '../asyncMachine';
 import type { Register, RegisterOptions } from '#registry';
 import type {
   inferT,
