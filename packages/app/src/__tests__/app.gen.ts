@@ -343,6 +343,23 @@ declare module '~types' {
       pContext: any;
     };
 
+    atomic: {
+      paths: {
+        map: { targets: never };
+        all: '/';
+      };
+      events: 'SET_LANG';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'setLang';
+        delays: never;
+        guards: never;
+      };
+      pContext: any;
+    };
+
     'src/__tests__/emitters/emitter1.machine': {
       paths: {
         map: {

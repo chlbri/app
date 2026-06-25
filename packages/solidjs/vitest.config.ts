@@ -1,12 +1,12 @@
-import { aliasTs } from '@bemedev/dev-utils/vitest-alias';
 import { exclude } from '@bemedev/dev-utils/vitest-exclude';
-import { defineConfig } from 'vitest/config';
-import tsconfig from './tsconfig.json';
 import solidPlugin from 'vite-plugin-solid';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
-    aliasTs(tsconfig as any),
     exclude({
       ignoreCoverageFiles: ['**/index.ts', '**/__tests__/**'],
     }),

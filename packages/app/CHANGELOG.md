@@ -11,6 +11,39 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.4.0] - 25/06/2026** => _12:05_
+
+</summary>
+
+### Features
+
+- **Atomic state machine verification**: Add support for atomic state
+  machine verification and edge cases testing.
+- **`any` type validator helper**: Add `any` type validator helper to
+  `typings`.
+
+### Fixes
+
+- **Initial config check**: Handle null/undefined values in initial
+  configuration parsing.
+
+### Refactor
+
+- **Simplify test configuration**: Simplify test config by replacing custom
+  TS aliases plugin with native `resolve.tsconfigPaths` in
+  `vitest.config.ts`.
+- **Remove type assertion**: Remove unnecessary type assertion in
+  `valueToNodeConfig`.
+
+- <u>Test coverage **_99.58%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.3.0] - 17/06/2026** => _18:45_
 
 </summary>

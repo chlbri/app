@@ -33,7 +33,7 @@ export type ValueToNodeConfig_F = <T extends StateValue>(
  * @see {@linkcode DEFAULT_DELIMITER} for the default delimiter used in state paths
  */
 export const valueToNodeConfig: ValueToNodeConfig_F = (body, from) => {
-  const flatBody = flatMap(body as NodeConfig2, false);
+  const flatBody = flatMap(body, false);
   const keysFlatBody = Object.keys(flatBody);
   const fromIsString = isString(from);
   if (fromIsString) {

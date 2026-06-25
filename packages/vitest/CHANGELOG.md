@@ -5,6 +5,30 @@
 <details>
 <summary>
 
+## **[1.4.0] - 25/06/2026** => _12:05_
+
+</summary>
+
+### Refactor
+
+- **Simplify test configuration**: Simplify test config by replacing custom
+  TS aliases plugin with native `resolve.tsconfigPaths` in
+  `vitest.config.ts`.
+
+### Dependencies
+
+- **Workspace and Dev Dependencies**: Bump devDependencies and
+  peerDependencies to align with `@bemedev/app` version `1.4.0`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.3.0] - 17/06/2026** => _18:45_
 
 </summary>

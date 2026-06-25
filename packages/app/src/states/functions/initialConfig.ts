@@ -17,6 +17,8 @@ export type InitialConfig_F = Fn<[body: NodeConfig2], NodeConfig2>;
  * @see {@linkcode t} for type utilities
  */
 export const initialConfig: InitialConfig_F = body => {
+  const check0 = body === undefined || body === null;
+  if (check0) return {};
   const check1 = isAtomic(body);
   if (check1) return body;
 

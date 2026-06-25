@@ -20,6 +20,7 @@ export const typings = {
       }),
     ),
   ),
+  any: type,
 };
 
 export { helpers };

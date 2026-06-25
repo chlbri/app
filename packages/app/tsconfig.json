@@ -6,6 +6,7 @@
     "declaration": true,
     "sourceMap": true,
     "outDir": "./lib",
+    "rootDir": "./src",
     "resolveJsonModule": true,
     "strict": true,
     "noImplicitReturns": true,
@@ -52,5 +53,10 @@
       "#registry": ["./src/registry.types.ts"],
       "#config": ["./src/config/index.ts"]
     }
-  }
+  },
+  "exclude": [
+    "./rolldown.config.ts",
+    "./vitest.config.ts",
+    "./vitest.setup.ts"
+  ]
 }
