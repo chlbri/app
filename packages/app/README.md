@@ -611,6 +611,14 @@ actions: {
 The path follows `@bemedev/decompose` conventions: `'context'`,
 `'context.field'`, `'context.nested.deep'`.
 
+You can also perform multi-variable assignments by passing an array of
+keys:
+
+```typescript
+// Assign multiple variables from an array-returning function
+updateCoordinates: assign(['context.x', 'context.y'], () => [100, 200]);
+```
+
 ### 5.2 voidAction
 
 Side-effect only — returns nothing, never modifies context.

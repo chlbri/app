@@ -5,6 +5,24 @@
 <details>
 <summary>
 
+## **[1.5.0] - 26/06/2026** => _20:20_
+
+</summary>
+
+### Dependencies
+
+- **Workspace and Dev Dependencies**: Bump devDependencies and
+  peerDependencies to align with `@bemedev/app` version `1.5.0`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.4.0] - 25/06/2026** => _12:05_
 
 </summary>

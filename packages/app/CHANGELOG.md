@@ -11,6 +11,32 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.5.0] - 26/06/2026** => _20:20_
+
+</summary>
+
+### Features
+
+- **Multi-variable assignment**: Support array of keys in `assign` helper
+  for both sync and async machines to allow multi-variable assignments.
+
+### Refactor
+
+- **Simplify assign logic**: Remove `expandFnMap` utility and refactor the
+  `assign` implementation to use `reduceFnMap` directly.
+- **Rename interpreter export**: Rename the internal `interpret` from
+  `#interpreter` to `interpretAsync` for consistency with async-specific
+  machine logic.
+
+- <u>Test coverage **_99.86%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.4.0] - 25/06/2026** => _12:05_
 
 </summary>
