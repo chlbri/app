@@ -22,8 +22,8 @@ import type {
   EmptyObject,
   FnMap,
   FnR,
-  NotReadonly,
   SingleOrArrayL2,
+  TraversableTuple,
   ValuesOf,
 } from '~types';
 import type { AsyncMachine } from './machine';
@@ -53,27 +53,11 @@ export type ErrorFn<
   T extends string = string,
 > = <Err>(err: Err) => AsyncAction2<Eo, Pc, Tc, T>;
 
-// #region type TraversableTupe
-type __TraversableTuple<T, K extends ReadonlyArray<keyof T>> = K extends [
-  infer Key extends keyof T,
-  ...infer Rest extends ReadonlyArray<keyof T>,
-]
-  ? readonly [T[Key], ...__TraversableTuple<T, Rest>]
-  : readonly [];
-
-type _TraversableTupe<T, K extends SingleOrArrayL2<keyof T>> =
-  K extends ReadonlyArray<keyof T>
-    ? __TraversableTuple<T, K>
-    : K extends keyof T
-      ? NotReadonly<T[K]>
-      : never;
-
-export type TraversableTupeAsync<
+export type TraversableTupleAsync<
   T,
   K extends SingleOrArrayL2<keyof T>,
-  R extends _TraversableTupe<T, K> = _TraversableTupe<T, K>,
+  R extends TraversableTuple<T, K> = TraversableTuple<T, K>,
 > = R | Promise<R>;
-// #endregion
 
 export type AsyncAssignAction_F<
   E extends EventObject = EventObject,
@@ -86,7 +70,10 @@ export type AsyncAssignAction_F<
   >,
 > = <
   const K extends SingleOrArrayL2<keyof D>,
-  const F extends TraversableTupeAsync<D, K> = TraversableTupeAsync<D, K>,
+  const F extends TraversableTupleAsync<D, K> = TraversableTupleAsync<
+    D,
+    K
+  >,
 >(
   keys: K,
   fn: FnMap<E, Pc, Tc, T, F>,

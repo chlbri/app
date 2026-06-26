@@ -28,9 +28,9 @@ import type {
   EmptyObject,
   FnMap,
   FnR,
-  NotReadonly,
   RecordS,
   SingleOrArrayL2,
+  TraversableTuple,
   ValuesOf,
 } from '~types';
 import type { SyncMachine } from './machine';
@@ -88,29 +88,10 @@ export type SyncValueCheckerGuard_F<
   ...values: any[]
 ) => FnR<E, Pc, Tc, T, boolean>;
 
-// #region type TraversableTupleSync
-type __TraversableTupleSync<
-  T,
-  K extends ReadonlyArray<keyof T>,
-> = K extends [
-  infer Key extends keyof T,
-  ...infer Rest extends ReadonlyArray<keyof T>,
-]
-  ? readonly [T[Key], ...__TraversableTupleSync<T, Rest>]
-  : readonly [];
-
-type _TraversableTupeSync<T, K extends SingleOrArrayL2<keyof T>> =
-  K extends ReadonlyArray<keyof T>
-    ? __TraversableTupleSync<T, K>
-    : K extends keyof T
-      ? NotReadonly<T[K]>
-      : never;
-
 export type TraversableTupleSync<
   T,
   K extends SingleOrArrayL2<keyof T>,
-> = _TraversableTupeSync<T, K>;
-// #endregion
+> = TraversableTuple<T, K>;
 
 export type SyncAssignAction_F<
   E extends EventObject = EventObject,
