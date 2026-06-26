@@ -1,5 +1,5 @@
 import type { AsyncAction } from '#actions';
-import { expandFnMap } from '#common/functions';
+
 import type { AsyncDelayFunction } from '#delays';
 import {
   ActorsConfigMap,
@@ -166,27 +166,49 @@ export class AsyncMachine<
         isDefined,
         isNotDefined,
 
-        assign: (key, fn, options?) => {
+        assign: (keys, fn, options?) => {
+          const keysArray = Array.isArray(keys) ? keys : [keys];
+          const isArray = Array.isArray(keys);
+
           if (!options) {
-            return _any(expandFnMap)(_any(key), fn, ...this.__eventsList);
+            const _fn = reduceFnMap(fn as any, ...this.__eventsList);
+            return async state => {
+              const result = await _fn(state);
+              if (!isArray) {
+                return recompose({ [keysArray[0]]: result });
+              }
+              const obj: Record<string, any> = {};
+              keysArray.forEach((k, idx) => {
+                obj[k] = result?.[idx];
+              });
+              return recompose(obj);
+            };
           }
 
           const { catch: errorFn, then: thenFn, max } = options;
           const _fn = reduceFnMap(fn as any, ...this.__eventsList);
 
-          return async ({ pContext, context, event, ...rest }) => {
-            const state = cloneDeep({ pContext, context });
+          return async state => {
+            const { pContext, context, event, ...rest } = state;
+            const _state = cloneDeep({ pContext, context });
 
             const execute = async () => {
-              const rawResult = await _fn({ ...state, event, ...rest });
-              return recompose({ [key]: rawResult });
+              const rawResult = await _fn(state);
+              if (!isArray) {
+                return recompose({ [keysArray[0]]: rawResult });
+              }
+              const obj: Record<string, any> = {};
+              keysArray.forEach((k, idx) => {
+                obj[k] = rawResult?.[idx];
+              });
+              return recompose(obj);
             };
 
             try {
               let res: any;
               if (max !== undefined) {
-                const _key = String(key);
-                const tp = withTimeout(execute, `assign-${_key}`, max);
+                const keysStr = keysArray.join('-');
+                const tp = withTimeout(execute, `assign-${keysStr}`, max);
 
                 res = await tp();
               } else {
@@ -209,7 +231,7 @@ export class AsyncMachine<
             } catch (e: any) {
               const errorAction = errorFn(e);
               return await errorAction({
-                ...state,
+                ..._state,
                 event,
                 ...rest,
               } as any);

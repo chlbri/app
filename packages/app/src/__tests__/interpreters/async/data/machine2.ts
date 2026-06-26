@@ -1,4 +1,4 @@
-import { interpret } from '#interpreters';
+import { interpretAsync } from '#interpreters';
 import { createMachine } from '#exports/createMachine';
 import { createConfig } from '#common/functions';
 import { notU } from '#utils';
@@ -152,7 +152,8 @@ export const machine2 = createMachine(
   },
   actors: {
     children: {
-      machine1: () => interpret(machine1, { context: { iterator: 0 } }),
+      machine1: () =>
+        interpretAsync(machine1, { context: { iterator: 0 } }),
     },
   },
   delays: {
@@ -223,7 +224,8 @@ export const _machine2 = createMachine(_config2, typings2).provideOptions(
     },
     actors: {
       children: {
-        machine1: () => interpret(machine1, { context: { iterator: 0 } }),
+        machine1: () =>
+          interpretAsync(machine1, { context: { iterator: 0 } }),
       },
     },
     delays: {

@@ -155,6 +155,8 @@ export type ExtractSender<
 > =
   Equals<R, never> extends true
     ? []
-    : PrimitiveObject extends R
+    : Equals<R, undefined> extends true
       ? []
-      : [payload: R];
+      : PrimitiveObject extends R
+        ? []
+        : [payload: R];

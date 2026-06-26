@@ -1,7 +1,7 @@
 import { tupleOf } from '@bemedev/app-utils-bemedev';
 import {} from '#fixturesData';
 import { constructTests } from '#fixtures';
-import { interpret } from '#interpreters';
+import { interpretAsync } from '#interpreters';
 import { nothing } from '#utils';
 import equal from 'fast-deep-equal';
 import { _machine2 } from './machine2';
@@ -17,7 +17,7 @@ describe('machine coverage', () => {
     '#02 => Activities Integration Test from perform -> stop before set to 1000';
 
   describe(TEXT, () => {
-    const service = interpret(_machine2, {
+    const service = interpretAsync(_machine2, {
       pContext: {
         iterator: 0,
       },

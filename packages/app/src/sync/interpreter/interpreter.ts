@@ -121,7 +121,7 @@ export class SyncInterpreter<
    * The {@linkcode SyncMachine} machine being interpreted.
    */
   get machine() {
-    return this.__machine as SyncMachine<
+    return super.machine as SyncMachine<
       C,
       Pc,
       Tc,

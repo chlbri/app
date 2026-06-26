@@ -11,7 +11,7 @@ import { _any, _unknown, tupleOf } from '@bemedev/app-utils-bemedev';
 
 import type { AnyInterpreter } from '#common/interpreter';
 import { defaultCheck } from '#guards';
-import { interpret } from '#interpreter';
+import { interpretAsync } from '#interpreter';
 import equal from 'fast-deep-equal';
 import _machine1 from './composition.1.machine';
 import _machine2 from './composition.2.machine';
@@ -32,7 +32,7 @@ describe('Composition', () => {
     let service = _unknown<AnyInterpreter>(null);
 
     test('#0 => Create the machine', () => {
-      service = _any(interpret(machine3, resultC));
+      service = _any(interpretAsync(machine3, resultC));
     });
 
     test('#1 => The machine is at "status: idle"', () => {
@@ -70,7 +70,7 @@ describe('Composition', () => {
   });
 
   describe('#02 => Can check without starting', () => {
-    const service = interpret(machine3, {
+    const service = interpretAsync(machine3, {
       ...resultC,
     }).renew;
 
@@ -245,7 +245,7 @@ describe('Composition', () => {
     describe('#01 => mode is normal', () => {
       const fn = vi.spyOn(console, 'error');
 
-      const service = interpret(machine, {
+      const service = interpretAsync(machine, {
         ...defaultC,
         context: { condition: false, iterator: 0 },
         mode: 'normal',
@@ -278,7 +278,7 @@ describe('Composition', () => {
 
     describe('#01 => mode is strict', () => {
       test('#00 => Start throws error', async () => {
-        const service = interpret(machine, {
+        const service = interpretAsync(machine, {
           ...defaultC,
           context: { condition: false, iterator: 0 },
           mode: 'strict',
@@ -304,7 +304,7 @@ describe('Composition', () => {
       },
     }));
 
-    const service = interpret(machine, defaultC);
+    const service = interpretAsync(machine, defaultC);
 
     test('#00 => Start the service', service.start.bind(service));
 
@@ -367,7 +367,7 @@ describe('Composition', () => {
       },
     }));
 
-    const service = interpret(machine);
+    const service = interpretAsync(machine);
     const { start, waiter } = constructTests(service, ({ waiter }) => ({
       waiter: waiter(1000),
     }));
@@ -400,7 +400,7 @@ describe('Composition', () => {
       },
     }));
 
-    const service = interpret(machine, {
+    const service = interpretAsync(machine, {
       ...defaultC,
       context: { iterator: 0 },
     });
@@ -434,7 +434,7 @@ describe('Composition', () => {
       const TEXT = 'Activities Integration Test from perform';
       // #region Config
 
-      const service = interpret(machine21, {
+      const service = interpretAsync(machine21, {
         pContext: {
           iterator: 0,
         },

@@ -343,6 +343,91 @@ declare module '~types' {
       pContext: any;
     };
 
+    arrayAsyncAssign: {
+      paths: {
+        map: { targets: never };
+        all: '/';
+      };
+      events: 'INC';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'incthearray';
+        delays: never;
+        guards: never;
+      };
+      pContext: any;
+    };
+
+    arrayAssign: {
+      paths: {
+        map: { targets: never };
+        all: '/';
+      };
+      events: 'INC';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'incthearray';
+        delays: never;
+        guards: never;
+      };
+      pContext: any;
+    };
+
+    'edges.arrayAssign.complex': {
+      paths: {
+        map: { targets: never };
+        all: '/';
+      };
+      events: 'INC';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'incDeep';
+        delays: never;
+        guards: never;
+      };
+      pContext: any;
+    };
+
+    'edges.arrayAssign.sync.complex': {
+      paths: {
+        map: { targets: never };
+        all: '/';
+      };
+      events: 'INC';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'incDeep';
+        delays: never;
+        guards: never;
+      };
+      pContext: any;
+    };
+
+    arrayAssignSync: {
+      paths: {
+        map: { targets: never };
+        all: '/';
+      };
+      events: 'INC';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'incthearray';
+        delays: never;
+        guards: never;
+      };
+      pContext: any;
+    };
+
     atomic: {
       paths: {
         map: { targets: never };
@@ -1153,6 +1238,30 @@ declare module '~types' {
         emitters: never;
         tags: never;
         actions: 'inc' | 'neverRun' | 'incPrivate';
+        delays: never;
+        guards: never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/interpreters/eras.machine.7': {
+      paths: {
+        map: {
+          targets: '/idle' | '/cleared';
+          initial: 'idle';
+          states: {
+            cleared: { targets: '/' | '/idle' };
+            idle: { targets: '/' | '/cleared' };
+          };
+        };
+        all: '/' | '/idle' | '/cleared';
+      };
+      events: 'SET_DATA' | 'CLEAR_ALL';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'setData' | 'clearAll';
         delays: never;
         guards: never;
       };

@@ -124,7 +124,7 @@ export class AsyncInterpreter<
    * The {@linkcode AsyncMachine} machine being interpreted.
    */
   get machine() {
-    return this.__machine as unknown as AsyncMachine<
+    return super.machine as AsyncMachine<
       C,
       Pc,
       Tc,
@@ -1009,7 +1009,7 @@ export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
  *
  * @see {@linkcode MachineConfig}
  */
-export const interpret: AsyncInterpreter_F = (..._args) => {
+export const interpretAsync: AsyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
   const { mode, exact, pContext, context } = _any(args ?? {});
   const out: any = new AsyncInterpreter(machine, mode, exact);

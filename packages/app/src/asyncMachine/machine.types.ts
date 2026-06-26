@@ -16,10 +16,17 @@ import type {
   EventObject,
   EventsMap,
 } from '#events';
-import type { AsyncMachine } from './machine';
 import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { EmptyObject, FnMap, FnR, ValuesOf } from '~types';
+import type {
+  EmptyObject,
+  FnMap,
+  FnR,
+  NotReadonly,
+  SingleOrArrayL2,
+  ValuesOf,
+} from '~types';
+import type { AsyncMachine } from './machine';
 /**
  * Options for async action helpers.
  * - `error`: called with the thrown error and current context snapshot when
@@ -46,22 +53,44 @@ export type ErrorFn<
   T extends string = string,
 > = <Err>(err: Err) => AsyncAction2<Eo, Pc, Tc, T>;
 
+// #region type TraversableTupe
+type __TraversableTuple<T, K extends ReadonlyArray<keyof T>> = K extends [
+  infer Key extends keyof T,
+  ...infer Rest extends ReadonlyArray<keyof T>,
+]
+  ? readonly [T[Key], ...__TraversableTuple<T, Rest>]
+  : readonly [];
+
+type _TraversableTupe<T, K extends SingleOrArrayL2<keyof T>> =
+  K extends ReadonlyArray<keyof T>
+    ? __TraversableTuple<T, K>
+    : K extends keyof T
+      ? NotReadonly<T[K]>
+      : never;
+
+export type TraversableTupeAsync<
+  T,
+  K extends SingleOrArrayL2<keyof T>,
+  R extends _TraversableTupe<T, K> = _TraversableTupe<T, K>,
+> = R | Promise<R>;
+// #endregion
+
 export type AsyncAssignAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <
   D = Decompose<
     { pContext: Pc; context: Tc },
     { object: 'both'; start: false; sep: '.' }
   >,
-  K extends keyof D = keyof D,
-  F extends D[K] | Promise<D[K]> = D[K] | Promise<D[K]>,
+> = <
+  const K extends SingleOrArrayL2<keyof D>,
+  const F extends TraversableTupeAsync<D, K> = TraversableTupeAsync<D, K>,
 >(
-  key: K,
+  keys: K,
   fn: FnMap<E, Pc, Tc, T, F>,
-  ...args: F extends Promise<D[K]> ? [AsyncOptions<E, Pc, Tc, T>] : []
+  ...args: F extends Promise<any> ? [AsyncOptions<E, Pc, Tc, T>] : []
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncResendAction_F<

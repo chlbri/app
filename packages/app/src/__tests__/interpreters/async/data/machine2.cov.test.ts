@@ -1,7 +1,7 @@
 import { tupleOf } from '@bemedev/app-utils-bemedev';
 import { constructTests } from '#fixtures';
 import { _machine2, DELAY, fakeDB } from '#fixturesData';
-import { interpret } from '#interpreters';
+import { interpretAsync } from '#interpreters';
 import { nothing } from '#utils';
 import equal from 'fast-deep-equal';
 
@@ -13,7 +13,7 @@ describe('machine coverage', () => {
   describe(TEXT, () => {
     // #region Config
 
-    const service = interpret(_machine2, {
+    const service = interpretAsync(_machine2, {
       exact: true,
       context: { iterator: 0, input: '', data: [] },
       pContext: { iterator: 0 },

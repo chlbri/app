@@ -6,6 +6,7 @@ import _machine3 from './filter-erase.3.machine';
 import _machine4 from './filter-erase.4.machine';
 import _machine5 from './filter-erase.5.machine';
 import _machine6 from './filter-erase.6.machine';
+import _machine7 from './erase.7.machine';
 
 describe('Filter and Erase actions', () => {
   describe('#01 => Filter action', () => {
@@ -371,6 +372,46 @@ describe('Filter and Erase actions', () => {
         expect(service.select('email')).toBeUndefined();
         expect(service.select('age')).toBeUndefined();
       });
+    });
+
+    describe('#04 => Erase whole context', () => {
+      const machine = _machine7.provideOptions(({ assign, erase }) => ({
+        actions: {
+          clearAll: erase('context'),
+          setData: assign('context', {
+            SET_DATA: ({ payload }) => payload,
+          }),
+        },
+      }));
+
+      const service = interpret(machine, {
+        context: '',
+      });
+
+      const {
+        useStateValue: useValue,
+        clearAll,
+        setData,
+        start,
+        context,
+      } = constructTests(service, ({ contexts, sender }) => ({
+        context: contexts(c => c.context),
+        clearAll: sender('CLEAR_ALL'),
+        setData: sender('SET_DATA'),
+      }));
+
+      test(...context(''));
+      test(...start());
+      test(...context(''));
+      test(...useValue('idle'));
+      test(...context(''));
+      test(...setData('data'));
+      test(...context('data'));
+      test(...useValue('idle'));
+      test(...context('data'));
+      test(...clearAll());
+      test(...context());
+      test(...useValue('cleared'));
     });
   });
 });

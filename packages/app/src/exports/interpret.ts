@@ -1,4 +1,4 @@
-import { interpret as interpretAsync } from '#interpreter';
+import { interpretAsync } from '#interpreter';
 import type { Fn } from '~types';
 import { interpretSync } from '../sync/interpreter';
 import type { CreateInterpreter_F } from './types.types';

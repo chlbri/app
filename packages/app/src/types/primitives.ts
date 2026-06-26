@@ -24,6 +24,7 @@ export type IsString_F = (value: unknown) => value is string;
  * Single or readonly array type of {@linkcode T}.
  */
 export type SingleOrArrayR<T> = T | readonly T[];
+export type SingleOrArrayL2<T> = T | [T, T, ...T[]];
 
 /**
  * Single or readonly array type of {@linkcode T} with at least one element.

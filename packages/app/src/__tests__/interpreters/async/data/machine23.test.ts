@@ -1,5 +1,5 @@
 import { tupleOf } from '@bemedev/app-utils-bemedev';
-import { interpret } from '#interpreters';
+import { interpretAsync } from '#interpreters';
 import { constructTests } from '#fixtures';
 import { DELAY } from './constants';
 import { fakeDB } from './fakeDB';
@@ -16,7 +16,7 @@ describe('Machine 23 -> Tests for inner machines', () => {
     describe(TEXT, () => {
       // #region Config
 
-      const service = interpret(machine23, {
+      const service = interpretAsync(machine23, {
         context: { data: [], input: '', iterator: 0 },
         pContext: { iterator: 0 },
       });

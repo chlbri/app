@@ -1,5 +1,5 @@
 import type { SyncAction2 } from '#actions';
-import { expandFnMap } from '#common/functions';
+
 import type {
   CommonConfig3,
   CommonCreateMachine_F,
@@ -145,12 +145,23 @@ export class SyncMachine<
         isDefined,
         isNotDefined,
 
-        assign: (key, fn) => {
-          return _any(expandFnMap.sync)(
-            _any(key),
-            fn,
-            ...this.__eventsList,
-          );
+        assign: (keys, fn) => {
+          const keysArray = Array.isArray(keys) ? keys : [keys];
+          const isArray = Array.isArray(keys);
+
+          const _fn = reduceFnMap(fn as any, ...this.__eventsList);
+
+          return state => {
+            const result = _fn(state);
+            if (!isArray) {
+              return recompose({ [keysArray[0]]: result });
+            }
+            const obj: Record<string, any> = {};
+            keysArray.forEach((k, idx) => {
+              obj[k] = result?.[idx];
+            });
+            return recompose(obj);
+          };
         },
 
         batch: (...fns) => {

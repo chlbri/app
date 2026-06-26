@@ -28,7 +28,9 @@ import type {
   EmptyObject,
   FnMap,
   FnR,
+  NotReadonly,
   RecordS,
+  SingleOrArrayL2,
   ValuesOf,
 } from '~types';
 import type { SyncMachine } from './machine';
@@ -86,20 +88,45 @@ export type SyncValueCheckerGuard_F<
   ...values: any[]
 ) => FnR<E, Pc, Tc, T, boolean>;
 
+// #region type TraversableTupleSync
+type __TraversableTupleSync<
+  T,
+  K extends ReadonlyArray<keyof T>,
+> = K extends [
+  infer Key extends keyof T,
+  ...infer Rest extends ReadonlyArray<keyof T>,
+]
+  ? readonly [T[Key], ...__TraversableTupleSync<T, Rest>]
+  : readonly [];
+
+type _TraversableTupeSync<T, K extends SingleOrArrayL2<keyof T>> =
+  K extends ReadonlyArray<keyof T>
+    ? __TraversableTupleSync<T, K>
+    : K extends keyof T
+      ? NotReadonly<T[K]>
+      : never;
+
+export type TraversableTupleSync<
+  T,
+  K extends SingleOrArrayL2<keyof T>,
+> = _TraversableTupeSync<T, K>;
+// #endregion
+
 export type SyncAssignAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <
   D = Decompose<
     { pContext: Pc; context: Tc },
     { object: 'both'; start: false; sep: '.' }
   >,
-  K extends keyof D = keyof D,
+> = <
+  const K extends SingleOrArrayL2<keyof D>,
+  const F extends TraversableTupleSync<D, K> = TraversableTupleSync<D, K>,
 >(
-  key: K,
-  fn: FnMap<E, Pc, Tc, T, D[K]>,
+  keys: K,
+  fn: FnMap<E, Pc, Tc, T, F>,
 ) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncBatchAction_F<

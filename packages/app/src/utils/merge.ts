@@ -47,14 +47,7 @@ export const transformMergeUndefined = (value: any): any => {
 };
 
 export const isMergeUndefined = (value: any) => {
-  if (value === MERGE_UNDEFINED) return false;
-
-  const check1 =
-    value !== null &&
-    typeof value === 'object' &&
-    Object.keys(value).length === 1 &&
-    value[UNEFINED_KEY] === UNEFINED_KEY;
-
+  const check1 = value[UNEFINED_KEY] === UNEFINED_KEY;
   return check1;
 };
 
