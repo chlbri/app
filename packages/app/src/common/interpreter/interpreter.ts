@@ -901,9 +901,10 @@ export abstract class CommonInterpreter<
 
   subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.__machine.eventsList;
-    const find = Array.from(this.__subscribers).find(
-      f => f.id === options?.id,
-    );
+    const id = options?.id;
+    const find = id
+      ? Array.from(this.__subscribers).find(f => f.id === id)
+      : undefined;
     if (find) return find;
 
     const subscriber = createSubscriber(_subscriber, options, ...events);
@@ -1076,11 +1077,14 @@ export abstract class CommonInterpreter<
   makeNormal = () => (this.__mode = 'normal' as Mode);
 
   /**
-   * Performs computations, after transitioning to the next target, to update the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service
+   * Performs computations, after transitioning to the next target, to update the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode CommonInterpreter} service
    */
   protected _performConfig = () => {
     const value = nodeToValue(this.__config as any);
-    const cb = () => (this.__value = value);
+    const cb = () => {
+      this.__value = value;
+      // this.__performStates({ value });
+    };
     this.__schedulerValue.schedule(cb, this.__sent);
     this.#node = this.#resolveNode(this.__config);
     const configForFlat = _any(this.__config);

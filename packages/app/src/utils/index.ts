@@ -21,16 +21,12 @@ export * from './strings';
 export * from './toFunction';
 export * from './undefined';
 export * from './typings';
-export * from './parseTree';
-export * from './parseTree.types';
-export { buildPaths } from './parseTree.helpers';
+export { flatMap } from '../states/functions/flatMap';
 export * from './readonly';
 export * from './checkValues';
 export * from './soa';
-export * from './reduceDescribers';
 export * from './fn';
 export * from './typings';
 export * from '@bemedev/sleep';
 
 export const deepEqual = <T>(a: T, b: T) => equal(a, b);
-export * from 'nanoid';

@@ -1,6 +1,7 @@
 {
-  "name": "@bemedev/app-utils-bemedev",
-  "version": "0.1.0",
+  "name": "@bemedev/app-cli",
+  "version": "1.5.0",
+  "description": "CLI tool and AST parseTree parser for @bemedev/app",
   "private": false,
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -13,6 +14,9 @@
   },
   "license": "MIT",
   "type": "module",
+  "bin": {
+    "app-cli": "lib/bin.js"
+  },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "module": "lib/index.js",
@@ -23,7 +27,6 @@
       "types": "./lib/index.d.ts"
     }
   },
-  "keywords": [],
   "files": [
     "lib"
   ],
@@ -31,35 +34,43 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown",
+    "build": "pnpm rm:lib && pnpm run rolldown && chmod +x lib/bin.js",
     "_ci": "pnpm run lint && pnpm run test",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "_lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "lint": "pnpm run fmt && pnpm run lint:fix",
-    "lint:watch": "onchange --await-write-finish 1500 -d 10000 -v \"**/*.ts\" -- pnpm run lint",
-    "build:watch": "onchange --await-write-finish 1500 -d 10000 -v \"**/*.ts\" -- pnpm run build",
     "p-q": "pretty-quick",
     "posttest": "pnpm run fmt",
-    "prepublishOnly": "",
     "pretest": "pnpm run build",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "rm:lib": "pnpx rimraf ./lib",
     "rolldown": "rolldown -c",
     "test:coverage": "vitest run",
-    "test": "pnpm run test:coverage",
-    "test:only": "pnpm run test:coverage --no-coverage",
-    "test:ui": "vitest --ui",
+    "test": "pnpm run test:coverage --no-coverage",
+    "test:only": "pnpm run test",
     "test:watch": "vitest"
   },
+  "dependencies": {
+    "@bemedev/better-set": "^0.2.1",
+    "@bemedev/decompose": "^2.2.0",
+    "@bemedev/pipe": "^1.6.1",
+    "@bemedev/sleep": "^0.2.2",
+    "cmd-ts": "^0.15.0",
+    "fast-glob": "^3.3.3",
+    "node-watch": "^0.7.4",
+    "ts-morph": "^28.0.0"
+  },
+  "peerDependencies": {
+    "@bemedev/app": "workspace:^"
+  },
   "devDependencies": {
+    "@bemedev/app": "workspace:^",
     "@bemedev/dev-utils": "^0.8.0",
     "@bemedev/rolldown-config": "^0.5.0",
     "@types/node": "^25.9.3",
     "@vitest/coverage-v8": "^4.1.9",
-    "@vitest/ui": "^4.1.9",
-    "husky": "^9.1.7",
     "oxfmt": "^0.55.0",
     "oxlint": "^1.70.0",
     "pretty-quick": "^4.2.2",

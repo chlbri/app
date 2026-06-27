@@ -5,7 +5,6 @@ import { _any } from '@bemedev/app-utils-bemedev';
 import type { TimerState } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
-import { nanoid } from 'nanoid';
 import { FnMapR, isFunction } from '../types/primitives';
 
 /**
@@ -48,7 +47,7 @@ class SubscriberClass<
   constructor(
     subscriber: FnMapR<Eo, Tc, T, void>,
     equals: (a: St, b: St) => boolean = equal,
-    private _id = nanoid(),
+    private _id?: string,
     events: string[] = [],
   ) {
     this.#subscriber = subscriber;

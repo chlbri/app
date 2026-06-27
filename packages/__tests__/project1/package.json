@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "tsx index.ts",
     "test": "vitest run",
-    "generate": "app-cli generate",
-    "prepare": "husky"
+    "generate": "app-cli generate"
   },
   "devDependencies": {
     "@bemedev/app": "workspace:^",

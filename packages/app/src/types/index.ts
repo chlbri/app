@@ -297,16 +297,11 @@ export type {
 
 export type {
   CheckKeys_F,
-  ConfigPaths,
-  ConfigPaths2,
   Decompose,
   DecomposeKeys,
   DeleteFirst_F,
   EscapeRexExp_F,
   Fn,
-  NoExtraKeysConfigPaths,
-  ParseTreeContext,
-  ParseTree_F,
   RecomposeSV_F,
   ReduceDescriber_F,
   ReduceFnMap2_F,
@@ -343,6 +338,7 @@ export type {
   TransitionConfigMapA,
   TransitionConfigMapF,
   TransitionsConfig,
+  _TransitionsConfig,
 } from '#transitions';
 
 export type {

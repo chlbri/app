@@ -5,6 +5,7 @@ packages:
   - "packages/solidjs"
   - "packages/utils/bemedev"
   - "packages/utils/vitest"
+  - "packages/cli"
 
 allowBuilds:
   esbuild: true

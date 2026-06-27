@@ -673,9 +673,10 @@ export class SyncInterpreter<
 
   subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.machine.eventsList;
-    const find = Array.from(this.__subscribers).find(
-      f => f.id === options?.id,
-    );
+    const id = options?.id;
+    const find = id
+      ? Array.from(this.__subscribers).find(f => f.id === id)
+      : undefined;
     if (find) return find;
 
     const subscriber = createSubscriber(_subscriber, options, ...events);
