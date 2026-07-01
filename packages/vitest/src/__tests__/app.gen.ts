@@ -8,364 +8,361 @@ declare module '@bemedev/app' {
   interface Register {
     'src/__tests__/actions/action.batch.cov': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'INC1' | 'INC2' | 'INC5';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc1' | 'inc2' | 'inc5';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'inc1' | 'inc2' | 'inc5';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/actions.1.machine': {
       paths: {
-        map: {
-          targets: '/state1' | '/state2';
-          initial: 'state1';
-          states: {
-            state1: { targets: '/' | '/state2' };
-            state2: { targets: '/' | '/state1' };
+        map: { targets: ('/state1' | '/state2'); 
+        initial: 'state1';
+        states: {
+          'state1': { targets: ('/' | '/state2'); 
+          };
+          'state2': { targets: ('/' | '/state1'); 
           };
         };
+      };
         all: '/' | '/state1' | '/state2';
       };
       events: 'NEXT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'action1';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'action1';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/actions.2.machine': {
       paths: {
-        map: {
-          targets: '/state1' | '/state2';
-          initial: 'state1';
-          states: {
-            state1: { targets: '/' | '/state2' };
-            state2: { targets: '/' | '/state1' };
+        map: { targets: ('/state1' | '/state2'); 
+        initial: 'state1';
+        states: {
+          'state1': { targets: ('/' | '/state2'); 
+          };
+          'state2': { targets: ('/' | '/state1'); 
           };
         };
+      };
         all: '/' | '/state1' | '/state2';
       };
       events: 'NEXT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'action1';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'action1';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/async-actions.1.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'LOAD';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'loadUser';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'loadUser';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/async-actions.2.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'LOAD';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'loadUser';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'loadUser';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/async-actions.3.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'LOAD';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'loadUser';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'loadUser';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/async-actions.4.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'PING';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'ping';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'ping';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/async-actions.5.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'PING';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'ping';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'ping';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/async-actions.6.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'FILTER';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'filterEven';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'filterEven';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/async-actions.7.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'DISPATCH';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'dispatchEvent';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'dispatchEvent';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/async-actions.8.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
           };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'INC';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'inc';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/sendToActions/sendToActions1.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/next';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/next' };
-            next: { targets: '/' | '/idle' };
+        map: { targets: ('/idle' | '/next'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/next'); 
+          };
+          'next': { targets: ('/' | '/idle'); 
           };
         };
+      };
         all: '/' | '/idle' | '/next';
       };
-      events:
-        | 'DECREMENT'
-        | 'INCREMENT'
-        | 'REDECREMENT'
-        | 'NEXT'
-        | 'INCREMENT.FORCE';
+      events: 'DECREMENT' | 'INCREMENT' | 'REDECREMENT' | 'NEXT' | 'INCREMENT.FORCE';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'init' | 'dec' | 'inc' | 'sendDec' | 'forceSendInc';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'init' | 'dec' | 'inc' | 'sendDec' | 'forceSendInc';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/actions/sendToActions/sendToActions2.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/next';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/next' };
-            next: { targets: '/' | '/idle' };
+        map: { targets: ('/idle' | '/next'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/next'); 
+          };
+          'next': { targets: ('/' | '/idle'); 
           };
         };
+      };
         all: '/' | '/idle' | '/next';
       };
-      events:
-        | 'DECREMENT'
-        | 'INCREMENT'
-        | 'REDECREMENT'
-        | 'NEXT'
-        | 'INCREMENT.FORCE';
+      events: 'DECREMENT' | 'INCREMENT' | 'REDECREMENT' | 'NEXT' | 'INCREMENT.FORCE';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'init' | 'dec' | 'inc' | 'sendDec' | 'forceSendInc';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'init' | 'dec' | 'inc' | 'sendDec' | 'forceSendInc';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/constructTests.machine': {
       paths: {
-        map: {
-          targets: '/state1' | '/state2';
-          initial: 'state1';
-          states: {
-            state1: { targets: '/' | '/state2' };
-            state2: { targets: '/' | '/state1' };
+        map: { targets: ('/state1' | '/state2'); 
+        initial: 'state1';
+        states: {
+          'state1': { targets: ('/' | '/state2'); 
+          };
+          'state2': { targets: ('/' | '/state1'); 
           };
         };
+      };
         all: '/' | '/state1' | '/state2';
       };
       events: 'NEXT' | 'PREVIOUS';
       options: {
         children: never;
         emitters: never;
-        tags: 'tag1' | 'tag2' | 'tag3';
-        actions: 'activity1';
-        delays: 'myActivity';
-        guards: never;
+        tags:     'tag1' | 'tag2' | 'tag3';
+        actions:  'activity1';
+        delays:   'myActivity';
+        guards:   never;
       };
       pContext: any;
     };
 
     'excedd.fsm': {
       paths: {
-        map: {
-          targets: '/idle' | '/working';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/working' };
-            working: { targets: '/' | '/idle' };
+        map: { targets: ('/idle' | '/working'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/working'); 
+          };
+          'working': { targets: ('/' | '/idle'); 
           };
         };
+      };
         all: '/' | '/idle' | '/working';
       };
       events: 'ADD_CONDITION' | 'REMOVE_CONDITION';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'addCondition' | 'removeCondition' | 'inc';
-        delays: 'DELAY';
-        guards: 'condition' | 'limit';
+        tags:     never;
+        actions:  'addCondition' | 'removeCondition' | 'inc';
+        delays:   'DELAY';
+        guards:   'condition' | 'limit';
       };
       pContext: any;
     };
+
   }
 }
 

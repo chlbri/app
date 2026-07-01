@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-utils-bemedev",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -41,7 +41,7 @@
     "build:watch": "onchange --await-write-finish 1500 -d 10000 -v \"**/*.ts\" -- pnpm run build",
     "p-q": "pretty-quick",
     "posttest": "pnpm run fmt",
-    "bemedev:lift": "pnpm dlx @bemedev/core@1.0.0 -h",
+    "bemedev:lift": "pnpm dlx @bemedev/core -h",
     "prepublishOnly": "",
     "pretest": "pnpm run build",
     "fmt": "oxfmt",

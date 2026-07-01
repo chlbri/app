@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "path": ".",
+  "path": ".bemedev",
   "files": [
     "features.arrays.types",
     "features.booleans.types",
