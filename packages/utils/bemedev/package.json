@@ -41,7 +41,7 @@
     "build:watch": "onchange --await-write-finish 1500 -d 10000 -v \"**/*.ts\" -- pnpm run build",
     "p-q": "pretty-quick",
     "posttest": "pnpm run fmt",
-    "bemedev:lift": "pnpm dlx @bemedev/core -h",
+    "bemedev:lift": "pnpm dlx @bemedev/core lift",
     "prepublishOnly": "",
     "pretest": "pnpm run build",
     "fmt": "oxfmt",
