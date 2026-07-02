@@ -1,4 +1,4 @@
-import type { Fn, RecursiveArrayOf } from '../../globals/types';
+import type { RecursiveArrayOf } from '../../globals/types';
 
 /**
  * SingleOrRecursiveArrayOf type - Auto-generated expression
@@ -70,30 +70,6 @@ export type SingleOrArray<T> = T | T[] | ReadonlyArray<T>;
  * @author chlbri (bri_lvi@icloud.com)
  */
 export type SoA<T> = SingleOrArray<T>;
-
-/**
- * NExtract type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type NExtract<T, U extends T> = Extract<T, U>;
-/**
- * NExclude type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type NExclude<T, U extends T> = Exclude<T, U>;
-
 /**
  * NotUndefined type - Auto-generated expression
  *
@@ -105,55 +81,6 @@ export type NExclude<T, U extends T> = Exclude<T, U>;
  * @author chlbri (bri_lvi@icloud.com)
  */
 export type NotUndefined<T> = Exclude<T, undefined>;
-
-/**
- * Nu type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type Nu<T> = NotUndefined<T>;
-
-/**
- * Undefiny type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type Undefiny<T> = T | undefined;
-
-/**
- * Un type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type Un<T> = Undefiny<T>;
-
-/**
- * Cast type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type Cast<A, B> = A extends B ? A : B;
-
 /**
  * Keys type - Auto-generated expression
  *
@@ -165,71 +92,6 @@ export type Cast<A, B> = A extends B ? A : B;
  * @author chlbri (bri_lvi@icloud.com)
  */
 export type Keys = keyof any;
-
-/**
- * TypeStrings type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type TypeStrings =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'bigint'
-  | 'symbol'
-  | 'undefined'
-  | 'object'
-  | 'function';
-
-/**
- * KeyTypes type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type KeyTypes = {
-  [K in Keys]: TypeStrings | Checker2 | KeyTypes;
-};
-
-/**
- * NonN type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type NonN<T> = T extends undefined | null ? any : NonNullable<T>;
-
-/**
- * Defaulted type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type Defaulted<T, U extends NonN<T>> = undefined extends T
-  ? U
-  : null extends T
-    ? U
-    : never extends T
-      ? U
-      : T;
-
 // export type Defaulted<T, U extends NonN<T>> = T extends
 //   | undefined
 //   | never
@@ -292,33 +154,6 @@ export type _UnionToIntersection2<U> = {
 export type UnionToIntersection<U> = _UnionToIntersection2<
   _UnionToIntersection1<U>
 >;
-
-/**
- * UnionOmit type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type UnionOmit<T, K extends Keys> = T extends any
-  ? Omit<T, K>
-  : never;
-
-/**
- * UnionNOmit type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type UnionNOmit<T, K extends keyof T> = UnionOmit<T, K>;
-
 /**
  * LastOfUnion type - Auto-generated expression
  *
@@ -354,18 +189,6 @@ export type UnionToTuple<T, A extends any[] = []> = [T] extends [never]
   : UnionToTuple<Exclude<T, LastOfUnion<T>>, [LastOfUnion<T>, ...A]>;
 
 // #endregion
-
-/**
- * Checker2 type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type Checker2<T = unknown> = (value: unknown) => value is T;
 // | ((value: unknown) => boolean);
 
 /**
@@ -383,20 +206,6 @@ export type Equals<T, U> = T extends U
     ? true
     : false
   : false;
-
-/**
- * Classe type - Auto-generated expression
- *
- * ⚠️ WARNING: This expression is auto-generated and should not be modified.
- * Any manual changes will be overwritten during the next generation.
- *
- * @generated
- * @readonly
- * @author chlbri (bri_lvi@icloud.com)
- */
-export type Classe = {
-  [Symbol.hasInstance]: Fn<any, boolean>;
-};
 
 /**
  * UndefinedHelper class - Auto-generated expression
