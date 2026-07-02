@@ -1,4 +1,28 @@
-export type { AllowedNames, AnyArray, DeepPartial, DeepReadonly, Equals, Fn, FnBasic, Identitfy, IndexesOfArray, Keys, NOmit, NoExtraKeys, NotUndefined, Primitive, Require, Ru, SoA, SoRa, SubTypeLow, UnionToIntersection, UnionToTuple, Unionize, _UnionToIntersection2 } from '#bemedev/globals/types';
+export type {
+  AllowedNames,
+  AnyArray,
+  DeepPartial,
+  DeepReadonly,
+  Equals,
+  Fn,
+  FnBasic,
+  Identitfy,
+  IndexesOfArray,
+  Keys,
+  NOmit,
+  NoExtraKeys,
+  NotUndefined,
+  Primitive,
+  Require,
+  Ru,
+  SoA,
+  SoRa,
+  SubTypeLow,
+  UnionToIntersection,
+  UnionToTuple,
+  Unionize,
+  _UnionToIntersection2,
+} from '#bemedev/globals/types';
 export * from '#bemedev/globals/utils/_unknown';
 export * from '#bemedev/globals/utils/expandFn';
 export { default as trueO } from '#bemedev/features/objects/castings/trueObject';

@@ -26,5 +26,6 @@
       "approve": true,
       "matchCommandLine": true
     }
-  }
+  },
+  "oxc.enable": true
 }

@@ -24,7 +24,7 @@
     "noEmit": true,
     "declarationMap": true,
     "paths": {
-      "#bemedev/*": ["./src/.bemedev/*"]
+      "#bemedev/*": ["./src/libs/bemedev/*"]
     }
   }
 }
