@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-vitest",
-  "version": "1.5.0",
+  "version": "1.7.0",
   "description": "Test helpers for @bemedev/app",
   "private": false,
   "author": {
@@ -12,6 +12,7 @@
     "type": "git",
     "url": "https://github.com/chlbri/app"
   },
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/vitest/README.md",
   "license": "MIT",
   "type": "module",
   "main": "lib/index.js",

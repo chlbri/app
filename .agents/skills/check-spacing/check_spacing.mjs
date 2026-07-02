@@ -47,8 +47,12 @@ for (let x = 0; x < tests.length - 1; x++) {
         `gap=${gap} expected=${expected} ` +
         `(${t1.type} → ${t2.type})`,
     );
-    console.log(`  line ${t1.lineNum}: ${lines[t1.lineNum - 1].trim()}`);
-    console.log(`  line ${t2.lineNum}: ${lines[t2.lineNum - 1].trim()}`);
+    console.log(
+      `  line ${t1.lineNum}: ${lines[t1.lineNum - 1].trim()}`,
+    );
+    console.log(
+      `  line ${t2.lineNum}: ${lines[t2.lineNum - 1].trim()}`,
+    );
   }
 }
 if (violations === 0) console.log('No spacing violations found.');

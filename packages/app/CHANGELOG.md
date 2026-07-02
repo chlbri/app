@@ -11,6 +11,42 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.7.0] - 02/07/2026** => _10:39_
+
+</summary>
+
+### Features
+
+- **Package Metadata**: Add `homepage` key to `package.json` referencing
+  documentation links.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
+## **[1.6.0] - 02/07/2026** => _10:11_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to `1.6.0` to align with the
+  core release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.5.0] - 26/06/2026** => _20:20_
 
 </summary>
@@ -724,4 +760,4 @@ chlbri (bri_lvi@icloud.com)
 
 ## Links
 
-- [Documentation](https://github.com/chlbri/app-ts)
+- [Documentation](https://github.com/chlbri/app/blob/main/packages/reactjs/README.md)

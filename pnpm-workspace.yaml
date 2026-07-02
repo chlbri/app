@@ -3,6 +3,7 @@ packages:
   - "packages/vitest"
   - "packages/__tests__/project1"
   - "packages/solidjs"
+  - "packages/reactjs"
   - "packages/utils/bemedev"
   - "packages/utils/vitest"
   - "packages/cli"

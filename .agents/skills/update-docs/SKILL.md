@@ -1,13 +1,14 @@
 ---
 name: update-docs
-description: Update `CHANGELOG.md` and `README.md` after a version upgrade by
+description:
+  Update `CHANGELOG.md` and `README.md` after a version upgrade by
   analyzing recent git commits and comparing versions.
 ---
 
 # Update Docs
 
-Four-step workflow to keep `CHANGELOG.md` and `README.md` in sync after a
-version bump in `package.json`.
+Four-step workflow to keep `CHANGELOG.md` and `README.md` in sync after
+a version bump in `package.json`.
 
 ## Required input
 
@@ -22,10 +23,11 @@ Before starting, explicitly define the target package directory.
 
 ## Flags
 
-| Flag       | Effect                                                               |
-| ---------- | -------------------------------------------------------------------- |
-| `--force`  | Continue to Step 3 even when no meaningful changes are detected      |
-| `--readme` | In Step 3, deeply analyse all diffs and consider README improvements |
+| Flag         | Effect                                                               |
+| ------------ | -------------------------------------------------------------------- |
+| `--force`    | Continue to Step 3 even when no meaningful changes are detected      |
+| `--readme`   | In Step 3, deeply analyse all diffs and consider README improvements |
+| `--no-tests` | Skip running automated tests during the verification phase           |
 
 ## Format Rules
 
@@ -49,5 +51,5 @@ Start at → [`steps/step1.md`](steps/step1.md)
 
 ## NB
 
-README and CHANGELOG should always BE in ENGLISH, NO OTHER LANGUAGE, even
-if the project is primarily in another language.
+README and CHANGELOG should always BE in ENGLISH, NO OTHER LANGUAGE,
+even if the project is primarily in another language.

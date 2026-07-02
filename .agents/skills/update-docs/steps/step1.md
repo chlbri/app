@@ -1,13 +1,14 @@
 # Step 1 — Version Check
 
-Compare the version in `package.json` against the last version documented
-in `CHANGELOG.md`.
+Compare the version in `package.json` against the last version
+documented in `CHANGELOG.md`.
 
 Target scope is mandatory:
 
 - Define `PACKAGE_DIR` first (for example `packages/app`)
 - Run all checks inside `${PACKAGE_DIR}`
-- Compare `${PACKAGE_DIR}/package.json` and `${PACKAGE_DIR}/CHANGELOG.md`
+- Compare `${PACKAGE_DIR}/package.json` and
+  `${PACKAGE_DIR}/CHANGELOG.md`
 
 ## Script
 

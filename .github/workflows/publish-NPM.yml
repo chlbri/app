@@ -12,25 +12,38 @@ jobs:
     uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
     secrets: inherit
     with:
-      type: ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
+      type:
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
         'canary' && 'canary' || 'latest' }}
 
-      package: "./packages/app"
+      package: './packages/app'
 
   vitest:
     uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
     secrets: inherit
     with:
-      type: ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
+      type:
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
         'canary' && 'canary' || 'latest' }}
 
-      package: "./packages/vitest"
+      package: './packages/vitest'
 
   solidjs:
     uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
     secrets: inherit
     with:
-      type: ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
+      type:
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
         'canary' && 'canary' || 'latest' }}
 
-      package: "./packages/solidjs"
+      package: './packages/solidjs'
+
+  reactjs:
+    uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
+    secrets: inherit
+    with:
+      type:
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
+        'canary' && 'canary' || 'latest' }}
+
+      package: './packages/reactjs'
