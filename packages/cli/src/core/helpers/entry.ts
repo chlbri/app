@@ -34,7 +34,7 @@ const configPathsToType = (cp: ConfigPaths, indent = 0): string => {
     lines.push(`${nextPad}states: {`);
 
     for (const [stateName, stateConfig] of Object.entries(cp.states)) {
-      const stateType = configPathsToType(stateConfig, indent + 4);
+      const stateType = configPathsToType(stateConfig as any, indent + 4);
       lines.push(`${' '.repeat(indent + 4)}'${stateName}': ${stateType};`);
     }
 

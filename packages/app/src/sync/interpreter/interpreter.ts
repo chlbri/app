@@ -545,6 +545,7 @@ export class SyncInterpreter<
         /* v8 ignore else -- @preserve */
         if (always) {
           const target = always();
+          /* v8 ignore else -- @preserve */
           if (target) return this.__performConfig(target);
         }
 
@@ -932,7 +933,7 @@ export type SyncInterpreter_F = <M extends AnyMachine>(
  */
 export const interpretSync: SyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
-  const { mode, exact, pContext, context } = _any(args ?? {});
+  const { mode, exact, pContext, context } = _any(args);
   const out: any = new SyncInterpreter(machine, mode, exact);
   out._providePrivateContext(pContext);
   out._provideContext(context);

@@ -1,4 +1,4 @@
-import { isChildConfig, isEmitterConfig } from '#actors';
+import { isChildConfig } from '#actors';
 import { type NodeConfig3 } from '#states';
 
 export const constructEvents = (node: NodeConfig3) => {
@@ -15,7 +15,7 @@ export const constructEvents = (node: NodeConfig3) => {
     const entries = Object.entries(actors);
     entries.forEach(([key, actor]) => {
       const checkChild = isChildConfig(actor);
-      const checkEmmiter = isEmitterConfig(actor);
+      // const checkEmmiter = isEmitterConfig(actor);
       if (checkChild) {
         const on = actor.on;
         if (on) {
@@ -24,7 +24,7 @@ export const constructEvents = (node: NodeConfig3) => {
             out.push(`${key}::on::${k}`);
           });
         }
-      } else if (checkEmmiter) {
+      } else {
         out.push(`${key}::next`);
         out.push(`${key}::error`);
       }

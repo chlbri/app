@@ -785,9 +785,6 @@ export class AsyncInterpreter<
     // #endregion
 
     for (const [from, transitions] of flat2) {
-      const cannotContinue = !this.__isInsideValue2(sv, from);
-      if (cannotContinue) continue;
-
       const target = await this.__performTransitions(
         from,
         ...toArray.typed(transitions),

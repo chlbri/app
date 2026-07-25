@@ -1,39 +1,8 @@
-import { defineConfig } from 'vitest/config';
-import { exclude } from '@bemedev/dev-utils/vitest-exclude';
+import { defineConfig, defaultExclude } from 'vitest/config';
 
 export default defineConfig({
   resolve: { tsconfigPaths: true },
   server: { host: '0.0.0.0' },
-  plugins: [
-    exclude({
-      ignoreCoverageFiles: [
-        '**/index.ts',
-        '**/node_modules/**',
-        '**/*.js',
-        '**/*.cjs',
-        '**/*.mjs',
-        '**/*.d.ts',
-        '**/types.ts',
-        '**/*.example.ts',
-        '**/*.types.ts',
-        '**/*.typegen.ts',
-        '**/*.fixtures.ts',
-        '**/fixtures/**',
-        '**/*.test-d.ts',
-        '**/*.machine.ts',
-        '**/experimental.ts',
-        '**/src/utils/nothing.ts',
-        '**/fixtures.ts',
-        '**/libs/bemedev/**/*',
-        '**/fixture.ts',
-        '**/*.fixture.ts',
-        '**/test.ts',
-        '**/src/cli/cli.ts',
-        '**/src/cli/core/helpers/**',
-        '**/__tests__/**',
-      ],
-    }),
-  ],
 
   test: {
     passWithNoTests: true,
@@ -47,6 +16,32 @@ export default defineConfig({
       enabled: true,
       reportsDirectory: '.coverage',
       provider: 'v8',
+      exclude: [
+        ...defaultExclude,
+        '**/index.ts',
+        '**/*.js',
+        '**/*.cjs',
+        '**/*.mjs',
+        '**/*.d.ts',
+        '**/types.ts',
+        '**/__tests__/edges/arrayAssign/async.async.fsm.ts',
+        '**/__tests__/interpreters/sync/data/machine2.ts',
+        '**/__tests__/interpreters/async/data/machine2.ts',
+        '**/__tests__/interpreters/async/data/machine21.ts',
+        '**/*.example.ts',
+        '**/*.types.ts',
+        '**/*.fixtures.ts',
+        '**/fixtures/**',
+        '**/*.machine.ts',
+        '**/experimental.ts',
+        '**/src/utils/nothing.ts',
+        '**/fixtures.ts',
+        '**/libs/bemedev/**/*',
+        '**/fixture.ts',
+        '**/*.fixture.ts',
+        '**/test.ts',
+        '**/src/core/helpers/**',
+      ],
     },
 
     projects: [

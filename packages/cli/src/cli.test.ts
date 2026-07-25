@@ -16,6 +16,7 @@ import { generate } from './commands/generate';
 import { watch } from './commands/watch';
 import { LIB } from './core/constants';
 import { produceStarterContent } from './core/helpers';
+const IS_EXTENSION = process.env.VITEST_VSCODE === 'true';
 
 describe('CLI', () => {
   // #region Config
@@ -84,11 +85,21 @@ export default createMachine(
   const CREATED_FILE = './src/__tests__/watch.machine.ts';
   const DIR = dirname(CREATED_FILE);
   const fsmPath = `${DIR}/actions.fsm.ts`;
+  const spy = vi.spyOn(process, 'cwd');
+  const WAITER = 500;
+
+  beforeAll(() => {
+    if (IS_EXTENSION) {
+      spy.mockReturnValue(resolve(process.cwd(), 'packages/cli'));
+    }
+  });
+
+  afterAll(() => spy.mockRestore());
 
   test('#-01 => Create strcuture folder', async () => {
     mkdirSync(resolve(process.cwd(), DIR), { recursive: true });
     writeFileSync(resolve(process.cwd(), fsmPath), ACTION_FSM_CONTENT);
-    await sleep(500);
+    await sleep(WAITER);
   });
   // #endregion
 
@@ -98,7 +109,7 @@ export default createMachine(
   });
 
   it('#01 => create file', async ({ onTestFinished }) => {
-    await sleep(1500).then(() => {
+    await sleep(WAITER).then(() => {
       writeFileSync(resolve(process.cwd(), CREATED_FILE), '', {
         mode: '777',
       });
@@ -107,7 +118,7 @@ export default createMachine(
   });
 
   it('#02 => close watcher', async ({ onTestFinished }) => {
-    await sleep(1500).then(() => watcher.close());
+    await sleep(WAITER).then(() => watcher.close());
     onTestFinished(() => console.warn('watcher closed'));
   });
 
@@ -121,7 +132,7 @@ export default createMachine(
   });
 
   it('#04 => delete file', async ({ onTestFinished }) => {
-    await sleep(100).then(() =>
+    await sleep(WAITER / 5).then(() =>
       unlinkSync(resolve(process.cwd(), CREATED_FILE)),
     );
     onTestFinished(() => console.warn('file deleted'));
@@ -144,7 +155,7 @@ export default createMachine(
   });
 
   it('#07 => delete the only machine left', async ({ onTestFinished }) => {
-    await sleep(100).then(() => {
+    await sleep(WAITER / 5).then(() => {
       const exists = existsSync(
         resolve(process.cwd(), `${DIR}/app.gen.ts`),
       );

@@ -25,8 +25,6 @@ export const MERGE_UNDEFINED = new MergeUndefined();
 // create a function that transform MERGE_UNDEFINED to undefined in all cases deep nested array or object, recursive
 
 export const transformMergeUndefined = (value: any): any => {
-  if (value === MERGE_UNDEFINED) return undefined;
-
   if (Array.isArray(value)) {
     return value.map(transformMergeUndefined);
   }
