@@ -6,16 +6,8 @@ describe('TESTS', () => {
   const machine = createMachine({
     initial: 'prev',
     states: {
-      prev: {
-        on: {
-          NEXT: '/next',
-        },
-      },
-      next: {
-        on: {
-          NEXT: '/prev',
-        },
-      },
+      prev: { on: { NEXT: '/next' } },
+      next: { on: { NEXT: '/prev' } },
     },
   });
 
@@ -23,9 +15,7 @@ describe('TESTS', () => {
 
   const { start, stop, next, useStateValue } = constructTests(
     service,
-    ({ sender }) => ({
-      next: sender('NEXT'),
-    }),
+    ({ sender }) => ({ next: sender('NEXT') }),
   );
 
   test(...start());

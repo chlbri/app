@@ -6,13 +6,8 @@ export default createMachine(
   { on: { INC: { actions: ['incthearray'] } } },
   {
     sync: true,
-    context: typings.context({
-      number1: 'number',
-      number2: 'number',
-    }),
-    eventsMap: typings.eventsMap({
-      INC: 'undefined',
-    }),
+    context: typings.context({ number1: 'number', number2: 'number' }),
+    eventsMap: typings.eventsMap({ INC: 'undefined' }),
   },
 ).provideOptions(({ assign }) => ({
   actions: {

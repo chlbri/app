@@ -8,13 +8,8 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          SET_DATA: {
-            actions: 'setData',
-          },
-          CLEAR_ALL: {
-            actions: 'clearAll',
-            target: '/cleared',
-          },
+          SET_DATA: { actions: 'setData' },
+          CLEAR_ALL: { actions: 'clearAll', target: '/cleared' },
         },
       },
       cleared: {},
@@ -22,11 +17,7 @@ export default createMachine(
   },
   {
     context: type(({ partial }) =>
-      partial({
-        name: 'string',
-        age: 'number',
-        email: 'string',
-      }),
+      partial({ name: 'string', age: 'number', email: 'string' }),
     ),
 
     eventsMap: type({

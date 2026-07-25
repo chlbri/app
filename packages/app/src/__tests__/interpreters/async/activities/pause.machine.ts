@@ -15,14 +15,8 @@ export default createMachine(
           NEXT: '/next',
         },
       },
-      next: {
-        always: '/idle',
-      },
+      next: { always: '/idle' },
     },
   },
-  {
-    context: type({
-      iterator: 'number',
-    }),
-  },
+  { context: type({ iterator: 'number' }) },
 );

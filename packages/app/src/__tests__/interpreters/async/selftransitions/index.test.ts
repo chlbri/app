@@ -12,11 +12,7 @@ describe('Self Transitions', () => {
   it('should handle after self transitions', async () => {
     const machine = _machine1;
 
-    machine.addOptions(() => ({
-      delays: {
-        DELAY,
-      },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY } }));
 
     const service = interpret(machine);
 

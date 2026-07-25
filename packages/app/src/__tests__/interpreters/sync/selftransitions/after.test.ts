@@ -15,23 +15,12 @@ describe('after', () => {
     const machine = createMachine(
       {
         initial: 'idle',
-        states: {
-          idle: {
-            after: {
-              DELAY: '/active',
-            },
-          },
-          active: {},
-        },
+        states: { idle: { after: { DELAY: '/active' } }, active: {} },
       },
       { sync: true },
     );
 
-    machine.addOptions(() => ({
-      delays: {
-        DELAY,
-      },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY } }));
 
     const service = interpret(machine, defaultC);
     service.start();
@@ -47,12 +36,7 @@ describe('after', () => {
       {
         initial: 'idle',
         states: {
-          idle: {
-            after: {
-              DELAY1: '/result1',
-              DELAY2: '/result2',
-            },
-          },
+          idle: { after: { DELAY1: '/result1', DELAY2: '/result2' } },
           result1: {},
           result2: {},
         },
@@ -61,10 +45,7 @@ describe('after', () => {
     );
 
     machine.addOptions(() => ({
-      delays: {
-        DELAY1: DELAY * 3,
-        DELAY2: DELAY * 2,
-      },
+      delays: { DELAY1: DELAY * 3, DELAY2: DELAY * 2 },
     }));
 
     const service = interpret(machine);
@@ -98,13 +79,8 @@ describe('after', () => {
     );
 
     machine.addOptions(() => ({
-      delays: {
-        DELAY,
-        DELAY2: DELAY * 4,
-      },
-      guards: {
-        returnFalse,
-      },
+      delays: { DELAY, DELAY2: DELAY * 4 },
+      guards: { returnFalse },
     }));
 
     const service = interpret(machine, defaultC);
@@ -125,28 +101,16 @@ describe('after', () => {
         initial: 'idle',
         states: {
           idle: {
-            after: {
-              DELAY2: { target: '/active' },
-            },
-            on: {
-              NEXT: '/active',
-            },
+            after: { DELAY2: { target: '/active' } },
+            on: { NEXT: '/active' },
           },
-          active: {
-            on: {
-              NEXT: '/idle',
-            },
-          },
+          active: { on: { NEXT: '/idle' } },
         },
       },
       { sync: true },
     );
 
-    machine.addOptions(() => ({
-      delays: {
-        DELAY2: DELAY * 3,
-      },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY2: DELAY * 3 } }));
 
     const service = interpret(machine, defaultC);
     service.start();
@@ -173,18 +137,13 @@ describe('after', () => {
     const machine = createMachine(
       {
         initial: 'idle',
-        states: {
-          idle: { after: { DELAY: '/active' } },
-          active: {},
-        },
+        states: { idle: { after: { DELAY: '/active' } }, active: {} },
       },
       { sync: true },
     );
 
     machine.addOptions(() => ({
-      delays: {
-        DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5,
-      },
+      delays: { DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5 },
     }));
 
     const service = interpret(machine, defaultC);

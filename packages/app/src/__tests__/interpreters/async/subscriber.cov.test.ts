@@ -211,9 +211,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         const service = interpret(machine1, baseConfig);
         const nextFn = vi.fn(() => 'next-handler');
 
-        const subscriber = service.subscribe({
-          NEXT: nextFn,
-        });
+        const subscriber = service.subscribe({ NEXT: nextFn });
 
         await service.start();
         await service.send('NEXT');
@@ -228,9 +226,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         const service = interpret(machine1, baseConfig);
         const firstFn = vi.fn(() => 'first-handler');
 
-        const subscriber = service.subscribe({
-          NEXT: firstFn,
-        });
+        const subscriber = service.subscribe({ NEXT: firstFn });
 
         await service.start();
         await service.send('NEXT');
@@ -247,9 +243,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         const service = interpret(machine1, baseConfig);
         const elseFn = vi.fn(() => 'else-result');
 
-        const subscriber = service.subscribe({
-          else: elseFn,
-        });
+        const subscriber = service.subscribe({ else: elseFn });
 
         await service.start();
         await service.send('NEXT');
@@ -419,12 +413,8 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const mockFn1 = vi.fn(() => 'first-subscriber');
       const mockFn2 = vi.fn(() => 'second-subscriber');
 
-      const subscriber1 = service.subscribe(mockFn1, {
-        id: 'unique-id',
-      });
-      const subscriber2 = service.subscribe(mockFn2, {
-        id: 'unique-id',
-      });
+      const subscriber1 = service.subscribe(mockFn1, { id: 'unique-id' });
+      const subscriber2 = service.subscribe(mockFn2, { id: 'unique-id' });
 
       // Should return the same subscriber for same ID
       expect(subscriber1).toBe(subscriber2);

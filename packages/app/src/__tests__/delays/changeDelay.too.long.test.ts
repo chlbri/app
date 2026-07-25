@@ -19,9 +19,7 @@ describe('TESTS', () => {
 
   it('#11 => Change DELAY', () => {
     service.addOptions(() => ({
-      delays: {
-        DELAY: DEFAULT_MAX_TIME_PROMISE / 2,
-      },
+      delays: { DELAY: DEFAULT_MAX_TIME_PROMISE / 2 },
     }));
   });
 

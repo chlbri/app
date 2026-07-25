@@ -92,10 +92,7 @@ export type ExecuteActivities_F = (
   activity: ActivityConfig,
 ) => string[];
 
-export type SendToEvent<T = any> = {
-  to: string;
-  event: T;
-};
+export type SendToEvent<T = any> = { to: string; event: T };
 
 export type DirectMerge_F<
   Pc = any,
@@ -379,10 +376,7 @@ export type MachineOptionsFrom<T extends KeyU<'options'>> = Extract<
 export type Contexts<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
-> = {
-  pContext?: Pc;
-  context?: Tc;
-};
+> = { pContext?: Pc; context?: Tc };
 
 /**
  * Alias of {@linkcode MachineOptionsFrom}.
@@ -422,10 +416,7 @@ export type InterpreterOptions<
   M extends AnyMachine,
   P extends PrivateContextFrom<M> = PrivateContextFrom<M>,
   C extends ContextFrom<M> = ContextFrom<M>,
-> = {
-  mode?: Mode;
-  exact?: boolean;
-} & OptionalDefinitions<P, C>;
+> = { mode?: Mode; exact?: boolean } & OptionalDefinitions<P, C>;
 
 export type InterpretArgs<M extends AnyMachine> =
   Equals<

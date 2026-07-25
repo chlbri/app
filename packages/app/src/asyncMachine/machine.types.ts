@@ -187,10 +187,7 @@ export type AsyncDebounceAction_F<
   T extends string = string,
 > = <A extends AsyncAction2<E, Pc, Tc, T>>(
   fn: A,
-  options: {
-    ms?: number;
-    id: string;
-  },
+  options: { ms?: number; id: string },
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 export type AsyncBatchAction_F<
@@ -247,9 +244,7 @@ export type AsyncAddOptionsParam_F<
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.
    */
-  legacyOptions: {
-    _legacy: L;
-  },
+  legacyOptions: { _legacy: L },
 ) => Mo;
 
 export type AsyncAddOptions_F<

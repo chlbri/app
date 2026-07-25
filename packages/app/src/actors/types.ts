@@ -13,9 +13,7 @@ import type {
 } from '@bemedev/app-utils-bemedev';
 import type { Describer } from '~types';
 
-export type CommonActor = {
-  readonly description?: string;
-};
+export type CommonActor = { readonly description?: string };
 
 export type _FinallyConfig = NOmit<TransitionConfigMapA, 'target'>;
 

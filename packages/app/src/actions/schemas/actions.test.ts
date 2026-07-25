@@ -9,46 +9,22 @@ describe('TESTS', () => {
   describe(
     '#01 => CASES',
     success(
-      {
-        invite: 'string => true',
-        parameters: ['foo'],
-        expected: true,
-      },
-      {
-        invite: 'empty string => true',
-        parameters: [''],
-        expected: true,
-      },
+      { invite: 'string => true', parameters: ['foo'], expected: true },
+      { invite: 'empty string => true', parameters: [''], expected: true },
       {
         invite: 'empty object => false',
         parameters: [{}],
         expected: false,
       },
-      {
-        invite: 'null => false',
-        parameters: [null],
-        expected: false,
-      },
+      { invite: 'null => false', parameters: [null], expected: false },
       {
         invite: 'undefined => false',
         parameters: [undefined],
         expected: false,
       },
-      {
-        invite: 'number => false',
-        parameters: [34],
-        expected: false,
-      },
-      {
-        invite: 'boolean => false',
-        parameters: [true],
-        expected: false,
-      },
-      {
-        invite: 'array #1 => false',
-        parameters: [[]],
-        expected: false,
-      },
+      { invite: 'number => false', parameters: [34], expected: false },
+      { invite: 'boolean => false', parameters: [true], expected: false },
+      { invite: 'array #1 => false', parameters: [[]], expected: false },
       {
         invite: 'array #2 => false',
         parameters: [['data', 34]],

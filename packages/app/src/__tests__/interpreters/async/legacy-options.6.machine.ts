@@ -18,10 +18,6 @@ export default createMachine(
   {
     context: type('number'),
 
-    eventsMap: type({
-      FIRST: 'never',
-      SECOND: 'never',
-      THIRD: 'never',
-    }),
+    eventsMap: type({ FIRST: 'never', SECOND: 'never', THIRD: 'never' }),
   },
 );

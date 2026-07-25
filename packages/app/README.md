@@ -217,9 +217,7 @@ const machine = createMachine(
     initial: 'idle',
 
     // Root-level actors (emitters/children) shared across all states
-    actors: {
-      /* optional */
-    },
+    actors: {/* optional */},
 
     // All states
     states: {
@@ -315,9 +313,7 @@ error:
 ```typescript
 const machine = createMachine({
   init: 'idle', // ❌ Type error: Object literal may only specify known properties...
-  states: {
-    idle: {},
-  },
+  states: { idle: {} },
 });
 ```
 
@@ -359,10 +355,7 @@ import {
 
 // Define schemas
 const user = type(({ partial }) =>
-  partial({
-    name: 'string',
-    age: 'number',
-  }),
+  partial({ name: 'string', age: 'number' }),
 );
 ```
 
@@ -388,10 +381,7 @@ const machine = createMachine(
   'auth-machine',
   {
     initial: 'idle',
-    states: {
-      idle: { on: { FETCH: '/loading' } },
-      loading: {},
-    },
+    states: { idle: { on: { FETCH: '/loading' } }, loading: {} },
   },
   {
     // Public context (exposed via service.context)
@@ -404,11 +394,7 @@ const machine = createMachine(
     ),
 
     // Private context (not exposed to subscribers)
-    pContext: type(({ partial }) =>
-      partial({
-        token: 'string',
-      }),
-    ),
+    pContext: type(({ partial }) => partial({ token: 'string' })),
 
     // All events the machine can receive
     eventsMap: type(({ partial, array }) => ({
@@ -498,9 +484,7 @@ service.addOptions(({ assign }) => ({
 
 ```typescript
 const enrichedService = service.provideOptions(({ voidAction }) => ({
-  actions: {
-    log: voidAction(() => console.log('state changed')),
-  },
+  actions: { log: voidAction(() => console.log('state changed')) },
 }));
 ```
 
@@ -892,9 +876,7 @@ const machine = createMachine(
     },
   },
   defaultT,
-).provideOptions(() => ({
-  delays: { POLL: 5000 },
-}));
+).provideOptions(() => ({ delays: { POLL: 5000 } }));
 // → transitions to 'refreshing' after 5 s
 ```
 
@@ -1187,10 +1169,7 @@ Context can be mapped from child to parent (`pContext`).
 const child = createMachine(
   {
     initial: 'idle',
-    states: {
-      idle: { on: { PING: '/pong' } },
-      pong: {},
-    },
+    states: { idle: { on: { PING: '/pong' } }, pong: {} },
   },
   typings({ eventsMap: { PING: 'primitive' } }),
 );
@@ -1222,9 +1201,7 @@ const parent = createMachine(
     notify: voidAction(() => console.log('child reached pong')),
     forwardPing: sendTo(child)(() => ({ to: 'worker', event: 'PING' })),
   },
-  actors: {
-    children: { worker: () => interpret(child) },
-  },
+  actors: { children: { worker: () => interpret(child) } },
 }));
 ```
 
@@ -1354,14 +1331,7 @@ global registry:
 // src/auth/auth.machine.ts
 import { createMachine, registerMachine, typings } from '@bemedev/app';
 
-const machine = createMachine(
-  {
-    /* config */
-  },
-  typings({
-    /* types */
-  }),
-);
+const machine = createMachine({/* config */}, typings({/* types */}));
 
 registerMachine('./src/auth/auth.machine.ts', machine);
 
@@ -1514,9 +1484,7 @@ service.addOptions(({ assign }) => ({
 }));
 
 service.addOptions(({ batch }, { _legacy }) => ({
-  actions: {
-    add10: batch(_legacy.actions.add5!, _legacy.actions.add5!),
-  },
+  actions: { add10: batch(_legacy.actions.add5!, _legacy.actions.add5!) },
 }));
 ```
 
@@ -1756,11 +1724,7 @@ The root package now re-exports a small set of generic utility helpers from
 ```typescript
 type TransitionConfig =
   | string // Target path
-  | {
-      target?: string;
-      guards?: GuardConfig;
-      actions?: ActionConfig;
-    }
+  | { target?: string; guards?: GuardConfig; actions?: ActionConfig }
   | TransitionConfig[]; // Array — first match wins
 ```
 

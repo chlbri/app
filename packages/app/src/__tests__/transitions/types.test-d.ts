@@ -57,9 +57,7 @@ const ttest3 = {
     { actions: 'f', target: '/state' },
   ],
   actors: {
-    em1: {
-      next: '/dfdfd',
-    },
+    em1: { next: '/dfdfd' },
     m1: {
       on: {
         EVENT1: { actions: 'action1' },
@@ -95,17 +93,11 @@ const transition1 = {
   actors: {
     machine111: {
       contexts: {},
-      on: {
-        NEXT: '/working',
-        PREVIOUS: '/idle',
-      },
+      on: { NEXT: '/working', PREVIOUS: '/idle' },
     },
     machine122: {
       contexts: {},
-      on: {
-        NEXT2: '/working',
-        PREVIOUS2: '/idle',
-      },
+      on: { NEXT2: '/working', PREVIOUS2: '/idle' },
     },
   },
 } as const satisfies TransitionsConfig;
@@ -113,30 +105,17 @@ const transition1 = {
 type TTS1 = ExtractChildKeysFromTransitions<typeof transition1>;
 
 expectTypeOf<TTS1>().toEqualTypeOf<
-  | {
-      src: 'machine111';
-      contexts: {};
-      on: 'NEXT' | 'PREVIOUS';
-    }
-  | {
-      src: 'machine122';
-      contexts: {};
-      on: 'NEXT2' | 'PREVIOUS2';
-    }
+  | { src: 'machine111'; contexts: {}; on: 'NEXT' | 'PREVIOUS' }
+  | { src: 'machine122'; contexts: {}; on: 'NEXT2' | 'PREVIOUS2' }
 >();
 
 const transition2 = {
   actors: {
     machine111: {
       contexts: {},
-      on: {
-        NEXT: '/working',
-        PREVIOUS: '/idle',
-      },
+      on: { NEXT: '/working', PREVIOUS: '/idle' },
     },
-    emitter1: {
-      next: '/',
-    },
+    emitter1: { next: '/' },
   },
 } as const satisfies TransitionsConfig;
 

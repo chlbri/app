@@ -30,12 +30,7 @@ describe('reduceActivity', () => {
       {
         invite: 'single transition object',
         parameters: [
-          {
-            after: {
-              actions: ['onEnter'],
-              guards: ['isReady'],
-            },
-          },
+          { after: { actions: ['onEnter'], guards: ['isReady'] } },
         ],
         expected: {
           actions: ['onEnter'],
@@ -46,10 +41,7 @@ describe('reduceActivity', () => {
       {
         invite: 'mixed string and transition',
         parameters: [
-          {
-            a: 'act',
-            b: { actions: ['act2'], guards: ['g1'] },
-          },
+          { a: 'act', b: { actions: ['act2'], guards: ['g1'] } },
         ],
         expected: {
           actions: ['act', 'act2'],

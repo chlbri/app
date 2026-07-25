@@ -6,9 +6,7 @@ import type {
 } from '@bemedev/app-utils-bemedev';
 import type { FnMap, FnMapR } from '~types';
 
-export type IsAsyncConfig<T> = T extends {
-  after: any;
-}
+export type IsAsyncConfig<T> = T extends { after: any }
   ? true
   : T extends { states: object }
     ? T['states'] extends infer T2

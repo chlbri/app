@@ -6,6 +6,7 @@
     "declaration": true,
     "sourceMap": true,
     "outDir": "./lib",
+    "rootDir": "./src",
     "resolveJsonModule": true,
     "strict": true,
     "noImplicitReturns": true,
@@ -23,8 +24,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "declarationMap": true,
-    "paths": {
-      "#tester": ["./src/constructTests.ts"]
-    }
-  }
+    "paths": { "#tester": ["./src/constructTests.ts"] }
+  },
+  "exclude": ["rolldown.config.ts", "vitest.config.ts"]
 }

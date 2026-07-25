@@ -36,11 +36,7 @@ describe('TESTS', () => {
         },
         {
           invite: 'neither contexts nor on, and description => false',
-          parameters: [
-            {
-              description: 'description',
-            },
-          ],
+          parameters: [{ description: 'description' }],
           expected: false,
         },
         {

@@ -315,9 +315,7 @@ type _FnMap<
       T
     >,
   ) => R;
-} & {
-  else?: FnR<E, Pc, Tc, T, R>;
-};
+} & { else?: FnR<E, Pc, Tc, T, R> };
 
 type _FnMapReduced<
   E extends EventObject = EventObject,
@@ -334,9 +332,7 @@ type _FnMapReduced<
   [key in TT['type']]?: (
     state: StateP<Extract<TT, { type: key }>['payload'], Tc, T>,
   ) => R;
-} & {
-  else?: FnReduced<E, Tc, T, R>;
-};
+} & { else?: FnReduced<E, Tc, T, R> };
 
 export type FnMap<
   E extends EventObject = EventObject,

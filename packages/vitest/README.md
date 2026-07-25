@@ -143,9 +143,7 @@ describe('Timer Machine tests', () => {
   const { start, useStateValue, wait, send } = constructTests(
     vi,
     service,
-    ({ waiter }) => ({
-      waitSecond: waiter(1000),
-    }),
+    ({ waiter }) => ({ waitSecond: waiter(1000) }),
   );
 
   test(...start());

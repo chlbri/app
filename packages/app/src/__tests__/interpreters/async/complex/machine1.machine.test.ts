@@ -11,9 +11,7 @@ import {
 vi.useFakeTimers();
 
 describe('Complex machine 1', () => {
-  const service = interpret(machine, {
-    context: {},
-  });
+  const service = interpret(machine, { context: {} });
 
   const {
     start,
@@ -41,14 +39,7 @@ describe('Complex machine 1', () => {
   test(...useStateValue('idle'));
   test(...start());
 
-  test(
-    ...send({
-      type: 'START',
-      payload: {
-        asset: ASSET_1,
-      },
-    }),
-  );
+  test(...send({ type: 'START', payload: { asset: ASSET_1 } }));
 
   test(...useIntermediariesLength(1, 1));
   test(...useStateValue('idle'));
@@ -80,12 +71,7 @@ describe('Complex machine 1', () => {
     expect(decomposed).not.toContain('working.adding');
   });
 
-  test(
-    ...send({
-      type: 'ADD_INTERMEDIARY',
-      payload: INTERMEDIARY_1,
-    }),
-  );
+  test(...send({ type: 'ADD_INTERMEDIARY', payload: INTERMEDIARY_1 }));
 
   test('#07 => state is at "working.adding"', () => {
     const decomposed = decomposeSV(service.state.value);
@@ -149,10 +135,7 @@ describe('Complex machine 1', () => {
   test(
     ...send({
       type: 'START',
-      payload: {
-        asset: ASSET_1,
-        mandatory: INTERMEDIARY_2,
-      },
+      payload: { asset: ASSET_1, mandatory: INTERMEDIARY_2 },
     }),
   );
 
@@ -189,12 +172,7 @@ describe('Complex machine 1', () => {
     expect(decomposed).not.toContain('working.adding');
   });
 
-  test(
-    ...send({
-      type: 'ADD_INTERMEDIARY',
-      payload: INTERMEDIARY_2,
-    }),
-  );
+  test(...send({ type: 'ADD_INTERMEDIARY', payload: INTERMEDIARY_2 }));
 
   test('#19 => state is at "working.idle"', () => {
     const decomposed = decomposeSV(service.state.value);
@@ -227,12 +205,7 @@ describe('Complex machine 1', () => {
     });
   });
 
-  test(
-    ...send({
-      type: 'ADD_INTERMEDIARY',
-      payload: INTERMEDIARY_1,
-    }),
-  );
+  test(...send({ type: 'ADD_INTERMEDIARY', payload: INTERMEDIARY_1 }));
 
   test('#22 => state is at "working.adding"', () => {
     const decomposed = decomposeSV(service.state.value);

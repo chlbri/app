@@ -21,9 +21,7 @@ describe('Integration testing for interpret, Children', () => {
 
     const { useStateValue, useWaiter, start } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(DELAY),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
 
     test(...start());

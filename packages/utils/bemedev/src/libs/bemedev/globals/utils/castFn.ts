@@ -31,9 +31,6 @@ export const castFn = <T>() => {
 
 castFn.withValues = <T extends RuA>(...values: T) => {
   const out = <const Tr extends object = object>(extensions?: Tr) =>
-    castFn<T[number]>()({
-      ...extensions,
-      is: mergeIs(...values),
-    });
+    castFn<T[number]>()({ ...extensions, is: mergeIs(...values) });
   return out;
 };

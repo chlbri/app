@@ -17,9 +17,7 @@ describe('machine coverage', () => {
 
   describe(TEXT, () => {
     const service = interpretAsync(_machine2, {
-      pContext: {
-        iterator: 0,
-      },
+      pContext: { iterator: 0 },
       context: { iterator: 0, input: '', data: [] },
       exact: true,
     });

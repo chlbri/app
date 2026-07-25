@@ -30,11 +30,7 @@ describe.concurrent('Legacy Options Access', () => {
       const prev = (_legacy as any).actions?.increment;
       expect(prev).toBeDefined();
 
-      return {
-        actions: {
-          doubleIncrement: batch(prev, prev),
-        },
-      };
+      return { actions: { doubleIncrement: batch(prev, prev) } };
     });
 
     const service = interpret(machine, { context: 0 });
@@ -64,11 +60,7 @@ describe.concurrent('Legacy Options Access', () => {
       const prev = (_legacy as any).actions.increment;
       expect(prev).toBeDefined();
 
-      return {
-        actions: {
-          increment: batch(prev, prev),
-        },
-      };
+      return { actions: { increment: batch(prev, prev) } };
     });
 
     const service = interpret(machine, { context: 0 });
@@ -88,9 +80,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // First call - define isPositive
     machine.addOptions(() => ({
-      guards: {
-        isPositive: ({ context }) => context > 0,
-      },
+      guards: { isPositive: ({ context }) => context > 0 },
     }));
 
     // Second call - access and extend with isNegative using _legacy
@@ -98,11 +88,7 @@ describe.concurrent('Legacy Options Access', () => {
       const previousPredicates = (_legacy as any).guards;
       expect(previousPredicates?.isPositive).toBeDefined();
 
-      return {
-        guards: {
-          isNegative: ({ context }) => context < 0,
-        },
-      };
+      return { guards: { isNegative: ({ context }) => context < 0 } };
     });
 
     const service = interpret(machine, { context: 5 });
@@ -116,9 +102,7 @@ describe.concurrent('Legacy Options Access', () => {
 
   test('#04 => should work with provideOptions', async () => {
     const machine = _machine4.provideOptions(({ assign }) => ({
-      actions: {
-        add: assign('context', ({ context }) => context + 2),
-      },
+      actions: { add: assign('context', ({ context }) => context + 2) },
     }));
 
     // provideOptions on the result should also have access to _legacy
@@ -149,9 +133,7 @@ describe.concurrent('Legacy Options Access', () => {
     const machine = _machine5;
 
     machine.addOptions(({ assign }) => ({
-      actions: {
-        test: assign('context', ({ context }) => context + 1),
-      },
+      actions: { test: assign('context', ({ context }) => context + 1) },
     }));
 
     machine.addOptions((_, { _legacy }) => {
@@ -169,9 +151,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // First call
     machine.addOptions(({ assign }) => ({
-      actions: {
-        first: assign('context', ({ context }) => context + 1),
-      },
+      actions: { first: assign('context', ({ context }) => context + 1) },
     }));
 
     // Second call - should see first
@@ -233,11 +213,7 @@ describe.concurrent('Legacy Options Access', () => {
         expect(prev).toBeDefined();
         const params = Array(3).fill(prev);
 
-        return {
-          actions: {
-            tripleIncrement: batch(...params),
-          },
-        };
+        return { actions: { tripleIncrement: batch(...params) } };
       });
 
       service.start();
@@ -274,11 +250,7 @@ describe.concurrent('Legacy Options Access', () => {
         expect(prev).toBeDefined();
         const params = Array(2).fill(prev);
 
-        return {
-          actions: {
-            increment: batch(...params),
-          },
-        };
+        return { actions: { increment: batch(...params) } };
       });
 
       await service.send('NEXT');
@@ -289,11 +261,7 @@ describe.concurrent('Legacy Options Access', () => {
         const prev = (_legacy as any).actions.increment;
         expect(prev).toBeDefined();
 
-        return {
-          actions: {
-            increment: batch(prev, prev, prev),
-          },
-        };
+        return { actions: { increment: batch(prev, prev, prev) } };
       });
 
       await service.send('NEXT');
@@ -307,9 +275,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // First call - define isPositive
       service.addOptions(() => ({
-        guards: {
-          isPositive: ({ context }) => context > 0,
-        },
+        guards: { isPositive: ({ context }) => context > 0 },
       }));
 
       // Second call - access and extend with isNegative using _legacy
@@ -317,11 +283,7 @@ describe.concurrent('Legacy Options Access', () => {
         const previousPredicates = (_legacy as any).guards;
         expect(previousPredicates?.isPositive).toBeDefined();
 
-        return {
-          guards: {
-            isNegative: ({ context }) => context < 0,
-          },
-        };
+        return { guards: { isNegative: ({ context }) => context < 0 } };
       });
 
       service.start();
@@ -374,9 +336,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // First provideOptions - define add
       const service2 = service1.provideOptions(({ assign }) => ({
-        actions: {
-          add: assign('context', ({ context }) => context + 3),
-        },
+        actions: { add: assign('context', ({ context }) => context + 3) },
       }));
 
       // Second provideOptions - access previous action via _legacy
@@ -433,9 +393,7 @@ describe.concurrent('Legacy Options Access', () => {
       const service1 = interpret(machine, { context: 0 });
 
       const service2 = service1.provideOptions(({ assign }) => ({
-        actions: {
-          op1: assign('context', ({ context }) => context + 1),
-        },
+        actions: { op1: assign('context', ({ context }) => context + 1) },
       }));
 
       const service3 = service2.provideOptions(

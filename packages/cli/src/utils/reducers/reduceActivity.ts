@@ -48,9 +48,5 @@ export const reduceActivity = (activity: ActivityConfig) => {
 
   piped();
 
-  return {
-    actions,
-    guards,
-    delays,
-  };
+  return { actions, guards, delays };
 };

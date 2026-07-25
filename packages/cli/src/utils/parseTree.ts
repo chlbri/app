@@ -10,10 +10,7 @@ import type {
 type Output = {
   __config: NodeConfig2;
   flat: RecordS<NodeConfig2>;
-  paths: {
-    map: NoExtraKeysConfigPaths<ConfigPaths>;
-    all: string[];
-  };
+  paths: { map: NoExtraKeysConfigPaths<ConfigPaths>; all: string[] };
   actions: BetterSet<string>;
   guards: BetterSet<string>;
   emitters: BetterSet<string>;
@@ -55,9 +52,6 @@ export const parseTree: ParseTree_F = config => {
     flat,
     __config,
 
-    paths: {
-      map: buildPaths(flat),
-      all: Object.keys(flat),
-    },
+    paths: { map: buildPaths(flat), all: Object.keys(flat) },
   };
 };

@@ -16,6 +16,8 @@ export default defineConfig({
   trailingComma: 'all',
   useTabs: false,
   vueIndentScriptAndStyle: true,
+  objectWrap: 'collapse',
+
   sortPackageJson: false,
   ignorePatterns: ['node_modules', 'publish', 'publish_npm', 'lib'],
 });

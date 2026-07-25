@@ -13,9 +13,7 @@ describe('constructTests coverage', () => {
         ({ context }) => context.count + 1,
       ),
     },
-    delays: {
-      myActivity,
-    },
+    delays: { myActivity },
   }));
 
   const service = interpret(machine, {

@@ -29,12 +29,5 @@ export const reduceActors = (actor: RecordS<ActorConfig>) => {
     }
   });
 
-  return {
-    actions,
-    guards,
-    targets,
-    pContextKeys,
-    emitters,
-    children,
-  };
+  return { actions, guards, targets, pContextKeys, emitters, children };
 };

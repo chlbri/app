@@ -6,26 +6,13 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        tags: ['idle'],
-        on: {
-          NEXT: '/working',
-        },
-      },
+      idle: { tags: ['idle'], on: { NEXT: '/working' } },
       working: {
         tags: ['working', 'busy'],
-        on: {
-          NEXT: '/final',
-          PREV: '/idle',
-        },
+        on: { NEXT: '/final', PREV: '/idle' },
       },
       final: {},
     },
   },
-  {
-    eventsMap: type({
-      NEXT: 'never',
-      PREV: 'never',
-    }),
-  },
+  { eventsMap: type({ NEXT: 'never', PREV: 'never' }) },
 );

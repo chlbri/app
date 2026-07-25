@@ -65,9 +65,6 @@ export const initialConfig: InitialConfig_F = body => {
     return out;
   }
 
-  const out = {
-    ...body,
-    states: { [__id]: initialConfig(initial) },
-  };
+  const out = { ...body, states: { [__id]: initialConfig(initial) } };
   return out;
 };

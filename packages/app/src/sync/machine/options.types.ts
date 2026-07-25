@@ -149,10 +149,7 @@ export type SyncDebounceAction_F<
   T extends string = string,
 > = <A extends SyncAction2<E, Pc, Tc, T>>(
   fn: A,
-  options: {
-    ms?: number;
-    id: string;
-  },
+  options: { ms?: number; id: string },
 ) => SyncAction2<E, Pc, Tc, T>;
 
 export type SyncResendAction_F<
@@ -230,9 +227,7 @@ export type SyncAddOptionsParam_F<
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.
    */
-  legacyOptions: {
-    _legacy: L;
-  },
+  legacyOptions: { _legacy: L },
 ) => Mo;
 
 export type SyncAddOptions_F<

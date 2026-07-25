@@ -9,11 +9,7 @@ const _switchValue: _SwitchValue_F = ({ condition, truthy, falsy }) => {
   return out;
 };
 
-type ParamsO<T> = {
-  condition?: boolean;
-  truthy: T;
-  falsy: T;
-};
+type ParamsO<T> = { condition?: boolean; truthy: T; falsy: T };
 
 type ParamsA<T> = [condition: boolean, first: T, second: T];
 
@@ -55,11 +51,7 @@ export function switchValue<T>(condition: any, truthy?: T, falsy?: T) {
 
   return _switchValue({
     condition: check1,
-    truthy: _switchValue({
-      condition,
-      truthy,
-      falsy,
-    }),
+    truthy: _switchValue({ condition, truthy, falsy }),
     falsy: _switchValue(condition),
   });
 }

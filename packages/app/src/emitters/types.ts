@@ -5,13 +5,9 @@ import type { AsyncTransition } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { RecordS } from '~types';
 
-export type Subscriber = {
-  unsubscribe: () => void;
-};
+export type Subscriber = { unsubscribe: () => void };
 
-export type Subscribable = {
-  subscribe: Subscriber;
-};
+export type Subscribable = { subscribe: Subscriber };
 
 /**
  * Observer wired into a {@linkcode Pausable} via its `subscribe` method.
@@ -54,10 +50,7 @@ export type Pausable<R = any> = {
 /** The string id that references an emitter source in the options map. */
 export type EmitterSrcConfig = string;
 
-export type EmitterDef = {
-  next: PrimitiveObject;
-  error: PrimitiveObject;
-};
+export type EmitterDef = { next: PrimitiveObject; error: PrimitiveObject };
 
 export type EmitterConfigMap<S extends string = string> = Record<
   S,

@@ -47,28 +47,21 @@ export default createMachine(
               guards: 'assetIsDefined',
               actions: ['provideAsset', 'addBlockImmoIntermediary'],
             },
-            {
-              actions: ['error.noAsset'],
-            },
+            { actions: ['error.noAsset'] },
           ],
         },
       },
       checking: {
         entry: 'setOnlineStatus',
         tags: ['un', 'deux'],
-        after: {
-          CHECK_DELAY: '/working',
-        },
+        after: { CHECK_DELAY: '/working' },
       },
       working: {
         initial: 'idle',
         states: {
           idle: {
             on: {
-              RESET: {
-                target: '/idle',
-                actions: ['reset'],
-              },
+              RESET: { target: '/idle', actions: ['reset'] },
               ADD_INTERMEDIARY: [
                 {
                   description: 'Add an intermediary',
@@ -84,27 +77,18 @@ export default createMachine(
                   target: '/working/adding',
                   actions: 'addIntermediary',
                 },
-                {
-                  actions: ['error.addIntermediary'],
-                },
+                { actions: ['error.addIntermediary'] },
               ],
             },
           },
-          adding: {
-            after: {
-              ADD_DELAY: '/working/idle',
-            },
-          },
+          adding: { after: { ADD_DELAY: '/working/idle' } },
         },
       },
     },
   },
   {
     eventsMap: type(({ partial }) => ({
-      START: partial({
-        asset,
-        mandatory: intermediary,
-      }),
+      START: partial({ asset, mandatory: intermediary }),
       ADD_INTERMEDIARY: intermediary,
       RESET: 'never',
     })),
@@ -116,9 +100,7 @@ export default createMachine(
         internetStatus: 'boolean',
         errors: partial({
           noAsset: 'string',
-          intermediary: {
-            offline: 'string',
-          },
+          intermediary: { offline: 'string' },
         }),
       }),
     ),
@@ -181,13 +163,9 @@ export default createMachine(
   },
 
   guards: {
-    assetIsDefined: {
-      START: ({ payload }) => !!payload.asset,
-    },
+    assetIsDefined: { START: ({ payload }) => !!payload.asset },
 
-    mandatoryIsDefined: {
-      START: ({ payload }) => !!payload.mandatory,
-    },
+    mandatoryIsDefined: { START: ({ payload }) => !!payload.mandatory },
 
     intermediariesAreNotFull: ({
       context: { asset, intermediaries = [] },
@@ -211,9 +189,5 @@ export default createMachine(
       },
     },
   },
-  delays: {
-    MAX_MUTATE: 1000,
-    CHECK_DELAY,
-    ADD_DELAY: 100,
-  },
+  delays: { MAX_MUTATE: 1000, CHECK_DELAY, ADD_DELAY: 100 },
 }));

@@ -47,9 +47,7 @@ export type NoExtraKeysTargetDef<T extends TargetDef> = T & {
 export type TransformTargetDef<T extends TargetDef> =
   (undefined extends T['initial']
     ? EmptyObject
-    : {
-        readonly initial: T['initial'];
-      }) &
+    : { readonly initial: T['initial'] }) &
     (undefined extends T['states']
       ? EmptyObject
       : {
@@ -182,13 +180,8 @@ export type CommonAddOptions_F<
 > = (option: CommonAddOptionsParam_F<Mo>) => Mo | undefined;
 
 export type CommonElements<
-  C extends {
-    readonly strict?: boolean;
-    readonly __longRuns?: boolean;
-  } = {
-    readonly strict?: boolean;
-    readonly __longRuns?: boolean;
-  },
+  C extends { readonly strict?: boolean; readonly __longRuns?: boolean } =
+    { readonly strict?: boolean; readonly __longRuns?: boolean },
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
@@ -213,13 +206,7 @@ export type CommonElements<
  */
 export type SimpleMachineOptions2 = Partial<
   Record<'actions' | 'guards' | 'delays', any> &
-    Record<
-      'actors',
-      {
-        children?: RecordS<any>;
-        emitters?: RecordS<any>;
-      }
-    >
+    Record<'actors', { children?: RecordS<any>; emitters?: RecordS<any> }>
 >;
 
 export type GetIO_F = (

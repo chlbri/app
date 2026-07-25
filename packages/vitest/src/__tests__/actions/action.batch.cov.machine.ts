@@ -8,20 +8,12 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          INC1: {
-            actions: 'inc1',
-          },
-          INC2: {
-            actions: 'inc2',
-          },
-          INC5: {
-            actions: 'inc5',
-          },
+          INC1: { actions: 'inc1' },
+          INC2: { actions: 'inc2' },
+          INC5: { actions: 'inc5' },
         },
       },
     },
   },
-  {
-    context: type('number'),
-  },
+  { context: type('number') },
 );

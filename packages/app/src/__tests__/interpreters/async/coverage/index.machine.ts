@@ -23,8 +23,5 @@ export default createMachine(
       final: {},
     },
   },
-  {
-    context,
-    pContext: context,
-  },
+  { context, pContext: context },
 );

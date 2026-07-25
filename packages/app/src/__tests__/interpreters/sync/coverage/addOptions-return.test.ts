@@ -27,15 +27,9 @@ describe.concurrent('Interpreter addOptions return', () => {
     const service = interpret(machine, { context: 0 });
 
     const result = service.addOptions(({ assign }) => ({
-      actions: {
-        setZero: assign('context', () => 0),
-      } as any,
-      guards: {
-        isPositive: ({ context }) => context > 0,
-      },
-      delays: {
-        shortDelay: () => 100,
-      } as any,
+      actions: { setZero: assign('context', () => 0) } as any,
+      guards: { isPositive: ({ context }) => context > 0 },
+      delays: { shortDelay: () => 100 } as any,
     }));
 
     expect(result).toBeDefined();
@@ -71,9 +65,7 @@ describe.concurrent('Interpreter addOptions return', () => {
 
     // First call
     const result1 = service.addOptions(({ assign }) => ({
-      actions: {
-        first: assign('context', ({ context }) => context + 1),
-      },
+      actions: { first: assign('context', ({ context }) => context + 1) },
     }));
 
     // Second call

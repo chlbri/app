@@ -9,33 +9,18 @@ export const machine1 = createMachine(
     initial: 'idle',
     states: {
       idle: {
-        activities: {
-          DELAY: 'inc',
-        },
-        on: {
-          NEXT: { description: 'Next', target: '/final' },
-        },
+        activities: { DELAY: 'inc' },
+        on: { NEXT: { description: 'Next', target: '/final' } },
       },
-      final: {
-        on: {
-          NEXT: '/idle',
-        },
-      },
+      final: { on: { NEXT: '/idle' } },
     },
   },
-  {
-    context: type({
-      iterator: 'number',
-    }),
-    sync: true,
-  },
+  { context: type({ iterator: 'number' }), sync: true },
 ).provideOptions(({ assign }) => ({
   actions: {
     inc: assign('context.iterator', ({ context }) => context.iterator + 1),
   },
-  delays: {
-    DELAY,
-  },
+  delays: { DELAY },
 }));
 
 export const hook = () => {
@@ -53,12 +38,5 @@ export const hook = () => {
     }),
   );
 
-  return {
-    service,
-    useNext,
-    useIterator,
-    waiter,
-    start,
-    stop,
-  };
+  return { service, useNext, useIterator, waiter, start, stop };
 };

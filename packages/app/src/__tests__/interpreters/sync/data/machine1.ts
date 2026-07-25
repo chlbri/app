@@ -17,13 +17,9 @@ export const machine1 = createMachine(
     },
   },
   {
-    context: typings.context({
-      iterator: 'number',
-    }),
+    context: typings.context({ iterator: 'number' }),
 
-    eventsMap: type({
-      NEXT: 'never',
-    }),
+    eventsMap: type({ NEXT: 'never' }),
     sync: true,
   },
 );

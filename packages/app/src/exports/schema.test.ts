@@ -18,9 +18,7 @@ describe('Coverage', () => {
 
   test('#03 => Error => wrong activity array', () => {
     const actual = () =>
-      v.parse(Config_Schema(), {
-        activities: { DELAY: ['dd', 'ee'] },
-      });
+      v.parse(Config_Schema(), { activities: { DELAY: ['dd', 'ee'] } });
     expect(actual).toThrow('Wrong activity Array');
   });
 
@@ -31,10 +29,7 @@ describe('Coverage', () => {
   });
 
   test('#04 => Error => activities not accepts type "Array"', () => {
-    const actual = () =>
-      v.parse(Config_Schema(), {
-        activities: [],
-      });
+    const actual = () => v.parse(Config_Schema(), { activities: [] });
     expect(actual).toThrow('Not an array');
   });
 });

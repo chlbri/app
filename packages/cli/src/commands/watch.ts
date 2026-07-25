@@ -106,7 +106,8 @@ export const watch = command({
       /* v8 ignore stop -- @preserve */
 
       if (event === 'update') {
-        await createStarter(path);
+        console.warn('path', '=>', path);
+        await createStarter(path, options.cwd);
         return generate();
       } else {
         console.log(`\nChange detected: ${path}`);

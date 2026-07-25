@@ -7,18 +7,12 @@ export default createMachine(
     initial: 'idle',
     states: {
       idle: {
-        on: {
-          FIRST: { actions: 'first' },
-          SECOND: { actions: 'second' },
-        },
+        on: { FIRST: { actions: 'first' }, SECOND: { actions: 'second' } },
       },
     },
   },
   {
     context: type('number'),
-    eventsMap: type({
-      FIRST: 'never',
-      SECOND: 'never',
-    }),
+    eventsMap: type({ FIRST: 'never', SECOND: 'never' }),
   },
 );

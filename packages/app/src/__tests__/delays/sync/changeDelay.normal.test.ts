@@ -19,11 +19,7 @@ describe('TESTS', () => {
   it(...useNext());
 
   it('#11 => Change DELAY', () => {
-    service.addOptions(() => ({
-      delays: {
-        DELAY: DELAY / 2,
-      },
-    }));
+    service.addOptions(() => ({ delays: { DELAY: DELAY / 2 } }));
   });
 
   it(...useNext());

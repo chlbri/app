@@ -11,9 +11,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -82,9 +80,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -105,9 +101,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -128,9 +122,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -151,9 +143,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -174,9 +164,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -197,9 +185,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -220,9 +206,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -243,9 +227,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -344,10 +326,7 @@ declare module '@bemedev/app' {
     };
 
     arrayAsyncAssign: {
-      paths: {
-        map: { targets: never };
-        all: '/';
-      };
+      paths: { map: { targets: never }; all: '/' };
       events: 'INC';
       options: {
         children: never;
@@ -361,10 +340,7 @@ declare module '@bemedev/app' {
     };
 
     arrayAssign: {
-      paths: {
-        map: { targets: never };
-        all: '/';
-      };
+      paths: { map: { targets: never }; all: '/' };
       events: 'INC';
       options: {
         children: never;
@@ -378,10 +354,7 @@ declare module '@bemedev/app' {
     };
 
     'edges.arrayAssign.complex': {
-      paths: {
-        map: { targets: never };
-        all: '/';
-      };
+      paths: { map: { targets: never }; all: '/' };
       events: 'INC';
       options: {
         children: never;
@@ -395,10 +368,7 @@ declare module '@bemedev/app' {
     };
 
     'edges.arrayAssign.sync.complex': {
-      paths: {
-        map: { targets: never };
-        all: '/';
-      };
+      paths: { map: { targets: never }; all: '/' };
       events: 'INC';
       options: {
         children: never;
@@ -412,10 +382,7 @@ declare module '@bemedev/app' {
     };
 
     arrayAssignSync: {
-      paths: {
-        map: { targets: never };
-        all: '/';
-      };
+      paths: { map: { targets: never }; all: '/' };
       events: 'INC';
       options: {
         children: never;
@@ -429,10 +396,7 @@ declare module '@bemedev/app' {
     };
 
     atomic: {
-      paths: {
-        map: { targets: never };
-        all: '/';
-      };
+      paths: { map: { targets: never }; all: '/' };
       events: 'SET_LANG';
       options: {
         children: never;
@@ -498,9 +462,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -674,9 +636,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -697,9 +657,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -720,9 +678,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -791,9 +747,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -926,9 +880,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -949,9 +901,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -972,9 +922,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -991,10 +939,7 @@ declare module '@bemedev/app' {
     };
 
     'src/__tests__/interpreters/coverage/actors/2ids.1.machine': {
-      paths: {
-        map: { targets: never };
-        all: '/';
-      };
+      paths: { map: { targets: never }; all: '/' };
       events: never;
       options: {
         children: never;
@@ -1036,10 +981,7 @@ declare module '@bemedev/app' {
     };
 
     'src/__tests__/interpreters/coverage/actors/child.1.machine': {
-      paths: {
-        map: { targets: never };
-        all: '/';
-      };
+      paths: { map: { targets: never }; all: '/' };
       events: never;
       options: {
         children: never;
@@ -1109,9 +1051,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1132,9 +1072,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1179,9 +1117,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1202,9 +1138,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1369,9 +1303,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1416,9 +1348,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1439,9 +1369,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1462,9 +1390,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1485,9 +1411,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1508,9 +1432,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1531,9 +1453,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1554,9 +1474,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1602,9 +1520,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1625,9 +1541,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1648,9 +1562,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1671,9 +1583,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -1694,9 +1604,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2013,9 +1921,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2036,9 +1942,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2083,9 +1987,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2106,9 +2008,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2129,9 +2029,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2152,9 +2050,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2175,9 +2071,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2198,9 +2092,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2221,9 +2113,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2244,9 +2134,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2365,9 +2253,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2388,9 +2274,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2411,9 +2295,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2434,9 +2316,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2457,9 +2337,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };
@@ -2480,9 +2358,7 @@ declare module '@bemedev/app' {
         map: {
           targets: '/idle';
           initial: 'idle';
-          states: {
-            idle: { targets: '/' };
-          };
+          states: { idle: { targets: '/' } };
         };
         all: '/' | '/idle';
       };

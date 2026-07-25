@@ -12,22 +12,11 @@ import { returnFalse } from '#guards';
 export const config2 = createConfig({
   initial: 'idle',
   states: {
-    idle: {
-      activities: {
-        DELAY: 'inc',
-      },
-      on: {
-        NEXT: '/working',
-      },
-    },
+    idle: { activities: { DELAY: 'inc' }, on: { NEXT: '/working' } },
     working: {
       type: 'parallel',
-      activities: {
-        DELAY2: { actions: 'inc2' },
-      },
-      on: {
-        FINISH: '/final',
-      },
+      activities: { DELAY2: { actions: 'inc2' } },
+      on: { FINISH: '/final' },
       states: {
         fetch: {
           initial: 'idle',
@@ -44,10 +33,7 @@ export const config2 = createConfig({
                 },
               },
             },
-            fetch: {
-              entry: 'insertData',
-              always: '/working/fetch/idle',
-            },
+            fetch: { entry: 'insertData', always: '/working/fetch/idle' },
           },
         },
         ui: {
@@ -55,10 +41,7 @@ export const config2 = createConfig({
           states: {
             idle: {
               on: {
-                WRITE: {
-                  actions: 'write',
-                  target: '/working/ui/input',
-                },
+                WRITE: { actions: 'write', target: '/working/ui/input' },
               },
             },
             input: {
@@ -91,39 +74,22 @@ export const config2 = createConfig({
 export const typings2 = {
   eventsMap: type(({ primitiveObject }) => ({
     FETCH: 'never',
-    WRITE: primitiveObject({
-      value: 'string',
-    }),
+    WRITE: primitiveObject({ value: 'string' }),
     NEXT: 'never',
     FINISH: 'never',
   })),
-  pContext: type({
-    iterator: 'number',
-  }),
+  pContext: type({ iterator: 'number' }),
   context: type(({ array }) => ({
     iterator: 'number',
     input: 'string',
     data: array('string'),
   })),
-  actorsMap: type({
-    children: {
-      machine1: {
-        NEXT: 'never',
-      },
-    },
-  }),
+  actorsMap: type({ children: { machine1: { NEXT: 'never' } } }),
 } as const;
 
 export const machine2 = createMachine(
   {
-    actors: {
-      machine1: {
-        contexts: {
-          iterator: 'iterator',
-        },
-        on: {},
-      },
-    },
+    actors: { machine1: { contexts: { iterator: 'iterator' }, on: {} } },
     ...config2,
   },
   { ...typings2, sync: true },
@@ -159,28 +125,15 @@ export const machine2 = createMachine(
         interpretAsync(machine1, { context: { iterator: 0 } }),
     },
   },
-  delays: {
-    DELAY,
-    DELAY2: 2 * DELAY,
-  },
+  delays: { DELAY, DELAY2: 2 * DELAY },
 }));
 
 const _config2 = createConfig({
   ...config2,
-  actors: {
-    machine1: {
-      contexts: {
-        iterator: 'iterator',
-      },
-      on: {},
-    },
-  },
+  actors: { machine1: { contexts: { iterator: 'iterator' }, on: {} } },
   states: {
     ...config2.states,
-    idle: {
-      entry: 'debounce',
-      ...config2.states.idle,
-    },
+    idle: { entry: 'debounce', ...config2.states.idle },
   },
 });
 
@@ -235,10 +188,7 @@ export const _machine2 = createMachine(_config2, {
           interpretAsync(machine1, { context: { iterator: 0 } }),
       },
     },
-    delays: {
-      DELAY,
-      DELAY2: 2 * DELAY,
-    },
+    delays: { DELAY, DELAY2: 2 * DELAY },
   }),
 );
 

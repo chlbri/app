@@ -13,10 +13,7 @@ describe('Pause activities on events', () => {
             'context.iterator',
             ({ context }) => context?.iterator + 1000,
           ),
-          {
-            ms: DELAY * 10,
-            id: 'inc',
-          },
+          { ms: DELAY * 10, id: 'inc' },
         ),
         pause: pauseTimer('inc'),
         resume: resumeTimer('inc'),

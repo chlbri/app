@@ -7,47 +7,29 @@ expectTypeOf<O<string | undefined>>().toEqualTypeOf<{ value?: string }>();
 expectTypeOf<O<number>>().toEqualTypeOf<{ value: number }>();
 
 expectTypeOf<O<Partial<{ name: string; age: number }>>>().toEqualTypeOf<{
-  value: Partial<{
-    name: string;
-    age: number;
-  }>;
+  value: Partial<{ name: string; age: number }>;
 }>();
 
 expectTypeOf<O<{ name: string; age?: number }>>().toEqualTypeOf<{
-  value: {
-    name: string;
-    age?: number;
-  };
+  value: { name: string; age?: number };
 }>();
 
 expectTypeOf<
   O<{ name: string; age?: number; sex: string }>
 >().toEqualTypeOf<{
-  value: {
-    name: string;
-    age?: number;
-    sex: string;
-  };
+  value: { name: string; age?: number; sex: string };
 }>();
 
 expectTypeOf<
   O<{ name?: string; age?: number; sex: string }>
 >().toEqualTypeOf<{
-  value: {
-    name?: string;
-    age?: number;
-    sex: string;
-  };
+  value: { name?: string; age?: number; sex: string };
 }>();
 
 expectTypeOf<
   O<{ name?: string; age?: number; sex?: string }>
 >().toEqualTypeOf<{
-  value: {
-    name?: string;
-    age?: number;
-    sex?: string;
-  };
+  value: { name?: string; age?: number; sex?: string };
 }>();
 
 expectTypeOf<

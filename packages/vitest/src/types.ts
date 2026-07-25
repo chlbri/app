@@ -47,9 +47,7 @@ export type ConstructTestsResult<
     send: (_event: EventArgObject<Eo>, index?: number) => TestArr;
   } & (Equals<Ta, never> extends true
     ? EmptyObject
-    : {
-        useTags: (...tags: Ta[]) => TestArr;
-      });
+    : { useTags: (...tags: Ta[]) => TestArr });
 
 export type ConstructTestsResult2 = CommonTestsResult & {
   send: (_event: EventObject, index?: number) => TestArr;

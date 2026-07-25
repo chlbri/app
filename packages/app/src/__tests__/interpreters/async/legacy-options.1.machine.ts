@@ -8,12 +8,8 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          NEXT: {
-            actions: 'increment',
-          },
-          DOUBLE: {
-            actions: 'doubleIncrement',
-          },
+          NEXT: { actions: 'increment' },
+          DOUBLE: { actions: 'doubleIncrement' },
         },
       },
     },
@@ -21,9 +17,6 @@ export default createMachine(
   {
     context: type('number'),
 
-    eventsMap: type({
-      NEXT: 'never',
-      DOUBLE: 'never',
-    }),
+    eventsMap: type({ NEXT: 'never', DOUBLE: 'never' }),
   },
 );

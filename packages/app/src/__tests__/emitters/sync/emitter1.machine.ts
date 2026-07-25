@@ -1,11 +1,7 @@
 import { createMachine } from '#exports/createMachine';
 import { typings } from '#utils';
 
-export const WAITERS = {
-  short: 200,
-  medium: 500,
-  long: 1000,
-};
+export const WAITERS = { short: 200, medium: 500, long: 1000 };
 
 export default createMachine(
   'src/__tests__/emitters/emitter1.machine',
@@ -13,25 +9,13 @@ export default createMachine(
     initial: 'inactive',
     actors: {
       interval: {
-        next: {
-          actions: ['assigN'],
-        },
-        complete: {
-          actions: ['mockCompleteAction'],
-        },
+        next: { actions: ['assigN'] },
+        complete: { actions: ['mockCompleteAction'] },
       },
     },
     states: {
-      inactive: {
-        on: {
-          NEXT: '/active',
-        },
-      },
-      active: {
-        on: {
-          NEXT: '/inactive',
-        },
-      },
+      inactive: { on: { NEXT: '/active' } },
+      active: { on: { NEXT: '/inactive' } },
     },
   },
   {
@@ -39,12 +23,7 @@ export default createMachine(
     sync: true,
 
     actorsMap: typings.actorsMap({
-      emitters: {
-        interval: {
-          next: 'number',
-          error: 'undefined',
-        },
-      },
+      emitters: { interval: { next: 'number', error: 'undefined' } },
     }),
   },
 );

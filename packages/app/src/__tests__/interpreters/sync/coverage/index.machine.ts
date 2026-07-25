@@ -23,9 +23,5 @@ export default createMachine(
       final: {},
     },
   },
-  {
-    context,
-    pContext: context,
-    sync: true,
-  },
+  { context, pContext: context, sync: true },
 );

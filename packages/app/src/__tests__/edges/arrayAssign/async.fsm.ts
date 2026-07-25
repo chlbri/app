@@ -5,13 +5,8 @@ export default createMachine(
   'arrayAssign',
   { on: { INC: { actions: ['incthearray'] } } },
   {
-    context: typings.context({
-      number1: 'number',
-      number2: 'number',
-    }),
-    eventsMap: typings.eventsMap({
-      INC: 'undefined',
-    }),
+    context: typings.context({ number1: 'number', number2: 'number' }),
+    eventsMap: typings.eventsMap({ INC: 'undefined' }),
   },
 ).provideOptions(({ assign }) => {
   return {

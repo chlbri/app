@@ -147,10 +147,7 @@ export type NodeConfig<T extends TargetDef> = CommonNodeConfig<
               };
         };
       } & (undefined extends T['initial']
-        ? {
-            readonly type: 'parallel';
-            readonly initial?: never;
-          }
+        ? { readonly type: 'parallel'; readonly initial?: never }
         : Pick<T, 'initial'> & { type?: 'compound' }));
 
 export type NodeConfigAtomic2<Paths extends string = string> =
@@ -239,18 +236,14 @@ export type StateExtended<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = {
-  pContext: Pc;
-} & State<E, Tc, T>;
+> = { pContext: Pc } & State<E, Tc, T>;
 
 export type StatePextended<
   E = any,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = {
-  pContext: Pc;
-} & StateP<E, Tc, T>;
+> = { pContext: Pc } & StateP<E, Tc, T>;
 // #endregion
 
 type FlatMapNodeConfig<
@@ -264,9 +257,7 @@ type FlatMapNodeConfig<
         : Omit<T['states'][key], 'states'>;
     } & {
       [key in keyof T['states']]: T['states'][key] extends infer S extends
-        NodeConfig2 & {
-          states: RecordS<NodeConfig2>;
-        }
+        NodeConfig2 & { states: RecordS<NodeConfig2> }
         ? FlatMapNodeConfig<
             S,
             withChildren,

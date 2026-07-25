@@ -3,30 +3,17 @@ import { createConfig } from '@bemedev/app';
 export const config2 = createConfig({
   initial: 'idle',
   states: {
-    idle: {
-      activities: {
-        DELAY: 'inc',
-      },
-      on: {
-        NEXT: '/working',
-      },
-    },
+    idle: { activities: { DELAY: 'inc' }, on: { NEXT: '/working' } },
     working: {
       type: 'parallel',
-      activities: {
-        DELAY2: 'inc2',
-      },
-      on: {
-        FINISH: '/final',
-      },
+      activities: { DELAY2: 'inc2' },
+      on: { FINISH: '/final' },
       states: {
         fetch: {
           initial: 'idle',
           states: {
             idle: {
-              activities: {
-                DELAY: 'sendPanelToUser',
-              },
+              activities: { DELAY: 'sendPanelToUser' },
               on: {
                 FETCH: {
                   guards: 'isInputNotEmpty',
@@ -34,10 +21,7 @@ export const config2 = createConfig({
                 },
               },
             },
-            fetch: {
-              entry: 'insertData',
-              always: '/working/fetch/idle',
-            },
+            fetch: { entry: 'insertData', always: '/working/fetch/idle' },
           },
         },
         ui: {
@@ -45,10 +29,7 @@ export const config2 = createConfig({
           states: {
             idle: {
               on: {
-                WRITE: {
-                  actions: 'write',
-                  target: '/working/ui/input',
-                },
+                WRITE: { actions: 'write', target: '/working/ui/input' },
               },
             },
             input: {
@@ -81,40 +62,20 @@ export const config2 = createConfig({
 export const config21 = createConfig({
   initial: 'idle',
   states: {
-    idle: {
-      activities: {
-        DELAY: 'inc',
-      },
-      on: {
-        NEXT: '/working',
-      },
-    },
+    idle: { activities: { DELAY: 'inc' }, on: { NEXT: '/working' } },
     working: {
       type: 'parallel',
-      activities: {
-        DELAY2: 'inc2',
-      },
-      on: {
-        SEND: {
-          actions: 'send',
-        },
-      },
+      activities: { DELAY2: 'inc2' },
+      on: { SEND: { actions: 'send' } },
       states: {
         fetch: {
           initial: 'idle',
           states: {
             idle: {
-              activities: {
-                DELAY: 'sendPanelToUser',
-              },
-              on: {
-                FETCH: '/working/fetch/fetch',
-              },
+              activities: { DELAY: 'sendPanelToUser' },
+              on: { FETCH: '/working/fetch/fetch' },
             },
-            fetch: {
-              entry: 'insertData',
-              always: '/working/fetch/idle',
-            },
+            fetch: { entry: 'insertData', always: '/working/fetch/idle' },
           },
         },
         ui: {
@@ -122,10 +83,7 @@ export const config21 = createConfig({
           states: {
             idle: {
               on: {
-                WRITE: {
-                  actions: 'write',
-                  target: '/working/ui/input',
-                },
+                WRITE: { actions: 'write', target: '/working/ui/input' },
               },
             },
             input: {
@@ -162,18 +120,8 @@ export const config3 = createConfig({
     state1: {
       initial: 'state11',
       states: {
-        state11: {
-          initial: 'state111',
-          states: {
-            state111: {},
-          },
-        },
-        state12: {
-          activities: {
-            DELAY5: 'deal',
-            DELAY17: 'deal17',
-          },
-        },
+        state11: { initial: 'state111', states: { state111: {} } },
+        state12: { activities: { DELAY5: 'deal', DELAY17: 'deal17' } },
       },
     },
     state2: {
@@ -188,11 +136,7 @@ export const config3 = createConfig({
         EVENT3: { actions: 'dodo5' },
       },
       always: [
-        {
-          actions: 'dodo6',
-          guards: 'guard2',
-          target: '/state1/state11',
-        },
+        { actions: 'dodo6', guards: 'guard2', target: '/state1/state11' },
         {
           actions: ['dodo7', 'doré3', 'doré1'],
           guards: 'guard2',
@@ -202,9 +146,5 @@ export const config3 = createConfig({
       ],
     },
   },
-  actors: {
-    machine1: {
-      on: {},
-    },
-  },
+  actors: { machine1: { on: {} } },
 });

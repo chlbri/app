@@ -6,12 +6,7 @@ export default createMachine(
   {
     __longRuns: true,
     initial: 'idle',
-    states: {
-      idle: { after: { DELAY: '/active' } },
-      active: {},
-    },
+    states: { idle: { after: { DELAY: '/active' } }, active: {} },
   },
-  {
-    context: type('number'),
-  },
+  { context: type('number') },
 );

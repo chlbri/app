@@ -31,9 +31,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: 42,
-      });
+      const service = interpret(machine, { context: 42 });
 
       test('#01 => service is ready', () => {
         expect(service).toBeDefined();
@@ -65,9 +63,7 @@ describe('Machine createOptions - error handlers', () => {
     });
 
     describe('#02 => errorFn return value affects the state', () => {
-      const errorAction = vi.fn((_state: any) => ({
-        context: -1,
-      }));
+      const errorAction = vi.fn((_state: any) => ({ context: -1 }));
       const errorFn = vi.fn((_err: any) => errorAction);
 
       const machine = _machine2.provideOptions(({ assign }) => ({
@@ -82,9 +78,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: 42,
-      });
+      const service = interpret(machine, { context: 42 });
 
       test('#01 => error handler modifies context', async () => {
         await service.send('TEST');
@@ -112,9 +106,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: 7,
-      });
+      const service = interpret(machine, { context: 7 });
 
       test('#01 => send event without throwing', async () => {
         await service.send('TEST');
@@ -144,9 +136,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: 10,
-      });
+      const service = interpret(machine, { context: 10 });
 
       test('#01 => service is ready', () => {
         expect(service).toBeDefined();
@@ -194,9 +184,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: 10,
-      });
+      const service = interpret(machine, { context: 10 });
 
       test("#01 => error handler doesn't modify context", async () => {
         await service.send('TEST');
@@ -225,9 +213,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: 3,
-      });
+      const service = interpret(machine, { context: 3 });
 
       test('#01 => send event without throwing', async () => {
         await service.send('TEST');
@@ -245,17 +231,13 @@ describe('Machine createOptions - error handlers', () => {
       const machine = _machine7.provideOptions(({ voidAction }) => ({
         actions: {
           myAction: voidAction(
-            {
-              TEST: () => passFn(theData),
-            },
+            { TEST: () => passFn(theData) },
             { catch: () => () => ({}), max: 5000 },
           ),
         },
       }));
 
-      const service = interpret(machine, {
-        context: 3,
-      });
+      const service = interpret(machine, { context: 3 });
 
       test('#01 => send event without throwing', () => {
         return service.send('TEST');
@@ -300,9 +282,7 @@ describe('Machine createOptions - error handlers', () => {
         };
       });
 
-      const service = interpret(machine, {
-        context: state.context,
-      });
+      const service = interpret(machine, { context: state.context });
 
       test('#01 => service is ready', () => {
         expect(service).toBeDefined();
@@ -348,9 +328,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: state.context,
-      });
+      const service = interpret(machine, { context: state.context });
 
       test("#01 => error handler doesn't modify context", async () => {
         await service.send('TEST');
@@ -377,9 +355,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: 1,
-      });
+      const service = interpret(machine, { context: 1 });
 
       test('#01 => send event without throwing', async () => {
         await service.send('TEST');
@@ -413,9 +389,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: 5,
-      });
+      const service = interpret(machine, { context: 5 });
 
       test('#01 => service context is updated by both main action and then handler', async () => {
         await service.send('TEST');
@@ -446,9 +420,7 @@ describe('Machine createOptions - error handlers', () => {
         }),
       );
 
-      const service = interpret(machine, {
-        context: 5,
-      });
+      const service = interpret(machine, { context: 5 });
 
       test('#01 => voidAction executes effect and triggers then handler', async () => {
         await service.send('TEST');

@@ -12,23 +12,13 @@ describe('valueToNode - coverage', () => {
     // Line 81: the `if (cannotContinue) return` branch is taken
     const body = {
       initial: 'a',
-      states: {
-        a: {
-          initial: 'b',
-          states: { b: {} },
-        },
-      },
+      states: { a: { initial: 'b', states: { b: {} } } },
     };
 
     const out = valueToNodeConfig(body as any, { a: 'b' });
 
     expect(out).toStrictEqual({
-      states: {
-        a: {
-          initial: 'b',
-          states: { b: {} },
-        },
-      },
+      states: { a: { initial: 'b', states: { b: {} } } },
     });
   });
 
@@ -38,23 +28,13 @@ describe('valueToNode - coverage', () => {
     // Lines 82-83: out1['/a/b'] is set
     const body = {
       initial: 'a',
-      states: {
-        a: {
-          initial: 'b',
-          states: { b: {} },
-        },
-      },
+      states: { a: { initial: 'b', states: { b: {} } } },
     };
 
     const out = valueToNodeConfig(body as any, { a: {} } as any);
 
     expect(out).toStrictEqual({
-      states: {
-        a: {
-          initial: 'b',
-          states: { b: {} },
-        },
-      },
+      states: { a: { initial: 'b', states: { b: {} } } },
     });
   });
 });

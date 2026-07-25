@@ -7,23 +7,13 @@ export default createMachine(
     initial: 'idle',
     states: {
       idle: {
-        on: {
-          ADD: {
-            actions: 'add',
-          },
-          MULTIPLY: {
-            actions: 'multiply',
-          },
-        },
+        on: { ADD: { actions: 'add' }, MULTIPLY: { actions: 'multiply' } },
       },
     },
   },
   {
     context: type('number'),
 
-    eventsMap: type({
-      ADD: 'never',
-      MULTIPLY: 'never',
-    }),
+    eventsMap: type({ ADD: 'never', MULTIPLY: 'never' }),
   },
 );

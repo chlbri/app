@@ -412,11 +412,7 @@ export class AsyncInterpreter<
           }
         };
 
-        const promise = this.createInterval({
-          callback,
-          interval,
-          id,
-        });
+        const promise = this.createInterval({ callback, interval, id });
 
         this.__cachedIntervals.push(promise);
 
@@ -728,11 +724,7 @@ export class AsyncInterpreter<
               complete: () => this.__performFinally(from, complete),
             });
 
-            return {
-              pausable,
-              id,
-              from,
-            };
+            return { pausable, id, from };
           },
         );
 
@@ -857,10 +849,7 @@ export class AsyncInterpreter<
       .map(([from, ..._children]) => {
         const services = _children.map(({ childFn, ...rest }) => {
           const service = this.#executeChild(childFn);
-          return {
-            service,
-            ...rest,
-          };
+          return { service, ...rest };
         });
 
         return [from, ...services] as const;
@@ -935,11 +924,7 @@ export class AsyncInterpreter<
             );
           }
 
-          return {
-            service: si,
-            id,
-            from,
-          };
+          return { service: si, id, from };
         });
 
         this.__collectedChildren.push(...services);

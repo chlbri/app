@@ -5,17 +5,7 @@ export default createMachine(
   'src/__tests__/actions/async-actions.2.machine',
   {
     initial: 'idle',
-    states: {
-      idle: {
-        on: {
-          LOAD: { actions: 'loadUser' },
-        },
-      },
-    },
+    states: { idle: { on: { LOAD: { actions: 'loadUser' } } } },
   },
-  {
-    context: type({
-      name: 'string',
-    }),
-  },
+  { context: type({ name: 'string' }) },
 );

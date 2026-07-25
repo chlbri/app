@@ -18,11 +18,7 @@ describe('ChangeDelay Edge', () => {
     it(...useIterator(20));
 
     it('#11 => Try change DELAY, but cannot', () => {
-      service.addOptions(() => ({
-        delays: {
-          DELAY: DELAY / 5,
-        },
-      }));
+      service.addOptions(() => ({ delays: { DELAY: DELAY / 5 } }));
     });
 
     it(...waiter(10));
@@ -47,9 +43,7 @@ describe('ChangeDelay Edge', () => {
 
     it('#11 => Try change DELAY, but cannot', () => {
       service.addOptions(() => ({
-        delays: {
-          DELAY: DEFAULT_MAX_TIME_PROMISE * 5,
-        },
+        delays: { DELAY: DEFAULT_MAX_TIME_PROMISE * 5 },
       }));
     });
 

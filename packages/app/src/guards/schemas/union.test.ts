@@ -11,11 +11,7 @@ describe('TESTS', () => {
     describe(
       '#01 => CASES',
       success(
-        {
-          invite: '"guard1"',
-          parameters: ['guard1'],
-          expected: true,
-        },
+        { invite: '"guard1"', parameters: ['guard1'], expected: true },
         {
           invite: '["guard1", "guard2"]',
           parameters: [['guard1', 'guard2']],

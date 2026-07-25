@@ -111,19 +111,13 @@ expectTypeOf<Test_IsAsyncConfig_2>().toEqualTypeOf<true>();
 
 // Test 3: Type with nested states containing 'after' - should be true
 type Test_IsAsyncConfig_3 = IsAsyncConfig<{
-  states: {
-    idle: { after: 100 };
-    active: { foo: string };
-  };
+  states: { idle: { after: 100 }; active: { foo: string } };
 }>;
 expectTypeOf<Test_IsAsyncConfig_3>().toEqualTypeOf<true>();
 
 // Test 4: Type with states that don't have 'after' - should be false
 type Test_IsAsyncConfig_4 = IsAsyncConfig<{
-  states: {
-    idle: { foo: string };
-    active: { bar: number };
-  };
+  states: { idle: { foo: string }; active: { bar: number } };
 }>;
 expectTypeOf<Test_IsAsyncConfig_4>().toEqualTypeOf<false>();
 
@@ -137,25 +131,13 @@ expectTypeOf<Test_IsAsyncConfig_6>().toEqualTypeOf<false>();
 
 // Test 7: Type with deeply nested states with 'after' - should be true
 type Test_IsAsyncConfig_7 = IsAsyncConfig<{
-  states: {
-    idle: {
-      states: {
-        waiting: { after: 200 };
-      };
-    };
-  };
+  states: { idle: { states: { waiting: { after: 200 } } } };
 }>;
 expectTypeOf<Test_IsAsyncConfig_7>().toEqualTypeOf<true>();
 
 // Test 8: Type with deeply nested states without 'after' - should be false
 type Test_IsAsyncConfig_8 = IsAsyncConfig<{
-  states: {
-    idle: {
-      states: {
-        waiting: { foo: string };
-      };
-    };
-  };
+  states: { idle: { states: { waiting: { foo: string } } } };
 }>;
 expectTypeOf<Test_IsAsyncConfig_8>().toEqualTypeOf<false>();
 
@@ -171,16 +153,9 @@ expectTypeOf<Test_IsAsyncConfig_10>().toEqualTypeOf<true>();
 type Test_IsAsyncConfig_11 = IsAsyncConfig<{
   states: {
     data: {
-      states: {
-        loading: { foo: string };
-        success: { bar: number };
-      };
+      states: { loading: { foo: string }; success: { bar: number } };
     };
-    idle: {
-      states: {
-        waiting: { foo: string };
-      };
-    };
+    idle: { states: { waiting: { foo: string } } };
   };
 }>;
 expectTypeOf<Test_IsAsyncConfig_11>().toEqualTypeOf<false>();
@@ -190,44 +165,28 @@ type Test_IsAsyncConfig_12 = IsAsyncConfig<{
   after: 45;
   states: {
     data: {
-      states: {
-        loading: { foo: string };
-        success: { bar: number };
-      };
+      states: { loading: { foo: string }; success: { bar: number } };
     };
-    idle: {
-      states: { waiting: { foo: string } };
-    };
+    idle: { states: { waiting: { foo: string } } };
   };
 }>;
 expectTypeOf<Test_IsAsyncConfig_12>().toEqualTypeOf<true>();
 
 // Test 13: complex with only on 'after' #2 - should be true
 type Test_IsAsyncConfig_13 = IsAsyncConfig<{
-  on: {
-    DODO: { actions: ['dodo'] };
-  };
+  on: { DODO: { actions: ['dodo'] } };
   states: {
     data: {
-      states: {
-        loading: { foo: string };
-        success: { bar: number };
-      };
+      states: { loading: { foo: string }; success: { bar: number } };
     };
-    idle: {
-      states: {
-        waiting: { foo: string; after: 45 };
-      };
-    };
+    idle: { states: { waiting: { foo: string; after: 45 } } };
   };
 }>;
 expectTypeOf<Test_IsAsyncConfig_13>().toEqualTypeOf<true>();
 
 // Test 14: complex with multiples 'after' - should be true
 type Test_IsAsyncConfig_14 = IsAsyncConfig<{
-  on: {
-    DODO: { actions: ['dodo'] };
-  };
+  on: { DODO: { actions: ['dodo'] } };
   states: {
     data: {
       states: {
@@ -235,26 +194,17 @@ type Test_IsAsyncConfig_14 = IsAsyncConfig<{
         success: { bar: number };
       };
     };
-    idle: {
-      states: {
-        waiting: { foo: string; after: 45 };
-      };
-    };
+    idle: { states: { waiting: { foo: string; after: 45 } } };
   };
 }>;
 expectTypeOf<Test_IsAsyncConfig_14>().toEqualTypeOf<true>();
 
 // Test 15: complex with only on 'after', deep nested #3 - should be true
 type Test_IsAsyncConfig_15 = IsAsyncConfig<{
-  on: {
-    DODO: { actions: ['dodo'] };
-  };
+  on: { DODO: { actions: ['dodo'] } };
   states: {
     data: {
-      states: {
-        loading: { foo: string };
-        success: { bar: number };
-      };
+      states: { loading: { foo: string }; success: { bar: number } };
     };
     idle: {
       states: {

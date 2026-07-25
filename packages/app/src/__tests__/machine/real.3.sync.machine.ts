@@ -64,27 +64,14 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        entry: 'prepare',
-        always: '/working',
-      },
+      idle: { entry: 'prepare', always: '/working' },
       working: {
         on: {
-          CHANGE_LANG: {
-            actions: ['changeLang'],
-          },
-          REMOVE: {
-            actions: ['remove'],
-          },
-          ADD: {
-            actions: ['add'],
-          },
-          UPDATE: {
-            actions: 'update',
-          },
-          'UPDATE:NOW': {
-            actions: 'update:now',
-          },
+          CHANGE_LANG: { actions: ['changeLang'] },
+          REMOVE: { actions: ['remove'] },
+          ADD: { actions: ['add'] },
+          UPDATE: { actions: 'update' },
+          'UPDATE:NOW': { actions: 'update:now' },
           'FIELDS:REGISTER': {
             actions: ['fields.register', 'fields.register.finish'],
             target: '/working/register',
@@ -109,9 +96,7 @@ export default createMachine(
                   'values.register.finish',
                 ],
               },
-              'VALUES:MODIFY': {
-                actions: ['values.modify'],
-              },
+              'VALUES:MODIFY': { actions: ['values.modify'] },
             },
           },
         },
@@ -124,10 +109,7 @@ export default createMachine(
         lang: lang,
         fields: array(field),
         responses: soa('string'),
-        states: partial({
-          fields: state,
-          values: state,
-        }),
+        states: partial({ fields: state, values: state }),
         values: record('string'),
       }),
     ),

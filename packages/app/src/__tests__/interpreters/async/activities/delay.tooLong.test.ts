@@ -8,12 +8,8 @@ describe('Delay is too long', () => {
   const activity1 = vi.fn().mockReturnValue(defaultC);
 
   machine.addOptions(() => ({
-    actions: {
-      activity1,
-    },
-    delays: {
-      DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5,
-    },
+    actions: { activity1 },
+    delays: { DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5 },
   }));
 
   const service = interpret(machine);

@@ -38,11 +38,7 @@ describe('TESTS', () => {
       {
         invite: 'valid next, error, and complete => true',
         parameters: [
-          {
-            next: 'target1',
-            error: 'target2',
-            complete: 'action1',
-          },
+          { next: 'target1', error: 'target2', complete: 'action1' },
         ],
         expected: true,
       },
@@ -66,12 +62,7 @@ describe('TESTS', () => {
       },
       {
         invite: 'no next,vzlids error, and complete => false',
-        parameters: [
-          {
-            error: 'target2',
-            complete: 'action1',
-          },
-        ],
+        parameters: [{ error: 'target2', complete: 'action1' }],
         expected: false,
       },
       {

@@ -14,9 +14,7 @@ describe('Performs send to itself actions', () => {
           ({ context }) => notU(context?.iterator) + 1,
         ),
 
-        init: assign('context', () => ({
-          iterator: 0,
-        })),
+        init: assign('context', () => ({ iterator: 0 })),
 
         dec: assign(
           'context.iterator',
@@ -29,9 +27,7 @@ describe('Performs send to itself actions', () => {
     }),
   );
 
-  const service = interpret(machine, {
-    context: {},
-  });
+  const service = interpret(machine, { context: {} });
   const { useIterator, start, dispose, useStateValue, send } =
     constructTests(
       vi,

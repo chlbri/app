@@ -32,15 +32,9 @@ describe('Machine addOptions return', () => {
     const machine = _machine3;
 
     const result = machine.addOptions(({ assign }) => ({
-      actions: {
-        setZero: assign('context', () => 0),
-      } as any,
-      guards: {
-        isPositive: ({ context }) => context > 0,
-      },
-      delays: {
-        shortDelay: () => 100,
-      } as any,
+      actions: { setZero: assign('context', () => 0) } as any,
+      guards: { isPositive: ({ context }) => context > 0 },
+      delays: { shortDelay: () => 100 } as any,
     }));
 
     expect(result).toBeDefined();

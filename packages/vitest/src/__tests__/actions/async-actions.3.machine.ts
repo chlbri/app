@@ -5,19 +5,11 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        on: {
-          LOAD: { actions: 'loadUser', target: '/' },
-        },
-      },
+      idle: { on: { LOAD: { actions: 'loadUser', target: '/' } } },
     },
   },
   {
-    context: typings.context({
-      name: 'string',
-    }),
-    eventsMap: typings.eventsMap({
-      LOAD: 'undefined',
-    }),
+    context: typings.context({ name: 'string' }),
+    eventsMap: typings.eventsMap({ LOAD: 'undefined' }),
   },
 );

@@ -13,18 +13,10 @@ export const machine = createMachine(
             description: 'This is a test activity',
           },
         },
-        on: {
-          NEXT: '/state2',
-        },
+        on: { NEXT: '/state2' },
       },
-      state2: {
-        on: {
-          NEXT: '/state1',
-        },
-      },
+      state2: { on: { NEXT: '/state1' } },
     },
   },
-  {
-    sync: true,
-  },
+  { sync: true },
 );

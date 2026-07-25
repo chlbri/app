@@ -5,15 +5,9 @@ export default createMachine(
   {
     initial: 'active',
     states: {
-      active: {
-        on: { NEXT: '/inactive' },
-      },
-      inactive: {
-        on: { NEXT: '/active' },
-      },
+      active: { on: { NEXT: '/inactive' } },
+      inactive: { on: { NEXT: '/active' } },
     },
   },
-  {
-    sync: true,
-  },
+  { sync: true },
 );

@@ -29,9 +29,7 @@ describe('#03 => Exceed selfTransitionsCounter', () => {
         return iterator <= DEFAULT_MAX_SELF_TRANSITIONS;
       },
     },
-    delays: {
-      DELAY: DEFAULT_MIN_ACTIVITY_TIME,
-    },
+    delays: { DELAY: DEFAULT_MIN_ACTIVITY_TIME },
   }));
 
   const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
@@ -47,9 +45,7 @@ describe('#03 => Exceed selfTransitionsCounter', () => {
     const { start, useWaiter, useErrors } = constructTests(
       vi,
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER) }),
     );
 
     test(...start());

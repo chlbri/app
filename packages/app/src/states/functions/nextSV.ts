@@ -65,10 +65,7 @@ export const nextSV: NextStateValue_F = (from, target) => {
   if (check4) return from;
 
   const decomposed = _any(
-    decompose(trueO.forceCast(from), {
-      start: false,
-      object: 'key',
-    }),
+    decompose(trueO.forceCast(from), { start: false, object: 'key' }),
   );
 
   const last = target.lastIndexOf(DEFAULT_DELIMITER);

@@ -6,16 +6,8 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        on: {
-          LOAD: { actions: 'loadUser', target: '/' },
-        },
-      },
+      idle: { on: { LOAD: { actions: 'loadUser', target: '/' } } },
     },
   },
-  {
-    context: v.object({
-      name: v.string(),
-    }),
-  },
+  { context: v.object({ name: v.string() }) },
 );

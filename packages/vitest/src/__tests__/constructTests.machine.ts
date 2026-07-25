@@ -6,27 +6,13 @@ export default createMachine(
   {
     initial: 'state1',
     states: {
-      state1: {
-        tags: 'tag1',
-        on: {
-          NEXT: '/state2',
-        },
-      },
+      state1: { tags: 'tag1', on: { NEXT: '/state2' } },
       state2: {
         tags: ['tag2', 'tag3'],
-        activities: {
-          myActivity: 'activity1',
-        },
-        on: {
-          PREVIOUS: '/state1',
-        },
+        activities: { myActivity: 'activity1' },
+        on: { PREVIOUS: '/state1' },
       },
     },
   },
-  {
-    context: type({
-      count: 'number',
-      name: 'string',
-    }),
-  },
+  { context: type({ count: 'number', name: 'string' }) },
 );

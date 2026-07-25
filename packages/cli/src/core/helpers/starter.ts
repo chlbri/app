@@ -10,6 +10,14 @@ const getMachineName = (filePath: string) => {
   return filename.replace(/\.machine\.ts$|\.fsm\.ts$/i, '') || 'machine';
 };
 
+export const produceStarterContent = (filePath: string) => {
+  const name = getMachineName(filePath);
+  return `import { createMachine } from '${LIB}';
+
+export default createMachine('${name}', { initial: 'idle', states: { idle: {} } })
+`;
+};
+
 export const createStarter = async (
   filePath: string,
   cwd = process.cwd(),
@@ -29,10 +37,7 @@ export const createStarter = async (
   }
 
   if (existing.trim().length > 0) return;
-
-  const defaultName = getMachineName(filePath);
-  const defaultContent = `import { createMachine } from '${LIB}';\n\nexport default createMachine('${defaultName}', { initial: 'idle', states: { idle: {} } })\n`;
-
+  const defaultContent = produceStarterContent(filePath);
   await writeFile(absolutePath, defaultContent, 'utf8');
   console.log(`Created starter machine file: ${filePath}`);
 };

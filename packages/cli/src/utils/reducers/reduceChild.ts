@@ -29,8 +29,5 @@ export const reduceChild = (child: ChildConfig) => {
     paramArray(reduceTransitions),
   )();
 
-  return {
-    ...result,
-    pContextKeys,
-  };
+  return { ...result, pContextKeys };
 };

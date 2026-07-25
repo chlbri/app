@@ -10,18 +10,8 @@ export const config3 = createConfig({
     state1: {
       initial: 'state11',
       states: {
-        state11: {
-          initial: 'state111',
-          states: {
-            state111: {},
-          },
-        },
-        state12: {
-          activities: {
-            DELAY5: 'deal',
-            DELAY17: 'deal17',
-          },
-        },
+        state11: { initial: 'state111', states: { state111: {} } },
+        state12: { activities: { DELAY5: 'deal', DELAY17: 'deal17' } },
       },
     },
     state2: {
@@ -36,11 +26,7 @@ export const config3 = createConfig({
         EVENT3: { actions: 'dodo5' },
       },
       always: [
-        {
-          actions: 'dodo6',
-          guards: 'guard2',
-          target: '/state1/state11',
-        },
+        { actions: 'dodo6', guards: 'guard2', target: '/state1/state11' },
         {
           actions: ['dodo7', 'doré3', 'doré1'],
           guards: 'guard2',
@@ -50,11 +36,7 @@ export const config3 = createConfig({
       ],
     },
   },
-  actors: {
-    machine1: {
-      on: {},
-    },
-  },
+  actors: { machine1: { on: {} } },
 });
 
 export const machine3 = createMachine(config3, {
@@ -63,19 +45,9 @@ export const machine3 = createMachine(config3, {
     EVENT2: 'boolean',
     EVENT3: { login: 'string', pwd: 'string' },
   }),
-  pContext: type({
-    data: 'string',
-  }),
-  context: typings.context({
-    age: 'number',
-  }),
-  actorsMap: type({
-    children: {
-      machine1: {
-        NEXT: 'boolean',
-      },
-    },
-  }),
+  pContext: type({ data: 'string' }),
+  context: typings.context({ age: 'number' }),
+  actorsMap: type({ children: { machine1: { NEXT: 'boolean' } } }),
 });
 
 export type Machine3 = typeof machine3;

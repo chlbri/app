@@ -13,40 +13,20 @@ import { createConfig } from '#common/functions';
 export const config21 = createConfig({
   initial: 'idle',
   states: {
-    idle: {
-      activities: {
-        DELAY: 'inc',
-      },
-      on: {
-        NEXT: '/working',
-      },
-    },
+    idle: { activities: { DELAY: 'inc' }, on: { NEXT: '/working' } },
     working: {
       type: 'parallel',
-      activities: {
-        DELAY2: 'inc2',
-      },
-      on: {
-        SEND: {
-          actions: 'send',
-        },
-      },
+      activities: { DELAY2: 'inc2' },
+      on: { SEND: { actions: 'send' } },
       states: {
         fetch: {
           initial: 'idle',
           states: {
             idle: {
-              activities: {
-                DELAY: 'sendPanelToUser',
-              },
-              on: {
-                FETCH: '/working/fetch/fetch',
-              },
+              activities: { DELAY: 'sendPanelToUser' },
+              on: { FETCH: '/working/fetch/fetch' },
             },
-            fetch: {
-              entry: 'insertData',
-              always: '/working/fetch/idle',
-            },
+            fetch: { entry: 'insertData', always: '/working/fetch/idle' },
           },
         },
         ui: {
@@ -54,10 +34,7 @@ export const config21 = createConfig({
           states: {
             idle: {
               on: {
-                WRITE: {
-                  actions: 'write',
-                  target: '/working/ui/input',
-                },
+                WRITE: { actions: 'write', target: '/working/ui/input' },
               },
             },
             input: {
@@ -89,14 +66,7 @@ export const config21 = createConfig({
 
 export const machine21 = createMachine(
   {
-    actors: {
-      machine1: {
-        on: {},
-        contexts: {
-          iterator: 'iterator',
-        },
-      },
-    },
+    actors: { machine1: { on: {}, contexts: { iterator: 'iterator' } } },
     ...config21,
   },
   {
@@ -113,17 +83,9 @@ export const machine21 = createMachine(
       data: array('string'),
     })),
 
-    pContext: type({
-      iterator: 'number',
-    }),
+    pContext: type({ iterator: 'number' }),
 
-    actorsMap: type({
-      children: {
-        machine1: {
-          NEXT: 'never',
-        },
-      },
-    }),
+    actorsMap: type({ children: { machine1: { NEXT: 'never' } } }),
   },
 ).provideOptions(
   ({ isNotValue, isValue, assign, voidAction, sendTo }) => ({
@@ -143,9 +105,7 @@ export const machine21 = createMachine(
       }),
       send: sendTo(machine1)(
         async () => ({ to: 'machine1', event: 'NEXT' }),
-        {
-          catch: emptyActionFn,
-        },
+        { catch: emptyActionFn },
       ),
       insertData: assign('context.data', ({ context }) =>
         fakeDB
@@ -159,16 +119,10 @@ export const machine21 = createMachine(
     },
     actors: {
       children: {
-        machine1: () =>
-          interpret(machine1, {
-            context: { iterator: 0 },
-          }),
+        machine1: () => interpret(machine1, { context: { iterator: 0 } }),
       },
     },
-    delays: {
-      DELAY,
-      DELAY2: 2 * DELAY,
-    },
+    delays: { DELAY, DELAY2: 2 * DELAY },
   }),
 );
 // #endregion

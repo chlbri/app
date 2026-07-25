@@ -7,9 +7,7 @@ export default createMachine(
     initial: 'idle',
     states: {
       idle: {
-        activities: {
-          DELAY: 'inc',
-        },
+        activities: { DELAY: 'inc' },
         on: {
           PAUSE: { actions: 'pause' },
           RESUME: { actions: 'resume' },
@@ -18,9 +16,5 @@ export default createMachine(
       },
     },
   },
-  {
-    context: type({
-      iterator: 'number',
-    }),
-  },
+  { context: type({ iterator: 'number' }) },
 );

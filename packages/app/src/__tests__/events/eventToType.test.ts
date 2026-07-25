@@ -10,11 +10,7 @@ describe('eventToType', () => {
   describe(
     '#01 => success',
     success(
-      {
-        invite: 'string',
-        parameters: INIT_EVENT,
-        expected: INIT_EVENT,
-      },
+      { invite: 'string', parameters: INIT_EVENT, expected: INIT_EVENT },
       {
         invite: 'undefined payload',
         parameters: { type: 'NEXT', payload: {} },

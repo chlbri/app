@@ -9,9 +9,7 @@ describe('#05 => Delay is not defined', () => {
 
   const { useStateValue, useWaiter, start, useWarnings } = constructTests(
     service,
-    ({ waiter }) => ({
-      useWaiter: waiter(DEFAULT_MAX_TIME_PROMISE * 3),
-    }),
+    ({ waiter }) => ({ useWaiter: waiter(DEFAULT_MAX_TIME_PROMISE * 3) }),
   );
 
   test(...start());

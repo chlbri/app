@@ -9,10 +9,6 @@ export default createMachine('src/__tests__/guards/index.3.machine', {
         target: '/state2',
       },
     },
-    state2: {
-      on: {
-        NEXT: '/state1',
-      },
-    },
+    state2: { on: { NEXT: '/state1' } },
   },
 });

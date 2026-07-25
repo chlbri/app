@@ -5,12 +5,7 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        after: {
-          DELAY: '/notActive',
-        },
-        always: '/active',
-      },
+      idle: { after: { DELAY: '/notActive' }, always: '/active' },
       active: {},
       notActive: {},
     },

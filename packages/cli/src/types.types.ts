@@ -14,13 +14,8 @@ export type ParseTreeContext = {
   tags: BetterSet<string>;
   __flat?: RecordS<NodeConfig3>;
 };
-export type ConfigPaths2 = {
-  targets: string[];
-  initial?: string;
-};
-export type ConfigPaths = ConfigPaths2 & {
-  states?: RecordS<ConfigPaths>;
-};
+export type ConfigPaths2 = { targets: string[]; initial?: string };
+export type ConfigPaths = ConfigPaths2 & { states?: RecordS<ConfigPaths> };
 
 export type NoExtraKeysConfigPaths<T extends ConfigPaths> = T & {
   [K in Exclude<keyof T, keyof ConfigPaths>]: never;

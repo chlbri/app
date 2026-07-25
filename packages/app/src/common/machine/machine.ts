@@ -587,15 +587,7 @@ export abstract class CommonMachine<
     const delays = cloneDeep(this.#delays);
     const actors = cloneDeep(this.#actors);
 
-    return {
-      config,
-      pContext,
-      context,
-      actions,
-      guards,
-      delays,
-      actors,
-    };
+    return { config, pContext, context, actions, guards, delays, actors };
   }
 
   addPrivateContext = (pContext: Pc) => {

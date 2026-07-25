@@ -8,12 +8,7 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        ...io,
-        on: {
-          NEXT: '/parallel',
-        },
-      },
+      idle: { ...io, on: { NEXT: '/parallel' } },
       parallel: {
         ...io,
         type: 'parallel',
@@ -25,11 +20,7 @@ export default createMachine(
             states: {
               idle: {
                 ...io,
-                on: {
-                  NEXT: {
-                    target: '/parallel/atomic/next',
-                  },
-                },
+                on: { NEXT: { target: '/parallel/atomic/next' } },
               },
               next: {
                 ...io,
@@ -47,11 +38,7 @@ export default createMachine(
             states: {
               idle: {
                 ...io,
-                on: {
-                  NEXT: {
-                    target: '/parallel/compound/compound',
-                  },
-                },
+                on: { NEXT: { target: '/parallel/compound/compound' } },
               },
               compound: {
                 ...io,
@@ -59,9 +46,7 @@ export default createMachine(
                 states: {
                   idle: {
                     ...io,
-                    on: {
-                      NEXT: '/parallel/compound/compound/next',
-                    },
+                    on: { NEXT: '/parallel/compound/compound/next' },
                   },
                   next: {
                     ...io,

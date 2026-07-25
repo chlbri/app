@@ -8,13 +8,8 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          SET_DATA: {
-            actions: 'setData',
-          },
-          CLEAR_ALL: {
-            actions: 'clearAll',
-            target: '/cleared',
-          },
+          SET_DATA: { actions: 'setData' },
+          CLEAR_ALL: { actions: 'clearAll', target: '/cleared' },
         },
       },
       cleared: {},
@@ -22,9 +17,6 @@ export default createMachine(
   },
   {
     context: type('string'),
-    eventsMap: type({
-      SET_DATA: 'string',
-      CLEAR_ALL: 'undefined',
-    }),
+    eventsMap: type({ SET_DATA: 'string', CLEAR_ALL: 'undefined' }),
   },
 );

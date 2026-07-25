@@ -6,10 +6,7 @@ export const defaultC = {
 export const defaultT = {
   ...defaultC,
   eventsMap: {},
-  actorsMap: {
-    children: {},
-    emitters: {},
-  },
+  actorsMap: { children: {}, emitters: {} },
 } as const;
 
 export const emptyFn = () => {};

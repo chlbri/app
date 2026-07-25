@@ -14,10 +14,7 @@ export type RegisterOptions = Record<
 export interface Register extends Record<
   string,
   {
-    paths: {
-      map: TargetDef;
-      all: string;
-    };
+    paths: { map: TargetDef; all: string };
 
     events: string;
     options: RegisterOptions;

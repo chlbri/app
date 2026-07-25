@@ -8,12 +8,7 @@ describe('TESTS', () => {
     });
 
     test('#02 => with an object containing only functions: returns true', () => {
-      expect(
-        isFnMap({
-          fn1: () => {},
-          fn2: () => {},
-        }),
-      ).toBe(true);
+      expect(isFnMap({ fn1: () => {}, fn2: () => {} })).toBe(true);
     });
 
     test('#03 => with null: returns false', () =>
@@ -28,30 +23,17 @@ describe('TESTS', () => {
     });
 
     test('#06.01 => with non-function values: returns false', () => {
-      expect(
-        isFnMap({
-          fn1: () => {},
-          fn2: 'not a function',
-        }),
-      ).toBe(false);
+      expect(isFnMap({ fn1: () => {}, fn2: 'not a function' })).toBe(
+        false,
+      );
     });
 
     test('#06.02 => with number values: returns false', () => {
-      expect(
-        isFnMap({
-          fn1: () => {},
-          fn2: 42,
-        }),
-      ).toBe(false);
+      expect(isFnMap({ fn1: () => {}, fn2: 42 })).toBe(false);
     });
 
     test('#06.03 => with object values: returns false', () => {
-      expect(
-        isFnMap({
-          fn1: () => {},
-          fn2: {},
-        }),
-      ).toBe(false);
+      expect(isFnMap({ fn1: () => {}, fn2: {} })).toBe(false);
     });
 
     test('#07 => with an empty object: returns true', () =>
@@ -81,29 +63,18 @@ describe('TESTS', () => {
 
     test('#02 => with only promise-returning functions: returns true', () => {
       expect(
-        isAsyncFnMap({
-          fn1: async () => {},
-          fn2: async () => {},
-        }),
+        isAsyncFnMap({ fn1: async () => {}, fn2: async () => {} }),
       ).toBe(true);
     });
 
     test('#03 => with some promise-returning functions: returns true', () => {
-      expect(
-        isAsyncFnMap({
-          fn1: () => {},
-          fn2: async () => {},
-        }),
-      ).toBe(true);
+      expect(isAsyncFnMap({ fn1: () => {}, fn2: async () => {} })).toBe(
+        true,
+      );
     });
 
     test('#04 => with only non-promise functions: returns false', () => {
-      expect(
-        isAsyncFnMap({
-          fn1: () => {},
-          fn2: () => {},
-        }),
-      ).toBe(false);
+      expect(isAsyncFnMap({ fn1: () => {}, fn2: () => {} })).toBe(false);
     });
 
     test('#05 => with null: returns false', () => {
@@ -120,21 +91,14 @@ describe('TESTS', () => {
 
     test('#08.01 => with non-function values: returns false', () => {
       expect(
-        isAsyncFnMap({
-          fn1: async () => {},
-          fn2: 'not a function',
-        }),
+        isAsyncFnMap({ fn1: async () => {}, fn2: 'not a function' }),
       ).toBe(false);
     });
 
     test('#08.02 => with mixed non-function values: returns false', () => {
-      expect(
-        isAsyncFnMap({
-          fn1: async () => {},
-          fn2: 42,
-          fn3: {},
-        }),
-      ).toBe(false);
+      expect(isAsyncFnMap({ fn1: async () => {}, fn2: 42, fn3: {} })).toBe(
+        false,
+      );
     });
 
     test('#09 => with an empty object: returns false', () => {

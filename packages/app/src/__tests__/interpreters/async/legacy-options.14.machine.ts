@@ -5,21 +5,11 @@ export default createMachine(
   'src/__tests__/interpreters/legacy-options.14.machine',
   {
     initial: 'idle',
-    states: {
-      idle: {
-        on: {
-          INCREMENT: {
-            actions: 'increment',
-          },
-        },
-      },
-    },
+    states: { idle: { on: { INCREMENT: { actions: 'increment' } } } },
   },
   {
     context: type('number'),
 
-    eventsMap: type({
-      INCREMENT: 'never',
-    }),
+    eventsMap: type({ INCREMENT: 'never' }),
   },
 );

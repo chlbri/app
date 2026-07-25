@@ -14,21 +14,14 @@ describe('Integration testing for interpret, Children', () => {
   describe('#01 => With delay', () => {
     const machine = _machine1;
 
-    machine.addOptions(() => ({
-      delays: { DELAY },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY } }));
 
-    machine.createOptions(() => ({
-      delays: { DELAY },
-      ezre: {},
-    }));
+    machine.createOptions(() => ({ delays: { DELAY }, ezre: {} }));
     const service = interpret(machine, defaultC);
 
     const { useStateValue, useWaiter, start } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(DELAY),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
 
     test(...start());
@@ -48,9 +41,7 @@ describe('Integration testing for interpret, Children', () => {
 
     const { useStateValue, useWaiter, start } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(DELAY),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
 
     test(...start());
@@ -75,9 +66,7 @@ describe('Integration testing for interpret, Children', () => {
 
     const { useStateValue, useWaiter, start } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(DELAY),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
 
     test(...start());

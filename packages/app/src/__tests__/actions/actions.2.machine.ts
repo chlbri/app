@@ -7,21 +7,12 @@ export default createMachine(
     states: {
       state1: {
         always: {
-          actions: {
-            name: 'action1',
-            description: 'Just an action',
-          },
+          actions: { name: 'action1', description: 'Just an action' },
           target: '/state2',
         },
       },
-      state2: {
-        on: {
-          NEXT: '/state1',
-        },
-      },
+      state2: { on: { NEXT: '/state1' } },
     },
   },
-  {
-    sync: true,
-  },
+  { sync: true },
 );

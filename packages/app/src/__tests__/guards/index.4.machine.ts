@@ -22,10 +22,7 @@ export default createMachine(
                     'returnTrue2',
                   ],
                 },
-                {
-                  name: 'returnFalse2',
-                  description: 'Just a guard',
-                },
+                { name: 'returnFalse2', description: 'Just a guard' },
               ],
             },
           ],
@@ -36,11 +33,7 @@ export default createMachine(
     },
   },
   {
-    pContext: type({
-      data: 'string',
-    }),
-    context: type({
-      data: 'number',
-    }),
+    pContext: type({ data: 'string' }),
+    context: type({ data: 'number' }),
   },
 );

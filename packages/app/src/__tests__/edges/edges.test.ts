@@ -93,12 +93,7 @@ describe('EDGES CASES', () => {
         context: {
           number1: 0,
           number2: 0,
-          deep: {
-            number3: 0,
-            deep2: {
-              number4: 0,
-            },
-          },
+          deep: { number3: 0, deep2: { number4: 0 } },
         },
       });
       const { incDeep, start, stop, number1, number2, number3, number4 } =
@@ -133,12 +128,7 @@ describe('EDGES CASES', () => {
         context: {
           number1: 0,
           number2: 0,
-          deep: {
-            number3: 0,
-            deep2: {
-              number4: 0,
-            },
-          },
+          deep: { number3: 0, deep2: { number4: 0 } },
         },
       });
       const { incDeep, start, stop, number1, number2, number3, number4 } =

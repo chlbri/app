@@ -6,9 +6,7 @@ export default createMachine(
     initial: 'idle',
     states: {
       idle: {
-        after: {
-          DELAY3: '/notActive',
-        },
+        after: { DELAY3: '/notActive' },
         always: { guards: 'returnFalse', target: '/active' },
       },
       active: {},

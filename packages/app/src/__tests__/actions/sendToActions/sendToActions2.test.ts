@@ -22,9 +22,7 @@ describe('cov => Performs send to itself actions', () => {
           return iterator - 1;
         }),
 
-        init: assign('context', () => ({
-          iterator: 0,
-        })),
+        init: assign('context', () => ({ iterator: 0 })),
 
         forceSendInc: forceSend('INCREMENT'),
         sendDec: resend('DECREMENT'),
@@ -32,10 +30,7 @@ describe('cov => Performs send to itself actions', () => {
     }),
   );
 
-  const service = interpret(machine, {
-    exact: true,
-    context: {},
-  });
+  const service = interpret(machine, { exact: true, context: {} });
 
   const { useIterator, start, dispose, useStateValue, send } =
     constructTests(service, ({ contexts: constructContexts }) => ({

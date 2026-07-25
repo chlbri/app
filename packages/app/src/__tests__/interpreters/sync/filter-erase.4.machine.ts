@@ -8,13 +8,8 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          SET_NAME: {
-            actions: 'setName',
-          },
-          CLEAR_NAME: {
-            actions: 'clearName',
-            target: '/cleared',
-          },
+          SET_NAME: { actions: 'setName' },
+          CLEAR_NAME: { actions: 'clearName', target: '/cleared' },
         },
       },
       cleared: {},

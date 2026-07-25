@@ -13,14 +13,10 @@ beforeAll(() => {
 describe('REAL LIFE TESTS', () => {
   describe('#01 => Real life testing', () => {
     const machine = _machine1.provideOptions(({ assign }) => ({
-      actions: {
-        inc: assign('context', ({ context }) => context + 1),
-      },
+      actions: { inc: assign('context', ({ context }) => context + 1) },
     }));
 
-    const service = interpret(machine, {
-      context: 0,
-    });
+    const service = interpret(machine, { context: 0 });
 
     // #region Hooks
     type SE = Parameters<typeof service.send>[0];
@@ -55,30 +51,14 @@ describe('REAL LIFE TESTS', () => {
       test(...useSend('NEXT', 3));
 
       test(
-        ...useValue(
-          {
-            parallel: {
-              atomic: 'idle',
-              compound: 'idle',
-            },
-          },
-          4,
-        ),
+        ...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 4),
       );
 
       test(...useIterator(8, 5));
       test(...useSend('NEXT', 6));
 
       test(
-        ...useValue(
-          {
-            parallel: {
-              atomic: 'next',
-              compound: 'next',
-            },
-          },
-          7,
-        ),
+        ...useValue({ parallel: { atomic: 'next', compound: 'next' } }, 7),
       );
 
       test(...useIterator(11, 8));
@@ -92,12 +72,7 @@ describe('REAL LIFE TESTS', () => {
 
       test(
         ...useValue(
-          {
-            parallel: {
-              atomic: 'idle',
-              compound: 'idle',
-            },
-          },
+          { parallel: { atomic: 'idle', compound: 'idle' } },
           16,
         ),
       );
@@ -110,12 +85,7 @@ describe('REAL LIFE TESTS', () => {
 
       test(
         ...useValue(
-          {
-            parallel: {
-              atomic: 'idle',
-              compound: 'idle',
-            },
-          },
+          { parallel: { atomic: 'idle', compound: 'idle' } },
           22,
         ),
       );
@@ -126,14 +96,10 @@ describe('REAL LIFE TESTS', () => {
 
   describe('#02 => Cover', () => {
     const machine = _machine2.provideOptions(({ assign }) => ({
-      actions: {
-        inc: assign('context', ({ context }) => context + 1),
-      },
+      actions: { inc: assign('context', ({ context }) => context + 1) },
     }));
 
-    const service = interpret(machine, {
-      context: 0,
-    });
+    const service = interpret(machine, { context: 0 });
 
     // #region Hooks
     type SE = Parameters<typeof service.send>[0];
@@ -168,28 +134,13 @@ describe('REAL LIFE TESTS', () => {
       test(...useIterator(1, 2));
       test(...useSend('NEXT', 3));
       test(
-        ...useValue(
-          {
-            parallel: {
-              atomic: 'idle',
-              compound: 'idle',
-            },
-          },
-          4,
-        ),
+        ...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 4),
       );
       test(...useIterator(7, 5));
       test(...useSend('NEXT', 6));
       test(
         ...useValue(
-          {
-            parallel: {
-              atomic: 'next',
-              compound: {
-                compound: 'idle',
-              },
-            },
-          },
+          { parallel: { atomic: 'next', compound: { compound: 'idle' } } },
           7,
         ),
       );
@@ -199,42 +150,20 @@ describe('REAL LIFE TESTS', () => {
       test(...useSend('NEXT', 11));
       test(
         ...useValue(
-          {
-            parallel: {
-              atomic: 'next',
-              compound: {
-                compound: 'next',
-              },
-            },
-          },
+          { parallel: { atomic: 'next', compound: { compound: 'next' } } },
           12,
         ),
       );
       test(...useIterator(18, 13));
       test(...useSend('NEXT', 14));
-      test(
-        ...useValue(
-          {
-            parallel: {
-              atomic: 'idle',
-            },
-          },
-          15,
-        ),
-      );
+      test(...useValue({ parallel: { atomic: 'idle' } }, 15));
       test(...useIterator(27, 16));
 
       test('#26 => #Decomposed', () => {
         const expected = {
           initial: 'idle',
           states: {
-            idle: {
-              exit: 'inc',
-              entry: 'inc',
-              on: {
-                NEXT: '/parallel',
-              },
-            },
+            idle: { exit: 'inc', entry: 'inc', on: { NEXT: '/parallel' } },
             parallel: {
               exit: 'inc',
               entry: 'inc',
@@ -248,11 +177,7 @@ describe('REAL LIFE TESTS', () => {
                     idle: {
                       exit: 'inc',
                       entry: 'inc',
-                      on: {
-                        NEXT: {
-                          target: '/parallel/atomic/next',
-                        },
-                      },
+                      on: { NEXT: { target: '/parallel/atomic/next' } },
                     },
                     next: {
                       exit: 'inc',
@@ -273,9 +198,7 @@ describe('REAL LIFE TESTS', () => {
                       exit: 'inc',
                       entry: 'inc',
                       on: {
-                        NEXT: {
-                          target: '/parallel/compound/compound',
-                        },
+                        NEXT: { target: '/parallel/compound/compound' },
                       },
                     },
                     compound: {
@@ -286,9 +209,7 @@ describe('REAL LIFE TESTS', () => {
                         idle: {
                           exit: 'inc',
                           entry: 'inc',
-                          on: {
-                            NEXT: '/parallel/compound/compound/next',
-                          },
+                          on: { NEXT: '/parallel/compound/compound/next' },
                         },
                         next: {
                           exit: 'inc',
@@ -308,15 +229,11 @@ describe('REAL LIFE TESTS', () => {
           'states.idle': {
             exit: 'inc',
             entry: 'inc',
-            on: {
-              NEXT: '/parallel',
-            },
+            on: { NEXT: '/parallel' },
           },
           'states.idle.exit': 'inc',
           'states.idle.entry': 'inc',
-          'states.idle.on': {
-            NEXT: '/parallel',
-          },
+          'states.idle.on': { NEXT: '/parallel' },
           'states.idle.on.NEXT': '/parallel',
           'states.parallel': {
             exit: 'inc',
@@ -331,11 +248,7 @@ describe('REAL LIFE TESTS', () => {
                   idle: {
                     exit: 'inc',
                     entry: 'inc',
-                    on: {
-                      NEXT: {
-                        target: '/parallel/atomic/next',
-                      },
-                    },
+                    on: { NEXT: { target: '/parallel/atomic/next' } },
                   },
                   next: {
                     exit: 'inc',
@@ -356,9 +269,7 @@ describe('REAL LIFE TESTS', () => {
                     exit: 'inc',
                     entry: 'inc',
                     on: {
-                      NEXT: {
-                        target: '/parallel/compound/compound',
-                      },
+                      NEXT: { target: '/parallel/compound/compound' },
                     },
                   },
                   compound: {
@@ -369,9 +280,7 @@ describe('REAL LIFE TESTS', () => {
                       idle: {
                         exit: 'inc',
                         entry: 'inc',
-                        on: {
-                          NEXT: '/parallel/compound/compound/next',
-                        },
+                        on: { NEXT: '/parallel/compound/compound/next' },
                       },
                       next: {
                         exit: 'inc',
@@ -399,11 +308,7 @@ describe('REAL LIFE TESTS', () => {
                 idle: {
                   exit: 'inc',
                   entry: 'inc',
-                  on: {
-                    NEXT: {
-                      target: '/parallel/atomic/next',
-                    },
-                  },
+                  on: { NEXT: { target: '/parallel/atomic/next' } },
                 },
                 next: {
                   exit: 'inc',
@@ -423,11 +328,7 @@ describe('REAL LIFE TESTS', () => {
                 idle: {
                   exit: 'inc',
                   entry: 'inc',
-                  on: {
-                    NEXT: {
-                      target: '/parallel/compound/compound',
-                    },
-                  },
+                  on: { NEXT: { target: '/parallel/compound/compound' } },
                 },
                 compound: {
                   exit: 'inc',
@@ -437,9 +338,7 @@ describe('REAL LIFE TESTS', () => {
                     idle: {
                       exit: 'inc',
                       entry: 'inc',
-                      on: {
-                        NEXT: '/parallel/compound/compound/next',
-                      },
+                      on: { NEXT: '/parallel/compound/compound/next' },
                     },
                     next: {
                       exit: 'inc',
@@ -462,11 +361,7 @@ describe('REAL LIFE TESTS', () => {
               idle: {
                 exit: 'inc',
                 entry: 'inc',
-                on: {
-                  NEXT: {
-                    target: '/parallel/atomic/next',
-                  },
-                },
+                on: { NEXT: { target: '/parallel/atomic/next' } },
               },
               next: {
                 exit: 'inc',
@@ -485,11 +380,7 @@ describe('REAL LIFE TESTS', () => {
             idle: {
               exit: 'inc',
               entry: 'inc',
-              on: {
-                NEXT: {
-                  target: '/parallel/atomic/next',
-                },
-              },
+              on: { NEXT: { target: '/parallel/atomic/next' } },
             },
             next: {
               exit: 'inc',
@@ -503,18 +394,12 @@ describe('REAL LIFE TESTS', () => {
           'states.parallel.states.atomic.states.idle': {
             exit: 'inc',
             entry: 'inc',
-            on: {
-              NEXT: {
-                target: '/parallel/atomic/next',
-              },
-            },
+            on: { NEXT: { target: '/parallel/atomic/next' } },
           },
           'states.parallel.states.atomic.states.idle.exit': 'inc',
           'states.parallel.states.atomic.states.idle.entry': 'inc',
           'states.parallel.states.atomic.states.idle.on': {
-            NEXT: {
-              target: '/parallel/atomic/next',
-            },
+            NEXT: { target: '/parallel/atomic/next' },
           },
           'states.parallel.states.atomic.states.idle.on.NEXT': {
             target: '/parallel/atomic/next',
@@ -547,11 +432,7 @@ describe('REAL LIFE TESTS', () => {
               idle: {
                 exit: 'inc',
                 entry: 'inc',
-                on: {
-                  NEXT: {
-                    target: '/parallel/compound/compound',
-                  },
-                },
+                on: { NEXT: { target: '/parallel/compound/compound' } },
               },
               compound: {
                 exit: 'inc',
@@ -561,9 +442,7 @@ describe('REAL LIFE TESTS', () => {
                   idle: {
                     exit: 'inc',
                     entry: 'inc',
-                    on: {
-                      NEXT: '/parallel/compound/compound/next',
-                    },
+                    on: { NEXT: '/parallel/compound/compound/next' },
                   },
                   next: {
                     exit: 'inc',
@@ -584,11 +463,7 @@ describe('REAL LIFE TESTS', () => {
             idle: {
               exit: 'inc',
               entry: 'inc',
-              on: {
-                NEXT: {
-                  target: '/parallel/compound/compound',
-                },
-              },
+              on: { NEXT: { target: '/parallel/compound/compound' } },
             },
             compound: {
               exit: 'inc',
@@ -598,9 +473,7 @@ describe('REAL LIFE TESTS', () => {
                 idle: {
                   exit: 'inc',
                   entry: 'inc',
-                  on: {
-                    NEXT: '/parallel/compound/compound/next',
-                  },
+                  on: { NEXT: '/parallel/compound/compound/next' },
                 },
                 next: {
                   exit: 'inc',
@@ -616,18 +489,12 @@ describe('REAL LIFE TESTS', () => {
           'states.parallel.states.compound.states.idle': {
             exit: 'inc',
             entry: 'inc',
-            on: {
-              NEXT: {
-                target: '/parallel/compound/compound',
-              },
-            },
+            on: { NEXT: { target: '/parallel/compound/compound' } },
           },
           'states.parallel.states.compound.states.idle.exit': 'inc',
           'states.parallel.states.compound.states.idle.entry': 'inc',
           'states.parallel.states.compound.states.idle.on': {
-            NEXT: {
-              target: '/parallel/compound/compound',
-            },
+            NEXT: { target: '/parallel/compound/compound' },
           },
           'states.parallel.states.compound.states.idle.on.NEXT': {
             target: '/parallel/compound/compound',
@@ -642,9 +509,7 @@ describe('REAL LIFE TESTS', () => {
               idle: {
                 exit: 'inc',
                 entry: 'inc',
-                on: {
-                  NEXT: '/parallel/compound/compound/next',
-                },
+                on: { NEXT: '/parallel/compound/compound/next' },
               },
               next: {
                 exit: 'inc',
@@ -664,9 +529,7 @@ describe('REAL LIFE TESTS', () => {
             idle: {
               exit: 'inc',
               entry: 'inc',
-              on: {
-                NEXT: '/parallel/compound/compound/next',
-              },
+              on: { NEXT: '/parallel/compound/compound/next' },
             },
             next: {
               exit: 'inc',
@@ -680,18 +543,14 @@ describe('REAL LIFE TESTS', () => {
           'states.parallel.states.compound.states.compound.states.idle': {
             exit: 'inc',
             entry: 'inc',
-            on: {
-              NEXT: '/parallel/compound/compound/next',
-            },
+            on: { NEXT: '/parallel/compound/compound/next' },
           },
           'states.parallel.states.compound.states.compound.states.idle.exit':
             'inc',
           'states.parallel.states.compound.states.compound.states.idle.entry':
             'inc',
           'states.parallel.states.compound.states.compound.states.idle.on':
-            {
-              NEXT: '/parallel/compound/compound/next',
-            },
+            { NEXT: '/parallel/compound/compound/next' },
           'states.parallel.states.compound.states.compound.states.idle.on.NEXT':
             '/parallel/compound/compound/next',
           'states.parallel.states.compound.states.compound.states.next': {
@@ -823,19 +682,14 @@ describe('REAL LIFE TESTS', () => {
             return {
               fields: [structuredClone(current)],
               lang: 'en' as const,
-              states: {
-                fields: 'idle' as const,
-                values: 'idle' as const,
-              },
+              states: { fields: 'idle' as const, values: 'idle' as const },
             };
           }),
         },
       }),
     );
 
-    const service = interpret(mainMachine, {
-      context: {},
-    });
+    const service = interpret(mainMachine, { context: {} });
 
     // #region Hooks
 
@@ -857,10 +711,7 @@ describe('REAL LIFE TESTS', () => {
         expect(service.state.context).toEqual({
           fields: [{ label: '', type: 'text' }],
           lang: 'en',
-          states: {
-            fields: 'idle',
-            values: 'idle',
-          },
+          states: { fields: 'idle', values: 'idle' },
         });
       });
 
@@ -892,10 +743,7 @@ describe('REAL LIFE TESTS', () => {
         ...send(
           {
             type: 'UPDATE',
-            payload: {
-              index: 0,
-              value: { label: 'Name', type: 'text' },
-            },
+            payload: { index: 0, value: { label: 'Name', type: 'text' } },
           },
           9,
         ),
@@ -961,10 +809,7 @@ describe('REAL LIFE TESTS', () => {
         ...send(
           {
             type: 'VALUES:REGISTER',
-            payload: {
-              name: 'John Doe',
-              email: 'john@example.com',
-            },
+            payload: { name: 'John Doe', email: 'john@example.com' },
           },
           14,
         ),
@@ -1001,14 +846,8 @@ describe('REAL LIFE TESTS', () => {
         expect(service.state.context).toEqual({
           fields: [{ label: 'Name', type: 'text' }],
           lang: 'fr',
-          states: {
-            fields: 'registration',
-            values: 'idle',
-          },
-          values: {
-            name: 'John Doe',
-            email: 'john@example.com',
-          },
+          states: { fields: 'registration', values: 'idle' },
+          values: { name: 'John Doe', email: 'john@example.com' },
         });
       });
     });

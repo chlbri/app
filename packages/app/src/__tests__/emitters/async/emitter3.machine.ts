@@ -12,15 +12,9 @@ export default createMachine(
   {
     initial: 'inactive',
     states: {
-      inactive: {
-        on: {
-          NEXT: '/active',
-        },
-      },
+      inactive: { on: { NEXT: '/active' } },
       active: {
-        on: {
-          NEXT: '/inactive',
-        },
+        on: { NEXT: '/inactive' },
         actors: {
           interval1: {
             next: {
@@ -40,12 +34,7 @@ export default createMachine(
   {
     context: type(({ optional }) => optional('number')),
     actorsMap: typings.actorsMap({
-      emitters: {
-        interval1: {
-          next: 'number',
-          error: 'undefined',
-        },
-      },
+      emitters: { interval1: { next: 'number', error: 'undefined' } },
     }),
   },
 ).provideOptions(({ assign }) => ({

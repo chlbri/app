@@ -245,15 +245,6 @@ describe('machine coverage', () => {
     describe('#35 => Close the service', async () => {
       test(...stop(1));
 
-      describe('#02 => Calls of log', () => {
-        // test('#01 => Length of calls of log is the same of length of strings', () => {
-        //   expect(log).toBeCalledTimes(strings.length);
-        // });
-        // test('#02 => Log is called "70" times', () => {
-        //   expect(log).toBeCalledTimes(70);
-        // });
-      });
-
       test('#03 => Log the time of all tests', () => {
         console.timeEnd(TEXT);
       });

@@ -33,9 +33,7 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             return 'Alice';
           },
-          {
-            catch: emptyActionFn,
-          },
+          { catch: emptyActionFn },
         ),
       },
     }));
@@ -107,16 +105,12 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             throw new Error('network failure');
           },
-          {
-            catch: () => assign('context.name', () => 'failure'),
-          },
+          { catch: () => assign('context.name', () => 'failure') },
         ),
       },
     }));
 
-    const service = interpret(machine, {
-      context: { name: '' },
-    });
+    const service = interpret(machine, { context: { name: '' } });
 
     const { start, send, useName, waiter } = constructTests(
       service,
@@ -143,9 +137,7 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             sideEffect('done');
           },
-          {
-            catch: emptyActionFn,
-          },
+          { catch: emptyActionFn },
         ),
       },
     }));
@@ -179,9 +171,7 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             throw new Error('boom');
           },
-          {
-            catch: _err => voidAction(() => errorHandler(_err)),
-          },
+          { catch: _err => voidAction(() => errorHandler(_err)) },
         ),
       },
     }));
@@ -228,9 +218,7 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             // side-effect only: proves async voidAction still works here
           },
-          {
-            catch: emptyActionFn,
-          },
+          { catch: emptyActionFn },
         ),
       },
     }));
@@ -266,9 +254,7 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             throw new Error('Load failed');
           },
-          {
-            catch: error,
-          },
+          { catch: error },
         ),
       },
     }));

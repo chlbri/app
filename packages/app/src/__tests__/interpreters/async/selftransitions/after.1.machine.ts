@@ -3,14 +3,7 @@ import { createConfig } from '#common/functions';
 
 const simpleConfig = createConfig({
   initial: 'idle',
-  states: {
-    idle: {
-      after: {
-        DELAY: '/active',
-      },
-    },
-    active: {},
-  },
+  states: { idle: { after: { DELAY: '/active' } }, active: {} },
 });
 
 export default createMachine(

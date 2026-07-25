@@ -6,11 +6,7 @@ vi.useFakeTimers();
 describe('delay is not defined', () => {
   const activity = vi.fn().mockReturnValue(defaultC);
 
-  machine.addOptions(() => ({
-    actions: {
-      activity1: activity,
-    },
-  }));
+  machine.addOptions(() => ({ actions: { activity1: activity } }));
 
   const service = interpret(machine);
   const { send, useStateValue, start, waiter } = constructTests(
@@ -41,9 +37,7 @@ describe('delay is not defined', () => {
   test(...useStateValue('state2', 5));
 
   test('#06 => add delay', () => {
-    service.addOptions(() => ({
-      delays: { DELAY },
-    }));
+    service.addOptions(() => ({ delays: { DELAY } }));
   });
 
   test(...send('NEXT', 7));

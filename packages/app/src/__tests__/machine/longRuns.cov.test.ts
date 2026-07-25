@@ -103,9 +103,7 @@ describe('longRuns - no timeout limit for async actions and after', () => {
 
     const machine = _machine5;
 
-    machine.addOptions(() => ({
-      delays: { DELAY },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY } }));
 
     const service = interpret(machine, { context: 0 });
 

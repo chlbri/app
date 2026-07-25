@@ -5,44 +5,27 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        tags: ['idle_tag'],
-        on: {
-          START: '/active',
-        },
-      },
+      idle: { tags: ['idle_tag'], on: { START: '/active' } },
       active: {
         initial: 'speed_low',
         tags: ['active_tag'],
         states: {
           speed_low: {
             tags: ['low_tag'],
-            on: {
-              ACCELERATE: '/active/speed_high',
-              STOP: '/final',
-            },
+            on: { ACCELERATE: '/active/speed_high', STOP: '/final' },
           },
           speed_high: {
             tags: ['high_tag'],
-            on: {
-              DECELERATE: '/active/speed_low',
-              STOP: '/final',
-            },
+            on: { DECELERATE: '/active/speed_low', STOP: '/final' },
           },
         },
-        on: {
-          INC: {
-            actions: 'increment',
-          },
-        },
+        on: { INC: { actions: 'increment' } },
       },
       final: {},
     },
   },
   {
-    context: type({
-      count: 'number',
-    }),
+    context: type({ count: 'number' }),
     eventsMap: type({
       START: 'never',
       STOP: 'never',

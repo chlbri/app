@@ -7,23 +7,14 @@ export default createMachine(
     initial: 'idle',
     states: {
       idle: {
-        on: {
-          CHECK: [
-            {
-              guards: 'isPositive',
-              target: '/positive',
-            },
-          ],
-        },
+        on: { CHECK: [{ guards: 'isPositive', target: '/positive' }] },
       },
       positive: {},
     },
   },
   {
     context: type('number'),
-    eventsMap: type({
-      CHECK: 'never',
-    }),
+    eventsMap: type({ CHECK: 'never' }),
     sync: true,
   },
 );

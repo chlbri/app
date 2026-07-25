@@ -47,10 +47,7 @@ export const location = helpers.partial({
   address: 'string',
   city: 'string',
   country: 'string',
-  coordinates: {
-    lat: 'number',
-    lng: 'number',
-  },
+  coordinates: { lat: 'number', lng: 'number' },
   googleMapsLink: 'string',
 });
 

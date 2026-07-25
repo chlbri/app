@@ -14,9 +14,7 @@ describe('Cannot perform Activity', () => {
   const service = interpret(machine);
   const { useStateValue, start, waiter, send } = constructTests(
     service,
-    ({ waiter }) => ({
-      waiter: waiter(DELAY),
-    }),
+    ({ waiter }) => ({ waiter: waiter(DELAY) }),
   );
 
   test(...start());

@@ -12,25 +12,18 @@ describe('Integration testing for interpret, Children', () => {
   });
 
   const child = _child1.provideOptions(({ assign }) => ({
-    actions: {
-      inc: assign('context', ({ context }) => context + 1),
-    },
+    actions: { inc: assign('context', ({ context }) => context + 1) },
     delays: { DELAY: 100 },
   }));
 
   describe('#01 => context are same', () => {
     const parent = _parent2.provideOptions(() => ({
       actors: {
-        children: {
-          child: () => interpret(child, { context: 0 }),
-        },
+        children: { child: () => interpret(child, { context: 0 }) },
       },
     }));
 
-    const service = interpret(parent, {
-      ...defaultC,
-      pContext: 0,
-    });
+    const service = interpret(parent, { ...defaultC, pContext: 0 });
 
     const { start, waiter, useIterator, dispose } = constructTests(
       service,
@@ -52,9 +45,7 @@ describe('Integration testing for interpret, Children', () => {
   describe('#02 => context of child, and the type correspond to a subtype of privateContext of parent', () => {
     const parent = _parent3.provideOptions(() => ({
       actors: {
-        children: {
-          child: () => interpret(child, { context: 0 }),
-        },
+        children: { child: () => interpret(child, { context: 0 }) },
       },
     }));
 
@@ -96,10 +87,7 @@ describe('Integration testing for interpret, Children', () => {
           notify();
         }),
         sendChildNext: sendTo(child)(() => {
-          return {
-            to: 'child',
-            event: 'NEXT',
-          };
+          return { to: 'child', event: 'NEXT' };
         }),
       },
       actors: { children: { child: () => interpret(child) } },

@@ -1,39 +1,11 @@
-import { exclude } from '@bemedev/dev-utils/vitest-exclude';
-import { defineConfig } from 'vitest/config';
+import { defineProject } from '@bemedev/dev-utils/vitest-extended';
 
-export default defineConfig({
-  resolve: {
-    tsconfigPaths: true,
-  },
-  plugins: [
-    exclude({
-      ignoreCoverageFiles: [],
-    }),
-  ],
-  server: {
-    host: '0.0.0.0',
-  },
+export default defineProject({
   test: {
     bail: 100,
     maxConcurrency: 10,
-    allowOnly: true,
-    passWithNoTests: true,
-    slowTestThreshold: 3000,
     environment: 'node',
-    env: {
-      NODE_ENV: 'test',
-    },
-    globals: true,
-    logHeapUsage: false,
     testTimeout: 30000,
-    typecheck: {
-      enabled: true,
-      ignoreSourceErrors: false,
-    },
-    coverage: {
-      enabled: true,
-      reportsDirectory: '.coverage',
-      provider: 'v8',
-    },
+    env: { NODE_ENV: 'test' },
   },
 });

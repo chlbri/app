@@ -154,36 +154,28 @@ export type AsyncPredicateAnd<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = {
-  and: AsyncPredicate<E, Pc, Tc, T>[];
-};
+> = { and: AsyncPredicate<E, Pc, Tc, T>[] };
 
 export type AsyncPredicateOr<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = {
-  or: AsyncPredicate<E, Pc, Tc, T>[];
-};
+> = { or: AsyncPredicate<E, Pc, Tc, T>[] };
 
 export type SyncPredicateAnd<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = {
-  and: SyncPredicate<E, Pc, Tc, T>[];
-};
+> = { and: SyncPredicate<E, Pc, Tc, T>[] };
 
 export type SyncPredicateOr<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = {
-  or: SyncPredicate<E, Pc, Tc, T>[];
-};
+> = { or: SyncPredicate<E, Pc, Tc, T>[] };
 
 export type SyncPredicate<
   E extends EventObject = EventObject,

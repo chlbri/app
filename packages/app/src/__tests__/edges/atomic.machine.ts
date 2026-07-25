@@ -7,18 +7,12 @@ const litts = typings.any(({ litterals }) =>
 
 export default createMachine(
   'atomic',
-  {
-    on: { SET_LANG: { actions: ['setLang'] } },
-  },
+  { on: { SET_LANG: { actions: ['setLang'] } } },
   {
     sync: true,
     context: typings.context(litts),
     eventsMap: typings.eventsMap({ SET_LANG: litts }),
   },
 ).provideOptions(({ assign }) => ({
-  actions: {
-    setLang: assign('context', {
-      SET_LANG: c => c.payload,
-    }),
-  },
+  actions: { setLang: assign('context', { SET_LANG: c => c.payload }) },
 }));

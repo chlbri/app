@@ -18,9 +18,7 @@ describe('TESTS', () => {
 
   it('#11 => Change DELAY', () => {
     service.addOptions(() => ({
-      delays: {
-        DELAY: DEFAULT_MIN_ACTIVITY_TIME / 2,
-      },
+      delays: { DELAY: DEFAULT_MIN_ACTIVITY_TIME / 2 },
     }));
   });
 

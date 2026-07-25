@@ -35,11 +35,7 @@ describe('TESTS', () => {
           parameters: [{ type: 'foo', payload: 'bar' }],
           expected: true,
         },
-        {
-          invite: '"other"',
-          parameters: ['other'],
-          expected: false,
-        },
+        { invite: '"other"', parameters: ['other'], expected: false },
         {
           invite: 'invalid event object (missing payload)',
           parameters: [{ type: 'foo' }],

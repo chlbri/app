@@ -18,19 +18,13 @@ describe('after', () => {
   describe('#01 => simple', () => {
     const machine = _machine1;
 
-    machine.addOptions(() => ({
-      delays: {
-        DELAY,
-      },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY } }));
 
     const service = interpret(machine, defaultC);
 
     const { useStateValue, useWaiter, start } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(DELAY),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
 
     test(...start());
@@ -43,19 +37,14 @@ describe('after', () => {
     const machine = _machine2;
 
     machine.addOptions(() => ({
-      delays: {
-        DELAY1: DELAY * 3,
-        DELAY2: DELAY * 2,
-      },
+      delays: { DELAY1: DELAY * 3, DELAY2: DELAY * 2 },
     }));
 
     const service = interpret(machine);
 
     const { useStateValue, useWaiter, start } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(DELAY),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
 
     test(...start());
@@ -71,22 +60,15 @@ describe('after', () => {
   describe('#03 => complex, two delays with parameters', () => {
     const machine = _machine3;
     machine.addOptions(() => ({
-      delays: {
-        DELAY,
-        DELAY2: DELAY * 4,
-      },
-      guards: {
-        returnFalse,
-      },
+      delays: { DELAY, DELAY2: DELAY * 4 },
+      guards: { returnFalse },
     }));
 
     const service = interpret(machine, defaultC);
 
     const { useStateValue, useWaiter, start } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(DELAY),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
 
     test(...start());
@@ -105,19 +87,13 @@ describe('after', () => {
     vi.useRealTimers();
     const machine = _machine4;
 
-    machine.addOptions(() => ({
-      delays: {
-        DELAY2: DELAY * 3,
-      },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY2: DELAY * 3 } }));
 
     const service = interpret(machine, defaultC);
 
     const { useStateValue, useWaiter, start, send } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(DELAY),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
 
     test(...start());
@@ -168,17 +144,13 @@ describe('after', () => {
     });
 
     machine.addOptions(() => ({
-      delays: {
-        DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5,
-      },
+      delays: { DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5 },
     }));
 
     const service = interpret(machine, defaultC);
     const { useStateValue, start, stop, useLong } = constructTests(
       service,
-      ({ waiter }) => ({
-        useLong: waiter(DEFAULT_MAX_TIME_PROMISE),
-      }),
+      ({ waiter }) => ({ useLong: waiter(DEFAULT_MAX_TIME_PROMISE) }),
     );
 
     test(...start());

@@ -3,22 +3,13 @@ import { typings } from '#utils';
 
 export default createMachine(
   'edges.arrayAssign.complex',
+  { on: { INC: { actions: ['incDeep'] } } },
   {
-    on: { INC: { actions: ['incDeep'] } },
-  },
-  {
-    eventsMap: typings.eventsMap({
-      INC: 'undefined',
-    }),
+    eventsMap: typings.eventsMap({ INC: 'undefined' }),
     context: typings.context({
       number1: 'number',
       number2: 'number',
-      deep: {
-        number3: 'number',
-        deep2: {
-          number4: 'number',
-        },
-      },
+      deep: { number3: 'number', deep2: { number4: 'number' } },
     }),
   },
 ).provideOptions(({ assign }) => ({

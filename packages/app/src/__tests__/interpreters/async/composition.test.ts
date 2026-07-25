@@ -23,10 +23,7 @@ beforeAll(() => {
 });
 
 describe('Composition', () => {
-  const resultC = {
-    pContext: { data: 'avion' },
-    context: { age: 5 },
-  };
+  const resultC = { pContext: { data: 'avion' }, context: { age: 5 } };
 
   describe('#01 => Status', () => {
     let service = _unknown<AnyInterpreter>(null);
@@ -51,11 +48,7 @@ describe('Composition', () => {
       });
 
       describe('#2 => Check the currentvalue', () => {
-        const expected = {
-          state1: {
-            state11: 'state111',
-          },
-        };
+        const expected = { state1: { state11: 'state111' } };
 
         test("#1 => It's expected", () => {
           const actual = service.value;
@@ -70,9 +63,7 @@ describe('Composition', () => {
   });
 
   describe('#02 => Can check without starting', () => {
-    const service = interpretAsync(machine3, {
-      ...resultC,
-    }).renew;
+    const service = interpretAsync(machine3, { ...resultC }).renew;
 
     describe('#01 => Mode', () => {
       test('#01 => mode is ""strict" by default', () => {
@@ -108,13 +99,7 @@ describe('Composition', () => {
       const node = {
         after: [],
         always: [],
-        children: [
-          {
-            contexts: [],
-            on: [],
-            src: undefined,
-          },
-        ],
+        children: [{ contexts: [], on: [], src: undefined }],
         description: 'cdd',
         emitters: [],
         entry: [],
@@ -181,22 +166,13 @@ describe('Composition', () => {
 
     describe('#05 => config', () => {
       const _config = {
-        actors: {
-          machine1: {
-            on: {},
-          },
-        },
+        actors: { machine1: { on: {} } },
         description: 'cdd',
         initial: 'state1',
         states: {
           state1: {
             states: {
-              state11: {
-                states: {
-                  state111: {},
-                },
-                initial: 'state111',
-              },
+              state11: { states: { state111: {} }, initial: 'state111' },
             },
             initial: 'state11',
           },
@@ -235,9 +211,7 @@ describe('Composition', () => {
           return iterator <= DEFAULT_MAX_SELF_TRANSITIONS;
         },
       },
-      delays: {
-        DELAY: DEFAULT_MIN_ACTIVITY_TIME,
-      },
+      delays: { DELAY: DEFAULT_MIN_ACTIVITY_TIME },
     }));
 
     const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
@@ -298,11 +272,7 @@ describe('Composition', () => {
   describe('#04 => Send without changed value', () => {
     const inc = vi.fn().mockReturnValue({ pContext: {}, context: {} });
 
-    const machine = _machine2.provideOptions(() => ({
-      actions: {
-        inc,
-      },
-    }));
+    const machine = _machine2.provideOptions(() => ({ actions: { inc } }));
 
     const service = interpretAsync(machine, defaultC);
 
@@ -315,10 +285,7 @@ describe('Composition', () => {
         value: 'idle',
         tags: undefined,
         context: undefined,
-        event: {
-          payload: {},
-          type: 'machine$$init',
-        },
+        event: { payload: {}, type: 'machine$$init' },
       };
 
       expect(actual).toStrictEqual(expected);
@@ -359,12 +326,8 @@ describe('Composition', () => {
     const inc = vi.fn().mockReturnValue({ pContext: {}, context: {} });
 
     const machine = _machine3.provideOptions(() => ({
-      actions: {
-        inc,
-      },
-      delays: {
-        NEXT: 1000,
-      },
+      actions: { inc },
+      delays: { NEXT: 1000 },
     }));
 
     const service = interpretAsync(machine);
@@ -391,13 +354,8 @@ describe('Composition', () => {
     const inc2 = vi.fn().mockReturnValue({ pContext: {}, context: {} });
 
     const machine = _machine4.provideOptions(() => ({
-      actions: {
-        inc,
-        inc2,
-      },
-      delays: {
-        DELAY: 1000,
-      },
+      actions: { inc, inc2 },
+      delays: { DELAY: 1000 },
     }));
 
     const service = interpretAsync(machine, {
@@ -435,9 +393,7 @@ describe('Composition', () => {
       // #region Config
 
       const service = interpretAsync(machine21, {
-        pContext: {
-          iterator: 0,
-        },
+        pContext: { iterator: 0 },
         context: { iterator: 0, input: '', data: [] },
         exact: true,
       });
@@ -590,17 +546,7 @@ describe('Composition', () => {
       test(...useSend('NEXT', 3));
 
       describe('#05 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'idle',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
         test(...useIterator(6, 2));
         test(...useIteratorC(6, 3));
@@ -619,17 +565,7 @@ describe('Composition', () => {
       test('#07 => pause', service.pause);
 
       describe('#08 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'idle',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
         test(...useIterator(18, 2));
         test(...useIteratorC(12, 3));
@@ -640,17 +576,7 @@ describe('Composition', () => {
       test(...waiter(6, 9));
 
       describe('#10 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'idle',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
         test(...useIterator(18, 2));
         test(...useIteratorC(12, 3));
@@ -663,17 +589,7 @@ describe('Composition', () => {
       test(...waiter(12, 12));
 
       describe('#13 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'idle',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
         test(...useIterator(42, 2));
         test(...useIteratorC(24, 3));
@@ -684,17 +600,7 @@ describe('Composition', () => {
       test(...useWrite('', 14));
 
       describe('#15 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'input',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(42, 2));
         test(...useIteratorC(24, 3));
@@ -705,17 +611,7 @@ describe('Composition', () => {
       test(...waiter(12, 16));
 
       describe('#17 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'input',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(66, 2));
         test(...useIteratorC(36, 3));
@@ -737,17 +633,7 @@ describe('Composition', () => {
       test(...useWrite(INPUT, 18));
 
       describe('#19 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'idle',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
         test(...useIterator(66, 2));
         test(...useIteratorC(36, 3));
@@ -758,17 +644,7 @@ describe('Composition', () => {
       test(...waiter(12, 20));
 
       describe('#21 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'idle',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
         test(...useIterator(90, 2));
         test(...useIteratorC(48, 3));
@@ -784,17 +660,7 @@ describe('Composition', () => {
       test(...useWrite(INPUT, 23));
 
       describe('#24 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'input',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(90, 2));
         test(...useIteratorC(48, 3));
@@ -805,17 +671,7 @@ describe('Composition', () => {
       test(...waiter(6, 25));
 
       describe('#26 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'input',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
@@ -827,17 +683,7 @@ describe('Composition', () => {
       test(...useSend('FETCH', 27));
 
       describe('#28 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'input',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
@@ -849,17 +695,7 @@ describe('Composition', () => {
       test(...waiter(0, 29));
 
       describe('#30 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'input',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
@@ -871,17 +707,7 @@ describe('Composition', () => {
       test(...waiter(6, 31));
 
       describe('#32 => Check the service', () => {
-        test(
-          ...useState(
-            {
-              working: {
-                fetch: 'idle',
-                ui: 'input',
-              },
-            },
-            1,
-          ),
-        );
+        test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(114, 2));
         test(...useIteratorC(60, 3));

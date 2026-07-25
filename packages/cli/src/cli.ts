@@ -6,8 +6,5 @@ import { BIN, LIB } from './core/constants';
 export const cli = subcommands({
   name: BIN,
   description: `CLI tool for ${LIB} type generation`,
-  cmds: {
-    generate,
-    watch,
-  },
+  cmds: { generate, watch },
 });

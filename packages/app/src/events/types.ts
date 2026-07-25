@@ -18,10 +18,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
  * @template T - The type of the payload.
  * @returns An object with a type and payload.
  */
-export type EventObject<T = any> = {
-  type: string;
-  payload: T;
-};
+export type EventObject<T = any> = { type: string; payload: T };
 
 /**
  * Represents a map of events where the keys are event names and the values are the payloads.
@@ -79,10 +76,7 @@ type _ChildConfigR<T extends ChildConfigMap> = {
 export type ActorsConfigMap<
   Sc extends string = string,
   Se extends string = string,
-> = {
-  children?: ChildConfigMap<Sc>;
-  emitters?: EmitterConfigMap<Se>;
-};
+> = { children?: ChildConfigMap<Sc>; emitters?: EmitterConfigMap<Se> };
 
 /**
  * Represents a union type of all events, emitters, and child events.

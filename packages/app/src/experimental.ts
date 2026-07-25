@@ -7,15 +7,9 @@ export const reduceRemainings = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
 >(
-  ...remains: (() => {
-    result: Contexts<Pc, Tc>;
-    target?: string;
-  })[]
+  ...remains: (() => { result: Contexts<Pc, Tc>; target?: string })[]
 ) => {
-  const remaining = (): {
-    target?: string;
-    result: Contexts<Pc, Tc>;
-  } => {
+  const remaining = (): { target?: string; result: Contexts<Pc, Tc> } => {
     let target: string | undefined = undefined;
     let result: Contexts<Pc, Tc> = {};
 

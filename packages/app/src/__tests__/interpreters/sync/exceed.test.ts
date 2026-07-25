@@ -24,17 +24,11 @@ describe('#03 => Exceed selfTransitionsCounter', () => {
       states: {
         idle: {
           entry: 'inc',
-          always: {
-            guards: ['condition', 'limit'],
-            target: '/working',
-          },
+          always: { guards: ['condition', 'limit'], target: '/working' },
         },
         working: {
           entry: 'inc',
-          always: {
-            guards: ['condition', 'limit'],
-            target: '/idle',
-          },
+          always: { guards: ['condition', 'limit'], target: '/idle' },
         },
       },
     },
@@ -44,10 +38,7 @@ describe('#03 => Exceed selfTransitionsCounter', () => {
         REMOVE_CONDITION: 'never',
       }),
 
-      context: type({
-        iterator: 'number',
-        condition: 'boolean',
-      }),
+      context: type({ iterator: 'number', condition: 'boolean' }),
 
       sync: true,
     },
@@ -72,9 +63,7 @@ describe('#03 => Exceed selfTransitionsCounter', () => {
         return iterator <= DEFAULT_MAX_SELF_TRANSITIONS;
       },
     },
-    delays: {
-      DELAY: DEFAULT_MIN_ACTIVITY_TIME,
-    },
+    delays: { DELAY: DEFAULT_MIN_ACTIVITY_TIME },
   }));
 
   const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
@@ -89,9 +78,7 @@ describe('#03 => Exceed selfTransitionsCounter', () => {
 
     const { start, useWaiter, useErrors } = constructTests(
       service,
-      ({ waiter }) => ({
-        useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
-      }),
+      ({ waiter }) => ({ useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER) }),
     );
 
     test(...start());

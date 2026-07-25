@@ -26,10 +26,7 @@ export type FlatMap_F<T extends NodeConfig2 = NodeConfig2> = <
  */
 export const flatMap = expandFn(
   ((node, children, sep = DEFAULT_DELIMITER) => {
-    return flatByKey.low(node, 'states', {
-      children,
-      sep,
-    });
+    return flatByKey.low(node, 'states', { children, sep });
   }) as FlatMap_F,
   {
     low: (

@@ -3,13 +3,6 @@ import { typings } from '#utils';
 
 export default createMachine(
   'src/__tests__/interpreters/coverage/addOptions-return.2.machine',
-  {
-    initial: 'idle',
-    states: {
-      idle: {},
-    },
-  },
-  {
-    context: typings.context('number'),
-  },
+  { initial: 'idle', states: { idle: {} } },
+  { context: typings.context('number') },
 );

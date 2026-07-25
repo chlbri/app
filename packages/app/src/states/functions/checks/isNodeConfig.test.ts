@@ -4,38 +4,19 @@ import { isNodeConfig } from './isNodeConfig';
 describe('isNodeConfig', () => {
   describe('atomic nodes', () => {
     test('minimal valid atomic node', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: {} })).toBe(true);
     });
 
     test('atomic node with type explicitly set to atomic', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          type: 'atomic',
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: {}, type: 'atomic' })).toBe(true);
     });
 
     test('atomic node with entry action', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          entry: 'onEnter',
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: {}, entry: 'onEnter' })).toBe(true);
     });
 
     test('atomic node with exit action', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          exit: 'onExit',
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: {}, exit: 'onExit' })).toBe(true);
     });
 
     test('atomic node with multiple actions', () => {
@@ -50,39 +31,23 @@ describe('isNodeConfig', () => {
 
     test('atomic node with description', () => {
       expect(
-        isNodeConfig({
-          on: {},
-          description: 'Atomic state description',
-        }),
+        isNodeConfig({ on: {}, description: 'Atomic state description' }),
       ).toBe(true);
     });
 
     test('atomic node with single tag', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          tags: 'important',
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: {}, tags: 'important' })).toBe(true);
     });
 
     test('atomic node with multiple tags', () => {
       expect(
-        isNodeConfig({
-          on: {},
-          tags: ['tag1', 'tag2', 'tag3'],
-        }),
+        isNodeConfig({ on: {}, tags: ['tag1', 'tag2', 'tag3'] }),
       ).toBe(true);
     });
 
     test('atomic node with activities', () => {
       expect(
-        isNodeConfig({
-          on: {},
-          activities: {
-            activity1: 'action1',
-          },
-        }),
+        isNodeConfig({ on: {}, activities: { activity1: 'action1' } }),
       ).toBe(true);
     });
 
@@ -110,11 +75,7 @@ describe('isNodeConfig', () => {
           on: {},
           type: 'compound',
           initial: 'idle',
-          states: {
-            idle: {
-              on: {},
-            },
-          },
+          states: { idle: { on: {} } },
         }),
       ).toBe(true);
     });
@@ -126,15 +87,9 @@ describe('isNodeConfig', () => {
           type: 'compound',
           initial: 'loading',
           states: {
-            loading: {
-              on: {},
-            },
-            loaded: {
-              on: {},
-            },
-            error: {
-              on: {},
-            },
+            loading: { on: {} },
+            loaded: { on: {} },
+            error: { on: {} },
           },
         }),
       ).toBe(true);
@@ -147,19 +102,9 @@ describe('isNodeConfig', () => {
           type: 'compound',
           initial: 'start',
           states: {
-            start: {
-              on: {},
-              entry: 'init',
-              exit: 'cleanup',
-            },
-            middle: {
-              on: {},
-              description: 'Middle state',
-            },
-            end: {
-              on: {},
-              tags: 'final',
-            },
+            start: { on: {}, entry: 'init', exit: 'cleanup' },
+            middle: { on: {}, description: 'Middle state' },
+            end: { on: {}, tags: 'final' },
           },
         }),
       ).toBe(true);
@@ -181,11 +126,7 @@ describe('isNodeConfig', () => {
                   on: {},
                   type: 'compound',
                   initial: 'level3',
-                  states: {
-                    level3: {
-                      on: {},
-                    },
-                  },
+                  states: { level3: { on: {} } },
                 },
               },
             },
@@ -202,11 +143,7 @@ describe('isNodeConfig', () => {
           initial: 'idle',
           entry: 'initCompound',
           exit: 'cleanupCompound',
-          states: {
-            idle: {
-              on: {},
-            },
-          },
+          states: { idle: { on: {} } },
         }),
       ).toBe(true);
     });
@@ -219,11 +156,7 @@ describe('isNodeConfig', () => {
           initial: 'state1',
           description: 'Main state machine',
           tags: ['machine', 'root'],
-          states: {
-            state1: {
-              on: {},
-            },
-          },
+          states: { state1: { on: {} } },
         }),
       ).toBe(true);
     });
@@ -235,11 +168,7 @@ describe('isNodeConfig', () => {
         isNodeConfig({
           on: {},
           type: true,
-          states: {
-            region1: {
-              on: {},
-            },
-          },
+          states: { region1: { on: {} } },
         }),
       ).toBe(false);
     });
@@ -248,11 +177,7 @@ describe('isNodeConfig', () => {
         isNodeConfig({
           on: {},
           type: 'parallel',
-          states: {
-            region1: {
-              on: {},
-            },
-          },
+          states: { region1: { on: {} } },
         }),
       ).toBe(true);
     });
@@ -263,15 +188,9 @@ describe('isNodeConfig', () => {
           on: {},
           type: 'parallel',
           states: {
-            region1: {
-              on: {},
-            },
-            region2: {
-              on: {},
-            },
-            region3: {
-              on: {},
-            },
+            region1: { on: {} },
+            region2: { on: {} },
+            region3: { on: {} },
           },
         }),
       ).toBe(true);
@@ -287,21 +206,13 @@ describe('isNodeConfig', () => {
               on: {},
               type: 'compound',
               initial: 'nested1',
-              states: {
-                nested1: {
-                  on: {},
-                },
-              },
+              states: { nested1: { on: {} } },
             },
             region2: {
               on: {},
               type: 'compound',
               initial: 'nested2',
-              states: {
-                nested2: {
-                  on: {},
-                },
-              },
+              states: { nested2: { on: {} } },
             },
           },
         }),
@@ -315,14 +226,7 @@ describe('isNodeConfig', () => {
           type: 'parallel',
           entry: 'startParallel',
           exit: 'stopParallel',
-          states: {
-            r1: {
-              on: {},
-            },
-            r2: {
-              on: {},
-            },
-          },
+          states: { r1: { on: {} }, r2: { on: {} } },
         }),
       ).toBe(true);
     });
@@ -352,14 +256,7 @@ describe('isNodeConfig', () => {
                 active: {
                   on: {},
                   type: 'parallel',
-                  states: {
-                    worker1: {
-                      on: {},
-                    },
-                    worker2: {
-                      on: {},
-                    },
-                  },
+                  states: { worker1: { on: {} }, worker2: { on: {} } },
                 },
               },
             },
@@ -378,27 +275,13 @@ describe('isNodeConfig', () => {
               on: {},
               type: 'compound',
               initial: 'a',
-              states: {
-                a: {
-                  on: {},
-                },
-                b: {
-                  on: {},
-                },
-              },
+              states: { a: { on: {} }, b: { on: {} } },
             },
             branch2: {
               on: {},
               type: 'compound',
               initial: 'x',
-              states: {
-                x: {
-                  on: {},
-                },
-                y: {
-                  on: {},
-                },
-              },
+              states: { x: { on: {} }, y: { on: {} } },
             },
           },
         }),
@@ -436,65 +319,33 @@ describe('isNodeConfig', () => {
     });
 
     test('returns false for node with invalid on property', () => {
-      expect(
-        isNodeConfig({
-          on: 'invalid',
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: 'invalid' })).toBe(false);
     });
 
     test('returns false for node with invalid entry type', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          entry: 123,
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: {}, entry: 123 })).toBe(false);
     });
 
     test('returns false for node with invalid exit type', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          exit: { invalid: 'action' },
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: {}, exit: { invalid: 'action' } })).toBe(
+        false,
+      );
     });
 
     test('returns false for node with invalid description type', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          description: 123,
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: {}, description: 123 })).toBe(false);
     });
 
     test('returns false for node with invalid tags type', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          tags: 123,
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: {}, tags: 123 })).toBe(false);
     });
 
     test('returns false for node with invalid type value', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          type: 'invalid',
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: {}, type: 'invalid' })).toBe(false);
     });
 
     test('returns false for node with unknown key', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          unknownKey: 'value',
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: {}, unknownKey: 'value' })).toBe(false);
     });
 
     test('returns false for compound node with invalid nested state', () => {
@@ -503,12 +354,7 @@ describe('isNodeConfig', () => {
           on: {},
           type: 'compound',
           initial: 'valid',
-          states: {
-            valid: {
-              on: {},
-            },
-            invalid: null,
-          },
+          states: { valid: { on: {} }, invalid: null },
         }),
       ).toBe(false);
     });
@@ -518,12 +364,7 @@ describe('isNodeConfig', () => {
         isNodeConfig({
           on: {},
           type: 'parallel',
-          states: {
-            region1: {
-              on: {},
-            },
-            region2: 'invalid',
-          },
+          states: { region1: { on: {} }, region2: 'invalid' },
         }),
       ).toBe(false);
     });
@@ -535,12 +376,9 @@ describe('isNodeConfig', () => {
     });
 
     test('returns true for valid node config', () => {
-      expect(
-        isNodeConfig.orUndefined({
-          on: {},
-          type: 'atomic',
-        }),
-      ).toBe(true);
+      expect(isNodeConfig.orUndefined({ on: {}, type: 'atomic' })).toBe(
+        true,
+      );
     });
 
     test('returns true for valid compound node', () => {
@@ -549,11 +387,7 @@ describe('isNodeConfig', () => {
           on: {},
           type: 'compound',
           initial: 'state',
-          states: {
-            state: {
-              on: {},
-            },
-          },
+          states: { state: { on: {} } },
         }),
       ).toBe(true);
     });
@@ -569,34 +403,21 @@ describe('isNodeConfig', () => {
 
   describe('edge cases', () => {
     test('empty states object in compound node is valid', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          type: 'compound',
-          states: {},
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: {}, type: 'compound', states: {} })).toBe(
+        true,
+      );
     });
 
     test('not well describer', () => {
       expect(
-        isNodeConfig({
-          entry: {
-            name: 'enter',
-            invalid: 'unexpected',
-          },
-        }),
+        isNodeConfig({ entry: { name: 'enter', invalid: 'unexpected' } }),
       ).toBe(false);
     });
 
     test('empty states object in parallel node is valid', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          type: 'parallel',
-          states: {},
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: {}, type: 'parallel', states: {} })).toBe(
+        true,
+      );
     });
 
     describe('activities', () => {
@@ -607,56 +428,35 @@ describe('isNodeConfig', () => {
             activities: {
               act1: 'action1',
               act2: ['action2', 'action3'],
-              act3: {
-                actions: 'action4',
-              },
+              act3: { actions: 'action4' },
             },
           }),
         ).toBe(true);
       });
 
       test('node with activity not well formed #1', () => {
-        expect(
-          isNodeConfig({
-            on: {},
-            activities: 56,
-          }),
-        ).toBe(false);
+        expect(isNodeConfig({ on: {}, activities: 56 })).toBe(false);
       });
 
       test('node with activity not well formed #2', () => {
-        expect(
-          isNodeConfig({
-            on: {},
-            activities: null,
-          }),
-        ).toBe(false);
+        expect(isNodeConfig({ on: {}, activities: null })).toBe(false);
       });
 
       test('node with activity not well formed #3', () => {
-        expect(
-          isNodeConfig({
-            on: {},
-            activities: { act: null },
-          }),
-        ).toBe(false);
+        expect(isNodeConfig({ on: {}, activities: { act: null } })).toBe(
+          false,
+        );
       });
 
       test('node with activity not well formed #4', () => {
-        expect(
-          isNodeConfig({
-            on: {},
-            activities: { act: {} },
-          }),
-        ).toBe(false);
+        expect(isNodeConfig({ on: {}, activities: { act: {} } })).toBe(
+          false,
+        );
       });
 
       test('node with activity not well formed #5', () => {
         expect(
-          isNodeConfig({
-            on: {},
-            activities: { act: () => 4 },
-          }),
+          isNodeConfig({ on: {}, activities: { act: () => 4 } }),
         ).toBe(false);
       });
 
@@ -664,25 +464,14 @@ describe('isNodeConfig', () => {
         expect(
           isNodeConfig({
             on: {},
-            activities: {
-              act: {
-                invalid: false,
-              },
-            },
+            activities: { act: { invalid: false } },
           }),
         ).toBe(false);
       });
 
       test('node with activity not well formed #7', () => {
         expect(
-          isNodeConfig({
-            on: {},
-            activities: {
-              act: {
-                guards: false,
-              },
-            },
-          }),
+          isNodeConfig({ on: {}, activities: { act: { guards: false } } }),
         ).toBe(false);
       });
 
@@ -690,11 +479,7 @@ describe('isNodeConfig', () => {
         expect(
           isNodeConfig({
             on: {},
-            activities: {
-              act: {
-                guards: 'returnTrue',
-              },
-            },
+            activities: { act: { guards: 'returnTrue' } },
           }),
         ).toBe(false);
       });
@@ -704,10 +489,7 @@ describe('isNodeConfig', () => {
           isNodeConfig({
             on: {},
             activities: {
-              act: {
-                guards: 'returnTrue',
-                actions: 'action1',
-              },
+              act: { guards: 'returnTrue', actions: 'action1' },
             },
           }),
         ).toBe(true);
@@ -715,59 +497,30 @@ describe('isNodeConfig', () => {
     });
 
     test('node with transitions config', () => {
-      expect(
-        isNodeConfig({
-          on: {
-            EVENT: 'nextState',
-          },
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: { EVENT: 'nextState' } })).toBe(true);
     });
 
     test('node with always transitions', () => {
       expect(
-        isNodeConfig({
-          on: {},
-          always: {
-            target: 'nextState',
-          },
-        }),
+        isNodeConfig({ on: {}, always: { target: 'nextState' } }),
       ).toBe(true);
     });
 
     test('node with after transitions', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          after: {
-            5000: 'nextState',
-          },
-        }),
-      ).toBe(true);
+      expect(isNodeConfig({ on: {}, after: { 5000: 'nextState' } })).toBe(
+        true,
+      );
     });
 
     test('node with actors config, with actors not well defined, returns false', () => {
-      expect(
-        isNodeConfig({
-          on: {},
-          actors: {
-            actor1: {},
-          },
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: {}, actors: { actor1: {} } })).toBe(false);
     });
 
     test('node with actors config, with actors not well defined #2, returns false', () => {
       expect(
         isNodeConfig({
           on: {},
-          actors: {
-            actor1: {
-              on: {
-                EVENT: 57,
-              },
-            },
-          },
+          actors: { actor1: { on: { EVENT: 57 } } },
         }),
       ).toBe(false);
     });
@@ -775,31 +528,18 @@ describe('isNodeConfig', () => {
 
   describe('actors config', () => {
     test('notwell #1', () => {
-      expect(
-        isNodeConfig({
-          actors: null,
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ actors: null })).toBe(false);
     });
 
     test('notwell #2', () => {
-      expect(
-        isNodeConfig({
-          actors: true,
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ actors: true })).toBe(false);
     });
 
     describe('emitter config', () => {
       test('nemitter is null, returns false', () => {
-        expect(
-          isNodeConfig({
-            on: {},
-            actors: {
-              emitter1: null,
-            },
-          }),
-        ).toBe(false);
+        expect(isNodeConfig({ on: {}, actors: { emitter1: null } })).toBe(
+          false,
+        );
       });
 
       test('node with valid emitter config', () => {
@@ -868,13 +608,7 @@ describe('isNodeConfig', () => {
           isNodeConfig({
             on: {},
             actors: {
-              emitter1: {
-                complete: [
-                  {
-                    actions: 'finalAction',
-                  },
-                ],
-              },
+              emitter1: { complete: [{ actions: 'finalAction' }] },
             },
           }),
         ).toBe(false);
@@ -886,10 +620,7 @@ describe('isNodeConfig', () => {
             isNodeConfig({
               on: {},
               actors: {
-                emitter1: {
-                  next: 'next',
-                  complete: 'finalAction',
-                },
+                emitter1: { next: 'next', complete: 'finalAction' },
               },
             }),
           ).toBe(true);
@@ -902,11 +633,7 @@ describe('isNodeConfig', () => {
               actors: {
                 emitter1: {
                   next: 'next',
-                  complete: [
-                    {
-                      actions: 'finalAction',
-                    },
-                  ],
+                  complete: [{ actions: 'finalAction' }],
                 },
               },
             }),
@@ -917,12 +644,7 @@ describe('isNodeConfig', () => {
           expect(
             isNodeConfig({
               on: {},
-              actors: {
-                emitter1: {
-                  next: 'next',
-                  complete: [],
-                },
-              },
+              actors: { emitter1: { next: 'next', complete: [] } },
             }),
           ).toBe(false);
         });
@@ -935,12 +657,8 @@ describe('isNodeConfig', () => {
                 emitter1: {
                   next: 'next',
                   complete: [
-                    {
-                      invalid: 'config',
-                    },
-                    {
-                      actions: 'finalAction',
-                    },
+                    { invalid: 'config' },
+                    { actions: 'finalAction' },
                   ],
                 },
               },
@@ -956,13 +674,8 @@ describe('isNodeConfig', () => {
                 emitter1: {
                   next: 'next',
                   complete: [
-                    {
-                      description: 'config',
-                      actions: 'action1',
-                    },
-                    {
-                      actions: 'finalAction',
-                    },
+                    { description: 'config', actions: 'action1' },
+                    { actions: 'finalAction' },
                   ],
                 },
               },
@@ -977,12 +690,8 @@ describe('isNodeConfig', () => {
                 emitter1: {
                   next: 'next',
                   complete: [
-                    {
-                      actions: 'finalAction',
-                    },
-                    {
-                      invalid: 'config',
-                    },
+                    { actions: 'finalAction' },
+                    { invalid: 'config' },
                   ],
                 },
               },
@@ -997,12 +706,7 @@ describe('isNodeConfig', () => {
         expect(
           isNodeConfig({
             on: {},
-            actors: {
-              child1: {
-                contexts: {},
-                description: 123,
-              },
-            },
+            actors: { child1: { contexts: {}, description: 123 } },
           }),
         ).toBe(false);
       });
@@ -1011,26 +715,14 @@ describe('isNodeConfig', () => {
         expect(
           isNodeConfig({
             on: {},
-            actors: {
-              child1: {
-                contexts: undefined,
-                on: undefined,
-              },
-            },
+            actors: { child1: { contexts: undefined, on: undefined } },
           }),
         ).toBe(false);
       });
 
       test('not well #2', () => {
         expect(
-          isNodeConfig({
-            on: {},
-            actors: {
-              child1: {
-                contexts: true,
-              },
-            },
-          }),
+          isNodeConfig({ on: {}, actors: { child1: { contexts: true } } }),
         ).toBe(false);
       });
 
@@ -1038,13 +730,7 @@ describe('isNodeConfig', () => {
         expect(
           isNodeConfig({
             on: {},
-            actors: {
-              child1: {
-                contexts: {
-                  value: {},
-                },
-              },
-            },
+            actors: { child1: { contexts: { value: {} } } },
           }),
         ).toBe(false);
       });
@@ -1054,11 +740,7 @@ describe('isNodeConfig', () => {
           isNodeConfig({
             on: {},
             actors: {
-              child1: {
-                contexts: {
-                  value: new Intl.DateTimeFormat(),
-                },
-              },
+              child1: { contexts: { value: new Intl.DateTimeFormat() } },
             },
           }),
         ).toBe(false);
@@ -1066,14 +748,7 @@ describe('isNodeConfig', () => {
 
       test('not well #5', () => {
         expect(
-          isNodeConfig({
-            on: {},
-            actors: {
-              child1: {
-                on: null,
-              },
-            },
-          }),
+          isNodeConfig({ on: {}, actors: { child1: { on: null } } }),
         ).toBe(false);
       });
 
@@ -1083,12 +758,7 @@ describe('isNodeConfig', () => {
             on: {},
             actors: {
               child1: {
-                on: {
-                  EVENT: {
-                    target: 'nextState',
-                    guards: 123,
-                  },
-                },
+                on: { EVENT: { target: 'nextState', guards: 123 } },
               },
             },
           }),
@@ -1099,26 +769,14 @@ describe('isNodeConfig', () => {
         expect(
           isNodeConfig({
             on: {},
-            actors: {
-              child1: {
-                contexts: {},
-                on: undefined,
-              },
-            },
+            actors: { child1: { contexts: {}, on: undefined } },
           }),
         ).toBe(true);
       });
 
       test('well #2', () => {
         expect(
-          isNodeConfig({
-            on: {},
-            actors: {
-              child1: {
-                on: {},
-              },
-            },
-          }),
+          isNodeConfig({ on: {}, actors: { child1: { on: {} } } }),
         ).toBe(true);
       });
     });
@@ -1128,12 +786,7 @@ describe('isNodeConfig', () => {
     test('well guards', () => {
       expect(
         isNodeConfig({
-          on: {
-            EVENT: {
-              target: 'nextState',
-              guards: 'isValid',
-            },
-          },
+          on: { EVENT: { target: 'nextState', guards: 'isValid' } },
         }),
       ).toBe(true);
     });
@@ -1141,12 +794,7 @@ describe('isNodeConfig', () => {
     test('guards invalid empty object', () => {
       expect(
         isNodeConfig({
-          on: {
-            EVENT: {
-              target: 'nextState',
-              guards: {},
-            },
-          },
+          on: { EVENT: { target: 'nextState', guards: {} } },
         }),
       ).toBe(false);
     });
@@ -1155,12 +803,7 @@ describe('isNodeConfig', () => {
       expect(
         isNodeConfig({
           on: {
-            EVENT: {
-              target: 'nextState',
-              guards: {
-                invalid: 'isValid',
-              },
-            },
+            EVENT: { target: 'nextState', guards: { invalid: 'isValid' } },
           },
         }),
       ).toBe(false);
@@ -1173,11 +816,7 @@ describe('isNodeConfig', () => {
             on: {
               EVENT: {
                 target: 'nextState',
-                guards: {
-                  and: {
-                    invalid: 'isValid',
-                  },
-                },
+                guards: { and: { invalid: 'isValid' } },
               },
             },
           }),
@@ -1188,12 +827,7 @@ describe('isNodeConfig', () => {
         expect(
           isNodeConfig({
             on: {
-              EVENT: {
-                target: 'nextState',
-                guards: {
-                  and: 'invalid',
-                },
-              },
+              EVENT: { target: 'nextState', guards: { and: 'invalid' } },
             },
           }),
         ).toBe(false);
@@ -1235,14 +869,7 @@ describe('isNodeConfig', () => {
       test('not well, empty guards #1', () => {
         expect(
           isNodeConfig({
-            on: {
-              EVENT: {
-                target: 'nextState',
-                guards: {
-                  and: [],
-                },
-              },
-            },
+            on: { EVENT: { target: 'nextState', guards: { and: [] } } },
           }),
         ).toBe(false);
       });
@@ -1250,14 +877,7 @@ describe('isNodeConfig', () => {
       test('not well, empty guards #2', () => {
         expect(
           isNodeConfig({
-            on: {
-              EVENT: {
-                target: 'nextState',
-                guards: {
-                  or: [],
-                },
-              },
-            },
+            on: { EVENT: { target: 'nextState', guards: { or: [] } } },
           }),
         ).toBe(false);
       });
@@ -1266,25 +886,13 @@ describe('isNodeConfig', () => {
 
   describe('transitions', () => {
     test('not well #1', () => {
-      expect(
-        isNodeConfig({
-          on: {
-            EVENT: {
-              guards: 'isValid',
-            },
-          },
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: { EVENT: { guards: 'isValid' } } })).toBe(
+        false,
+      );
     });
 
     test('not well #2, empty array', () => {
-      expect(
-        isNodeConfig({
-          on: {
-            EVENT: [],
-          },
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: { EVENT: [] } })).toBe(false);
     });
 
     test('not well #3, array with last invalid transition config', () => {
@@ -1292,13 +900,8 @@ describe('isNodeConfig', () => {
         isNodeConfig({
           on: {
             EVENT: [
-              {
-                target: 'nextState',
-                guards: 'isValid',
-              },
-              {
-                invalid: 'config',
-              },
+              { target: 'nextState', guards: 'isValid' },
+              { invalid: 'config' },
             ],
           },
         }),
@@ -1310,13 +913,8 @@ describe('isNodeConfig', () => {
         isNodeConfig({
           on: {
             EVENT: [
-              {
-                invalid: 'config',
-              },
-              {
-                target: 'nextState',
-                guards: 'isValid',
-              },
+              { invalid: 'config' },
+              { target: 'nextState', guards: 'isValid' },
             ],
           },
         }),
@@ -1328,13 +926,8 @@ describe('isNodeConfig', () => {
         isNodeConfig({
           on: {
             EVENT: [
-              {
-                target: 'prev',
-              },
-              {
-                target: 'nextState',
-                guards: 'isValid',
-              },
+              { target: 'prev' },
+              { target: 'nextState', guards: 'isValid' },
             ],
           },
         }),
@@ -1346,11 +939,7 @@ describe('isNodeConfig', () => {
         isNodeConfig({
           on: {
             EVENT: [
-              {
-                description: 234,
-                target: 'nextState',
-                guards: 'isValid',
-              },
+              { description: 234, target: 'nextState', guards: 'isValid' },
             ],
           },
         }),
@@ -1358,96 +947,50 @@ describe('isNodeConfig', () => {
     });
 
     test('not well #7', () => {
-      expect(
-        isNodeConfig({
-          on: {
-            EVENT: [
-              {
-                target: 345,
-              },
-            ],
-          },
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: { EVENT: [{ target: 345 }] } })).toBe(
+        false,
+      );
     });
 
     test('not well #8', () => {
-      expect(
-        isNodeConfig({
-          on: {
-            EVENT: [
-              {
-                actions: 345,
-              },
-            ],
-          },
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ on: { EVENT: [{ actions: 345 }] } })).toBe(
+        false,
+      );
     });
 
     test('not well #9', () => {
-      expect(
-        isNodeConfig(
-          {
-            on: {
-              EVENT: 'notInside',
-            },
-          },
-          'inside',
-        ),
-      ).toBe(false);
+      expect(isNodeConfig({ on: { EVENT: 'notInside' } }, 'inside')).toBe(
+        false,
+      );
     });
 
     test('not well #10', () => {
       expect(
         isNodeConfig.orUndefined(
-          {
-            on: {
-              EVENT: { target: 'notInside' },
-            },
-          },
+          { on: { EVENT: { target: 'notInside' } } },
           'inside',
         ),
       ).toBe(false);
     });
 
     test('always not well #1', () => {
-      expect(
-        isNodeConfig({
-          always: null,
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ always: null })).toBe(false);
     });
 
     test('always not well #2', () => {
-      expect(
-        isNodeConfig({
-          always: {},
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ always: {} })).toBe(false);
     });
 
     test('always not well #3', () => {
-      expect(
-        isNodeConfig({
-          always: {
-            actions: 'action1',
-          },
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ always: { actions: 'action1' } })).toBe(false);
     });
 
     test('always not well #4', () => {
       expect(
         isNodeConfig({
           always: [
-            {
-              actions: 'action1',
-            },
-            {
-              actions: 'action1',
-              target: 'nextState',
-            },
+            { actions: 'action1' },
+            { actions: 'action1', target: 'nextState' },
           ],
         }),
       ).toBe(false);
@@ -1457,39 +1000,23 @@ describe('isNodeConfig', () => {
       expect(
         isNodeConfig({
           always: [
-            {
-              actions: 'action1',
-              target: 'nextState',
-            },
-            {
-              actions: 'action1',
-              target: 'nextState',
-            },
+            { actions: 'action1', target: 'nextState' },
+            { actions: 'action1', target: 'nextState' },
           ],
         }),
       ).toBe(false);
     });
 
     test('always not well #6', () => {
-      expect(
-        isNodeConfig({
-          always: [],
-        }),
-      ).toBe(false);
+      expect(isNodeConfig({ always: [] })).toBe(false);
     });
 
     test('always not well #7', () => {
       expect(
         isNodeConfig({
           always: [
-            {
-              actions: 'action1',
-              target: 'nextState',
-              guards: 'isValid',
-            },
-            {
-              actions: 'action1',
-            },
+            { actions: 'action1', target: 'nextState', guards: 'isValid' },
+            { actions: 'action1' },
           ],
         }),
       ).toBe(false);
@@ -1499,26 +1026,15 @@ describe('isNodeConfig', () => {
       expect(
         isNodeConfig({
           always: [
-            {
-              actions: 'action1',
-              target: 'nextState',
-              guards: 'isValid',
-            },
-            {
-              actions: 'action1',
-              target: 'nextState',
-            },
+            { actions: 'action1', target: 'nextState', guards: 'isValid' },
+            { actions: 'action1', target: 'nextState' },
           ],
         }),
       ).toBe(true);
     });
 
     test('always well #2', () => {
-      expect(
-        isNodeConfig.orUndefined({
-          always: 'nextState',
-        }),
-      ).toBe(true);
+      expect(isNodeConfig.orUndefined({ always: 'nextState' })).toBe(true);
     });
 
     test('well formated', () => {
@@ -1526,13 +1042,8 @@ describe('isNodeConfig', () => {
         isNodeConfig({
           on: {
             EVENT: [
-              {
-                target: 'prev',
-                guards: 'isValid',
-              },
-              {
-                target: 'nextState',
-              },
+              { target: 'prev', guards: 'isValid' },
+              { target: 'nextState' },
             ],
           },
         }),

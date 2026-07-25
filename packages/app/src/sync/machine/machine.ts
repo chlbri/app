@@ -234,31 +234,19 @@ export class SyncMachine<
             const data = fn(state);
             const scheduled: ScheduledData<Pc, Tc> = { data, ms, id };
 
-            return _any({
-              context,
-              pContext,
-              scheduled,
-            });
+            return _any({ context, pContext, scheduled });
           };
         },
 
         resend: resend => {
           return ({ context, pContext }) => {
-            return _any({
-              context,
-              pContext,
-              resend,
-            });
+            return _any({ context, pContext, resend });
           };
         },
 
         forceSend: forceSend => {
           return ({ context, pContext }) => {
-            return _any({
-              context,
-              pContext,
-              forceSend,
-            });
+            return _any({ context, pContext, forceSend });
           };
         },
 
@@ -340,15 +328,7 @@ export class SyncMachine<
     out.__pContext = pContext;
     out.__context = context;
 
-    out.addOptions(
-      () =>
-        ({
-          guards,
-          actions,
-          delays,
-          actors,
-        }) as any,
-    );
+    out.addOptions(() => ({ guards, actions, delays, actors }) as any);
 
     return out as any;
   };

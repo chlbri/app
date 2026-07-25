@@ -8,12 +8,8 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          NEXT: {
-            actions: 'increment',
-          },
-          TRIPLE: {
-            actions: 'tripleIncrement',
-          },
+          NEXT: { actions: 'increment' },
+          TRIPLE: { actions: 'tripleIncrement' },
         },
       },
     },

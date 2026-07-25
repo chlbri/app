@@ -8,26 +8,15 @@ export default createMachine(
     states: {
       state1: {
         on: {
-          ADD: {
-            actions: 'addNumbers',
-          },
-          FILTER: {
-            actions: 'filterEven',
-            target: '/state2',
-          },
+          ADD: { actions: 'addNumbers' },
+          FILTER: { actions: 'filterEven', target: '/state2' },
         },
       },
-      state2: {
-        on: {
-          RESET: '/state1',
-        },
-      },
+      state2: { on: { RESET: '/state1' } },
     },
   },
   {
-    context: type(({ array }) => ({
-      numbers: array('number'),
-    })),
+    context: type(({ array }) => ({ numbers: array('number') })),
 
     eventsMap: type(({ array }) => ({
       ADD: { values: array('number') },

@@ -33,9 +33,7 @@ describe('reduceFnMap tests', () => {
 
     test('#02 => correctly handles string type event', () => {
       // Arrange
-      const events: EventsMap = {
-        EVENT1: stringsT.type,
-      };
+      const events: EventsMap = { EVENT1: stringsT.type };
       const elseSpy = vi.fn().mockReturnValue('else result');
 
       const fnMap: FnMap<any, any, any, any, string> = {
@@ -142,9 +140,7 @@ describe('reduceFnMap tests', () => {
 
     test('#04 => uses nothing as default else function', () => {
       // Arrange
-      const events: EventsMap = {
-        EVENT1: stringsT.type,
-      };
+      const events: EventsMap = { EVENT1: stringsT.type };
 
       const fnMap: FnMap<any, any, any, any, any> = {
         EVENT1: () => 'event1 result',
@@ -190,9 +186,7 @@ describe('reduceFnMap tests', () => {
 
     test('#02 => correctly handles string type event', () => {
       // Arrange
-      const events: EventsMap = {
-        EVENT1: stringsT.type,
-      };
+      const events: EventsMap = { EVENT1: stringsT.type };
       const elseSpy = vi.fn().mockReturnValue('else result');
 
       const fnMap: FnMapR<any, any, any, string> = {
@@ -291,9 +285,7 @@ describe('reduceFnMap tests', () => {
 
     test('#04 => uses nothing as default else function', () => {
       // Arrange
-      const events: EventsMap = {
-        EVENT1: stringsT.type,
-      };
+      const events: EventsMap = { EVENT1: stringsT.type };
 
       const fnMap: FnMapR<any, any, any, any> = {
         EVENT1: () => 'event1 result',

@@ -6,17 +6,8 @@ export default createMachine(
   {
     activities: {
       DELAY: ['inc'],
-      DELAY2: {
-        actions: 'inc2',
-        guards: 'returnTrue',
-      },
+      DELAY2: { actions: 'inc2', guards: 'returnTrue' },
     },
   },
-  {
-    context: type({
-      iter1: 'number',
-      iter2: 'number',
-    }),
-    sync: true,
-  },
+  { context: type({ iter1: 'number', iter2: 'number' }), sync: true },
 );

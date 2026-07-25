@@ -1377,12 +1377,7 @@ export abstract class CommonInterpreter<
     interval,
   }) => {
     const exact = this.__exact;
-    const out = createInterval({
-      callback,
-      id,
-      interval,
-      exact,
-    });
+    const out = createInterval({ callback, id, interval, exact });
 
     return out;
   };

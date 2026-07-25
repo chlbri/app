@@ -7,30 +7,18 @@ describe('TESTS', () => {
     {
       initial: 'prev',
       states: {
-        prev: {
-          on: {
-            NEXT: '/next',
-          },
-        },
-        next: {
-          on: {
-            NEXT: '/prev',
-          },
-        },
+        prev: { on: { NEXT: '/next' } },
+        next: { on: { NEXT: '/prev' } },
       },
     },
-    {
-      sync: true,
-    },
+    { sync: true },
   );
 
   const service = interpret(machine);
 
   const { start, stop, next, useStateValue } = constructTests(
     service,
-    ({ sender }) => ({
-      next: sender('NEXT'),
-    }),
+    ({ sender }) => ({ next: sender('NEXT') }),
   );
 
   test(...start());

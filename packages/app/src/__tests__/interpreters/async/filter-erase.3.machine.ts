@@ -13,9 +13,7 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          SET_SCORES: {
-            actions: 'setScores',
-          },
+          SET_SCORES: { actions: 'setScores' },
           FILTER_HIGH_SCORES: {
             actions: 'filterHighScores',
             target: '/filtered',
@@ -27,9 +25,7 @@ export default createMachine(
   },
   {
     // Can implement typings with valibot validators
-    context: v.object({
-      scores: recordV(v.string(), v.number()),
-    }),
+    context: v.object({ scores: recordV(v.string(), v.number()) }),
 
     eventsMap: type({
       SET_SCORES: { scores },

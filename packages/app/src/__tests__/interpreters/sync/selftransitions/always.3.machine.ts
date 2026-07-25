@@ -17,7 +17,5 @@ export default createMachine(
       result3: {},
     },
   },
-  {
-    sync: true,
-  },
+  { sync: true },
 );

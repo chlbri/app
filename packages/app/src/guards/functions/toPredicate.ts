@@ -45,9 +45,7 @@ export type _ToPredicateAsyncF = <
   errors: string[];
 };
 
-export type _ToPredicate = _ToPredicateF & {
-  async: _ToPredicateAsyncF;
-};
+export type _ToPredicate = _ToPredicateF & { async: _ToPredicateAsyncF };
 
 export type ToPredicate_F = <
   Pc = any,
@@ -77,9 +75,7 @@ export type ToPredicateAsync_F = <
   errors: string[];
 };
 
-export type ToPredicate = ToPredicate_F & {
-  async: ToPredicateAsync_F;
-};
+export type ToPredicate = ToPredicate_F & { async: ToPredicateAsync_F };
 
 const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
   const errors: string[] = [];

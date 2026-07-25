@@ -8,24 +8,11 @@ export default createMachine(
     states: {
       idle: {
         on: { NEXT: '/working' },
-        actors: {
-          child: {
-            contexts: {
-              '.': 'all',
-              iter1: 'iter1',
-            },
-          },
-        },
+        actors: { child: { contexts: { '.': 'all', iter1: 'iter1' } } },
       },
       working: {
         on: { NEXT: '/idle' },
-        actors: {
-          child: {
-            contexts: {
-              iter2: 'iter2',
-            },
-          },
-        },
+        actors: { child: { contexts: { iter2: 'iter2' } } },
       },
     },
   },
@@ -33,10 +20,7 @@ export default createMachine(
     pContext: type({
       iter1: 'number',
       iter2: 'number',
-      all: {
-        iter1: 'number',
-        iter2: 'number',
-      },
+      all: { iter1: 'number', iter2: 'number' },
     }),
   },
 );

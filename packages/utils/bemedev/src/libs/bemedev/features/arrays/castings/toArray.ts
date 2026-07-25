@@ -24,8 +24,6 @@ const _toArray = (value?: unknown) => {
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-const toArray: ToArray_F = expandFn(_toArray, {
-  typed: _toArray,
-});
+const toArray: ToArray_F = expandFn(_toArray, { typed: _toArray });
 
 export default toArray;

@@ -14,64 +14,27 @@ type TTConfig = ConfigFrom<Machine3>;
 expectTypeOf<TTConfig>().toEqualTypeOf<Config3>();
 
 type TTPrivate = PrivateContextFrom<Machine3>;
-expectTypeOf<TTPrivate>().branded.toEqualTypeOf<{
-  data: string;
-}>();
+expectTypeOf<TTPrivate>().branded.toEqualTypeOf<{ data: string }>();
 
 type TTC = ContextFrom<Machine3>;
-expectTypeOf<TTC>().toEqualTypeOf<{
-  age: number;
-}>();
+expectTypeOf<TTC>().toEqualTypeOf<{ age: number }>();
 
 type TTEm = EventsMapFrom<Machine3>;
 expectTypeOf<TTEm>().branded.toEqualTypeOf<{
-  EVENT: {
-    password: string;
-    username: string;
-  };
+  EVENT: { password: string; username: string };
   EVENT2: boolean;
-  EVENT3: {
-    login: string;
-    pwd: string;
-  };
+  EVENT3: { login: string; pwd: string };
 }>();
 
 type TTE = EventsFrom<Machine3>;
 expectTypeOf<TTE>().toEqualTypeOf<
-  | {
-      type: 'machine$$init';
-      payload: EmptyObject;
-    }
-  | {
-      type: 'machine$$exceeded';
-      payload: EmptyObject;
-    }
-  | {
-      type: 'machine$$always';
-      payload: EmptyObject;
-    }
-  | {
-      type: 'EVENT2';
-      payload: boolean;
-    }
-  | {
-      type: 'EVENT';
-      payload: {
-        password: string;
-        username: string;
-      };
-    }
-  | {
-      type: 'EVENT3';
-      payload: {
-        login: string;
-        pwd: string;
-      };
-    }
-  | {
-      type: 'machine1::on::NEXT';
-      payload: boolean;
-    }
+  | { type: 'machine$$init'; payload: EmptyObject }
+  | { type: 'machine$$exceeded'; payload: EmptyObject }
+  | { type: 'machine$$always'; payload: EmptyObject }
+  | { type: 'EVENT2'; payload: boolean }
+  | { type: 'EVENT'; payload: { password: string; username: string } }
+  | { type: 'EVENT3'; payload: { login: string; pwd: string } }
+  | { type: 'machine1::on::NEXT'; payload: boolean }
 >();
 
 // type ActionKeys =

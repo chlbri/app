@@ -8,27 +8,18 @@ export default createMachine(
     states: {
       inactive: {
         on: { NEXT: '/active' },
-        actors: {
-          interval: { next: { actions: ['assignN'] } },
-        },
+        actors: { interval: { next: { actions: ['assignN'] } } },
       },
       active: {
         on: { NEXT: '/inactive' },
-        actors: {
-          interval: { next: { actions: ['assignN'] } },
-        },
+        actors: { interval: { next: { actions: ['assignN'] } } },
       },
     },
   },
   {
     context: type('number'),
     actorsMap: type({
-      emitters: {
-        interval: {
-          next: 'number',
-          error: 'never',
-        },
-      },
+      emitters: { interval: { next: 'number', error: 'never' } },
     }),
     sync: true,
   },

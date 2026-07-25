@@ -2,11 +2,7 @@ import { createMachine } from '#exports/createMachine';
 import { type } from '@bemedev/typings';
 import { any } from '@bemedev/typings/helpers';
 
-const person = any({
-  name: 'string',
-  age: 'number',
-  active: 'boolean',
-});
+const person = any({ name: 'string', age: 'number', active: 'boolean' });
 
 export default createMachine(
   'src/__tests__/interpreters/filter-erase.2.machine',
@@ -15,22 +11,15 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          ADD_PEOPLE: {
-            actions: 'addPeople',
-          },
-          FILTER_ACTIVE: {
-            actions: 'filterActive',
-            target: '/filtered',
-          },
+          ADD_PEOPLE: { actions: 'addPeople' },
+          FILTER_ACTIVE: { actions: 'filterActive', target: '/filtered' },
         },
       },
       filtered: {},
     },
   },
   {
-    context: type(({ array }) => ({
-      people: array(person),
-    })),
+    context: type(({ array }) => ({ people: array(person) })),
 
     eventsMap: type(({ array }) => ({
       ADD_PEOPLE: { people: array(person) },

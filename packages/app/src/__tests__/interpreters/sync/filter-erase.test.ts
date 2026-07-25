@@ -12,9 +12,7 @@ describe('Filter and Erase actions', () => {
     describe('#01 => Filter array of numbers', () => {
       const machine = _machine1;
 
-      const service = interpret(machine, {
-        context: { numbers: [] },
-      });
+      const service = interpret(machine, { context: { numbers: [] } });
 
       const {
         useStateValue: useValue,
@@ -71,9 +69,7 @@ describe('Filter and Erase actions', () => {
 
       const machine = _machine2;
 
-      const service = interpret(machine, {
-        context: { people: [] },
-      });
+      const service = interpret(machine, { context: { people: [] } });
 
       const {
         useStateValue: useValue,
@@ -134,9 +130,7 @@ describe('Filter and Erase actions', () => {
     describe('#03 => Filter object properties', () => {
       const machine = _machine3;
 
-      const service = interpret(machine, {
-        context: { scores: {} },
-      });
+      const service = interpret(machine, { context: { scores: {} } });
 
       const {
         useStateValue: useValue,
@@ -188,11 +182,7 @@ describe('Filter and Erase actions', () => {
       test('#06 => Check filtered scores (>= 80)', () => {
         const scores = service.select('scores');
 
-        expect(scores).toEqual({
-          user1: 95,
-          user3: 85,
-          user5: 90,
-        });
+        expect(scores).toEqual({ user1: 95, user3: 85, user5: 90 });
       });
     });
   });
@@ -201,11 +191,7 @@ describe('Filter and Erase actions', () => {
     describe('#01 => Erase single context property', () => {
       const machine = _machine4;
 
-      const service = interpret(machine, {
-        context: {
-          data: 42,
-        },
-      });
+      const service = interpret(machine, { context: { data: 42 } });
 
       const {
         useStateValue: useValue,
@@ -228,13 +214,7 @@ describe('Filter and Erase actions', () => {
       });
 
       test(
-        ...useSend(
-          {
-            type: 'SET_NAME',
-            payload: { name: 'John Doe' },
-          },
-          3,
-        ),
+        ...useSend({ type: 'SET_NAME', payload: { name: 'John Doe' } }, 3),
       );
 
       test('#04 => Check name', () => {
@@ -252,11 +232,7 @@ describe('Filter and Erase actions', () => {
       const machine = _machine5;
 
       const service = interpret(machine, {
-        context: {
-          user: {
-            name: '',
-          },
-        },
+        context: { user: { name: '' } },
       });
 
       const {
@@ -287,10 +263,7 @@ describe('Filter and Erase actions', () => {
         ...useSend(
           {
             type: 'SET_USER',
-            payload: {
-              name: 'Jane Doe',
-              email: 'jane@example.com',
-            },
+            payload: { name: 'Jane Doe', email: 'jane@example.com' },
           },
           3,
         ),
@@ -314,9 +287,7 @@ describe('Filter and Erase actions', () => {
     describe('#03 => Erase multiple properties with batch', () => {
       const machine = _machine6;
 
-      const service = interpret(machine, {
-        context: {},
-      });
+      const service = interpret(machine, { context: {} });
 
       const {
         useStateValue: useValue,

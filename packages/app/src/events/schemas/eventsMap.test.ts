@@ -10,11 +10,7 @@ describe('TESTS', () => {
     describe(
       '#01 => CASES',
       success(
-        {
-          invite: 'empty object',
-          parameters: [{}],
-          expected: true,
-        },
+        { invite: 'empty object', parameters: [{}], expected: true },
         {
           invite: 'valid events map',
           parameters: [{ event1: 'payload1', event2: { data: 42 } }],

@@ -30,14 +30,7 @@ describe('Coverage actors', () => {
     }));
 
     const service = interpret(machine, {
-      pContext: {
-        iter1: 0,
-        iter2: 0,
-        all: {
-          iter1: 0,
-          iter2: 0,
-        },
-      },
+      pContext: { iter1: 0, iter2: 0, all: { iter1: 0, iter2: 0 } },
     });
 
     const {

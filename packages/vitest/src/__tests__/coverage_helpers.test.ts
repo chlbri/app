@@ -9,16 +9,11 @@ describe('Coverage tests for constructTests', () => {
     {
       initial: 'idle',
       states: {
-        idle: {
-          tags: ['tag1'],
-          on: { NEXT: '/done' },
-        },
+        idle: { tags: ['tag1'], on: { NEXT: '/done' } },
         done: {},
       },
     },
-    {
-      context: type('number'),
-    },
+    { context: type('number') },
   );
 
   const service = interpret(machine, { context: 0 });

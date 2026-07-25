@@ -419,12 +419,7 @@ export class SyncInterpreter<
     interval,
   }) => {
     const exact = this.__exact;
-    const out = createInterval({
-      callback,
-      id,
-      interval,
-      exact,
-    });
+    const out = createInterval({ callback, id, interval, exact });
 
     return out;
   };
@@ -487,11 +482,7 @@ export class SyncInterpreter<
           }
         };
 
-        const promise = this.createInterval({
-          callback,
-          interval,
-          id,
-        });
+        const promise = this.createInterval({ callback, interval, id });
 
         this.__cachedIntervals.push(promise);
 
@@ -522,10 +513,7 @@ export class SyncInterpreter<
   protected get __collectedSelfTransitions0() {
     const entries = new Map<
       string,
-      {
-        always?: () => string | false;
-        after?: () => void;
-      }
+      { always?: () => string | false; after?: () => void }
     >();
 
     this.#collectedAlways.forEach(([from, always]) => {
@@ -618,11 +606,7 @@ export class SyncInterpreter<
               complete: () => this.__performFinally(complete),
             });
 
-            return {
-              pausable,
-              id,
-              from,
-            };
+            return { pausable, id, from };
           },
         );
 
@@ -798,10 +782,7 @@ export class SyncInterpreter<
       .map(([from, ..._children]) => {
         const services = _children.map(({ childFn, ...rest }) => {
           const service = this.#executeChild(childFn);
-          return {
-            service,
-            ...rest,
-          };
+          return { service, ...rest };
         });
 
         return [from, ...services] as const;
@@ -876,11 +857,7 @@ export class SyncInterpreter<
             );
           }
 
-          return {
-            service: si,
-            id,
-            from,
-          };
+          return { service: si, id, from };
         });
 
         this.__collectedChildren.push(...services);

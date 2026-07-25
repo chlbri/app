@@ -7,31 +7,18 @@ export const machine23 = createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        activities: {
-          DELAY: 'inc',
-        },
-        on: {
-          NEXT: '/working',
-        },
-      },
+      idle: { activities: { DELAY: 'inc' }, on: { NEXT: '/working' } },
       working: {
         entry: 'debounce',
         type: 'parallel',
-        activities: {
-          DELAY2: 'inc2',
-        },
-        on: {
-          FINISH: '/final',
-        },
+        activities: { DELAY2: 'inc2' },
+        on: { FINISH: '/final' },
         states: {
           fetch: {
             initial: 'idle',
             states: {
               idle: {
-                activities: {
-                  DELAY: 'sendPanelToUser',
-                },
+                activities: { DELAY: 'sendPanelToUser' },
                 on: {
                   FETCH: {
                     guards: 'isInputNotEmpty',
@@ -50,17 +37,10 @@ export const machine23 = createMachine(
             states: {
               idle: {
                 on: {
-                  WRITE: {
-                    actions: 'write',
-                    target: '/working/ui/input',
-                  },
+                  WRITE: { actions: 'write', target: '/working/ui/input' },
                 },
                 actors: {
-                  machine1: {
-                    contexts: {
-                      iterator: 'iterator',
-                    },
-                  },
+                  machine1: { contexts: { iterator: 'iterator' } },
                 },
               },
               input: {

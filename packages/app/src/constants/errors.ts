@@ -6,15 +6,9 @@ const action = {
   capital: 'Action',
 } as const satisfies STR;
 
-const guard = {
-  normal: 'guard',
-  capital: 'Guard',
-} as const satisfies STR;
+const guard = { normal: 'guard', capital: 'Guard' } as const satisfies STR;
 
-const delay = {
-  normal: 'delay',
-  capital: 'Delay',
-} as const satisfies STR;
+const delay = { normal: 'delay', capital: 'Delay' } as const satisfies STR;
 
 const promise = {
   normal: 'promise',

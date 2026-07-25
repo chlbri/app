@@ -247,9 +247,7 @@ describe('#01 => parseTree', () => {
 
   describe('#06 => activities', () => {
     describe('#01 => activity as string action', () => {
-      const config = {
-        activities: { polling: 'pollAction' },
-      };
+      const config = { activities: { polling: 'pollAction' } };
       const result = parseTree(config);
 
       test('#01 => action key extracted', () => {
@@ -260,10 +258,7 @@ describe('#01 => parseTree', () => {
     describe('#02 => activity as object with guards and actions', () => {
       const config = readonly({
         activities: {
-          polling: {
-            guards: ['canPoll'],
-            actions: ['startPoll'],
-          },
+          polling: { guards: ['canPoll'], actions: ['startPoll'] },
         },
       });
 
@@ -297,10 +292,7 @@ describe('#01 => parseTree', () => {
   describe('#08 => actors children', () => {
     const config = {
       actors: {
-        myChild: {
-          on: { DONE: '/done' },
-          contexts: { parentId: 'id' },
-        },
+        myChild: { on: { DONE: '/done' }, contexts: { parentId: 'id' } },
       },
     };
     const result = parseTree(config);
@@ -354,10 +346,7 @@ describe('#01 => parseTree', () => {
   describe('#10 => parallel state', () => {
     const config = {
       type: 'parallel' as const,
-      states: {
-        a: { entry: 'entryA' },
-        b: { entry: 'entryB' },
-      },
+      states: { a: { entry: 'entryA' }, b: { entry: 'entryB' } },
     };
     const result = parseTree(config);
 

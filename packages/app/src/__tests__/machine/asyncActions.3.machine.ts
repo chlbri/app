@@ -5,15 +5,7 @@ export default createMachine(
   'src/__tests__/machine/asyncActions.3.machine',
   {
     initial: 'idle',
-    states: {
-      idle: {
-        on: {
-          TEST: {
-            actions: 'myAction',
-          },
-        },
-      },
-    },
+    states: { idle: { on: { TEST: { actions: 'myAction' } } } },
   },
   asyncActionsTypings1,
 );

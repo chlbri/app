@@ -22,10 +22,7 @@ describe('getTargetsFromConfig', () => {
           {
             type: 'compound',
             initial: 'a',
-            states: {
-              a: { type: 'atomic' },
-              b: { type: 'atomic' },
-            },
+            states: { a: { type: 'atomic' }, b: { type: 'atomic' } },
           },
         ],
         expected: ['/', '/a', '/b'],
@@ -35,15 +32,7 @@ describe('getTargetsFromConfig', () => {
         parameters: [
           {
             type: 'parallel',
-            states: {
-              a: {},
-              b: {
-                initial: 'c',
-                states: {
-                  c: {},
-                },
-              },
-            },
+            states: { a: {}, b: { initial: 'c', states: { c: {} } } },
           },
         ],
         expected: ['/', '/a', '/b', '/b/c'],

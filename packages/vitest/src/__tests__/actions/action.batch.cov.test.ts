@@ -7,14 +7,10 @@ vi.useFakeTimers();
 describe('Machine batch action', () => {
   const machine = _raw_machine
     .provideOptions(({ assign }) => ({
-      actions: {
-        inc1: assign('context', ({ context }) => context + 1),
-      },
+      actions: { inc1: assign('context', ({ context }) => context + 1) },
     }))
     .provideOptions(({ batch }, { _legacy }) => ({
-      actions: {
-        inc2: batch(_legacy.actions.inc1, _legacy.actions.inc1),
-      },
+      actions: { inc2: batch(_legacy.actions.inc1, _legacy.actions.inc1) },
     }))
     .provideOptions(({ batch, assign, voidAction }, { _legacy }) => ({
       actions: {

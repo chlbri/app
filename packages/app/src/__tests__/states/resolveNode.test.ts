@@ -2,15 +2,8 @@ import { resolveNode } from '../../states/functions/resolveNode';
 
 test('resolveNode -> coverage', () => {
   const inc = vi.fn();
-  const options = {
-    actions: {
-      inc,
-    },
-  };
-  const config = {
-    entry: 'inc',
-    exit: 'inc',
-  };
+  const options = { actions: { inc } };
+  const config = { entry: 'inc', exit: 'inc' };
 
   const node = resolveNode(config, options);
   expect(node).toStrictEqual({

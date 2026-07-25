@@ -16,9 +16,7 @@ describe('Performs activities on events', () => {
         resume: resumeActivity('/idle::DELAY'),
         stop: stopActivity('/idle::DELAY'),
       },
-      delays: {
-        DELAY,
-      },
+      delays: { DELAY },
     }),
   );
 

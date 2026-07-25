@@ -26,12 +26,7 @@ export default createMachine(
   },
   {
     context: type(({ partial, union }) =>
-      union(
-        partial({
-          iterator: 'number',
-        }),
-        'undefined',
-      ),
+      union(partial({ iterator: 'number' }), 'undefined'),
     ),
   },
 );

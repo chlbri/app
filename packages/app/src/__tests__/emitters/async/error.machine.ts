@@ -7,28 +7,17 @@ export default createMachine(
     initial: 'idle',
     actors: {
       interval: {
-        next: {
-          actions: ['assigN'],
-        },
-        error: {
-          actions: ['signals'],
-        },
+        next: { actions: ['assigN'] },
+        error: { actions: ['signals'] },
       },
     },
-    states: {
-      idle: {},
-    },
+    states: { idle: {} },
   },
   {
     context: type('number'),
     actorsMap: type({
       ccxc: 'any',
-      emitters: {
-        interval: {
-          next: 'number',
-          error: 'never',
-        },
-      },
+      emitters: { interval: { next: 'number', error: 'never' } },
     }),
   },
 );

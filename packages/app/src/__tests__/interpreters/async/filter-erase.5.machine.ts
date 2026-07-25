@@ -8,22 +8,15 @@ export default createMachine(
     states: {
       idle: {
         on: {
-          SET_USER: {
-            actions: 'setUser',
-          },
-          CLEAR_EMAIL: {
-            actions: 'clearEmail',
-          },
+          SET_USER: { actions: 'setUser' },
+          CLEAR_EMAIL: { actions: 'clearEmail' },
         },
       },
     },
   },
   {
     context: type(({ optional }) => ({
-      user: {
-        name: 'string',
-        email: optional('string'),
-      },
+      user: { name: 'string', email: optional('string') },
     })),
 
     eventsMap: type({

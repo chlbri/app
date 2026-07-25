@@ -25,11 +25,5 @@ export default createMachine(
       },
     },
   },
-  {
-    context: type(({ partial }) =>
-      partial({
-        iterator: 'number',
-      }),
-    ),
-  },
+  { context: type(({ partial }) => partial({ iterator: 'number' })) },
 );

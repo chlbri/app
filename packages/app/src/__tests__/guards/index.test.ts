@@ -12,9 +12,7 @@ describe('Interpret for guards', () => {
     const machine = _machine1;
 
     machine.addOptions(({ isDefined }) => ({
-      guards: {
-        guard1: isDefined('events.payload'),
-      },
+      guards: { guard1: isDefined('events.payload') },
     }));
 
     const service = interpret(machine);
@@ -48,11 +46,7 @@ describe('Interpret for guards', () => {
     });
 
     test('#04 => add guard', () => {
-      service.addOptions(() => ({
-        guards: {
-          guard1,
-        },
-      }));
+      service.addOptions(() => ({ guards: { guard1 } }));
     });
 
     test(...send('NEXT', 5));
@@ -101,11 +95,7 @@ describe('Interpret for guards', () => {
     });
 
     test('#04 => add guard', () => {
-      service.addOptions(() => ({
-        guards: {
-          guard1,
-        },
-      }));
+      service.addOptions(() => ({ guards: { guard1 } }));
     });
 
     test(...send('NEXT', 5));

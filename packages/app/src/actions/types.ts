@@ -54,10 +54,7 @@ export type FromActionConfig<T> = T extends Describer
 export type ActionResult<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
-> = DeepPartial<{
-  pContext: Pc;
-  context: Tc;
-}>;
+> = DeepPartial<{ pContext: Pc; context: Tc }>;
 
 /**
  * An action may return synchronously or asynchronously.
