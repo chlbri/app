@@ -79,7 +79,7 @@ export const nextSV: NextStateValue_F = (from, target) => {
   });
 
   const target2 = deleteFirst(_target2, '.');
-  const keysD = decomposeKeys(from);
+  const keysD = decomposeKeys.low(from);
   const check5 = keysD.includes(target2 as any);
 
   if (check5) {

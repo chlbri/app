@@ -1,12 +1,22 @@
 import { interpret } from '#exports/interpret';
+import { swap } from '@bemedev/function-swap';
+import type { StateExtendedFrom } from '~types';
 import _raw_machine from './action.batch.cov.machine';
 
 vi.useFakeTimers();
 
 describe('Machine batch action', () => {
+  const fnBis = (data: number) => data + 1;
+  type TT = StateExtendedFrom<typeof _raw_machine>;
+
   const machine = _raw_machine
     .provideOptions(({ assign }) => ({
-      actions: { inc1: assign('context', ({ context }) => context + 1) },
+      actions: {
+        inc1: assign(
+          'context',
+          swap(fnBis).constraint<[TT]>()({ '[0]': '[0].context' }),
+        ),
+      },
     }))
     .provideOptions(({ batch }, { _legacy }) => ({
       actions: { inc2: batch(_legacy.actions.inc1, _legacy.actions.inc1) },
