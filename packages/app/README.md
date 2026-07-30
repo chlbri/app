@@ -581,22 +581,37 @@ The path follows `@bemedev/decompose` conventions: `'context'`,
 
 ### 5.2 swap
 
-Computes new context values based on a map dictionary or function mapping
-powered by `@bemedev/function-swap`.
+Remaps and adapts standard functions into machine options using parameter decomposition powered by `@bemedev/function-swap`.
+
+`swap` converts any standard function `fn` into a machine selector function (`FnR`), remapping parameter positions from state, context, or event payload paths. Because it returns a standard machine selector, **`swap` can be used across actions, `assign`, `guards`, `delays`, and standalone options.**
 
 ```typescript
+// 1. Inside assign (remap event payload into context assignment)
 actions: {
-  // Swap discrete values directly at a context path
-  toggleStatus: swap('context.status', {
-    idle: 'active',
-    active: 'paused',
-    paused: 'idle',
-  }),
-
-  // Compute swapped output dynamically
-  cycleTheme: swap('context.theme', currentTheme =>
-    currentTheme === 'light' ? 'dark' : 'light'
+  updateInput: assign(
+    'context.input',
+    swap(
+      (value: string) => value.trim(),
+      'WRITE',
+    )({ '[0]': '[0].payload.value' }),
   ),
+},
+
+// 2. Inside guards (returns boolean predicate)
+guards: {
+  isAdult: swap(
+    (age: number) => age >= 18,
+  )({ '[0]': '[0].context.user.age' }),
+},
+
+// 3. Inside delays (returns number in ms)
+delays: {
+  RETRY_TIMEOUT: swap(
+    (retryCount: number, baseMs: number) => retryCount * baseMs,
+  )({
+    '[0]': '[0].context.retries',
+    '[1]': '[0].context.baseTimeout',
+  }),
 }
 ```
 
@@ -835,11 +850,16 @@ machine.createOptions(
 ### 6.2 Custom & Async Predicates
 
 ```typescript
-machine.provideOptions(({ isValue }) => ({
+machine.provideOptions(({ isValue, swap }) => ({
   guards: {
     // Synchronous custom predicate
     isAuthenticated: ({ context }) =>
       context.token !== undefined && !isExpired(context.token),
+
+    // Remapped predicate with swap
+    isAdult: swap((age: number) => age >= 18)({
+      '[0]': '[0].context.user.age',
+    }),
 
     // Predicate with event payload
     isValidInput: ({ event }) =>
@@ -952,9 +972,13 @@ const machine = createMachine(
 ```
 
 ```typescript
-// Dynamic: function of current state
+// Dynamic: function of current state (or remapped with swap)
 delays: {
   RETRY_DELAY: ({ context }) => context.retryCount * 1000,
+  SWAPPED_DELAY: swap((count: number, ms: number) => count * ms)({
+    '[0]': '[0].context.retryCount',
+    '[1]': '[0].context.baseMs',
+  }),
 }
 ```
 

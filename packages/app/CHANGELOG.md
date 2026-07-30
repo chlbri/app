@@ -11,6 +11,25 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.8.1] - 30/07/2026** => _02:40_
+
+</summary>
+
+### Features
+
+- **Swap Helper**: Document and expand `swap` helper integration to
+  showcase usage inside `assign`, `guards`, `delays`, and standalone
+  options.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.8.0] - 30/07/2026** => _02:15_
 
 </summary>
