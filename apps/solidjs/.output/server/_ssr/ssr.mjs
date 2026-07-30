@@ -1,6 +1,6 @@
 import { n as __exportAll } from "../_runtime.mjs";
-import { B as on, D as Switch, E as Suspense, F as createResource, L as createSignal, M as createEffect, N as createMemo, S as ErrorBoundary, T as Show, _ as cu, a as escape, c as ssr, d as ssrHydrationKey, f as ssrStyleProperty, h as Ou, j as createContext, k as createComponent, l as ssrAttribute, n as Dynamic, q as useContext, s as renderToStream, v as lu, w as Match$1, z as mergeProps } from "../_libs/@solid-primitives/refs+[...].mjs";
-import { C as getStylesheetHref, F as isNotFound, M as isRedirect, N as isResolvedRedirect, O as getLocationChangeInfo, P as rootRouteId, S as getScriptPreloadAttrs, T as resolveManifestCssLink, _ as makeSsrSerovalPlugin, a as normalizeSsrResponse, c as attachRouterServerSsrUtils, d as mergeHeaders, f as getScrollRestorationScriptForRouter, g as makeSerovalPlugin, h as createSerializationAdapter, i as isSsrResponse, j as executeRewriteInput, l as getNormalizedURL, m as createRawStreamRPCPlugin, n as createSsrStreamResponse, o as replaceSsrResponse, p as defaultSerovalPlugins, r as defineHandlerCallback, s as stripSsrResponseBody, t as transformReadableStreamWithRouter, u as getOrigin, w as resolveManifestAssetLink, z as invariant } from "../_libs/@tanstack/router-core+[...].mjs";
+import { C as createContext, D as createResource, M as on, T as createMemo, _ as Show, a as escape, c as ssr, d as ssrHydrationKey, f as ssrStyleProperty, g as Match$1, j as mergeProps, k as createSignal, l as ssrAttribute, m as ErrorBoundary, n as Dynamic, s as renderToStream, v as Suspense, w as createEffect, x as createComponent, y as Switch, z as useContext } from "../_libs/@solid-primitives/refs+[...].mjs";
+import { D as resolveManifestAssetLink, E as getStylesheetHref, F as isRedirect, H as invariant, I as isResolvedRedirect, L as rootRouteId, O as resolveManifestCssLink, P as executeRewriteInput, R as isNotFound, T as getScriptPreloadAttrs, _ as makeSsrSerovalPlugin, a as normalizeSsrResponse, b as toCrossJSONStream, c as attachRouterServerSsrUtils, d as mergeHeaders, f as getScrollRestorationScriptForRouter, g as makeSerovalPlugin, h as createSerializationAdapter, i as isSsrResponse, j as getLocationChangeInfo, l as getNormalizedURL, m as createRawStreamRPCPlugin, n as createSsrStreamResponse, o as replaceSsrResponse, p as defaultSerovalPlugins, r as defineHandlerCallback, s as stripSsrResponseBody, t as transformReadableStreamWithRouter, u as getOrigin, v as fromJSON, y as toCrossJSONAsync } from "../_libs/@tanstack/router-core+[...].mjs";
 import { n as createMemoryHistory } from "../_libs/tanstack__history.mjs";
 import { n as toResponse, t as H3Event } from "../_libs/h3-v2.mjs";
 import { t as isbot } from "../_libs/isbot.mjs";
@@ -129,7 +129,8 @@ function ScriptOnce({ children }) {
 	return ssr(_tmpl$, ssrHydrationKey() + ssrAttribute("nonce", escape(router.options.ssr?.nonce, true), false), children + ";document.currentScript.remove()");
 }
 function ScrollRestoration() {
-	const script = getScrollRestorationScriptForRouter(useRouter());
+	const router = useRouter();
+	const script = getScrollRestorationScriptForRouter(router);
 	if (!script) return null;
 	return createComponent(ScriptOnce, { children: script });
 }
@@ -177,7 +178,8 @@ var Match = (props) => {
 			const ResolvedSuspenseBoundary = () => Suspense;
 			const ResolvedCatchBoundary = () => routeErrorComponent() ? CatchBoundary : SafeFragment;
 			const ResolvedNotFoundBoundary = () => routeNotFoundComponent() ? CatchNotFound : SafeFragment;
-			return createComponent(route().isRoot ? route().options.shellComponent ?? SafeFragment : SafeFragment, { get children() {
+			const ShellComponent = route().isRoot ? route().options.shellComponent ?? SafeFragment : SafeFragment;
+			return createComponent(ShellComponent, { get children() {
 				return [createComponent(nearestMatchContext.Provider, {
 					value: nearestMatch,
 					get children() {
@@ -260,7 +262,8 @@ var Match = (props) => {
 };
 function OnRendered() {
 	const router = useRouter();
-	createEffect(on([createMemo(() => router.stores.resolvedLocation.get()?.state.__TSR_key)], () => {
+	const location = createMemo(() => router.stores.resolvedLocation.get()?.state.__TSR_key);
+	createEffect(on([location], () => {
 		router.emit({
 			type: "onRendered",
 			...getLocationChangeInfo(router.stores.location.get(), router.stores.resolvedLocation.get())
@@ -389,12 +392,15 @@ var MatchInner = () => {
 							return currentMatch().status === "error";
 						},
 						children: (_) => {
-							return createComponent((route().options.errorComponent ?? router.options.defaultErrorComponent) || ErrorComponent, {
-								get error() {
-									return currentMatch().error;
-								},
-								info: { componentStack: "" }
-							});
+							{
+								const RouteErrorComponent = (route().options.errorComponent ?? router.options.defaultErrorComponent) || ErrorComponent;
+								return createComponent(RouteErrorComponent, {
+									get error() {
+										return currentMatch().error;
+									},
+									info: { componentStack: "" }
+								});
+							}
 						}
 					}),
 					createComponent(Match$1, {
@@ -479,7 +485,8 @@ function Matches() {
 	const ResolvedSuspense = SafeFragment;
 	const rootRoute = () => router.routesById[rootRouteId];
 	const PendingComponent = rootRoute().options.pendingComponent ?? router.options.defaultPendingComponent;
-	return createComponent(router.options.InnerWrap || SafeFragment, { get children() {
+	const OptionalWrapper = router.options.InnerWrap || SafeFragment;
+	return createComponent(OptionalWrapper, { get children() {
 		return createComponent(ResolvedSuspense, {
 			get fallback() {
 				return PendingComponent ? createComponent(PendingComponent, {}) : null;
@@ -538,7 +545,8 @@ function RouterContextProvider({ router, children, ...rest }) {
 			...rest.context
 		}
 	});
-	return createComponent(router.options.Wrap || SafeFragment, { get children() {
+	const OptionalWrapper = router.options.Wrap || SafeFragment;
+	return createComponent(OptionalWrapper, { get children() {
 		return createComponent(routerContext.Provider, {
 			value: router,
 			get children() {
@@ -619,7 +627,7 @@ var HEADERS = { TSS_SHELL: "X-TSS_SHELL" };
 * the dev styles URL for route-scoped CSS collection.
 */
 async function getStartManifest(matchedRoutes) {
-	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-B_skHdI2.mjs");
+	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-BI4L5mVU.mjs");
 	const startManifest = tsrStartManifest();
 	let routes = startManifest.routes;
 	routes[rootRouteId];
@@ -980,7 +988,7 @@ var handleServerAction = async ({ request, context, serverFnId }) => {
 	if (!serovalPlugins) serovalPlugins = getDefaultSerovalPlugins();
 	const contentType = request.headers.get("Content-Type");
 	function parsePayload(payload) {
-		return Ou(payload, { plugins: serovalPlugins });
+		return fromJSON(payload, { plugins: serovalPlugins });
 	}
 	return await (async () => {
 		try {
@@ -996,7 +1004,7 @@ var handleServerAction = async ({ request, context, serverFnId }) => {
 						method: methodUpper
 					};
 					if (typeof serializedContext === "string") try {
-						const deserializedContext = Ou(JSON.parse(serializedContext), { plugins: serovalPlugins });
+						const deserializedContext = fromJSON(JSON.parse(serializedContext), { plugins: serovalPlugins });
 						if (typeof deserializedContext === "object" && deserializedContext) params.context = safeObjectMerge(deserializedContext, context);
 					} catch (e) {}
 					return await action(params);
@@ -1063,7 +1071,7 @@ var handleServerAction = async ({ request, context, serverFnId }) => {
 							throw error;
 						}
 					};
-					cu(res, {
+					toCrossJSONStream(res, {
 						refs: /* @__PURE__ */ new Map(),
 						plugins,
 						onParse(value) {
@@ -1139,7 +1147,7 @@ var handleServerAction = async ({ request, context, serverFnId }) => {
 			console.info();
 			console.error(error);
 			console.info();
-			const serializedError = JSON.stringify(await Promise.resolve(lu(error, {
+			const serializedError = JSON.stringify(await Promise.resolve(toCrossJSONAsync(error, {
 				refs: /* @__PURE__ */ new Map(),
 				plugins: serovalPlugins
 			})));
@@ -1726,7 +1734,7 @@ var getBaseManifest = getProdBaseManifest;
 var createEarlyHintsForRequest = createEarlyHintsCollector;
 async function loadEntries() {
 	const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-		import("./router-CLES2M17.mjs"),
+		import("./router-BpBdxDl9.mjs"),
 		import("./start-C8NC6o6C.mjs"),
 		import("./empty-plugin-adapters-CykxgOdX.mjs")
 	]);

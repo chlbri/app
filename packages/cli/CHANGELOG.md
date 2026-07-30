@@ -5,6 +5,29 @@
 <details>
 <summary>
 
+## **[1.9.0] - 30/07/2026** => _17:30_
+
+</summary>
+
+### Refactor
+
+- **Valibot Migration**: Update AST parseTree and extractor helpers to
+  import from `@bemedev/app-valibot`.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
+  `1.9.0`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.8.0] - 30/07/2026** => _02:15_
 
 </summary>

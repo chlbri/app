@@ -57,3 +57,13 @@ jobs:
         'canary' && 'canary' || 'latest' }}
 
       package: './packages/cli'
+
+  valibot:
+    uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
+    secrets: inherit
+    with:
+      type:
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
+        'canary' && 'canary' || 'latest' }}
+
+      package: './packages/valibot'

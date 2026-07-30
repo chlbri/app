@@ -11,6 +11,30 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.9.0] - 30/07/2026** => _17:30_
+
+</summary>
+
+### Refactor
+
+- **Valibot Migration**: Extract Valibot schemas and validation helpers
+  into `@bemedev/app-valibot` package.
+- **State Schemas**: Streamline machine configuration and interpreter state
+  validation.
+
+### Dependencies
+
+- **Workspace Dependencies**: Add `@bemedev/app-valibot` dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.8.1] - 30/07/2026** => _02:40_
 
 </summary>

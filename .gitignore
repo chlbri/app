@@ -1,7 +1,13 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 
+#For Apps
+.output
+.tanstack
+.nitro
+
 #For Libraries
+**/node_modules
 dist
 lib
 

@@ -1,5 +1,5 @@
-import { H as onMount, K as untrack, L as createSignal, M as createEffect, N as createMemo, V as onCleanup, W as splitProps, a as escape, c as ssr, d as ssrHydrationKey, k as createComponent, n as Dynamic, t as mergeRefs, u as ssrElement, z as mergeProps } from "../_libs/@solid-primitives/refs+[...].mjs";
-import { E as preloadWarning, G as isDangerousProtocol, I as exactPathTest, L as removeTrailingSlash, U as functionalUpdate, V as deepEqual, W as hasKeys } from "../_libs/@tanstack/router-core+[...].mjs";
+import { I as splitProps, N as onCleanup, P as onMount, R as untrack, T as createMemo, a as escape, c as ssr, d as ssrHydrationKey, j as mergeProps, k as createSignal, n as Dynamic, t as mergeRefs, u as ssrElement, w as createEffect, x as createComponent } from "../_libs/@solid-primitives/refs+[...].mjs";
+import { B as removeTrailingSlash, J as isDangerousProtocol, K as functionalUpdate, W as deepEqual, k as preloadWarning, q as hasKeys, z as exactPathTest } from "../_libs/@tanstack/router-core+[...].mjs";
 import { i as useRouter } from "./ssr.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/link-DmEhZipg.js
 /**
@@ -277,7 +277,7 @@ function useLinkProps(options) {
 	const onMouseLeave = createComposedHandler(() => local.onMouseLeave, handleLeave);
 	const onMouseOut = createComposedHandler(() => local.onMouseOut, handleLeave);
 	const onTouchStart = createComposedHandler(() => local.onTouchStart, handleTouchStart);
-	return mergeProps(propsSafeToSpread, createMemo(() => {
+	const resolvedProps = createMemo(() => {
 		const active = isActive();
 		const base = {
 			href: hrefOption()?.href,
@@ -319,7 +319,8 @@ function useLinkProps(options) {
 			...className ? { class: className } : void 0,
 			...active && STATIC_ACTIVE_ATTRIBUTES
 		};
-	}));
+	});
+	return mergeProps(propsSafeToSpread, resolvedProps);
 }
 var STATIC_ACTIVE_PROPS = { class: "active" };
 var STATIC_ACTIVE_PROPS_GET = () => STATIC_ACTIVE_PROPS;
