@@ -1,4 +1,4 @@
-import type { NodeConfig2 } from '@bemedev/app';
+import type { NodeConfig2 } from '@bemedev/app/types';
 import type { Project } from 'ts-morph';
 import { evaluateNode } from './evaluate';
 import { extractPContextType } from './pContext';

@@ -1,6 +1,5 @@
 import type { DeepPartial } from '@bemedev/app-utils-bemedev';
 import { deepmergeCustom } from 'deepmerge-ts';
-// import equal from 'fast-deep-equal';
 
 export const _merge = deepmergeCustom({
   mergeArrays: false,

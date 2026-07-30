@@ -16,13 +16,16 @@ describe('Integration with @bemedev/app machine and interpret', () => {
   const service = interpret(machine, { context: { count: 0 } });
 
   createRoot(dispose => {
-    const count = useService(service, s => s.context.count);
-    const value = useService(service, s => s.value);
+    const count = useService(service, {
+      selector: s => s.context.count,
+      equality: (a, b) => a === b,
+    });
+    const value = useService(service, { selector: s => s.value });
     const all = useService(service);
 
     test('#000 => ALL, service not started yet', () => {
       const expected = {
-        status: 'starting',
+        status: 'idle',
         context: { count: 0 },
         event: { type: 'machine$$init', payload: {} },
         value: 'idle',

@@ -581,9 +581,14 @@ The path follows `@bemedev/decompose` conventions: `'context'`,
 
 ### 5.2 swap
 
-Remaps and adapts standard functions into machine options using parameter decomposition powered by `@bemedev/function-swap`.
+Remaps and adapts standard functions into machine options using parameter
+decomposition powered by `@bemedev/function-swap`.
 
-`swap` converts any standard function `fn` into a machine selector function (`FnR`), remapping parameter positions from state, context, or event payload paths. Because it returns a standard machine selector, **`swap` can be used across actions, `assign`, `guards`, `delays`, and standalone options.**
+`swap` converts any standard function `fn` into a machine selector function
+(`FnR`), remapping parameter positions from state, context, or event
+payload paths. Because it returns a standard machine selector, **`swap` can
+be used across actions, `assign`, `guards`, `delays`, and standalone
+options.**
 
 ```typescript
 // 1. Inside assign (remap event payload into context assignment)

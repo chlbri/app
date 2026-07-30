@@ -52,6 +52,7 @@ export default defineConfig({
       'packages/solidjs/vitest.config.ts',
       'packages/utils/bemedev/vitest.config.ts',
       'packages/vitest/vitest.config.ts',
+      'packages/valibot/vitest.config.ts',
       //Add all packages according to the package folder
     ],
   },

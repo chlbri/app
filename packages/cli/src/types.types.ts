@@ -1,5 +1,5 @@
 import type { BetterSet } from '@bemedev/better-set';
-import type { NodeConfig3, RecordS } from '@bemedev/app';
+import type { NodeConfig3, RecordS } from '@bemedev/app/types';
 
 export type ParseTreeContext = {
   actions: BetterSet<string>;

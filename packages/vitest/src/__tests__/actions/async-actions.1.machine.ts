@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import * as v from 'valibot';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/actions/async-actions.1.machine',
@@ -7,5 +7,5 @@ export default createMachine(
     initial: 'idle',
     states: { idle: { on: { LOAD: { actions: 'loadUser' } } } },
   },
-  { context: v.object({ name: v.string() }) },
+  { context: type({ name: 'string' }) },
 );

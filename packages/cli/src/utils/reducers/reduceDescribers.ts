@@ -1,4 +1,4 @@
-import { fromDescriber, type WithDescriber } from '@bemedev/app';
+import { fromDescriber, type WithDescriber } from '@bemedev/app/types';
 import { createBetterSet } from '@bemedev/better-set';
 
 export const reduceDescribers = (...describers: WithDescriber[]) => {

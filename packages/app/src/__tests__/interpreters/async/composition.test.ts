@@ -34,7 +34,7 @@ describe('Composition', () => {
 
     test('#1 => The machine is at "status: idle"', () => {
       const actual = service.status;
-      expect(actual).toBe('starting');
+      expect(actual).toBe('idle');
     });
 
     test('#2 => Start the machine', () => {

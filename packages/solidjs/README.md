@@ -33,10 +33,10 @@ service.start();
 
 createRoot(dispose => {
   // 1. Select a specific slice of context reactively
-  const count = useService(service, s => s.context.count);
+  const count = useService(service, { selector: s => s.context.count });
 
   // 2. Or track the active state value reactively
-  const stateValue = useService(service, s => s.value);
+  const stateValue = useService(service, { selector: s => s.value });
 
   // 3. Or track the whole state object
   const state = useService(service);
@@ -53,15 +53,15 @@ createRoot(dispose => {
 
 ## API Reference
 
-### `useService(service, selector?)`
+### `useService(service, options?)`
 
 Creates a SolidJS signal that updates whenever the interpreter transitions,
 using deep comparison to prevent unnecessary reactive notifications.
 
-| Parameter  | Type                    | Description                                                            |
-| ---------- | ----------------------- | ---------------------------------------------------------------------- |
-| `service`  | `Interpreter`           | The `@bemedev/app` interpreter service instance.                       |
-| `selector` | `(state: State) => any` | Optional selector function to slice and track specific parts of state. |
+| Parameter | Type                | Description                                                                         |
+| --------- | ------------------- | ----------------------------------------------------------------------------------- |
+| `service` | `Interpreter`       | The `@bemedev/app` interpreter service instance.                                    |
+| `options` | `UseServiceOptions` | Optional object containing `selector` and/or custom `equality` comparison function. |
 
 Returns a SolidJS `Accessor<T>` containing the selected state or slice.
 

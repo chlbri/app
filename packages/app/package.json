@@ -183,18 +183,15 @@
   ],
   "dependencies": {
     "@bemedev/better-promise": "^0.1.1",
-    "@bemedev/better-set": "^0.2.1",
     "@bemedev/boolean-recursive": "^0.0.3",
     "@bemedev/decompose": "^2.3.0",
     "@bemedev/function-swap": "^0.2.5",
-    "@bemedev/interval2": "^1.0.1",
-    "@bemedev/pipe": "^1.6.1",
+    "@bemedev/interval2": "^1.1.4",
     "@bemedev/scheduler": "^1.1.0",
     "@bemedev/sleep": "^0.2.2",
     "@bemedev/typings": "^1.3.0",
     "clone-deep": "^4.0.1",
     "deepmerge-ts": "^7.1.5",
-    "fast-deep-equal": "^3.1.3",
-    "valibot": "^1.4.2"
+    "fast-deep-equal": "^3.1.3"
   }
 }

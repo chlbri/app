@@ -781,6 +781,7 @@ export abstract class CommonInterpreter<
   };
 
   start = () => {
+    this.__setStatus('starting');
     this.__collectChildren();
     this.__collectPausables();
     this.__throwing();
@@ -801,7 +802,7 @@ export abstract class CommonInterpreter<
    * @see {@linkcode SubscriberClass}
    */
   protected __performStates = (parts?: Partial<State<Eo, Tc, Ta>>) => {
-    this.#previousState = cloneDeep(this.__state);
+    this.#previousState = structuredClone(this.__state);
     this.__state = { ...this.__state, ...parts };
     const check = !equal(this.#previousState, this.__state);
     if (check) this.__flush();
@@ -830,13 +831,13 @@ export abstract class CommonInterpreter<
   };
 
   pause = () => {
-    this.#pauseAllActivities();
     this.__setStatus('busy');
-    this.__subscribers.forEach(this.#close);
+    this.#pauseAllActivities();
     this.#pauseChildren();
     this.#pausePausables();
     this.__timeoutActions.forEach(this.#pause);
     this.__setStatus('paused');
+    this.__subscribers.forEach(this.#close);
   };
 
   resume = () => {
@@ -852,14 +853,15 @@ export abstract class CommonInterpreter<
   };
 
   stop = () => {
-    this.pause();
     this.__setStatus('busy');
-    this.__subscribers.forEach(this.#unsubscribe);
-    this.#stopChildren();
+    this.#pauseAllActivities();
     this.__cachedIntervals.forEach(this.#dispose);
     this.__timeoutActions.forEach(this.#dispose);
     this.#stopPausables();
+    this.#stopChildren();
     this.__setStatus('stopped');
+    this.__subscribers.forEach(this.#close);
+    this.__subscribers.forEach(this.#unsubscribe);
     this.#stopSchedulers();
   };
 
@@ -870,11 +872,7 @@ export abstract class CommonInterpreter<
   _provideContext = (context: Tc) => {
     this.__initialContext = this.__context = context;
     this.__performStates({ context });
-    this.__setStatus('busy');
-
     this.__machine.addContext(this.__initialContext);
-
-    this.__setStatus('starting');
     return this.__machine;
   };
 
@@ -925,7 +923,7 @@ export abstract class CommonInterpreter<
   };
 
   get state() {
-    return Object.freeze(cloneDeep(this.__state));
+    return Object.freeze(structuredClone(this.__state));
   }
 
   #errorsCollector = new Set<string>();
@@ -1425,11 +1423,7 @@ export abstract class CommonInterpreter<
    */
   _providePrivateContext = (pContext: Pc) => {
     this.__initialPpc = this.__pContext = pContext;
-    this.__setStatus('busy');
-
     this.__machine.addPrivateContext(this.__initialPpc);
-
-    this.__setStatus('starting');
     return this.__machine;
   };
 

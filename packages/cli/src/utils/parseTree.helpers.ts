@@ -1,12 +1,12 @@
-import {
-  DEFAULT_DELIMITER,
-  toArray,
-  type ActivityConfig,
-  type NodeConfig2,
-  type RecordS,
-  type SingleOrArrayL,
-  type WithDescriber,
-} from '@bemedev/app';
+import { toArray } from '@bemedev/app';
+import { DEFAULT_DELIMITER } from '@bemedev/app/constants';
+import type {
+  ActivityConfig,
+  NodeConfig2,
+  RecordS,
+  SingleOrArrayL,
+  WithDescriber,
+} from '@bemedev/app/types';
 import { flatMap } from '@bemedev/app/states';
 import { reduceActivity } from './reducers/reduceActivity';
 import { reduceDescribers } from './reducers/reduceDescribers';

@@ -1,13 +1,16 @@
 packages:
   - "packages/app"
+  - "packages/valibot"
   - "packages/vitest"
   - "packages/__tests__/project1"
   - "packages/solidjs"
   - "packages/reactjs"
   - "packages/utils/bemedev"
   - "packages/cli"
+  - "apps/*"
 
 allowBuilds:
+  '@parcel/watcher': true
   esbuild: true
 
 nodeLinker: hoisted

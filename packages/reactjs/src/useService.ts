@@ -3,15 +3,25 @@ import type {
   EventObject,
   PrimitiveObject,
   State,
-} from '@bemedev/app/types';
-import { deepEqual } from '@bemedev/app/utils';
+} from '@bemedev/app';
+import { deepEqual } from '@bemedev/app';
 import { useEffect, useState } from 'react';
+
+export type UseServiceOptions<
+  Tc extends PrimitiveObject,
+  Ta extends string,
+  Eo extends EventObject,
+  T = State<Eo, Tc, Ta>,
+> = {
+  selector?: (state: State<Eo, Tc, Ta>) => T;
+  equality?: (first: T, next: T) => boolean;
+};
 
 /**
  * A hook that creates a React state from a service with a subscribe function.
  *
  * @param service - The service containing the state and subscribe method.
- * @param selector - A function to select the desired slice of state.
+ * @param options - Optional configuration options for selection and equality comparison.
  * @returns The selected state.
  */
 export function useService<
@@ -24,9 +34,13 @@ export function useService<
     subscribe: AddSubscriber_F<Tc, Ta, Eo>;
     state: State<Eo, Tc, Ta>;
   },
-  selector: (state: State<Eo, Tc, Ta>) => T = (s: State<Eo, Tc, Ta>) =>
-    s as unknown as T,
+  options?: UseServiceOptions<Tc, Ta, Eo, T>,
 ): T {
+  const {
+    selector = (s: State<Eo, Tc, Ta>) => s as T,
+    equality = (first: T, next: T) => deepEqual(first, next),
+  } = options ?? {};
+
   const [state, setState] = useState<T>(() => selector(service.state));
 
   const sub = service.subscribe(
@@ -35,11 +49,11 @@ export function useService<
       equals: (first, next) => {
         const _first = selector(first);
         const _next = selector(next);
-        return deepEqual(_first, _next);
+        return equality(_first, _next);
       },
     },
   );
 
-  useEffect(() => sub.unsubscribe, [service, selector]);
+  useEffect(() => sub.unsubscribe, []);
   return state;
 }

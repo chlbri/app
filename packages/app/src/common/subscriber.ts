@@ -3,9 +3,9 @@ import type { State } from '#states';
 import { nothing } from '#utils';
 import { _any } from '@bemedev/app-utils-bemedev';
 import type { TimerState } from '@bemedev/interval2';
-import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
 import { FnMapR, isFunction } from '../types/primitives';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Subscriber class that manages the subscription state and provides methods

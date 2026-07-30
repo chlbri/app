@@ -3,7 +3,6 @@ export * from './flatMap';
 export * from './getChildren';
 export * from './getParents';
 export * from './initialConfig';
-export * from './targets';
 export * from './nextSV';
 export * from './nodeToValue';
 export * from './recompose';

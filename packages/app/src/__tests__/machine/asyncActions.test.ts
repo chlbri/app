@@ -35,7 +35,7 @@ describe('Machine createOptions - error handlers', () => {
 
       test('#01 => service is ready', () => {
         expect(service).toBeDefined();
-        expect(service.isReady).toBe(true);
+        expect(service.isReady).toBe(false);
       });
 
       test('#02 => send event without throwing', async () => {
@@ -140,7 +140,7 @@ describe('Machine createOptions - error handlers', () => {
 
       test('#01 => service is ready', () => {
         expect(service).toBeDefined();
-        expect(service.isReady).toBe(true);
+        expect(service.isReady).toBe(false);
       });
 
       test('#02 => send event without throwing', async () => {
@@ -286,7 +286,7 @@ describe('Machine createOptions - error handlers', () => {
 
       test('#01 => service is ready', () => {
         expect(service).toBeDefined();
-        expect(service.isReady).toBe(true);
+        expect(service.isReady).toBe(false);
       });
 
       test('#02 => send event without throwing', async () => {

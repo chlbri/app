@@ -1,0 +1,99 @@
+{
+  "name": "@bemedev/app-valibot",
+  "version": "1.8.1",
+  "description": "Valibot schemas and validation helpers for @bemedev/app",
+  "author": {
+    "email": "bri_lvi@icloud.com",
+    "name": "chlbri",
+    "url": "https://bemedev.vercel.app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chlbri/app"
+  },
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/valibot/README.md",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "maintainers": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "contributors": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "keywords": [
+    "typescript",
+    "state machines",
+    "valibot",
+    "validation"
+  ],
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "pnpm rm:lib && pnpm run rolldown",
+    "_ci": "pnpm run lint && pnpm run test",
+    "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "_lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "lint": "pnpm run fmt && pnpm run lint:fix",
+    "p-q": "pretty-quick",
+    "posttest": "pnpm run fmt",
+    "pretest": "pnpm run build",
+    "rm": "pnpx rimraf ./node_modules ./pnpm-lock.yaml",
+    "rm:lib": "pnpx rimraf ./lib",
+    "rolldown": "rolldown -c",
+    "test:coverage": "vitest run",
+    "test": "pnpm run test:coverage --no-coverage",
+    "test:only": "pnpm run test:coverage --no-coverage",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@bemedev/app": "workspace:^",
+    "@bemedev/app-cli": "workspace:^",
+    "@bemedev/dev-utils": "^1.1.1",
+    "@types/node": "^26.1.2",
+    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/ui": "^4.1.10",
+    "oxfmt": "^0.61.0",
+    "oxlint": "^1.76.0",
+    "pretty-quick": "^4.2.2",
+    "rimraf": "^6.1.3",
+    "rolldown": "1.2.1",
+    "tslib": "^2.8.1",
+    "typescript": "^6.0.3",
+    "valibot": "^1.4.2",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "@bemedev/better-set": "^0.2.1",
+    "@bemedev/typings": "^1.3.0"
+  },
+  "peerDependencies": {
+    "@bemedev/app": "workspace:^",
+    "valibot": "^1.4.2"
+  }
+}
