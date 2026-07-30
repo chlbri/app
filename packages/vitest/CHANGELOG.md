@@ -5,6 +5,26 @@
 <details>
 <summary>
 
+## **[1.8.0] - 30/07/2026** => _02:15_
+
+</summary>
+
+### Dependencies
+
+- **Peer Dependencies**: Update `vitest` peer dependency to `^4.1.10` and
+  remove `@bemedev/typings`.
+- **Dependencies**: Upgrade build tool dependencies including `rolldown` to
+  `1.2.1`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.7.0] - 02/07/2026** => _10:39_
 
 </summary>

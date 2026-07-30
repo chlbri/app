@@ -30,10 +30,6 @@
     "type": "git",
     "url": "https://github.com/chlbri/app"
   },
-  "workspaces": [
-    "packages/app",
-    "packages/app-vitest"
-  ],
   "type": "module",
   "scripts": {
     "pnpm:devPreinstall": "node -e \"const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); const version=require('child_process').execSync('pnpm -v').toString().trim(); pkg.packageManager='pnpm@' + version; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\\n');\"",
@@ -50,7 +46,8 @@
     "ci": "CI=$(date +%s) && pnpm run _ci && echo \"\n✅ CI takes $(($(date +%s) - CI))s\n\"",
     "ci:admin": "CI_ADMIN=$(date +%s) && pnpm run rinit && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_ADMIN))s\n\"",
     "rm": "pnpm run rimraf -- node_modules pnpm-lock.yaml && pnpm clean lockfile",
-    "up": "pnpm -r update --latest !typescript && pnpm dlx npm-check-updates -w -u --peer --dep peer,optional,prod",
+    "up": "pnpm -r update --latest !typescript && pnpm run check-updates",
+    "check-updates": "pnpm dlx npm-check-updates -w -u --dep peer,optional,prod",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -86,7 +83,7 @@
     "oxlint": "^1.76.0",
     "pretty-quick": "^4.2.2",
     "rimraf": "^6.1.3",
-    "rolldown": "1.2.0",
+    "rolldown": "1.2.1",
     "rxjs": "^7.8.2",
     "ts-morph": "^28.0.0",
     "tsc-alias": "^1.9.1",

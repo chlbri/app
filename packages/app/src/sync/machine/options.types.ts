@@ -20,6 +20,7 @@ import type {
   AnyMachine,
   CommonConfig3,
   SimpleMachineOptions2,
+  SwapFunction_F,
 } from '#common/machine';
 import type { RegisterOptions } from '#registry';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -192,6 +193,7 @@ export type SyncAddOption<
   isNotDefined: SyncDefineGuard_F<E, Pc, Tc, T>;
   isValue: SyncValueCheckerGuard_F<E, Pc, Tc, T>;
   isNotValue: SyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  swap: SwapFunction_F<E, Pc, Tc, T>;
   assign: SyncAssignAction_F<E, Pc, Tc, T>;
   batch: SyncBatchAction_F<E, Pc, Tc, T>;
   filter: SyncFilterAction_F<E, Pc, Tc, T>;

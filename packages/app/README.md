@@ -12,9 +12,6 @@ separately, generate types automatically.**
 
 ## Philosophy
 
-<details>
-<summary>Expand</summary>
-
 ### The machine defines _what can happen_. The interpreter _makes it happen_.
 
 A machine is **purely declarative**. Its configuration is plain data: state
@@ -63,8 +60,6 @@ in the config. This is intentional:
 An **emitter** is a pausable stream the machine _listens to_. It never
 receives events from the machine. A **child** is a nested interpreter the
 parent can _talk to_.
-
-</details>
 
 ## Installation
 
@@ -115,7 +110,7 @@ await service[Symbol.asyncDispose]();
 ## Table of Contents
 
 - [Philosophy](#philosophy)
-  - [The machine defines what can happen. The interpreter makes it happen.](#the-machine-defines-what-can-happen-the-interpreter-makes-it-happen)
+  - [The machine defines _what can happen_. The interpreter _makes it happen_.](#the-machine-defines-what-can-happen-the-interpreter-makes-it-happen)
   - [Names, not references](#names-not-references)
   - [Actors — two kinds of external work](#actors--two-kinds-of-external-work)
 - [Installation](#installation)
@@ -123,13 +118,11 @@ await service[Symbol.asyncDispose]();
 - [1. Machine Configuration](#1-machine-configuration)
   - [`createConfig(config)`](#createconfigconfig)
   - [Synchronous vs Asynchronous Machines](#synchronous-vs-asynchronous-machines)
-  - [Strict Configuration Type Checking (NoExtraKeysConfig)](#strict-configuration-type-checking-noextrakeysconfig)
+  - [Strict Configuration Type Checking (`NoExtraKeysConfig`)](#strict-configuration-type-checking-noextrakeysconfig)
 - [2. Typings System](#2-typings-system)
-  - [Primitives](#primitives)
-  - [Object schemas](#object-schemas)
-  - [Collections](#collections)
-  - [Advanced types](#advanced-types)
-  - [Full machine typings example](#full-machine-typings-example)
+  - [Schema Builders](#schema-builders)
+  - [Supported Schemas](#supported-schemas)
+  - [Full Machine Typings Example](#full-machine-typings-example)
 - [3. Interpreter](#3-interpreter)
   - [Adding options at runtime](#adding-options-at-runtime)
 - [4. State Subscriptions](#4-state-subscriptions)
@@ -137,12 +130,18 @@ await service[Symbol.asyncDispose]();
   - [Subscribe to specific events](#subscribe-to-specific-events)
 - [5. Actions](#5-actions)
   - [5.1 assign](#51-assign)
-  - [5.2 voidAction](#52-voidaction)
-  - [5.3 batch](#53-batch)
-  - [5.4 filter & erase](#54-filter--erase)
-  - [5.5 resend & forceSend](#55-resend--forcesend)
-  - [5.6 Async actions & AsyncOptions](#56-async-actions--asyncoptions)
+  - [5.2 swap](#52-swap)
+  - [5.3 voidAction](#53-voidaction)
+  - [5.4 batch](#54-batch)
+  - [5.5 filter & erase](#55-filter--erase)
+  - [5.6 debounce](#56-debounce)
+  - [5.7 sendTo](#57-sendto)
+  - [5.8 resend & forceSend](#58-resend--forcesend)
+  - [5.9 Activity & Timer Lifecycle Actions](#59-activity--timer-lifecycle-actions)
+  - [5.10 Async actions & AsyncOptions (AsyncMachine vs SyncMachine)](#510-async-actions--asyncoptions-asyncmachine-vs-syncmachine)
 - [6. Guards](#6-guards)
+  - [6.1 Built-in Guard Helpers](#61-built-in-guard-helpers)
+  - [6.2 Custom & Async Predicates](#62-custom--async-predicates)
   - [Using guards in config](#using-guards-in-config)
   - [AND/OR guard composition](#andor-guard-composition)
 - [7. Transitions: on, after, always](#7-transitions-on-after-always)
@@ -162,7 +161,6 @@ await service[Symbol.asyncDispose]();
 - [11. Tags](#11-tags)
   - [Tags in action callbacks](#tags-in-action-callbacks)
 - [12. Registry & Code Generation](#12-registry--code-generation)
-  - [CLI Binary Entry Point](#cli-binary-entry-point)
   - [12.1 Machine file convention](#121-machine-file-convention)
   - [12.2 CLI: generate](#122-cli-generate)
   - [12.3 CLI: watch / dev](#123-cli-watch--dev)
@@ -179,8 +177,6 @@ await service[Symbol.asyncDispose]();
   - [14.4 `betterTimeout`](#144-bettertimeout)
 - [15. API Reference](#15-api-reference)
   - [Machine creation](#machine-creation)
-    - [`createMachine(config, types?)`](#createmachineconfig-types)
-    - [`createConfig(config)`](#createconfigconfig-1)
   - [Machine methods](#machine-methods)
   - [Utility helper exports](#utility-helper-exports)
   - [`interpret(machine, options?)`](#interpretmachine-options)
@@ -190,6 +186,7 @@ await service[Symbol.asyncDispose]();
   - [Transition configuration](#transition-configuration)
   - [`Pausable<T>` interface](#pausablet-interface)
   - [Typings utilities](#typings-utilities)
+  - [Advanced Exported Types](#advanced-exported-types)
   - [CLI](#cli)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
@@ -201,9 +198,6 @@ await service[Symbol.asyncDispose]();
 ---
 
 ## 1. Machine Configuration
-
-<details>
-<summary>Expand</summary>
 
 `createMachine(config, types?)` is the entry point. The first argument is
 the machine config; the second is optional type information.
@@ -322,14 +316,9 @@ using correct keywords.
 
 <br/>
 
-</details>
-
 ---
 
 ## 2. Typings System
-
-<details>
-<summary>Expand</summary>
 
 TypeScript cannot always infer complex generic types from nested object
 literals alone. `@bemedev/app` relies on `@bemedev/typings` to let you
@@ -411,14 +400,9 @@ const machine = createMachine(
 
 <br/>
 
-</details>
-
 ---
 
 ## 3. Interpreter
-
-<details>
-<summary>Expand</summary>
 
 The interpreter is the runtime engine. It receives a configured machine,
 holds state and context, processes events, schedules timers, and manages
@@ -490,14 +474,9 @@ const enrichedService = service.provideOptions(({ voidAction }) => ({
 
 <br/>
 
-</details>
-
 ---
 
 ## 4. State Subscriptions
-
-<details>
-<summary>Expand</summary>
 
 ### Subscribe to all state changes
 
@@ -535,28 +514,26 @@ sub.close();
 
 <br/>
 
-</details>
-
 ---
 
 ## 5. Actions
 
-<details>
-<summary>Expand</summary>
-
 Actions are **side-effects** that run during transitions. They are always
-declared by name in the config and implemented in `provideOptions` /
-`addOptions`. The library provides a set of **action helpers** that cover
-the most common patterns.
+declared by name in the config and implemented using options helpers in
+`createOptions`, `provideOptions`, or `addOptions`. The library provides a
+rich set of **action helpers** that cover state mutation, side-effects,
+event sending, and activity/timer management.
 
-All helpers are injected as parameters of the `provideOptions` callback:
+All helpers are injected as parameters of the options helper callback:
 
 ```typescript
-machine.provideOptions(({
-  assign, voidAction, batch, filter, erase,
-  resend, forceSend, isValue, isNotValue,
+// Create strongly-typed options for Sync or Async machines
+const options = machine.createOptions(({
+  assign, swap, voidAction, batch, filter, erase, debounce,
+  sendTo, resend, forceSend,
   pauseActivity, resumeActivity, stopActivity,
-  sendTo,
+  pauseTimer, resumeTimer, stopTimer,
+  isValue, isNotValue, isDefined, isNotDefined,
 }) => ({
   actions:  { ... },
   guards:   { ... },
@@ -567,7 +544,8 @@ machine.provideOptions(({
 
 ### 5.1 assign
 
-Updates context values using decomposed dot-notation paths.
+Updates context values using decomposed dot-notation paths. Supports
+single-key assignments or multi-variable array assignments.
 
 ```typescript
 actions: {
@@ -584,6 +562,12 @@ actions: {
     count: 0,
   })),
 
+  // Assign multiple variables from an array-returning function
+  updateCoordinates: assign(
+    ['context.x', 'context.y'],
+    () => [100, 200],
+  ),
+
   // Scoped to an actor event — runs only when that actor emits
   storeData: assign('context.items', {
     'dataStream::next':  ({ payload }) => [payload],
@@ -595,15 +579,28 @@ actions: {
 The path follows `@bemedev/decompose` conventions: `'context'`,
 `'context.field'`, `'context.nested.deep'`.
 
-You can also perform multi-variable assignments by passing an array of
-keys:
+### 5.2 swap
+
+Computes new context values based on a map dictionary or function mapping
+powered by `@bemedev/function-swap`.
 
 ```typescript
-// Assign multiple variables from an array-returning function
-updateCoordinates: assign(['context.x', 'context.y'], () => [100, 200]);
+actions: {
+  // Swap discrete values directly at a context path
+  toggleStatus: swap('context.status', {
+    idle: 'active',
+    active: 'paused',
+    paused: 'idle',
+  }),
+
+  // Compute swapped output dynamically
+  cycleTheme: swap('context.theme', currentTheme =>
+    currentTheme === 'light' ? 'dark' : 'light'
+  ),
+}
 ```
 
-### 5.2 voidAction
+### 5.3 voidAction
 
 Side-effect only — returns nothing, never modifies context.
 
@@ -622,7 +619,7 @@ actions: {
 }
 ```
 
-### 5.3 batch
+### 5.4 batch
 
 Groups multiple actions into a single named action. Useful when a
 transition needs to perform several operations atomically.
@@ -643,7 +640,7 @@ actions: {
 }
 ```
 
-### 5.4 filter & erase
+### 5.5 filter & erase
 
 **`filter`** — removes elements from arrays, object arrays, or records
 stored in context:
@@ -661,7 +658,8 @@ actions: {
 }
 ```
 
-**`erase`** — sets a context property to `undefined`:
+**`erase`** — sets a context property to `undefined` (removing it from
+context):
 
 ```typescript
 actions: {
@@ -675,9 +673,37 @@ actions: {
 }
 ```
 
-### 5.5 resend & forceSend
+### 5.6 debounce
 
-Re-dispatch events from within an action.
+Schedules a debounced context update after a specified time delay `ms`
+under a unique identifier `id`.
+
+```typescript
+actions: {
+  searchDebounced: debounce(
+    assign('context.results', async ({ context }) => fetchResults(context.query)),
+    { id: 'search-query', ms: 300 }
+  ),
+}
+```
+
+### 5.7 sendTo
+
+Sends an event to a child service or actor from within an action.
+
+```typescript
+actions: {
+  // Send an event to child actor 'childWorker'
+  notifyChild: sendTo(({ context }) => ({
+    to: 'childWorker',
+    event: { type: 'PING', payload: context.id },
+  })),
+}
+```
+
+### 5.8 resend & forceSend
+
+Re-dispatch events from within an action back to the current machine.
 
 - **`resend(event)`** — only dispatches if the machine is not in a blocked
   state (e.g. `'stopped'`).
@@ -690,26 +716,48 @@ actions: {
 }
 ```
 
-### 5.6 Async actions & AsyncOptions
+### 5.9 Activity & Timer Lifecycle Actions
 
-All action helpers (`assign`, `voidAction`, `sendTo`) accept `async`
-functions. The interpreter's action pipeline is fully async and awaits each
-step sequentially.
+Action helpers to manage active activity actors and timers directly:
 
-You can configure execution behavior by passing an options object as the
-last argument:
-
-- `catch`: A curried function `(err) => Action` that handles rejections
-  inline. If omitted, errors flow to the interpreter's internal `_addError`
-  channel.
-- `then`: An optional action to execute sequentially after successful
-  resolution.
-- `max`: An optional timeout in milliseconds. If execution exceeds this, it
-  is aborted.
+- **`pauseActivity(name)`**, **`resumeActivity(name)`**,
+  **`stopActivity(name)`**
+- **`pauseTimer(name)`**, **`resumeTimer(name)`**, **`stopTimer(name)`**
 
 ```typescript
 actions: {
-  // Async assign with inline catch and then chaining
+  pauseUpload:   pauseActivity('uploadWorker'),
+  resumeUpload:  resumeActivity('uploadWorker'),
+  stopUpload:    stopActivity('uploadWorker'),
+
+  pauseTimeout:  pauseTimer('sessionTimer'),
+  resumeTimeout: resumeTimer('sessionTimer'),
+  cancelTimeout: stopTimer('sessionTimer'),
+}
+```
+
+### 5.10 Async actions & AsyncOptions (AsyncMachine vs SyncMachine)
+
+In **`AsyncMachine`** (created via `createAsyncMachine` or
+`createMachine`), action helpers (`assign`, `voidAction`, `sendTo`) accept
+`async` functions and support an optional `AsyncOptions` configuration
+object as their final parameter:
+
+- `max`: Optional timeout in milliseconds. If execution exceeds `max` ms,
+  it is aborted via a timeout exception (`withTimeout`).
+- `catch`: A curried function `(err) => Action` that captures exceptions
+  and executes a fallback action inline. If omitted, rejections flow to the
+  interpreter's internal error channel.
+- `then`: An optional post-action `(state) => Action` executed sequentially
+  after successful resolution.
+
+> **Note:** In **`SyncMachine`** (`createSyncMachine`), action execution is
+> purely synchronous; `AsyncOptions` (`max`, `catch`, `then`) are not used
+> in synchronous mode.
+
+```typescript
+actions: {
+  // Async assign with timeout limit, inline catch, and then chaining
   loadUser: assign(
     'context.user',
     async ({ event }) => {
@@ -717,6 +765,9 @@ actions: {
       return res.json();
     },
     {
+      // Enforce a 5-second timeout limit
+      max: 5000,
+
       // Handle rejection by assigning the error message to context
       catch: (err) => assign('context.error', () => err.message),
 
@@ -724,43 +775,68 @@ actions: {
       then: voidAction(({ context }) => {
         console.log(`User ${context.user.name} loaded successfully!`);
       }),
-
-      // Enforce a 5-second timeout limit
-      max: 5000,
     },
   ),
 
-  // Async void — no options → errors propagate to the interpreter
-  trackAnalytics: voidAction(
-    async ({ context }) => {
-      await analytics.track('state_change', { userId: context.userId });
-    },
+  // Async sendTo with timeout and error handler
+  dispatchTask: sendTo(
+    async ({ context }) => ({
+      to: 'workerService',
+      event: { type: 'PROCESS', payload: await prepareData(context) },
+    }),
+    {
+      max: 3000,
+      catch: (err) => voidAction(() => console.error('Dispatch failed:', err)),
+    }
   ),
 }
 ```
 
 <br/>
 
-</details>
-
 ---
 
 ## 6. Guards
-
-<details>
-<summary>Expand</summary>
 
 Guards are **predicates** that gate transitions. They receive the current
 state snapshot and return a `boolean` (or `Promise<boolean>` in async
 machines).
 
-```typescript
-machine.provideOptions(({ isValue, isNotValue }) => ({
-  guards: {
-    // Built-in helpers — compare a context path to a value
-    isEmpty: isValue('context.items', []),
-    hasToken: isNotValue('context.pContext.token', undefined),
+### 6.1 Built-in Guard Helpers
 
+All guard helpers evaluate context properties using decomposed path
+strings:
+
+- **`isValue(key, expectedValue)`** — returns `true` if property at `key`
+  strictly equals `expectedValue`.
+- **`isNotValue(key, expectedValue)`** — returns `true` if property at
+  `key` does not equal `expectedValue`.
+- **`isDefined(key)`** — returns `true` if property at `key` is defined
+  (neither `undefined` nor `null`).
+- **`isNotDefined(key)`** — returns `true` if property at `key` is
+  `undefined` or `null`.
+
+```typescript
+machine.createOptions(
+  ({ isValue, isNotValue, isDefined, isNotDefined }) => ({
+    guards: {
+      // Check property values
+      isEmpty: isValue('context.items', []),
+      hasToken: isNotValue('context.pContext.token', undefined),
+
+      // Check presence or absence
+      hasUserData: isDefined('context.user'),
+      isUnauthenticated: isNotDefined('context.session'),
+    },
+  }),
+);
+```
+
+### 6.2 Custom & Async Predicates
+
+```typescript
+machine.provideOptions(({ isValue }) => ({
+  guards: {
     // Synchronous custom predicate
     isAuthenticated: ({ context }) =>
       context.token !== undefined && !isExpired(context.token),
@@ -769,7 +845,7 @@ machine.provideOptions(({ isValue, isNotValue }) => ({
     isValidInput: ({ event }) =>
       event.type === 'SUBMIT' && event.payload.value.length > 0,
 
-    // Async predicate — only available in AsyncInterpreter
+    // Async predicate — available in AsyncMachine / AsyncInterpreter
     // A rejected promise resolves to false (error-safe)
     hasPermission: async ({ context }) => {
       const res = await fetch(`/api/permissions/${context.userId}`);
@@ -828,14 +904,9 @@ on: {
 
 <br/>
 
-</details>
-
 ---
 
 ## 7. Transitions: on, after, always
-
-<details>
-<summary>Expand</summary>
 
 ### `on` — event-driven
 
@@ -924,14 +995,9 @@ states: {
 
 <br/>
 
-</details>
-
 ---
 
 ## 8. Activities
-
-<details>
-<summary>Expand</summary>
 
 An **activity** is an action that fires **repeatedly** on a named interval
 while the state is active. It supports **pause**, **resume**, and **stop**
@@ -984,14 +1050,9 @@ it permanently for the current state visit.
 
 <br/>
 
-</details>
-
 ---
 
 ## 9. Actors: Emitters
-
-<details>
-<summary>Expand</summary>
 
 > **Core principle — emitters are NEVER touched during the flow.**
 
@@ -1150,14 +1211,9 @@ states: {
 
 <br/>
 
-</details>
-
 ---
 
 ## 10. Actors: Children
-
-<details>
-<summary>Expand</summary>
 
 A **child actor** is a nested interpreter. The parent can send events to it
 via `sendTo`, and the child's events bubble up via declared `on` handlers.
@@ -1220,14 +1276,9 @@ actors: {
 
 <br/>
 
-</details>
-
 ---
 
 ## 11. Tags
-
-<details>
-<summary>Expand</summary>
 
 Tags are **metadata labels** on states. They let consumers ask "what
 category is the machine in?" without hard-coding state names. A state can
@@ -1274,14 +1325,9 @@ union** — enabling narrowing inside actions:
 
 <br/>
 
-</details>
-
 ---
 
 ## 12. Registry & Code Generation
-
-<details>
-<summary>Expand</summary>
 
 `@bemedev/app` ships a **CLI and a type-level registry** that together give
 you **full compile-time types for every machine in your project** — paths,
@@ -1438,14 +1484,9 @@ console.log(Object.keys(MACHINES));
 
 <br/>
 
-</details>
-
 ---
 
 ## 13. Legacy Options (\_legacy)
-
-<details>
-<summary>Expand</summary>
 
 Both `provideOptions` and `addOptions` receive a second parameter
 `{ _legacy }` containing **all options defined in previous calls**. This
@@ -1507,14 +1548,9 @@ service.addOptions(({ batch }, { _legacy }) => ({
 
 <br/>
 
-</details>
-
 ---
 
 ## 14. Internal Utilities
-
-<details>
-<summary>Expand</summary>
 
 These lower-level building blocks are used by the library internally. They
 are exported for advanced use cases such as building tooling, custom
@@ -1614,14 +1650,9 @@ betterTimeout({
 
 <br/>
 
-</details>
-
 ---
 
 ## 15. API Reference
-
-<details>
-<summary>Expand</summary>
 
 ### Machine creation
 
@@ -1791,8 +1822,6 @@ app dev      [--output path] [--excludes dirs...]   # alias for watch
 ```
 
 <br/>
-
-</details>
 
 ---
 

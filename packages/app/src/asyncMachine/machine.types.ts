@@ -8,6 +8,7 @@ import type {
   AnyMachine,
   CommonConfig3,
   SimpleMachineOptions2,
+  SwapFunction_F,
 } from '#common/machine';
 import type {
   ActorsConfigMap,
@@ -209,6 +210,7 @@ export type AsyncAddOption<
   isNotDefined: AsyncDefineGuard_F<E, Pc, Tc, T>;
   isValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
   isNotValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  swap: SwapFunction_F<E, Pc, Tc, T>;
   assign: AsyncAssignAction_F<E, Pc, Tc, T>;
   batch: AsyncBatchAction_F<E, Pc, Tc, T>;
   filter: AsyncFilterAction_F<E, Pc, Tc, T>;

@@ -1,6 +1,11 @@
 import type { ActionResult, AsyncAction2, WithDescriber } from '#actions';
 import type { NoExtraKeysActorConfig } from '#actors';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type {
+  ActorsConfigMap,
+  EventObject,
+  EventsMap,
+  EventStrings,
+} from '#events';
 
 import type {
   FlatMapN,
@@ -11,6 +16,8 @@ import type {
   StateValue,
   TargetDef,
   NodeConfig3,
+  StateExtended,
+  StatePextended,
 } from '#states';
 import type {
   AsyncTransition,
@@ -19,6 +26,10 @@ import type {
 } from '#transitions';
 import type { Fn } from '#utils';
 import type { Identitfy, NotUndefined } from '@bemedev/app-utils-bemedev';
+import type {
+  DecomposeString,
+  Decompose as _Decompose,
+} from '@bemedev/function-swap';
 import type {
   ObjectT,
   PrimitiveObject,
@@ -323,3 +334,24 @@ export type CommonChild<
   on: Identitfy<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };
+
+export type SwapFunction_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = <const F2 extends Fn, const Ev extends E['type'] = string>(
+  fn: F2,
+  event?: Ev,
+) => (
+  types: DecomposeString<
+    [
+      EventStrings extends Ev
+        ? StateExtended<E, Pc, Tc, T>
+        : Required<
+            StatePextended<Extract<E, { type: Ev }>['payload'], Pc, Tc, T>
+          >,
+    ],
+    _Decompose<Parameters<F2>>
+  >,
+) => FnR<E, Pc, Tc, T, ReturnType<F2>>;

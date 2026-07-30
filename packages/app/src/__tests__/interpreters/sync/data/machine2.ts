@@ -148,6 +148,7 @@ export const _machine2 = createMachine(_config2, {
     voidAction,
     debounce: _debounce,
     batch,
+    swap,
   }) => ({
     actions: {
       inc: assign(
@@ -161,9 +162,16 @@ export const _machine2 = createMachine(_config2, {
       ),
       sendPanelToUser: voidAction(() => console.log('sendPanelToUser')),
       askUsertoInput: voidAction(() => console.log('Input, please !!')),
-      write: assign('context.input', {
-        WRITE: ({ payload: { value } }) => value,
-      }),
+      // write: assign('context.input', {
+      //   WRITE: ({ payload: { value } }) => value,
+      // }),
+      write: assign(
+        'context.input',
+        swap(
+          (value: string) => value,
+          'WRITE',
+        )({ '[0]': '[0].payload.value' }),
+      ),
       insertData: assign('context.data', ({ context }) =>
         fakeDB
           .filter(item => item.name.includes(context?.input ?? ''))

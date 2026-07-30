@@ -32,7 +32,6 @@ import type {
  * A class representing a state machine.
  * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
- * @template : {@linkcode Config} [C] - The configuration type of the machine.
  * @template Pc : The private context type of the machine.
  * @template : {@linkcode PrimitiveObject} [Pc] - The context type of the machine.
  * @template : {@linkcode GetEventsFromConfig}<{@linkcode C}> [E] - The events map type derived from the configuration.
@@ -144,6 +143,7 @@ export class SyncMachine<
         isNotValue,
         isDefined,
         isNotDefined,
+        swap: this.swap,
 
         assign: (keys, fn) => {
           const keysArray = Array.isArray(keys) ? keys : [keys];

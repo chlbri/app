@@ -5,6 +5,26 @@
 <details>
 <summary>
 
+## **[1.8.0] - 30/07/2026** => _02:15_
+
+</summary>
+
+### Dependencies
+
+- **Peer Dependencies**: Update `react` peer dependency to `^19.2.8` and
+  remove `@bemedev/decompose`.
+- **Dependencies**: Upgrade build tool dependencies including `rolldown` to
+  `1.2.1`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.7.0] - 02/07/2026** => _10:39_
 
 </summary>

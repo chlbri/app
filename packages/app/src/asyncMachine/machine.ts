@@ -165,6 +165,7 @@ export class AsyncMachine<
         isNotValue,
         isDefined,
         isNotDefined,
+        swap: this.swap,
 
         assign: (keys, fn, options?) => {
           const keysArray = Array.isArray(keys) ? keys : [keys];
@@ -194,6 +195,8 @@ export class AsyncMachine<
 
             const execute = async () => {
               const rawResult = await _fn(state);
+              console.warn('result', '=>', 'rawResult');
+
               if (!isArray) {
                 return recompose({ [keysArray[0]]: rawResult });
               }

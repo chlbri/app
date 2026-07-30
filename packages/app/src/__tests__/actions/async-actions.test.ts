@@ -25,16 +25,25 @@ const TINY_DELAY = 200; // ms — resolves fast enough not to hit a 5 s max
 
 describe('Async action helpers', () => {
   describe('#01 => assign — async fn, no options', () => {
-    const machine = _machine1.provideOptions(({ assign }) => ({
+    const machine = _machine1.provideOptions(({ assign, swap }) => ({
       actions: {
         loadUser: assign(
           'context.name',
-          async () => {
+          swap(async () => {
             await sleep(TINY_DELAY);
+            console.warn('ddd');
             return 'Alice';
-          },
+          })({}),
           { catch: emptyActionFn },
         ),
+        // loadUser: assign(
+        //   'context.name',
+        //   async () => {
+        //     await sleep(TINY_DELAY);
+        //     return 'Alice';
+        //   },
+        //   { catch: emptyActionFn },
+        // ),
       },
     }));
 

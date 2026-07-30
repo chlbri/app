@@ -30,7 +30,7 @@ import {
   type StatePextended,
   type StateValue,
 } from '#states';
-import { constructEvents, merge } from '#utils';
+import { constructEvents, merge, reduceFnMap } from '#utils';
 import type {
   AllowedNames,
   Fn,
@@ -38,6 +38,7 @@ import type {
 } from '@bemedev/app-utils-bemedev';
 import { _unknown } from '@bemedev/app-utils-bemedev';
 import { decompose, type Decompose } from '@bemedev/decompose';
+import { swap as _swap } from '@bemedev/function-swap';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import type {
@@ -48,6 +49,7 @@ import type {
   GetIO_F,
   MachineType,
   SimpleMachineOptions2,
+  SwapFunction_F,
 } from './types';
 
 export abstract class CommonMachine<
@@ -423,6 +425,13 @@ export abstract class CommonMachine<
     this.#getInitialKeys();
     this.__eventsList = constructEvents(this.#config as any);
   }
+
+  swap: SwapFunction_F<Eo, Pc, Tc, Ta> = (fn, ev) => types => {
+    const _swappped = _swap(fn).constraint()(types);
+    const __fn = ev ? { [ev]: _swappped } : _swappped;
+    const _fn = reduceFnMap(__fn, ...this.__eventsList);
+    return _fn;
+  };
 
   /**
    * The accessor of context for this {@linkcode Machine}.

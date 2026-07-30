@@ -6,8 +6,8 @@ import type {
   EventsMap,
   SimpleMachineOptions2,
   SyncInterpreter,
+  PrimitiveObject,
 } from '@bemedev/app/types';
-import type { PrimitiveObject } from '@bemedev/typings';
 import type { VitestUtils } from 'vitest';
 import type { ConstructTestsResult, Option } from './types';
 

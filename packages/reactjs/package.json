@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-reactjs",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Middleware between @bemedev/app and reactjs",
   "keywords": [
     "app",
@@ -106,7 +106,7 @@
     "pretty-quick": "^4.2.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "rolldown": "1.2.0",
+    "rolldown": "1.2.1",
     "rolldown-plugin-dts": "^0.27.14",
     "size-limit": "^13.0.2",
     "tslib": "^2.8.1",
@@ -116,8 +116,7 @@
   },
   "peerDependencies": {
     "@bemedev/app": "workspace:^",
-    "@bemedev/decompose": "2.2.0",
-    "react": "^18.0.0 || ^19.0.0"
+    "react": "^19.2.8"
   },
   "size-limit": [
     {

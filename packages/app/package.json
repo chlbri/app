@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "A reprogramming method to code better",
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -152,7 +152,6 @@
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "^1.1.1",
-    "@bemedev/function-swap": "^0.2.4",
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/sequence": "^1.0.0",
@@ -170,7 +169,7 @@
     "oxlint": "^1.76.0",
     "pretty-quick": "^4.2.2",
     "rimraf": "^6.1.3",
-    "rolldown": "1.2.0",
+    "rolldown": "1.2.1",
     "rxjs": "^7.8.2",
     "tsc-alias": "^1.9.1",
     "tslib": "^2.8.1",
@@ -187,6 +186,7 @@
     "@bemedev/better-set": "^0.2.1",
     "@bemedev/boolean-recursive": "^0.0.3",
     "@bemedev/decompose": "^2.3.0",
+    "@bemedev/function-swap": "^0.2.5",
     "@bemedev/interval2": "^1.0.1",
     "@bemedev/pipe": "^1.6.1",
     "@bemedev/scheduler": "^1.1.0",

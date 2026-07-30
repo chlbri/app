@@ -11,6 +11,43 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.8.0] - 30/07/2026** => _02:15_
+
+</summary>
+
+### Features
+
+- **Assign Helper**: Add support for multi-variable assignments in state
+  machine actions.
+- **State Machine Core**: Introduce synchronous (`SyncMachine`) and
+  asynchronous (`AsyncMachine`) interpreters with unified `interpret`
+  interface.
+- **Async Actions**: Enhance async actions with error handling, timeout
+  options, and error propagation (`errorFn`).
+
+### Refactor
+
+- **Machine Actions**: Refactor machine actions to utilize
+  `@bemedev/function-swap`.
+- **Node Config**: Streamline `isNodeConfig` checks and state resolution
+  logic.
+- **Decompose Integration**: Update `@bemedev/decompose` integration across
+  machine type definitions and schemas.
+
+### Dependencies
+
+- **Dependencies**: Update `@bemedev/function-swap` to `^0.2.5` and upgrade
+  `rolldown` to `1.2.1`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.7.0] - 02/07/2026** => _10:39_
 
 </summary>

@@ -27,7 +27,6 @@ describe('machine coverage', () => {
       useData,
       useInput,
       useWrite,
-      // useConsole,
       start,
       pause,
       resume,
