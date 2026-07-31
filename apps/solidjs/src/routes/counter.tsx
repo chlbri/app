@@ -1,51 +1,44 @@
-import { interpret } from '@bemedev/app';
 import { useService } from '@bemedev/app-solidjs';
 import { createFileRoute } from '@tanstack/solid-router';
-import { createEffect, onMount } from 'solid-js';
 import { counterMachine } from '../machines/counter.machine';
-
-const service = interpret(counterMachine, {
-  context: { count: 0, step: 1 },
-});
+import { MachineConfig } from '../ui/components/MachineConfig';
 
 export const Route = createFileRoute('/counter')({
   component: () => {
-    onMount(service.start);
+    const service = Route.useRouteContext({
+      select: s => s.counterService,
+    })();
 
     // Subscriptions with options
-    const fullState = useService(service);
-    const countOnly = useService(service, {
-      selector: s => s.context.count,
-    });
-    const stateValue = useService(service, {
-      selector: s => {
-        return s.value;
-      },
-    });
-
-    createEffect(() => {
-      console.log('countOnly', countOnly());
-    });
-
-    const canStart = () => stateValue() === 'idle';
+    const hooks = useService(service);
+    const fullState = hooks.state();
+    const countOnly = () => fullState().context.count;
+    const stateValue = () => fullState().value;
+    const canStart = hooks.can('START');
 
     return (
-      <div class='max-w-4xl mx-auto space-y-8'>
+      <div class='max-w-5xl mx-auto space-y-8'>
         <div>
           <h2 class='text-3xl font-extrabold text-white'>
             Counter Machine Tester
           </h2>
           <p class='text-sm text-slate-400 mt-1'>
-            Testing{' '}
+            {'Testing '}
             <code class='text-indigo-400 font-mono'>
               useService(service, &#123; selector, equality &#125;)
-            </code>{' '}
-            signals from `@bemedev/app-solidjs`
+            </code>
+            {' signals from `@bemedev/app-solidjs`'}
           </p>
         </div>
 
+        <MachineConfig
+          config={counterMachine.config}
+          title='Counter Machine Configuration'
+          class='rounded-md'
+        />
+
         {/* Counter Visual Display */}
-        <div class='p-8 rounded-2xl bg-linear-to-b from-slate-900 to-slate-950 border border-slate-800 shadow-2xl flex flex-col items-center justify-center space-y-6'>
+        <div class='p-8 rounded-2xl bg-linear-to-b from-slate-900 to-slate-950 border border-slate-800 shadow-2xl flex flex-col items-center justify-center space-y-6 w-sm mx-auto'>
           <div class='text-center space-y-1'>
             <span class='text-xs uppercase font-bold tracking-widest text-slate-500'>
               Current Value
@@ -58,14 +51,16 @@ export const Route = createFileRoute('/counter')({
           <div class='flex items-center space-x-3'>
             <button
               onClick={() => service.send('DEC')}
-              class='w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xl border border-slate-700 flex items-center justify-center transition-all cursor-pointer'
+              class='w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xl border border-slate-700 flex items-center justify-center transition-all cursor-pointer disabled:opacity-40'
+              disabled={canStart()}
             >
               -
             </button>
 
             <button
               onClick={() => service.send('INC')}
-              class='w-12 h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-lg shadow-indigo-600/30 flex items-center justify-center transition-all cursor-pointer'
+              class='w-12 h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-lg shadow-indigo-600/30 flex items-center justify-center transition-all cursor-pointer disabled:opacity-40'
+              disabled={canStart()}
             >
               +
             </button>
@@ -98,7 +93,7 @@ export const Route = createFileRoute('/counter')({
             State Inspector
           </h3>
           <div class='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div class='p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2'>
+            <div class='p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 flex flex-col'>
               <span class='text-slate-500 font-bold'>
                 State Value Accessor:
               </span>
@@ -106,7 +101,7 @@ export const Route = createFileRoute('/counter')({
                 {JSON.stringify(stateValue(), null, 2)}
               </pre>
             </div>
-            <div class='p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2'>
+            <div class='p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 flex flex-col'>
               <span class='text-slate-500 font-bold'>
                 Full Machine State Object:
               </span>
@@ -120,3 +115,5 @@ export const Route = createFileRoute('/counter')({
     );
   },
 });
+
+type TT = (typeof Route)['options']['context'];

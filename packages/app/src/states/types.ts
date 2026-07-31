@@ -9,7 +9,6 @@ import type { AsyncTransitions, TransitionsConfig } from '#transitions';
 import type {
   Equals,
   Keys,
-  SoA,
   UnionToIntersection,
 } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -207,29 +206,22 @@ export type ExtractTagsFromFlat<Flat extends FlatMapN> =
         : Tags
     : string;
 
+export type CommonState<
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = { context: Tc; status: WorkingStatus; value: StateValue; tags: T[] };
+
 export type State<
   E extends EventObject = EventObject,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = {
-  context: Tc;
-  status: WorkingStatus;
-  value: StateValue;
-  event: E;
-  tags?: SoA<T>;
-};
+> = { event: E } & CommonState<Tc, T>;
 
 export type StateP<
   E = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = {
-  context: Tc;
-  status: WorkingStatus;
-  value: StateValue;
-  payload: E;
-  tags?: SoA<T>;
-};
+> = { payload: E } & CommonState<Tc, T>;
 
 export type StateExtended<
   E extends EventObject = EventObject,

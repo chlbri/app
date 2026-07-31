@@ -449,7 +449,7 @@ export abstract class CommonInterpreter<
       context: this.__context,
       event: { type: INIT_EVENT, payload: {} } as any,
       value: this.__value,
-      tags: this.tags,
+      tags: toArray.typed(this.tags),
     };
 
     this.#collectEmitterConfigs();
@@ -1015,13 +1015,17 @@ export abstract class CommonInterpreter<
 
   protected abstract __presend: Fn<[event: Eo], any>;
 
-  get #possibleEvents() {
+  get possibleEvents() {
     return possibleEvents(this.#flat);
   }
 
+  canEvent = (event: Eo['type']) => {
+    return this.possibleEvents.includes(event);
+  };
+
   #cannotPerformEvents = (_event: EventArgObject<Eo>) => {
     const type = eventToType(_event);
-    const check = !this.#possibleEvents.includes(type);
+    const check = !this.possibleEvents.includes(type);
     return check;
   };
 
