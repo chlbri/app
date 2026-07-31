@@ -115,5 +115,3 @@ export const Route = createFileRoute('/counter')({
     );
   },
 });
-
-type TT = (typeof Route)['options']['context'];
