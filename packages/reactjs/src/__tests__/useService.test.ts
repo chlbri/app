@@ -1,31 +1,61 @@
 import { interpret } from '@bemedev/app';
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
-import { useService } from '../useService';
+import { createHooks, useService } from '../useService';
 import _machine from './common.machine';
 
-describe('Integration with @bemedev/app machine and interpret', () => {
+describe('#01 => useService', () => {
   const machine = _machine.provideOptions(({ assign }) => ({
     actions: {
-      increment: assign('context', ({ context }) => ({
-        count: context.count + 1,
-      })),
+      increment: assign(
+        'context.count',
+        ({ context }) => context.count + 1,
+      ),
     },
   }));
 
   const service = interpret(machine, { context: { count: 0 } });
 
   const { result } = renderHook(() => {
-    const count = useService(service, {
+    const _service = useService(service);
+    const all = _service.state();
+    const value = _service.state({ selector: s => s.value });
+    const count = _service.state({
       selector: s => s.context.count,
-      equality: (a, b) => a === b,
+      equals: (a, b) => a === b,
     });
-    const value = useService(service, { selector: s => s.value });
-    const all = useService(service);
-    return { count, value, all };
+
+    const canStart = _service.can('START');
+    const canAnd = _service.can.and('START', 'STOP');
+    const canOr = _service.can.or('START', 'STOP');
+    const canIncAndStop = _service.can.and('INC', 'STOP');
+
+    const isIdle = createHooks(service).isInside('idle');
+    const isOr = _service.isInside.or('idle', 'active');
+    const isAnd = _service.isInside('active', 'active.speed_low');
+    const isSpeedLow = _service.isInside('active.speed_low');
+    const isSpeedHigh = _service.isInside.and(
+      'active',
+      'active.speed_high',
+    );
+
+    return {
+      all,
+      value,
+      count,
+      canStart,
+      canAnd,
+      canOr,
+      canIncAndStop,
+      isIdle,
+      isOr,
+      isAnd,
+      isSpeedLow,
+      isSpeedHigh,
+    };
   });
 
-  test('#000 => ALL, service not started yet', () => {
+  test('#00 => ALL, service not started yet', () => {
     const expected = {
       status: 'idle',
       context: { count: 0 },
@@ -37,39 +67,124 @@ describe('Integration with @bemedev/app machine and interpret', () => {
     expect(result.current.all).toEqual(expected);
   });
 
-  test('#001 => count is 0', () => {
+  test('#01 => count should be 0', () => {
     expect(result.current.count).toBe(0);
   });
 
-  test('#002 => state is "idle"', () => {
+  test('#02 => state is "idle"', () => {
     expect(result.current.value).toBe('idle');
   });
 
-  test('#003 => starts the service', () => act(service.start));
-
-  test('#004 => sends START event', () => {
-    act(() => service.send('START'));
+  test('#03 => can START is true', () => {
+    expect(result.current.canStart).toBe(true);
   });
 
-  test('#005 => state transitions to active.speed_low', () => {
+  test('#04 => canAnd is false', () => {
+    expect(result.current.canAnd).toBe(false);
+  });
+
+  test('#05 => canOr is true', () => {
+    expect(result.current.canOr).toBe(true);
+  });
+
+  test('#06 => canIncAndStop is false', () => {
+    expect(result.current.canIncAndStop).toBe(false);
+  });
+
+  test('#07 => is idle is true', () => {
+    expect(result.current.isIdle).toBe(true);
+  });
+
+  test('#08 => state is "idle" or "active"', () => {
+    expect(result.current.isOr).toBe(true);
+  });
+
+  test('#09 => isAnd is false', () => {
+    expect(result.current.isAnd).toBe(false);
+  });
+
+  test('#10 => isSpeedLow is false', () => {
+    expect(result.current.isSpeedLow).toBe(false);
+  });
+
+  test('#11 => isSpeedHigh is false', () => {
+    expect(result.current.isSpeedHigh).toBe(false);
+  });
+
+  test('#12 => starts the service', () => act(() => service.start()));
+  test('#13 => sends START event', () => act(() => service.send('START')));
+
+  test('#14 => state transitions to active.speed_low', () => {
     expect(result.current.value).toEqual({ active: 'speed_low' });
   });
 
-  test('#006 => sends INC event', () => {
-    act(() => service.send('INC'));
+  test('#15 => can START is false', () => {
+    expect(result.current.canStart).toBe(false);
   });
 
-  test('#007 => count is 1', () => {
+  test('#16 => canOr is true', () => {
+    expect(result.current.canOr).toBe(true);
+  });
+
+  test('#17 => canIncAndStop is true', () => {
+    expect(result.current.canIncAndStop).toBe(true);
+  });
+
+  test('#18 => is idle is false', () => {
+    expect(result.current.isIdle).toBe(false);
+  });
+
+  test('#19 => state is "idle" or "active"', () => {
+    expect(result.current.isOr).toBe(true);
+  });
+
+  test('#20 => isAnd is true', () => {
+    expect(result.current.isAnd).toBe(true);
+  });
+
+  test('#21 => is speed_low', () => {
+    expect(result.current.isSpeedLow).toBe(true);
+  });
+
+  test('#22 => is speed_high is false', () => {
+    expect(result.current.isSpeedHigh).toBe(false);
+  });
+
+  test('#23 => sends ACCELERATE event', () => {
+    act(() => service.send('ACCELERATE'));
+  });
+
+  test('#24 => state transitions to active.speed_high', () => {
+    expect(result.current.value).toEqual({ active: 'speed_high' });
+  });
+
+  test('#25 => is speed_low is false', () => {
+    expect(result.current.isSpeedLow).toBe(false);
+  });
+
+  test('#26 => is speed_high is true', () => {
+    expect(result.current.isSpeedHigh).toBe(true);
+  });
+
+  test('#27 => sends DECELERATE event', () => {
+    act(() => service.send('DECELERATE'));
+  });
+
+  test('#28 => is speed_low is true', () => {
+    expect(result.current.isSpeedLow).toBe(true);
+  });
+
+  test('#29 => sends INC event', () => act(() => service.send('INC')));
+
+  test('#30 => count should be 1', () => {
     expect(result.current.count).toBe(1);
   });
 
-  test('#008 => sends INC event', () => {
-    act(() => service.send('INC'));
-  });
+  test('#31 => sends INC event', () => act(() => service.send('INC')));
 
-  test('#009 => count is 2', () => {
+  test('#32 => count should be 2', () => {
     expect(result.current.count).toBe(2);
   });
 
-  test('#010 => stops the service', () => act(service.stop));
+  test('#33 => stops the service', () => act(() => service.stop()));
 });

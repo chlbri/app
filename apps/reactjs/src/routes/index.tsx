@@ -1,7 +1,7 @@
-import { createMachine, interpret } from '@bemedev/app';
+import { cn } from '#/components/ui/cn.ts';
+import { counterMachine } from '#/machines/counter';
+import { interpret } from '@bemedev/app';
 import { useService } from '@bemedev/app-reactjs';
-import { toArray } from '@bemedev/app/bemedev';
-import { type } from '@bemedev/typings';
 import { createFileRoute } from '@tanstack/react-router';
 import {
   Activity,
@@ -29,84 +29,15 @@ import {
   CardHeader,
   CardTitle,
 } from '../components/ui/card';
-import { decomposeSV } from '@bemedev/app/utils';
-import { cn } from '#/components/ui/cn.ts';
 
 export const Route = createFileRoute('/')({
   component: AppTestVisualizer,
 });
 
-// 1. Define state machine using @bemedev/app
-const machineDefinition = createMachine(
-  {
-    initial: 'idle',
-    states: {
-      idle: { tags: ['idle_state'], on: { START: '/active' } },
-      active: {
-        initial: 'speed_low',
-        tags: ['active_state'],
-        states: {
-          speed_low: { tags: ['mode_eco', 'low_speed'] },
-          speed_high: { tags: ['mode_turbo', 'high_speed'] },
-        },
-        on: {
-          INC: { actions: 'increment' },
-          DEC: { actions: 'decrement' },
-          ACCELERATE: {
-            target: '/active/speed_high',
-            actions: 'accelerate',
-          },
-          DECELERATE: {
-            target: '/active/speed_low',
-            actions: 'decelerate',
-          },
-          STOP: '/final',
-        },
-      },
-      final: { tags: ['completed'], on: { RESET: '/idle' } },
-    },
-  },
-  {
-    context: type({ count: 'number', speed: 'number' }),
-    eventsMap: type({
-      START: 'never',
-      STOP: 'never',
-      ACCELERATE: 'never',
-      DECELERATE: 'never',
-      INC: 'never',
-      DEC: 'never',
-      RESET: 'never',
-    }),
-    sync: true,
-  },
-).provideOptions(({ assign }) => ({
-  actions: {
-    increment: assign(
-      'context.count',
-      ({ context: { count, speed } }) => count + speed,
-    ),
-
-    decrement: assign('context.count', ({ context: { count, speed } }) =>
-      Math.max(count - speed, 0),
-    ),
-
-    accelerate: assign(
-      'context.speed',
-      ({ context }) => context.speed + 1,
-    ),
-
-    decelerate: assign('context.speed', ({ context }) =>
-      Math.max(context.speed - 1, 1),
-    ),
-  },
-}));
-
 function AppTestVisualizer() {
   // Create an interpreter service instance once
   const service = useMemo(() => {
-    return interpret(machineDefinition, {
-      context: { count: 0, speed: 1 },
-    });
+    return interpret(counterMachine, { context: { count: 0, speed: 1 } });
   }, []);
 
   // State log history
@@ -121,32 +52,28 @@ function AppTestVisualizer() {
   >([]);
 
   // 2. Reactively consume state machine using @bemedev/app-reactjs useService hook
+  const hooks = useService(service);
+
   // A. Full State Subscription
-  const fullState = useService(service);
+  const fullState = hooks.state();
 
   // B. Selected context count subscription
-  const count = useService(service, {
+  const count = hooks.state({
     selector: s => s.context.count,
-    equality: (a, b) => a === b,
+    equals: (a, b) => a === b,
   });
 
   // C. Selected state value subscription
-  const stateValue = useService(service, { selector: s => s.value });
+  const stateValue = hooks.state({ selector: s => s.value });
 
   // D. Selected tags subscription
-  const tags = useService(service, {
-    selector: s => toArray.typed(s.tags) ?? [],
-  });
+  const tags = hooks.state({ selector: s => s.tags });
+  const isReady = hooks.state({ selector: s => s.status !== 'idle' });
 
-  const can = (val: 'START' | 'STOP' | 'CLOSE') => {
-    if (val === 'START') return stateValue === 'idle';
-    else if (val === 'STOP') {
-      const dps = decomposeSV(stateValue);
-      return dps.includes('active');
-    } else {
-      return fullState.status !== 'idle' && fullState.status !== 'stopped';
-    }
-  };
+  const _canStart = hooks.can('START');
+  const canStart = isReady && _canStart;
+  const canReset = hooks.can('RESET');
+  const canStop = hooks.can('STOP');
 
   // Track service lifecycle & events
   const handleStartService = () => {
@@ -238,7 +165,7 @@ function AppTestVisualizer() {
                 </div>
                 <div className='flex items-center gap-2'>
                   <span
-                    className={`h-3 w-3 rounded-full ${can('STOP') ? 'bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50' : 'bg-rose-500'}`}
+                    className={`h-3 w-3 rounded-full ${canStop ? 'bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50' : 'bg-rose-500'}`}
                   />
                   <span className='font-semibold text-white capitalize'>
                     {fullState.status}
@@ -246,7 +173,7 @@ function AppTestVisualizer() {
                 </div>
               </div>
               <div className='h-8 w-px bg-slate-800' />
-              {can('CLOSE') ? (
+              {canStop ? (
                 <Button
                   variant='destructive'
                   size='sm'
@@ -383,7 +310,7 @@ function AppTestVisualizer() {
                       variant='outline'
                       size='icon'
                       onClick={() => sendEvent('DEC')}
-                      disabled={!can('STOP')}
+                      disabled={!canStop}
                     >
                       <Minus className='w-4 h-4' />
                     </Button>
@@ -391,7 +318,7 @@ function AppTestVisualizer() {
                       variant='default'
                       size='icon'
                       onClick={() => sendEvent('INC')}
-                      disabled={!can('STOP')}
+                      disabled={!canStop}
                     >
                       <Plus className='w-4 h-4' />
                     </Button>
@@ -416,7 +343,7 @@ function AppTestVisualizer() {
                   <Button
                     variant='default'
                     onClick={() => sendEvent('START')}
-                    disabled={!can('CLOSE') || !can('START')}
+                    disabled={!canStart}
                     className='flex space-x-2 min-w-max'
                   >
                     <Play className='w-4 h-4' /> ACTIVATE COUNTERS
@@ -425,7 +352,7 @@ function AppTestVisualizer() {
                   <Button
                     variant='secondary'
                     onClick={() => sendEvent('ACCELERATE')}
-                    disabled={!can('STOP')}
+                    disabled={!canStop}
                     className='gap-2'
                   >
                     <Flame className='w-4 h-4 text-amber-400' /> ACCELERATE
@@ -434,7 +361,7 @@ function AppTestVisualizer() {
                   <Button
                     variant='secondary'
                     onClick={() => sendEvent('DECELERATE')}
-                    disabled={!can('STOP')}
+                    disabled={!canStop}
                     className='gap-2'
                   >
                     <Gauge className='w-4 h-4 text-sky-400' /> DECELERATE
@@ -443,14 +370,14 @@ function AppTestVisualizer() {
                   <Button
                     variant='destructive'
                     onClick={() => sendEvent('STOP')}
-                    disabled={!can('STOP')}
+                    disabled={!canStop}
                     className='flex space-x-2 min-w-max'
                   >
                     <Square className='w-4 h-4' /> STOP COUNTERS
                   </Button>
                 </div>
 
-                {formattedStateValue === 'final' && (
+                {canReset && (
                   <div className='mt-4 pt-4 border-t border-slate-800 flex justify-end'>
                     <Button
                       variant='outline'
