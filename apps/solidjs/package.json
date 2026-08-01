@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prebuild": "pnpm --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-solidjs run -r --sort build",
     "dev": "vite dev",
     "build": "vite build",
     "start": "vite start",

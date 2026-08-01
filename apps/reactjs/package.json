@@ -6,6 +6,7 @@
     "#/*": "./src/*"
   },
   "scripts": {
+    "prebuild": "pnpm --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-reactjs run -r --sort build",
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
     "build": "vite build",
