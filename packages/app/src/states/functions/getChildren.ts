@@ -7,11 +7,11 @@ export type GetChildren_F = (str: string, ...keys: string[]) => string[];
  * @returns An array of keys that include the given string, excluding the string itself.
  */
 export const getChildren: GetChildren_F = (str, ...keys) => {
-  const noKeys = keys.length > 0;
+  const hasKeys = keys.length > 0;
   const out: string[] = [];
 
   /* v8 ignore else -- @preserve */
-  if (noKeys) {
+  if (hasKeys) {
     keys.forEach(key => {
       const notMatch = str !== key;
       const check3 = key.startsWith(str);

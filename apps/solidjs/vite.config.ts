@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 import viteSolid from 'vite-plugin-solid';
 
 export default defineConfig({
-  server: { port: 3002 },
+  server: { port: 3012 },
   resolve: { tsconfigPaths: true },
   plugins: [
     tailwindcss(),

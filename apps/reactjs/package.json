@@ -1,13 +1,11 @@
 {
-  "name": "reactjs",
+  "name": "@bemedev/app-reactjs-demo",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
-  "imports": {
-    "#/*": "./src/*"
-  },
   "scripts": {
     "prebuild": "pnpm --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-reactjs run -r --sort build",
-    "dev": "vite dev --port 3000",
+    "dev": "vite dev",
     "generate-routes": "tsr generate",
     "build": "vite build",
     "preview": "vite preview"
@@ -23,6 +21,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.28.0",
+    "nitro": "3.0.260610-beta",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwind-merge": "^3.6.0",

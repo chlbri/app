@@ -1,11 +1,16 @@
 import { createMachine } from '@bemedev/app';
+import { eventToType } from '@bemedev/app/events';
 import { type } from '@bemedev/typings';
 
 export const counterMachine = createMachine(
   {
     initial: 'idle',
+    on: { TOGGLE_LOG_EXPAND: { actions: ['toggleLogExpand'] } },
     states: {
-      idle: { tags: ['idle_state'], on: { START: '/active' } },
+      idle: {
+        tags: ['idle_state'],
+        on: { START: { target: '/active', actions: ['log'] } },
+      },
       active: {
         initial: 'speed_low',
         tags: ['active_state'],
@@ -14,24 +19,37 @@ export const counterMachine = createMachine(
           speed_high: { tags: ['mode_turbo', 'high_speed'] },
         },
         on: {
-          INC: { actions: 'increment' },
-          DEC: { actions: 'decrement' },
+          INC: { actions: ['increment', 'log'] },
+          DEC: { actions: ['decrement', 'log'] },
           ACCELERATE: {
             target: '/active/speed_high',
-            actions: 'accelerate',
+            actions: ['accelerate', 'log'],
           },
           DECELERATE: {
             target: '/active/speed_low',
-            actions: 'decelerate',
+            actions: ['decelerate', 'log'],
           },
-          STOP: '/final',
+          STOP: { target: '/final', actions: ['log'] },
         },
       },
-      final: { tags: ['completed'], on: { RESET: '/idle' } },
+      final: {
+        tags: ['completed'],
+        on: { RESET: { target: '/idle', actions: ['log'] } },
+      },
     },
   },
   {
-    context: type({ count: 'number', speed: 'number' }),
+    context: type(({ array }) => ({
+      count: 'number',
+      speed: 'number',
+      logs: array({
+        id: 'string',
+        timestamp: 'string',
+        event: 'string',
+        state: 'any',
+        expanded: 'boolean',
+      }),
+    })),
     eventsMap: type({
       START: 'never',
       STOP: 'never',
@@ -40,6 +58,7 @@ export const counterMachine = createMachine(
       INC: 'never',
       DEC: 'never',
       RESET: 'never',
+      TOGGLE_LOG_EXPAND: 'string',
     }),
     sync: true,
   },
@@ -62,5 +81,29 @@ export const counterMachine = createMachine(
     decelerate: assign('context.speed', ({ context }) =>
       Math.max(context.speed - 1, 1),
     ),
+
+    log: assign('context.logs', ({ context, value, event }) => {
+      const eventType = eventToType(event);
+
+      return [
+        {
+          id: `${eventType}-${Date.now()}`,
+          timestamp: new Date().toLocaleTimeString(),
+          event: eventType,
+          state: value,
+          expanded: false,
+        },
+        ...context.logs,
+      ];
+    }),
+
+    toggleLogExpand: assign('context.logs', {
+      TOGGLE_LOG_EXPAND: ({ context, payload }) => {
+        return context.logs.map(log => {
+          const check = log.id === payload;
+          return check ? { ...log, expanded: !log.expanded } : log;
+        });
+      },
+    }),
   },
 }));

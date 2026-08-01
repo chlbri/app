@@ -5,7 +5,7 @@ import type {
   State,
 } from '@bemedev/app';
 import { deepEqual } from '@bemedev/app';
-import { useEffect, useRef, useState as useReactState } from 'react';
+import { useEffect, useState as useReactState } from 'react';
 import type { UseServiceOptions } from './types';
 
 /**
@@ -29,32 +29,28 @@ export function useState<
 ): T {
   const {
     selector = (s: State<Eo, Tc, Ta>) => s as T,
-    equals: equality = deepEqual<T>,
+    equals = deepEqual<T>,
   } = options ?? {};
 
-  const selectorRef = useRef(selector);
-  selectorRef.current = selector;
-
-  const equalityRef = useRef(equality);
-  equalityRef.current = equality;
-
   const [_state, setState] = useReactState<T>(() =>
-    selectorRef.current(service.state),
+    selector(service.state),
   );
 
-  const sub = service.subscribe(
-    nextState => {
-      setState(selectorRef.current(nextState));
-    },
-    {
-      equals: (first, next) => {
-        const _first = selectorRef.current(first);
-        const _next = selectorRef.current(next);
-        return equalityRef.current(_first, _next);
+  useEffect(() => {
+    const sub = service.subscribe(
+      nextState => {
+        setState(selector(nextState));
       },
-    },
-  );
+      {
+        equals: (first, next) => {
+          const _first = selector(first);
+          const _next = selector(next);
+          return equals(_first, _next);
+        },
+      },
+    );
 
-  useEffect(() => sub.unsubscribe, []);
+    return sub.unsubscribe;
+  }, [_state, setState, selector, equals, service]);
   return _state;
 }

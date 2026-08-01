@@ -41,7 +41,6 @@ export const valueToNodeConfig: ValueToNodeConfig_F = (body, from) => {
     if (check2) {
       const parents = getParents(from as any);
       const children = getChildren(from, ...keysFlatBody);
-
       const out1: any = {};
 
       parents.concat(children).forEach(key => {
@@ -67,7 +66,12 @@ export const valueToNodeConfig: ValueToNodeConfig_F = (body, from) => {
   const out1: any = {};
 
   flatFrom.forEach((key1, _, all) => {
+    const parents = getParents(key1 as any);
     const check4 = keysFlatBody.some(key => key.startsWith(key1));
+
+    parents.forEach(parent => {
+      out1[parent] = (flatBody as any)[parent];
+    });
 
     /* v8 ignore else -- @preserve */
     if (check4) {

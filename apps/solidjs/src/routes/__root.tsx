@@ -18,11 +18,14 @@ import {
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
   head: () => ({
-    links: [{ rel: 'stylesheet', href: appCss }],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: '@bemedev/app + @bemedev/app-solidjs Visual Tester' },
+      { title: '@bemedev/app-solidjs Visual Tester' },
+    ],
+    links: [
+      { rel: 'stylesheet', href: appCss },
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
     ],
   }),
 
@@ -107,7 +110,7 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
             </div>
           </header>
 
-          <main class='max-w-7xl mx-auto p-6 md:p-8'>
+          <main class='max-w-7xl mx-auto p-4'>
             <Outlet />
           </main>
 

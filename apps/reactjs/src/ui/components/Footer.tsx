@@ -2,38 +2,19 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className='mt-20 border-t border-(--line) px-4 pb-4 pt-2 text-(--sea-ink-soft)'>
+    <footer className='mt-20 border-t border-(--line) px-4 py-2 text-(--sea-ink-soft)'>
       <div className='page-wrap flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left'>
         <p className='m-0 text-sm'>
           &copy; {year} Your name here. All rights reserved.
         </p>
         <div className='flex justify-center gap-4'>
           <a
-            href='https://x.com/tan_stack'
+            href='https://github.com/chlbri/app/tree/main/apps/reactjs'
             target='_blank'
             rel='noreferrer'
             className='rounded-xl p-2 text-(--sea-ink-soft) transition hover:bg-(--link-bg-hover) hover:text-(--sea-ink)'
           >
-            <span className='sr-only'>Follow TanStack on X</span>
-            <svg
-              viewBox='0 0 16 16'
-              aria-hidden='true'
-              width='32'
-              height='32'
-            >
-              <path
-                fill='currentColor'
-                d='M12.6 1h2.2L10 6.48 15.64 15h-4.41L7.78 9.82 3.23 15H1l5.14-5.84L.72 1h4.52l3.12 4.73L12.6 1zm-.77 12.67h1.22L4.57 2.26H3.26l8.57 11.41z'
-              />
-            </svg>
-          </a>
-          <a
-            href='https://github.com/TanStack'
-            target='_blank'
-            rel='noreferrer'
-            className='rounded-xl p-2 text-(--sea-ink-soft) transition hover:bg-(--link-bg-hover) hover:text-(--sea-ink)'
-          >
-            <span className='sr-only'>Go to TanStack GitHub</span>
+            <span className='sr-only'>Go to repository</span>
             <svg
               viewBox='0 0 16 16'
               aria-hidden='true'

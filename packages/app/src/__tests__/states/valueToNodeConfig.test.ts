@@ -18,6 +18,7 @@ describe('valueToNode - coverage', () => {
     const out = valueToNodeConfig(body as any, { a: 'b' });
 
     expect(out).toStrictEqual({
+      initial: 'a',
       states: { a: { initial: 'b', states: { b: {} } } },
     });
   });
@@ -34,6 +35,7 @@ describe('valueToNode - coverage', () => {
     const out = valueToNodeConfig(body as any, { a: {} } as any);
 
     expect(out).toStrictEqual({
+      initial: 'a',
       states: { a: { initial: 'b', states: { b: {} } } },
     });
   });

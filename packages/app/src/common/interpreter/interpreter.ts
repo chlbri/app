@@ -1122,7 +1122,6 @@ export abstract class CommonInterpreter<
   protected proposedNextConfig = (target: string) => {
     const nextValue = this.#proposedNextSV(target);
     const out = this.__machine.valueToConfig(nextValue);
-
     return out;
   };
 
