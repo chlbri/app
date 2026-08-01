@@ -44,7 +44,6 @@
     "test:only": "pnpm run -r test:only",
     "_ci": "pnpm run -r --sort --sequential _ci",
     "ci": "CIN=$(date +%s) && pnpm install && pnpm run _ci && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
-    "ci:offline": "CIN=$(date +%s) && pnpm install --offline && pnpm run _ci && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
     "ci:admin": "CI_ADMIN=$(date +%s) && pnpm run rm && pnpm run up && pnpm install && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_ADMIN))s\n\"",
     "rm": "pnpm run rimraf -- node_modules pnpm-lock.yaml && pnpm clean lockfile",
     "up": "pnpm -r update --latest !typescript && pnpm run check-updates",

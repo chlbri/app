@@ -8,6 +8,13 @@ reactive contexts.
 
 <br/>
 
+## Demo
+
+Check out the live interactive demo on Vercel:
+[https://app-solidjs.vercel.app](https://app-solidjs.vercel.app)
+
+<br/>
+
 ## Installation
 
 ```bash

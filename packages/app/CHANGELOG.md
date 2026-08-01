@@ -11,6 +11,24 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.9.1] - 01/08/2026** => _17:20_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
+  `1.9.1`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.0] - 30/07/2026** => _17:30_
 
 </summary>

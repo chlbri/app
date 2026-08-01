@@ -5,6 +5,32 @@
 <details>
 <summary>
 
+## **[1.9.1] - 01/08/2026** => _17:20_
+
+</summary>
+
+### Features
+
+- **`useState` / `useCan` / `useIsInside`**: Add modular React hooks for
+  state selection, transition predicate checks, and nested state location
+  checks.
+- **`useService` / `createHooks`**: Update hook factory structure to expose
+  `state`, `can`, and `isInside` helpers.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
+  `1.9.1`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.0] - 30/07/2026** => _17:30_
 
 </summary>

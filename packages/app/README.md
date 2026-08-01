@@ -10,6 +10,17 @@ separately, generate types automatically.**
 
 <br/>
 
+## Demos
+
+Live interactive demonstrations are available on Vercel:
+
+- **ReactJS Demo**:
+  [https://bemedev-app-reactjs.vercel.app](https://bemedev-app-reactjs.vercel.app)
+- **SolidJS Demo**:
+  [https://app-solidjs.vercel.app](https://app-solidjs.vercel.app)
+
+<br/>
+
 ## Philosophy
 
 ### The machine defines _what can happen_. The interpreter _makes it happen_.
