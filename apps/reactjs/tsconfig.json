@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/ui/hooks"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",

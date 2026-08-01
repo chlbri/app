@@ -76,7 +76,7 @@ export const Route = createFileRoute('/')({
     const formattedStateValue = JSON.stringify(stateValue);
 
     return (
-      <div className='min-h-screen bg-slate-950 text-slate-100 font-sans p-4 sm:p-8'>
+      <div className=' text-slate-100 font-sans p-4 sm:p-8'>
         <div className='max-w-7xl mx-auto space-y-8'>
           {/* Header Hero Section */}
           <div className='relative overflow-hidden rounded-3xl border border-slate-800 bg-linear-to-b from-slate-900/90 to-slate-950/80 p-8 shadow-2xl backdrop-blur-2xl'>

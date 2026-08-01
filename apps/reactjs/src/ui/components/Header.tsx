@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Cpu } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Header() {
   return (

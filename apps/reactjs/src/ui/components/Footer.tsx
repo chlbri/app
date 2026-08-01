@@ -2,8 +2,8 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className='mt-20 border-t border-(--line) px-4 py-2 text-(--sea-ink-soft)'>
-      <div className='page-wrap flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left'>
+    <footer className='border-t border-slate-800 bg-slate-950 px-4 py-2 text-slate-400 backdrop-blur-xl'>
+      <div className='max-w-7xl mx-auto flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left'>
         <p className='m-0 text-sm'>
           &copy; {year} Your name here. All rights reserved.
         </p>
@@ -12,14 +12,13 @@ export default function Footer() {
             href='https://github.com/chlbri/app/tree/main/apps/reactjs'
             target='_blank'
             rel='noreferrer'
-            className='rounded-xl p-2 text-(--sea-ink-soft) transition hover:bg-(--link-bg-hover) hover:text-(--sea-ink)'
+            className='rounded-xl p-2 text-slate-400 transition hover:bg-slate-800 hover:text-white'
           >
             <span className='sr-only'>Go to repository</span>
             <svg
               viewBox='0 0 16 16'
               aria-hidden='true'
-              width='32'
-              height='32'
+              className='size-10'
             >
               <path
                 fill='currentColor'
@@ -28,7 +27,9 @@ export default function Footer() {
             </svg>
           </a>
         </div>
-        <p className='island-kicker m-0'>Built with TanStack Start</p>
+        <p className='m-0 text-xs font-bold uppercase tracking-wider text-emerald-400'>
+          Built with TanStack Start
+        </p>
       </div>
     </footer>
   );
