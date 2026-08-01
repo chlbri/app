@@ -102,7 +102,7 @@ export const Route = createFileRoute('/traffic')({
                 }
                 class='w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 transition-all cursor-pointer'
               >
-                {isAccelerated() ? 'DECELERATE' : 'ACCELERATE'}
+                {isAccelerated() ? '↘️ DECELERATE' : '↗️ ACCELERATE'}
               </button>
 
               <div class='space-y-3'>
