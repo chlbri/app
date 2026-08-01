@@ -5,7 +5,7 @@ import type {
   State,
 } from '@bemedev/app';
 import { deepEqual } from '@bemedev/app';
-import { useEffect, useState as useReactState } from 'react';
+import { useEffect, useMemo, useState as useReactState } from 'react';
 import type { UseServiceOptions } from './types';
 
 /**
@@ -36,21 +36,17 @@ export function useState<
     selector(service.state),
   );
 
-  useEffect(() => {
-    const sub = service.subscribe(
-      nextState => {
-        setState(selector(nextState));
-      },
-      {
-        equals: (first, next) => {
-          const _first = selector(first);
-          const _next = selector(next);
-          return equals(_first, _next);
+  const sub = useMemo(
+    () =>
+      service.subscribe(
+        nextState => {
+          setState(selector(nextState));
         },
-      },
-    );
+        { equals: (prev, next) => equals(selector(prev), selector(next)) },
+      ),
+    [],
+  );
 
-    return sub.unsubscribe;
-  }, [_state, setState, selector, equals, service]);
+  useEffect(() => sub.unsubscribe, []);
   return _state;
 }

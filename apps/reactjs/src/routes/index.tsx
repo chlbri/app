@@ -1,5 +1,10 @@
+import { counterMachine } from '#/machines/counter';
 import { cn } from '#/ui/cn';
+import { Logs } from '#/ui/components/Logs';
+import { MachineConfig } from '#/ui/components/MachineConfig';
+import { Tags } from '#/ui/components/tags';
 import { useService } from '@bemedev/app-reactjs';
+import { wrap } from '@bemedev/hook-wrapper';
 import { createFileRoute } from '@tanstack/react-router';
 import {
   Activity,
@@ -7,7 +12,6 @@ import {
   Cpu,
   Flame,
   Gauge,
-  History,
   Layers,
   Minus,
   Play,
@@ -26,8 +30,6 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/components/card';
-import { MachineConfig } from '#/ui/components/MachineConfig';
-import { counterMachine } from '#/machines/counter';
 
 export const Route = createFileRoute('/')({
   component: () => {
@@ -36,34 +38,38 @@ export const Route = createFileRoute('/')({
       select: s => s.counterService,
     });
 
-    // 2. Reactively consume state machine using @bemedev/app-reactjs useService hook
     const hooks = useService(service);
 
-    // A. Full State Subscription
-    const fullState = hooks.state();
+    const FullStateWrapper = wrap(() =>
+      hooks.state({ selector: s => JSON.stringify(s, null, 2) }),
+    );
 
-    // State log history
-    const logs = hooks.state({ selector: s => s.context.logs });
-
-    // B. Selected context count subscription
-    const count = hooks.state({
-      selector: s => s.context.count,
-      equals: (a, b) => a === b,
+    const Status = wrap(() => hooks.state({ selector: s => s.status }))({
+      render: value => (
+        <span className='font-semibold text-white capitalize'>
+          {value}
+        </span>
+      ),
     });
 
-    // C. Selected state value subscription
-    const stateValue = hooks.state({ selector: s => s.value });
+    const Count = wrap(() =>
+      hooks.state({ selector: s => s.context.count }),
+    )({ render: value => <>{value}</> });
 
-    // D. Selected tags subscription
-    const tags = hooks.state({ selector: s => s.tags });
+    const stateValue = hooks.state({
+      selector: s => JSON.stringify(s.value, null, 2),
+    });
+
     const isReady = hooks.state({
       selector: s => s.status !== 'idle' && s.status !== 'stopped',
     });
 
     const _canStart = hooks.can('START');
     const canStart = isReady && _canStart;
+
     const _canReset = hooks.can('RESET');
     const canReset = isReady && _canReset;
+
     const _canStop = hooks.can('STOP');
     const canStop = isReady && _canStop;
 
@@ -72,8 +78,6 @@ export const Route = createFileRoute('/')({
     const sendEvent = (event: Parameters<typeof service.send>[0]) => {
       return () => service.send(event);
     };
-
-    const formattedStateValue = JSON.stringify(stateValue);
 
     return (
       <div className=' text-slate-100 font-sans p-4 sm:p-8'>
@@ -121,9 +125,8 @@ export const Route = createFileRoute('/')({
                     <span
                       className={`h-3 w-3 rounded-full ${canStop ? 'bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50' : 'bg-rose-500'}`}
                     />
-                    <span className='font-semibold text-white capitalize'>
-                      {fullState.status}
-                    </span>
+
+                    {Status}
                   </div>
                 </div>
                 <div className='h-8 w-px bg-slate-800' />
@@ -170,14 +173,14 @@ export const Route = createFileRoute('/')({
                     </span>
                     <Badge
                       variant={
-                        formattedStateValue.includes('speed_high')
+                        stateValue.includes('speed_high')
                           ? 'purple'
-                          : formattedStateValue.includes('speed_low')
+                          : stateValue.includes('speed_low')
                             ? 'active'
                             : 'secondary'
                       }
                     >
-                      {formattedStateValue}
+                      {stateValue}
                     </Badge>
                   </CardTitle>
                   <CardDescription>
@@ -188,7 +191,12 @@ export const Route = createFileRoute('/')({
                   {/* State Node Visual Display */}
                   <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
                     <div
-                      className={`p-4 rounded-xl border transition-all ${formattedStateValue === 'idle' ? 'bg-emerald-950/40 border-emerald-500/50 shadow-md shadow-emerald-500/10' : 'bg-slate-900/40 border-slate-800 opacity-60'}`}
+                      className={cn(
+                        `p-4 rounded-xl border transition-all`,
+                        isReady && stateValue.includes('idle')
+                          ? 'bg-emerald-950/40 border-emerald-500/50 shadow-md shadow-emerald-500/10'
+                          : 'bg-slate-900/40 border-slate-800 opacity-60',
+                      )}
                     >
                       <div className='text-xs text-slate-400 mb-1'>
                         State 1
@@ -202,7 +210,12 @@ export const Route = createFileRoute('/')({
                     </div>
 
                     <div
-                      className={`p-4 rounded-xl border transition-all ${formattedStateValue.includes('active') ? 'bg-teal-950/40 border-teal-500/50 shadow-md shadow-teal-500/10' : 'bg-slate-900/40 border-slate-800 opacity-60'}`}
+                      className={cn(
+                        'p-4 rounded-xl border transition-all',
+                        isReady && stateValue.includes('active')
+                          ? 'bg-teal-950/40 border-teal-500/50 shadow-md shadow-teal-500/10'
+                          : 'bg-slate-900/40 border-slate-800 opacity-60',
+                      )}
                     >
                       <div className='text-xs text-slate-400 mb-1'>
                         State 2 (Nested)
@@ -211,12 +224,17 @@ export const Route = createFileRoute('/')({
                         active
                       </div>
                       <div className='text-xs text-slate-400 mt-2 truncate'>
-                        {formattedStateValue}
+                        {stateValue}
                       </div>
                     </div>
 
                     <div
-                      className={`p-4 rounded-xl border transition-all ${formattedStateValue === 'final' ? 'bg-rose-950/40 border-rose-500/50 shadow-md shadow-rose-500/10' : 'bg-slate-900/40 border-slate-800 opacity-60'}`}
+                      className={cn(
+                        `p-4 rounded-xl border transition-all`,
+                        isReady && stateValue.includes('final')
+                          ? 'bg-rose-950/40 border-rose-500/50 shadow-md shadow-rose-500/10'
+                          : 'bg-slate-900/40 border-slate-800 opacity-60',
+                      )}
                     >
                       <div className='text-xs text-slate-400 mb-1'>
                         State 3
@@ -236,23 +254,8 @@ export const Route = createFileRoute('/')({
                       <Layers className='w-3.5 h-3.5 text-slate-400' />{' '}
                       Active Tags:
                     </div>
-                    <div className='flex flex-wrap gap-2'>
-                      {tags.length > 0 ? (
-                        tags.map(tag => (
-                          <Badge
-                            key={tag}
-                            variant='blue'
-                            className='text-xs'
-                          >
-                            #{tag}
-                          </Badge>
-                        ))
-                      ) : (
-                        <span className='text-xs text-slate-500 italic'>
-                          No tags active
-                        </span>
-                      )}
-                    </div>
+
+                    <Tags />
                   </div>
 
                   {/* Context Counter Section */}
@@ -262,7 +265,7 @@ export const Route = createFileRoute('/')({
                         Context Counter
                       </div>
                       <div className='text-3xl font-extrabold text-white mt-1'>
-                        {count}
+                        {Count}
                       </div>
                     </div>
                     <div className='flex items-center gap-2'>
@@ -373,7 +376,7 @@ export const Route = createFileRoute('/')({
                     </div>
                     <div className='text-sm font-semibold text-slate-200'>
                       Extracted Count:{' '}
-                      <span className='text-white font-bold'>{count}</span>
+                      <span className='text-white font-bold'>{Count}</span>
                     </div>
                   </div>
 
@@ -385,7 +388,7 @@ export const Route = createFileRoute('/')({
                     <div className='text-sm font-semibold text-slate-200'>
                       State Value:{' '}
                       <span className='text-white font-bold'>
-                        {formattedStateValue}
+                        {stateValue}
                       </span>
                     </div>
                   </div>
@@ -404,70 +407,18 @@ export const Route = createFileRoute('/')({
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className='p-4 rounded-xl bg-slate-950 border border-slate-800/80 text-xs font-mono text-emerald-400/90 overflow-x-auto max-h-64 leading-relaxed'>
-                    {JSON.stringify(fullState, null, 2)}
-                  </pre>
+                  <FullStateWrapper
+                    render={value => (
+                      <pre className='p-4 rounded-xl bg-slate-950 border border-slate-800/80 text-xs font-mono text-emerald-400/90 overflow-x-auto max-h-64 leading-relaxed'>
+                        {value}
+                      </pre>
+                    )}
+                  />
                 </CardContent>
               </Card>
 
               {/* Event Transition Audit Log */}
-              <Card className='flex flex-col'>
-                <CardHeader className='pb-3'>
-                  <CardTitle className='text-sm flex items-center justify-between'>
-                    <span className='flex items-center gap-2'>
-                      <History className='w-4 h-4 text-purple-400' />{' '}
-                      Transition Log
-                    </span>
-                    <Badge
-                      variant='secondary'
-                      className='text-[10px] w-20 justify-center'
-                    >
-                      {logs.length} Events
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className='flex-1'>
-                  <div className='space-y-2 max-h-92.5 overflow-y-auto pr-1'>
-                    {logs.length > 0 ? (
-                      logs.map(log => (
-                        <button
-                          key={log.id}
-                          className='p-3 rounded-lg bg-slate-950/70 border border-slate-800/60 text-xs flex items-center justify-between gap-2 w-full cursor-pointer'
-                          onClick={sendEvent({
-                            type: 'TOGGLE_LOG_EXPAND',
-                            payload: log.id,
-                          })}
-                        >
-                          <div className='space-y-0.5 flex-col'>
-                            <div className='font-mono font-bold text-amber-300 text-start'>
-                              {log.event}
-                            </div>
-                            <div
-                              className={cn(
-                                'text-slate-400 font-mono text-xs',
-                                {
-                                  'truncate max-w-[100px]': !log.expanded,
-                                },
-                                'text-start',
-                              )}
-                            >
-                              → {JSON.stringify(log.state, null, 2)}
-                            </div>
-                          </div>
-                          <div className='text-[10px] text-slate-500 font-mono shrink-0'>
-                            {log.timestamp}
-                          </div>
-                        </button>
-                      ))
-                    ) : (
-                      <div className='text-center py-8 text-slate-500 text-xs italic'>
-                        No transitions logged yet. Start service and send
-                        events!
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              <Logs />
             </div>
           </div>
         </div>
