@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-solidjs",
-  "version": "1.9.1",
+  "version": "1.9.3",
   "description": "Middleware between @bemedev/app-ts and solidjs",
   "keywords": [
     "app",
@@ -94,7 +94,7 @@
     "@vitest/coverage-v8": "^4.1.10",
     "@vitest/ui": "4.1.10",
     "glob": "^13.0.6",
-    "globals": "^17.8.0",
+    "globals": "^17.9.0",
     "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "onchange": "^7.1.0",

@@ -11,6 +11,24 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.9.3] - 02/08/2026** => _21:50_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with the 1.9.3
+  workspace release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.1] - 01/08/2026** => _17:20_
 
 </summary>

@@ -58,6 +58,23 @@ function MyComponent() {
 
 <br/>
 
+## Available Hooks
+
+The package also exports `useState`, `useCan`, and `useIsInside` for common
+state selection patterns:
+
+```typescript
+const count = useState(service, state => state.context.count);
+const canIncrement = useCan(service, 'INCREMENT');
+const isInside = useIsInside(service, 'some.state');
+```
+
+These helpers are designed to work with the same interpreter service and
+provide a lightweight way to subscribe to state slices, transition
+permissions, and nested state location checks.
+
+<br/>
+
 ## API Reference
 
 ### `useService(service, options?)`

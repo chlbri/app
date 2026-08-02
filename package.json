@@ -60,7 +60,7 @@
     "@vitest/ui": "^4.1.10",
     "fast-glob": "^3.3.3",
     "glob": "^13.0.6",
-    "globals": "^17.8.0",
+    "globals": "^17.9.0",
     "husky": "^9.1.7",
     "onchange": "^7.1.0",
     "oxfmt": "^0.61.0",

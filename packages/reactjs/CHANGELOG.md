@@ -5,6 +5,32 @@
 <details>
 <summary>
 
+## **[1.9.3] - 02/08/2026** => _21:50_
+
+</summary>
+
+### Refactor
+
+- **`useState` / `useCan` / `useIsInside`**: Refine selector memoization
+  and deep equality checks to keep hook subscriptions stable and reduce
+  redundant renders.
+- **`useService`**: Tighten state comparison logic for more predictable
+  reactivity while preserving existing hook behavior.
+
+### Dependencies
+
+- **Workspace Dependencies**: Align the ReactJS package with the latest
+  `@bemedev/app` workspace release and refresh package metadata.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.2] - 02/08/2026** => _03:24_
 
 </summary>
