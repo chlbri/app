@@ -11,9 +11,12 @@
 
 ### Refactor
 
-- **`useState`**: Optimize selector memoization and equality comparison using `useCallback` for stable subscription handling.
-- **`useCan` / `useIsInside`**: Simplify initial state evaluation and refine subscription equality comparison using deep value comparison.
-- **`Imports`**: Update utility imports to consume modular exports from `@bemedev/app/utils`.
+- **`useState`**: Optimize selector memoization and equality comparison
+  using `useCallback` for stable subscription handling.
+- **`useCan` / `useIsInside`**: Simplify initial state evaluation and
+  refine subscription equality comparison using deep value comparison.
+- **`Imports`**: Update utility imports to consume modular exports from
+  `@bemedev/app/utils`.
 
 - <u>Test coverage **_100%_**</u>
 

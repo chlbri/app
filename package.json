@@ -32,6 +32,9 @@
   },
   "type": "module",
   "scripts": {
+    "_ci": "pnpm run -r --sort --sequential _ci",
+    "ci": "CIN=$(date +%s) && pnpm install && pnpm run _ci && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
+    "ci:admin": "CI_ADMIN=$(date +%s) && pnpm run rm && pnpm run up && pnpm install && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_ADMIN))s\n\"",
     "pnpm:devPreinstall": "node -e \"const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); const version=require('child_process').execSync('pnpm -v').toString().trim(); pkg.packageManager='pnpm@' + version; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\\n');\"",
     "build": "pnpm -r --sort --sequential run build",
     "config": "pnpm i",
@@ -42,9 +45,6 @@
     "pretest": "pnpm run -r pretest",
     "posttest": "pnpm run -r posttest",
     "test:only": "pnpm run -r test:only",
-    "_ci": "pnpm run -r --sort --sequential _ci",
-    "ci": "CIN=$(date +%s) && pnpm install && pnpm run _ci && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
-    "ci:admin": "CI_ADMIN=$(date +%s) && pnpm run rm && pnpm run up && pnpm install && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_ADMIN))s\n\"",
     "rm": "pnpm run rimraf -- node_modules pnpm-lock.yaml && pnpm clean lockfile",
     "up": "pnpm -r update --latest !typescript && pnpm run check-updates",
     "check-updates": "pnpm dlx npm-check-updates -w -u --dep peer,optional,prod",
@@ -70,7 +70,7 @@
     "rolldown": "1.2.1",
     "tsc-alias": "^1.9.1",
     "tslib": "^2.8.1",
-    "tsx": "^4.23.1",
+    "tsx": "^4.23.4",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
   },

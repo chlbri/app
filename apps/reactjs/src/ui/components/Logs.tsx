@@ -41,7 +41,7 @@ export const Logs: FC = () => {
               return (
                 <button
                   key={log.id}
-                  className='p-3 rounded-lg bg-slate-950/70 border border-slate-800/60 text-xs flex items-center justify-between gap-2 w-full cursor-pointer'
+                  className='px-2 py-3 rounded-lg bg-slate-950/70 border border-slate-800/60 text-xs flex items-center justify-between gap-2 w-full cursor-pointer'
                   onClick={() =>
                     service.send({
                       type: 'TOGGLE_LOG_EXPAND',
@@ -55,6 +55,7 @@ export const Logs: FC = () => {
                       {' => '}
                       {log.event}
                     </div>
+
                     <div
                       className={cn(
                         'text-slate-400 font-mono text-xs',
@@ -62,7 +63,7 @@ export const Logs: FC = () => {
                         'text-start',
                       )}
                     >
-                      → {JSON.stringify(log.state, null, 2)}
+                      State → {JSON.stringify(log.state, null, 2)}
                     </div>
                   </div>
                   <div className='text-[10px] text-slate-500 font-mono shrink-0'>
