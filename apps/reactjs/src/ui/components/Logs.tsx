@@ -1,7 +1,7 @@
 import { useState } from '@bemedev/app-reactjs';
 import { useRouteContext } from '@tanstack/react-router';
 import { History } from 'lucide-react';
-import { useRef, type FC } from 'react';
+import { type FC } from 'react';
 import { cn } from '../cn';
 import { Badge } from './badge';
 import { Card, CardContent, CardHeader, CardTitle } from './card';
@@ -13,7 +13,6 @@ export const Logs: FC = () => {
   });
 
   const logs = useState(service, { selector: s => s.context.logs });
-  const parentRef = useRef(null);
 
   return (
     <Card className='flex flex-col'>
@@ -30,10 +29,7 @@ export const Logs: FC = () => {
           </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent
-        className='flex-1 overflow-y-auto pr-1  max-h-92.5'
-        ref={parentRef}
-      >
+      <CardContent className='flex-1 overflow-y-auto pr-1  max-h-92.5'>
         <div className='flex flex-col space-y-2 '>
           {logs.length > 0 ? (
             logs.map((log, index, all) => {

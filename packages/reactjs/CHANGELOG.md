@@ -5,6 +5,25 @@
 <details>
 <summary>
 
+## **[1.9.2] - 02/08/2026** => _03:24_
+
+</summary>
+
+### Refactor
+
+- **`useState`**: Optimize selector memoization and equality comparison using `useCallback` for stable subscription handling.
+- **`useCan` / `useIsInside`**: Simplify initial state evaluation and refine subscription equality comparison using deep value comparison.
+- **`Imports`**: Update utility imports to consume modular exports from `@bemedev/app/utils`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.1] - 01/08/2026** => _17:20_
 
 </summary>

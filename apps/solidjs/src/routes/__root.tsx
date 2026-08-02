@@ -7,7 +7,6 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/solid-router';
-import { TanStackRouterDevtools } from '@tanstack/solid-router-devtools';
 import { HydrationScript } from 'solid-js/web';
 import appCss from '../app.css?url';
 import {
@@ -113,8 +112,6 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
           <main class='max-w-7xl mx-auto p-4'>
             <Outlet />
           </main>
-
-          <TanStackRouterDevtools />
           <Scripts />
         </body>
       </html>

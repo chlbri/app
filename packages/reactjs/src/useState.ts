@@ -4,8 +4,8 @@ import type {
   PrimitiveObject,
   State,
 } from '@bemedev/app';
-import { deepEqual } from '@bemedev/app';
-import { useEffect, useMemo, useState as useReactState } from 'react';
+import { deepEqual } from '@bemedev/app/utils';
+import { useCallback, useEffect, useState as useReactState } from 'react';
 import type { UseServiceOptions } from './types';
 
 /**
@@ -36,15 +36,18 @@ export function useState<
     selector(service.state),
   );
 
-  const sub = useMemo(
-    () =>
-      service.subscribe(
-        nextState => {
-          setState(selector(nextState));
-        },
-        { equals: (prev, next) => equals(selector(prev), selector(next)) },
-      ),
-    [],
+  const _selector = useCallback(selector, [selector]);
+  const _equals = useCallback(equals, [equals]);
+
+  const sub = service.subscribe(
+    nextState => setState(_selector(nextState)),
+    {
+      equals: (prev, next) => {
+        const _prev = _selector(prev);
+        const _next = _selector(next);
+        return _equals(_prev, _next);
+      },
+    },
   );
 
   useEffect(() => sub.unsubscribe, []);

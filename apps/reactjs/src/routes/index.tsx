@@ -40,21 +40,36 @@ export const Route = createFileRoute('/')({
 
     const hooks = useService(service);
 
-    const FullStateWrapper = wrap(() =>
-      hooks.state({ selector: s => JSON.stringify(s, null, 2) }),
+    const FullStateWrapper = wrap.noParams(
+      () =>
+        hooks.state({
+          selector: s => JSON.stringify(s, null, 2),
+          equals: prev => {
+            return prev.length > 350;
+          },
+        }),
+
+      value => (
+        <pre className='p-4 rounded-xl bg-slate-950 border border-slate-800/80 text-xs font-mono text-emerald-400/90 overflow-x-auto max-h-64 leading-relaxed'>
+          {value}
+        </pre>
+      ),
     );
 
-    const Status = wrap(() => hooks.state({ selector: s => s.status }))({
-      render: value => (
+    const Status = wrap.noParams(
+      () => hooks.state({ selector: s => s.status }),
+
+      value => (
         <span className='font-semibold text-white capitalize'>
           {value}
         </span>
       ),
-    });
+    );
 
-    const Count = wrap(() =>
-      hooks.state({ selector: s => s.context.count }),
-    )({ render: value => <>{value}</> });
+    const Count = wrap.noParams(
+      () => hooks.state({ selector: s => s.context.count }),
+      value => value,
+    );
 
     const stateValue = hooks.state({
       selector: s => JSON.stringify(s.value, null, 2),
@@ -126,7 +141,7 @@ export const Route = createFileRoute('/')({
                       className={`h-3 w-3 rounded-full ${canStop ? 'bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50' : 'bg-rose-500'}`}
                     />
 
-                    {Status}
+                    {<Status />}
                   </div>
                 </div>
                 <div className='h-8 w-px bg-slate-800' />
@@ -265,7 +280,7 @@ export const Route = createFileRoute('/')({
                         Context Counter
                       </div>
                       <div className='text-3xl font-extrabold text-white mt-1'>
-                        {Count}
+                        {<Count />}
                       </div>
                     </div>
                     <div className='flex items-center gap-2'>
@@ -376,7 +391,9 @@ export const Route = createFileRoute('/')({
                     </div>
                     <div className='text-sm font-semibold text-slate-200'>
                       Extracted Count:{' '}
-                      <span className='text-white font-bold'>{Count}</span>
+                      <span className='text-white font-bold'>
+                        {<Count />}
+                      </span>
                     </div>
                   </div>
 
@@ -407,13 +424,7 @@ export const Route = createFileRoute('/')({
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <FullStateWrapper
-                    render={value => (
-                      <pre className='p-4 rounded-xl bg-slate-950 border border-slate-800/80 text-xs font-mono text-emerald-400/90 overflow-x-auto max-h-64 leading-relaxed'>
-                        {value}
-                      </pre>
-                    )}
-                  />
+                  <FullStateWrapper />
                 </CardContent>
               </Card>
 

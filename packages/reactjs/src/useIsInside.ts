@@ -4,7 +4,7 @@ import type {
   PrimitiveObject,
   State,
 } from '@bemedev/app';
-import { decomposeSV } from '@bemedev/app';
+import { decomposeSV, deepEqual } from '@bemedev/app/utils';
 import { expandFn } from '@bemedev/app/bemedev';
 import { useEffect, useState } from 'react';
 
@@ -26,19 +26,11 @@ export function useIsInside<
         return states[matcher](state => selector1(_state).includes(state));
       };
 
-      const [_state, setState] = useState(() => selector(service.state));
+      const [_state, setState] = useState(selector(service.state));
 
       const sub = service.subscribe(
-        nextState => {
-          setState(selector(nextState));
-        },
-        {
-          equals: (first, next) => {
-            const _first = selector(first);
-            const _next = selector(next);
-            return _first === _next;
-          },
-        },
+        nextState => setState(selector(nextState)),
+        { equals: (first, next) => deepEqual(first.value, next.value) },
       );
 
       useEffect(() => sub.unsubscribe, []);

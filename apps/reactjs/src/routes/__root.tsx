@@ -1,10 +1,8 @@
-import { TanStackDevtools } from '@tanstack/react-devtools';
 import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import Footer from '../ui/components/Footer';
 import Header from '../ui/components/Header';
 
@@ -36,15 +34,7 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
           <Header />
           <div className='flex-1'>{children}</div>
           <Footer />
-          <TanStackDevtools
-            config={{ position: 'bottom-right' }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
+
           <Scripts />
         </body>
       </html>
