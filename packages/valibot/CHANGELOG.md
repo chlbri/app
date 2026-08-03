@@ -5,6 +5,24 @@
 <details>
 <summary>
 
+## **[1.9.4] - 03/08/2026** => _21:09_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with the 1.9.4
+  workspace release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.3] - 02/08/2026** => _21:50_
 
 </summary>

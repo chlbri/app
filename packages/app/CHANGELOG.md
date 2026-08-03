@@ -11,6 +11,33 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.9.4] - 03/08/2026** => _21:09_
+
+</summary>
+
+### Features
+
+- **`CommonInterpreter`**: Add `reset()` and `softReset()` methods to reset
+  service state to its initial configuration.
+- **`canEvents`**: Replace `canEvent` with `canEvents` to support variadic
+  event capability checking.
+
+### Refactor
+
+- **`SyncInterpreter`**: Preserve `mode` and `exact` options when calling
+  `renew`.
+- **`CommonMachine`**: Refine `eventsList` typing for better event key
+  extraction.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.3] - 02/08/2026** => _21:50_
 
 </summary>
