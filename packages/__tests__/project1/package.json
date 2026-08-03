@@ -11,6 +11,6 @@
     "@bemedev/app": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
     "tsx": "^4.23.5",
-    "typescript": "^6.0.3"
+    "typescript": "6.0.3"
   }
 }

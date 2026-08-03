@@ -19,3 +19,32 @@ minimumReleaseAge: 300
 
 minimumReleaseAgeExclude:
   - '@bemedev/*'
+
+overrides:
+  typescript: 6.0.3
+  '@bemedev/rolldown-config>typescript': 6.0.3
+  '@bemedev/dev-utils>typescript': 6.0.3
+  'rolldown-plugin-dts>typescript': 6.0.3
+  'rollup-plugin-tsconfig-paths>typescript': 6.0.3
+  'typescript-paths>typescript': 6.0.3
+  'valibot>typescript': 6.0.3
+
+packageExtensions:
+  '@bemedev/rolldown-config':
+    peerDependencies:
+      typescript: 6.0.3
+  '@bemedev/dev-utils':
+    peerDependencies:
+      typescript: 6.0.3
+  'rolldown-plugin-dts':
+    peerDependencies:
+      typescript: 6.0.3
+  'rollup-plugin-tsconfig-paths':
+    peerDependencies:
+      typescript: 6.0.3
+  'typescript-paths':
+    peerDependencies:
+      typescript: 6.0.3
+  'valibot':
+    peerDependencies:
+      typescript: 6.0.3

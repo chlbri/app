@@ -34,7 +34,7 @@
   "scripts": {
     "_ci": "pnpm run -r --sort --sequential _ci",
     "ci": "CIN=$(date +%s) && pnpm install && pnpm run _ci && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
-    "ci:admin": "CI_ADMIN=$(date +%s) && pnpm run rm && pnpm run up && pnpm install && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_ADMIN))s\n\"",
+    "ci:admin": "CI_ADMIN=$(date +%s) && pnpm run rm && pnpm run up && pnpm install && pnpm run _ci && pnpm install && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_ADMIN))s\n\"",
     "pnpm:devPreinstall": "node -e \"const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); const version=require('child_process').execSync('pnpm -v').toString().trim(); pkg.packageManager='pnpm@' + version; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\\n');\"",
     "build": "pnpm -r --sort --sequential run build",
     "config": "pnpm i",
@@ -71,11 +71,14 @@
     "tsc-alias": "^1.9.1",
     "tslib": "^2.8.1",
     "tsx": "^4.23.5",
-    "typescript": "^6.0.3",
+    "typescript": "6.0.3",
     "vitest": "^4.1.10"
   },
   "engines": {
     "node": ">=24"
+  },
+  "overrides": {
+    "typescript": "6.0.3"
   },
   "packageManager": "pnpm@11.17.0"
 }
