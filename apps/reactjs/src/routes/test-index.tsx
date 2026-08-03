@@ -107,8 +107,6 @@ const TIMER_INTERVAL = 15_000;
 const ONE_SECOND = 1000;
 
 export const Route = createFileRoute('/test-index')({
-  beforeLoad: ({ context }) => context.counterServiceTest.start(),
-
   component: () => {
     const service = Route.useRouteContext({
       select: s => s.counterServiceTest,
@@ -137,6 +135,11 @@ export const Route = createFileRoute('/test-index')({
       },
       [],
     );
+
+    useEffect(() => {
+      if (service.status === 'idle') service.start();
+      else service.resume();
+    }, []);
 
     const TimerReset = wrap.noParams(
       () => {
