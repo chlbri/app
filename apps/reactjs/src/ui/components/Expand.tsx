@@ -12,7 +12,6 @@ export type ExpandProps = {
   title: ExpandSlot;
   content?: ExpandSlot;
   defaultOpen?: boolean;
-  class?: string;
   className?: string;
   id: string;
 };
@@ -21,7 +20,6 @@ export const Expand: React.FC<ExpandProps> = ({
   title,
   content,
   defaultOpen = false,
-  class: classProp,
   className,
   id,
 }) => {
@@ -29,29 +27,39 @@ export const Expand: React.FC<ExpandProps> = ({
 
   const renderSlot = (slot: ExpandSlot) => {
     if (typeof slot === 'function') {
-      const SlotComponent = slot as (props: ExpandSlotProps) => React.ReactNode;
+      const SlotComponent = slot as (
+        props: ExpandSlotProps,
+      ) => React.ReactNode;
       return SlotComponent({ isOpen });
     }
     return slot;
   };
 
+  const toggle = () => setIsOpen(prev => !prev);
+
   return (
     <div
       className={cn(
         'rounded-xl border overflow-hidden transition-all',
-        classProp,
         className,
       )}
     >
-      <button
-        onClick={() => setIsOpen(prev => !prev)}
-        className='w-full text-left'
-        type='button'
+      <div
+        onClick={toggle}
+        className='w-full text-left cursor-pointer'
+        role='button'
+        tabIndex={0}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        }}
         aria-expanded={isOpen}
         aria-controls={id ? `${id}-content` : undefined}
       >
         {renderSlot(title)}
-      </button>
+      </div>
 
       <div
         id={id ? `${id}-content` : undefined}

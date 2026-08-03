@@ -140,6 +140,8 @@ export class SyncInterpreter<
   get renew() {
     const out = new SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
       this.machine,
+      this.__mode,
+      this.__exact,
     );
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);

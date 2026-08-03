@@ -25,6 +25,13 @@ export default function Header() {
             Tester App
           </Link>
           <Link
+            to='/test-index'
+            className='transition hover:text-white'
+            activeProps={{ className: 'text-emerald-400 font-semibold' }}
+          >
+            Self Tester App
+          </Link>
+          <Link
             to='/about'
             className='transition hover:text-slate-100'
             activeProps={{ className: 'text-emerald-400 font-semibold' }}

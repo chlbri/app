@@ -3,6 +3,8 @@ import { cn } from '#/ui/cn';
 import { Logs } from '#/ui/components/Logs';
 import { MachineConfig } from '#/ui/components/MachineConfig';
 import { Tags } from '#/ui/components/tags';
+import type { TimerState } from '@bemedev/app/bemedev';
+import { wrap } from '@bemedev/hook-wrapper';
 import { createFileRoute } from '@tanstack/react-router';
 import {
   Activity,
@@ -12,11 +14,15 @@ import {
   Gauge,
   Layers,
   Minus,
+  Pause,
+  Play,
   Plus,
+  RefreshCw,
   Sparkles,
   Square,
   Zap,
 } from 'lucide-react';
+import { useEffect, useState, type FC } from 'react';
 import { Badge } from '../ui/components/badge';
 import { Button } from '../ui/components/button';
 import {
@@ -28,10 +34,84 @@ import {
 } from '../ui/components/card';
 import { useComponents } from './-index.components';
 
-export const Route = createFileRoute('/')({
+interface StartTestsProps {
+  pause: () => void;
+  resume: () => void;
+}
+
+const StartTests: FC<StartTestsProps> = ({
+  pause,
+  resume,
+}: StartTestsProps) => {
+  const [timerState, setTimerState] = useState<TimerState>('idle');
+
+  const isRunning = timerState === 'active';
+
+  return (
+    <button
+      type='button'
+      onClick={() => {
+        setTimerState(prev => {
+          if (prev === 'active') {
+            pause();
+            return 'paused';
+          }
+          resume();
+          return 'active';
+        });
+      }}
+      className={cn(
+        'group relative inline-flex items-center justify-center overflow-hidden rounded-xl p-0.5 font-medium text-white shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] cursor-pointer',
+        isRunning
+          ? 'bg-linear-to-r from-emerald-500 via-teal-500 to-cyan-500 shadow-emerald-500/25 hover:shadow-emerald-500/40'
+          : 'bg-linear-to-r from-indigo-600 via-blue-600 to-cyan-600 shadow-indigo-500/25 hover:shadow-indigo-500/40',
+      )}
+    >
+      <span className='absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100' />
+      <div className='relative flex items-center gap-2.5 rounded-[10px] bg-slate-950/60 px-3.5 py-1.5 backdrop-blur-md transition-colors group-hover:bg-transparent'>
+        {isRunning ? (
+          <>
+            <div className='relative flex h-2.5 w-2.5 items-center justify-center'>
+              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75' />
+              <span className='relative inline-flex h-2 w-2 rounded-full bg-emerald-400' />
+            </div>
+            <Pause className='h-3.5 w-3.5 fill-emerald-300 text-emerald-300 transition-transform group-hover:scale-110' />
+            <div className='flex flex-col text-left'>
+              <span className='text-[9px] font-bold tracking-wider text-emerald-300 uppercase leading-none'>
+                Tests Running
+              </span>
+              <span className='text-xs font-extrabold text-white leading-tight'>
+                Pause Tests
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            <Play className='h-3.5 w-3.5 text-cyan-300 animate-pulse' />
+            <div className='flex flex-col text-left'>
+              <span className='text-[9px] font-bold tracking-wider text-cyan-300 uppercase leading-none'>
+                Tests Stopped
+              </span>
+              <span className='text-xs font-extrabold text-white leading-tight'>
+                Start Tests
+              </span>
+            </div>
+          </>
+        )}
+      </div>
+    </button>
+  );
+};
+
+const TIMER_INTERVAL = 15_000;
+const ONE_SECOND = 1000;
+
+export const Route = createFileRoute('/test-index')({
+  beforeLoad: ({ context }) => context.counterServiceTest.start(),
+
   component: () => {
     const service = Route.useRouteContext({
-      select: s => s.counterService,
+      select: s => s.counterServiceTest,
     });
 
     const {
@@ -43,14 +123,49 @@ export const Route = createFileRoute('/')({
       StateIdle,
       StateActive,
       StateFinal,
-      StartStop,
       ActivateCounters,
       CanStop,
       Reset,
       sendEvent,
-    } = useComponents(service);
+      tests,
+    } = useComponents.test(service);
 
-    console.log('RENDER');
+    useEffect(
+      () => () => {
+        service.reset();
+        tests.pause();
+      },
+      [],
+    );
+
+    const TimerReset = wrap.noParams(
+      () => {
+        const [tick, setTick] = useState(TIMER_INTERVAL);
+        useEffect(() => {
+          const interval = setInterval(() => {
+            setTick(t => {
+              if (t === ONE_SECOND) return TIMER_INTERVAL;
+              return t - ONE_SECOND;
+            });
+          }, ONE_SECOND);
+          return () => clearInterval(interval);
+        }, []);
+
+        return tick;
+      },
+      tick => (
+        <span className='text-xs italic text-slate-400'>
+          Auto reset the full-state in {tick / 1000} seconds
+        </span>
+      ),
+    );
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        service.softReset();
+      }, TIMER_INTERVAL);
+      return () => clearInterval(interval);
+    }, []);
 
     return (
       <div className=' text-slate-100 font-sans p-4 sm:p-8'>
@@ -73,9 +188,11 @@ export const Route = createFileRoute('/')({
                   </Badge>
                 </div>
 
-                <h1 className='text-3xl sm:text-4xl font-extrabold tracking-tight bg-linear-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent'>
-                  Visual State Machine Tester
-                </h1>
+                <div className='flex gap-2'>
+                  <h1 className='text-3xl sm:text-4xl font-extrabold tracking-tight bg-linear-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent'>
+                    Self Machine Tester
+                  </h1>
+                </div>
 
                 <p className='text-slate-400 max-w-2xl text-sm sm:text-base leading-relaxed'>
                   Test and inspect real-time state machine transitions with{' '}
@@ -88,17 +205,18 @@ export const Route = createFileRoute('/')({
                   </code>
                   .
                 </p>
+                <TimerReset />
               </div>
 
               {/* Service Status Card */}
-              <div className='flex items-center gap-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-inner'>
+              <div className='flex space-x-10 items-center gap-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-inner'>
                 <div className='space-y-1'>
                   <div className='text-xs text-slate-400 font-medium'>
                     Interpreter Status
                   </div>
                   <div className='flex items-center gap-2'>
                     <CanStop
-                      render={canStop => (
+                      render={(canStop: boolean) => (
                         <span
                           className={cn(
                             'h-3 w-3 rounded-full',
@@ -113,8 +231,28 @@ export const Route = createFileRoute('/')({
                   </div>
                 </div>
 
-                <div className='h-8 w-px bg-slate-800' />
-                <StartStop />
+                <div className='flex flex-col items-center gap-2'>
+                  <StartTests
+                    resume={() => {
+                      tests.resume();
+                    }}
+                    pause={tests.pause}
+                  />
+                  <div className='w-8 h-px bg-slate-800' />
+                  <button
+                    type='button'
+                    onClick={e => {
+                      e.stopPropagation();
+                      service.softReset();
+                      // setLogs();
+                    }}
+                    className='px-2.5 py-1 text-xs font-sans rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer z-10'
+                    title='Fetch current machine state'
+                  >
+                    <RefreshCw className='w-3.5 h-3.5 text-yellow-700' />
+                    <span>Reset State</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -327,7 +465,7 @@ export const Route = createFileRoute('/')({
             <div className='space-y-6'>
               {/* Raw JSON Inspector */}
               <FullStateWrapper />
-              <Logs {...{ service }} />
+              <Logs.test {...{ service }} />
             </div>
           </div>
         </div>

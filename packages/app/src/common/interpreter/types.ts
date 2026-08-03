@@ -42,7 +42,7 @@ export type AnyInterpreter = {
   makeStrict: () => Mode;
   makeNormal: () => Mode;
   readonly TYPE: MachineType;
-  canEvent: (event: string) => boolean;
+  canEvents: (...events: string[]) => boolean;
 
   status: WorkingStatus;
   initialConfig: any;

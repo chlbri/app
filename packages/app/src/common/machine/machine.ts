@@ -75,7 +75,7 @@ export abstract class CommonMachine<
     return this.#config;
   }
 
-  protected readonly __eventsList: string[];
+  protected readonly __eventsList: Extract<keyof E, string>[];
 
   get eventsList() {
     return this.__eventsList;
@@ -423,7 +423,7 @@ export abstract class CommonMachine<
       .flat() as any;
     this.#initialConfig = initialConfig(this.#config as any);
     this.#getInitialKeys();
-    this.__eventsList = constructEvents(this.#config as any);
+    this.__eventsList = constructEvents(this.#config as any) as any;
   }
 
   swap: SwapFunction_F<Eo, Pc, Tc, Ta> = (fn, ev) => types => {

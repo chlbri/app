@@ -15,12 +15,12 @@ export function useCan<
 >(service: {
   subscribe: AddSubscriber_F<Tc, Ta, Eo>;
   state: State<Eo, Tc, Ta>;
-  canEvent: (event: Eo['type']) => boolean;
+  canEvents: (...events: Eo['type'][]) => boolean;
 }) {
   const dispatch = (matcher: 'some' | 'every') => {
     return (...events: Eo['type'][]) => {
       const selector = (_state: State<Eo, Tc, Ta>) => {
-        return events[matcher](event => service.canEvent(event));
+        return events[matcher](event => service.canEvents(event));
       };
 
       const [_state, setState] = useState(selector(service.state));

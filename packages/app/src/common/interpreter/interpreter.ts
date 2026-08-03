@@ -107,7 +107,7 @@ export abstract class CommonInterpreter<
 >
   implements AnyInterpreter, Disposable, AsyncDisposable
 {
-  protected __machine: CommonMachine<
+  protected __machine!: CommonMachine<
     C,
     Pc,
     Tc,
@@ -163,7 +163,7 @@ export abstract class CommonInterpreter<
   /**
    * The {@linkcode Mode} of this {@linkcode Interpreter} service
    */
-  protected __mode: Mode;
+  protected __mode!: Mode;
 
   /**
    * The initial {@linkcode Node} of the inner {@linkcode Machine}.
@@ -258,7 +258,7 @@ export abstract class CommonInterpreter<
 
   protected __sent = false;
 
-  protected __exact: boolean;
+  protected __exact!: boolean;
 
   /**
    * Public getter of the service subscribers of this {@linkcode Interpreter} service.
@@ -437,14 +437,23 @@ export abstract class CommonInterpreter<
     mode: Mode = 'strict',
     exact = true,
   ) {
-    this.__machine = machine.renew;
+    this.#init(machine.renew, mode, exact);
+    this.__initialConfig = this.__machine.initialConfig;
+    this.#initialNode = this.#resolveNode(this.__initialConfig);
+  }
 
-    this.__config = this.__initialConfig = this.__machine.initialConfig;
-    this.#initialNode = this.#resolveNode(this.__initialConfig) as any;
+  #init = (
+    machine: AnyMachine<E, A, Pc, Tc>,
+    mode: Mode = 'strict',
+    exact = true,
+    isConstructor = true,
+  ) => {
+    this.__machine = machine.renew;
+    this.__config = this.__machine.initialConfig;
     this.__mode = mode;
     this.__exact = exact;
 
-    this.__state = this.#previousState = {
+    this.__state = {
       status: this.#status,
       context: this.__context,
       event: { type: INIT_EVENT, payload: {} } as any,
@@ -452,10 +461,33 @@ export abstract class CommonInterpreter<
       tags: toArray.typed(this.tags),
     };
 
+    if (isConstructor) this.#previousState = this.__state;
+
     this.#collectEmitterConfigs();
     this.#collectChildrenConfig();
     this.__throwing();
-  }
+  };
+
+  /**
+   * Resets the interpreter to its initial state.
+   * does not pause any running actions
+   */
+  softReset = () => {
+    this.__value = nodeToValue(this.__initialConfig);
+    this.__context = this.__initialContext;
+    this.__pContext = this.__initialPpc;
+    this.#status = 'idle';
+    this.#init(this.__machine, this.__mode, this.__exact, false);
+    this.__flush();
+  };
+
+  /**
+   * Resets the interpreter to its initial state.
+   */
+  reset = () => {
+    this.softReset();
+    this.pause();
+  };
 
   /**
    * Changes the current {@linkcode ToEvents} event of this {@linkcode Interpreter} service.
@@ -1019,8 +1051,8 @@ export abstract class CommonInterpreter<
     return possibleEvents(this.#flat);
   }
 
-  canEvent = (event: Eo['type']) => {
-    return this.possibleEvents.includes(event);
+  canEvents = (...events: Eo['type'][]) => {
+    return events.every(event => this.possibleEvents.includes(event));
   };
 
   #cannotPerformEvents = (_event: EventArgObject<Eo>) => {

@@ -1,4 +1,4 @@
-import { createMachine } from '@bemedev/app';
+import { createMachine, type SyncInterpreterFrom } from '@bemedev/app';
 import { eventToType } from '@bemedev/app/events';
 import { type } from '@bemedev/typings';
 
@@ -87,7 +87,7 @@ export const counterMachine = createMachine(
 
       return [
         {
-          id: `${eventType}-${Date.now()}`,
+          id: `${eventType}-${context.logs.length}`,
           timestamp: new Date().toLocaleTimeString(),
           event: eventType,
           state: value,
@@ -107,3 +107,5 @@ export const counterMachine = createMachine(
     }),
   },
 }));
+
+export type Service = SyncInterpreterFrom<typeof counterMachine>;

@@ -6,7 +6,7 @@ import {
 import Footer from '../ui/components/Footer';
 import Header from '../ui/components/Header';
 
-import { counterService, type RootRouterContext } from '#/services';
+import { createCounterService, type RootRouterContext } from '#/services';
 import appCss from '../styles.css?url';
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
@@ -22,7 +22,10 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
     ],
   }),
 
-  context: () => ({ counterService }),
+  context: () => ({
+    counterService: createCounterService(),
+    counterServiceTest: createCounterService(),
+  }),
 
   shellComponent: ({ children }) => {
     return (
@@ -34,7 +37,6 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
           <Header />
           <div className='flex-1'>{children}</div>
           <Footer />
-
           <Scripts />
         </body>
       </html>

@@ -1,14 +1,9 @@
+import type { Service } from '#/machines/counter';
 import { useState } from '@bemedev/app-reactjs';
-import { useRouteContext } from '@tanstack/react-router';
 import type { FC } from 'react';
 import { Badge } from './badge';
 
-export const Tags: FC = () => {
-  const service = useRouteContext({
-    from: '__root__',
-    select: s => s.counterService,
-  });
-
+export const Tags: FC<{ service: Service }> = ({ service }) => {
   const tags = useState(service, { selector: s => s.tags });
 
   return (

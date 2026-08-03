@@ -16,7 +16,7 @@ export function useService<
 >(service: {
   subscribe: AddSubscriber_F<Tc, Ta, Eo>;
   state: State<Eo, Tc, Ta>;
-  canEvent: (event: Eo['type']) => boolean;
+  canEvents: (...events: Eo['type'][]) => boolean;
 }) {
   return {
     state: <T = State<Eo, Tc, Ta>>(

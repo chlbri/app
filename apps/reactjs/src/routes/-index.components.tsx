@@ -1,27 +1,86 @@
+import type { Service } from '#/machines/counter';
+import { TEST_LOGS } from '#/machines/counter.fixtures';
 import { cn } from '#/ui/cn';
 import { useService } from '@bemedev/app-reactjs';
 import { wrap } from '@bemedev/hook-wrapper';
-import { useRouteContext } from '@tanstack/react-router';
-import { Play, RotateCcw, Square } from 'lucide-react';
+import {
+  ChevronDown,
+  Code2,
+  Play,
+  RefreshCw,
+  RotateCcw,
+  Square,
+} from 'lucide-react';
+import React, { useState } from 'react';
 import { Button } from '../ui/components/button';
+import { Expand } from '../ui/components/Expand';
 
-export const useComponents = () => {
-  const service = useRouteContext({
-    from: '/',
-    select: s => s.counterService,
-  });
-
+export const useComponents = (service: Service) => {
   const hooks = useService(service);
 
-  const FullStateWrapper = wrap.noParams(
-    () => hooks.state({ selector: s => JSON.stringify(s, null, 2) }),
+  const FullStateWrapper: React.FC<{
+    defaultOpen?: boolean;
+    className?: string;
+  }> = ({ defaultOpen = false, className }) => {
+    const getJSon = () => JSON.stringify(service.state, null, 2);
 
-    value => (
-      <pre className='p-4 rounded-xl bg-slate-950 border border-slate-800/80 text-xs font-mono text-emerald-400/90 overflow-x-auto max-h-64 leading-relaxed'>
-        {value}
-      </pre>
-    ),
-  );
+    const [json, _setJson] = useState(getJSon);
+    const setJson = () => _setJson(getJSon);
+
+    return (
+      <Expand
+        id='full-state-json'
+        defaultOpen={defaultOpen}
+        className={cn(
+          'border-slate-800 bg-slate-900/60 shadow-lg',
+          className,
+        )}
+        title={({ isOpen }) => (
+          <div className='w-full px-4 py-3 bg-slate-900 hover:bg-slate-800/80 text-slate-300 font-medium text-sm flex items-center justify-between transition-colors cursor-pointer'>
+            <div className='flex items-center space-x-2.5'>
+              <Code2 className='w-4 h-4 text-yellow-700' />
+              <h2 className='font-semibold text-slate-200'>
+                Full State JSON
+              </h2>
+            </div>
+
+            <div className='flex items-center space-x-2'>
+              <span className='text-xs text-slate-400 font-medium'>
+                {isOpen ? 'Hide State' : 'Show State'}
+              </span>
+
+              <ChevronDown
+                className={cn(
+                  'w-4 h-4 text-slate-400 transition-transform duration-300',
+                  { 'rotate-180': isOpen },
+                )}
+              />
+            </div>
+          </div>
+        )}
+
+        content={
+          <div className='p-4 border-t border-slate-800 bg-slate-950 relative group'>
+            <button
+              type='button'
+              onClick={e => {
+                e.stopPropagation();
+                setJson();
+              }}
+              className='absolute top-3 right-3 px-2.5 py-1 text-xs font-sans rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer z-10'
+              title='Fetch current machine state'
+            >
+              <RefreshCw className='w-3.5 h-3.5 text-yellow-700' />
+              <span>Refresh</span>
+            </button>
+            <pre className='font-mono text-xs text-yellow-200/90 overflow-x-auto max-h-64 p-2 leading-relaxed selection:bg-yellow-200/30'>
+              {json}
+            </pre>
+          </div>
+        }
+      />
+    );
+  };
 
   const Status = wrap.noParams(
     () => hooks.state({ selector: s => s.status }),
@@ -33,6 +92,10 @@ export const useComponents = () => {
 
   const Count = wrap.noParams(
     () => hooks.state({ selector: s => s.context.count }),
+    value => value,
+  );
+  const Speed = wrap.noParams(
+    () => hooks.state({ selector: s => s.context.speed }),
     value => value,
   );
 
@@ -125,7 +188,7 @@ export const useComponents = () => {
         onClick={service.stop}
         className='gap-1.5'
       >
-        <Square className='w-4 h-4' /> Stop Service
+        <Square className='w-4 h-4' /> Stop
       </Button>
     ) : (
       <Button
@@ -134,7 +197,7 @@ export const useComponents = () => {
         onClick={service.start}
         className='gap-1.5'
       >
-        <Play className='w-4 h-4' /> Start Service
+        <Play className='w-4 h-4' /> Start
       </Button>
     ),
   );
@@ -191,6 +254,7 @@ export const useComponents = () => {
     FullStateWrapper,
     Status,
     Count,
+    Speed,
     StateValue,
     StateIdle,
     StateActive,
@@ -200,5 +264,12 @@ export const useComponents = () => {
     CanStop,
     Reset,
     sendEvent,
+    service,
   };
+};
+
+useComponents.test = (service: Service) => {
+  const all = useComponents(service);
+  const tests = TEST_LOGS(service, 350);
+  return { ...all, tests };
 };

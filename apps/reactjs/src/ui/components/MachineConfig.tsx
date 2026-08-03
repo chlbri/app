@@ -3,20 +3,19 @@ import { Expand, type ExpandSlotProps } from './Expand';
 import { cn } from '../cn';
 
 export type MachineConfigProps = {
-  config: Record<string, any>;
+  config: any;
   title: string;
-  class?: string;
   className?: string;
 };
 
 export const MachineConfig: React.FC<MachineConfigProps> = ({
   config,
   title,
-  class: classProp,
   className,
 }) => {
   const [copied, setCopied] = useState(false);
-  const formattedCode = JSON.stringify(config, null, 2);
+  const formattedCode =
+    typeof config === 'string' ? config : JSON.stringify(config, null, 2);
 
   const Title = (titleProps: ExpandSlotProps) => (
     <div className='w-full px-4 py-3 bg-slate-900 hover:bg-slate-800/80 text-slate-300 font-medium text-sm flex items-center justify-between transition-colors cursor-pointer'>
@@ -130,7 +129,6 @@ export const MachineConfig: React.FC<MachineConfigProps> = ({
       content={Content}
       className={cn(
         'mt-4 border-slate-800 border-3 bg-slate-900/60 shadow-lg',
-        classProp,
         className,
       )}
     />
