@@ -5,7 +5,7 @@ import type {
   State,
 } from '@bemedev/app';
 import { deepEqual } from '@bemedev/app/utils';
-import { useCallback, useEffect, useState as useReactState } from 'react';
+import { useSync } from '@bemedev/react-sync';
 import type { UseServiceOptions } from './types';
 
 /**
@@ -32,24 +32,20 @@ export function useState<
     equals = deepEqual<T>,
   } = options ?? {};
 
-  const [_state, setState] = useReactState<T>(() =>
-    selector(service.state),
-  );
-
-  const _selector = useCallback(selector, [selector]);
-  const _equals = useCallback(equals, [equals]);
-
-  const sub = service.subscribe(
-    nextState => setState(_selector(nextState)),
-    {
-      equals: (prev, next) => {
-        const _prev = _selector(prev);
-        const _next = _selector(next);
-        return _equals(_prev, _next);
-      },
+  return useSync(
+    listener => {
+      const { unsubscribe } = service.subscribe(listener, {
+        equals: (prev, next) => {
+          const _prev = selector(prev);
+          const _next = selector(next);
+          return equals(_prev, _next);
+        },
+      });
+      return unsubscribe;
     },
+    () => service.state,
+    () => service.state,
+    selector,
+    equals,
   );
-
-  useEffect(() => sub.unsubscribe, []);
-  return _state;
 }

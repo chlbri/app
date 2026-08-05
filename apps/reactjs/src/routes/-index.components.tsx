@@ -94,6 +94,7 @@ export const useComponents = (service: Service) => {
     () => hooks.state({ selector: s => s.context.count }),
     value => value,
   );
+
   const Speed = wrap.noParams(
     () => hooks.state({ selector: s => s.context.speed }),
     value => value,

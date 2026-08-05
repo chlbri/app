@@ -6,7 +6,7 @@ import {
 } from '@bemedev/app';
 import { expandFn } from '@bemedev/app/bemedev';
 import { deepEqual } from '@bemedev/app/utils';
-import { useEffect, useState } from 'react';
+import { useSync } from '@bemedev/react-sync';
 
 export function useCan<
   Tc extends PrimitiveObject,
@@ -17,23 +17,21 @@ export function useCan<
   state: State<Eo, Tc, Ta>;
   canEvents: (...events: Eo['type'][]) => boolean;
 }) {
-  const dispatch = (matcher: 'some' | 'every') => {
-    return (...events: Eo['type'][]) => {
-      const selector = (_state: State<Eo, Tc, Ta>) => {
-        return events[matcher](event => service.canEvents(event));
-      };
-
-      const [_state, setState] = useState(selector(service.state));
-
-      const sub = service.subscribe(
-        () => setState(selector(service.state)),
-        { equals: (first, next) => deepEqual(first.value, next.value) },
+  const dispatch =
+    (matcher: 'some' | 'every') =>
+    (...events: Eo['type'][]) => {
+      return useSync(
+        listener => {
+          const { unsubscribe } = service.subscribe(listener, {
+            equals: (first, next) => deepEqual(first.value, next.value),
+          });
+          return unsubscribe;
+        },
+        () => service.state,
+        () => service.state,
+        () => events[matcher](event => service.canEvents(event)),
       );
-
-      useEffect(() => sub.unsubscribe, []);
-      return _state;
     };
-  };
 
   const or = dispatch('some');
   const and = dispatch('every');

@@ -5,6 +5,27 @@
 <details>
 <summary>
 
+## **[1.9.5] - 05/08/2026** => _18:06_
+
+</summary>
+
+### Refactor
+
+- **`useCan` / `useIsInside` / `useState`**: Migrate internal hook state subscriptions to use `useSync` from `@bemedev/react-sync`.
+
+### Dependencies
+
+- **Dependencies**: Add `@bemedev/react-sync` as a runtime dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.4] - 03/08/2026** => _21:09_
 
 </summary>

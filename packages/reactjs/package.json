@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-reactjs",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "description": "Middleware between @bemedev/app and reactjs",
   "keywords": [
     "app",
@@ -130,5 +130,8 @@
   ],
   "engines": {
     "node": ">=24"
+  },
+  "dependencies": {
+    "@bemedev/react-sync": "^0.1.1"
   }
 }

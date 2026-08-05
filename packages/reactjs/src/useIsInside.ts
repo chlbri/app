@@ -4,9 +4,9 @@ import type {
   PrimitiveObject,
   State,
 } from '@bemedev/app';
-import { decomposeSV, deepEqual } from '@bemedev/app/utils';
 import { expandFn } from '@bemedev/app/bemedev';
-import { useEffect, useState } from 'react';
+import { decomposeSV, deepEqual } from '@bemedev/app/utils';
+import { useSync } from '@bemedev/react-sync';
 
 export function useIsInside<
   Tc extends PrimitiveObject,
@@ -22,19 +22,21 @@ export function useIsInside<
 
   const dispatch = (matcher: 'some' | 'every') => {
     return (...states: string[]) => {
-      const selector = (_state: State<Eo, Tc, Ta>) => {
-        return states[matcher](state => selector1(_state).includes(state));
-      };
-
-      const [_state, setState] = useState(selector(service.state));
-
-      const sub = service.subscribe(
-        nextState => setState(selector(nextState)),
-        { equals: (first, next) => deepEqual(first.value, next.value) },
+      return useSync(
+        listener => {
+          const { unsubscribe } = service.subscribe(listener, {
+            equals: (first, next) => deepEqual(first.value, next.value),
+          });
+          return unsubscribe;
+        },
+        () => service.state,
+        () => service.state,
+        _state => {
+          return states[matcher](state =>
+            selector1(_state).includes(state),
+          );
+        },
       );
-
-      useEffect(() => sub.unsubscribe, []);
-      return _state;
     };
   };
 
