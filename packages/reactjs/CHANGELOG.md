@@ -11,7 +11,8 @@
 
 ### Refactor
 
-- **`useCan` / `useIsInside` / `useState`**: Migrate internal hook state subscriptions to use `useSync` from `@bemedev/react-sync`.
+- **`useCan` / `useIsInside` / `useState`**: Migrate internal hook state
+  subscriptions to use `useSync` from `@bemedev/react-sync`.
 
 ### Dependencies
 
