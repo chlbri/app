@@ -39,7 +39,7 @@ describe('Cannot perform Activity', () => {
         ...defaultC,
         event: { type: 'NEXT', payload: {} },
         status: 'busy',
-        tags: undefined,
+        tags: [],
         value: 'state1',
       });
     });

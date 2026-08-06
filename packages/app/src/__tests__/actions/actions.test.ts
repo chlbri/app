@@ -42,7 +42,7 @@ describe('Interpret for actions', () => {
           ...defaultC,
           event: transformEventArg(ALWAYS_EVENT),
           status: 'busy',
-          tags: undefined,
+          tags: [],
           value: 'state1',
         });
       });
@@ -87,7 +87,7 @@ describe('Interpret for actions', () => {
           ...defaultC,
           event: transformEventArg(ALWAYS_EVENT),
           status: 'busy',
-          tags: undefined,
+          tags: [],
           value: 'state1',
         });
       });

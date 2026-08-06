@@ -54,7 +54,7 @@ describe('delay is not defined', () => {
         ...defaultC,
         event: { type: 'NEXT', payload: {} },
         status: 'busy',
-        tags: undefined,
+        tags: [],
         value: 'state1',
       });
     });

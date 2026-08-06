@@ -8,5 +8,6 @@ export default defineProject({
     logHeapUsage: false,
     setupFiles: ['./vitest.setup.ts'],
     testTimeout: 30000,
+    typecheck: { enabled: true, ignoreSourceErrors: false },
   },
 });

@@ -1,18 +1,17 @@
 import { flatMap, type NodeConfig2 } from '#states';
 import { toArray } from '@bemedev/app-utils-bemedev';
 
-export const getTags = <T extends string = string>(node: NodeConfig2) => {
+export const getTags = <T extends string = string>(
+  node: NodeConfig2,
+): T[] => {
   const flat = flatMap(node);
-  const out: string[] = [];
+  const out = new Set<string>();
   const entries = Object.entries(flat);
 
   entries.forEach(([, state]) => {
     const tags = toArray.typed(state.tags);
-    out.push(...tags);
+    tags.forEach(tag => out.add(tag));
   });
 
-  const checkEmpty = out.length === 0;
-  if (checkEmpty) return undefined;
-
-  return out as T[];
+  return Array.from(out) as T[];
 };

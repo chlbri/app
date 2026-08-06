@@ -16,7 +16,7 @@ export default createMachine(
     },
   },
   {
-    context: type('string'),
+    context: type(({ optional }) => optional('string')),
     eventsMap: type({ SET_DATA: 'string', CLEAR_ALL: 'undefined' }),
   },
 );

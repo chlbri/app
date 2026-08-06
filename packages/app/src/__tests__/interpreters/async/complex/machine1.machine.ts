@@ -108,10 +108,7 @@ export default createMachine(
 ).provideOptions(({ assign, erase, batch }) => ({
   actions: {
     provideAsset: assign('context.asset', {
-      START: ({ payload, tags }) => {
-        if (tags === 'deux') {
-          /**EMPTY */
-        }
+      START: ({ payload }) => {
         return payload.asset;
       },
     }),

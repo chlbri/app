@@ -55,7 +55,7 @@ describe('Machine createOptions - error handlers', () => {
           context: 42,
           pContext: undefined,
           status: 'busy',
-          tags: undefined,
+          tags: [],
           value: 'idle',
           event: { type: 'TEST', payload: {} },
         });
@@ -160,7 +160,7 @@ describe('Machine createOptions - error handlers', () => {
           context: 10,
           pContext: undefined,
           status: 'busy',
-          tags: undefined,
+          tags: [],
           value: 'idle',
           event: { type: 'TEST', payload: {} },
         });
@@ -306,7 +306,7 @@ describe('Machine createOptions - error handlers', () => {
           context: 5,
           pContext: undefined,
           status: 'busy',
-          tags: undefined,
+          tags: [],
           value: 'idle',
           event: { type: 'TEST', payload: {} },
         });

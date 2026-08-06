@@ -103,7 +103,7 @@ const StartTests: FC<StartTestsProps> = ({
   );
 };
 
-const TIMER_INTERVAL = 15_000;
+const TIMER_INTERVAL = 30_000;
 const ONE_SECOND = 1000;
 
 export const Route = createFileRoute('/test-index')({

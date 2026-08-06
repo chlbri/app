@@ -61,7 +61,7 @@ describe('Interpret for guards', () => {
           ...defaultC,
           event: transformEventArg(ALWAYS_EVENT),
           status: 'busy',
-          tags: undefined,
+          tags: [],
           value: 'state1',
         });
       });
@@ -110,7 +110,7 @@ describe('Interpret for guards', () => {
           ...defaultC,
           event: transformEventArg(ALWAYS_EVENT),
           status: 'busy',
-          tags: undefined,
+          tags: [],
           value: 'state1',
         });
       });

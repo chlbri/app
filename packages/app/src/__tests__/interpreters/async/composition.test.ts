@@ -283,7 +283,7 @@ describe('Composition', () => {
       const expected = {
         status: 'working',
         value: 'idle',
-        tags: undefined,
+        tags: [],
         context: undefined,
         event: { payload: {}, type: 'machine$$init' },
       };
@@ -301,7 +301,7 @@ describe('Composition', () => {
         status: 'working',
         value: 'idle',
         context: {},
-        tags: undefined,
+        tags: [],
         event: { type: 'NEXT', payload: {} },
       };
 
