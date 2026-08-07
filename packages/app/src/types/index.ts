@@ -167,7 +167,7 @@ export type * from '#common/types.types';
 
 export type {
   CreateSubscriber_F,
-  SubscriberClass,
+  Subscriber as SubscriberClass,
   SubscriberOptions,
 } from '#common/subscriber';
 

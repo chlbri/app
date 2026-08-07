@@ -33,6 +33,7 @@ export const TEST_LOGS = (
     },
     interval,
     exact: true,
+    maxTicks: 1_000,
   });
 
   return all;

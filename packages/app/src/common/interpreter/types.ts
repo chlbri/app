@@ -12,12 +12,13 @@ import type {
 import type { GuardConfig } from '#guards';
 import type { ActivityConfig, StateValue, WorkingStatus } from '#states';
 import type { Decompose } from '@bemedev/decompose';
-import type { Interval2, IntervalParams } from '@bemedev/interval2';
+import type { Interval2 } from '@bemedev/interval2';
 import type { Equals, PrimitiveObject } from '@bemedev/typings';
 import type { Fn, FnMapR, KeyU, OptionalDefinition } from '~types';
 import type { ScheduledData, SimpleMachineOptions2 } from '../machine';
 import type { AnyMachine, MachineType } from '../machine/types';
-import type { SubscriberClass, SubscriberOptions } from '../subscriber';
+import type { Subscriber, SubscriberOptions } from '../subscriber';
+import type { IntervalParams } from '@bemedev/interval2/types';
 
 export type Mode = 'normal' | 'strict';
 
@@ -31,7 +32,7 @@ export type AddSubscriber_F<
 > = (
   subscriber: FnMapR<Eo, Tc, T, void>,
   options?: SubscriberOptions<Eo, Tc, T>,
-) => SubscriberClass<Tc, T, Eo>;
+) => Subscriber<Tc, T, Eo>;
 
 export type AnyInterpreter = {
   mode: Mode;

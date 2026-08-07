@@ -3,7 +3,6 @@ import { cn } from '#/ui/cn';
 import { Logs } from '#/ui/components/Logs';
 import { MachineConfig } from '#/ui/components/MachineConfig';
 import { Tags } from '#/ui/components/tags';
-import type { TimerState } from '@bemedev/app/bemedev';
 import { wrap } from '@bemedev/hook-wrapper';
 import { createFileRoute } from '@tanstack/react-router';
 import {
@@ -14,15 +13,13 @@ import {
   Gauge,
   Layers,
   Minus,
-  Pause,
-  Play,
   Plus,
   RefreshCw,
   Sparkles,
   Square,
   Zap,
 } from 'lucide-react';
-import { useEffect, useState, type FC } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge } from '../ui/components/badge';
 import { Button } from '../ui/components/button';
 import {
@@ -33,75 +30,6 @@ import {
   CardTitle,
 } from '../ui/components/card';
 import { useComponents } from './-index.components';
-
-interface StartTestsProps {
-  pause: () => void;
-  resume: () => void;
-}
-
-const StartTests: FC<StartTestsProps> = ({
-  pause,
-  resume,
-}: StartTestsProps) => {
-  const [timerState, setTimerState] = useState<TimerState>('idle');
-
-  const isRunning = timerState === 'active';
-
-  return (
-    <button
-      type='button'
-      onClick={() => {
-        setTimerState(prev => {
-          if (prev === 'active') {
-            pause();
-            return 'paused';
-          }
-          resume();
-          return 'active';
-        });
-      }}
-      className={cn(
-        'group relative inline-flex items-center justify-center overflow-hidden rounded-xl p-0.5 font-medium text-white shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] cursor-pointer',
-        isRunning
-          ? 'bg-linear-to-r from-emerald-500 via-teal-500 to-cyan-500 shadow-emerald-500/25 hover:shadow-emerald-500/40'
-          : 'bg-linear-to-r from-indigo-600 via-blue-600 to-cyan-600 shadow-indigo-500/25 hover:shadow-indigo-500/40',
-      )}
-    >
-      <span className='absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100' />
-      <div className='relative flex items-center gap-2.5 rounded-[10px] bg-slate-950/60 px-3.5 py-1.5 backdrop-blur-md transition-colors group-hover:bg-transparent'>
-        {isRunning ? (
-          <>
-            <div className='relative flex h-2.5 w-2.5 items-center justify-center'>
-              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75' />
-              <span className='relative inline-flex h-2 w-2 rounded-full bg-emerald-400' />
-            </div>
-            <Pause className='h-3.5 w-3.5 fill-emerald-300 text-emerald-300 transition-transform group-hover:scale-110' />
-            <div className='flex flex-col text-left'>
-              <span className='text-[9px] font-bold tracking-wider text-emerald-300 uppercase leading-none'>
-                Tests Running
-              </span>
-              <span className='text-xs font-extrabold text-white leading-tight'>
-                Pause Tests
-              </span>
-            </div>
-          </>
-        ) : (
-          <>
-            <Play className='h-3.5 w-3.5 text-cyan-300 animate-pulse' />
-            <div className='flex flex-col text-left'>
-              <span className='text-[9px] font-bold tracking-wider text-cyan-300 uppercase leading-none'>
-                Tests Stopped
-              </span>
-              <span className='text-xs font-extrabold text-white leading-tight'>
-                Start Tests
-              </span>
-            </div>
-          </>
-        )}
-      </div>
-    </button>
-  );
-};
 
 const TIMER_INTERVAL = 30_000;
 const ONE_SECOND = 1000;
@@ -125,6 +53,7 @@ export const Route = createFileRoute('/test-index')({
       CanStop,
       Reset,
       sendEvent,
+      StartStopTests,
       tests,
     } = useComponents.test(service);
 
@@ -235,12 +164,7 @@ export const Route = createFileRoute('/test-index')({
                 </div>
 
                 <div className='flex flex-col items-center gap-2'>
-                  <StartTests
-                    resume={() => {
-                      tests.resume();
-                    }}
-                    pause={tests.pause}
-                  />
+                  <StartStopTests />
                   <div className='w-8 h-px bg-slate-800' />
                   <button
                     type='button'

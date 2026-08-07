@@ -594,7 +594,13 @@ describe('Composition', () => {
         test(...useIterator(42, 2));
         test(...useIteratorC(24, 3));
 
-        describe(...useConsole(4, ...Array(12).fill('sendPanelToUser')));
+        describe(
+          ...useConsole(
+            4,
+            'NEXT time, you will see!!',
+            ...Array(12).fill('sendPanelToUser'),
+          ),
+        );
       });
 
       test(...useWrite('', 14));
@@ -743,12 +749,12 @@ describe('Composition', () => {
           });
 
           test('#02 => Log is called "75" times', () => {
-            expect(log).toBeCalledTimes(75);
+            expect(log).toBeCalledTimes(76);
           });
         });
 
         test('#03', () => {
-          expect(dumbFn).toBeCalledTimes(6);
+          expect(dumbFn).toBeCalledTimes(7);
         });
 
         test('#04 => Log the time of all tests', () => {

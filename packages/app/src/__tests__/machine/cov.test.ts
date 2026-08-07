@@ -199,8 +199,8 @@ describe('machine coverage', () => {
       test(...useIterator(42, 2));
       test(...useIteratorC(24, 3));
       const array = [
-        'sendPanelToUser',
-        ...Array(11).fill('sendPanelToUser'),
+        'NEXT time, you will see!!',
+        ...Array(12).fill('sendPanelToUser'),
       ];
       describe(...useConsole(4, ...array));
     });
@@ -346,8 +346,8 @@ describe('machine coverage', () => {
             expect(log).toBeCalledTimes(strings.length);
           });
 
-          test('#02 => Log is called "69" times', () => {
-            expect(log).toBeCalledTimes(70);
+          test('#02 => Log is called "71" times', () => {
+            expect(log).toBeCalledTimes(71);
           });
         });
 

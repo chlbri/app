@@ -45,10 +45,10 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const subscriber = service.subscribe(mockFn);
 
       await service.start();
-      expect(mockFn).toHaveBeenCalledTimes(7); // Appelé à l'initialisation et à chaque changement de contexte
+      expect(mockFn).toHaveBeenCalledTimes(5); // Appelé à l'initialisation et à chaque changement de contexte
       await service.send('NEXT');
 
-      expect(mockFn).toHaveBeenCalledTimes(13);
+      expect(mockFn).toHaveBeenCalledTimes(11);
       expect(subscriber.state).toBe('active');
 
       service.stop();
@@ -61,13 +61,13 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const subscriber = service.subscribe(mockFn);
 
       await service.start();
-      expect(mockFn).toHaveBeenCalledTimes(7); // Appelé à l'initialisation et à chaque changement de contexte
+      expect(mockFn).toHaveBeenCalledTimes(5); // Appelé à l'initialisation et à chaque changement de contexte
       subscriber.close();
-      expect(mockFn).toHaveBeenCalledTimes(7);
+      expect(mockFn).toHaveBeenCalledTimes(5);
       await service.send('NEXT');
 
       expect(subscriber.state).toBe('paused');
-      expect(mockFn).toHaveBeenCalledTimes(7);
+      expect(mockFn).toHaveBeenCalledTimes(5);
 
       service.stop();
     });
@@ -82,7 +82,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       subscriber.unsubscribe();
       await service.send('NEXT');
 
-      expect(subscriber.state).toBe('disposed');
+      expect(subscriber.state).toBe('inactive');
 
       service.stop();
     });
@@ -278,12 +278,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
     test('#01.03 => should handle custom equality function', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(() => 'custom-equality');
-      const customEquals = vi.fn(
-        (
-          a: State<EventObject, TestContext>,
-          b: State<EventObject, TestContext>,
-        ) => a.context.iterator === b.context.iterator,
-      );
+      const customEquals = vi.fn();
 
       const subscriber = service.subscribe(mockFn, {
         equals: customEquals,
@@ -367,7 +362,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
       // Test disposed state
       subscriber.unsubscribe();
-      expect(subscriber.state).toBe('disposed');
+      expect(subscriber.state).toBe('inactive');
 
       service.stop();
     });
@@ -380,10 +375,10 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       service.start();
 
       subscriber.unsubscribe();
-      expect(subscriber.state).toBe('disposed');
+      expect(subscriber.state).toBe('inactive');
 
       subscriber.open();
-      expect(subscriber.state).toBe('disposed');
+      expect(subscriber.state).toBe('inactive');
 
       service.stop();
     });

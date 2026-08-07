@@ -20,6 +20,7 @@ export * from './resolve';
 export * from './strings';
 export * from './toFunction';
 export * from './undefined';
+export * from './identity';
 export * from './typings';
 export { flatMap } from '../states/functions/flatMap';
 export * from './readonly';

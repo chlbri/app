@@ -59,8 +59,8 @@ import {
 } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
-import equal from 'fast-deep-equal';
 import type { Fn, MachineType, Pausable } from '~types';
+import { createSubscriber, type Subscriber } from '../subscriber';
 import {
   getEntries,
   getExits,
@@ -70,7 +70,6 @@ import {
   type ScheduledData,
   type SimpleMachineOptions2,
 } from '../machine';
-import { createSubscriber, type SubscriberClass } from '../subscriber';
 import type {
   ActorsMapFrom,
   AddSubscriber_F,
@@ -245,7 +244,6 @@ export abstract class CommonInterpreter<
   /**
    * The previous {@linkcode State} of this {@linkcode Interpreter} service.
    */
-  #previousState!: State<Eo, Tc, Ta>;
 
   /**
    * The current {@linkcode State} of this {@linkcode Interpreter} service.
@@ -446,7 +444,6 @@ export abstract class CommonInterpreter<
     machine: AnyMachine<E, A, Pc, Tc>,
     mode: Mode = 'strict',
     exact = true,
-    isConstructor = true,
   ) => {
     this.__machine = machine.renew;
     this.__config = this.__machine.initialConfig;
@@ -460,8 +457,6 @@ export abstract class CommonInterpreter<
       value: this.__value,
       tags: toArray.typed(this.tags),
     };
-
-    if (isConstructor) this.#previousState = this.__state;
 
     this.#collectEmitterConfigs();
     this.#collectChildrenConfig();
@@ -477,7 +472,7 @@ export abstract class CommonInterpreter<
     this.__context = this.__initialContext;
     this.__pContext = this.__initialPpc;
     this.#status = 'idle';
-    this.#init(this.__machine, this.__mode, this.__exact, false);
+    this.#init(this.__machine, this.__mode, this.__exact);
     this.__flush();
   };
 
@@ -704,18 +699,18 @@ export abstract class CommonInterpreter<
   #stop = this.#mapperFn('stop');
   #dispose = this.#mapperFn('dispose');
 
-  protected __subscribers = new Set<SubscriberClass<Tc, Ta, Eo>>();
-  #innerSubscribers = new Set<SubscriberClass<Tc, Ta, Eo>>();
+  protected __subscribers = new Set<Subscriber<Tc, Ta, Eo>>();
+  #innerSubscribers = new Set<Subscriber<Tc, Ta, Eo>>();
 
   /**
    * Flushes all subscribers and map subscribers of this {@linkcode Interpreter} service.
    *
-   * @see {@linkcode SubscriberClass} for more information about subscribers.
-   * @see {@linkcode SubscriberClass} for more information about map subscribers.
+   * @see {@linkcode Subscriber} for more information about subscribers.
+   * @see {@linkcode Subscriber} for more information about map subscribers.
    */
   protected __flush = () => {
     const all = [...this.#innerSubscribers, ...this.__subscribers];
-    all.forEach(({ fn }) => fn(this.#previousState, this.__state));
+    all.forEach(({ fn }) => fn(this.__state));
   };
 
   /**
@@ -830,14 +825,12 @@ export abstract class CommonInterpreter<
    * Assign the current {@linkcode State} and the previous {@linkcode State} of the {@linkcode Interpreter} service and flush all subscribers.
    * @param parts, Partial {@linkcode State}
    *
-   * @see {@linkcode SubscriberClass}
-   * @see {@linkcode SubscriberClass}
+   * @see {@linkcode Subscriber}
+   * @see {@linkcode Subscriber}
    */
   protected __performStates = (parts?: Partial<State<Eo, Tc, Ta>>) => {
-    this.#previousState = structuredClone(this.__state);
     this.__state = { ...this.__state, ...parts };
-    const check = !equal(this.#previousState, this.__state);
-    if (check) this.__flush();
+    this.__flush();
   };
 
   protected __setStatus = (status: WorkingStatus) => {
@@ -948,7 +941,6 @@ export abstract class CommonInterpreter<
     options,
   ) => {
     const events = this.__machine.eventsList;
-
     const subscriber = createSubscriber(_subscriber, options, ...events);
     this.#innerSubscribers.add(subscriber as any);
     return subscriber as any;
@@ -1541,6 +1533,8 @@ export abstract class CommonInterpreter<
   dispose = () => {
     this.stop();
     this.__timeoutActions.forEach(this.#dispose);
+    this.__subscribers.forEach(this.#dispose);
+    this.#innerSubscribers.forEach(this.#dispose);
   };
 
   [Symbol.dispose] = this.dispose;
