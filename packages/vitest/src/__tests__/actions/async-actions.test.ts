@@ -295,6 +295,52 @@ describe('Async action helpers', () => {
     test(...stop());
   });
 
+  describe('#07 => assign — async fn fails, emptyFn handler, fails with number', () => {
+    const error = vi.fn(emptyActionFn);
+    const machine = _machine1.provideOptions(({ assign }) => ({
+      actions: {
+        loadUser: assign(
+          'context.name',
+          async () => {
+            await sleep(TINY_DELAY);
+            throw 404;
+          },
+          { catch: error },
+        ),
+      },
+    }));
+
+    const service = interpret(machine, { context: { name: '' } });
+
+    const { start, send, useName, waiter, stop, callError } =
+      constructTests(
+        vi,
+        service,
+        ({ contexts: constructContexts, waiter, tupleOf, getIndex }) => ({
+          useName: constructContexts(
+            ({ context }) => context.name,
+            'name',
+          ),
+          waiter: waiter(TINY_DELAY / 4),
+          callError: (times = 0) =>
+            tupleOf(
+              `#${getIndex()} => call error fn ${times} times`,
+              () => {
+                expect(error).toHaveBeenCalledTimes(times);
+              },
+            ),
+        }),
+      );
+
+    test(...start());
+    test(...useName(''));
+    test(...callError(0));
+    test(...send('LOAD'));
+    test(...waiter(5));
+    test(...callError(1));
+    test(...stop());
+  });
+
   describe('#08 => assign — async fn + then handler', () => {
     const machine = _machine8.provideOptions(({ assign }) => ({
       actions: {
