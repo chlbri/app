@@ -34,7 +34,6 @@ import { useComponents } from './-index.components';
 const TIMER_INTERVAL = 20_000;
 
 export const Route = createFileRoute('/test-index')({
-  beforeLoad: ({ context }) => context.counterServiceTest.start(),
   component: () => {
     const service = Route.useRouteContext({
       select: s => s.counterServiceTest,
@@ -57,12 +56,29 @@ export const Route = createFileRoute('/test-index')({
     } = useComponents.test(service);
 
     const TimerReset = wrap.noParams(
-      () => useSecondTicks(TIMER_INTERVAL / ONE_SECOND, service.softReset),
-      ({ count }) => (
-        <span className='text-xs italic text-slate-400'>
-          [For performance] : Auto reset the full-state in {count}
-        </span>
-      ),
+      () => {
+        const secs = TIMER_INTERVAL / ONE_SECOND;
+        const ticks = useSecondTicks(secs, service.softReset);
+        const count = ticks.count;
+        const isPlural = count !== 1;
+        const seconds = `second${isPlural ? 's' : ''}`;
+
+        const countClass = cn(
+          'text-lg w-7 text-center',
+          count <= secs / 4 ? 'text-red-400 font-semibold' : 'font-medium',
+        );
+
+        return { count, seconds, countClass };
+      },
+      ({ count, seconds, countClass }) => {
+        return (
+          <p className='text-xs italic text-slate-400 flex items-center gap-1'>
+            [For performance] : Auto reset the full-state in
+            <span className={countClass}>{count}</span>
+            <span>{seconds}</span>
+          </p>
+        );
+      },
     );
 
     return (

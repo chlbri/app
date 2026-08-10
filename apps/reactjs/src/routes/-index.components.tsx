@@ -388,5 +388,10 @@ useComponents.test = (service: Service) => {
     );
   };
 
+  useEffect(() => {
+    if (service.status === 'paused') service.resume();
+    service.start();
+  }, []);
+
   return { ...all, FullStateWrapper, StartStopTests };
 };

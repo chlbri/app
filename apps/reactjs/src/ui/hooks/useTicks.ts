@@ -9,7 +9,7 @@ export const ONE_SECOND = 1000;
  * @returns An object containing the count, start, stop, and reset functions.
  */
 export const useSecondTicks = (total: number, cb: Cb = () => {}) => {
-  const [_count, setCount] = useState(total);
+  const [count, setCount] = useState(total);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const start = useCallback(() => {
@@ -39,11 +39,11 @@ export const useSecondTicks = (total: number, cb: Cb = () => {}) => {
 
   useEffect(() => {
     start();
-    return reset;
+    return () => {
+      stop();
+      reset();
+    };
   }, []);
-
-  const isPlural = _count !== 1;
-  const count = `${_count} second${isPlural ? 's' : ''}`;
 
   return { count, start, stop, reset };
 };
