@@ -44,35 +44,43 @@ describe('Error transitions testing)', () => {
 
     const service = interpret(machine, { context: 0 });
 
-    const { useNext, useError, useContext, useMock, start, waiter } =
-      constructTests(vi, service, ({ getIndex, contexts, waiter }) => ({
-        useNext: (value: number) => {
-          const invite = `#${getIndex()} => sub1.next(${value})`;
-          return tupleOf(invite, () => {
-            const [, fn] = waiter(DELAY)();
-            fn().then(() => sub.next(value));
-          });
-        },
+    const {
+      useNext,
+      useError,
+      useContext,
+      useMock,
+      start,
+      waiter,
+      useFull,
+    } = constructTests(vi, service, ({ getIndex, contexts, waiter }) => ({
+      useNext: (value: number) => {
+        const invite = `#${getIndex()} => sub1.next(${value})`;
+        return tupleOf(invite, () => {
+          const [, fn] = waiter(DELAY)();
+          fn().then(() => sub.next(value));
+        });
+      },
 
-        useError: (value: number) => {
-          const invite = `#${getIndex()} => sub1.error(${value})`;
-          return tupleOf(invite, () => {
-            const [, fn] = waiter(DELAY)();
-            fn().then(() => sub.error(value));
-          });
-        },
+      useError: (value: number) => {
+        const invite = `#${getIndex()} => sub1.error(${value})`;
+        return tupleOf(invite, () => {
+          const [, fn] = waiter(DELAY)();
+          fn().then(() => sub.error(value));
+        });
+      },
 
-        useMock: (payload: number, fails = false) => {
-          const invite = `#${getIndex()} => mock('Error received:', ${payload})${fails ? ' => (fails)' : ''}`;
+      useMock: (payload: number, fails = false) => {
+        const invite = `#${getIndex()} => mock('Error received:', ${payload})${fails ? ' => (fails)' : ''}`;
 
-          return tupleOf(invite, () => {
-            expect(mock).toHaveBeenCalledWith('Error received:', payload);
-          });
-        },
+        return tupleOf(invite, () => {
+          expect(mock).toHaveBeenCalledWith('Error received:', payload);
+        });
+      },
 
-        useContext: contexts(({ context }) => context),
-        waiter: waiter(DELAY),
-      }));
+      useContext: contexts(({ context }) => context),
+      useFull: contexts(),
+      waiter: waiter(DELAY),
+    }));
 
     test(...start());
     test(...useContext(0));
@@ -88,6 +96,7 @@ describe('Error transitions testing)', () => {
     test(...waiter(45));
     test(...useMock(20));
     test(...useContext(15));
+    test(...useFull({ context: 15, pContext: undefined }));
   });
 });
 

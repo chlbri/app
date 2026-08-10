@@ -12,10 +12,10 @@ import {
   type TagFrom,
 } from '#common/interpreter';
 import {
+  ALWAYS_EVENT,
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
-  TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
 import { type AsyncEmitterFunction } from '#emitters';
 import {
@@ -34,7 +34,6 @@ import type {
   DelayedTransitions,
   TransitionConfig,
 } from '#transitions';
-import { betterTimeout } from '#utils';
 import {
   _any,
   isDefined,
@@ -361,30 +360,22 @@ export class SyncInterpreter<
         }
 
         const transitions = toArray.typed(transition);
+        setTimeout(() => {
+          if (this.__cannotPerform(from)) return;
 
-        betterTimeout({
-          callback: () => {
-            if (this.__cannotPerform(from)) return;
+          const target = this.__performTransitions(
+            ...(transitions as any),
+          );
 
-            const target = this.__performTransitions(
-              ...(transitions as any),
+          if (target === false) {
+            this._addWarning(
+              `No transitions reached from "${from}" by delay "${_delay}" !`,
             );
-
-            if (target === false) {
-              this._addWarning(
-                `No transitions reached from "${from}" by delay "${_delay}" !`,
-              );
-            } else {
-              this.__performConfig(target);
-              this._next();
-            }
-          },
-          onError: () => {
-            this._addWarning('MAX_TIMEOUT REACHED !!');
-          },
-          ms: delay,
-          maxTime: DEFAULT_MAX_TIME_PROMISE,
-        });
+          } else {
+            this.__performConfig(target);
+            this._next();
+          }
+        }, delay);
       });
     };
   };
@@ -512,6 +503,12 @@ export class SyncInterpreter<
     return outs;
   };
 
+  private __performAlways = (alway: AlwaysConfig) => {
+    this.__changeEvent(transformEventArg(ALWAYS_EVENT));
+    const always = toArray<TransitionConfig>(alway);
+    return this.__performTransitions(...always);
+  };
+
   protected get __collectedSelfTransitions0() {
     const entries = new Map<
       string,
@@ -519,11 +516,7 @@ export class SyncInterpreter<
     >();
 
     this.#collectedAlways.forEach(([from, always]) => {
-      const inner = entries.get(from);
-      if (inner) inner.always = () => this.__performAlways(always);
-      else {
-        entries.set(from, { always: () => this.__performAlways(always) });
-      }
+      entries.set(from, { always: () => this.__performAlways(always) });
     });
 
     this.#collectedAfters.forEach(([from, after]) => {
@@ -721,22 +714,17 @@ export class SyncInterpreter<
   protected _next = () => {
     let check = false;
     do {
-      const startTime = Date.now();
       const previousValue = this.__value;
 
       const checkCounter =
         this.__selfTransitionsCounter >= DEFAULT_MAX_SELF_TRANSITIONS;
+
       if (checkCounter) return this.__throwMaxCounter();
       this.__throwing();
       this.__preNext();
-
       const currentValue = this.__value;
       check = !equal(previousValue, currentValue);
       if (check) this.__flush();
-
-      const duration = Date.now() - startTime;
-      const check2 = duration > TIME_TO_RINIT_SELF_COUNTER;
-      if (check2) this.__selfTransitionsCounter = 0;
     } while (check);
 
     this.__selfTransitionsCounter = 0;

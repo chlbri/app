@@ -69,18 +69,18 @@ export class SubscriberBase<T, R = T>
    *
    * @returns type {@linkcode Equals_F} comparator function or `undefined` if disposed.
    */
-  get equals(): Equals_F<R> {
-    return this.__equals;
-  }
+  // get equals(): Equals_F<R> {
+  //   return this.__equals;
+  // }
 
   /**
    * Getter for the selector function.
    *
    * @returns type {@linkcode Selector_F} selector function or `undefined`.
    */
-  get selector(): Selector_F<T, R> | undefined {
-    return this._selector;
-  }
+  // get selector(): Selector_F<T, R> | undefined {
+  //   return this._selector;
+  // }
 
   /**
    * Previous value processed by the subscriber.

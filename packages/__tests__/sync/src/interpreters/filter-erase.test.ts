@@ -286,7 +286,7 @@ describe('Filter and Erase actions', () => {
 
     describe('#03 => Erase multiple properties with batch', () => {
       const machine = _machine6;
-
+    
       const service = interpret(machine, { context: {} });
 
       const {
@@ -296,7 +296,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {

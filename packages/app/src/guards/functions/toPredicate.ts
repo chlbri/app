@@ -100,13 +100,7 @@ const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
     return guards
       .map(guard => _toPredicate(guard, _guards, ...events))
       .filter(({ errors: errors1 }) => {
-        const check = errors1.length > 0;
-        if (check) {
-          errors.push(...errors1);
-
-          // Because if it has error, the function is not defined
-          return false;
-        }
+        errors.push(...errors1);
         return true;
       })
       .map(({ func }) => func)
@@ -128,7 +122,7 @@ const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
   return { func: { or }, errors };
 };
 
-const _toPredicateAsync: _ToPredicateAsyncF = (
+const _toPredicateAsyncFn: _ToPredicateAsyncF = (
   guard,
   _guards,
   ...events
@@ -151,38 +145,31 @@ const _toPredicateAsync: _ToPredicateAsyncF = (
     return { func: func as any, errors };
   }
 
-  const makeArray = (guards: GuardConfig[]) => {
-    return guards
-      .map(guard => _toPredicate.async(guard, _guards, ...events))
+  const makeArray = (guards: GuardConfig[]) =>
+    guards
+      .map(guard => _toPredicateAsyncFn(guard, _guards, ...events))
       .filter(({ errors: errors1 }) => {
-        const check = errors1.length > 0;
-        if (check) {
-          errors.push(...errors1);
-          return false;
-        }
+        errors.push(...errors1);
         return true;
       })
       .map(({ func }) => func)
       .filter(isDefined);
-  };
 
   if (GUARD_TYPE.and in guard) {
     const and = makeArray(guard.and);
     const check = and.length < 1;
     if (check) return { errors };
-
     return { func: { and } as any, errors };
   }
 
   const or = makeArray(guard.or);
   const check = or.length < 1;
   if (check) return { errors };
-
   return { func: { or } as any, errors };
 };
 
 export const _toPredicate: _ToPredicate = expandFn(_toPredicateFn, {
-  async: _toPredicateAsync,
+  async: _toPredicateAsyncFn,
 });
 
 /**
@@ -205,10 +192,9 @@ export const _toPredicate: _ToPredicate = expandFn(_toPredicateFn, {
 export const toPredicate: ToPredicate = expandFn(
   (guard, guards, ...events) => {
     const { func, errors } = _toPredicate(guard, guards, ...events);
-
     if (!func) return { errors };
-
-    return { predicate: recursive(func), errors };
+    const predicate = recursive(func);
+    return { predicate, errors };
   },
   {
     async: ((guard, guards, ...events) => {
@@ -219,18 +205,17 @@ export const toPredicate: ToPredicate = expandFn(
       );
 
       if (!func) return { errors };
+      const _predicate = asyncRecursive(func as any);
 
-      const predicate = asyncRecursive(func as any);
-
-      const safePredicate = async (...args: any[]) => {
+      const predicate = async (...args: any[]) => {
         try {
-          return await predicate(...args);
+          return await _predicate(...args);
         } catch {
           return false;
         }
       };
 
-      return { predicate: safePredicate as any, errors };
+      return { predicate, errors };
     }) as ToPredicate['async'],
   },
 );

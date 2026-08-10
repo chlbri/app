@@ -1,0 +1,27 @@
+{
+  "name": "valibot",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx index.ts",
+    "test": "vitest run",
+    "test:coverage": "vitest run",
+    "generate:lib": "app-cli generate -c ./src",
+    "generate": "app-cli generate -c ./src",
+    "generate:watch": "app-cli watch -c ./src",
+    "pretest": "pnpm run generate:lib"
+  },
+  "devDependencies": {
+    "@bemedev/app": "workspace:^",
+    "@bemedev/app-cli": "workspace:^",
+    "@bemedev/app-utils-bemedev": "workspace:^",
+    "@bemedev/app-valibot": "workspace:^",
+    "@bemedev/app-vitest": "workspace:^",
+    "@bemedev/dev-utils": "^1.1.1",
+    "@types/node": "^26.2.0",
+    "tsx": "^4.23.12",
+    "typescript": "6.0.3",
+    "valibot": "^1.4.2",
+    "vitest": "^4.1.10"
+  }
+}

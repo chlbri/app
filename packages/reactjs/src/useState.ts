@@ -28,6 +28,7 @@ export function useState<
   options?: UseServiceOptions<Tc, Ta, Eo, T>,
 ): T {
   const { selector = identity, equals = deepEqual<T> } = options ?? {};
+  const _selector = () => selector(service.state);
 
   return useSync(
     listener => {
@@ -41,8 +42,8 @@ export function useState<
       });
       return unsubscribe;
     },
-    () => selector(service.state),
-    () => selector(service.state),
+    _selector,
+    _selector,
     identity,
     equals,
   );

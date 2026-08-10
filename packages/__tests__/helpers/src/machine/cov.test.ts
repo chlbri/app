@@ -1,5 +1,10 @@
 import { tupleOf } from '@bemedev/app-utils-bemedev';
-import { _machine2, DELAY, fakeDB, machine2 } from '../../../async/src/interpreters/async/data';
+import {
+  _machine2,
+  DELAY,
+  fakeDB,
+  machine2,
+} from '../../../async/src/interpreters/data';
 import { interpret } from '@bemedev/app';
 import { AsyncMachine } from '@bemedev/app';
 
@@ -67,62 +72,69 @@ describe('machine coverage', () => {
     useInput,
     useData,
     useConsole,
-  } = constructTests(vi, service, ({ waiter: _waiter, sender, contexts }) => ({
-    useWaiter: _waiter(DELAY),
-    useWrite: sender('WRITE'),
-    useIterator: contexts(({ context }) => context?.iterator, 'iterator'),
-    useIteratorC: contexts(
-      ({ pContext }) => (pContext as any)?.iterator,
-      'private iterator',
-    ),
-    useInput: contexts(({ context }) => context?.input, 'input'),
-    useData: (index: number, ...datas: any[]) => {
-      const inviteStrict = `#02 => Check strict data`;
+  } = constructTests(
+    vi,
+    service,
+    ({ waiter: _waiter, sender, contexts }) => ({
+      useWaiter: _waiter(DELAY),
+      useWrite: sender('WRITE'),
+      useIterator: contexts(
+        ({ context }) => context?.iterator,
+        'iterator',
+      ),
+      useIteratorC: contexts(
+        ({ pContext }) => (pContext as any)?.iterator,
+        'private iterator',
+      ),
+      useInput: contexts(({ context }) => context?.input, 'input'),
+      useData: (index: number, ...datas: any[]) => {
+        const inviteStrict = `#02 => Check strict data`;
 
-      const strict = () => {
-        expect(service.context?.data).toStrictEqual(datas);
-      };
+        const strict = () => {
+          expect(service.context?.data).toStrictEqual(datas);
+        };
 
-      const inviteLength = `#01 => Length of data is ${datas.length}`;
+        const inviteLength = `#01 => Length of data is ${datas.length}`;
 
-      const length = () => {
-        expect(service.context?.data?.length).toBe(datas.length);
-      };
+        const length = () => {
+          expect(service.context?.data?.length).toBe(datas.length);
+        };
 
-      const _index = index < 10 ? '0' + index : index;
-      const invite = `#${_index} => Check data`;
-      const func = () => {
-        test(inviteLength, length);
-        test(inviteStrict, strict);
-      };
+        const _index = index < 10 ? '0' + index : index;
+        const invite = `#${_index} => Check data`;
+        const func = () => {
+          test(inviteLength, length);
+          test(inviteStrict, strict);
+        };
 
-      return tupleOf(invite, func);
-    },
-    useConsole: (index: number, ..._strings: (string | string[])[]) => {
-      const inviteStrict = `#02 => Check strict string`;
+        return tupleOf(invite, func);
+      },
+      useConsole: (index: number, ..._strings: (string | string[])[]) => {
+        const inviteStrict = `#02 => Check strict string`;
 
-      const strict = () => {
-        const calls = strings.map(data => [data].flat());
-        expect(log.mock.calls).toStrictEqual(calls);
-      };
+        const strict = () => {
+          const calls = strings.map(data => [data].flat());
+          expect(log.mock.calls).toStrictEqual(calls);
+        };
 
-      const inviteLength = `#01 => Length of calls is : ${_strings.length}`;
+        const inviteLength = `#01 => Length of calls is : ${_strings.length}`;
 
-      const length = () => {
-        strings.push(..._strings);
-        expect(log.mock.calls.length).toBe(strings.length);
-      };
+        const length = () => {
+          strings.push(..._strings);
+          expect(log.mock.calls.length).toBe(strings.length);
+        };
 
-      const _index = index < 10 ? '0' + index : index;
-      const invite = `#${_index} => Check the console`;
-      const func = () => {
-        test(inviteLength, length);
-        test(inviteStrict, strict);
-      };
+        const _index = index < 10 ? '0' + index : index;
+        const invite = `#${_index} => Check the console`;
+        const func = () => {
+          test(inviteLength, length);
+          test(inviteStrict, strict);
+        };
 
-      return tupleOf(invite, func);
-    },
-  }));
+        return tupleOf(invite, func);
+      },
+    }),
+  );
 
   // #endregion
 

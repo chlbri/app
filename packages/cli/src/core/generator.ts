@@ -75,10 +75,7 @@ export const generator = async (options: {
   console.warn(
     `[app] Starting generation with options: ${JSON.stringify(options.excludes)}`,
   );
-  const EXCLUDES = options.excludes
-    .filter(Boolean)
-    .map(pattern => pattern.trim());
-
+  const EXCLUDES = options.excludes.filter(Boolean);
   const cwd = options.cwd;
   const outputPath = resolve(cwd, DEFAULT_OUTPUT);
 

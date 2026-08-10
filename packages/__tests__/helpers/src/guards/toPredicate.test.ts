@@ -1,33 +1,68 @@
-import {
-  toPredicate,
-  _toPredicate,
-} from '@bemedev/app/guards';
+import { toPredicate, _toPredicate } from '@bemedev/app/guards';
 import { sleep } from '@bemedev/sleep';
 
 describe('toPredicate - coverage', () => {
+  
   test('toPredicate - and', () => {
-    const out = toPredicate({ and: ['non-exist2', 'non-exist1'] }, {});
+    const out = toPredicate(
+      { and: ['non-exist2', 'non-exist1', { or: ['non-exist1'] }] },
+      {},
+    );
 
     expect(out).toStrictEqual({
       errors: [
         'Predicate (non-exist2) is not defined',
+        'Predicate (non-exist1) is not defined',
         'Predicate (non-exist1) is not defined',
       ],
     });
   });
 
   test('toPredicate - or', () => {
-    const out = toPredicate({ or: ['non-exist2', 'non-exist1'] }, {});
+    const out = toPredicate(
+      { or: ['non-exist2', 'non-exist1', { and: ['non-exist2'] }] },
+      {},
+    );
 
     expect(out).toStrictEqual({
       errors: [
         'Predicate (non-exist2) is not defined',
         'Predicate (non-exist1) is not defined',
+        'Predicate (non-exist2) is not defined',
       ],
     });
   });
 
   describe('toPredicate.async', () => {
+    test('toPredicateAsync - and', () => {
+      const out = toPredicate.async(
+        { and: ['non-exist2', 'non-exist1', { or: ['non-exist1'] }] },
+        {},
+      );
+
+      expect(out).toStrictEqual({
+        errors: [
+          'Predicate (non-exist2) is not defined',
+          'Predicate (non-exist1) is not defined',
+          'Predicate (non-exist1) is not defined',
+        ],
+      });
+    });
+
+    test('toPredicateAsync - or', () => {
+      const out = toPredicate.async(
+        { or: ['non-exist2', 'non-exist1', { and: ['non-exist2'] }] },
+        {},
+      );
+
+      expect(out).toStrictEqual({
+        errors: [
+          'Predicate (non-exist2) is not defined',
+          'Predicate (non-exist1) is not defined',
+          'Predicate (non-exist2) is not defined',
+        ],
+      });
+    });
     test('resolves sync predicates', async () => {
       const { predicate, errors } = toPredicate.async('isTrue', {
         isTrue: () => true,

@@ -9,7 +9,10 @@
     "build": "vite build",
     "start": "vite start",
     "preview": "pnpm run build && vite start",
-    "up": "pnpm up --latest"
+    "up": "pnpm up --latest",
+    "test": "vitest run",
+    "test:coverage": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@bemedev/app": "workspace:^",
@@ -31,9 +34,12 @@
     "vite": "^8.2.1"
   },
   "devDependencies": {
+    "@bemedev/dev-utils": "^1.1.1",
     "@tanstack/solid-router-devtools": "1.167.1",
     "@types/node": "^26.2.0",
+    "jsdom": "^30.0.1",
     "vite-plugin-solid": "^2.11.14",
-    "vite-tsconfig-paths": "^6.1.1"
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.10"
   }
 }

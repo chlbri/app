@@ -26,7 +26,7 @@ declare module '@bemedev/app' {
         tags:     never;
         actions:  'mockCompleteAction' | 'assigN';
         delays:   never;
-        guards:   never;
+        guards:   'returnTrue';
       };
       pContext: any;
     };
@@ -51,7 +51,7 @@ declare module '@bemedev/app' {
         tags:     never;
         actions:  'assigN';
         delays:   never;
-        guards:   never;
+        guards:   'returnTrue';
       };
       pContext: any;
     };

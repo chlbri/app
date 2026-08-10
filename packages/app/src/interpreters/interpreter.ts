@@ -196,14 +196,13 @@ export class AsyncInterpreter<
 
       const checkCounter =
         this.__selfTransitionsCounter >= DEFAULT_MAX_SELF_TRANSITIONS;
+
       if (checkCounter) return this.__throwMaxCounter();
       this.__throwing();
       await this.__preNext();
-
       const currentValue = this.__value;
       check = !equal(previousValue, currentValue);
       if (check) this.__flush();
-
       const duration = Date.now() - startTime;
       const check2 = duration > TIME_TO_RINIT_SELF_COUNTER;
       if (check2) this.__selfTransitionsCounter = 0;
@@ -995,7 +994,7 @@ export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
  */
 export const interpretAsync: AsyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
-  const { mode, exact, pContext, context } = _any(args ?? {});
+  const { mode, exact, pContext, context } = _any(args);
   const out: any = new AsyncInterpreter(machine, mode, exact);
   out._providePrivateContext(pContext);
   out._provideContext(context);

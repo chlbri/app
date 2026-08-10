@@ -12,125 +12,123 @@ beforeAll(() => {
   vi.useFakeTimers();
 });
 
-const unhandledRejection = async (
-  testFn: () => any | Promise<any>,
-  handler: (error: any) => void,
-  timeout = 100,
-) => {
-  process.on('unhandledRejection', handler);
-  process.on('uncaughtException', handler);
-  try {
-    testFn();
-    await new Promise(r => setTimeout(r, timeout));
-  } catch (error) {
-    handler(error);
-  } finally {
-    process.off('unhandledRejection', handler);
-    process.off('uncaughtException', handler);
-  }
-};
-
-describe('#03 => Exceed selfTransitionsCounter', () => {
-  const machine = createMachine(
-    {
-      on: {
-        ADD_CONDITION: { actions: 'addCondition' },
-        REMOVE_CONDITION: { actions: 'removeCondition' },
-      },
-      initial: 'idle',
-      states: {
-        idle: {
-          entry: 'inc',
-          always: { guards: ['condition', 'limit'], target: '/working' },
+describe('TESTS', () => {
+  describe('#03 => Exceed selfTransitionsCounter', () => {
+    const machine = createMachine(
+      {
+        on: {
+          ADD_CONDITION: { actions: 'addCondition' },
+          REMOVE_CONDITION: { actions: 'removeCondition' },
         },
-        working: {
-          entry: 'inc',
-          always: { guards: ['condition', 'limit'], target: '/idle' },
+        initial: 'idle',
+        states: {
+          idle: {
+            entry: 'inc',
+            always: { guards: ['condition', 'limit'], target: '/working' },
+          },
+          working: {
+            entry: 'inc',
+            always: { guards: ['condition', 'limit'], target: '/idle' },
+          },
         },
       },
-    },
-    {
-      eventsMap: type({
-        ADD_CONDITION: 'never',
-        REMOVE_CONDITION: 'never',
-      }),
+      {
+        eventsMap: type({
+          ADD_CONDITION: 'never',
+          REMOVE_CONDITION: 'never',
+        }),
 
-      context: type({ iterator: 'number', condition: 'boolean' }),
+        context: type({ iterator: 'number', condition: 'boolean' }),
 
-      sync: true,
-    },
-  ).provideOptions(({ isValue, assign }) => ({
-    actions: {
-      addCondition: ({ pContext, context }) => ({
-        pContext,
-        context: { ...context, condition: true },
-      }),
-      removeCondition: assign('context.condition', () => false),
-      inc: assign('context.iterator', ({ context }) => {
-        return context.iterator + 1;
-      }),
-    },
-    guards: {
-      condition: isValue('context.condition', false),
-      limit: ({
-        context: { iterator },
-      }: {
-        context: { iterator: number; condition: boolean };
-      }) => {
-        return iterator <= DEFAULT_MAX_SELF_TRANSITIONS;
+        sync: true,
       },
-    },
-    delays: { DELAY: DEFAULT_MIN_ACTIVITY_TIME },
-  }));
+    ).provideOptions(({ isValue, assign }) => ({
+      actions: {
+        addCondition: ({ pContext, context }) => ({
+          pContext,
+          context: { ...context, condition: true },
+        }),
+        removeCondition: assign('context.condition', () => false),
+        inc: assign('context.iterator', ({ context }) => {
+          return context.iterator + 1;
+        }),
+      },
+      guards: {
+        condition: isValue('context.condition', false),
+        limit: ({
+          context: { iterator },
+        }: {
+          context: { iterator: number; condition: boolean };
+        }) => {
+          return iterator <= DEFAULT_MAX_SELF_TRANSITIONS;
+        },
+      },
+      delays: { DELAY: DEFAULT_MIN_ACTIVITY_TIME },
+    }));
 
-  const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
+    const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
 
-  describe('#01 => mode is normal', () => {
-    const fn = vi.spyOn(console, 'error');
+    describe('#01 => mode is normal', () => {
+      const fn = vi.spyOn(console, 'error');
 
-    const service = interpret(machine, {
-      context: { condition: false, iterator: 0 },
-      mode: 'normal',
-    });
-
-    const { start, useWaiter, useErrors } = constructTests(
-      vi,
-      service,
-      ({ waiter }) => ({ useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER) }),
-    );
-
-    test(...start());
-    test(...useWaiter());
-
-    describe('#002 => Error is throwing', () => {
-      describe('#001 => console.error', () => {
-        test('#001 => called one time', () => {
-          expect(fn).toBeCalledTimes(1);
-        });
-
-        test('#02 => called with the error', () => {
-          expect(fn).toHaveBeenNthCalledWith(1, error);
-        });
+      const service = interpret(machine, {
+        context: { condition: false, iterator: 0 },
+        mode: 'normal',
       });
 
-      describe(...useErrors(error));
+      const { start, useWaiter, useErrors } = constructTests(
+        vi,
+        service,
+        ({ waiter }) => ({
+          useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
+        }),
+      );
+
+      test(...start());
+      test(...useWaiter());
+
+      describe('#002 => Error is throwing', () => {
+        describe('#001 => console.error', () => {
+          test('#001 => called one time', () => {
+            expect(fn).toBeCalledTimes(1);
+          });
+
+          test('#02 => called with the error', () => {
+            expect(fn).toHaveBeenNthCalledWith(1, error);
+          });
+        });
+
+        describe(...useErrors(error));
+      });
+    });
+
+    describe('#01 => mode is strict', () => {
+      describe('#01 => Start throws error', () => {
+        const service = interpret(machine, {
+          context: { condition: false, iterator: 0 },
+          mode: 'strict',
+        });
+
+        const { unhandledRejection } = constructTests(vi, service);
+        test(...unhandledRejection(service.start, error));
+      });
     });
   });
 
-  describe('#01 => mode is strict', () => {
-    test('#00 => Start throws error', async () => {
-      const service = interpret(machine, {
-        context: { condition: false, iterator: 0 },
-        mode: 'strict',
-      });
+  describe('#00 => Start throws an express error', () => {
+    const machine = createMachine(
+      { entry: 'throw' },
+      { sync: true },
+    ).provideOptions(({ voidAction }) => ({
+      actions: {
+        throw: voidAction(() => {
+          throw 'error';
+        }),
+      },
+    }));
 
-      unhandledRejection(service.start, val => {
-        if (val instanceof Error) {
-          expect(val.message).toBe(error);
-        }
-      });
-
-      await vi.advanceTimersByTimeAsync(TIME_TO_RINIT_SELF_COUNTER);
-    });
+    const service = interpret(machine, { mode: 'strict' });
+    const { unhandledRejection } = constructTests(vi, service);
+    test(...unhandledRejection(service.start, 'error'));
   });
 });

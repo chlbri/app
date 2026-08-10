@@ -1,5 +1,5 @@
 import { DEFAULT_NOTHING } from '#constants';
-import { IS_TEST } from '#utils';
+import { IS_TEST } from './environment';
 
 /**
  * A utility function used when no action is required or when a placeholder value is needed.
@@ -7,7 +7,7 @@ import { IS_TEST } from '#utils';
  * @returns in text environment {@linkcode DEFAULT_NOTHING}.
  */
 export const nothing = () => {
-  if (IS_TEST) {
+  if (IS_TEST()) {
     console.log(`${DEFAULT_NOTHING} call ${DEFAULT_NOTHING}`);
     return DEFAULT_NOTHING;
   }

@@ -23,7 +23,8 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "noEmit": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "paths": { "#machines/*": ["../__tests__/*"] }
   },
   "exclude": ["./rolldown.config.ts", "./vitest.config.ts"]
 }

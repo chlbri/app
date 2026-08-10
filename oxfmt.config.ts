@@ -17,6 +17,7 @@ export default defineConfig({
   useTabs: false,
   vueIndentScriptAndStyle: true,
   objectWrap: 'collapse',
+  sortTailwindcss: true,
   sortPackageJson: false,
   ignorePatterns: ['node_modules', 'publish', 'publish_npm', 'lib'],
 });

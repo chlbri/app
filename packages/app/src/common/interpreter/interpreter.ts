@@ -1,5 +1,4 @@
 import {
-  ALWAYS_EVENT,
   eventToType,
   INIT_EVENT,
   possibleEvents,
@@ -60,7 +59,6 @@ import {
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import type { Fn, MachineType, Pausable } from '~types';
-import { createSubscriber, type Subscriber } from '../subscriber';
 import {
   getEntries,
   getExits,
@@ -70,6 +68,7 @@ import {
   type ScheduledData,
   type SimpleMachineOptions2,
 } from '../machine';
+import { createSubscriber, type Subscriber } from '../subscriber';
 import type {
   ActorsMapFrom,
   AddSubscriber_F,
@@ -334,7 +333,7 @@ export abstract class CommonInterpreter<
    */
   get _pContext() {
     /* v8 ignore else -- @preserve */
-    if (IS_TEST) {
+    if (IS_TEST()) {
       return this.__pContext;
     }
 
@@ -379,7 +378,7 @@ export abstract class CommonInterpreter<
    */
   get _pSelect(): Selector_F<Pc> {
     /* v8 ignore else -- @preserve */
-    if (IS_TEST) {
+    if (IS_TEST()) {
       const check = this.isReady && isPrimitive(this.__pContext);
       const pContext = this.__pContext;
       if (check) return undefined as any;
@@ -498,12 +497,6 @@ export abstract class CommonInterpreter<
     return this.__schedulerEvent.schedule(cb, this.__sent);
   };
   protected abstract __performTransitions: Fn;
-
-  protected __performAlways = (alway: AlwaysConfig) => {
-    this.__changeEvent(transformEventArg(ALWAYS_EVENT));
-    const always = toArray<TransitionConfig>(alway);
-    return this.__performTransitions(...always);
-  };
 
   protected get __collectedAlways() {
     const entriesFlat = Object.entries(this.#flat);
@@ -960,7 +953,7 @@ export abstract class CommonInterpreter<
    */
   get _errorsCollector() {
     /* v8 ignore else -- @preserve */
-    if (IS_TEST) {
+    if (IS_TEST()) {
       return this.#errorsCollector;
     }
 
@@ -977,7 +970,7 @@ export abstract class CommonInterpreter<
    */
   get _warningsCollector() {
     /* v8 ignore else -- @preserve */
-    if (IS_TEST) {
+    if (IS_TEST()) {
       return this.#warningsCollector;
     }
     /* v8 ignore start -- @preserve */
@@ -1292,7 +1285,7 @@ export abstract class CommonInterpreter<
     const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
 
     /* v8 ignore else -- @preserve */
-    if (IS_TEST) {
+    if (IS_TEST()) {
       this._addError(error);
       this.__throwing();
       this.stop();

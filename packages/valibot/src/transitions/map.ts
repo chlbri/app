@@ -52,6 +52,7 @@ export const TransitionConfigMapG_Schema = <
 
   return out;
 };
+
 export const TransitionConfigMapFG_Schema = <
   const T extends ReadonlyArray<string>,
 >(

@@ -1,4 +1,4 @@
-import { DELAY } from '../../../async/src/interpreters/async/data';
+import { DELAY } from '../../../async/src/interpreters/data';
 import { hook } from './fixtures';
 
 vi.useFakeTimers();

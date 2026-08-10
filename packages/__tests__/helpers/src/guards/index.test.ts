@@ -75,12 +75,9 @@ describe('Interpret for guards', () => {
 
   describe('#02 => describer', () => {
     const machine = _machine3;
-
     const service = interpret(machine, defaultC);
     const { useStateValue, send, start } = constructTests(vi, service);
-
     test(...start(1));
-
     test(...useStateValue('state2', 2));
 
     describe('#03 => Check the warnings', () => {
@@ -117,9 +114,7 @@ describe('Interpret for guards', () => {
       });
     });
 
-    afterAll(() => {
-      guard1.mockClear();
-    });
+    afterAll(() => guard1.mockClear());
   });
 
   describe('#03 => And/Or', () => {
@@ -140,9 +135,7 @@ describe('Interpret for guards', () => {
     });
 
     const { useStateValue, start } = constructTests(vi, service);
-
     test(...start(1));
-
     test(...useStateValue('state2', 2));
   });
 });

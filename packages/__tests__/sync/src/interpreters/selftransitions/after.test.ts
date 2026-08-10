@@ -1,7 +1,8 @@
+import { createMachine, interpret } from '@bemedev/app';
+import { constructTests } from '@bemedev/app-vitest';
 import { DEFAULT_MAX_TIME_PROMISE } from '@bemedev/app/constants';
 import { returnFalse } from '@bemedev/app/guards';
-import { interpret } from '@bemedev/app';
-import { createMachine } from '@bemedev/app';
+import { type } from '@bemedev/typings';
 
 const DELAY = 1000;
 
@@ -142,19 +143,109 @@ describe('after', () => {
     );
 
     machine.addOptions(() => ({
-      delays: { DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5 },
+      delays: { DELAY: DEFAULT_MAX_TIME_PROMISE * 1.1 },
     }));
 
     const service = interpret(machine);
     service.start();
-    await vi.advanceTimersByTimeAsync(0);
     expect(service.state.value).toEqual('idle');
 
     expect(service._warningsCollector?.size).toBe(1);
     expect(service._warningsCollector).toContain(
       'Delay DELAY is too long',
     );
+    vi.advanceTimersByTime(DEFAULT_MAX_TIME_PROMISE * 1.2);
+    vi.advanceTimersToNextTimer();
+    console.warn(service._warningsCollector);
     service.stop();
+  });
+
+  test('#06 => not-defined', async () => {
+    const machine = createMachine(
+      {
+        initial: 'idle',
+        states: { idle: { after: { DELAY: '/active' } }, active: {} },
+      },
+      { sync: true },
+    );
+
+    const service = interpret(machine);
+    service.start();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(service.state.value).toEqual('idle');
+
+    await vi.advanceTimersByTimeAsync(100_000);
+    expect(service.state.value).toEqual('idle');
+  });
+
+  describe('#07 => always and after conflict on state with context', async () => {
+    const machine = createMachine(
+      {
+        initial: 'idle',
+        states: {
+          idle: {
+            always: [
+              { guards: 'checkCount', target: '/alwaysTarget' },
+              { guards: 'returnFalse', target: '/neverTarget' },
+            ],
+            after: { DELAY: '/afterTarget' },
+          },
+          alwaysTarget: {},
+          afterTarget: {},
+          neverTarget: {},
+        },
+      },
+      { context: type({ count: 'number', limit: 'number' }), sync: true },
+    ).provideOptions(() => ({
+      delays: { DELAY },
+      guards: {
+        returnFalse: false,
+        checkCount: ({ context }) => context.count >= context.limit,
+      },
+    }));
+
+    describe('#01 => Always target', () => {
+      const service1 = interpret(machine, {
+        context: { count: 5, limit: 5 },
+      });
+
+      const { start, waiter, useStateValue, changeIndex } = constructTests(
+        vi,
+        service1,
+        ({ waiter }) => ({ waiter: waiter(DELAY) }),
+      );
+      test(...start());
+      test(...useStateValue('alwaysTarget'));
+      test(...waiter());
+      test(...useStateValue('alwaysTarget'));
+      test(...waiter(10));
+      test(...useStateValue('alwaysTarget'));
+      test('#06 => count is "5"', () =>
+        expect(service1.context.count).toBe(5));
+      test(...changeIndex(prev => prev + 2));
+      test(...waiter());
+      test(...useStateValue('alwaysTarget'));
+      test(...waiter(10));
+      test(...useStateValue('alwaysTarget'));
+    });
+
+    describe('#02 => After target', () => {
+      const service1 = interpret(machine, {
+        context: { count: 2, limit: 5 },
+      });
+
+      const { start, waiter, useStateValue } = constructTests(
+        vi,
+        service1,
+        ({ waiter }) => ({ waiter: waiter(DELAY) }),
+      );
+      test(...start());
+      test(...useStateValue('idle'));
+      test(...waiter());
+      test(...useStateValue('afterTarget'));
+      test(...waiter(10));
+      test(...useStateValue('afterTarget'));
+    });
   });
 });
 

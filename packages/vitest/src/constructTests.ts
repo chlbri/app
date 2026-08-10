@@ -1,5 +1,5 @@
 import { _any, tupleOf } from '@bemedev/app/bemedev';
-import { sleep } from '@bemedev/app/utils';
+import { identity, sleep } from '@bemedev/app/utils';
 import { expect, test } from 'vitest';
 import type { ConstructTests_F } from './constructTests.types';
 import { fakeWaiter } from './helpers';
@@ -17,7 +17,7 @@ export const constructTests: ConstructTests_F = (
   let _index = startIndex;
   const index = (__index?: number) => {
     const num = __index ?? _index;
-    const out = buildIndex(num, Math.max(100, num + 5));
+    const out = buildIndex(num, Math.max(90, num + 5));
     _index++;
     return out;
   };
@@ -35,7 +35,7 @@ export const constructTests: ConstructTests_F = (
               buildInvite(
                 `${warning} should be in service.${type}`,
                 index + 1,
-                Math.max(100, warnings.length + 5),
+                Math.max(90, warnings.length + 5),
               ),
               warning,
             ] as const,
@@ -67,8 +67,7 @@ export const constructTests: ConstructTests_F = (
 
       contexts: (selector, name) => (value, _index) => {
         const isNo = value === undefined || value === null;
-        const _defaultSelector = (value: any) => value;
-        const _selector = selector ?? _defaultSelector;
+        const _selector = selector ?? identity;
 
         const _value = isNo
           ? 'undefined'
@@ -125,7 +124,7 @@ export const constructTests: ConstructTests_F = (
     },
 
     unhandledRejection: (testFn, error, timeout = 100) => {
-      const invite = `#${index(_index)} => Error : ${error} should be thrown`;
+      const invite = `#${index()} => Error : ${error} should be thrown`;
 
       const handler: RejectionHandler = (_error: any) => {
         const msg =
