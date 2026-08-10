@@ -93,7 +93,6 @@ describe('machine coverage', () => {
     });
 
     test(...start(0));
-
     test(...waiter(6, 1));
 
     describe('#02 => Check the service', () => {
@@ -125,7 +124,6 @@ describe('machine coverage', () => {
     });
 
     test(...resume(11));
-
     test(...waiter(12, 12));
 
     describe('#13 => Check the service', () => {
@@ -161,7 +159,6 @@ describe('machine coverage', () => {
     });
 
     test('#22 => Close the subscriber', subscriber.close.bind(subscriber));
-
     test(...useWrite({ value: INPUT }));
 
     describe('#24 => Check the service', () => {

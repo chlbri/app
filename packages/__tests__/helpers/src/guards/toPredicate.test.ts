@@ -1,3 +1,4 @@
+import type { Fn } from '@bemedev/app-utils-bemedev';
 import { toPredicate, _toPredicate } from '@bemedev/app/guards';
 import { sleep } from '@bemedev/sleep';
 
@@ -68,8 +69,7 @@ describe('toPredicate - coverage', () => {
         isTrue: () => true,
       });
 
-      test('#01 => errors is empty', () =>
-        expect(errors).toHaveLength(0));
+      test('#01 => errors is empty', () => expect(errors).toHaveLength(0));
 
       test('#02 => predicate resolves to true', async () => {
         const res = await predicate!({} as any);
@@ -85,8 +85,7 @@ describe('toPredicate - coverage', () => {
         },
       });
 
-      test('#01 => errors is empty', () =>
-        expect(errors).toHaveLength(0));
+      test('#01 => errors is empty', () => expect(errors).toHaveLength(0));
 
       test('#02 => predicate resolves to true', async () => {
         const res = await predicate!({} as any);
@@ -101,8 +100,7 @@ describe('toPredicate - coverage', () => {
         },
       });
 
-      test('#01 => errors is empty', () =>
-        expect(errors).toHaveLength(0));
+      test('#01 => errors is empty', () => expect(errors).toHaveLength(0));
 
       test('#02 => predicate resolves to false', async () => {
         const res = await predicate!({} as any);
@@ -118,8 +116,7 @@ describe('toPredicate - coverage', () => {
         },
       });
 
-      test('#01 => errors is empty', () =>
-        expect(errors).toHaveLength(0));
+      test('#01 => errors is empty', () => expect(errors).toHaveLength(0));
 
       test('#02 => predicate resolves to false', async () => {
         const res = await predicate!({} as any);
@@ -134,13 +131,15 @@ describe('toPredicate - coverage', () => {
         isTrue: () => true,
       });
 
-      test('#01 => errors is empty', () =>
-        expect(errors).toHaveLength(0));
-      test('#02 => func is a function', () =>
-        expect(typeof func).toBe('function'));
-      // oxlint-disable-next-line typescript/no-unsafe-function-type
-      test('#03 => func returns true', () =>
-        expect((func as Function)({} as any)).toBe(true));
+      test('#01 => errors is empty', () => expect(errors).toHaveLength(0));
+
+      test('#02 => func is a function', () => {
+        expect(typeof func).toBe('function');
+      });
+
+      test('#03 => func returns true', () => {
+        expect((func as Fn)({} as any)).toBe(true);
+      });
     });
 
     describe('#02 => _toPredicate.async returns structured function tree for async predicates', () => {
@@ -151,14 +150,14 @@ describe('toPredicate - coverage', () => {
         },
       });
 
-      test('#01 => errors is empty', () =>
-        expect(errors).toHaveLength(0));
-      test('#02 => func is a function', () =>
-        expect(typeof func).toBe('function'));
+      test('#01 => errors is empty', () => expect(errors).toHaveLength(0));
 
-      // oxlint-disable-next-line typescript/no-unsafe-function-type
+      test('#02 => func is a function', () => {
+        expect(typeof func).toBe('function');
+      });
+
       test('#03 => func resolves to true', async () => {
-        const res = await (func as Function)({} as any);
+        const res = await (func as Fn)({} as any);
         expect(res).toBe(true);
       });
     });

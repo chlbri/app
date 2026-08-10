@@ -8,6 +8,16 @@ import type { ConstructTestsResult2, RejectionHandler } from './types';
 
 export { ConstructTests_F };
 
+/**
+ * Constructs test suites and assertion utilities for an interpreter instance.
+ *
+ * @param vi - Vitest utility instance.
+ * @param service - Interpreter service instance (sync or async).
+ * @param helper - Optional helper builder callback function.
+ * @param startIndex - Starting index for test step numbers (defaults to `0`).
+ *
+ * @returns Constructed test helpers object.
+ */
 export const constructTests: ConstructTests_F = (
   vi,
   service,

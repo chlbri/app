@@ -95,9 +95,8 @@ import asyncInterp_53 from "#machines/async/interpreters/selftransitions/index.1
 import asyncInterp_54 from "#machines/async/interpreters/selftransitions/index.2.machine";
 import asyncInterp_55 from "#machines/async/interpreters/tags/tags.machine";
 
-describe("Interpreters machines validation", () => {
-
-  test("#01 => interpreters/activities/pause.machine.ts", () =>
+describe('Interpreters machines validation', () => {
+  test('#01 => interpreters/activities/pause.machine.ts', () =>
     expect(validate.safe(syncInterp_1.config).success).toBe(true));
 
   test("#02 => interpreters/activities/perform.bis.machine.ts", () =>

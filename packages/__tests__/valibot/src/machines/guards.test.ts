@@ -4,9 +4,8 @@ import guards2 from "#machines/helpers/guards/index.2.machine";
 import guards3 from "#machines/helpers/guards/index.3.machine";
 import guards4 from "#machines/helpers/guards/index.4.machine";
 
-describe("Guards machines validation", () => {
-
-  test("#01 => guards index.1.machine", () =>
+describe('Guards machines validation', () => {
+  test('#01 => guards index.1.machine', () =>
     expect(validate.safe(guards1.config).success).toBe(true));
 
   test("#02 => guards index.2.machine", () =>

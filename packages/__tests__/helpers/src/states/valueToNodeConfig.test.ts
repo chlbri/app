@@ -1,12 +1,12 @@
 import { valueToNodeConfig } from '@bemedev/app/states';
 
 describe('valueToNode - coverage', () => {
-  test('#01 from not inside keys of body', () => {
+  test('#01 => from not inside keys of body', () => {
     const out = valueToNodeConfig({}, 'state1');
     expect(out).toStrictEqual({});
   });
 
-  test('#02 cannotContinue=true: skips redundant initial child when deeper path already in flatFrom', () => {
+  test('#02 => cannotContinue=true: skips redundant initial child when deeper path already in flatFrom', () => {
     // decomposeSV({ a: 'b' }) = ['a', 'a.b'] → flatFrom = ['/a', '/a/b']
     // For key1='/a': initial='b', cannotContinue=true because '/a/b' starts with '/a/'
     // Line 81: the `if (cannotContinue) return` branch is taken
@@ -23,7 +23,7 @@ describe('valueToNode - coverage', () => {
     });
   });
 
-  test('#03 cannotContinue=false: adds initial child when no deeper path exists in flatFrom', () => {
+  test('#03 => cannotContinue=false: adds initial child when no deeper path exists in flatFrom', () => {
     // decomposeSV({ a: {} }) = ['a'] → flatFrom = ['/a']
     // For key1='/a': initial='b', cannotContinue=false (no key starts with '/a/')
     // Lines 82-83: out1['/a/b'] is set

@@ -61,82 +61,45 @@ describe('cov => Performs send to itself actions', () => {
 
   // #region "idle" state
   test(...useIterator(0, 1));
-
   test(...useSend('INCREMENT', 2));
-
   test(...useIterator(1, 3));
-
   test(...useSend('INCREMENT', 4));
-
   test(...useIterator(2, 5));
-
   test(...useSend('DECREMENT', 6));
-
   test(...useIterator(1, 7));
   // #endregion
-
   test(...useValue('idle', 8));
-
   test(...useSend('NEXT', 9));
-
   test(...useValue('next', 10));
-
   // #region "next" state
   test(...useIterator(1, 11));
-
   test(...useSend('INCREMENT', 12));
-
   test(...useIterator(1, 13));
-
   test(...useSend('INCREMENT.FORCE', 14));
-
   test(...useIterator(2, 15));
-
   test(...useSend('INCREMENT', 16));
-
   test(...useIterator(2, 17));
-
   test(...useSend('REDECREMENT', 18));
-
   test(...useIterator(2, 19));
   // #endregion
-
   test(...useValue('next', 20));
-
   test(...useSend('NEXT', 21));
-
   test(...useValue('idle', 22));
-
   // #region "idle" state again
-
   test(...useIterator(2, 23));
-
   test(...useSend('REDECREMENT', 24));
-
   test(...useIterator(1, 25));
-
   test(...useSend('DECREMENT', 26));
-
   test(...useIterator(0, 27));
-
   test(...useSend('INCREMENT', 28));
-
   test(...useIterator(1, 29));
-
   test(...useSend('INCREMENT.FORCE', 30));
-
   test(...useIterator(1, 31));
-
   test(...useSend('INCREMENT', 32));
-
   test(...useIterator(2, 33));
-
   test(...useSend('REDECREMENT', 34));
-
   test(...useIterator(1, 35));
-
   // #endregion
-
   test('#36 => Dispose', service.dispose);
 });
 

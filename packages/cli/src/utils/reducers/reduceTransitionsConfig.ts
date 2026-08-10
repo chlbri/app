@@ -6,6 +6,13 @@ import { pipe } from '@bemedev/pipe';
 import { tap } from '@bemedev/pipe/extensions/common';
 import type { _TransitionsConfig } from '@bemedev/app/transitions';
 
+/**
+ * Reduces top-level transitions configuration (on, always, actors, after) into symbol sets.
+ *
+ * @param transitions - Transitions configuration object of type {@linkcode _TransitionsConfig}.
+ *
+ * @returns Object containing symbol sets for actions, guards, targets, events, delays, pContext keys, emitters, and children.
+ */
 export const reduceTransitionsConfig = (
   transitions: _TransitionsConfig,
 ) => {

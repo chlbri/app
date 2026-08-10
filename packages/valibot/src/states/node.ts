@@ -7,6 +7,17 @@ import { recordV } from '../utils/record';
 import { SoaLSchema } from '../utils/soa';
 import { ActivityConfig_Schema } from './activity';
 
+/**
+ * Creates common Valibot object schema entries for state node configurations.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Object containing common node schema field definitions.
+ *
+ * @see {@linkcode Transitions_Schema}, {@linkcode ActionConfig_Schema}, {@linkcode ActivityConfig_Schema}
+ */
 export const CommonNodeConfigEntries = <
   T extends ReadonlyArray<string> = ReadonlyArray<string>,
 >(
@@ -31,6 +42,13 @@ export const CommonNodeConfigEntries = <
   };
 };
 
+/**
+ * Internal predicate function to validate node configuration consistency across atomic, parallel, and compound types.
+ *
+ * @param node - The node configuration object to validate.
+ *
+ * @returns `true` if node type matches its structure, `false` otherwise.
+ */
 const _checkNodeType = (node: any) => {
   const checkAtomic =
     (!node.type || node.type === 'atomic') &&
@@ -50,11 +68,27 @@ const _checkNodeType = (node: any) => {
   return checkAtomic || checkParallel || checkCompound;
 };
 
+/**
+ * Valibot check action to validate node type structural integrity.
+ *
+ * @see {@linkcode _checkNodeType}
+ */
 export const checkNodeType = v.check(
   _checkNodeType,
   'Must be "Atomic" or "Parallel" or "Compound" config',
 );
 
+/**
+ * Valibot schema builder for validating state machine configuration nodes.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Valibot schema for validating machine node configuration of type {@linkcode NodeConfig2}.
+ *
+ * @see {@linkcode CommonNodeConfigEntries}, {@linkcode checkNodeType}
+ */
 export const NodeConfig_Schema = <
   T extends ReadonlyArray<string> = ReadonlyArray<string>,
 >(

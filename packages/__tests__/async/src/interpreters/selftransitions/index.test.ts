@@ -8,27 +8,44 @@ beforeAll(() => {
 
 describe('Self Transitions', () => {
   const DELAY = 1000;
-  it('should handle after self transitions', async () => {
+
+  describe('#01 => should handle after self transitions', () => {
     const machine = _machine1;
 
     machine.addOptions(() => ({ delays: { DELAY } }));
 
     const service = interpret(machine);
 
-    service.start();
-    expect(service.value).toEqual('idle');
-    await vi.advanceTimersByTimeAsync(DELAY);
-    expect(service.value).toEqual('active');
+    test('#01 => start', () => {
+      service.start();
+    });
+
+    test('#02 => value is idle', () =>
+      expect(service.value).toEqual('idle'));
+
+    test('#03 => advance timer', async () => {
+      await vi.advanceTimersByTimeAsync(DELAY);
+    });
+
+    test('#04 => value is active', () =>
+      expect(service.value).toEqual('active'));
   });
 
-  it('should handle always self transitions', async () => {
+  describe('#02 => should handle always self transitions', () => {
     const machine = _machine2;
 
     const service = interpret(machine);
 
-    service.start();
-    await vi.advanceTimersByTimeAsync(0);
-    expect(service.value).toEqual('active');
+    test('#01 => start', () => {
+      service.start();
+    });
+
+    test('#02 => advance timer', async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    test('#03 => value is active', () =>
+      expect(service.value).toEqual('active'));
   });
 });
 

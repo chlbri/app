@@ -22,7 +22,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('state1', 2));
 
       test('#03 => Add actions', () => {
@@ -53,7 +52,6 @@ describe('Filter and Erase actions', () => {
       });
 
       test(...useSend('FILTER', 6));
-
       test(...useValue('state2', 7));
 
       test('#08 => Check filtered numbers (only even)', () => {
@@ -79,7 +77,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {
@@ -113,7 +110,6 @@ describe('Filter and Erase actions', () => {
       });
 
       test(...useSend('FILTER_ACTIVE', 6));
-
       test(...useValue('filtered', 7));
 
       test('#08 => Check filtered people (only active)', () => {
@@ -140,7 +136,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {
@@ -242,7 +237,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {
@@ -296,7 +290,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {
@@ -335,7 +328,6 @@ describe('Filter and Erase actions', () => {
       });
 
       test(...useSend('CLEAR_ALL', 6));
-
       test(...useValue('cleared', 7));
 
       test('#08 => Check all properties are undefined', () => {

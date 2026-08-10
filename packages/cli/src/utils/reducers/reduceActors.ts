@@ -3,6 +3,13 @@ import { reduceChild } from './reduceChild';
 import { type ActorConfig, type RecordS } from '@bemedev/app';
 import { createBetterSet } from '@bemedev/better-set';
 
+/**
+ * Reduces a map of actor configurations into sets of actions, guards, targets, pContext keys, emitters, and children.
+ *
+ * @param actor - Map of actor configurations of type {@linkcode RecordS}<{@linkcode ActorConfig}>.
+ *
+ * @returns Reduced symbol sets object.
+ */
 export const reduceActors = (actor: RecordS<ActorConfig>) => {
   const actions = createBetterSet<string>();
   const guards = createBetterSet<string>();

@@ -30,29 +30,31 @@ describe('TESTS', () => {
   describe('#01 => softReset', () => {
     const service = interpret(machine, { context: { count: 0 } });
 
-    test('#00 => start the machine', service.start);
+    test('#01 => start the machine', service.start);
 
-    test('#01 => cannot INC2 initially', () =>
+    test('#02 => cannot INC2 initially', () =>
       expect(service.canEvents('INC2')).toBe(false));
 
-    test('#02 => send INC event', () => {
+    test('#03 => send INC event', () => {
       service.send('INC');
     });
 
-    test('#03 => can INC2 event', () =>
+    test('#04 => can INC2 event', () =>
       expect(service.canEvents('INC2')).toBe(true));
-    test('#04 => state value is active', () =>
+
+    test('#05 => state value is active', () =>
       expect(service.state.value).toBe('active'));
-    test('#05 => context count is 1', () =>
-      expect(service.state.context.count).toBe(1));
 
-    test('#06 => softReset', service.softReset);
+    test('#06 => context count is 1', () => expect(service.state.context.count).toBe(1));
 
-    test('#07 => state value is reset', () =>
-      expect(service.state.value).toBe('idle'));
-    test('#08 => context count is reset', () =>
+    test('#07 => softReset', service.softReset);
+
+    test('#08 => state value is reset', () => expect(service.state.value).toBe('idle'));
+
+    test('#09 => context count is reset', () =>
       expect(service.state.context.count).toBe(0));
-    test('#09 => softReset sets status to idle', () =>
+
+    test('#10 => softReset sets status to idle', () =>
       expect(service.status).toBe('idle'));
   });
 
@@ -62,38 +64,41 @@ describe('TESTS', () => {
     let callsLength = 0;
     service.subscribe(spy);
 
-    test('#00 => start the machine', service.start);
+    test('#01 => start the machine', service.start);
 
-    test('#01 => send INC event', () => {
+    test('#02 => send INC event', () => {
       service.send('INC');
     });
 
-    test('#02 => state value is active', () =>
+    test('#03 => state value is active', () =>
       expect(service.state.value).toBe('active'));
-    test('#03 => context count is 1', () =>
-      expect(service.state.context.count).toBe(1));
 
-    test('#04 => reset', () => {
+    test('#04 => context count is 1', () => expect(service.state.context.count).toBe(1));
+
+    test('#05 => reset', () => {
       service.reset();
       callsLength = spy.mock.calls.length;
     });
 
-    test('#05 => spy call count matches after reset', () =>
+    test('#06 => spy call count matches after reset', () =>
       expect(spy).toHaveBeenCalledTimes(callsLength));
-    test('#06 => state value is reset', () =>
-      expect(service.state.value).toBe('idle'));
-    test('#07 => context count is reset', () =>
+
+    test('#07 => state value is reset', () => expect(service.state.value).toBe('idle'));
+
+    test('#08 => context count is reset', () =>
       expect(service.state.context.count).toBe(0));
-    test('#08 => status is paused', () =>
+
+    test('#09 => status is paused', () =>
       expect(service.status).toBe('paused'));
 
-    test('#09 => send INC event when paused', () => {
+    test('#10 => send INC event when paused', () => {
       service.send('INC');
     });
 
-    test('#10 => context count is unchanged when paused', () =>
+    test('#11 => context count is unchanged when paused', () =>
       expect(service.state.context.count).toBe(1));
-    test('#11 => spy call count is unchanged when paused', () =>
+
+    test('#12 => spy call count is unchanged when paused', () =>
       expect(spy).toHaveBeenCalledTimes(callsLength));
   });
 });

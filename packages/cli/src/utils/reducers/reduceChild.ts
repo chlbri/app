@@ -8,6 +8,13 @@ import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { paramArray, tap } from '@bemedev/pipe/extensions/common';
 
+/**
+ * Reduces a child machine configuration into symbol sets and pContext keys.
+ *
+ * @param child - Child machine configuration object of type {@linkcode ChildConfig}.
+ *
+ * @returns Reduced symbol sets object including `pContextKeys`.
+ */
 export const reduceChild = (child: ChildConfig) => {
   const pContextKeys = createBetterSet<string>();
 

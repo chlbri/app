@@ -133,27 +133,33 @@ describe('REAL LIFE TESTS', () => {
       test(...useValue('idle', 1));
       test(...useIterator(1, 2));
       test(...useSend('NEXT', 3));
+
       test(
         ...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 4),
       );
+
       test(...useIterator(7, 5));
       test(...useSend('NEXT', 6));
+
       test(
         ...useValue(
           { parallel: { atomic: 'next', compound: { compound: 'idle' } } },
           7,
         ),
       );
+
       test(...useIterator(12, 8));
       test(...useSend('PREVIOUS', 9));
       test(...useIterator(14, 10));
       test(...useSend('NEXT', 11));
+
       test(
         ...useValue(
           { parallel: { atomic: 'next', compound: { compound: 'next' } } },
           12,
         ),
       );
+
       test(...useIterator(18, 13));
       test(...useSend('NEXT', 14));
       test(...useValue({ parallel: { atomic: 'idle' } }, 15));
@@ -723,23 +729,31 @@ describe('REAL LIFE TESTS', () => {
       test(...send('ADD', 7));
 
       describe('#08 => Should add a new field', () => {
-        test('#08 => Should have two fields', () => {
+        test('#01 => Should have two fields', () => {
           expect(service.state.context.fields).toHaveLength(2);
         });
-        test('#08 => These 2 are same', () => {
+
+        test('#02 => First field is default text', () => {
           expect(service.state.context.fields?.[0]).toEqual({
             label: '',
             type: 'text',
           });
+        });
+
+        test('#03 => Second field is default text', () => {
           expect(service.state.context.fields?.[1]).toEqual({
             label: '',
             type: 'text',
           });
+        });
+
+        test('#04 => First and second fields are equal', () => {
           expect(service.state.context.fields?.[0]).toEqual(
             service.state.context.fields?.[1],
           );
         });
       });
+
       test(
         ...send(
           {
@@ -749,22 +763,27 @@ describe('REAL LIFE TESTS', () => {
           9,
         ),
       );
-      describe('#10 => Fiels are not changed', () => {
-        test('#08 => Should have two fields', () => {
+
+      describe('#10 => Fields are not changed', () => {
+        test('#01 => Should have two fields', () => {
           expect(service.state.context.fields).toHaveLength(2);
         });
 
-        test('#08 => These 2 are same', () => {
+        test('#02 => First field is default text', () => {
           expect(service.state.context.fields?.[0]).toEqual({
             label: '',
             type: 'text',
           });
+        });
 
+        test('#03 => Second field is default text', () => {
           expect(service.state.context.fields?.[1]).toEqual({
             label: '',
             type: 'text',
           });
+        });
 
+        test('#04 => First and second fields are equal', () => {
           expect(service.state.context.fields?.[0]).toEqual(
             service.state.context.fields?.[1],
           );
@@ -806,6 +825,7 @@ describe('REAL LIFE TESTS', () => {
       test('#13 => Fields state should be registration', () => {
         expect(service.state.context.states?.fields).toBe('registration');
       });
+
       test(
         ...send(
           {
@@ -815,25 +835,38 @@ describe('REAL LIFE TESTS', () => {
           14,
         ),
       );
+
       test('#15 => Values should be registered', () => {
         expect(service.state.context.values).toEqual({
           name: 'John Doe',
           email: 'john@example.com',
         });
+      });
+
+      test('#16 => Values state should be registration', () => {
         expect(service.state.context.states?.values).toBe('registration');
       });
+
       test(...send('VALUES:MODIFY', 16));
+
       test('#17 => Values state should be idle', () => {
         expect(service.state.context.states?.values).toBe('idle');
       });
+
       test(...send('FIELDS:MODIFY', 18));
       test(...useStateValue({ working: 'idle' }, 19));
+
       test('#20 => Fields state should be idle', () => {
         expect(service.state.context.states?.fields).toBe('idle');
       });
+
       test(...send({ type: 'REMOVE', payload: { index: 1 } }, 21));
+
       test('#22 => Should remove second field', () => {
         expect(service.state.context.fields).toHaveLength(1);
+      });
+
+      test('#23 => First field should remain Name', () => {
         expect(service.state.context.fields?.[0]).toEqual({
           label: 'Name',
           type: 'text',

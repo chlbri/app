@@ -7,8 +7,8 @@ const tests = [];
 let i = 0;
 while (i < lines.length) {
   const line = lines[i];
-  if (/^\s+test\(/.test(line)) {
-    const isSingle = /^\s+test\(.*\);$/.test(line);
+  if (/^\s+test(?:\.\w+)*\(/ .test(line)) {
+    const isSingle = /^\s+test(?:\.\w+)*\(.*\);\s*(?:\/\/.*)?$/.test(line);
     if (isSingle) {
       tests.push({ lineNum: i + 1, type: 'single', endLine: i + 1 });
       i++;
@@ -37,7 +37,27 @@ let violations = 0;
 for (let x = 0; x < tests.length - 1; x++) {
   const t1 = tests[x];
   const t2 = tests[x + 1];
-  const gap = t2.lineNum - t1.endLine - 1;
+  
+  // Check if there is a block/scope boundary between t1 and t2
+  let hasDescribeBoundary = false;
+  for (let l = t1.endLine; l < t2.lineNum - 1; l++) {
+    if (
+      /^\s*(?:const|function|describe)\b/.test(lines[l]) ||
+      /^\s*\}\)?;?\s*$/.test(lines[l])
+    ) {
+      hasDescribeBoundary = true;
+      break;
+    }
+  }
+  if (hasDescribeBoundary) continue;
+
+  let blankCount = 0;
+  for (let l = t1.endLine; l < t2.lineNum - 1; l++) {
+    if (/^\s*$/.test(lines[l])) {
+      blankCount++;
+    }
+  }
+  const gap = blankCount;
   const bothSingle = t1.type === 'single' && t2.type === 'single';
   const expected = bothSingle ? 0 : 1;
   if (gap !== expected) {

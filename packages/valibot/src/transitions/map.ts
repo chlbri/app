@@ -4,6 +4,17 @@ import { GuardConfig_Schema } from '../guards';
 import { SoaLSchema } from '../utils/soa';
 import { TargetSchema } from './target';
 
+/**
+ * Valibot schema builder for transition configuration objects with actions (optional target).
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Strict object schema for action-driven transition configuration.
+ *
+ * @see {@linkcode TargetSchema}, {@linkcode SoaLSchema}, {@linkcode ActionConfig_Schema}, {@linkcode GuardConfig_Schema}
+ */
 export const TransitionConfigMapA_Schema = <
   const T extends ReadonlyArray<string>,
 >(
@@ -19,6 +30,17 @@ export const TransitionConfigMapA_Schema = <
   });
 };
 
+/**
+ * Valibot schema builder for transition configuration objects requiring explicit target.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Strict object schema for target-driven transition configuration.
+ *
+ * @see {@linkcode TargetSchema}, {@linkcode SoaLSchema}, {@linkcode ActionConfig_Schema}, {@linkcode GuardConfig_Schema}
+ */
 export const TransitionConfigMapF_Schema = <
   const T extends ReadonlyArray<string>,
 >(
@@ -34,6 +56,17 @@ export const TransitionConfigMapF_Schema = <
   });
 };
 
+/**
+ * Valibot schema builder for transition configuration objects requiring guards.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Union schema of action/target transition maps with mandatory guards.
+ *
+ * @see {@linkcode TransitionConfigMapA_Schema}, {@linkcode TransitionConfigMapF_Schema}, {@linkcode GuardConfig_Schema}
+ */
 export const TransitionConfigMapG_Schema = <
   const T extends ReadonlyArray<string>,
 >(
@@ -53,6 +86,17 @@ export const TransitionConfigMapG_Schema = <
   return out;
 };
 
+/**
+ * Valibot schema builder for transition configuration objects requiring both target and guards.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Strict object schema for target transition maps with mandatory guards.
+ *
+ * @see {@linkcode TransitionConfigMapF_Schema}, {@linkcode GuardConfig_Schema}
+ */
 export const TransitionConfigMapFG_Schema = <
   const T extends ReadonlyArray<string>,
 >(

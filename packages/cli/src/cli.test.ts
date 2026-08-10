@@ -96,19 +96,18 @@ export default createMachine(
 
   afterAll(() => spy.mockRestore());
 
-  test('#-01 => Create strcuture folder', async () => {
+  test('#00 => create structure folder', async () => {
     mkdirSync(resolve(process.cwd(), DIR), { recursive: true });
     writeFileSync(resolve(process.cwd(), fsmPath), ACTION_FSM_CONTENT);
     await sleep(WAITER);
   });
-  // #endregion
 
-  it('#00 => create watcher', async ({ onTestFinished }) => {
+  test('#01 => create watcher', async ({ onTestFinished }) => {
     watcher = await run(watch, ['-c', resolve(process.cwd(), DIR)]);
     onTestFinished(() => console.warn('watcher started'));
   });
 
-  it('#01 => create file', async ({ onTestFinished }) => {
+  test('#02 => create file', async ({ onTestFinished }) => {
     await sleep(WAITER).then(() => {
       writeFileSync(resolve(process.cwd(), CREATED_FILE), '', {
         mode: '777',
@@ -117,12 +116,12 @@ export default createMachine(
     onTestFinished(() => console.warn('writing ....'));
   });
 
-  it('#02 => close watcher', async ({ onTestFinished }) => {
+  test('#03 => close watcher', async ({ onTestFinished }) => {
     await sleep(WAITER).then(() => watcher.close());
     onTestFinished(() => console.warn('watcher closed'));
   });
 
-  it('#03 => check file content', async ({ onTestFinished }) => {
+  test('#04 => check file content', async ({ onTestFinished }) => {
     const received = readFileSync(
       resolve(process.cwd(), CREATED_FILE),
       'utf-8',
@@ -131,14 +130,14 @@ export default createMachine(
     onTestFinished(() => console.warn('file content checked'));
   });
 
-  it('#04 => delete file', async ({ onTestFinished }) => {
+  test('#05 => delete file', async ({ onTestFinished }) => {
     await sleep(WAITER / 5).then(() =>
       unlinkSync(resolve(process.cwd(), CREATED_FILE)),
     );
     onTestFinished(() => console.warn('file deleted'));
   });
 
-  it('#05 => check generated file', async ({ onTestFinished }) => {
+  test('#06 => check generated file', async ({ onTestFinished }) => {
     const generated = readFileSync(
       resolve(process.cwd(), `${DIR}/app.gen.ts`),
       'utf-8',
@@ -148,13 +147,13 @@ export default createMachine(
     onTestFinished(() => console.warn('generated file checked'));
   });
 
-  it('#06 => cli generate', async ({ onTestFinished }) => {
+  test('#07 => cli generate', async ({ onTestFinished }) => {
     const result = await run(generate, ['-c', DIR, '--dry-run']);
     expect(result).toEqual(OUPUT1);
     onTestFinished(() => console.warn('generated file for dry-run'));
   });
 
-  it('#07 => delete the only machine left', async ({ onTestFinished }) => {
+  test('#08 => delete the only machine left', async ({ onTestFinished }) => {
     await sleep(WAITER / 5).then(() => {
       const exists = existsSync(
         resolve(process.cwd(), `${DIR}/app.gen.ts`),
@@ -166,26 +165,26 @@ export default createMachine(
     onTestFinished(() => console.warn('All machine files are deleted'));
   });
 
-  it('#08 => cli generate', () => {
+  test('#09 => cli generate', () => {
     return run(generate, ['-c', DIR, '--dry-run']);
   });
 
-  it('#09 => check generated file is removed', ({ onTestFinished }) => {
+  test('#10 => check generated file is removed', ({ onTestFinished }) => {
     const exists = existsSync(resolve(process.cwd(), `${DIR}/app.gen.ts`));
     expect(exists).toBe(false);
     onTestFinished(() => console.warn('generated file is removed'));
   });
 
-  it('#10 => cli generate', () => {
+  test('#11 => cli generate', () => {
     return run(generate, ['-c', DIR, '--dry-run']);
   });
 
-  it('#11 => No files inside __tests__', () => {
+  test('#12 => no files inside __tests__', () => {
     const files = readdirSync(resolve(process.cwd(), DIR));
     expect(files.length).toBe(0);
   });
 
-  it('#12 => unlink the dir', ({ onTestFinished }) => {
+  test('#13 => unlink the dir', ({ onTestFinished }) => {
     rmdirSync(resolve(process.cwd(), DIR));
     onTestFinished(() => console.warn('__tests__ dir is deleted', '\n\n'));
   });

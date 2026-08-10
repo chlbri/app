@@ -7,6 +7,9 @@ import type {
   ParseTreeContext,
 } from './parseTree.types';
 
+/**
+ * Output object structure returned by function {@linkcode parseTree}.
+ */
 type Output = {
   __config: NodeConfig2;
   flat: RecordS<NodeConfig2>;
@@ -23,8 +26,18 @@ type Output = {
   tags: BetterSet<string>;
 };
 
+/**
+ * Type alias for function {@linkcode parseTree}.
+ */
 export type ParseTree_F = (config: NodeConfig2) => Output;
 
+/**
+ * Traverses a machine configuration node tree and extracts symbol sets and path mappings.
+ *
+ * @param config - Machine configuration node of type {@linkcode NodeConfig2}.
+ *
+ * @returns Parsed tree analysis result.
+ */
 export const parseTree: ParseTree_F = config => {
   const __config = config;
 

@@ -1,7 +1,6 @@
 import { validate } from '@bemedev/app-valibot';
 
 describe('Coverage', () => {
-
   test('#00 => traffic light config is valid', () => {
     const config = {
       initial: 'red',
@@ -26,33 +25,35 @@ describe('Coverage', () => {
       },
     } as const;
 
-    const actual = validate.safe(config);
-    expect(actual.success).toBe(true);
+    expect(validate.safe(config).success).toBe(true);
   });
 
   test('#01 => Error => Unexpected key at root level', () => {
-    const actual = () => validate({ dd: true });
-    expect(actual).toThrow(`Unexpected key 'dd' in node config`);
+    expect(() => validate({ dd: true })).toThrow(
+      `Unexpected key 'dd' in node config`,
+    );
   });
 
   test('#02 => Error => Unexpected key at states level', () => {
-    const actual = () =>
-      validate({ initial: 'idle', states: { idle: { dd: true } } });
-    expect(actual).toThrow(`Unexpected key 'dd' in node config`);
+    expect(() =>
+      validate({ initial: 'idle', states: { idle: { dd: true } } }),
+    ).toThrow(`Unexpected key 'dd' in node config`);
   });
 
   test('#03 => Error => wrong activity array', () => {
-    const actual = () => validate({ activities: { DELAY: ['dd', 'ee'] } });
-    expect(actual).toThrow('Wrong activity Array');
+    expect(() =>
+      validate({ activities: { DELAY: ['dd', 'ee'] } }),
+    ).toThrow('Wrong activity Array');
   });
 
   test('#04 => Error => empty activity array', () => {
-    const actual = () => validate({ activities: { DELAY: [] } });
-    expect(actual).toThrow('Empty Activity Array');
+    expect(() => validate({ activities: { DELAY: [] } })).toThrow(
+      'Empty Activity Array',
+    );
   });
 
   test('#05 => Error => activities not accepts type "Array"', () => {
-    const actual = () => validate({ activities: [] });
-    expect(actual).toThrow('Not an array');
+    expect(() => validate({ activities: [] })).toThrow('Not an array');
   });
 });
+

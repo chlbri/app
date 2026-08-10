@@ -4,10 +4,10 @@ import { nextSV } from '@bemedev/app/states';
 describe('nextSV', () => {
   const { acceptation, success } = createTests(nextSV);
 
-  describe('#00 => Acceptation', acceptation);
+  describe('#01 => Acceptation', acceptation);
 
   describe(
-    '#01 => success',
+    '#02 => success',
     success(
       {
         invite: 'empty from returns empty object',

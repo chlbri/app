@@ -5,23 +5,22 @@ import { recordV } from '@bemedev/app-valibot';
 describe('#01 => recordV schema', () => {
   const schema = recordV(v.string(), v.string());
 
-  test('#01 => valid record success', () => {
+  describe('#01 => valid record', () => {
     const result = v.safeParse(schema, { a: 'hello', b: 'world' });
-    expect(result.success).toBe(true);
+
+    test('#01 => success is true', () => expect(result.success).toBe(true));
+
+    test('#02 => output matches', () => {
+      expect(result.output).toEqual({ a: 'hello', b: 'world' });
+    });
   });
 
-  test('#02 => valid record output', () => {
-    const result = v.safeParse(schema, { a: 'hello', b: 'world' });
-    expect(result.output).toEqual({ a: 'hello', b: 'world' });
+  test('#02 => invalid array returns failure', () => {
+    expect(v.safeParse(schema, ['hello', 'world']).success).toBe(false);
   });
 
-  test('#03 => invalid array returns failure', () => {
-    const result = v.safeParse(schema, ['hello', 'world']);
-    expect(result.success).toBe(false);
-  });
-
-  test('#04 => invalid values returns failure', () => {
-    const result = v.safeParse(schema, { a: 123 });
-    expect(result.success).toBe(false);
+  test('#03 => invalid values returns failure', () => {
+    expect(v.safeParse(schema, { a: 123 }).success).toBe(false);
   });
 });
+

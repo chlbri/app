@@ -5,6 +5,17 @@ import {
 } from './map';
 import { TargetSchema } from './target';
 
+/**
+ * Valibot schema builder for transition configuration requiring explicit targets.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Union schema for target string or map with target property.
+ *
+ * @see {@linkcode TargetSchema}, {@linkcode TransitionConfigMapF_Schema}
+ */
 export const TransitionConfigF_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
@@ -14,6 +25,17 @@ export const TransitionConfigF_Schema = <T extends ReadonlyArray<string>>(
   ]);
 };
 
+/**
+ * Valibot schema builder for transition configuration (target string, action map, or full transition map).
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Union schema for transition configurations.
+ *
+ * @see {@linkcode TargetSchema}, {@linkcode TransitionConfigMapA_Schema}, {@linkcode TransitionConfigMapF_Schema}
+ */
 export const TransitionConfig_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {

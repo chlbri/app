@@ -12,10 +12,11 @@ describe('Interpret for actions', () => {
   describe('#01 => string', () => {
     const service = interpret(_machine1, { mode: 'normal' });
     const { send, useStateValue, start } = constructTests(vi, service);
+
     test(...start());
     test(...useStateValue('state2'));
 
-    describe('#03 => Check the warnings', () => {
+    describe('#02 => Check the warnings', () => {
       test('#01 => Length of warnings', () => {
         expect(service._warningsCollector?.size).toBe(1);
       });
@@ -27,13 +28,13 @@ describe('Interpret for actions', () => {
       });
     });
 
-    test('#04 => add action', () => {
+    test('#03 => add action', () => {
       service.addOptions(() => ({ actions: { action1 } }));
     });
 
     test(...send('NEXT', 5));
 
-    describe('#05 => Check the action', () => {
+    describe('#04 => Check the action', () => {
       test('#01 => Called one time', () => {
         expect(action1).toHaveBeenCalledTimes(1);
       });
@@ -57,6 +58,7 @@ describe('Interpret for actions', () => {
   describe('#02 => describer', () => {
     const service = interpret(_machine2);
     const { send, useStateValue, start } = constructTests(vi, service as any);
+
     test(...start());
     test(...useStateValue('state2'));
 
@@ -78,7 +80,7 @@ describe('Interpret for actions', () => {
 
     test(...send('NEXT', 4));
 
-    describe('#05 => Check the action', () => {
+    describe('#04 => Check the action', () => {
       test('#01 => Called one time', () => {
         expect(action1).toHaveBeenCalledTimes(1);
       });

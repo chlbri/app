@@ -17,6 +17,7 @@ describe('Tests not defined emitters -> Machine1', () => {
   const { start } = constructTests(vi, service);
 
   test(...start());
+
   test('#02 => Error is emmitted', () => {
     expect(log).toHaveBeenCalledWith('Emitter (interval) is not defined');
   });

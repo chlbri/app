@@ -1,5 +1,15 @@
+/**
+ * Constant representing fallback 'any' type name.
+ */
 const ANY = 'any';
 
+/**
+ * Serializes a `pContext` AST node into a TypeScript type declaration string.
+ *
+ * @param node - AST node representing `pContext` specification.
+ *
+ * @returns Serialized type string.
+ */
 const serializePContextType = (node: any): string => {
   try {
     const kind = node.getKindName?.();
@@ -25,6 +35,13 @@ const serializePContextType = (node: any): string => {
   }
 };
 
+/**
+ * Converts an object literal AST node into an inline interface/type string representation.
+ *
+ * @param objNode - Object literal AST node.
+ *
+ * @returns Serialized object type string.
+ */
 const objectToTypeString = (objNode: any): string => {
   const entries: string[] = [];
 
@@ -46,6 +63,13 @@ const objectToTypeString = (objNode: any): string => {
   return `{ ${entries.join('; ')} }`;
 };
 
+/**
+ * Converts a value AST node into a TypeScript type representation string.
+ *
+ * @param node - AST value node.
+ *
+ * @returns Serialized type string.
+ */
 const valueNodeToTypeString = (node: any): string => {
   const kind = node.getKindName?.();
 
@@ -81,6 +105,13 @@ const valueNodeToTypeString = (node: any): string => {
   return node.getText?.() ?? ANY;
 };
 
+/**
+ * Extracts the protected context (`pContext`) type string from a machine typings argument.
+ *
+ * @param typingsArg - AST node for the third argument passed to `createMachine`.
+ *
+ * @returns Serialized `pContext` type string or `'any'`.
+ */
 export const extractPContextType = (typingsArg: any): string => {
   try {
     if (

@@ -1,3 +1,10 @@
+/**
+ * Calculates the integer log10 of a positive index for padding calculations.
+ *
+ * @param index - Index number (defaults to `0`).
+ *
+ * @returns Truncated log10 value.
+ */
 const log10 = (index = 0) => {
   if (index === 0) return 0;
   const log = Math.trunc(Math.log10(index));

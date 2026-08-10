@@ -95,8 +95,7 @@ describe('Simple Machine2 (from Machine1)', () => {
   test(...useStateValue('active'));
   test(...useContext(50));
   test.fails(...useMock());
-  //Resume without pause, no effect
-  test(...resume());
+  test(...resume()); //Resume without pause, no effect
   test(...waiter());
   test(...useContext(50));
   test.fails(...useMock());

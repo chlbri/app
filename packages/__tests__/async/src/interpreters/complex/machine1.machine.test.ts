@@ -38,9 +38,7 @@ describe('Complex machine 1', () => {
 
   test(...useStateValue('idle'));
   test(...start());
-
   test(...send({ type: 'START', payload: { asset: ASSET_1 } }));
-
   test(...useIntermediariesLength(1, 1));
   test(...useStateValue('idle'));
   test(...wait150());

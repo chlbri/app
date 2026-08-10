@@ -18,9 +18,8 @@ import syncActorsChild1 from "#machines/sync/interpreters/coverage/actors/child.
 import syncActorsChild2 from "#machines/sync/interpreters/coverage/actors/child.2.machine";
 import syncActorsEmitter from "#machines/sync/interpreters/coverage/actors/emitter.machine";
 
-describe("Actors machines validation", () => {
-
-  test("#01 => async emitter1.machine", () =>
+describe('Actors machines validation', () => {
+  test('#01 => async emitter1.machine', () =>
     expect(validate.safe(asyncEmitter1.config).success).toBe(true));
 
   test("#02 => async emitter3.machine", () =>

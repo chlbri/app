@@ -1,6 +1,17 @@
 import type { SoRa } from '@bemedev/app/bemedev';
 import * as v from 'valibot';
 
+/**
+ * Recursive Valibot schema builder for single elements or arbitrarily nested arrays of elements.
+ *
+ * @template {v.BaseSchema<any, any, any>} TSchema - Inner element schema type.
+ *
+ * @param schema - Base element schema to wrap recursively.
+ *
+ * @returns Valibot schema validating recursive single or nested array structures of type {@linkcode SoRa}.
+ *
+ * @see type {@linkcode SoRa}
+ */
 export function SoraSchema<
   const TSchema extends v.BaseSchema<any, any, any>,
 >(

@@ -26,9 +26,11 @@ import type {
 } from './parseTree.types';
 import type { _TransitionsConfig } from '@bemedev/app/transitions';
 
-// Recursively builds the paths map (ConfigDef) from a NodeConfig node.
-// `targets` is all state paths in the machine; `initial` is only set for compound nodes;
-// `states` is recursively built for each child state.
+/**
+ * Recursively builds the paths map from a flat map of node configurations.
+ * `targets` is all state paths in the machine; `initial` is set for compound nodes;
+ * `states` is recursively built for each child state.
+ */
 export const buildPaths = pipe(
   (flat: RecordS<NodeConfig2>) => Object.entries(flat),
   entries => {
@@ -96,7 +98,12 @@ export const buildPaths = pipe(
   v => v as ConfigPaths,
 );
 
-// Helper to extract from single activity
+/**
+ * Extracts action, guard, and delay tokens from an activity configuration node into context.
+ *
+ * @param ctx - Parse tree context of type {@linkcode ParseTreeContext}.
+ * @param activity - Optional activity configuration node of type {@linkcode ActivityConfig}.
+ */
 export const processActivity = pipe(
   (ctx: ParseTreeContext, activity?: ActivityConfig) => {
     pipe(
@@ -118,6 +125,12 @@ export const processActivity = pipe(
   },
 );
 
+/**
+ * Processes transitions configuration object and populates symbol sets into context.
+ *
+ * @param ctx - Parse tree context of type {@linkcode ParseTreeContext}.
+ * @param transitions - Transitions config object of type {@linkcode _TransitionsConfig}.
+ */
 export const processTransitionsConfig = (
   ctx: ParseTreeContext,
   transitions: _TransitionsConfig,
@@ -136,6 +149,12 @@ export const processTransitionsConfig = (
   )();
 };
 
+/**
+ * Extracts action names from entry or exit describers and adds them to context.
+ *
+ * @param ctx - Parse tree context of type {@linkcode ParseTreeContext}.
+ * @param actions - Single action or array of actions with describers of type {@linkcode WithDescriber}.
+ */
 const processActions = pipe(
   (ctx: ParseTreeContext, actions?: SingleOrArrayL<WithDescriber>) => {
     pipe(
@@ -147,7 +166,12 @@ const processActions = pipe(
   },
 );
 
-// Process all nodes in flat structure
+/**
+ * Traverses a single node config and processes entry/exit actions, activities, transitions, and tags.
+ *
+ * @param ctx - Parse tree context of type {@linkcode ParseTreeContext}.
+ * @param node - Node configuration object of type {@linkcode NodeConfig2}.
+ */
 export const traverseOne = (ctx: ParseTreeContext, node: NodeConfig2) => {
   processActions(ctx, node.entry);
   processActions(ctx, node.exit);
@@ -161,6 +185,13 @@ export const traverseOne = (ctx: ParseTreeContext, node: NodeConfig2) => {
     v => ctx.tags.add(...v),
   )();
 };
+
+/**
+ * Flattens and traverses all nodes in a machine configuration hierarchy.
+ *
+ * @param ctx - Parse tree context of type {@linkcode ParseTreeContext}.
+ * @param node - Root machine configuration node of type {@linkcode NodeConfig2}.
+ */
 export const traverse = (ctx: ParseTreeContext, node: NodeConfig2) => {
   pipe(
     () => node,

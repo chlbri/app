@@ -17,26 +17,22 @@ describe('longRuns - no timeout limit for async actions and after', () => {
 
     const machineWithoutLong = _machineWithoutLong2;
 
-    test('#01 => machine.longRuns is true when __longRuns: true', () => {
-      expect(machineWithLong.longRuns).toBe(true);
-    });
+    test('#01 => machine.longRuns is true when __longRuns: true', () =>
+      expect(machineWithLong.longRuns).toBe(true));
 
-    test('#02 => machine.longRuns is false when __longRuns is not set', () => {
-      expect(machineWithoutLong.longRuns).toBe(false);
-    });
+    test('#02 => machine.longRuns is false when __longRuns is not set', () =>
+      expect(machineWithoutLong.longRuns).toBe(false));
 
     const serviceWithLong = interpret(machineWithLong, { context: 0 });
     const serviceWithoutLong = interpret(machineWithoutLong, {
       context: 0,
     });
 
-    test('#03 => service.longRuns is true when __longRuns: true', () => {
-      expect(serviceWithLong.longRuns).toBe(true);
-    });
+    test('#03 => service.longRuns is true when __longRuns: true', () =>
+      expect(serviceWithLong.longRuns).toBe(true));
 
-    test('#04 => service.longRuns is false when __longRuns is not set', () => {
-      expect(serviceWithoutLong.longRuns).toBe(false);
-    });
+    test('#04 => service.longRuns is false when __longRuns is not set', () =>
+      expect(serviceWithoutLong.longRuns).toBe(false));
   });
 
   describe('#02 => without __longRuns: async action times out at DEFAULT_MAX_TIME_PROMISE', () => {
@@ -107,9 +103,7 @@ describe('longRuns - no timeout limit for async actions and after', () => {
 
     const service = interpret(machine, { context: 0 });
 
-    test('#01 => start', () => {
-      service.start();
-    });
+    test('#01 => start', service.start);
 
     test('#02 => state is idle before delay elapses', () => {
       expect(service.value).toEqual('idle');

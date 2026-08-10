@@ -8,7 +8,7 @@ import type { FnMap, FnMapR } from '@bemedev/app/types';
 import { reduceFnMap, reduceFnMapReduced } from '@bemedev/app/utils';
 
 describe('reduceFnMap tests', () => {
-  describe('#02 => reduceFnMap', () => {
+  describe('#01 => reduceFnMap', () => {
     describe('#01 => returns function directly if it is already a function', () => {
       // Arrange
       const events: EventsMap = {};
@@ -18,8 +18,8 @@ describe('reduceFnMap tests', () => {
       const result = reduceFnMap(directFn, ...Object.keys(events));
 
       // Assert
-      test('#01 => result is the direct function', () =>
-        expect(result).toBe(directFn));
+      test('#01 => result is the direct function', () => expect(result).toBe(directFn));
+
       test('#02 => result returns "result" when called', () =>
         expect(
           result({
@@ -64,8 +64,8 @@ describe('reduceFnMap tests', () => {
           value: 'test',
           tags: [],
         }));
-      test('#02 => result is "else result"', () =>
-        expect(result).toBe('else result'));
+
+      test('#02 => result is "else result"', () => expect(result).toBe('else result'));
     });
 
     describe('#03 => uses appropriate function based on event type', () => {
@@ -122,6 +122,7 @@ describe('reduceFnMap tests', () => {
           value: 'test',
           tags: [],
         }));
+
       test('#02 => event2Fn was called correctly', () =>
         expect(event2Fn).toHaveBeenCalledWith({
           payload: { data: 42 },
@@ -131,6 +132,7 @@ describe('reduceFnMap tests', () => {
           value: 'test',
           tags: [],
         }));
+
       test('#03 => elseFn was called correctly', () =>
         expect(elseFn).toHaveBeenCalledWith({
           event: { type: 'UNKNOWN', payload: null },
@@ -140,12 +142,10 @@ describe('reduceFnMap tests', () => {
           value: 'test',
           tags: [],
         }));
-      test('#04 => result1 is "event1 result"', () =>
-        expect(result1).toBe('event1 result'));
-      test('#05 => result2 is "event2 result"', () =>
-        expect(result2).toBe('event2 result'));
-      test('#06 => result3 is "else result"', () =>
-        expect(result3).toBe('else result'));
+
+      test('#04 => result1 is "event1 result"', () => expect(result1).toBe('event1 result'));
+      test('#05 => result2 is "event2 result"', () => expect(result2).toBe('event2 result'));
+      test('#06 => result3 is "else result"', () => expect(result3).toBe('else result'));
     });
 
     test('#04 => uses nothing as default else function', () => {
@@ -172,7 +172,7 @@ describe('reduceFnMap tests', () => {
     });
   });
 
-  describe('#03 => reduceFnMapReduced', () => {
+  describe('#02 => reduceFnMapReduced', () => {
     describe('#01 => returns function directly if it is already a function', () => {
       // Arrange
       const events: EventsMap = {};
@@ -185,8 +185,8 @@ describe('reduceFnMap tests', () => {
       );
 
       // Assert
-      test('#01 => result is the direct function', () =>
-        expect(result).toBe(directFn));
+      test('#01 => result is the direct function', () => expect(result).toBe(directFn));
+
       test('#02 => result returns "result" when called', () =>
         expect(
           result({
@@ -234,8 +234,8 @@ describe('reduceFnMap tests', () => {
           value: 'test',
           tags: [],
         }));
-      test('#02 => result is "else result"', () =>
-        expect(result).toBe('else result'));
+
+      test('#02 => result is "else result"', () => expect(result).toBe('else result'));
     });
 
     describe('#03 => uses appropriate function based on event type', () => {
@@ -291,6 +291,7 @@ describe('reduceFnMap tests', () => {
           value: 'test',
           tags: [],
         }));
+
       test('#02 => event2Fn was called correctly', () =>
         expect(event2Fn).toHaveBeenCalledWith({
           context: {},
@@ -299,6 +300,7 @@ describe('reduceFnMap tests', () => {
           value: 'test',
           tags: [],
         }));
+
       test('#03 => elseFn was called correctly', () =>
         expect(elseFn).toHaveBeenCalledWith({
           context: {},
@@ -307,12 +309,10 @@ describe('reduceFnMap tests', () => {
           value: 'test',
           tags: [],
         }));
-      test('#04 => result1 is "event1 result"', () =>
-        expect(result1).toBe('event1 result'));
-      test('#05 => result2 is "event2 result"', () =>
-        expect(result2).toBe('event2 result'));
-      test('#06 => result3 is "else result"', () =>
-        expect(result3).toBe('else result'));
+
+      test('#04 => result1 is "event1 result"', () => expect(result1).toBe('event1 result'));
+      test('#05 => result2 is "event2 result"', () => expect(result2).toBe('event2 result'));
+      test('#06 => result3 is "else result"', () => expect(result3).toBe('else result'));
     });
 
     test('#04 => uses nothing as default else function', () => {

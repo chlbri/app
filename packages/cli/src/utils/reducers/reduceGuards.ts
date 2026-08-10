@@ -5,6 +5,13 @@ import {
   type WithDescriber,
 } from '@bemedev/app';
 
+/**
+ * Flattens and deduplicates guard configurations into a unique list of describers.
+ *
+ * @param guards - Array of guard unions of type {@linkcode GuardUnion}.
+ *
+ * @returns Array of deduplicated guard describers of type {@linkcode WithDescriber}.
+ */
 export const reduceGuards = (...guards: GuardUnion[]): WithDescriber[] => {
   const result: WithDescriber[] = [];
   const keyMap = new Map<string, number>();

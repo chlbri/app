@@ -9,6 +9,13 @@ import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { tap } from '@bemedev/pipe/extensions/common';
 
+/**
+ * Reduces activity configuration into sets of extracted actions, guards, and delays.
+ *
+ * @param activity - Activity configuration object of type {@linkcode ActivityConfig}.
+ *
+ * @returns Object containing `actions`, `guards`, and `delays` sets.
+ */
 export const reduceActivity = (activity: ActivityConfig) => {
   const actions = createBetterSet<string>();
   const guards = createBetterSet<string>();

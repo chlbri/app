@@ -1,10 +1,10 @@
 import { ActionConfig_Schema } from '@bemedev/app-valibot';
-import { createValibotTests } from "../fixtures";
+import { createValibotTests } from '../fixtures';
 
 describe('TESTS', () => {
   const { acceptation, success } = createValibotTests(ActionConfig_Schema);
 
-  describe('#01 => Acceptation', acceptation);
+  describe('#00 => Acceptation', acceptation);
 
   describe(
     '#01 => CASES',

@@ -13,9 +13,8 @@ import asyncActions8 from "#machines/helpers/actions/async-actions.8.machine";
 import sendToActions1 from "#machines/helpers/actions/sendToActions/sendToActions1.machine";
 import sendToActions2 from "#machines/helpers/actions/sendToActions/sendToActions2.machine";
 
-describe("Actions machines validation", () => {
-
-  test("#01 => action.batch.cov.machine", () =>
+describe('Actions machines validation', () => {
+  test('#01 => action.batch.cov.machine', () =>
     expect(validate.safe(actionBatchCov.config).success).toBe(true));
 
   test("#02 => actions.1.machine", () =>

@@ -220,8 +220,10 @@ describe('after', () => {
       test(...useStateValue('alwaysTarget'));
       test(...waiter(10));
       test(...useStateValue('alwaysTarget'));
+
       test('#06 => count is "5"', () =>
         expect(service1.context.count).toBe(5));
+
       test(...changeIndex(prev => prev + 2));
       test(...waiter());
       test(...useStateValue('alwaysTarget'));

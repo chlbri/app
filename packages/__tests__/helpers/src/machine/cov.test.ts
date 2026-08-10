@@ -360,13 +360,11 @@ describe('machine coverage', () => {
         test(...pause(1));
 
         describe('#02 => Calls of log', () => {
-          test('#01 => Length of calls of log is the same of length of strings', () => {
-            expect(log).toBeCalledTimes(strings.length);
-          });
+          test('#01 => Length of calls of log is the same of length of strings', () =>
+            expect(log).toBeCalledTimes(strings.length));
 
-          test('#02 => Log is called "72" times', () => {
-            expect(log).toBeCalledTimes(72);
-          });
+          test('#02 => Log is called "72" times', () =>
+            expect(log).toBeCalledTimes(72));
         });
 
         test('#03 => Log the time of all tests', () => {
@@ -785,68 +783,64 @@ describe('#04 = > coverage retrieve initial', () => {
   });
 });
 
-describe('#06 => machine id is not defined', () => {
-  describe('#01 => string', () => {
-    const idM = 'machineNotDefined' as const;
-    const machineT = _machineT2;
+  describe('#06 => machine id is not defined', () => {
+    describe('#01 => string', () => {
+      const idM = 'machineNotDefined' as const;
+      const machineT = _machineT2;
 
-    const service = interpret(machineT);
-    const { start } = constructTests(vi, service);
+      const service = interpret(machineT);
+      const { start } = constructTests(vi, service);
 
-    test(...start(0));
+      test(...start(0));
 
-    describe('#01 => log', () => {
-      test('#01 => errors is empty', () => {
-        const actual = service._errorsCollector;
-        expect(actual).toHaveLength(0);
-      });
+      describe('#01 => log', () => {
+        test('#01 => errors is empty', () =>
+          expect(service._errorsCollector).toHaveLength(0));
 
-      describe('#02 => It has some watnings', () => {
-        test('#01 => warnings is not empty', () => {
-          const actual = service._warningsCollector;
-          expect(actual).not.toHaveLength(0);
-          expect(actual).toHaveLength(1);
+        describe('#02 => It has some watnings', () => {
+          test('#01 => warnings is not empty', () =>
+            expect(service._warningsCollector).not.toHaveLength(0));
+
+          test('#02 => warnings has length 1', () =>
+            expect(service._warningsCollector).toHaveLength(1));
+
+          test(`#02 => contains warning for machine : "${idM}"`, () => {
+            const expected = `Machine (${idM}) is not defined`;
+            expect(service._warningsCollector).toContain(expected);
+          });
         });
+      });
+    });
 
-        test(`#02 => contains warning for machine : "${idM}"`, () => {
-          const expected = `Machine (${idM}) is not defined`;
-          expect(service._warningsCollector).toContain(expected);
+    describe('#01 => object', () => {
+      const idM = { name: 'machineNotDefined', description: 'Not defined' };
+      const machineT = _machineT3;
+
+      const service = interpret(machineT);
+
+      test('#01 => start', service.start.bind(service));
+
+      describe('#01 => log', () => {
+        test('#01 => errors is empty', () =>
+          expect(service._errorsCollector).toHaveLength(0));
+
+        describe('#02 => It has some watnings', () => {
+          test('#01 => warnings is not empty', () =>
+            expect(service._warningsCollector).not.toHaveLength(0));
+
+          test('#02 => warnings has length 1', () =>
+            expect(service._warningsCollector).toHaveLength(1));
+
+          test(`#02 => contains warning for machine : "${reduceDescriber(idM)}"`, () => {
+            const expected = `Machine (${reduceDescriber(idM)}) is not defined`;
+            expect(service._warningsCollector).toContain(expected);
+          });
         });
       });
     });
   });
 
-  describe('#01 => object', () => {
-    const idM = { name: 'machineNotDefined', description: 'Not defined' };
-    const machineT = _machineT3;
-
-    const service = interpret(machineT);
-
-    test('#00 => start', service.start.bind(service));
-
-    describe('#01 => log', () => {
-      test('#01 => errors is empty', () => {
-        const actual = service._errorsCollector;
-        expect(actual).toHaveLength(0);
-      });
-
-      describe('#02 => It has some watnings', () => {
-        test('#01 => warnings is not empty', () => {
-          const actual = service._warningsCollector;
-          expect(actual).not.toHaveLength(0);
-          expect(actual).toHaveLength(1);
-        });
-
-        test(`#02 => contains warning for machine : "${reduceDescriber(idM)}"`, () => {
-          const expected = `Machine (${reduceDescriber(idM)}) is not defined`;
-          expect(service._warningsCollector).toContain(expected);
-        });
-      });
-    });
-  });
-});
-
-test('#my', () => {
+test('#01 => my', () => {
   console.warn(
     path.resolve(
       '/parent/child/grandchild/grantchild',

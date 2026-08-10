@@ -2,7 +2,7 @@ import { ChildConfig_Schema } from '@bemedev/app-valibot';
 import { createValibotTests } from "../fixtures";
 
 describe('TESTS', () => {
-  describe('#02 => ChildConfig_Schema', () => {
+  describe('#01 => ChildConfig_Schema', () => {
     const { acceptation, success } = createValibotTests(
       ChildConfig_Schema(),
     );
@@ -10,7 +10,7 @@ describe('TESTS', () => {
     describe('#01 => Acceptation', acceptation);
 
     describe(
-      '#01 => CASES',
+      '#02 => CASES',
       success(
         {
           invite: 'only contexts => true',

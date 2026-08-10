@@ -557,7 +557,6 @@ describe('Composition', () => {
       // #endregion
 
       test(...start());
-
       test(...waiter(6, 1));
 
       describe('#02 => Check the service', () => {
@@ -571,7 +570,6 @@ describe('Composition', () => {
 
       describe('#05 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
-
         test(...useIterator(6, 2));
         test(...useIteratorC(6, 3));
 
@@ -590,7 +588,6 @@ describe('Composition', () => {
 
       describe('#08 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
-
         test(...useIterator(18, 2));
         test(...useIteratorC(12, 3));
 
@@ -601,7 +598,6 @@ describe('Composition', () => {
 
       describe('#10 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
-
         test(...useIterator(18, 2));
         test(...useIteratorC(12, 3));
 
@@ -609,12 +605,10 @@ describe('Composition', () => {
       });
 
       test('#11 => resume', service.resume);
-
       test(...waiter(12, 12));
 
       describe('#13 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
-
         test(...useIterator(42, 2));
         test(...useIteratorC(24, 3));
 
@@ -631,7 +625,6 @@ describe('Composition', () => {
 
       describe('#15 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
-
         test(...useIterator(42, 2));
         test(...useIteratorC(24, 3));
         test(...useInput('', 4));
@@ -642,7 +635,6 @@ describe('Composition', () => {
 
       describe('#17 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
-
         test(...useIterator(66, 2));
         test(...useIteratorC(36, 3));
         test(...useInput('', 4));
@@ -664,7 +656,6 @@ describe('Composition', () => {
 
       describe('#19 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
-
         test(...useIterator(66, 2));
         test(...useIteratorC(36, 3));
         test(...useInput('', 4));
@@ -675,7 +666,6 @@ describe('Composition', () => {
 
       describe('#21 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'idle' } }, 1));
-
         test(...useIterator(90, 2));
         test(...useIteratorC(48, 3));
         test(...useInput('', 4));
@@ -691,7 +681,6 @@ describe('Composition', () => {
 
       describe('#24 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
-
         test(...useIterator(90, 2));
         test(...useIteratorC(48, 3));
         test(...useInput(INPUT, 4));
@@ -702,7 +691,6 @@ describe('Composition', () => {
 
       describe('#26 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
-
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
         test(...useInput(INPUT, 4));
@@ -714,7 +702,6 @@ describe('Composition', () => {
 
       describe('#28 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
-
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
         test(...useInput(INPUT, 4));
@@ -726,7 +713,6 @@ describe('Composition', () => {
 
       describe('#30 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
-
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
         test(...useInput(INPUT, 4));
@@ -738,7 +724,6 @@ describe('Composition', () => {
 
       describe('#32 => Check the service', () => {
         test(...useState({ working: { fetch: 'idle', ui: 'input' } }, 1));
-
         test(...useIterator(114, 2));
         test(...useIteratorC(60, 3));
         test(...useInput(INPUT, 4));

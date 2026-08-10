@@ -162,9 +162,7 @@ describe('REAL LIFE TESTS', () => {
 
       test(...useIterator(18, 13));
       test(...useSend('NEXT', 14));
-
       test(...useValue({ parallel: { atomic: 'idle' } }, 15));
-
       test(...useIterator(27, 16));
 
       test('#26 => #Decomposed', () => {
@@ -734,6 +732,7 @@ describe('REAL LIFE TESTS', () => {
         test('#08 => Should have two fields', () => {
           expect(service.state.context.fields).toHaveLength(2);
         });
+
         test('#08 => These 2 are same', () => {
           expect(service.state.context.fields?.[0]).toEqual({
             label: '',
@@ -814,6 +813,7 @@ describe('REAL LIFE TESTS', () => {
       test('#13 => Fields state should be registration', () => {
         expect(service.state.context.states?.fields).toBe('registration');
       });
+
       test(
         ...send(
           {
@@ -823,6 +823,7 @@ describe('REAL LIFE TESTS', () => {
           14,
         ),
       );
+
       test('#15 => Values should be registered', () => {
         expect(service.state.context.values).toEqual({
           name: 'John Doe',
@@ -830,16 +831,22 @@ describe('REAL LIFE TESTS', () => {
         });
         expect(service.state.context.states?.values).toBe('registration');
       });
+
       test(...send('VALUES:MODIFY', 16));
+
       test('#17 => Values state should be idle', () => {
         expect(service.state.context.states?.values).toBe('idle');
       });
+
       test(...send('FIELDS:MODIFY', 18));
       test(...useStateValue({ working: 'idle' }, 19));
+
       test('#20 => Fields state should be idle', () => {
         expect(service.state.context.states?.fields).toBe('idle');
       });
+
       test(...send({ type: 'REMOVE', payload: { index: 1 } }, 21));
+
       test('#22 => Should remove second field', () => {
         expect(service.state.context.fields).toHaveLength(1);
         expect(service.state.context.fields?.[0]).toEqual({

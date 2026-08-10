@@ -4,6 +4,12 @@ import { PrimitiveSchema } from './primitive';
 import { SoraSchema } from './sora';
 import type { PrimitiveObject } from '@bemedev/app/types';
 
+/**
+ * Valibot schema for recursive primitive objects or nested maps of primitives.
+ *
+ * @see type {@linkcode PrimitiveObject}
+ * @see {@linkcode SoraSchema}, {@linkcode PrimitiveSchema}, {@linkcode MapSchema}
+ */
 export const PrimitiveObjectSchema: v.BaseSchema<
   PrimitiveObject,
   PrimitiveObject,

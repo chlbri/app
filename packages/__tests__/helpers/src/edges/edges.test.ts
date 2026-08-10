@@ -157,8 +157,10 @@ describe('EDGES CASES', () => {
       test(...number3(0));
       test(...number4(8));
       test(...stop());
+
       test('#99 => machine is defined', () =>
         expect(service.machine).toBeDefined());
     });
   });
 });
+

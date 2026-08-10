@@ -14,12 +14,12 @@ describe('Machine addOptions return', () => {
       },
     }));
 
-    test('#01 => result is defined', () =>
-      expect(result).toBeDefined());
-    test('#02 => result.actions is defined', () =>
-      expect(result?.actions).toBeDefined());
+    test('#01 => result is defined', () => expect(result).toBeDefined());
+    test('#02 => result.actions is defined', () => expect(result?.actions).toBeDefined());
+
     test('#03 => result.actions.increment is defined', () =>
       expect(result?.actions?.increment).toBeDefined());
+
     test('#04 => result.actions.increment is a function', () =>
       expect(typeof result?.actions?.increment).toBe('function'));
   });
@@ -41,14 +41,10 @@ describe('Machine addOptions return', () => {
       delays: { shortDelay: () => 100 } as any,
     }));
 
-    test('#01 => result is defined', () =>
-      expect(result).toBeDefined());
-    test('#02 => result.actions is defined', () =>
-      expect(result?.actions).toBeDefined());
-    test('#03 => result.guards is defined', () =>
-      expect(result?.guards).toBeDefined());
-    test('#04 => result.delays is defined', () =>
-      expect(result?.delays).toBeDefined());
+    test('#01 => result is defined', () => expect(result).toBeDefined());
+    test('#02 => result.actions is defined', () => expect(result?.actions).toBeDefined());
+    test('#03 => result.guards is defined', () => expect(result?.guards).toBeDefined());
+    test('#04 => result.delays is defined', () => expect(result?.delays).toBeDefined());
   });
 
   describe('#04 => should still add options to machine even when capturing return value', () => {
@@ -59,8 +55,7 @@ describe('Machine addOptions return', () => {
       },
     }));
 
-    test('#01 => result is defined', () =>
-      expect(result).toBeDefined());
+    test('#01 => result is defined', () => expect(result).toBeDefined());
 
     // Verify the machine actually has the options applied
     test('#02 => context starts at 0 after start', () => {

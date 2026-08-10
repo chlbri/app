@@ -16,6 +16,17 @@ import {
   TransitionConfigMapG_Schema,
 } from './map';
 
+/**
+ * Valibot schema builder for non-empty transition arrays.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Schema validating an array of transition configurations of type {@linkcode ArrayTransitions}.
+ *
+ * @see {@linkcode TransitionConfig_Schema}, {@linkcode TransitionConfigMapG_Schema}
+ */
 export const ArrayTransitions_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ): v.BaseSchema<
@@ -35,6 +46,17 @@ export const ArrayTransitions_Schema = <T extends ReadonlyArray<string>>(
   ) as any;
 };
 
+/**
+ * Valibot schema builder for non-empty transition arrays requiring explicit targets.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Schema validating an array of transition configurations of type {@linkcode ArrayTransitionsF}.
+ *
+ * @see {@linkcode TransitionConfigF_Schema}, {@linkcode TransitionConfigMapFG_Schema}
+ */
 export const ArrayTransitionsF_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ): v.BaseSchema<
@@ -54,6 +76,17 @@ export const ArrayTransitionsF_Schema = <T extends ReadonlyArray<string>>(
   ) as any;
 };
 
+/**
+ * Valibot schema builder for single transition configuration or array of transition configurations.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Union schema for single or array transition configuration.
+ *
+ * @see {@linkcode ArrayTransitions_Schema}, {@linkcode TransitionConfig_Schema}
+ */
 export const SingleOrArrayT_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
@@ -63,6 +96,17 @@ export const SingleOrArrayT_Schema = <T extends ReadonlyArray<string>>(
   ]);
 };
 
+/**
+ * Valibot schema builder for transient/always transition configurations.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Schema validating always transition configuration of type {@linkcode AlwaysConfig}.
+ *
+ * @see {@linkcode TransitionConfigF_Schema}, {@linkcode ArrayTransitionsF_Schema}
+ */
 export const AlwaysConfig_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ): v.BaseSchema<
@@ -76,6 +120,17 @@ export const AlwaysConfig_Schema = <T extends ReadonlyArray<string>>(
   ]) as any;
 };
 
+/**
+ * Valibot schema builder for delayed (`on` / `after`) transition configurations.
+ *
+ * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ *
+ * @param paths - Allowed target state paths.
+ *
+ * @returns Schema validating delayed transitions map.
+ *
+ * @see {@linkcode NotArray_Schema}, {@linkcode recordV}, {@linkcode SingleOrArrayT_Schema}
+ */
 export const DelayedTransitions_Config = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {

@@ -4,8 +4,8 @@ describe('getParents', () => {
   describe('#01 => should return correct parents for top level state', () => {
     const result = getParents('/state1');
 
-    test('#01 => includes root', () =>
-      expect(result).toContain('/'));
+    test('#01 => includes root', () => expect(result).toContain('/'));
+
     test('#02 => equals expected array', () =>
       expect(result).toEqual(['/', '/state1']));
   });

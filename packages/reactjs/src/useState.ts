@@ -11,9 +11,17 @@ import type { UseServiceOptions } from './types';
 /**
  * A hook that creates a React state from a service with a subscribe function.
  *
- * @param service - The service containing the state and subscribe method.
- * @param options - Optional configuration options for selection and equality comparison.
- * @returns The selected state.
+ * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
+ * @template {string} Ta - Tag type extending `string`.
+ * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ * @template T - Selected state type, defaults to type {@linkcode State}<{@linkcode Eo}, {@linkcode Tc}, {@linkcode Ta}>.
+ *
+ * @param service - The service containing state and subscribe method.
+ * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
+ * @param service.state - Current state of type {@linkcode State}.
+ * @param options - Optional configuration options of type {@linkcode UseServiceOptions}.
+ *
+ * @returns The selected state of type `T`.
  */
 export function useState<
   Tc extends PrimitiveObject,

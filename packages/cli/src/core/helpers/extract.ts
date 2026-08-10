@@ -3,6 +3,13 @@ import type { Project } from 'ts-morph';
 import { evaluateNode } from './evaluate';
 import { extractPContextType } from './pContext';
 
+/**
+ * Recursively locates the `createMachine` function call within a call expression.
+ *
+ * @param callNode - AST call expression node.
+ *
+ * @returns Found call node or `null`.
+ */
 const findCreateMachineCall = (callNode: any): any | null => {
   const callee = callNode.getExpression?.();
   if (!callee) return null;
@@ -21,6 +28,14 @@ const findCreateMachineCall = (callNode: any): any | null => {
   return null;
 };
 
+/**
+ * Extracts machine metadata, static config, and protected context typings from a source file.
+ *
+ * @param sourceFilePath - Absolute path to machine source file.
+ * @param project - `ts-morph` class {@linkcode Project} instance.
+ *
+ * @returns Extracted machine info object or `null` if invalid/unparseable.
+ */
 export const extractMachineInfo = (
   sourceFilePath: string,
   project: Project,

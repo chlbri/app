@@ -85,7 +85,6 @@ describe('Machine 23 -> Tests for inner machines', () => {
       });
 
       test(...start());
-
       test(...useWaiter(6));
 
       describe('#02 => Check the service', () => {
@@ -119,7 +118,6 @@ describe('Machine 23 -> Tests for inner machines', () => {
       });
 
       test(...resume());
-
       test(...useWaiter(12));
 
       describe('#13 => Check the service', () => {

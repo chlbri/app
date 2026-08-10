@@ -45,9 +45,8 @@ describe('Machine batch action', () => {
 
   const service = interpret(machine, { context: 0 });
 
-  test('#00 => start the machine', service.start);
-
-  test('#01 => context is at 0', () =>
+  test('#01 => start the machine', service.start);
+  test('#02 => context is at 0', () =>
     expect(service.state.context).toBe(0));
 
   describe('#02 => send INC1 event', () => {
@@ -60,12 +59,11 @@ describe('Machine batch action', () => {
   });
 
   describe('#03 => send INC2 event', () => {
-    test('#01 => send INC2', async () => {
-      await service.send('INC2');
-    });
+    test('#01 => send INC2', () => service.send('INC2'));
 
-    test('#02 => context should be at 3', () =>
-      expect(service.state.context).toBe(3));
+    test('#02 => context should be at 3', () => {
+      expect(service.state.context).toBe(3);
+    });
   });
 
   describe('#04 => send INC5 event', () => {

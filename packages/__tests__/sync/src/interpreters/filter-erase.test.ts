@@ -21,7 +21,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('state1', 2));
 
       test('#03 => Add actions', () => {
@@ -52,7 +51,6 @@ describe('Filter and Erase actions', () => {
       });
 
       test(...useSend('FILTER', 6));
-
       test(...useValue('state2', 7));
 
       test('#08 => Check filtered numbers (only even)', () => {
@@ -78,7 +76,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {
@@ -112,7 +109,6 @@ describe('Filter and Erase actions', () => {
       });
 
       test(...useSend('FILTER_ACTIVE', 6));
-
       test(...useValue('filtered', 7));
 
       test('#08 => Check filtered people (only active)', () => {
@@ -139,7 +135,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {
@@ -242,7 +237,6 @@ describe('Filter and Erase actions', () => {
       } = constructTests(vi, service);
 
       test(...start(1));
-
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {
@@ -269,18 +263,22 @@ describe('Filter and Erase actions', () => {
         ),
       );
 
-      test('#04 => Check user', () => {
-        const user = service.select('user');
-        expect(user?.name).toBe('Jane Doe');
-        expect(user?.email).toBe('jane@example.com');
+      test('#04 => Check user name', () => {
+        expect(service.select('user')?.name).toBe('Jane Doe');
       });
 
-      test(...useSend('CLEAR_EMAIL', 5));
+      test('#05 => Check user email', () => {
+        expect(service.select('user')?.email).toBe('jane@example.com');
+      });
 
-      test('#06 => Check email is undefined, name still exists', () => {
-        const user = service.select('user');
-        expect(user?.name).toBe('Jane Doe');
-        expect(user?.email).toBeUndefined();
+      test(...useSend('CLEAR_EMAIL', 6));
+
+      test('#07 => Check name still exists', () => {
+        expect(service.select('user')?.name).toBe('Jane Doe');
+      });
+
+      test('#08 => Check email is undefined', () => {
+        expect(service.select('user')?.email).toBeUndefined();
       });
     });
 
@@ -323,23 +321,34 @@ describe('Filter and Erase actions', () => {
               age: 30,
             },
           },
-          3,
+          4,
         ),
       );
 
-      test('#04 => Check data', () => {
+      test('#05 => Check name', () => {
         expect(service.select('name')).toBe('Alice');
+      });
+
+      test('#06 => Check email', () => {
         expect(service.select('email')).toBe('alice@example.com');
+      });
+
+      test('#07 => Check age', () => {
         expect(service.select('age')).toBe(30);
       });
 
-      test(...useSend('CLEAR_ALL', 6));
+      test(...useSend('CLEAR_ALL', 8));
+      test(...useValue('cleared', 9));
 
-      test(...useValue('cleared', 7));
-
-      test('#08 => Check all properties are undefined', () => {
+      test('#10 => Check name is undefined', () => {
         expect(service.select('name')).toBeUndefined();
+      });
+
+      test('#11 => Check email is undefined', () => {
         expect(service.select('email')).toBeUndefined();
+      });
+
+      test('#12 => Check age is undefined', () => {
         expect(service.select('age')).toBeUndefined();
       });
     });

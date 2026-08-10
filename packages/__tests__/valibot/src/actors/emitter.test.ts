@@ -8,7 +8,7 @@ describe('TESTS', () => {
   describe('#01 => Acceptation', acceptation);
 
   describe(
-    '#01 => CASES',
+    '#02 => CASES',
     success(
       {
         invite: 'valid next string => true',

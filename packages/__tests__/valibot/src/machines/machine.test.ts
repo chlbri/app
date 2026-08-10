@@ -25,9 +25,8 @@ import asyncMachine_8 from "#machines/async/machine/real.1.machine";
 import asyncMachine_9 from "#machines/async/machine/real.2.machine";
 import asyncMachine_10 from "#machines/async/machine/real.3.machine";
 
-describe("Machine package machines validation", () => {
-
-  test("#01 => machine/addOptions-return.1.machine.ts", () =>
+describe('Machine package machines validation', () => {
+  test('#01 => machine/addOptions-return.1.machine.ts', () =>
     expect(validate.safe(helpersMachine_1.config).success).toBe(true));
 
   test("#02 => machine/addOptions-return.2.machine.ts", () =>

@@ -10,54 +10,55 @@ describe('#01 => parseTree', () => {
       expect(Object.keys(result.flat)).toEqual(['/']);
     });
 
-    test('#02 => __config is original config', () => {
+    test('#02 => empty __config is empty object', () => {
       expect(parseTree({}).__config).toEqual({});
+    });
+
+    test('#03 => __config is original config', () => {
       expect(result.__config).toBe(config);
     });
 
-    test('#03 => actions is empty', () => {
+    test('#04 => actions is empty', () => {
       expect(result.actions.toArray).toEqual([]);
     });
 
-    test('#04 => guards is empty', () => {
+    test('#05 => guards is empty', () => {
       expect(result.guards.toArray).toEqual([]);
     });
 
-    test('#05 => emitters is empty', () => {
+    test('#06 => emitters is empty', () => {
       expect(result.emitters.toArray).toEqual([]);
     });
 
-    test('#06 => children is empty', () => {
+    test('#07 => children is empty', () => {
       expect(result.children.toArray).toEqual([]);
     });
 
-    test('#07 => delays is empty', () => {
+    test('#08 => delays is empty', () => {
       expect(result.delays.toArray).toEqual([]);
     });
 
-    test('#08 => paths.all contains root', () => {
+    test('#09 => paths.all contains root', () => {
       expect(result.paths.all).toContain('/');
     });
 
-    test('#09 => paths.map.targets contains root path', () => {
+    test('#10 => paths.map.targets contains root path', () => {
       expect(result.paths.map.targets).toEqual([]);
     });
 
-    test('#10 => allPaths is empty', () => {
-      expect(result.allPaths.toArray).toContain('/'); // Root path is included in allPaths
+    test('#11 => allPaths is empty', () => {
+      expect(result.allPaths.toArray).toContain('/');
     });
 
-    test('#11 => targets is empty', () => {
+    test('#12 => targets is empty', () => {
       expect(result.targets.toArray).toEqual([]);
     });
 
-    test('#12 => events is empty', () => {
+    test('#13 => events is empty', () => {
       expect(result.events.toArray).toEqual([]);
     });
 
-    test('#13 => tags is empty', () => {
-      expect(result.tags.toArray).toEqual([]);
-    });
+    test('#14 => tags is empty', () => expect(result.tags.toArray).toEqual([]));
   });
 
   describe('#02 => entry and exit actions', () => {
@@ -71,16 +72,19 @@ describe('#01 => parseTree', () => {
     } as const;
     const result = parseTree(config);
 
-    test('#01 => entry actions in actions', () => {
+    test('#01 => first entry action in actions', () => {
       expect(result.actions.toArray).toContain('entryAction1');
+    });
+
+    test('#02 => second entry action in actions', () => {
       expect(result.actions.toArray).toContain('entryAction2');
     });
 
-    test('#02 => exit action in actions', () => {
+    test('#03 => exit action in actions', () => {
       expect(result.actions.toArray).toContain('exitAction1');
     });
 
-    test('#03 => no duplicate actions', () => {
+    test('#04 => no duplicate actions', () => {
       const unique = new Set(result.actions.toArray);
       expect(unique.size).toBe(result.actions.toArray.length);
     });
@@ -120,8 +124,11 @@ describe('#01 => parseTree', () => {
         expect(result.actions.toArray).toContain('doSomething');
       });
 
-      test('#02 => guard extracted', () => {
+      test('#02 => string guard extracted', () => {
         expect(result.guards.toArray).toContain('canGo');
+      });
+
+      test('#03 => complex guard extracted', () => {
         expect(result.guards.toArray).toContainEqual(complexGuard.name);
       });
     });
@@ -147,25 +154,27 @@ describe('#01 => parseTree', () => {
       });
       const result = parseTree(config);
 
-      test('#01 => guards extracted', () => {
+      test('#01 => guardA extracted', () => {
         expect(result.guards.toArray).toContain('guardA');
+      });
+
+      test('#02 => guardsB extracted', () => {
         expect(result.guards.toArray).toContain('guardsB');
       });
 
-      test('#02 => actions extracted', () => {
+      test('#03 => actionA extracted', () => {
         expect(result.actions.toArray).toContain('actionA');
+      });
+
+      test('#04 => actionB extracted', () => {
         expect(result.actions.toArray).toContain('actionB');
       });
     });
   });
 
   describe('#04 => always transitions', () => {
-    describe('#01 => always as string', () => {
-      const result = parseTree({ always: '/target' });
-
-      test('#01 => path added', () => {
-        expect(result.paths.all).toContain('/');
-      });
+    test('#01 => always as string adds path', () => {
+      expect(parseTree({ always: '/target' }).paths.all).toContain('/');
     });
 
     describe('#02 => always as array with actions and guards', () => {
@@ -197,24 +206,36 @@ describe('#01 => parseTree', () => {
       });
       const result = parseTree(config);
 
-      test('#01 => guards extracted', () => {
+      test('#01 => first guard extracted', () => {
         expect(result.guards.toArray).toContain('alwaysGuard');
+      });
+
+      test('#02 => second guard extracted', () => {
         expect(result.guards.toArray).toContain('alwaysGuard2');
+      });
+
+      test('#03 => third guard extracted', () => {
         expect(result.guards.toArray).toContain('alwaysGuard3');
       });
 
-      test('#02 => actions extracted', () => {
+      test('#04 => first action extracted', () => {
         expect(result.actions.toArray).toContain('alwaysAction');
+      });
+
+      test('#05 => second action extracted', () => {
         expect(result.actions.toArray).toContain('alwaysAction2');
+      });
+
+      test('#06 => third action extracted', () => {
         expect(result.actions.toArray).toContain('alwaysAction3');
       });
 
-      test('#03 => no duplicate guards', () => {
+      test('#07 => no duplicate guards', () => {
         const unique = new Set(result.guards.toArray);
         expect(unique.size).toBe(result.guards.toArray.length);
       });
 
-      test('#04 => no duplicate actions', () => {
+      test('#08 => no duplicate actions', () => {
         const unique = new Set(result.actions.toArray);
         expect(unique.size).toBe(result.actions.toArray.length);
       });
@@ -230,29 +251,30 @@ describe('#01 => parseTree', () => {
     });
     const result = parseTree(config);
 
-    test('#01 => delay keys extracted', () => {
+    test('#01 => 1000 delay key extracted', () => {
       expect(result.delays.toArray).toContain('1000');
+    });
+
+    test('#02 => LONG delay key extracted', () => {
       expect(result.delays.toArray).toContain('LONG');
     });
 
-    test('#02 => action from delay extracted', () => {
+    test('#03 => action from delay extracted', () => {
       expect(result.actions.toArray).toContain('onTimeout');
     });
 
-    test('#03 => no duplicate delay keys', () => {
+    test('#04 => no duplicate delay keys', () => {
       const unique = new Set(result.delays.toArray);
       expect(unique.size).toBe(result.delays.toArray.length);
     });
   });
 
   describe('#06 => activities', () => {
-    describe('#01 => activity as string action', () => {
-      const config = { activities: { polling: 'pollAction' } };
-      const result = parseTree(config);
-
-      test('#01 => action key extracted', () => {
-        expect(result.actions.toArray).toContain('pollAction');
-      });
+    test('#01 => activity as string action extracts action key', () => {
+      expect(
+        parseTree({ activities: { polling: 'pollAction' } }).actions
+          .toArray,
+      ).toContain('pollAction');
     });
 
     describe('#02 => activity as object with guards and actions', () => {
@@ -316,29 +338,47 @@ describe('#01 => parseTree', () => {
     };
     const result = parseTree(config);
 
-    test('#01 => flat contains root and child paths', () => {
+    test('#01 => flat contains root path', () => {
       expect(result.flat).toHaveProperty('/');
+    });
+
+    test('#02 => flat contains idle path', () => {
       expect(result.flat).toHaveProperty('/idle');
+    });
+
+    test('#03 => flat contains active path', () => {
       expect(result.flat).toHaveProperty('/active');
     });
 
-    test('#02 => paths.all contains all paths', () => {
+    test('#04 => paths.all contains root path', () => {
       expect(result.paths.all).toContain('/');
+    });
+
+    test('#05 => paths.all contains idle path', () => {
       expect(result.paths.all).toContain('/idle');
+    });
+
+    test('#06 => paths.all contains active path', () => {
       expect(result.paths.all).toContain('/active');
     });
 
-    test('#03 => paths.map.initial is set for compound', () => {
+    test('#07 => paths.map.initial is set for compound', () => {
       expect((result.paths.map as any).initial).toBe('idle');
     });
 
-    test('#04 => paths.map.states has child entries', () => {
+    test('#08 => paths.map.states has idle entry', () => {
       expect((result.paths.map as any).states).toHaveProperty('idle');
+    });
+
+    test('#09 => paths.map.states has active entry', () => {
       expect((result.paths.map as any).states).toHaveProperty('active');
     });
 
-    test('#05 => actions from child states extracted', () => {
+    test('#10 => entry action from child state extracted', () => {
       expect(result.actions.toArray).toContain('doStart');
+    });
+
+    test('#11 => exit action from child state extracted', () => {
       expect(result.actions.toArray).toContain('doStop');
     });
   });
@@ -350,17 +390,23 @@ describe('#01 => parseTree', () => {
     };
     const result = parseTree(config);
 
-    test('#01 => flat contains both parallel branches', () => {
+    test('#01 => flat contains first parallel branch', () => {
       expect(result.flat).toHaveProperty('/a');
+    });
+
+    test('#02 => flat contains second parallel branch', () => {
       expect(result.flat).toHaveProperty('/b');
     });
 
-    test('#02 => paths.map.initial is NOT set for parallel', () => {
+    test('#03 => paths.map.initial is NOT set for parallel', () => {
       expect((result.paths.map as any).initial).toBeUndefined();
     });
 
-    test('#03 => actions from both branches extracted', () => {
+    test('#04 => action from first branch extracted', () => {
       expect(result.actions.toArray).toContain('entryA');
+    });
+
+    test('#05 => action from second branch extracted', () => {
       expect(result.actions.toArray).toContain('entryB');
     });
   });
@@ -384,40 +430,60 @@ describe('#01 => parseTree', () => {
     };
     const result = parseTree(config);
 
-    test('#01 => flat contains deeply nested path', () => {
+    test('#01 => flat contains level1 path', () => {
       expect(result.flat).toHaveProperty('/level1');
+    });
+
+    test('#02 => flat contains level2 path', () => {
       expect(result.flat).toHaveProperty('/level1/level2');
+    });
+
+    test('#03 => flat contains level3 path', () => {
       expect(result.flat).toHaveProperty('/level1/level2/level3');
     });
 
-    test('#02 => deep action extracted', () => {
+    test('#04 => deep action extracted', () => {
       expect(result.actions.toArray).toContain('deepAction');
     });
 
-    test('#03 => paths.map recursively has nested states', () => {
+    test('#05 => paths.map recursively has nested states', () => {
       const map = result.paths.map as any;
       expect(map.states.level1.states.level2.states).toHaveProperty(
         'level3',
       );
     });
 
-    test('#04 => paths.map.initial set at each compound level', () => {
+    test('#06 => paths.map.initial set at root level', () => {
       const map = result.paths.map as any;
       expect(map.initial).toBe('level1');
+    });
+
+    test('#07 => paths.map.initial set at level1', () => {
+      const map = result.paths.map as any;
       expect(map.states.level1.initial).toBe('level2');
+    });
+
+    test('#08 => paths.map.initial set at level2', () => {
+      const map = result.paths.map as any;
       expect(map.states.level1.states.level2.initial).toBe('level3');
     });
 
-    test('#05 => leaf node has no initial in paths.map', () => {
+    test('#09 => leaf node has no initial in paths.map', () => {
       const map = result.paths.map as any;
       expect(
         map.states.level1.states.level2.states.level3.initial,
       ).toBeUndefined();
     });
 
-    test('#06 => paths.map.targets contains all paths', () => {
+    test('#10 => paths.map.targets does not contain root', () => {
       expect(result.paths.map.targets).not.toContain('/');
+    });
+
+    test('#11 => paths.map.targets contains level2 path', () => {
       expect(result.paths.map.targets).toContain('/level1/level2');
+    });
+
+    test('#12 => paths.map.targets contains level1 path', () => {
       expect(result.paths.map.targets).toContain('/level1');
     });
   });
@@ -472,49 +538,55 @@ describe('#01 => parseTree', () => {
     } as const;
     const result = parseTree(config);
 
-    test('#01 => all state paths in flat', () => {
+    test('#01 => idle state path in flat', () => {
       expect(result.flat).toHaveProperty('/idle');
+    });
+
+    test('#02 => active state path in flat', () => {
       expect(result.flat).toHaveProperty('/active');
+    });
+
+    test('#03 => timeout state path in flat', () => {
       expect(result.flat).toHaveProperty('/timeout');
     });
 
-    test('#02 => entry action extracted', () => {
+    test('#04 => entry action extracted', () => {
       expect(result.actions.toArray).toContain('onEntry');
     });
 
-    test('#03 => guard extracted', () => {
+    test('#05 => guard extracted', () => {
       expect(result.guards.toArray).toContain('canStart');
     });
 
-    test('#04 => transition action extracted', () => {
+    test('#06 => transition action extracted', () => {
       expect(result.actions.toArray).toContain('doStart');
     });
 
-    test('#05 => delay key extracted', () => {
+    test('#07 => delay key extracted', () => {
       expect(result.delays.toArray).toContain('5000');
     });
 
-    test('#06 => delay action extracted', () => {
+    test('#08 => delay action extracted', () => {
       expect(result.actions.toArray).toContain('onIdle');
     });
 
-    test('#07 => exit action extracted', () => {
+    test('#09 => exit action extracted', () => {
       expect(result.actions.toArray).toContain('doClean');
     });
 
-    test('#08 => emitter key extracted', () => {
+    test('#10 => emitter key extracted', () => {
       expect(result.emitters.toArray).toContain('stream');
     });
 
-    test('#09 => child key extracted', () => {
+    test('#11 => child key extracted', () => {
       expect(result.children.toArray).toContain('childMachine');
     });
 
-    test('#10 => paths.map.initial is set', () => {
+    test('#12 => paths.map.initial is set', () => {
       expect((result.paths.map as any).initial).toBe('idle');
     });
 
-    test('#11 => no duplicates in any collection', () => {
+    test('#13 => no duplicates in any collection', () => {
       const collections = [
         result.actions.toArray,
         result.guards.toArray,

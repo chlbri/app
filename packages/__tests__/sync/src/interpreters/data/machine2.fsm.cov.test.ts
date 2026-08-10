@@ -98,7 +98,6 @@ describe('machine coverage', () => {
     // #endregion
 
     test(...start());
-
     test(...useWaiter(6));
 
     describe('#02 => Check the service', () => {
@@ -186,7 +185,6 @@ describe('machine coverage', () => {
     });
 
     test('#22 => Close the subscriber', subscriber.close.bind(subscriber));
-
     test(...useWrite({ value: INPUT }));
 
     describe('#24 => Check the service', () => {

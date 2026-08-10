@@ -16,12 +16,21 @@ import type {
 } from '@bemedev/app/types';
 import type { ProcessEventMap } from 'process';
 
+/**
+ * Tuple representing a test description and its corresponding execution callback.
+ */
 export type TestArr = readonly [string, () => void];
 
+/**
+ * Rejection handler function signature for process `unhandledRejection` events.
+ */
 export type RejectionHandler = (
   ...args: ProcessEventMap['unhandledRejection']
 ) => void;
 
+/**
+ * Common test result builder methods available on constructed test objects.
+ */
 type CommonTestsResult = Record<
   'start' | 'stop' | 'dispose' | 'pause' | 'resume',
   (index?: number) => TestArr
@@ -38,6 +47,13 @@ type CommonTestsResult = Record<
   useErrors: (...warnings: string[]) => TestArr;
 };
 
+/**
+ * Result object returned by type {@linkcode ConstructTests_F} containing generated test methods.
+ *
+ * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ * @template {object} T - Custom helper return type extending `object`.
+ * @template {string} Ta - Tag type extending `string`.
+ */
 export type ConstructTestsResult<
   Eo extends EventObject,
   T extends object = object,
@@ -49,16 +65,25 @@ export type ConstructTestsResult<
     ? EmptyObject
     : { useTags: (...tags: Ta[]) => TestArr });
 
+/**
+ * Internal result structure for type {@linkcode constructTests} execution.
+ */
 export type ConstructTestsResult2 = CommonTestsResult & {
   send: (_event: EventObject, index?: number) => TestArr;
   useTags: (...tags: string[]) => TestArr;
 };
 
+/**
+ * Helper tuple builder function signature.
+ */
 type OptionTupleOf = (
   invite: string,
   assertion: () => any,
 ) => [string, () => any];
 
+/**
+ * Waiter function builder signature.
+ */
 type ConstructWaiter_F = (
   DELAY?: number,
 ) => (
@@ -66,6 +91,12 @@ type ConstructWaiter_F = (
   index?: number,
 ) => readonly [string, () => Promise<void>];
 
+/**
+ * Context selector test builder function signature.
+ *
+ * @template Pc - Protected context type.
+ * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
+ */
 type ConstructContexts_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -74,6 +105,21 @@ type ConstructContexts_F<
   name?: string,
 ) => (value?: R, index?: number) => readonly [string, () => void];
 
+/**
+ * Configuration options object passed to custom test helper functions.
+ *
+ * @template {CommonConfig3} C - Machine configuration type extending type {@linkcode CommonConfig3}.
+ * @template Pc - Protected context type.
+ * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
+ * @template {EventsMap} E - Events map type extending type {@linkcode EventsMap}.
+ * @template {ActorsConfigMap} A - Actors configuration map extending type {@linkcode ActorsConfigMap}.
+ * @template {string} Ta - Tag type extending `string`.
+ * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ * @template {string} AllPaths - All paths union type extending `string`.
+ * @template {SimpleMachineOptions2} Mo - Machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * @template {SimpleMachineOptions2} L - Local machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * @template {MachineType} Type - Machine type ('sync' or 'async').
+ */
 export type Option<
   C extends CommonConfig3 = CommonConfig3,
   Pc = any,

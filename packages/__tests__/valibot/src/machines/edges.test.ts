@@ -6,9 +6,8 @@ import arrayAssignComplex from "#machines/helpers/edges/arrayAssign/complex.fsm"
 import arrayAssignComplexSync from "#machines/helpers/edges/arrayAssign/complex.sync.fsm";
 import arrayAssignSync from "#machines/helpers/edges/arrayAssign/sync.machine";
 
-describe("Edges machines validation", () => {
-
-  test("#01 => atomic.machine", () =>
+describe('Edges machines validation', () => {
+  test('#01 => atomic.machine', () =>
     expect(validate.safe(atomicMachine.config).success).toBe(true));
 
   test("#02 => arrayAssign async.async.fsm", () =>

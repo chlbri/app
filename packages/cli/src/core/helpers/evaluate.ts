@@ -1,3 +1,11 @@
+/**
+ * Statically evaluates a ts-morph AST node into a runtime JavaScript value.
+ *
+ * @param node - The ts-morph AST node to evaluate.
+ * @param sourceFile - The containing source file node.
+ *
+ * @returns Evaluated literal value, array, or object structure.
+ */
 export const evaluateNode = (node: any, sourceFile: any): any => {
   const kind = node.getKindName?.();
 
@@ -98,6 +106,14 @@ export const evaluateNode = (node: any, sourceFile: any): any => {
   throw new Error(`Cannot evaluate node kind: ${kind}`);
 };
 
+/**
+ * Resolves an identifier or property access name to its static declaration value.
+ *
+ * @param name - The identifier name string.
+ * @param sourceFile - The containing source file node.
+ *
+ * @returns Evaluated declaration value.
+ */
 const resolveIdentifier = (name: string, sourceFile: any): any => {
   const parts = name.split('.');
   const baseName = parts[0];

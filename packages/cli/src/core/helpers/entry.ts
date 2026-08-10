@@ -1,5 +1,14 @@
+// oxlint-disable-next-line no-unused-vars
+import type { Register } from '@bemedev/app/types';
 import type { ConfigPaths } from '../../utils/parseTree.types';
 
+/**
+ * Converts a set of string values into a TypeScript literal union type string.
+ *
+ * @param set - Iterable set or array of string tokens.
+ *
+ * @returns Formatted union type string.
+ */
 const setToUnion = (set: any): string => {
   const values: string[] = [];
   for (const v of set) {
@@ -10,11 +19,26 @@ const setToUnion = (set: any): string => {
   return values.map(v => `'${v}'`).join(' | ');
 };
 
+/**
+ * Converts an array of state paths into a TypeScript union type string.
+ *
+ * @param paths - Array of path strings.
+ *
+ * @returns Formatted paths union type string.
+ */
 const pathsToUnion = (paths: string[]): string => {
   if (paths.length === 0) return 'never';
   return paths.map(p => `'${p}'`).join(' | ');
 };
 
+/**
+ * Formats a `ConfigPaths` object into an inlined TypeScript interface declaration block.
+ *
+ * @param cp - Configuration paths object of type {@linkcode ConfigPaths}.
+ * @param indent - Indentation offset level in spaces (defaults to `0`).
+ *
+ * @returns Serialized type declaration string.
+ */
 const configPathsToType = (cp: ConfigPaths, indent = 0): string => {
   const pad = ' '.repeat(indent);
   const nextPad = ' '.repeat(indent + 2);
@@ -46,6 +70,16 @@ const configPathsToType = (cp: ConfigPaths, indent = 0): string => {
   return lines.join('\n');
 };
 
+/**
+ * Generates a `Register` interface entry string for a machine.
+ *
+ * @param name - Machine name string.
+ * @param tree - Parsed tree context.
+ * @param pContextType - Serialized protected context type string.
+ *
+ * @returns Formatted `Register` interface entry string.
+ * @see type {@linkcode Register}
+ */
 export const emitRegisterEntry = (
   name: string,
   tree: any,
