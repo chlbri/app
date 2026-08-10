@@ -1,0 +1,45 @@
+import { DEFAULT_MAX_TIME_PROMISE } from '@bemedev/app/constants';
+import { constructTests } from '@bemedev/app-vitest';
+import { interpret } from '@bemedev/app';
+import { machine } from './constants';
+
+vi.useFakeTimers();
+describe('Delay is too long', () => {
+  const activity1 = vi.fn().mockReturnValue({});
+
+  machine.addOptions(() => ({
+    actions: { activity1 },
+    delays: { DELAY: DEFAULT_MAX_TIME_PROMISE * 1.5 },
+  }));
+
+  const service = interpret(machine);
+  const { useStateValue, start, stop, waiter } = constructTests(
+    vi,
+    service,
+    ({ waiter }) => ({ waiter: waiter(DEFAULT_MAX_TIME_PROMISE * 2) }),
+  );
+
+  test(...start());
+  test(...useStateValue('state1', 1));
+
+  test('#03 => activity1 is not called', () => {
+    expect(activity1).not.toBeCalled();
+  });
+
+  describe('#03 => Check the warnings', () => {
+    test('#01 => Length of warnings', () => {
+      expect(service._warningsCollector?.size).toBe(1);
+    });
+
+    test('#02 => Check the warning', () => {
+      expect(service._warningsCollector).toContain(
+        'Delay (DELAY) is too long',
+      );
+    });
+  });
+
+  test(...stop());
+  test(...waiter(1, 6));
+});
+
+afterAll(() => vi.useRealTimers());

@@ -18,16 +18,7 @@ export default defineConfig({
       provider: 'v8',
       exclude: [
         ...defaultExclude,
-        '**/index.ts',
-        '**/*.js',
-        '**/*.cjs',
-        '**/*.mjs',
-        '**/*.d.ts',
         '**/types.ts',
-        '**/__tests__/edges/arrayAssign/async.async.fsm.ts',
-        '**/__tests__/interpreters/sync/data/machine2.ts',
-        '**/__tests__/interpreters/async/data/machine2.ts',
-        '**/__tests__/interpreters/async/data/machine21.ts',
         '**/*.example.ts',
         '**/*.types.ts',
         '**/*.fixtures.ts',
@@ -45,15 +36,15 @@ export default defineConfig({
     },
 
     projects: [
-      'packages/__tests__/project1/vitest.config.ts',
-      'packages/app/vitest.config.ts',
+      'packages/__tests__/sync/vitest.config.ts',
+      'packages/__tests__/async/vitest.config.ts',
+      'packages/__tests__/helpers/vitest.config.ts',
       'packages/cli/vitest.config.ts',
       'packages/reactjs/vitest.config.ts',
       'packages/solidjs/vitest.config.ts',
       'packages/utils/bemedev/vitest.config.ts',
       'packages/vitest/vitest.config.ts',
       'packages/valibot/vitest.config.ts',
-      //Add all packages according to the package folder
     ],
   },
 });

@@ -2,7 +2,7 @@ packages:
   - "packages/app"
   - "packages/valibot"
   - "packages/vitest"
-  - "packages/__tests__/project1"
+  - "packages/__tests__/*"
   - "packages/solidjs"
   - "packages/reactjs"
   - "packages/utils/bemedev"

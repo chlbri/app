@@ -1,0 +1,97 @@
+import { ALWAYS_EVENT, transformEventArg } from '@bemedev/app/events';
+import { constructTests } from '@bemedev/app-vitest';
+import { interpret } from '@bemedev/app';
+
+import _machine1 from './actions.1.machine';
+import _machine2 from './actions.2.machine';
+
+describe('Interpret for actions', () => {
+  const defaultC = { pContext: undefined, context: undefined };
+  const action1 = vi.fn().mockReturnValue(defaultC);
+
+  describe('#01 => string', () => {
+    const service = interpret(_machine1, { mode: 'normal' });
+    const { send, useStateValue, start } = constructTests(vi, service);
+    test(...start());
+    test(...useStateValue('state2'));
+
+    describe('#03 => Check the warnings', () => {
+      test('#01 => Length of warnings', () => {
+        expect(service._warningsCollector?.size).toBe(1);
+      });
+
+      test('#02 => Check the warning', () => {
+        expect(service._warningsCollector).toContain(
+          'Action (action1) is not defined',
+        );
+      });
+    });
+
+    test('#04 => add action', () => {
+      service.addOptions(() => ({ actions: { action1 } }));
+    });
+
+    test(...send('NEXT', 5));
+
+    describe('#05 => Check the action', () => {
+      test('#01 => Called one time', () => {
+        expect(action1).toHaveBeenCalledTimes(1);
+      });
+
+      test('#02 => Called with the correct arguments', () => {
+        expect(action1).toHaveBeenCalledWith({
+          ...defaultC,
+          event: transformEventArg(ALWAYS_EVENT),
+          status: 'busy',
+          tags: [],
+          value: 'state1',
+        });
+      });
+    });
+
+    afterAll(() => {
+      action1.mockClear();
+    });
+  });
+
+  describe('#02 => describer', () => {
+    const service = interpret(_machine2);
+    const { send, useStateValue, start } = constructTests(vi, service as any);
+    test(...start());
+    test(...useStateValue('state2'));
+
+    describe('#02 => Check the warnings', () => {
+      test('#01 => Length of warnings', () => {
+        expect(service._warningsCollector?.size).toBe(1);
+      });
+
+      test('#02 => Check the warning', () => {
+        expect(service._warningsCollector).toContain(
+          'Action (action1) is not defined',
+        );
+      });
+    });
+
+    test('#03 => add action', () => {
+      service.addOptions(() => ({ actions: { action1 } }));
+    });
+
+    test(...send('NEXT', 4));
+
+    describe('#05 => Check the action', () => {
+      test('#01 => Called one time', () => {
+        expect(action1).toHaveBeenCalledTimes(1);
+      });
+
+      test('#02 => Called with the correct arguments', () => {
+        expect(action1).toHaveBeenCalledWith({
+          ...defaultC,
+          event: transformEventArg(ALWAYS_EVENT),
+          status: 'busy',
+          tags: [],
+          value: 'state1',
+        });
+      });
+    });
+  });
+});

@@ -1,0 +1,21 @@
+import { resolveNode } from '@bemedev/app/states';
+
+test('resolveNode -> coverage', () => {
+  const inc = vi.fn();
+  const options = { actions: { inc } };
+  const config = { entry: 'inc', exit: 'inc' };
+
+  const node = resolveNode(config, options);
+  expect(node).toStrictEqual({
+    after: [],
+    always: [],
+    entry: [inc],
+    exit: [inc],
+    children: [],
+    emitters: [],
+    on: [],
+    states: [],
+    tags: [],
+    type: 'atomic',
+  });
+});

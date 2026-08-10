@@ -1,0 +1,127 @@
+import { constructTests } from '@bemedev/app-vitest';
+import { interpret } from '@bemedev/app';
+import _child1 from './children.1.machine';
+import _parent2 from './children.2.machine';
+import _parent3 from './children.3.machine';
+import _child4 from './children.4.machine';
+import _parent5 from './children.5.machine';
+
+describe('Integration testing for interpret, Children', () => {
+  beforeAll(() => {
+    vi.useFakeTimers();
+  });
+
+  const child = _child1.provideOptions(({ assign }) => ({
+    actions: { inc: assign('context', ({ context }) => context + 1) },
+    delays: { DELAY: 100 },
+  }));
+
+  describe('#01 => context are same', () => {
+    const parent = _parent2.provideOptions(() => ({
+      actors: {
+        children: { child: () => interpret(child, { context: 0 }) },
+      },
+    }));
+
+    const service = interpret(parent, { pContext: 0 as any });
+
+    const { start, waiter, useIterator, dispose } = constructTests(
+      vi,
+      service,
+      ({ contexts, waiter }) => ({
+        useIterator: contexts(({ pContext }) => pContext, 'iterator'),
+        waiter: waiter(100),
+      }),
+    );
+
+    test(...start());
+    test(...useIterator(0 as any));
+    test(...waiter(1));
+    test(...useIterator(1 as any));
+    test(...waiter(1));
+    test(...useIterator(2 as any));
+    test(...dispose());
+  });
+
+  describe('#02 => context of child, and the type correspond to a subtype of privateContext of parent', () => {
+    const parent = _parent3.provideOptions(() => ({
+      actors: {
+        children: { child: () => interpret(child, { context: 0 }) },
+      },
+    }));
+
+    const service = interpret(parent, {
+      pContext: { iterator: 0 } as any,
+    });
+
+    const { start, waiter, useIterator, send, dispose } = constructTests(
+      vi,
+      service,
+      ({ contexts, waiter, sender }) => ({
+        useIterator: contexts(
+          ({ pContext }) => (pContext as any)?.iterator,
+          'iterator',
+        ),
+        waiter: waiter(100),
+        useNext: sender('NEXT'),
+      }),
+    );
+
+    test(...start(1));
+    test(...useIterator(0, 2));
+    test(...waiter(1, 3));
+    test(...useIterator(1, 4));
+    test(...waiter(1, 5));
+    test(...useIterator(2, 6));
+    test(...send('NEXT', 7));
+    test(...dispose());
+    test(...waiter(5));
+  });
+
+  describe('#03 => Cover child->on', () => {
+    const notify = vi.fn();
+    const child = _child4;
+    const childService = interpret(child);
+
+    const parent = _parent5.provideOptions(({ sendTo, voidAction }) => ({
+      actions: {
+        notify: voidAction(() => {
+          notify();
+        }),
+        sendChildNext: sendTo(child)(() => {
+          return { to: 'child', event: 'NEXT' };
+        }),
+      },
+      actors: { children: { child: () => childService } },
+    }));
+
+    const service = interpret(parent);
+
+    let calls = 0;
+    const { send, useFailNotify, start, waiter } = constructTests(
+      vi,
+      service,
+      ({ getIndex, tupleOf, waiter }) => {
+        return {
+          useFailNotify: (fails = false) => {
+            const invite = `#${getIndex()} => Notify is used => ${fails ? '(fails)' : ''}`;
+
+            return tupleOf(invite, () => {
+              if (!fails) calls++;
+              expect(notify).toBeCalledTimes(calls);
+            });
+          },
+          waiter: waiter(10),
+        };
+      },
+    );
+
+    test(...start());
+    test(...useFailNotify(true));
+    test(...send('NEXT'));
+    test(...waiter(1000));
+    test(...useFailNotify());
+  });
+});
+
+afterAll(() => vi.useRealTimers());
