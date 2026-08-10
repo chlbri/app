@@ -5,6 +5,29 @@
 <details>
 <summary>
 
+## **[1.10.0] - 10/08/2026** => _22:58_
+
+</summary>
+
+### Docs
+
+- **`JSDoc`**: Add comprehensive JSDoc annotations across CLI tools and AST
+  parsers.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with the 1.10.0
+  workspace release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.4] - 03/08/2026** => _21:09_
 
 </summary>

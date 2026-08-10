@@ -5,7 +5,7 @@ import _machine3 from './addOptions-return.3.machine';
 import _machine4 from './addOptions-return.4.machine';
 
 describe('Machine addOptions return', () => {
-  test('#01 => should return the options object from machine.addOptions', () => {
+  describe('#01 => should return the options object from machine.addOptions', () => {
     const machine = _machine1;
 
     const result = machine.addOptions(({ assign }) => ({
@@ -14,10 +14,14 @@ describe('Machine addOptions return', () => {
       },
     }));
 
-    expect(result).toBeDefined();
-    expect(result?.actions).toBeDefined();
-    expect(result?.actions?.increment).toBeDefined();
-    expect(typeof result?.actions?.increment).toBe('function');
+    test('#01 => result is defined', () =>
+      expect(result).toBeDefined());
+    test('#02 => result.actions is defined', () =>
+      expect(result?.actions).toBeDefined());
+    test('#03 => result.actions.increment is defined', () =>
+      expect(result?.actions?.increment).toBeDefined());
+    test('#04 => result.actions.increment is a function', () =>
+      expect(typeof result?.actions?.increment).toBe('function'));
   });
 
   test('#02 => should return undefined when callback returns undefined', () => {
@@ -28,7 +32,7 @@ describe('Machine addOptions return', () => {
     expect(result).toBeUndefined();
   });
 
-  test('#03 => should return options with multiple properties', () => {
+  describe('#03 => should return options with multiple properties', () => {
     const machine = _machine3;
 
     const result = machine.addOptions(({ assign }) => ({
@@ -37,13 +41,17 @@ describe('Machine addOptions return', () => {
       delays: { shortDelay: () => 100 } as any,
     }));
 
-    expect(result).toBeDefined();
-    expect(result?.actions).toBeDefined();
-    expect(result?.guards).toBeDefined();
-    expect(result?.delays).toBeDefined();
+    test('#01 => result is defined', () =>
+      expect(result).toBeDefined());
+    test('#02 => result.actions is defined', () =>
+      expect(result?.actions).toBeDefined());
+    test('#03 => result.guards is defined', () =>
+      expect(result?.guards).toBeDefined());
+    test('#04 => result.delays is defined', () =>
+      expect(result?.delays).toBeDefined());
   });
 
-  test('#04 => should still add options to machine even when capturing return value', async () => {
+  describe('#04 => should still add options to machine even when capturing return value', () => {
     const machine = _machine4.renew;
     const result = machine.addOptions(({ assign }) => ({
       actions: {
@@ -51,14 +59,21 @@ describe('Machine addOptions return', () => {
       },
     }));
 
-    expect(result).toBeDefined();
+    test('#01 => result is defined', () =>
+      expect(result).toBeDefined());
 
     // Verify the machine actually has the options applied
-    const service = interpret(machine, { context: 0 });
-    service.start();
-    expect(service.state.context).toBe(0);
+    test('#02 => context starts at 0 after start', () => {
+      const service = interpret(machine, { context: 0 });
+      service.start();
+      expect(service.state.context).toBe(0);
+    });
 
-    await service.send('INCREMENT');
-    expect(service.state.context).toBe(1);
+    test('#03 => context is 1 after sending INCREMENT', async () => {
+      const service = interpret(machine, { context: 0 });
+      service.start();
+      await service.send('INCREMENT');
+      expect(service.state.context).toBe(1);
+    });
   });
 });

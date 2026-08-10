@@ -9,7 +9,7 @@ import { reduceFnMap, reduceFnMapReduced } from '@bemedev/app/utils';
 
 describe('reduceFnMap tests', () => {
   describe('#02 => reduceFnMap', () => {
-    test('#01 => returns function directly if it is already a function', () => {
+    describe('#01 => returns function directly if it is already a function', () => {
       // Arrange
       const events: EventsMap = {};
       const directFn = () => 'result';
@@ -18,20 +18,22 @@ describe('reduceFnMap tests', () => {
       const result = reduceFnMap(directFn, ...Object.keys(events));
 
       // Assert
-      expect(result).toBe(directFn);
-      expect(
-        result({
-          event: { type: INIT_EVENT, payload: {} },
-          context: {},
-          pContext: {},
-          status: 'active' as any,
-          value: 'test',
-          tags: [],
-        }),
-      ).toBe('result');
+      test('#01 => result is the direct function', () =>
+        expect(result).toBe(directFn));
+      test('#02 => result returns "result" when called', () =>
+        expect(
+          result({
+            event: { type: INIT_EVENT, payload: {} },
+            context: {},
+            pContext: {},
+            status: 'active' as any,
+            value: 'test',
+            tags: [],
+          }),
+        ).toBe('result'));
     });
 
-    test('#02 => correctly handles string type event', () => {
+    describe('#02 => correctly handles string type event', () => {
       // Arrange
       const events: EventsMap = { EVENT1: stringsT.type };
       const elseSpy = vi.fn().mockReturnValue('else result');
@@ -53,18 +55,20 @@ describe('reduceFnMap tests', () => {
       });
 
       // Assert
-      expect(elseSpy).toHaveBeenCalledWith({
-        event: INIT_EVENT,
-        context: {},
-        pContext: {},
-        status: 'active' as any,
-        value: 'test',
-        tags: [],
-      });
-      expect(result).toBe('else result');
+      test('#01 => elseSpy was called correctly', () =>
+        expect(elseSpy).toHaveBeenCalledWith({
+          event: INIT_EVENT,
+          context: {},
+          pContext: {},
+          status: 'active' as any,
+          value: 'test',
+          tags: [],
+        }));
+      test('#02 => result is "else result"', () =>
+        expect(result).toBe('else result'));
     });
 
-    test('#03 => uses appropriate function based on event type', () => {
+    describe('#03 => uses appropriate function based on event type', () => {
       // Arrange
       const events: EventsMap = {
         EVENT1: stringsT.type,
@@ -109,33 +113,39 @@ describe('reduceFnMap tests', () => {
       });
 
       // Assert
-      expect(event1Fn).toHaveBeenCalledWith({
-        payload: 'test',
-        context: {},
-        pContext: {},
-        status: 'active' as any,
-        value: 'test',
-        tags: [],
-      });
-      expect(event2Fn).toHaveBeenCalledWith({
-        payload: { data: 42 },
-        context: {},
-        pContext: {},
-        status: 'active' as any,
-        value: 'test',
-        tags: [],
-      });
-      expect(elseFn).toHaveBeenCalledWith({
-        event: { type: 'UNKNOWN', payload: null },
-        context: {},
-        pContext: {},
-        status: 'active' as any,
-        value: 'test',
-        tags: [],
-      });
-      expect(result1).toBe('event1 result');
-      expect(result2).toBe('event2 result');
-      expect(result3).toBe('else result');
+      test('#01 => event1Fn was called correctly', () =>
+        expect(event1Fn).toHaveBeenCalledWith({
+          payload: 'test',
+          context: {},
+          pContext: {},
+          status: 'active' as any,
+          value: 'test',
+          tags: [],
+        }));
+      test('#02 => event2Fn was called correctly', () =>
+        expect(event2Fn).toHaveBeenCalledWith({
+          payload: { data: 42 },
+          context: {},
+          pContext: {},
+          status: 'active' as any,
+          value: 'test',
+          tags: [],
+        }));
+      test('#03 => elseFn was called correctly', () =>
+        expect(elseFn).toHaveBeenCalledWith({
+          event: { type: 'UNKNOWN', payload: null },
+          context: {},
+          pContext: {},
+          status: 'active' as any,
+          value: 'test',
+          tags: [],
+        }));
+      test('#04 => result1 is "event1 result"', () =>
+        expect(result1).toBe('event1 result'));
+      test('#05 => result2 is "event2 result"', () =>
+        expect(result2).toBe('event2 result'));
+      test('#06 => result3 is "else result"', () =>
+        expect(result3).toBe('else result'));
     });
 
     test('#04 => uses nothing as default else function', () => {
@@ -163,28 +173,36 @@ describe('reduceFnMap tests', () => {
   });
 
   describe('#03 => reduceFnMapReduced', () => {
-    test('#01 => returns function directly if it is already a function', () => {
+    describe('#01 => returns function directly if it is already a function', () => {
       // Arrange
       const events: EventsMap = {};
       const directFn = () => 'result';
 
       // Act
-      const result = reduceFnMapReduced(directFn, ...Object.keys(events));
+      const result = reduceFnMapReduced(
+        directFn,
+        ...Object.keys(events),
+      );
 
       // Assert
-      expect(result).toBe(directFn);
-      expect(
-        result({
-          context: {},
-          event: { type: MAX_EXCEEDED_EVENT_TYPE, payload: {} },
-          status: 'active' as any,
-          value: 'test',
-          tags: [],
-        }),
-      ).toBe('result');
+      test('#01 => result is the direct function', () =>
+        expect(result).toBe(directFn));
+      test('#02 => result returns "result" when called', () =>
+        expect(
+          result({
+            context: {},
+            event: {
+              type: MAX_EXCEEDED_EVENT_TYPE,
+              payload: {},
+            },
+            status: 'active' as any,
+            value: 'test',
+            tags: [],
+          }),
+        ).toBe('result'));
     });
 
-    test('#02 => correctly handles string type event', () => {
+    describe('#02 => correctly handles string type event', () => {
       // Arrange
       const events: EventsMap = { EVENT1: stringsT.type };
       const elseSpy = vi.fn().mockReturnValue('else result');
@@ -195,7 +213,10 @@ describe('reduceFnMap tests', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
+      const reducedFn = reduceFnMapReduced(
+        fnMap,
+        ...Object.keys(events),
+      );
       const result = reducedFn({
         context: {},
         event: INIT_EVENT,
@@ -205,17 +226,19 @@ describe('reduceFnMap tests', () => {
       });
 
       // Assert
-      expect(elseSpy).toHaveBeenCalledWith({
-        context: {},
-        event: INIT_EVENT,
-        status: 'active' as any,
-        value: 'test',
-        tags: [],
-      });
-      expect(result).toBe('else result');
+      test('#01 => elseSpy was called correctly', () =>
+        expect(elseSpy).toHaveBeenCalledWith({
+          context: {},
+          event: INIT_EVENT,
+          status: 'active' as any,
+          value: 'test',
+          tags: [],
+        }));
+      test('#02 => result is "else result"', () =>
+        expect(result).toBe('else result'));
     });
 
-    test('#03 => uses appropriate function based on event type', () => {
+    describe('#03 => uses appropriate function based on event type', () => {
       // Arrange
       const events: EventsMap = {
         EVENT1: stringsT.type,
@@ -233,7 +256,10 @@ describe('reduceFnMap tests', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
+      const reducedFn = reduceFnMapReduced(
+        fnMap,
+        ...Object.keys(events),
+      );
       const result1 = reducedFn({
         context: {},
         event: { type: 'EVENT1', payload: 'test' },
@@ -257,30 +283,36 @@ describe('reduceFnMap tests', () => {
       });
 
       // Assert
-      expect(event1Fn).toHaveBeenCalledWith({
-        context: {},
-        payload: 'test',
-        status: 'active' as any,
-        value: 'test',
-        tags: [],
-      });
-      expect(event2Fn).toHaveBeenCalledWith({
-        context: {},
-        payload: { data: 42 },
-        status: 'active' as any,
-        value: 'test',
-        tags: [],
-      });
-      expect(elseFn).toHaveBeenCalledWith({
-        context: {},
-        event: { type: 'UNKNOWN', payload: null },
-        status: 'active' as any,
-        value: 'test',
-        tags: [],
-      });
-      expect(result1).toBe('event1 result');
-      expect(result2).toBe('event2 result');
-      expect(result3).toBe('else result');
+      test('#01 => event1Fn was called correctly', () =>
+        expect(event1Fn).toHaveBeenCalledWith({
+          context: {},
+          payload: 'test',
+          status: 'active' as any,
+          value: 'test',
+          tags: [],
+        }));
+      test('#02 => event2Fn was called correctly', () =>
+        expect(event2Fn).toHaveBeenCalledWith({
+          context: {},
+          payload: { data: 42 },
+          status: 'active' as any,
+          value: 'test',
+          tags: [],
+        }));
+      test('#03 => elseFn was called correctly', () =>
+        expect(elseFn).toHaveBeenCalledWith({
+          context: {},
+          event: { type: 'UNKNOWN', payload: null },
+          status: 'active' as any,
+          value: 'test',
+          tags: [],
+        }));
+      test('#04 => result1 is "event1 result"', () =>
+        expect(result1).toBe('event1 result'));
+      test('#05 => result2 is "event2 result"', () =>
+        expect(result2).toBe('event2 result'));
+      test('#06 => result3 is "else result"', () =>
+        expect(result3).toBe('else result'));
     });
 
     test('#04 => uses nothing as default else function', () => {
@@ -292,7 +324,10 @@ describe('reduceFnMap tests', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
+      const reducedFn = reduceFnMapReduced(
+        fnMap,
+        ...Object.keys(events),
+      );
       const result = reducedFn({
         context: {},
         event: { type: 'UNKNOWN', payload: null },

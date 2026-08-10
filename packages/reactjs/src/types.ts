@@ -1,5 +1,16 @@
 import type { EventObject, State, PrimitiveObject } from '@bemedev/app';
 
+/**
+ * Options for configuring the `useService` hook.
+ *
+ * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
+ * @template {string} Ta - Tag type extending `string`.
+ * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ * @template T - Selected state type, defaults to type {@linkcode State}<{@linkcode Eo}, {@linkcode Tc}, {@linkcode Ta}>.
+ *
+ * @property selector - Optional selector function to project the state into a sub-state.
+ * @property equals - Optional equality comparator function to compare previous and next selected state.
+ */
 export type UseServiceOptions<
   Tc extends PrimitiveObject,
   Ta extends string,

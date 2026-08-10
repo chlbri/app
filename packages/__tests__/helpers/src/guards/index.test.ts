@@ -35,15 +35,12 @@ describe('Interpret for guards', () => {
     test(...useStateValue('state2', 2));
 
     describe('#03 => Check the warnings', () => {
-      test('#01 => Length of warnings', () => {
-        expect(service._warningsCollector?.size).toBe(1);
-      });
-
-      test('#02 => Check the warning', () => {
+      test('#01 => Length of warnings', () =>
+        expect(service._warningsCollector?.size).toBe(1));
+      test('#02 => Check the warning', () =>
         expect(service._warningsCollector).toContain(
           'Predicate (guard1) is not defined',
-        );
-      });
+        ));
     });
 
     test('#04 => add guard', () => {
@@ -53,19 +50,17 @@ describe('Interpret for guards', () => {
     test(...send('NEXT', 5));
 
     describe('#05 => Check the action', () => {
-      test('#01 => Called one time', () => {
-        expect(guard1).toHaveBeenCalledTimes(1);
-      });
+      test('#01 => Called one time', () =>
+        expect(guard1).toHaveBeenCalledTimes(1));
 
-      test('#02 => Called with the correct arguments', () => {
+      test('#02 => Called with the correct arguments', () =>
         expect(guard1).toHaveBeenCalledWith({
           ...defaultC,
           event: transformEventArg(ALWAYS_EVENT),
           status: 'busy',
           tags: [],
           value: 'state1',
-        });
-      });
+        }));
     });
 
     afterAll(() => {
@@ -81,15 +76,12 @@ describe('Interpret for guards', () => {
     test(...useStateValue('state2', 2));
 
     describe('#03 => Check the warnings', () => {
-      test('#01 => Length of warnings', () => {
-        expect(service._warningsCollector?.size).toBe(1);
-      });
-
-      test('#02 => Check the warning', () => {
+      test('#01 => Length of warnings', () =>
+        expect(service._warningsCollector?.size).toBe(1));
+      test('#02 => Check the warning', () =>
         expect(service._warningsCollector).toContain(
           'Predicate (guard1) is not defined',
-        );
-      });
+        ));
     });
 
     test('#04 => add guard', () => {
@@ -99,19 +91,17 @@ describe('Interpret for guards', () => {
     test(...send('NEXT', 5));
 
     describe('#06 => Check the action', () => {
-      test('#01 => Called one time', () => {
-        expect(guard1).toHaveBeenCalledTimes(1);
-      });
+      test('#01 => Called one time', () =>
+        expect(guard1).toHaveBeenCalledTimes(1));
 
-      test('#02 => Called with the correct arguments', () => {
+      test('#02 => Called with the correct arguments', () =>
         expect(guard1).toHaveBeenCalledWith({
           ...defaultC,
           event: transformEventArg(ALWAYS_EVENT),
           status: 'busy',
           tags: [],
           value: 'state1',
-        });
-      });
+        }));
     });
 
     afterAll(() => guard1.mockClear());

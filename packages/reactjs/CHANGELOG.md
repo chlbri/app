@@ -5,6 +5,29 @@
 <details>
 <summary>
 
+## **[1.10.0] - 10/08/2026** => _22:58_
+
+</summary>
+
+### Docs
+
+- **`JSDoc`**: Add comprehensive JSDoc annotations to `useService`,
+  `useState`, `useCan`, `useIsInside`, and options types.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with the 1.10.0
+  workspace release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.5] - 05/08/2026** => _18:06_
 
 </summary>

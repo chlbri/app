@@ -31,16 +31,32 @@ export const getTargetsFromConfig = (node: NodeConfig2) => {
   return _getTargetsFromConfig(node, '/');
 };
 
+/**
+ * Validates a machine configuration against the generated Valibot schema.
+ * Throws a Valibot error if validation fails.
+ *
+ * @param config - The machine configuration object to validate.
+ * @returns The parsed machine configuration.
+ */
 export const validateMachine = (config: any) => {
   const targets = getTargetsFromConfig(config);
   const out = v.parse(Config_Schema(...targets), config);
   return out;
 };
 
+/**
+ * Safely validates a machine configuration without throwing.
+ *
+ * @param config - The machine configuration object to validate.
+ * @returns Valibot SafeParseResult object.
+ */
 validateMachine.safe = (config: any) => {
   const targets = getTargetsFromConfig(config);
   const out = v.safeParse(Config_Schema(...targets), config);
   return out;
 };
 
+/**
+ * Alias for function {@linkcode validateMachine}.
+ */
 export const validate = validateMachine;

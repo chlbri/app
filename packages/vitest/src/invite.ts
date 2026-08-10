@@ -4,6 +4,13 @@ const log10 = (index = 0) => {
   return log;
 };
 
+/**
+ * Formats a zero-padded index string based on current index and max value.
+ *
+ * @param index - Current index number (default 0).
+ * @param max - Maximum index number (default 0).
+ * @returns Padded index string.
+ */
 export const buildIndex = (index = 0, max = 0) => {
   if (index < 0 || max < 0) {
     throw new Error(
@@ -24,6 +31,14 @@ export const buildIndex = (index = 0, max = 0) => {
   return `${zeros}${index}`;
 };
 
+/**
+ * Builds a formatted test invite string with indexed prefix.
+ *
+ * @param invite - Invite description string.
+ * @param index - Current test index (default 0).
+ * @param max - Maximum index count (default 0).
+ * @returns Formatted test title string.
+ */
 export const buildInvite = (invite: string, index = 0, max = 0) => {
   const _index = buildIndex(index, max);
   return `#${_index} => ${invite}`;

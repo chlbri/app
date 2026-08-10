@@ -11,6 +11,29 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.10.0] - 10/08/2026** => _22:58_
+
+</summary>
+
+### Docs
+
+- **`JSDoc`**: Add comprehensive JSDoc annotations and `{@linkcode}`
+  references across source files.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with the 1.10.0
+  workspace release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.9.4] - 03/08/2026** => _21:09_
 
 </summary>

@@ -8,6 +8,20 @@ import { expandFn } from '@bemedev/app/bemedev';
 import { deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';
 
+/**
+ * React hook that creates reactive helpers for querying event capabilities from a service.
+ *
+ * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
+ * @template {string} Ta - Tag type extending `string`.
+ * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ *
+ * @param service - Service object containing `subscribe`, `state`, and `canEvents`.
+ * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
+ * @param service.state - Current state of type {@linkcode State}.
+ * @param service.canEvents - Function checking if event types can be accepted.
+ *
+ * @returns Object helper with `or` and `and` methods to check event availability.
+ */
 export function useCan<
   Tc extends PrimitiveObject,
   Ta extends string,

@@ -1,6 +1,6 @@
 import { resolveNode } from '@bemedev/app/states';
 
-test('resolveNode -> coverage', () => {
+test('#01 => resolveNode -> coverage', () => {
   const inc = vi.fn();
   const options = { actions: { inc } };
   const config = { entry: 'inc', exit: 'inc' };

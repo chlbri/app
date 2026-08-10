@@ -8,6 +8,19 @@ import { decomposeSV } from '@bemedev/app';
 import { expandFn } from '@bemedev/app/bemedev';
 import { createSignal, onCleanup } from 'solid-js';
 
+/**
+ * SolidJS hook that creates reactive signal helpers for checking active state hierarchy.
+ *
+ * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
+ * @template {string} Ta - Tag type extending `string`.
+ * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ *
+ * @param service - Service object containing `subscribe` and `state`.
+ * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
+ * @param service.state - Current state of type {@linkcode State}.
+ *
+ * @returns Object helper with `or` and `and` methods returning signals.
+ */
 export function useIsInside<
   Tc extends PrimitiveObject,
   Ta extends string,

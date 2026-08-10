@@ -5,8 +5,5 @@ const getEntries = (node?: any): any[] => {
   return [];
 };
 
-describe('Coverage tests', () => {
-  test('#01 => getEntries - coverage', () => {
-    expect(getEntries()).toStrictEqual([]);
-  });
-});
+test('Coverage tests #01 => getEntries - coverage', () =>
+  expect(getEntries()).toStrictEqual([]));
