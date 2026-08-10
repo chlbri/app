@@ -814,6 +814,7 @@ export class SyncInterpreter<
               {
                 equals: (a, b) => a.event.type === b.event.type,
                 id: `${id}::on`,
+                firstTime: false,
               },
             );
           }
@@ -855,6 +856,7 @@ export class SyncInterpreter<
                   return true;
                 },
                 id: `${id}::contexts`,
+                firstTime: false,
               },
             );
           }

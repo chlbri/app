@@ -3,7 +3,6 @@ import { TEST_LOGS } from '#/machines/counter.fixtures';
 import { cn } from '#/ui/cn';
 import { useService } from '@bemedev/app-reactjs';
 import { wrap } from '@bemedev/hook-wrapper';
-import type { TimerState } from '@bemedev/interval2/types';
 import {
   ChevronDown,
   Code2,
@@ -13,7 +12,7 @@ import {
   RotateCcw,
   Square,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '../ui/components/button';
 import { Expand } from '../ui/components/Expand';
 
@@ -40,7 +39,7 @@ export const useComponents = (service: Service) => {
         title={({ isOpen }) => (
           <div className='w-full px-4 py-3 bg-slate-900 hover:bg-slate-800/80 text-slate-300 font-medium text-sm flex items-center justify-between transition-colors cursor-pointer'>
             <div className='flex items-center space-x-2.5'>
-              <Code2 className='w-4 h-4 text-yellow-700' />
+              <Code2 className='size-4 text-yellow-700' />
               <h2 className='font-semibold text-slate-200'>
                 Full State JSON
               </h2>
@@ -53,7 +52,7 @@ export const useComponents = (service: Service) => {
 
               <ChevronDown
                 className={cn(
-                  'w-4 h-4 text-slate-400 transition-transform duration-300',
+                  'size-4 text-slate-400 transition-transform duration-300',
                   { 'rotate-180': isOpen },
                 )}
               />
@@ -191,7 +190,7 @@ export const useComponents = (service: Service) => {
         onClick={service.stop}
         className='gap-1.5'
       >
-        <Square className='w-4 h-4' /> Stop
+        <Square className='size-4' /> Stop
       </Button>
     ) : (
       <Button
@@ -200,7 +199,7 @@ export const useComponents = (service: Service) => {
         onClick={service.start}
         className='gap-1.5'
       >
-        <Play className='w-4 h-4' /> Start
+        <Play className='size-4' /> Start
       </Button>
     ),
   );
@@ -218,7 +217,7 @@ export const useComponents = (service: Service) => {
         disabled={disabled}
         className='flex space-x-2 min-w-max'
       >
-        <Play className='w-4 h-4' /> ACTIVATE COUNTERS
+        <Play className='size-4' /> ACTIVATE COUNTERS
       </Button>
     ),
   );
@@ -243,7 +242,7 @@ export const useComponents = (service: Service) => {
             onClick={sendEvent('RESET')}
             className='gap-2 text-emerald-400 border-emerald-500/30'
           >
-            <RotateCcw className='w-4 h-4' /> Reset Machine to Idle
+            <RotateCcw className='size-4' /> Reset Machine to Idle
           </Button>
         </div>
       ),
@@ -277,20 +276,23 @@ useComponents.test = (service: Service) => {
 
   const StartStopTests = wrap.noParams(
     () => {
-      const [state, setState] = useState<TimerState>();
+      const [state, setState] = useState(tests.state);
+      useEffect(() => tests.pause as any, []);
       tests.subscribe(setState);
-      return state;
-    },
-    state => {
       const isRunning = state === 'active';
 
+      const onClick = useCallback(() => {
+        if (isRunning) tests.pause();
+        else tests.resume();
+      }, [isRunning]);
+
+      return { isRunning, onClick };
+    },
+    ({ isRunning, onClick }) => {
       return (
         <button
           type='button'
-          onClick={() => {
-            if (isRunning) tests.pause();
-            else tests.resume();
-          }}
+          onClick={onClick}
           className={cn(
             'group relative inline-flex items-center justify-center overflow-hidden rounded-xl p-0.5 font-medium text-white shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] cursor-pointer',
             isRunning
@@ -335,5 +337,56 @@ useComponents.test = (service: Service) => {
     },
   );
 
-  return { ...all, tests, StartStopTests };
+  const FullStateWrapper: React.FC<{
+    defaultOpen?: boolean;
+    className?: string;
+  }> = ({ defaultOpen = false, className }) => {
+    const json = useService(service).state({
+      selector: s => JSON.stringify(s, null, 2),
+    });
+
+    return (
+      <Expand
+        id='full-state-json'
+        defaultOpen={defaultOpen}
+        className={cn(
+          'border-slate-800 bg-slate-900/60 shadow-lg',
+          className,
+        )}
+        title={({ isOpen }) => (
+          <div className='w-full px-4 py-3 bg-slate-900 hover:bg-slate-800/80 text-slate-300 font-medium text-sm flex items-center justify-between transition-colors cursor-pointer'>
+            <div className='flex items-center space-x-2.5'>
+              <Code2 className='size-4 text-yellow-700' />
+              <h2 className='font-semibold text-slate-200'>
+                Full State JSON
+              </h2>
+            </div>
+
+            <div className='flex items-center space-x-2'>
+              <span className='text-xs text-slate-400 font-medium'>
+                {isOpen ? 'Hide State' : 'Show State'}
+              </span>
+
+              <ChevronDown
+                className={cn(
+                  'size-4 text-slate-400 transition-transform duration-300',
+                  { 'rotate-180': isOpen },
+                )}
+              />
+            </div>
+          </div>
+        )}
+
+        content={
+          <div className='p-4 border-t border-slate-800 bg-slate-950 relative group'>
+            <pre className='font-mono text-xs text-yellow-200/90 overflow-x-auto max-h-64 p-2 leading-relaxed selection:bg-yellow-200/30'>
+              {json}
+            </pre>
+          </div>
+        }
+      />
+    );
+  };
+
+  return { ...all, FullStateWrapper, StartStopTests };
 };

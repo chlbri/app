@@ -5,7 +5,7 @@ import {
   type State,
 } from '@bemedev/app';
 import { expandFn } from '@bemedev/app/bemedev';
-import { deepEqual } from '@bemedev/app/utils';
+import { deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';
 
 export function useCan<
@@ -20,16 +20,19 @@ export function useCan<
   const dispatch =
     (matcher: 'some' | 'every') =>
     (...events: Eo['type'][]) => {
+      const selector = () =>
+        events[matcher](event => service.canEvents(event));
       return useSync(
         listener => {
           const { unsubscribe } = service.subscribe(listener, {
             equals: (first, next) => deepEqual(first.value, next.value),
+            firstTime: true,
           });
           return unsubscribe;
         },
-        () => service.state,
-        () => service.state,
-        () => events[matcher](event => service.canEvents(event)),
+        selector,
+        selector,
+        identity,
       );
     };
 

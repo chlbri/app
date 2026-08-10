@@ -540,7 +540,7 @@ describe('Composition', () => {
         test(...useState('idle', 1));
         test(...useIterator(6, 2));
         test(...useIteratorC(6, 3));
-        describe(...useConsole(4));
+        describe(...useConsole(4, 'nothing call nothing'));
       });
 
       test(...useSend('NEXT', 3));
@@ -749,12 +749,12 @@ describe('Composition', () => {
           });
 
           test('#02 => Log is called "75" times', () => {
-            expect(log).toBeCalledTimes(76);
+            expect(log).toBeCalledTimes(77);
           });
         });
 
         test('#03', () => {
-          expect(dumbFn).toBeCalledTimes(7);
+          expect(dumbFn).toBeCalledTimes(8);
         });
 
         test('#04 => Log the time of all tests', () => {

@@ -3,9 +3,10 @@ import type {
   EventObject,
   PrimitiveObject,
   State,
+  StateValue,
 } from '@bemedev/app';
 import { expandFn } from '@bemedev/app/bemedev';
-import { decomposeSV, deepEqual } from '@bemedev/app/utils';
+import { decomposeSV, deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';
 
 export function useIsInside<
@@ -16,26 +17,30 @@ export function useIsInside<
   subscribe: AddSubscriber_F<Tc, Ta, Eo>;
   state: State<Eo, Tc, Ta>;
 }) {
-  const selector1 = (_state: State<Eo, Tc, Ta>) => {
-    return decomposeSV(_state.value);
+  const selector1 = (value: StateValue) => {
+    return decomposeSV(value);
   };
 
   const dispatch = (matcher: 'some' | 'every') => {
     return (...states: string[]) => {
+      const selector = () =>
+        states[matcher](state =>
+          selector1(service.state.value).includes(state),
+        );
       return useSync(
         listener => {
           const { unsubscribe } = service.subscribe(listener, {
-            equals: (first, next) => deepEqual(first.value, next.value),
+            equals: (first, next) => {
+              return deepEqual(first.value, next.value);
+            },
+            firstTime: true,
           });
+
           return unsubscribe;
         },
-        () => service.state,
-        () => service.state,
-        _state => {
-          return states[matcher](state =>
-            selector1(_state).includes(state),
-          );
-        },
+        selector,
+        selector,
+        identity,
       );
     };
   };

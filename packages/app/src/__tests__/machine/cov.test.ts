@@ -136,7 +136,13 @@ describe('machine coverage', () => {
       test(...useStateValue('idle', 1));
       test(...useIterator(6, 2));
       test(...useIteratorC(6, 3));
-      describe(...useConsole(4, ['Debounced action executed']));
+      describe(
+        ...useConsole(
+          4,
+          ['nothing call nothing'],
+          ['Debounced action executed'],
+        ),
+      );
     });
 
     test(...send('NEXT', 3));
@@ -346,8 +352,8 @@ describe('machine coverage', () => {
             expect(log).toBeCalledTimes(strings.length);
           });
 
-          test('#02 => Log is called "71" times', () => {
-            expect(log).toBeCalledTimes(71);
+          test('#02 => Log is called "72" times', () => {
+            expect(log).toBeCalledTimes(72);
           });
         });
 

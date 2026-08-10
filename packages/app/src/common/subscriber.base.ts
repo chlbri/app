@@ -105,6 +105,7 @@ export class SubscriberBase<T, R = T>
     protected _subscriber: Subscriber_F<T>,
     protected _selector: Selector_F<T, R> = identity,
     protected __equals: Equals_F<R> = deepEqual,
+    private __firstTime = true,
   ) {}
 
   /**
@@ -125,6 +126,10 @@ export class SubscriberBase<T, R = T>
   fn: Fn<[T], void> = currenValue => {
     this.__previousValue = this.__currenValue ?? currenValue;
     this.__currenValue = currenValue;
+    if (this.__firstTime) {
+      this.__firstTime = false;
+      return this._subscriber(this.__currenValue);
+    }
     if (this.__cannotPerform) return;
 
     const _equals = this.__equals(

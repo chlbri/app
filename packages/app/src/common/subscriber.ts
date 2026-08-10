@@ -36,9 +36,10 @@ class Subscriber<
     equals: (a: State<Eo, Tc, T>, b: State<Eo, Tc, T>) => boolean = equal,
     private _id?: string,
     events: string[] = [],
+    public firstTime?: boolean,
   ) {
     const subscriber = Subscriber.transformSub(_subscriber, events);
-    super(subscriber, a => a, equals);
+    super(subscriber, undefined, equals, firstTime);
   }
 
   private static transformSub = <
@@ -79,6 +80,7 @@ export type SubscriberOptions<
 > = {
   id?: string;
   equals?: (a: State<E, Tc, T>, b: State<E, Tc, T>) => boolean;
+  firstTime?: boolean;
 };
 
 export type CreateSubscriber_F = <
@@ -104,5 +106,11 @@ export const createSubscriber: CreateSubscriber_F = (
   options,
   ...events
 ) => {
-  return new Subscriber(subscriber, options?.equals, options?.id, events);
+  return new Subscriber(
+    subscriber,
+    options?.equals,
+    options?.id,
+    events,
+    options?.firstTime,
+  );
 };

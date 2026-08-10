@@ -1,10 +1,10 @@
-import type {
-  AddSubscriber_F,
-  EventObject,
-  PrimitiveObject,
-  State,
+import {
+  type AddSubscriber_F,
+  type EventObject,
+  type PrimitiveObject,
+  type State,
 } from '@bemedev/app';
-import { deepEqual } from '@bemedev/app/utils';
+import { deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';
 import type { UseServiceOptions } from './types';
 
@@ -27,10 +27,7 @@ export function useState<
   },
   options?: UseServiceOptions<Tc, Ta, Eo, T>,
 ): T {
-  const {
-    selector = (s: State<Eo, Tc, Ta>) => s as T,
-    equals = deepEqual<T>,
-  } = options ?? {};
+  const { selector = identity, equals = deepEqual<T> } = options ?? {};
 
   return useSync(
     listener => {
@@ -40,12 +37,13 @@ export function useState<
           const _next = selector(next);
           return equals(_prev, _next);
         },
+        firstTime: true,
       });
       return unsubscribe;
     },
-    () => service.state,
-    () => service.state,
-    selector,
+    () => selector(service.state),
+    () => selector(service.state),
+    identity,
     equals,
   );
 }

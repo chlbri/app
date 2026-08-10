@@ -3,6 +3,7 @@ import { cn } from '#/ui/cn';
 import { Logs } from '#/ui/components/Logs';
 import { MachineConfig } from '#/ui/components/MachineConfig';
 import { Tags } from '#/ui/components/tags';
+import { ONE_SECOND, useSecondTicks } from '#/ui/hooks/useTicks';
 import { wrap } from '@bemedev/hook-wrapper';
 import { createFileRoute } from '@tanstack/react-router';
 import {
@@ -19,7 +20,6 @@ import {
   Square,
   Zap,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { Badge } from '../ui/components/badge';
 import { Button } from '../ui/components/button';
 import {
@@ -31,10 +31,10 @@ import {
 } from '../ui/components/card';
 import { useComponents } from './-index.components';
 
-const TIMER_INTERVAL = 30_000;
-const ONE_SECOND = 1000;
+const TIMER_INTERVAL = 20_000;
 
 export const Route = createFileRoute('/test-index')({
+  beforeLoad: ({ context }) => context.counterServiceTest.start(),
   component: () => {
     const service = Route.useRouteContext({
       select: s => s.counterServiceTest,
@@ -54,50 +54,16 @@ export const Route = createFileRoute('/test-index')({
       Reset,
       sendEvent,
       StartStopTests,
-      tests,
     } = useComponents.test(service);
 
-    useEffect(
-      () => () => {
-        service.reset();
-        tests.pause();
-      },
-      [],
-    );
-
-    useEffect(() => {
-      if (service.status === 'idle') service.start();
-      else service.resume();
-    }, []);
-
     const TimerReset = wrap.noParams(
-      () => {
-        const [tick, setTick] = useState(TIMER_INTERVAL);
-        useEffect(() => {
-          const interval = setInterval(() => {
-            setTick(t => {
-              if (t === ONE_SECOND) return TIMER_INTERVAL;
-              return t - ONE_SECOND;
-            });
-          }, ONE_SECOND);
-          return () => clearInterval(interval);
-        }, []);
-
-        return tick;
-      },
-      tick => (
+      () => useSecondTicks(TIMER_INTERVAL / ONE_SECOND, service.softReset),
+      ({ count }) => (
         <span className='text-xs italic text-slate-400'>
-          Auto reset the full-state in {tick / 1000} seconds
+          [For performance] : Auto reset the full-state in {count}
         </span>
       ),
     );
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        service.softReset();
-      }, TIMER_INTERVAL);
-      return () => clearInterval(interval);
-    }, []);
 
     return (
       <div className=' text-slate-100 font-sans p-4 sm:p-8'>

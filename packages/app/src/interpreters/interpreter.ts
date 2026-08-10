@@ -876,6 +876,7 @@ export class AsyncInterpreter<
               {
                 equals: (a, b) => a.event.type === b.event.type,
                 id: `${id}::on`,
+                firstTime: false,
               },
             );
           }
@@ -917,6 +918,7 @@ export class AsyncInterpreter<
                   return true;
                 },
                 id: `${id}::contexts`,
+                firstTime: false,
               },
             );
           }
