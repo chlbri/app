@@ -2,6 +2,14 @@ import { DEFAULT_DELIMITER } from '#constants';
 import { isStringEmpty } from '#utils';
 
 type _GetParents_F = (value: string) => string[];
+
+/**
+ * Function signature for retrieving all parent ancestor path strings for a state path.
+ *
+ * @param value - Root-relative path string.
+ *
+ * @returns Array of parent path strings.
+ */
 type GetParents_F = (value: `/${string}`) => string[];
 
 const _getParents: _GetParents_F = value => {

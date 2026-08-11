@@ -8,6 +8,20 @@ import type { AsyncTransition, TransitionConfig } from '#transitions';
 import { toArray } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 
+/**
+ * Function signature for converting transition config into structured transition object.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param config - Transition configuration input.
+ * @param options - Machine options object.
+ * @param events - List of machine event names.
+ *
+ * @returns Structured transition instance of type {@linkcode AsyncTransition}.
+ */
 export type ToTransition_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -27,11 +41,7 @@ export type ToTransition_F = <
  * @param events - The events list used for action and guard resolution.
  * @returns A structured transition object with target, actions, guards, and optional description.
  *
- * @see {@linkcode ToTransition_F} for more details
- * @see {@linkcode toAction} for converting actions
- * @see {@linkcode toPredicate} for converting guards
- * @see {@linkcode toArray.typed} for ensuring typed arrays
- * @see {@linkcode toArray} for ensuring typed arrays
+ * @see {@linkcode toAction}, {@linkcode toPredicate}
  */
 export const toTransition: ToTransition_F = (
   config,

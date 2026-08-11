@@ -44,8 +44,10 @@ import type {
 // };
 
 /**
- * Represents the simpliest configuration map for a transition.
- * Used as Helper
+ * Represents the simplest configuration map for a transition.
+ * Used as Helper.
+ *
+ * @template Paths - Allowed state target paths. Defaults to `string`.
  */
 export type _TransitionConfigMap<Paths = string> = {
   readonly target?: Paths;
@@ -54,6 +56,11 @@ export type _TransitionConfigMap<Paths = string> = {
   readonly description?: string;
 };
 
+/**
+ * Enforces no extra keys on transition configuration object or string target.
+ *
+ * @template { _TransitionConfigMap | string} T - Transition config input.
+ */
 export type NoExtraKeysTransitionConfig<
   T extends _TransitionConfigMap | string,
 > = T extends string
@@ -70,6 +77,11 @@ export type NoExtraKeysTransitionConfig<
       [key in Exclude<keyof T, keyof _TransitionConfigMap>]?: never;
     };
 
+/**
+ * Enforces no extra keys on array of transition configurations.
+ *
+ * @template {ReadonlyArray<_TransitionConfigMap | string>} T - Transition config array.
+ */
 export type NoExtraKeysTransitionConfigArray<
   T extends ReadonlyArray<_TransitionConfigMap | string>,
 > = T extends readonly [
@@ -82,6 +94,11 @@ export type NoExtraKeysTransitionConfigArray<
     ]
   : [];
 
+/**
+ * Enforces no extra keys across single or array of transition configurations.
+ *
+ * @template T - Input transition type.
+ */
 export type NoExtraKeysTransitionConfigSoA<T> = T extends
   | ArrayTransitionsF
   | ArrayTransitions
@@ -101,10 +118,7 @@ export type NoExtraKeysTransitionConfigSoA<T> = T extends
  * @template T - The transition configuration type.
  * @returns The actions extracted from the transition configuration.
  *
- * @see {@linkcode WithDescriber} for the structure of action configurations.
- * @see {@linkcode FromActionConfig} for converting action configurations to actions.
- * @see {@linkcode ReduceArray} for reducing arrays to their elements.
- * @see {@linkcode SingleOrArrayL} for handling single or array
+ * @see {@linkcode WithDescriber}, {@linkcode FromActionConfig}, {@linkcode ReduceArray}, {@linkcode SingleOrArrayL}
  */
 export type ExtractActionsFromTransition<
   T extends { actions: SingleOrArrayL<WithDescriber> },
@@ -119,10 +133,7 @@ export type ExtractActionsFromTransition<
  * @template T - The transition configuration type.
  * @returns The guards extracted from the transition configuration.
  *
- * @see {@linkcode GuardConfig} for the structure of guard configurations.
- * @see {@linkcode FromGuard} for converting guard configurations to guards
- * @see {@linkcode ReduceArray} for reducing arrays to their elements.
- * @see {@linkcode SingleOrArrayL} for handling single or array
+ * @see {@linkcode GuardConfig}, {@linkcode FromGuard}, {@linkcode ReduceArray}, {@linkcode SingleOrArrayL}
  */
 export type ExtractGuardKeysFromTransition<
   T extends { guards: SingleOrArrayL<GuardConfig> },
@@ -132,75 +143,110 @@ export type ExtractGuardKeysFromTransition<
     : never;
 
 /**
- * A {@linkcode _TransitionConfigMap} that requires actions.
+ * A type {@linkcode _TransitionConfigMap} that requires actions.
+ *
+ * @template Paths - State path union.
  */
 export type TransitionConfigMapA<Paths = string> = Require<
   _TransitionConfigMap<Paths>,
   'actions'
 >;
 
+/**
+ * Transition configuration requiring actions or string path.
+ *
+ * @template Paths - State path union.
+ */
 export type TransitionConfigA<Paths = string> =
   | TransitionConfigMapA<Paths>
   | Paths;
 
+/**
+ * A type {@linkcode _TransitionConfigMap} that requires target.
+ *
+ * @template Paths - State path union.
+ */
 export type TransitionConfigMapF<Paths = string> = Require<
   _TransitionConfigMap<Paths>,
   'target'
 >;
 
+/**
+ * Transition configuration requiring target or string path.
+ *
+ * @template Paths - State path union.
+ */
 export type TransitionConfigF<Paths = string> =
   | TransitionConfigMapF<Paths>
   | Paths;
 
+/**
+ * Union of target-required and action-required transition maps.
+ *
+ * @template Paths - State path union.
+ */
 export type TransitionConfigMap<Paths = string> =
   | TransitionConfigMapF<Paths>
   | TransitionConfigMapA<Paths>;
 
+/**
+ * Transition configuration map requiring guards.
+ *
+ * @template Paths - State path union.
+ */
 export type TransitionConfigMapG<Paths = string> = Require<
   TransitionConfigMap<Paths>,
   'guards'
 >;
+
+/**
+ * Transition configuration map requiring both target and guards.
+ *
+ * @template Paths - State path union.
+ */
 export type TransitionConfigMapFG<Paths = string> = Require<
   TransitionConfigMapF<Paths>,
   'guards'
 >;
 
 /**
- * A better version {@linkcode _TransitionConfigMap}.
+ * A better version type {@linkcode _TransitionConfigMap}.
  *
  * This type is used to ensure that the transition configuration
  * has either a target or actions defined, but not both.
  *
- * @see {@linkcode TransitionConfigMapF} for a version that requires a target.
- * @see {@linkcode TransitionConfigMapA} for a version that requires actions.
+ * @see {@linkcode TransitionConfigMapF}, {@linkcode TransitionConfigMapA}
  */
 export type TransitionConfig<Paths = string> =
   | Paths
   | TransitionConfigMap<Paths>;
 
+/**
+ * String target path or transition configuration map helper.
+ *
+ * @template Paths - State path union.
+ */
 export type _TransitionConfig<Paths = string> =
   | Paths
   | _TransitionConfigMap<Paths>;
 
 /**
- * A version {@linkcode TransitionConfig} with string declaration.
- */
-
-/**
  * An array of transitions that can be used in a state machine.
  *
- * More difficult than a simple array of {@linkcode TransitionConfig}
+ * @template Paths - State path union.
  *
- * @see {@linkcode TransitionConfigMapF} for a version that requires a target.
- * @see {@linkcode TransitionConfigMapA} for a version that requires actions.
- * @see {@linkcode TransitionConfig} for a version that can be a string or a {@linkcode TransitionConfig}.
- * @see {@linkcode Require}
+ * @see {@linkcode TransitionConfigMapF}, {@linkcode TransitionConfigMapA}, {@linkcode TransitionConfig}, {@linkcode Require}
  */
 export type ArrayTransitions<Paths = string> = readonly [
   ...TransitionConfigMapG<Paths>[],
   TransitionConfig<Paths>,
 ];
 
+/**
+ * Array of target-required transition configurations ending with target transition.
+ *
+ * @template Paths - State path union.
+ */
 export type ArrayTransitionsF<Paths = string> = readonly [
   ...TransitionConfigMapFG<Paths>[],
   TransitionConfigF<Paths>,
@@ -209,19 +255,18 @@ export type ArrayTransitionsF<Paths = string> = readonly [
 /**
  * A type that can be either an array of transitions or a single transition configuration.
  *
- * @see {@linkcode ArrayTransitions} for an array of transitions.
- * @see {@linkcode TransitionConfig} for a single transition configuration.
+ * @see {@linkcode ArrayTransitions}, {@linkcode TransitionConfig}
  */
 export type SingleOrArrayT<Paths = string> =
   | ArrayTransitions<Paths>
   | TransitionConfig<Paths>;
 
 /**
- * Representation of a always transition config.
+ * Representation of an always transition config.
  *
- * @see {@linkcode ArrayTransitions} for an array of transitions.
- * @see {@linkcode TransitionConfigF} for a single transition configuration with a target.
- * @see {@linkcode Require}
+ * @template Paths - State path union.
+ *
+ * @see {@linkcode ArrayTransitions}, {@linkcode TransitionConfigF}, {@linkcode Require}
  */
 export type AlwaysConfig<Paths = string> =
   | ArrayTransitionsF<Paths>

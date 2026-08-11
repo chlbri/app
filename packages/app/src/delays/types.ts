@@ -17,6 +17,14 @@ export type AsyncDelayFunction<
   T extends string = string,
 > = number | FnMap<E, Pc, Tc, T, number>;
 
+/**
+ * Synchronous delay function type.
+ *
+ * @template {EventObject} E - Events map.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Public context type.
+ * @template {string} T - Event string type.
+ */
 export type SyncDelayFunction<
   E extends EventObject = EventObject,
   Pc = any,
@@ -24,6 +32,14 @@ export type SyncDelayFunction<
   T extends string = string,
 > = number | FnMap<E, Pc, Tc, T, number>;
 
+/**
+ * Async delay function type resolver.
+ *
+ * @template {EventObject} E - Events map.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Public context type.
+ * @template {string} T - Event string type.
+ */
 export type AsyncDelayFunction2<
   E extends EventObject = EventObject,
   Pc = any,
@@ -31,6 +47,14 @@ export type AsyncDelayFunction2<
   T extends string = string,
 > = number | AsyncDelayFunction3<E, Pc, Tc, T>;
 
+/**
+ * Sync delay function type resolver.
+ *
+ * @template {EventObject} E - Events map.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Public context type.
+ * @template {string} T - Event string type.
+ */
 export type SyncDelayFunction2<
   E extends EventObject = EventObject,
   Pc = any,
@@ -38,6 +62,14 @@ export type SyncDelayFunction2<
   T extends string = string,
 > = number | SyncDelayFunction3<E, Pc, Tc, T>;
 
+/**
+ * Async delay function execution handler.
+ *
+ * @template {EventObject} E - Events map.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Public context type.
+ * @template {string} T - Event string type.
+ */
 export type AsyncDelayFunction3<
   E extends EventObject = EventObject,
   Pc = any,
@@ -45,6 +77,14 @@ export type AsyncDelayFunction3<
   T extends string = string,
 > = FnR<E, Pc, Tc, T, number>;
 
+/**
+ * Sync delay function execution handler.
+ *
+ * @template {EventObject} E - Events map.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Public context type.
+ * @template {string} T - Event string type.
+ */
 export type SyncDelayFunction3<
   E extends EventObject = EventObject,
   Pc = any,
@@ -54,11 +94,11 @@ export type SyncDelayFunction3<
 
 /**
  * Delay configuration map.
- * Maps a string key to a {@linkcode AsyncDelayFunction} function.
- * @template : type {@linkcode EventObject} [E] - The events map.
- * @template : [Pc] - The type of the private context.
- * @template : type {@linkcode PrimitiveObject} [Tc] - The type of the context.
- * @returns : A partial record where each key is a string and each value is a {@linkcode AsyncDelayFunction}.
+ * Maps a string key to an type {@linkcode AsyncDelayFunction} function.
+ * @template {EventObject} E - The events map.
+ * @template Pc - The type of the private context.
+ * @template {PrimitiveObject} Tc - The type of the context.
+ * @template {string} T - Event string type.
  */
 export type AsyncDelayMap<
   E extends EventObject = EventObject,
@@ -67,6 +107,14 @@ export type AsyncDelayMap<
   T extends string = string,
 > = Partial<Record<string, AsyncDelayFunction<E, Pc, Tc, T>>>;
 
+/**
+ * Sync delay configuration map.
+ *
+ * @template {EventObject} E - The events map.
+ * @template Pc - The type of the private context.
+ * @template {PrimitiveObject} Tc - The type of the context.
+ * @template {string} T - Event string type.
+ */
 export type SyncDelayMap<
   E extends EventObject = EventObject,
   Pc = any,

@@ -3,6 +3,20 @@ import { reduceFnMap } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { AsyncDelayFunction3, AsyncDelayMap } from '../types';
 
+/**
+ * Function signature for converting a delay config string into an executable delay function.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Public context type.
+ * @template {string} T - Event string type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param delay - Delay configuration key or name.
+ * @param delays - Optional delay map.
+ * @param events - List of machine event keys.
+ *
+ * @returns Executable delay function of type {@linkcode AsyncDelayFunction3} or `undefined`.
+ */
 export type ToDelay_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,

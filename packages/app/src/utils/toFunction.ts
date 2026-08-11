@@ -1,3 +1,12 @@
+/**
+ * Signature for function that converts a value into a getter function returning that value.
+ *
+ * @template T - Type of the value to wrap. Defaults to `any`.
+ *
+ * @param value - Value of type `T`.
+ *
+ * @returns Function returning `value`.
+ */
 export type ToFunction_F = <T = any>(value: T) => () => T;
 
 /**

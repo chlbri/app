@@ -5,6 +5,16 @@ import {
   isTransitionConfigTarget,
 } from './transition';
 
+/**
+ * Type guard for checking always transition configuration.
+ *
+ * @template {string[]} T - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if type {@linkcode AlwaysConfig}, `false` otherwise.
+ */
 export const isAlways = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

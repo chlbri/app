@@ -7,6 +7,21 @@ import type { EmitterConfig } from '../../actors/types';
 import type { AsyncEmitter } from '../types';
 import { toEmitterSrc } from './src';
 
+/**
+ * Function signature for converting emitter config to an type {@linkcode AsyncEmitter} object.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ * @template R - Return value type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param emitter - Emitter config object with `__id`.
+ * @param options - Machine options object.
+ * @param events - List of machine event strings.
+ *
+ * @returns Configured type {@linkcode AsyncEmitter} instance.
+ */
 export type ToEmitter_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -26,10 +41,7 @@ export type ToEmitter_F = <
  * @param events of type {@linkcode string[]}, list of events of the machine.
  * @returns an emitter object with a source and transitions.
  *
- * @see {@linkcode toEmitterSrc} for converting the source.
- * @see {@linkcode toTransition} for converting transitions.
- * @see {@linkcode toArray.typed} for the type of the context.
- * @see {@linkcode ToEmitter_F} for more details
+ * @see {@linkcode toEmitterSrc}, {@linkcode toTransition}
  */
 export const toEmitter: ToEmitter_F = (emitter, options, ...events) => {
   const src = toEmitterSrc(emitter.__id, options?.actors?.emitters);

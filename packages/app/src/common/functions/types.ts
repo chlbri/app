@@ -6,6 +6,11 @@ import type {
 } from '@bemedev/app-utils-bemedev';
 import type { FnMap, FnMapR } from '~types';
 
+/**
+ * Helper checking if a state configuration object contains async transitions or child states.
+ *
+ * @template T - State node configuration object.
+ */
 export type IsAsyncConfig<T> = T extends { after: any }
   ? true
   : T extends { states: object }
@@ -22,6 +27,11 @@ export type IsAsyncConfig<T> = T extends { after: any }
       : never
     : false;
 
+/**
+ * Helper checking if a type `T` is a Promise instance.
+ *
+ * @template T - Input type.
+ */
 export type IsPromise<T> =
   Equals<any, T> extends true
     ? false
@@ -29,6 +39,11 @@ export type IsPromise<T> =
       ? true
       : false;
 
+/**
+ * Helper checking if a function type `T` returns a Promise.
+ *
+ * @template T - Function type.
+ */
 export type IsAsyncFn<T> = T extends Fn ? IsPromise<ReturnType<T>> : false;
 
 type _IsAsyncFnMap<T> =

@@ -3,6 +3,9 @@ import { tupleOf } from '@bemedev/app-utils-bemedev';
 import type { NodeConfig2 } from '../types';
 import { isAtomic, isParallel } from './checks';
 
+/**
+ * Function signature for initial configuration resolver.
+ */
 export type InitialConfig_F = Fn<[body: NodeConfig2], NodeConfig2>;
 
 /**
@@ -11,10 +14,7 @@ export type InitialConfig_F = Fn<[body: NodeConfig2], NodeConfig2>;
  * @param body - The state machine configuration to process.
  * @returns The initial configuration of the state machine.
  *
- * @see {@linkcode isAtomic} for checking atomic states
- * @see {@linkcode isParallel} for checking parallel states
- * @see {@linkcode InitialConfig_F} for more details
- * @see {@linkcode t} for type utilities
+ * @see {@linkcode isAtomic}, {@linkcode isParallel}
  */
 export const initialConfig: InitialConfig_F = body => {
   const check0 = body === undefined || body === null;

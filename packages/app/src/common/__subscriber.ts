@@ -33,15 +33,18 @@ class SubscriberClass<
    */
   #equals: (previous: St, next: St) => boolean;
 
+  /**
+   * Subscriber identifier getter.
+   */
   get id() {
     return this._id;
   }
 
   /**
-   * Creates an instance of SubscriberMapClass.
-   * @param subscriber - The {@linkcode FnSubReduced} subscriber function or object.
-   * @param equals - Function to compare two {@linkcode State}s for equality (optional).
-   * @param _id - Unique identifier for the subscriber (optional).
+   * Creates an instance of type {@linkcode SubscriberClass}.
+   * @param subscriber - Subscriber function or object map.
+   * @param equals - Function to compare two state instances for equality.
+   * @param _id - Unique identifier for the subscriber.
    * @param events - The events list.
    */
   constructor(
@@ -61,8 +64,7 @@ class SubscriberClass<
    * Function that returns a reduced function based on the subscriber's logic.
    * @returns A function that reduces the state based on the subscriber's logic.
    *
-   * @see {@linkcode isFunction} to check if the subscriber is a function.
-   * @see {@linkcode nothing} to provide a default action if no event matches.
+   * @see {@linkcode isFunction}, {@linkcode nothing}
    */
   get #reduceFn() {
     const sub = this.#subscriber;
@@ -94,8 +96,8 @@ class SubscriberClass<
 
   /**
    * Function to handle state changes.
-   * @param previous of type {@linkcode State} - Previous state
-   * @param next of type {@linkcode State} - Next state
+   * @param previous - Previous state
+   * @param next - Next state
    *
    * @remarks
    * This function checks if the subscriber can perform its action,
@@ -111,18 +113,30 @@ class SubscriberClass<
     return this.#reduceFn(next);
   };
 
+  /**
+   * Subscriber state getter.
+   */
   get state() {
     return this.#state;
   }
 
+  /**
+   * Pauses the subscriber.
+   */
   close = () => {
     if (this.state !== 'disposed') this.#state = 'paused';
   };
 
+  /**
+   * Activates the subscriber.
+   */
   open = () => {
     if (this.state !== 'disposed') this.#state = 'active';
   };
 
+  /**
+   * Unsubscribes and disposes the subscriber.
+   */
   unsubscribe = () => {
     this.close();
     this.#state = 'disposed';
@@ -131,15 +145,35 @@ class SubscriberClass<
 
 export type { SubscriberClass };
 
+/**
+ * Options for configuring a subscriber instance.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ */
 export type SubscriberOptions<
   E extends EventObject = EventObject,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
+  /**
+   * Optional subscriber identifier string.
+   */
   id?: string;
+  /**
+   * Optional equality comparator function.
+   */
   equals?: (a: State<E, Tc, T>, b: State<E, Tc, T>) => boolean;
 };
 
+/**
+ * Function signature for creating subscriber instances.
+ *
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ * @template {EventObject} Eo - Event object type.
+ */
 export type CreateSubscriber_F = <
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,

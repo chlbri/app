@@ -1,6 +1,16 @@
 import type { DelayedTransitions } from '../../types';
 import { isSingleOrArrayT } from './transition';
 
+/**
+ * Type guard for checking delayed transitions configuration map.
+ *
+ * @template {string[]} T - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if type {@linkcode DelayedTransitions}, `false` otherwise.
+ */
 export const isAfter = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

@@ -3,6 +3,9 @@ import type { StateExtended } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 
+/**
+ * Supported activity and timer action strings.
+ */
 export type TimeActionsTypes =
   | 'pauseActivity'
   | 'resumeActivity'
@@ -20,10 +23,24 @@ type _ActionTypes =
   | 'debounce'
   | TimeActionsTypes;
 
+/**
+ * Prefixed action category string types.
+ */
 export type ActionTypes = `actions.${_ActionTypes}`;
 
+/**
+ * Union of core application types.
+ */
 export type AppTypes = ActionTypes | 'guards' | 'pContext' | 'context';
 
+/**
+ * Function signature for accessing state properties by dot-delimited key.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type ByKey_F<
   E extends EventObject = EventObject,
   Pc = any,

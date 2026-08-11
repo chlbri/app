@@ -3,6 +3,14 @@ import { checkKeys } from '#utils';
 import type { GuardConfig } from '~types';
 
 const GUARD_KEYS = ['and', 'or'];
+
+/**
+ * Type guard for checking if a value satisfies type {@linkcode GuardConfig}.
+ *
+ * @param value - Target value.
+ *
+ * @returns `true` if valid guard configuration, `false` otherwise.
+ */
 export const checkGuards = (value: unknown): value is GuardConfig => {
   if (value === undefined) return false;
   const check1 = checkAction(value);

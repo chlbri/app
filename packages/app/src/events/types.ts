@@ -27,8 +27,19 @@ export type EventObject<T = any> = { type: string; payload: T };
  */
 export type EventsMap = Record<string, PrimitiveObject>;
 
+/**
+ * Type alias for initial machine event string type.
+ */
 export type InitEvent = typeof INIT_EVENT;
+
+/**
+ * Type alias for max exceeded machine event string type.
+ */
 export type MaxExceededEvent = typeof MAX_EXCEEDED_EVENT_TYPE;
+
+/**
+ * Type alias for always machine event string type.
+ */
 export type AlwaysEvent = typeof ALWAYS_EVENT;
 
 /**
@@ -36,12 +47,15 @@ export type AlwaysEvent = typeof ALWAYS_EVENT;
  */
 export type EventStrings = InitEvent | MaxExceededEvent | AlwaysEvent;
 
+/**
+ * Union type representing an event object or event string.
+ */
 export type AllEvent = EventObject | EventStrings;
 
 /**
  * Transforms a map of events into a union type of event objects.
  * Each event object has a type and payload.
- * @template : {@linkcode EventsMap} [T], the map to transform.
+ * @template {EventsMap} T - the map to transform.
  *
  * @see {@linkcode Unionize} for the utility type that creates a union type from
  * the keys of the map.
@@ -73,6 +87,12 @@ type _ChildConfigR<T extends ChildConfigMap> = {
     : never;
 }[keyof T & string];
 
+/**
+ * Configuration map for children and emitter actors.
+ *
+ * @template {string} Sc - Children keys string union.
+ * @template {string} Se - Emitters keys string union.
+ */
 export type ActorsConfigMap<
   Sc extends string = string,
   Se extends string = string,
@@ -81,8 +101,8 @@ export type ActorsConfigMap<
 /**
  * Represents a union type of all events, emitters, and child events.
  * It combines the transformed events, emitters, and child events into a single type.
- * @template : {@linkcode EventsMap} [E], the map of events.
- * @template : {@linkcode ActorsConfigMap} [A], the configuration map for actors which includes children and emitters.
+ * @template {EventsMap} E - the map of events.
+ * @template {ActorsConfigMap} A - the configuration map for actors which includes children and emitters.
  * @returns A union type of events, emitter-events, and child-events.
  */
 export type ToEventsR<E extends EventsMap, A extends ActorsConfigMap> =
@@ -90,10 +110,21 @@ export type ToEventsR<E extends EventsMap, A extends ActorsConfigMap> =
   | _EmitterConfigR<NotUndefined<A['emitters']>>
   | _ChildConfigR<NotUndefined<A['children']>>;
 
+/**
+ * Comprehensive union of custom events, actor events, and built-in event strings.
+ *
+ * @template {EventsMap} E - Events map.
+ * @template {ActorsConfigMap} A - Actors map.
+ */
 export type ToEvents<E extends EventsMap, A extends ActorsConfigMap> =
   | ToEventsR<E, A>
   | EventStrings;
 
+/**
+ * Resolves event argument types based on payload optionality.
+ *
+ * @template {EventObject} E - Event object type.
+ */
 export type EventArgObject<E extends EventObject> = E extends any
   ? E['payload'] extends never
     ? E['type']
@@ -106,6 +137,11 @@ export type EventArgObject<E extends EventObject> = E extends any
           : E
   : never;
 
+/**
+ * Resolves event argument types for all events.
+ *
+ * @template {AllEvent} E - Event object or event string.
+ */
 export type EventArgAll<E extends AllEvent> = E extends string
   ? E
   : E extends EventObject
@@ -114,23 +150,27 @@ export type EventArgAll<E extends AllEvent> = E extends string
 
 /**
  * Transforms an event map into arguments to send to the machine.
- * @template : {@linkcode EventsMap} [E], the map of events.
+ * @template {EventsMap} E - the map of events.
  *
- * @see {@linkcode EventsR} for the utility type that transforms the map into a union type.
- * @see {@linkcode EventObject} for the structure of the event object.
+ * @see {@linkcode EventsR}, {@linkcode EventObject}
  */
 export type EventArg<E extends EventsMap> = EventArgObject<EventsR<E>>;
 
 /**
  * Extracts the type of the event from the event map.
- * @template : {@linkcode EventsMap} [E], the map of events
+ * @template {EventsMap} E - the map of events
  *
- * @see {@linkcode EventsR} for the utility type that transforms the map into a union type.
- * @see {@linkcode EventObject} for the structure of the event object.
+ * @see {@linkcode EventsR}, {@linkcode EventObject}
  */
 export type EventArgT<E extends EventsMap> =
   EventsR<E> extends infer To extends EventObject ? To['type'] : never;
 
+/**
+ * Normalizes event strings and event objects into event objects of type {@linkcode EventObject}.
+ *
+ * @template {AllEvent} T - Event string or event object type.
+ * @template {string} Ex - Event types to exclude.
+ */
 export type ToEventObject<
   T extends AllEvent,
   Ex extends string = never,
@@ -139,6 +179,13 @@ export type ToEventObject<
   { type: Ex }
 >;
 
+/**
+ * Helper extracting tuple parameter list for event sender functions.
+ *
+ * @template {EventObject} T - Target event object.
+ * @template {T['type']} E - Target event type key.
+ * @template R - Inferred payload type.
+ */
 export type ExtractSender<
   T extends EventObject,
   E extends T['type'],

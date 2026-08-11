@@ -1,3 +1,11 @@
+/**
+ * Function signature for retrieving child paths that start with a prefix path string.
+ *
+ * @param str - Base path string.
+ * @param keys - List of candidate path strings.
+ *
+ * @returns Array of matching child path strings.
+ */
 export type GetChildren_F = (str: string, ...keys: string[]) => string[];
 
 /**

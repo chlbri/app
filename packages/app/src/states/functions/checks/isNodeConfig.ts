@@ -34,6 +34,13 @@ const ACTIVITY_KEYS = ['guards', 'actions'];
 
 // const ACTION_KEYS = ['description', 'name'];
 
+/**
+ * Type guard for checking activity map configuration.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if type {@linkcode ActivityMap}, `false` otherwise.
+ */
 export const checkActivity = (value: unknown): value is ActivityMap => {
   if (!value) return false;
   const check1 = checkAction(value);
@@ -60,6 +67,13 @@ export const checkActivity = (value: unknown): value is ActivityMap => {
   }
 };
 
+/**
+ * Type guard for checking activity configuration record.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if type {@linkcode ActivityConfig}, `false` otherwise.
+ */
 export const checkActivities = (
   value: unknown,
 ): value is ActivityConfig => {
@@ -76,6 +90,16 @@ checkActivities.orUndefined = (value: unknown): boolean => {
   return checkActivities(value);
 };
 
+/**
+ * Validates atomic properties and transition options of a node config object.
+ *
+ * @template {string[]} T - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target state paths.
+ *
+ * @returns `true` if valid atomic node configuration, `false` otherwise.
+ */
 export const checkAtomic = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -111,6 +135,16 @@ export const checkAtomic = <T extends string[] = string[]>(
   return isStringOrUndefined(initial);
 };
 
+/**
+ * Recursive type guard for validating complete state node configuration objects.
+ *
+ * @template {string[]} T - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target state paths.
+ *
+ * @returns `true` if valid type {@linkcode NodeConfig2}, `false` otherwise.
+ */
 export const isNodeConfig = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

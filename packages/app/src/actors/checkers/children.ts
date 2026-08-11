@@ -5,6 +5,16 @@ import { isString } from '~types';
 
 const CHILD_KEYS = ['on', 'contexts', 'description'] as const;
 
+/**
+ * Type guard for checking if a value is a valid child actor configuration.
+ *
+ * @template {string[]} T - Keys parameter tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target state path keys.
+ *
+ * @returns `true` if type {@linkcode ChildConfig}, `false` otherwise.
+ */
 export const isChildConfig = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

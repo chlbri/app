@@ -6,6 +6,21 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import type { ChildConfig } from '../../actors/types';
 import { toChildSrc } from './toChildSrc';
 
+/**
+ * Function signature for converting child configuration into structured child actor instance.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ * @template R - Child machine return type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param child - Child configuration input.
+ * @param options - Machine options object.
+ * @param events - List of machine event strings.
+ *
+ * @returns Structured child instance of type {@linkcode CommonChild}.
+ */
 export type ToChild_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -20,15 +35,12 @@ export type ToChild_F = <
 
 /**
  * Converts an emitter config to an emitter object with a source and transitions.
- * @param child of type {@linkcode ChildConfig}, the child configuration to convert.
- * @param options of type {@linkcode SimpleMachineOptions2}, the machine options.
- * @param events of type {@linkcode string[]}, list of events of the machine.
- * @returns an emitter object with a source and transitions.
+ * @param child - The child configuration to convert.
+ * @param options - The machine options.
+ * @param events - List of events of the machine.
+ * @returns An emitter object with a source and transitions.
  *
- * @see {@linkcode toChildSrc} for converting the source.
- * @see {@linkcode toTransition} for converting transitions.
- * @see {@linkcode toArray} for the type of the context.
- * @see {@linkcode ToChild_F} for more details
+ * @see {@linkcode toChildSrc}, {@linkcode toTransition}
  */
 export const toChild: ToChild_F = (child, options, ...events) => {
   const tMapper = (config: any) => {

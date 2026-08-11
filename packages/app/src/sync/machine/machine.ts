@@ -29,16 +29,19 @@ import type {
 } from './options.types';
 
 /**
- * A class representing a state machine.
+ * A class representing a synchronous state machine.
  * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
- * @template Pc : The private context type of the machine.
- * @template : {@linkcode PrimitiveObject} [Pc] - The context type of the machine.
- * @template : {@linkcode GetEventsFromConfig}<{@linkcode C}> [E] - The events map type derived from the configuration.
- * @template : {@linkcode PromiseeMap} [P] - The promisees map type derived from the configuration.
- * @template : {@linkcode SimpleMachineOptions2} [Mo] - The options type for the machine, which includes actions, guards, delays, promises, and machines. Defaults to {@linkcode SimpleMachineOptions2}<[{@linkcode C} , {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} ]>.
- *
- * @implements {@linkcode AnyMachine}<{@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} >
+ * @template {CommonConfig3} C - Configuration type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {EventsMap} E - Events map type.
+ * @template {ActorsConfigMap} A - Actors configuration map type.
+ * @template {string} Ta - Tag string type.
+ * @template {EventObject} Eo - Event object type.
+ * @template {string} AllPaths - All state paths type.
+ * @template {SimpleMachineOptions2} Mo - Machine options type.
+ * @template {SimpleMachineOptions2} L - Additional options type.
  */
 export class SyncMachine<
   const C extends CommonConfig3 = CommonConfig3,
@@ -54,17 +57,7 @@ export class SyncMachine<
 > extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
   readonly TYPE = 'sync';
   /**
-   * @deprecated
-   * This property provides the action function for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode E}
-   * @see {@linkcode PromiseeMap}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Tc}
+   * @deprecated Use the action function type.
    */
   get __actionFn() {
     return _unknown<SyncAction2<Eo, Pc, Tc, Ta>>();
@@ -75,38 +68,14 @@ export class SyncMachine<
   }
 
   /**
-   * @deprecated
-   *
-   * This property provides the predicate function for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode AsyncPredicateS}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @deprecated Use the predicate function type.
    */
   get __predicate() {
     return _unknown<AsyncPredicateS<Eo, Pc, Tc, Ta>>();
   }
 
   /**
-   * @deprecated
-   *
-   * This property provides the delay function for this {@linkcode Machine} as a type.
-   *
-   * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode DelayFunction}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @deprecated Use the delay function type.
    */
   get __delay() {
     return _unknown<SyncDelayFunction<Eo, Pc, Tc, Ta>>();
@@ -117,10 +86,10 @@ export class SyncMachine<
   /**
    * Create options for the machine.
    *
-   * @param option a function that provides options for the machine.
+   * @param helper - A function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    *
-   * Remark: Used for typings, when you're outside the Machine class.
+   * @returns Option object for machine customization.
    */
   createOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     const isValue = this.__isValue;
@@ -265,18 +234,9 @@ export class SyncMachine<
 
   /**
    * Provides elements of the machine.
-   * @param key the key of the element to provide.
-   * @param value the value of the element to provide.
-   * If not provided, the current elements will be returned.
-   * @returns the elements of the machine with the provided key and value.
-   *
-   * @see {@linkcode Elements}
-   *
-   * @see type inferences :
-   *
-   *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
+   * @param helper - Option helper callback.
+   * @returns Machine options structure.
    */
-
   addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
   };
@@ -284,11 +244,9 @@ export class SyncMachine<
   /**
    * Provides options for the machine.
    *
-   * @param helper a function that provides options for the machine.
-   * Options can include actions, guards, delays, promises, and child machines.
-   * @returns a new instance of the machine with the provided options applied.
+   * @param helper - A function that provides options for the machine.
+   * @returns A new instance of the machine with the provided options applied.
    */
-
   provideOptions: SyncProvideOptions_F<
     C,
     Pc,
@@ -305,17 +263,9 @@ export class SyncMachine<
   // #endregion
 
   /**
-   * Renews the machine with the provided key and value.
-   * @param key the key of the element to provide.
-   * @param value the value of the element to provide.
-   * If not provided, the current elements will be returned.
-   * @returns a new instance of this {@linkcode Machine} with the provided key and value.
+   * Renews the machine with current configuration.
    *
-   * @see {@linkcode Elements}
-   *
-   * @see type inferences :
-   *
-   *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
+   * @returns A new instance of this {@linkcode SyncMachine}.
    */
   protected __renew = (): this => {
     const { config, pContext, context, guards, actions, delays, actors } =
@@ -337,14 +287,6 @@ export class SyncMachine<
 
   /**
    * Function helper to send an event to a child service.
-   *
-   * @param _ an optional parameter of type {@linkcode AnyMachine} [{@linkcode T}] to specify the machine context. Only used for type inference.
-   *
-   * @see type inferences :
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode reduceFnMap}
    */
   protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = () => {
     return fn => {
@@ -367,13 +309,7 @@ export class SyncMachine<
   /**
    * Function helper to perform a void action.
    *
-   * @param fn the action function to perform.
-   *
-   * @see type inferences :
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode VoidAction_F}
+   * @param fn - The action function to perform.
    */
   protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
     return ({ context, pContext, ...rest }) => {
@@ -390,6 +326,13 @@ export class SyncMachine<
   };
 }
 
+/**
+ * Creates a new synchronous state machine instance.
+ *
+ * @param config - Machine configuration object.
+ *
+ * @returns Instance of type {@linkcode SyncMachine}.
+ */
 export const createSyncMachine: CommonCreateMachine_F = config => {
   return new SyncMachine(config);
 };

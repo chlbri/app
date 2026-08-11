@@ -17,6 +17,18 @@ import type {
   PredicateMap,
 } from '../types';
 
+/**
+ * Signature for sync guard recursive parser function.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param guard - Guard configuration.
+ * @param guards - Predicate map.
+ * @param events - Machine events list.
+ */
 export type _ToPredicateF = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -31,6 +43,18 @@ export type _ToPredicateF = <
   errors: string[];
 };
 
+/**
+ * Signature for async guard recursive parser function.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param guard - Guard configuration.
+ * @param guards - Predicate map.
+ * @param events - Machine events list.
+ */
 export type _ToPredicateAsyncF = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -45,8 +69,23 @@ export type _ToPredicateAsyncF = <
   errors: string[];
 };
 
+/**
+ * Internal helper for converting guard configurations into boolean-recursive definitions.
+ */
 export type _ToPredicate = _ToPredicateF & { async: _ToPredicateAsyncF };
 
+/**
+ * Signature for converting guard config into executable sync predicate.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param guard - Guard configuration.
+ * @param guards - Predicate map.
+ * @param events - Machine events list.
+ */
 export type ToPredicate_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -61,6 +100,18 @@ export type ToPredicate_F = <
   errors: string[];
 };
 
+/**
+ * Signature for converting guard config into executable async predicate.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param guard - Guard configuration.
+ * @param guards - Predicate map.
+ * @param events - Machine events list.
+ */
 export type ToPredicateAsync_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -75,6 +126,11 @@ export type ToPredicateAsync_F = <
   errors: string[];
 };
 
+/**
+ * Combined type for sync and async guard predicate converters.
+ *
+ * @see -- type {@linkcode ToPredicate_F}, -- type {@linkcode ToPredicateAsync_F}
+ */
 export type ToPredicate = ToPredicate_F & { async: ToPredicateAsync_F };
 
 const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
@@ -168,26 +224,23 @@ const _toPredicateAsyncFn: _ToPredicateAsyncF = (
   return { func: { or } as any, errors };
 };
 
+/**
+ * Internal converter function resolving guard definitions into recursive guard objects.
+ */
 export const _toPredicate: _ToPredicate = expandFn(_toPredicateFn, {
   async: _toPredicateAsyncFn,
 });
 
 /**
+ * Converts a guard configuration into an executable predicate function.
  *
- * @param guard of type {@linkcode GuardConfig}, the guard configuration to convert to a predicate.
- * @param guards of type {@linkcode PredicateMap}, the map of guards containing functions to execute.
- * @param events of type {@linkcode string[]}, list of events of the machine.
- * @returns an object containing the predicate function and any errors encountered during the conversion.
+ * @param guard - The guard configuration of type {@linkcode GuardConfig}.
+ * @param guards - The map of guards containing functions to execute.
+ * @param events - List of events of the machine.
  *
- * @see {@linkcode PrimitiveObject}
- * @see {@linkcode AsyncPredicateS3}
- * @see {@linkcode GuardDefUnion}
- * @see {@linkcode reduceFnMap}
- * @see {@linkcode isDescriber}
- * @see {@linkcode isString}
- * @see {@linkcode castings}
- * @see {@linkcode GUARD_TYPE}
- * @see {@linkcode recursive}
+ * @returns An object containing the predicate function and any errors encountered.
+ *
+ * @see {@linkcode reduceFnMap}, {@linkcode isDescriber}, {@linkcode isString}, {@linkcode GUARD_TYPE}, {@linkcode recursive}
  */
 export const toPredicate: ToPredicate = expandFn(
   (guard, guards, ...events) => {

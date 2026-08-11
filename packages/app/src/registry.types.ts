@@ -1,5 +1,8 @@
 import type { TargetDef } from '#states';
 
+/**
+ * Map of option categories to string identifiers for registry options.
+ */
 export type RegisterOptions = Record<
   'children' | 'emitters' | 'tags' | 'actions' | 'guards' | 'delays',
   string

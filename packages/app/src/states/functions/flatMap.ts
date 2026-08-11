@@ -4,6 +4,17 @@ import type { FlatMapN, NodeConfig2 } from '../types';
 import { expandFn } from '@bemedev/app-utils-bemedev';
 import type { RecordS } from '~types';
 
+/**
+ * Function signature for flattening state node configuration map.
+ *
+ * @template {NodeConfig2} T - Root node configuration type.
+ *
+ * @param config - State node configuration.
+ * @param children - Whether to include child states.
+ * @param sep - Delimiter string.
+ *
+ * @returns Flattened state map of type {@linkcode FlatMapN}.
+ */
 export type FlatMap_F<T extends NodeConfig2 = NodeConfig2> = <
   const SN extends T,
   Wc extends boolean = false,

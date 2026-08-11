@@ -1,6 +1,15 @@
 import { isChildConfig } from '#actors';
 import { type NodeConfig3 } from '#states';
 
+/**
+ * Constructs an array of all event strings supported by a state node and its descendants.
+ *
+ * @param node - The state node configuration of type {@linkcode NodeConfig3}.
+ *
+ * @returns Array of event string names.
+ *
+ * @see -- type {@linkcode NodeConfig3}
+ */
 export const constructEvents = (node: NodeConfig3) => {
   const out = [];
 

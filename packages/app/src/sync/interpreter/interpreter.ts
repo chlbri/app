@@ -78,28 +78,20 @@ import type { SyncAddOptions_F } from '../machine';
 import type { SyncMachine } from '../machine/machine';
 
 /**
- * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
+ * The class {@linkcode SyncInterpreter} is responsible for interpreting and managing the state of a synchronous machine.
  * It provides methods to start, stop, pause, and resume the machine, as well as to send events
  * and subscribe to state changes.
  *
- * @template : type {@linkcode Config} [C] - The configuration type of the machine.
- * @template : [Pc] - The private context type, which can be any type.
- * @template : type {@linkcode types} [Tc] - The context type.
- * @template : type {@linkcode EventsMap} [E] - The events map type, which maps event names to their
- * @template : type {@linkcode PromiseeMap} [P] - The promisees map type, which maps promise names to their
- * @template Mo : type {@linkcode SimpleMachineOptions2} - The machine options type, which includes various configurations for the machine. Default to {@linkcode SimpleMachineOptions2}.
- *
- * @implements : {@linkcode AnySyncInterpreter}
- *
- * @remarks
- * The `Interpreter` class is a core component of the state machine implementation,
- * allowing for the execution of state transitions, handling of events, and management of the machine's lifecycle.
- * It supports various modes of operation, including strict and normal modes,
- * and provides mechanisms for error and warning handling.
- * * It also allows for the execution of actions, guards, and delays,
- * * as well as the management of child interpreters and scheduled tasks.
- *
- * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
+ * @template {CommonConfig3} C - The configuration type of the machine.
+ * @template Pc - The private context type.
+ * @template {PrimitiveObject} Tc - The context type.
+ * @template {EventsMap} E - The events map type.
+ * @template {ActorsConfigMap} A - The actors config map type.
+ * @template {string} Ta - Tag string type.
+ * @template {EventObject} Eo - Event object type.
+ * @template {string} AllPaths - All state paths type.
+ * @template {SimpleMachineOptions2} Mo - Machine options type.
+ * @template {SimpleMachineOptions2} L - Additional options type.
  */
 export class SyncInterpreter<
   const C extends CommonConfig3 = CommonConfig3,
@@ -113,11 +105,15 @@ export class SyncInterpreter<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
-  readonly TYPE = 'sync';
   /**
-   * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.
+   * The type identifier for the synchronous interpreter.
+   */
+  readonly TYPE = 'sync';
+
+  /**
+   * Access the inner class {@linkcode SyncMachine} machine being interpreted.
    *
-   * The {@linkcode SyncMachine} machine being interpreted.
+   * @returns The class {@linkcode SyncMachine} instance.
    */
   get machine() {
     return super.machine as SyncMachine<
@@ -134,7 +130,9 @@ export class SyncInterpreter<
   }
 
   /**
-   * Create a new {@linkcode Interpreter} instance with the same initial configuration as this instance.
+   * Creates a new class {@linkcode SyncInterpreter} instance with the same initial configuration as this instance.
+   *
+   * @returns A new instance of class {@linkcode SyncInterpreter}.
    */
   get renew() {
     const out = new SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
@@ -148,30 +146,38 @@ export class SyncInterpreter<
     return out;
   }
 
-  #initSchedulers = () => {
+  /**
+   * Initializes internal schedulers for context, value, event, and status.
+   */
+  private __initSchedulers = () => {
     this.__schedulerContexts = createScheduler();
     this.__schedulerValue = createScheduler();
     this.__schedulerEvent = createScheduler();
     this.__schedulerStatus = createScheduler();
   };
 
+  /**
+   * Creates an instance of class {@linkcode SyncInterpreter}.
+   *
+   * @param machine - The machine instance of interface {@linkcode AnyMachine} to be interpreted.
+   * @param mode - The execution mode of the interpreter, defaults to `'strict'`.
+   * @param exact - Whether to use exact interval and timeout evaluation, defaults to `true`.
+   */
   constructor(
     machine: AnyMachine<E, A, Pc, Tc>,
     mode: Mode = 'strict',
     exact = true,
   ) {
     super(machine, mode, exact);
-    this.#initSchedulers();
+    this.__initSchedulers();
     this.__performConfig(true);
   }
 
   /**
-   * Force transition to performs inner actions despite the current state.
+   * Forces transition to perform inner actions despite the current state.
    * This is useful for sending events that are not part of the current state transitions.
-   * @param transitions, the transitions to perform.
-   * @returns the result of the transitions.
    *
-   * @see {@linkcode TransitionConfig} for more information about transitions.
+   * @param forceSend - The optional event payload of type {@linkcode EventArgObject} to force send.
    */
   protected __performForceSendAction = (
     forceSend?: EventArgObject<Eo>,
@@ -186,6 +192,13 @@ export class SyncInterpreter<
     }
   };
 
+  /**
+   * Executes extended actions such as sending events, scheduling, activity management, timer management, and forced sending.
+   *
+   * @param params - The parameters of type {@linkcode ExtendedActionsParams}.
+   *
+   * @returns The result of performing forced send or resend actions.
+   */
   protected __performsExtendedActions = ({
     forceSend,
     resend,
@@ -216,6 +229,11 @@ export class SyncInterpreter<
     return result;
   };
 
+  /**
+   * Executes a single synchronous action, updating context and running extended actions.
+   *
+   * @param action - The action function of type {@linkcode SyncPerformAction_F}.
+   */
   protected __executeAction: SyncPerformAction_F<Eo, Pc, Tc, Ta> =
     action => {
       this.__setStatus('busy');
@@ -228,6 +246,11 @@ export class SyncInterpreter<
       this.__performsExtendedActions(extendeds);
     };
 
+  /**
+   * Performs multiple actions in sequence.
+   *
+   * @param actions - The list of action describers of type {@linkcode WithDescriber}.
+   */
   protected __performActions = (...actions: WithDescriber[]) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
 
@@ -236,29 +259,57 @@ export class SyncInterpreter<
     }
   };
 
-  #performPredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
+  /**
+   * Evaluates a single predicate function against the current cloned state.
+   *
+   * @param predicate - The predicate function of type {@linkcode SyncPerformPredicate_F}.
+   *
+   * @returns `true` if the predicate condition is met, `false` otherwise.
+   */
+  private __performPredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
     predicate => {
       this._iterate();
       return predicate(this.__cloneState);
     };
 
-  #executePredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
+  /**
+   * Executes a predicate function while managing the status of the interpreter.
+   *
+   * @param predicate - The predicate function of type {@linkcode SyncPerformPredicate_F}.
+   *
+   * @returns `true` if the predicate condition is met, `false` otherwise.
+   */
+  private __executePredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
     predicate => {
       this.__setStatus('busy');
-      const out = this.#performPredicate(predicate);
+      const out = this.__performPredicate(predicate);
       this.__setStatus('working');
       return out;
     };
 
-  #performPredicates = (...guards: GuardConfig[]) => {
+  /**
+   * Evaluates an array of guard configurations against the state.
+   *
+   * @param guards - The array of guard configurations of type {@linkcode GuardConfig}.
+   *
+   * @returns `true` if all guards evaluate to `true`, `false` otherwise.
+   */
+  private __performPredicates = (...guards: GuardConfig[]) => {
     if (guards.length < 1) return true;
     return guards
       .map(this.toPredicateFn)
       .filter(isDefined)
-      .map(this.#executePredicate)
+      .map(this.__executePredicate)
       .every(b => b);
   };
 
+  /**
+   * Performs a single state transition, executing exit, action, and entry callbacks.
+   *
+   * @param transition - The transition target string or configuration of type {@linkcode SyncPerformTransition_F}.
+   *
+   * @returns The target state path string if the transition succeeded, or `false` if it failed.
+   */
   protected __performTransition: SyncPerformTransition_F = transition => {
     const check = typeof transition == 'string';
     if (check) {
@@ -271,7 +322,7 @@ export class SyncInterpreter<
     const { guards, actions, target } = transition;
     const { diffEntries, diffExits } = this.__diffNext(target);
 
-    const response = this.#performPredicates(
+    const response = this.__performPredicates(
       ...toArray<GuardConfig>(guards),
     );
 
@@ -284,6 +335,13 @@ export class SyncInterpreter<
     return false;
   };
 
+  /**
+   * Performs the first valid transition from a list of transition configurations.
+   *
+   * @param transitions - The transition configurations of type {@linkcode SyncPerformTransitions_F}.
+   *
+   * @returns The target state path string if a transition succeeded, or `false` otherwise.
+   */
   protected __performTransitions: SyncPerformTransitions_F = (
     ...transitions
   ) => {
@@ -296,6 +354,11 @@ export class SyncInterpreter<
     return false;
   };
 
+  /**
+   * Performs finalization configurations when completing a state node or activity.
+   *
+   * @param _finally - The optional finalization configuration of type {@linkcode FinallyConfig}.
+   */
   protected __performFinally = (_finally?: FinallyConfig) => {
     const check1 = _finally === undefined;
     if (check1) return;
@@ -312,7 +375,7 @@ export class SyncInterpreter<
         continue;
       }
 
-      const response = this.#performPredicates(
+      const response = this.__performPredicates(
         ...toArray.typed(final.guards),
       );
 
@@ -324,12 +387,22 @@ export class SyncInterpreter<
     return;
   };
 
-  get #flat() {
+  /**
+   * Accesses the flattened state node map from the underlying machine.
+   *
+   * @returns The flat state nodes object.
+   */
+  private get __flat() {
     return this.machine.flat;
   }
 
-  get #collectedAlways() {
-    const entriesFlat = Object.entries(this.#flat);
+  /**
+   * Collects all `always` transition configurations from flat state nodes.
+   *
+   * @returns An array of tuples containing state node paths and their `always` configurations of type {@linkcode AlwaysConfig}.
+   */
+  protected get __collectedAlways() {
+    const entriesFlat = Object.entries(this.__flat);
     const entries: [from: string, always: AlwaysConfig][] = [];
 
     entriesFlat.forEach(([from, node]) => {
@@ -342,7 +415,15 @@ export class SyncInterpreter<
     return entries;
   }
 
-  #performAfter = (from: string, after: DelayedTransitions) => {
+  /**
+   * Creates a delayed transition handler for a specific state path.
+   *
+   * @param from - The state path string.
+   * @param after - The delayed transitions configuration of type {@linkcode DelayedTransitions}.
+   *
+   * @returns A parameterless function that schedules delayed transitions.
+   */
+  private __performAfter = (from: string, after: DelayedTransitions) => {
     const entries = Object.entries(after);
 
     return () => {
@@ -350,7 +431,7 @@ export class SyncInterpreter<
         const delayF = this.toDelayFn(_delay);
         const check0 = !isDefined(delayF);
         if (check0) return;
-        const delay = this.#executeDelay(delayF);
+        const delay = this.__executeDelay(delayF);
 
         const check1 = delay > DEFAULT_MAX_TIME_PROMISE;
         /* v8 ignore else -- @preserve */
@@ -380,8 +461,13 @@ export class SyncInterpreter<
     };
   };
 
-  get #collectedAfters() {
-    const entriesFlat = Object.entries(this.#flat);
+  /**
+   * Collects all delayed transition (`after`) configurations across flat state nodes.
+   *
+   * @returns An array of tuples containing state node paths and their `after` configurations of type {@linkcode DelayedTransitions}.
+   */
+  private get __collectedAfters() {
+    const entriesFlat = Object.entries(this.__flat);
     const entries: [from: string, after: DelayedTransitions][] = [];
 
     entriesFlat.forEach(([from, node]) => {
@@ -394,18 +480,39 @@ export class SyncInterpreter<
     return entries;
   }
 
-  #performDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+  /**
+   * Evaluates a delay function against the state.
+   *
+   * @param delay - The delay function of type {@linkcode SyncPerformDelay_F}.
+   *
+   * @returns The evaluated delay time in milliseconds.
+   */
+  private __performDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this._iterate();
     return delay(this.__cloneState);
   };
 
-  #executeDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+  /**
+   * Executes a delay function while setting the interpreter status to busy.
+   *
+   * @param delay - The delay function of type {@linkcode SyncPerformDelay_F}.
+   *
+   * @returns The evaluated delay time in milliseconds.
+   */
+  private __executeDelay: SyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this.__setStatus('busy');
-    const out = this.#performDelay(delay);
+    const out = this.__performDelay(delay);
     this.__setStatus('started');
     return out;
   };
 
+  /**
+   * Creates an interval instance for executing periodic tasks or activities.
+   *
+   * @param options - Configuration options for interval creation of type {@linkcode CreateInterval2_F}.
+   *
+   * @returns The created interval handle.
+   */
   protected createInterval: CreateInterval2_F = ({
     callback,
     id,
@@ -417,6 +524,14 @@ export class SyncInterpreter<
     return out;
   };
 
+  /**
+   * Executes activity timers for a state node.
+   *
+   * @param from - The origin state path string.
+   * @param _activities - The activities map to execute.
+   *
+   * @returns An array of activity interval identifiers.
+   */
   protected __executeActivities: ExecuteActivities_F = (
     from,
     _activities,
@@ -437,7 +552,7 @@ export class SyncInterpreter<
         const delayF = this.toDelayFn(_delay);
         const check0 = !isDefined(delayF);
         if (check0) return;
-        const interval = this.#executeDelay(delayF);
+        const interval = this.__executeDelay(delayF);
 
         const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
         if (check11) {
@@ -464,7 +579,7 @@ export class SyncInterpreter<
               continue;
             }
 
-            const check5 = this.#performPredicates(
+            const check5 = this.__performPredicates(
               ...toArray.typed(activity.guards),
             );
 
@@ -503,33 +618,50 @@ export class SyncInterpreter<
     return outs;
   };
 
+  /**
+   * Performs `always` (transitional) logic for a state node configuration.
+   *
+   * @param alway - The `always` transition configuration of type {@linkcode AlwaysConfig}.
+   *
+   * @returns The target state path string if successful, or `false` otherwise.
+   */
   private __performAlways = (alway: AlwaysConfig) => {
     this.__changeEvent(transformEventArg(ALWAYS_EVENT));
     const always = toArray<TransitionConfig>(alway);
     return this.__performTransitions(...always);
   };
 
+  /**
+   * Collects initial self-transitions (`always` and `after`) across all flat state nodes.
+   *
+   * @returns A map of state paths to self-transition execution functions.
+   */
   protected get __collectedSelfTransitions0() {
     const entries = new Map<
       string,
       { always?: () => string | false; after?: () => void }
     >();
 
-    this.#collectedAlways.forEach(([from, always]) => {
+    this.__collectedAlways.forEach(([from, always]) => {
       entries.set(from, { always: () => this.__performAlways(always) });
     });
 
-    this.#collectedAfters.forEach(([from, after]) => {
+    this.__collectedAfters.forEach(([from, after]) => {
       const inner = entries.get(from);
-      if (inner) inner.after = this.#performAfter(from, after);
+      if (inner) inner.after = this.__performAfter(from, after);
       else {
-        entries.set(from, { after: this.#performAfter(from, after) });
+        entries.set(from, { after: this.__performAfter(from, after) });
       }
     });
 
     return entries;
   }
 
+  /**
+   * Collects self-transitions that are currently active based on state value.
+   *
+   * @returns A parameterless function that executes all active self-transitions, or `undefined` if none active.
+   */
   protected get __collectedSelfTransitions() {
     const entries = Array.from(this.__collectedSelfTransitions0).filter(
       ([from]) => this.__isInsideValue(from),
@@ -552,6 +684,11 @@ export class SyncInterpreter<
     return () => out.forEach(f => f());
   }
 
+  /**
+   * Collects and activates pausable emitters active in the current state.
+   *
+   * @returns An array of activated pausable emitter objects.
+   */
   protected __collectPausables = () => {
     type _Emitter = EmitterConfig & {
       emitterFn: AsyncEmitterFunction<Eo, Pc, Tc, Ta>;
@@ -612,6 +749,9 @@ export class SyncInterpreter<
       .flat();
   };
 
+  /**
+   * Performs all active self-transitions and flushes state changes if state changed.
+   */
   protected __performSelfTransitions = () => {
     this.__setStatus('busy');
     const previousState = structuredClone(this.__state);
@@ -623,7 +763,11 @@ export class SyncInterpreter<
   };
 
   /**
-   * Add options to the inner {@linkcode Machine} of this {@linkcode Interpreter} service.
+   * Adds options to the inner class {@linkcode SyncMachine} of this interpreter service.
+   *
+   * @param helper - The options provider function of type {@linkcode SyncAddOptions_F}.
+   *
+   * @returns The interpreter instance with updated options.
    */
   addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
@@ -632,9 +776,9 @@ export class SyncInterpreter<
   /**
    * Provides options for the interpreter and returns a new interpreter instance.
    *
-   * @param option a function that provides options for the machine.
-   * Options can include actions, guards, delays, promises, and child machines.
-   * @returns a new interpreter instance with the provided options applied.
+   * @param option - A function that provides options for the machine of type {@linkcode SyncProvideMachineOptions_F}.
+   *
+   * @returns A new class {@linkcode SyncInterpreter} instance with the provided options applied.
    */
   provideOptions: SyncProvideMachineOptions_F<
     C,
@@ -651,6 +795,14 @@ export class SyncInterpreter<
     return super.provideOptions(option) as any;
   };
 
+  /**
+   * Subscribes a listener to state and context updates of this interpreter.
+   *
+   * @param _subscriber - The subscriber callback function.
+   * @param options - Subscription configuration options.
+   *
+   * @returns The created subscriber object of type {@linkcode AddSubscriber_F}.
+   */
   subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.machine.eventsList;
     const id = options?.id;
@@ -664,6 +816,13 @@ export class SyncInterpreter<
     return subscriber as any;
   };
 
+  /**
+   * Pre-processes an event send operation to compute state transition results.
+   *
+   * @param event - The event argument of type {@linkcode EventArgObject}.
+   *
+   * @returns The computed next state configuration, or `undefined` if unchanged.
+   */
   protected __presend: _SyncSend_F<Eo> = event => {
     this.__sent = true;
     this.__changeEvent(event);
@@ -693,11 +852,13 @@ export class SyncInterpreter<
   };
 
   /**
-   * Creates a sender function for the given event type.
-   * @param type - the {@linkcode EventArgT} type of the event to send.
-   * @returns a function with the payload as Parameter that sends the event with the given type and payload.
+   * Creates a curried sender function for the given event type.
    *
-   * @see {@linkcode send} for sending events directly.
+   * @template T - The event type string extending `Eo['type']`.
+   *
+   * @param type - The event type string.
+   *
+   * @returns A function that accepts payload data and sends the event.
    */
   sender = <const T extends Eo['type']>(type: T) => {
     return (...data: ExtractSender<Eo, T>) => {
@@ -708,8 +869,9 @@ export class SyncInterpreter<
   };
 
   /**
-   * Performs all self transitions and activities of this {@linkcode Interpreter} service.
-   * @remarks Throw if the number of self transitions exceeds {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
+   * Performs all self transitions and activities of this class {@linkcode SyncInterpreter} service.
+   *
+   * @throws type {@linkcode Error} Throw if the number of self transitions exceeds {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
    */
   protected _next = () => {
     let check = false;
@@ -731,10 +893,9 @@ export class SyncInterpreter<
   };
 
   /**
-   * Sends an event without cheching to the current {@linkcode Interpreter} service.
+   * Sends an event without precondition checking to the current class {@linkcode SyncInterpreter} service.
    *
-   * @param _event - the {@linkcode EventArg} event to send.
-   *
+   * @param _event - The event argument object of type {@linkcode EventArgObject}.
    */
   protected __send = (_event: EventArgObject<Eo>) => {
     const event = transformEventArg(_event);
@@ -748,6 +909,11 @@ export class SyncInterpreter<
     } else return this.__setStatus('working');
   };
 
+  /**
+   * Spawns and manages child actor services for active state nodes.
+   *
+   * @returns An array of spawned child service objects.
+   */
   protected __collectChildren = () => {
     type _Child = ChildConfig & {
       childFn: CommonChildFunction2<Eo, Pc, Tc, Ta>;
@@ -771,7 +937,7 @@ export class SyncInterpreter<
       })
       .map(([from, ..._children]) => {
         const services = _children.map(({ childFn, ...rest }) => {
-          const service = this.#executeChild(childFn);
+          const service = this.__executeChild(childFn);
           return { service, ...rest };
         });
 
@@ -857,7 +1023,16 @@ export class SyncInterpreter<
       });
   };
 
-  #executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
+  /**
+   * Executes a child machine factory function with the current cloned state.
+   *
+   * @param child - The child factory function of type {@linkcode CommonChildFunction2}.
+   *
+   * @returns The spawned child machine interpreter instance.
+   */
+  private __executeChild = (
+    child: CommonChildFunction2<Eo, Pc, Tc, Ta>,
+  ) => {
     const instance = child(this.__cloneState);
     return instance;
   };
@@ -867,10 +1042,10 @@ export class SyncInterpreter<
   /**
    * Sends an event to a specific child service by its ID.
    *
-   * @param to - The ID of the child service to which the event will be sent.
-   * @param : the {@linkcode EventObject} event to send to the child service.
+   * @template T - The event object type extending interface {@linkcode EventObject}.
    *
-   * @see {@linkcode send} for sending events to the current service.
+   * @param to - The ID of the child service to which the event will be sent.
+   * @param event - The event object of type {@linkcode EventObject} to send to the child service.
    */
   protected __sendTo = <T extends EventObject>(to: string, event: T) => {
     const collector = this.__collectedChildren.filter(
@@ -883,19 +1058,17 @@ export class SyncInterpreter<
   };
 }
 
+/**
+ * Type helper to extract the machine configuration property from a type {@linkcode KeyU}.
+ *
+ * @template T - The target type extending type {@linkcode KeyU}.
+ */
 type SyncConfigFrom<T extends KeyU<'config'>> = T['config'];
 
 /**
- * Retrieves the {@linkcode Interpreter} service from the given {@linkcode AnyMachine} machine.
+ * Retrieves the type {@linkcode SyncInterpreter} service type from a given interface {@linkcode AnyMachine}.
  *
- * @template : type {@linkcode AnyMachine} [M] - The type of the machine from which to retrieve the interpreter.
- *
- * @see {@linkcode SyncConfigFrom}
- * @see {@linkcode PrivateContextFrom}
- * @see {@linkcode ContextFrom}
- * @see {@linkcode EventsMapFrom}
- * @see {@linkcode PromiseesMapFrom}
- * @see {@linkcode MachineOptionsFrom}
+ * @template M - The machine type extending interface {@linkcode AnyMachine}.
  */
 export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
   SyncConfigFrom<M>,
@@ -909,18 +1082,25 @@ export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
   MachineOptionsFrom<M>
 >;
 
+/**
+ * Function type signature for creating a type {@linkcode SyncInterpreterFrom} service from an interface {@linkcode AnyMachine}.
+ *
+ * @template M - The machine type extending interface {@linkcode AnyMachine}.
+ *
+ * @param args - The interpretation arguments of type {@linkcode InterpretArgs}.
+ *
+ * @returns A type {@linkcode SyncInterpreterFrom} instance.
+ */
 export type SyncInterpreter_F = <M extends AnyMachine>(
   ...args: InterpretArgs<M>
 ) => SyncInterpreterFrom<M>;
 
 /**
- * Creates an {@linkcode SyncInterpreter} service from the given {@linkcode AnyMachine} machine.
+ * Creates and initializes a class {@linkcode SyncInterpreter} service from the given interface {@linkcode AnyMachine}.
  *
- * @param machine - The {@linkcode AnyMachine} machine to create the interpreter from.
- * @param options - The options for the interpreter, including context, private context, mode, and exact.
- * @returns an {@linkcode SyncInterpreter} service.
+ * @param _args - The interpretation arguments including the machine, mode, exact, context, and private context.
  *
- * @see {@linkcode SyncConfig}
+ * @returns A new class {@linkcode SyncInterpreter} service instance.
  */
 export const interpretSync: SyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;

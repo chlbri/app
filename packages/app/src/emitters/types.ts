@@ -5,17 +5,44 @@ import type { AsyncTransition } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { RecordS } from '~types';
 
-export type Subscriber = { unsubscribe: () => void };
-
-export type Subscribable = { subscribe: Subscriber };
+/**
+ * Object holding an unsubscribe cleanup method.
+ */
+export type Subscriber = {
+  /**
+   * Unsubscribes from the source stream.
+   */
+  unsubscribe: () => void;
+};
 
 /**
- * Observer wired into a {@linkcode Pausable} via its `subscribe` method.
+ * Interface for objects that allow subscribing via a type {@linkcode Subscriber}.
+ */
+export type Subscribable = {
+  /**
+   * Subscribes to emissions.
+   */
+  subscribe: Subscriber;
+};
+
+/**
+ * Observer wired into a type {@linkcode Pausable} via its `subscribe` method.
  * Mirrors the shape expected by `@bemedev/rx-pausable`'s SubArgs.
+ *
+ * @template R - The emitted payload type.
  */
 export type EmitterObserver<R = any> = {
+  /**
+   * Receives next value emission.
+   */
   next: (value: R) => void;
+  /**
+   * Receives error emission.
+   */
   error: (err: any) => void;
+  /**
+   * Receives completion notification.
+   */
   complete: () => void;
 };
 
@@ -50,13 +77,30 @@ export type Pausable<R = any> = {
 /** The string id that references an emitter source in the options map. */
 export type EmitterSrcConfig = string;
 
+/**
+ * Definition structure for next and error primitive payloads in an emitter.
+ */
 export type EmitterDef = { next: PrimitiveObject; error: PrimitiveObject };
 
+/**
+ * Record map of emitter names to emitter definitions.
+ *
+ * @template {string} S - Key identifier string union.
+ */
 export type EmitterConfigMap<S extends string = string> = Record<
   S,
   EmitterDef
 >;
 
+/**
+ * Asynchronous emitter configuration structure.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ * @template R - Return value type.
+ */
 export type AsyncEmitter<
   E extends EventObject = EventObject,
   Pc = any,
@@ -64,13 +108,37 @@ export type AsyncEmitter<
   T extends string = string,
   R = any,
 > = {
+  /**
+   * Source function returning a pausable stream.
+   */
   src: AsyncEmitterFunction<E, Pc, Tc, T, R>;
+  /**
+   * Optional description string.
+   */
   description?: string;
+  /**
+   * Transitions triggered on next emission.
+   */
   next: AsyncTransition<E, Pc, Tc, T>[];
+  /**
+   * Transitions triggered on error emission.
+   */
   error: AsyncTransition<E, Pc, Tc, T>[];
+  /**
+   * Transitions triggered on completion.
+   */
   complete: AsyncTransition<E, Pc, Tc, T>[];
 };
 
+/**
+ * Synchronous emitter configuration structure.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ * @template R - Return value type.
+ */
 export type SyncEmitter<
   E extends EventObject = EventObject,
   Pc = any,
@@ -78,13 +146,34 @@ export type SyncEmitter<
   T extends string = string,
   R = any,
 > = {
+  /**
+   * Source function returning a pausable stream.
+   */
   src: AsyncEmitterFunction<E, Pc, Tc, T, R>;
+  /**
+   * Optional description string.
+   */
   description?: string;
+  /**
+   * Transitions triggered on next emission.
+   */
   next: AsyncTransition<E, Pc, Tc, T>[];
+  /**
+   * Transitions triggered on error emission.
+   */
   error: AsyncTransition<E, Pc, Tc, T>[];
+  /**
+   * Transitions triggered on completion.
+   */
   complete: AsyncTransition<E, Pc, Tc, T>[];
 };
 
+/**
+ * Type helper extracting the return payload type for an emitter key `K`.
+ *
+ * @template {string} K - Emitter key string.
+ * @template {ActorsConfigMap} A - Actors configuration map.
+ */
 export type EmitterReturn<
   K extends string,
   A extends ActorsConfigMap = ActorsConfigMap,
@@ -94,6 +183,19 @@ export type EmitterReturn<
     : P
   : never;
 
+/**
+ * Async emitter factory function signature.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ * @template R - Return value type.
+ *
+ * @param state - Current extended state node of type {@linkcode StateExtended}.
+ *
+ * @returns Pausable stream object of type {@linkcode Pausable}.
+ */
 export type AsyncEmitterFunction<
   E extends EventObject = EventObject,
   Pc = any,
@@ -102,6 +204,19 @@ export type AsyncEmitterFunction<
   R = any,
 > = (state: StateExtended<E, Pc, Tc, T>) => Pausable<R>;
 
+/**
+ * Sync emitter factory function signature.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ * @template R - Return value type.
+ *
+ * @param state - Current extended state node of type {@linkcode StateExtended}.
+ *
+ * @returns Pausable stream object of type {@linkcode Pausable}.
+ */
 export type SyncEmitterFunction<
   E extends EventObject = EventObject,
   Pc = any,
@@ -110,6 +225,14 @@ export type SyncEmitterFunction<
   R = any,
 > = (state: StateExtended<E, Pc, Tc, T>) => Pausable<R>;
 
+/**
+ * Map of async emitter keys to their factory functions.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type AsyncEmittersMap<
   E extends EventObject = EventObject,
   Pc = any,
@@ -117,6 +240,14 @@ export type AsyncEmittersMap<
   T extends string = string,
 > = RecordS<AsyncEmitterFunction<E, Pc, Tc, T>>;
 
+/**
+ * Map of sync emitter keys to their factory functions.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type SyncEmittersMap<
   E extends EventObject = EventObject,
   Pc = any,

@@ -20,12 +20,21 @@ type gType = typeof GUARD_TYPE;
 type and = gType['and'];
 type or = gType['or'];
 
+/**
+ * Union of guard descriptors and logical AND/OR guard configurations.
+ */
 export type GuardUnion = WithDescriber | GuardAnd | GuardOr;
 
+/**
+ * Logical AND guard structure.
+ */
 export type GuardAnd = {
   [k in and]: GuardUnion[];
 };
 
+/**
+ * Logical OR guard structure.
+ */
 export type GuardOr = {
   [k in or]: GuardUnion[];
 };
@@ -33,12 +42,15 @@ export type GuardOr = {
 /**
  * JSON configuration for a guard.
  *
- * @see {@linkcode WithDescriber} for more details.
- * @see {@linkcode GuardAnd} for more details.
- * @see {@linkcode GuardOr} for more details.
+ * @see {@linkcode WithDescriber}, {@linkcode GuardAnd}, {@linkcode GuardOr}
  */
 export type GuardConfig = GuardUnion;
 
+/**
+ * Enforces no extra keys on guard configuration objects.
+ *
+ * @template T - Input guard configuration type.
+ */
 export type NoExtraKeysGuardConfig<T> = T extends WithDescriber
   ? NoExtraKeysWithDescriber<T>
   : T extends GuardAnd
@@ -53,6 +65,11 @@ export type NoExtraKeysGuardConfig<T> = T extends WithDescriber
         >
       : never;
 
+/**
+ * Enforces no extra keys on tuple or array of guard configurations.
+ *
+ * @template {ReadonlyArray<GuardConfig>} T - Array of guard configurations.
+ */
 export type NoExtraKeysGuardConfigArray<
   T extends ReadonlyArray<GuardConfig>,
 > = T extends [
@@ -62,6 +79,11 @@ export type NoExtraKeysGuardConfigArray<
   ? readonly [NoExtraKeysGuardConfig<S>, ...NoExtraKeysGuardConfigArray<R>]
   : [];
 
+/**
+ * Enforces no extra keys across single value or array of guard configurations.
+ *
+ * @template T - Guard configuration type.
+ */
 export type NoExtraKeysGuardConfigSoA<T> =
   T extends ReadonlyArray<GuardConfig>
     ? NoExtraKeysGuardConfigArray<T>
@@ -69,13 +91,10 @@ export type NoExtraKeysGuardConfigSoA<T> =
 
 /**
  * Retrieves the name of the action if it is a describer, otherwise returns the action itself.
- * @template : type {@linkcode GuardConfig} [T], GuardConfig to reduce
- * @return The name of the action if it is a describer, otherwise the action itself.
+ * @template {GuardConfig} T - GuardConfig to reduce
+ * @returns The name of the action if it is a describer, otherwise the action itself.
  *
- * @see {@linkcode FromActionConfig} for more details.
- * @see {@linkcode ReduceArray} for more details.
- * @see {@linkcode GuardAnd} for more details.
- * @see {@linkcode GuardOr} for more details.
+ * @see {@linkcode FromActionConfig}, {@linkcode ReduceArray}, {@linkcode GuardAnd}, {@linkcode GuardOr}
  */
 export type FromGuard<T extends GuardConfig> = T extends WithDescriber
   ? FromActionConfig<T>
@@ -85,6 +104,14 @@ export type FromGuard<T extends GuardConfig> = T extends WithDescriber
       ? FromGuard<ReduceArray<T['or']>>
       : never;
 
+/**
+ * Async predicate function or constant boolean value.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type AsyncPredicateS<
   E extends EventObject = EventObject,
   Pc = any,
@@ -92,6 +119,14 @@ export type AsyncPredicateS<
   T extends string = string,
 > = boolean | FnMap<E, Pc, Tc, T, MaybePromise<boolean>>;
 
+/**
+ * Sync predicate function or constant boolean value.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type SyncPredicateS<
   E extends EventObject = EventObject,
   Pc = any,
@@ -99,6 +134,14 @@ export type SyncPredicateS<
   T extends string = string,
 > = boolean | FnMap<E, Pc, Tc, T, boolean>;
 
+/**
+ * Async predicate function or constant boolean value resolver.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type AsyncPredicateS2<
   E extends EventObject = EventObject,
   Pc = any,
@@ -106,6 +149,14 @@ export type AsyncPredicateS2<
   T extends string = string,
 > = boolean | AsyncPredicateS3<E, Pc, Tc, T>;
 
+/**
+ * Sync predicate function or constant boolean value resolver.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type SyncPredicateS2<
   E extends EventObject = EventObject,
   Pc = any,
@@ -113,6 +164,14 @@ export type SyncPredicateS2<
   T extends string = string,
 > = boolean | SyncPredicateS3<E, Pc, Tc, T>;
 
+/**
+ * Async predicate function runner.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type AsyncPredicateS3<
   E extends EventObject = EventObject,
   Pc = any,
@@ -120,6 +179,14 @@ export type AsyncPredicateS3<
   T extends string = string,
 > = FnR<E, Pc, Tc, T, MaybePromise<boolean>>;
 
+/**
+ * Sync predicate function runner.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type SyncPredicateS3<
   E extends EventObject = EventObject,
   Pc = any,
@@ -129,15 +196,14 @@ export type SyncPredicateS3<
 
 /**
  * Union of all predicate functions.
- * @template : type {@linkcode EventObject} [E], the events map to use for resolving the predicate.
- * @template : [Pc], the type of the private context.
- * @template : type {@linkcode PrimitiveObject} [Tc], the type of the context.
+ * @template {EventObject} E - the events map to use for resolving the predicate.
+ * @template Pc - the type of the private context.
+ * @template {PrimitiveObject} Tc - the type of the context.
+ * @template {string} T - state path string type.
  *
  * @returns A union type that can be a single predicate function, a combination of guards with AND logic, or a combination of guards with OR logic.
  *
- * @see {@linkcode AsyncPredicateS2} for single predicate function.
- * @see {@linkcode AsyncPredicateAnd} for combining multiple guards with AND logic.
- * @see {@linkcode AsyncPredicateOr} for combining multiple guards with OR logic.
+ * @see {@linkcode AsyncPredicateS2}, {@linkcode AsyncPredicateAnd}, {@linkcode AsyncPredicateOr}
  */
 export type AsyncPredicate<
   E extends EventObject = EventObject,
@@ -149,6 +215,14 @@ export type AsyncPredicate<
   | AsyncPredicateAnd<E, Pc, Tc, T>
   | AsyncPredicateOr<E, Pc, Tc, T>;
 
+/**
+ * Async logical AND predicate wrapper.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type AsyncPredicateAnd<
   E extends EventObject = EventObject,
   Pc = any,
@@ -156,6 +230,14 @@ export type AsyncPredicateAnd<
   T extends string = string,
 > = { and: AsyncPredicate<E, Pc, Tc, T>[] };
 
+/**
+ * Async logical OR predicate wrapper.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type AsyncPredicateOr<
   E extends EventObject = EventObject,
   Pc = any,
@@ -163,6 +245,14 @@ export type AsyncPredicateOr<
   T extends string = string,
 > = { or: AsyncPredicate<E, Pc, Tc, T>[] };
 
+/**
+ * Sync logical AND predicate wrapper.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type SyncPredicateAnd<
   E extends EventObject = EventObject,
   Pc = any,
@@ -170,6 +260,14 @@ export type SyncPredicateAnd<
   T extends string = string,
 > = { and: SyncPredicate<E, Pc, Tc, T>[] };
 
+/**
+ * Sync logical OR predicate wrapper.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type SyncPredicateOr<
   E extends EventObject = EventObject,
   Pc = any,
@@ -177,6 +275,14 @@ export type SyncPredicateOr<
   T extends string = string,
 > = { or: SyncPredicate<E, Pc, Tc, T>[] };
 
+/**
+ * Sync predicate union structure.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ */
 export type SyncPredicate<
   E extends EventObject = EventObject,
   Pc = any,
@@ -188,16 +294,16 @@ export type SyncPredicate<
   | AsyncPredicateOr<E, Pc, Tc, T>;
 
 /**
- * Represents a map of guards, where each key is a string and each value is a {@linkcode AsyncPredicate}.
+ * Represents a map of guards, where each key is a string and each value is an type {@linkcode AsyncPredicate}.
  *
- * @template : type {@linkcode EventsMap} [E], the events map to use for resolving the predicate.
- * @template : type {@linkcode PromiseeMap} [P], the promisees map to use for resolving the predicate.
- * @template : [Pc], the type of the private context.
- * @template : type {@linkcode PrimitiveObject} [Tc], the type of the context.
+ * @template {EventObject} E - the events map to use for resolving the predicate.
+ * @template Pc - the type of the private context.
+ * @template {PrimitiveObject} Tc - the type of the context.
+ * @template {string} T - state path type.
  *
- * @returns A partial record where each key is a string and each value is a {@linkcode AsyncPredicateS}.
+ * @returns A partial record where each key is a string and each value is an type {@linkcode AsyncPredicateS}.
  *
- * @see {@linkcode RecordS} for single predicate function.
+ * @see {@linkcode RecordS}
  */
 export type PredicateMap<
   E extends EventObject = EventObject,

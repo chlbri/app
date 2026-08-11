@@ -2,6 +2,13 @@ import { tupleOf } from '@bemedev/app-utils-bemedev';
 import type { NodeConfig2, StateValue } from '../types';
 import { isAtomic, isCompound } from './checks';
 
+/**
+ * Function signature for converting state machine configuration to type {@linkcode StateValue}.
+ *
+ * @param body - State machine configuration.
+ *
+ * @returns Resolved state value of type {@linkcode StateValue}.
+ */
 export type NodeToValue_F = (body: NodeConfig2) => StateValue;
 
 /**
@@ -11,9 +18,7 @@ export type NodeToValue_F = (body: NodeConfig2) => StateValue;
  * @returns A value representation of the state machine, which can be a string,
  *         an object, or an empty object if the state is atomic.
  *
- * @see {@linkcode NodeToValue_F} for more details
- * @see {@linkcode isAtomic} for checking atomic states
- * @see {@linkcode isCompound} for checking compound states
+ * @see {@linkcode isAtomic}, {@linkcode isCompound}
  */
 export const nodeToValue: NodeToValue_F = body => {
   if (isAtomic(body)) return {};

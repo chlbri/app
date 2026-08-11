@@ -9,6 +9,18 @@ import type {
 import { isNotValue, isValue } from './value';
 import type { PrimitiveObject } from '@bemedev/typings';
 
+/**
+ * Function signature for checking if a path in context or events is defined/undefined.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ *
+ * @param path - Target path string of type {@linkcode DefinedValue}.
+ *
+ * @returns Guard evaluation function of type {@linkcode FnR}.
+ */
 export type IsDefinedS_F = <
   E extends EventObject = EventObject,
   Pc = any,
@@ -23,11 +35,7 @@ export type IsDefinedS_F = <
  * @param path : A {@linkcode DefinedValue}, the path to retrieve.
  * @returns A {@linkcode AsyncPredicateS2} function that returns true if the path is defined, false otherwise.
  *
- * @see {@linkcode isNotValue} for more details.
- * @see {@linkcode EventObject}
- * @see {@linkcode PromiseeMap}
- * @see {@linkcode PrimitiveObject}
- *
+ * @see {@linkcode isNotValue}
  */
 export const isDefinedS: IsDefinedS_F = path => {
   return isNotValue(path, undefined, null);
@@ -38,10 +46,7 @@ export const isDefinedS: IsDefinedS_F = path => {
  * @param path : A {@linkcode DefinedValue} , the path to retrieve.
  * @returns A {@linkcode AsyncPredicateS2} function that returns true if the path is undefined or null, false otherwise.
  *
- * @see {@linkcode isValue} for more details.
- * @see {@linkcode EventObject}
- * @see {@linkcode PromiseeMap}
- * @see {@linkcode PrimitiveObject}
+ * @see {@linkcode isValue}
  */
 export const isNotDefinedS: IsDefinedS_F = path => {
   return isValue(path, undefined, null);

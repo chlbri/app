@@ -20,11 +20,27 @@ import type { AnyMachine, MachineType } from '../machine/types';
 import type { Subscriber, SubscriberOptions } from '../subscriber';
 import type { IntervalParams } from '@bemedev/interval2/types';
 
+/**
+ * Execution mode of state machine interpreter.
+ */
 export type Mode = 'normal' | 'strict';
 
+/**
+ * Optional definitions for context and private context setup.
+ *
+ * @template P - Private context.
+ * @template C - Internal context.
+ */
 export type OptionalDefinitions<P, C> = OptionalDefinition<P, 'pContext'> &
   OptionalDefinition<C, 'context'>;
 
+/**
+ * Function signature for adding subscriber instance to interpreter.
+ *
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path string type.
+ * @template {EventObject} Eo - Event object type.
+ */
 export type AddSubscriber_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
@@ -34,6 +50,9 @@ export type AddSubscriber_F<
   options?: SubscriberOptions<Eo, Tc, T>,
 ) => Subscriber<Tc, T, Eo>;
 
+/**
+ * Generic interface for an interpreter instance.
+ */
 export type AnyInterpreter = {
   mode: Mode;
   eventsList: string[];
@@ -72,39 +91,68 @@ export type AnyInterpreter = {
   dispose: () => void;
 };
 
+/**
+ * Structure holding collected pausable emitter metadata.
+ */
 export type CollectedPausable = {
   from: string;
   pausable: Pausable;
   id: string;
 };
 
+/**
+ * Structure holding collected child interpreter service metadata.
+ */
 export type CommonCollectedService = {
   from: string;
   service: AnyInterpreter;
   id: string;
 };
 
+/**
+ * Simple task scheduler interface.
+ */
 export type SimpleScheduler = {
   schedule: Fn<[() => void, boolean?], any>;
   stop: Fn<[], any>;
 };
 
+/**
+ * Function signature for executing activities.
+ */
 export type ExecuteActivities_F = (
   from: string,
   activity: ActivityConfig,
 ) => string[];
 
+/**
+ * Target-directed event envelope.
+ *
+ * @template T - Event type.
+ */
 export type SendToEvent<T = any> = { to: string; event: T };
 
+/**
+ * Function signature for merging action execution result.
+ *
+ * @template Pc - Private context.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ */
 export type DirectMerge_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
 > = Fn<[result?: ActionResult<Pc, Tc>], void>;
 
+/**
+ * Function signature for creating timer instance.
+ */
 export type CreateInterval2_F = (
   config: NOmit<IntervalParams, 'exact'>,
 ) => Interval2;
 
+/**
+ * Difference calculation output structure for next state transition.
+ */
 export type DiffNext = {
   sv: StateValue;
   diffEntries: WithDescriber[];
@@ -114,25 +162,23 @@ export type DiffNext = {
 /**
  * Getting config from a machine.
  *
- * @template : {@linkcode KeyU}<'config'> [T] - type of the machine pre-config
- *
- * @see {@linkcode Config} for the structure of the machine config.
+ * @template {KeyU<'config'>} T - Type of machine pre-config.
  */
 export type ConfigFrom<T extends KeyU<'config'>> = T['config'];
 
 /**
  * Getting private context from a machine.
  *
- * @template : {@linkcode KeyU}<'pContext'> [T] - type of the machine events map
+ * @template {KeyU<'pContext'>} T - Type of machine events map.
  */
 export type PrivateContextFrom<T extends KeyU<'pContext'>> = T['pContext'];
 
 /**
  * Getting context from a machine.
  *
- * @template : {@linkcode KeyU}<'context'> [T] - type of the machine context
+ * @template {KeyU<'context'>} T - Type of machine context.
  *
- * @see {@linkcode PrimitiveObject} for the structure of the context.
+ * @see {@linkcode PrimitiveObject}
  */
 export type ContextFrom<T extends KeyU<'context'>> = Extract<
   T['context'],
@@ -146,6 +192,13 @@ export type ContextFrom<T extends KeyU<'context'>> = Extract<
  *
  * @see {@linkcode EventsMap} for the structure of the events map.
  */
+/**
+ * Getting events map from a machine.
+ *
+ * @template {KeyU<'eventsMap'>} T - Type of machine events map.
+ *
+ * @see {@linkcode EventsMap}
+ */
 export type EventsMapFrom<T extends KeyU<'eventsMap'>> = Extract<
   T['eventsMap'],
   EventsMap
@@ -154,15 +207,25 @@ export type EventsMapFrom<T extends KeyU<'eventsMap'>> = Extract<
 /**
  * Getting state from a machine.
  *
- * @template : {@linkcode KeyU}<'__state'> [T] - type of the machine state
- *
- * @see {@linkcode StateFrom} for extracting the state from the machine.
+ * @template {KeyU<'__state'>} T - Type of machine state.
  */
 export type StateFrom<T extends KeyU<'__state'>> = T['__state'];
 
+/**
+ * Getting decomposed state from a machine.
+ *
+ * @template {KeyU<'__decomposedState'>} T - Type of machine decomposed state.
+ */
 export type DecomposedStateFrom<T extends KeyU<'__decomposedState'>> =
   T['__decomposedState'];
 
+/**
+ * Getting function map from a machine.
+ *
+ * @template {KeyU<'__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'>} T - Target machine type.
+ * @template R - Return value type.
+ * @template {string} Ex - Exception string type.
+ */
 export type FnMapFrom<
   T extends KeyU<
     '__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'
@@ -180,25 +243,22 @@ export type FnMapFrom<
 /**
  * Getting extended state from a machine.
  *
- * @template : {@linkcode KeyU}<'__stateExtended'> [T] - type of the machine extended state
- *
- * @see {@linkcode StateExtendedFrom} for extracting the extended state from the machine.
+ * @template {KeyU<'__stateExtended'>} T - Type of machine extended state.
  */
 export type StateExtendedFrom<T extends KeyU<'__stateExtended'>> =
   T['__stateExtended'];
 
-/** * Getting stateP from a machine.
- * @template : {@linkcode KeyU}<'__stateP'> [T] - type of the machine stateP
- * @see {@linkcode StatePFrom} for extracting the stateP from the machine.
+/**
+ * Getting stateP from a machine.
+ *
+ * @template {KeyU<'__stateP'>} T - Type of machine stateP.
  */
 export type StatePFrom<T extends KeyU<'__stateP'>> = T['__stateP'];
 
 /**
  * Getting statePextended from a machine.
  *
- * @template : {@linkcode KeyU}<'__statePextended'> [T] - type of the machine statePextended
- *
- * @see {@linkcode StatePextendedFrom} for extracting the statePextended from the machine.
+ * @template {KeyU<'__statePextended'>} T - Type of machine statePextended.
  */
 export type StatePextendedFrom<T extends KeyU<'__statePextended'>> =
   T['__statePextended'];
@@ -206,24 +266,33 @@ export type StatePextendedFrom<T extends KeyU<'__statePextended'>> =
 /**
  * Getting promisees map from a machine.
  *
- * @template : {@linkcode KeyU}<'promiseesMap'> [T] - type of the machine promisees map
+ * @template {KeyU<'actorsMap'>} T - Type of machine promisees map.
  *
- * @see {@linkcode ActorsConfigMap} for the structure of the promisees map.
+ * @see {@linkcode ActorsConfigMap}
  */
 export type ActorsMapFrom<T extends KeyU<'actorsMap'>> = Extract<
   T['actorsMap'],
   ActorsConfigMap
 >;
 
+/**
+ * Getting tag from a machine.
+ *
+ * @template {KeyU<'__tag'>} T - Target machine type.
+ */
 export type TagFrom<T extends KeyU<'__tag'>> = T['__tag'];
 
+/**
+ * Getting all paths from a machine.
+ *
+ * @template {KeyU<'__allPaths'>} T - Target machine type.
+ */
 export type AllPathsFrom<T extends KeyU<'__allPaths'>> = T['__allPaths'];
 
 /**
  * Getting all events from a machine.
  *
- * @template : {@linkcode KeyU}<'__events'> [T] - type of the machine events
- *
+ * @template {KeyU<'__events'>} T - Type of machine events.
  */
 export type EventsFrom<T extends KeyU<'__events'>> = Extract<
   T['__events'],
@@ -233,18 +302,19 @@ export type EventsFrom<T extends KeyU<'__events'>> = Extract<
 /**
  * Get all actions map from a machine.
  *
- * @template : {@linkcode KeyU}<'actions'> [T] - type of the machine actions
+ * @template {KeyU<'actions'>} T - Type of machine actions.
  *
- * @see {@linkcode ActionsMapFrom} for extracting actions from the machine.
  * @see {@linkcode NotUndefined}
- * @see {@linkcode ActionFnFrom} for extracting action functions from the machine.
- * @see {@linkcode ActionParamsFrom} for extracting action parameters from the machine.
- * @see {@linkcode ActionKeysFrom} for extracting action keys from the machine.
  */
 export type ActionsMapFrom<T extends KeyU<'actions'>> = NotUndefined<
   T['actions']
 >;
 
+/**
+ * Getting options added to machine.
+ *
+ * @template {KeyU<'addOptions'>} T - Target machine type.
+ */
 export type AddOptionsFrom<T extends KeyU<'addOptions'>> = NotUndefined<
   T['addOptions']
 >;
@@ -252,9 +322,9 @@ export type AddOptionsFrom<T extends KeyU<'addOptions'>> = NotUndefined<
 /**
  * Get the action function from a machine.
  *
- * @template : {@linkcode KeyU}<'__actionFn'> [T] - type of the machine action function
+ * @template {KeyU<'__actionFn'>} T - Type of machine action function.
  *
- * @see {@linkcode NotUndefined} for ensuring the action function is not undefined.
+ * @see {@linkcode NotUndefined}
  */
 export type ActionFnFrom<T extends KeyU<'__actionFn'>> = NotUndefined<
   T['__actionFn']
@@ -263,9 +333,9 @@ export type ActionFnFrom<T extends KeyU<'__actionFn'>> = NotUndefined<
 /**
  * Get the action function parameters from a machine.
  *
- * @template : {@linkcode KeyU}<'__actionParams'> [T] - type of the machine action parameters
+ * @template {KeyU<'__actionParams'>} T - Type of machine action parameters.
  *
- * @see {@linkcode NotUndefined} for ensuring the action parameters are not undefined.
+ * @see {@linkcode NotUndefined}
  */
 export type ActionParamsFrom<T extends KeyU<'__actionParams'>> =
   NotUndefined<T['__actionParams']>;
@@ -273,9 +343,7 @@ export type ActionParamsFrom<T extends KeyU<'__actionParams'>> =
 /**
  * Get the action keys from a machine.
  *
- * @template : {@linkcode KeyU}<'actions'> [T] - type of the machine actions
- *
- * @see {@linkcode ActionsMapFrom} for extracting actions from the machine.
+ * @template {KeyU<'__actionKey'>} T - Type of machine actions.
  */
 export type ActionKeysFrom<T extends KeyU<'__actionKey'>> =
   T['__actionKey'];
@@ -283,7 +351,7 @@ export type ActionKeysFrom<T extends KeyU<'__actionKey'>> =
 /**
  * Get all guards map from a machine.
  *
- * @template : {@linkcode KeyU}<'guards'> [T] - type of the machine guards map.
+ * @template {KeyU<'guards'>} T - Type of machine guards map.
  *
  * @see {@linkcode NotUndefined}
  */
@@ -294,9 +362,9 @@ export type PredicatesMapFrom<T extends KeyU<'guards'>> = NotUndefined<
 /**
  * Get the predicate function from a machine.
  *
- * @template : {@linkcode KeyU}<'__predicate'> [T] - type of the machine predicate function
+ * @template {KeyU<'__predicate'>} T - Type of machine predicate function.
  *
- * @see {@linkcode NotUndefined} for ensuring the predicate function is not undefined.
+ * @see {@linkcode NotUndefined}
  */
 export type PredicateSFrom<T extends KeyU<'__predicate'>> = NotUndefined<
   T['__predicate']
@@ -305,19 +373,18 @@ export type PredicateSFrom<T extends KeyU<'__predicate'>> = NotUndefined<
 /**
  * Get the guard keys from a machine.
  *
- * @template : {@linkcode KeyU}<'guards'> [T] - type of the machine machine guards map.
+ * @template {KeyU<'__guardKey'>} T - Type of machine guards map.
  *
- * @see {@linkcode NotUndefined} for ensuring the guards map is not undefined.
- * @see {@linkcode PredicatesMapFrom} for extracting guards from the machine.
+ * @see {@linkcode NotUndefined}
  */
 export type GuardKeysFrom<T extends KeyU<'__guardKey'>> = T['__guardKey'];
 
 /**
  * Get all delays map from a machine.
  *
- * @template : {@linkcode KeyU}<'delays'> [T] - type of the machine delays map.
+ * @template {KeyU<'delays'>} T - Type of machine delays map.
  *
- * @see {@linkcode NotUndefined} for ensuring the delays map is not undefined.
+ * @see {@linkcode NotUndefined}
  */
 export type DelaysMapFrom<T extends KeyU<'delays'>> = NotUndefined<
   T['delays']
@@ -326,19 +393,18 @@ export type DelaysMapFrom<T extends KeyU<'delays'>> = NotUndefined<
 /**
  * Get the delay keys from a machine.
  *
- * @template : {@linkcode KeyU}<'delays'> [T] - type of the machine delays map.
+ * @template {KeyU<'__delayKey'>} T - Type of machine delays map.
  *
- * @see {@linkcode NotUndefined} for ensuring the delays map is not undefined.
- * @see {@linkcode DelaysMapFrom} for extracting delays from the machine.
+ * @see {@linkcode NotUndefined}
  */
 export type DelayKeysFrom<T extends KeyU<'__delayKey'>> = T['__delayKey'];
 
 /**
  * Get the delay function from a machine.
  *
- * @template : {@linkcode KeyU}<'__delay'> [T] - type of the machine delay function.
+ * @template {KeyU<'__delay'>} T - Type of machine delay function.
  *
- * @see {@linkcode NotUndefined} for ensuring the delay function is not undefined.
+ * @see {@linkcode NotUndefined}
  */
 export type DelayFnFrom<T extends KeyU<'__delay'>> = NotUndefined<
   T['__delay']
@@ -347,18 +413,18 @@ export type DelayFnFrom<T extends KeyU<'__delay'>> = NotUndefined<
 /**
  * Get the machines map from a machine.
  *
- * @template : {@linkcode KeyU}<'machines'> [T] - type of the machine machines map.
+ * @template {KeyU<'machines'>} T - Type of machine machines map.
  *
- * @see {@linkcode NotUndefined} for ensuring the machines map is not undefined.
+ * @see {@linkcode NotUndefined}
  */
 export type MachinesMapFrom<T extends KeyU<'machines'>> = NotUndefined<
   T['machines']
 >;
 
 /**
- * Get the childrend keys from a machine.
+ * Get the children keys from a machine.
  *
- * @template : {@linkcode KeyU}<'__childKey'> [T] - type of the machine child keys.
+ * @template {KeyU<'__childKey'>} T - Type of machine child keys.
  */
 export type ChildrenKeysFrom<T extends KeyU<'__childKey'>> =
   T['__childKey'];
@@ -366,15 +432,21 @@ export type ChildrenKeysFrom<T extends KeyU<'__childKey'>> =
 /**
  * Getting the options from a machine.
  *
- * @template : {@linkcode KeyU}<'options'> [T] - type of the machine options
+ * @template {KeyU<'options'>} T - Type of machine options.
  *
- * @see {@linkcode SimpleMachineOptions2} for the structure of the machine options.
+ * @see {@linkcode SimpleMachineOptions2}
  */
 export type MachineOptionsFrom<T extends KeyU<'options'>> = Extract<
   T['options'],
   SimpleMachineOptions2
 >;
 
+/**
+ * Object structure storing private and internal contexts.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ */
 export type Contexts<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -382,9 +454,16 @@ export type Contexts<
 
 /**
  * Alias of {@linkcode MachineOptionsFrom}.
+ *
+ * @template {KeyU<'options'>} T - Type of machine options.
  */
 export type MoF<T extends KeyU<'options'>> = MachineOptionsFrom<T>;
 
+/**
+ * State selector function type signature.
+ *
+ * @template T - State shape.
+ */
 export type Selector_F<T = any> = 0 extends 1 & T
   ? (key: string) => any
   : T extends Primitive
@@ -397,6 +476,13 @@ export type Selector_F<T = any> = 0 extends 1 & T
         selector: K,
       ) => R;
 
+/**
+ * Map of built-in action payloads passed to action functions.
+ *
+ * @template {EventObject} Eo - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ */
 export type ExtendedActionsParams<
   Eo extends EventObject = EventObject,
   Pc = any,
@@ -414,12 +500,24 @@ export type ExtendedActionsParams<
   sentEvent: SendToEvent;
 }>;
 
+/**
+ * Options for configuring an interpreter.
+ *
+ * @template {AnyMachine} M - Machine type.
+ * @template {PrivateContextFrom<M>} P - Private context.
+ * @template {ContextFrom<M>} C - Internal context.
+ */
 export type InterpreterOptions<
   M extends AnyMachine,
   P extends PrivateContextFrom<M> = PrivateContextFrom<M>,
   C extends ContextFrom<M> = ContextFrom<M>,
 > = { mode?: Mode; exact?: boolean } & OptionalDefinitions<P, C>;
 
+/**
+ * Arguments tuple passed to interpret function.
+ *
+ * @template {AnyMachine} M - Machine type.
+ */
 export type InterpretArgs<M extends AnyMachine> =
   Equals<
     InterpreterOptions<M>,

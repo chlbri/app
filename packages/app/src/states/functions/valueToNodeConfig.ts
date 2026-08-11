@@ -9,6 +9,17 @@ import { getChildren } from './getChildren';
 import { getParents } from './getParents';
 import { recomposeConfig } from './recompose';
 
+/**
+ * Function signature for converting a state value into a node configuration.
+ *
+ * @template {StateValue} T - State value type.
+ *
+ * @param body - Node configuration body.
+ * @param from - State value input.
+ * @param initial - Optional initial state flag.
+ *
+ * @returns Converted type {@linkcode NodeConfig2} object.
+ */
 export type ValueToNodeConfig_F = <T extends StateValue>(
   body: NodeConfig2,
   from: T,
@@ -23,14 +34,7 @@ export type ValueToNodeConfig_F = <T extends StateValue>(
  * @param initial - Optional flag to indicate if the initial state should be included.
  * @returns A node configuration object that represents the state value.
  *
- * @see {@linkcode ValueToNodeConfig_F} for more details
- * @see {@linkcode flatMap} for flattening the node configuration
- * @see {@linkcode getChildren} for retrieving child states
- * @see {@linkcode getParents} for retrieving parent states
- * @see {@linkcode recomposeConfig} for recomposing the node configuration
- * @see {@linkcode decomposeSV} for decomposing state values
- * @see {@linkcode replaceAll} for replacing substrings in the state value
- * @see {@linkcode DEFAULT_DELIMITER} for the default delimiter used in state paths
+ * @see {@linkcode flatMap}, {@linkcode getChildren}, {@linkcode getParents}, {@linkcode recomposeConfig}, {@linkcode DEFAULT_DELIMITER}
  */
 export const valueToNodeConfig: ValueToNodeConfig_F = (body, from) => {
   const flatBody = flatMap(body, false);

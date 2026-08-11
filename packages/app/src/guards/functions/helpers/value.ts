@@ -4,6 +4,19 @@ import type { FnR } from '~types';
 import type { DefinedValue } from '../../types';
 import type { PrimitiveObject } from '@bemedev/typings';
 
+/**
+ * Function signature for path value matcher guard helper.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ *
+ * @param path - Path string of type {@linkcode DefinedValue}.
+ * @param values - Values to match against.
+ *
+ * @returns Guard evaluation function of type {@linkcode FnR}.
+ */
 export type IsValueS_F = <
   E extends EventObject = EventObject,
   Pc = any,
@@ -35,13 +48,7 @@ export type IsValueS_F = <
  * console.log(result); // true
  * ```
  *
- * @see {@linkcode EventObject} for the type of the events map.
- * @see {@linkcode PromiseeMap} for the type of the promisees map.
- * @see {@linkcode PrimitiveObject} for the type of the context.
- * @see {@linkcode getByKey} for retrieving values by key.
- *  @see {@linkcode t} for type checking and validation.
- *
- * @see {@linkcode isNotValue} for the opposite check.
+ * @see {@linkcode isNotValue}, {@linkcode getByKey}
  */
 export const isValue: IsValueS_F = (path, ...values) => {
   const start = path.startsWith.bind(path);
@@ -94,13 +101,7 @@ export const isValue: IsValueS_F = (path, ...values) => {
  * console.log(result); // false
  * ```
  *
- * @see {@linkcode EventObject} for the type of the events map.
- * @see {@linkcode PromiseeMap} for the type of the promisees map.
- * @see {@linkcode PrimitiveObject} for the type of the context.
- * @see {@linkcode getByKey} for retrieving values by key.
- * @see {@linkcode t} for type checking and validation.
- *
- * @see {@linkcode isValue} for the opposite check.
+ * @see {@linkcode isValue}, {@linkcode getByKey}
  */
 export const isNotValue: IsValueS_F = (path, ...values) => {
   const func = isValue(path, ...values);

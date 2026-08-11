@@ -13,6 +13,16 @@ import type {
 
 const TRANSITIONS_KEYS = ['target', 'actions', 'guards', 'description'];
 
+/**
+ * Type guard for checking if a value is a valid transition configuration map.
+ *
+ * @template {string[]} T - Keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target state paths.
+ *
+ * @returns `true` if type {@linkcode TransitionConfigMap}, `false` otherwise.
+ */
 export const isTransitionConfigMap = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -44,6 +54,16 @@ export const isTransitionConfigMap = <T extends string[] = string[]>(
   return checkGuards.orUndefined(guards);
 };
 
+/**
+ * Type guard for checking if a transition map requires a target.
+ *
+ * @template {string[]} T - Keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if type {@linkcode TransitionConfigMapF}, `false` otherwise.
+ */
 export const isTransitionConfigMapTarget = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -53,6 +73,16 @@ export const isTransitionConfigMapTarget = <T extends string[] = string[]>(
   );
 };
 
+/**
+ * Type guard for checking if a transition map requires actions.
+ *
+ * @template {string[]} T - Keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if type {@linkcode TransitionConfigMapA}, `false` otherwise.
+ */
 export const isTransitionConfigMapActions = <
   T extends string[] = string[],
 >(
@@ -64,6 +94,16 @@ export const isTransitionConfigMapActions = <
   );
 };
 
+/**
+ * Type guard for checking string or object transition configuration.
+ *
+ * @template {string[]} T - Keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if type {@linkcode TransitionConfig}, `false` otherwise.
+ */
 export const isTransitionConfig = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -74,6 +114,16 @@ export const isTransitionConfig = <T extends string[] = string[]>(
   return isTransitionConfigMap(value, ...keys);
 };
 
+/**
+ * Type guard for checking target-required transition configuration.
+ *
+ * @template {string[]} T - Keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if type {@linkcode TransitionConfigF}, `false` otherwise.
+ */
 export const isTransitionConfigTarget = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -84,6 +134,16 @@ export const isTransitionConfigTarget = <T extends string[] = string[]>(
   return isTransitionConfigMapTarget(value, ...keys);
 };
 
+/**
+ * Type guard for checking array of transition configurations.
+ *
+ * @template {string[]} T - Keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if type {@linkcode ArrayTransitions}, `false` otherwise.
+ */
 export const isTransitionArray = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
@@ -103,6 +163,16 @@ export const isTransitionArray = <T extends string[] = string[]>(
   });
 };
 
+/**
+ * Type guard for checking single or array of transition configurations.
+ *
+ * @template {string[]} T - Keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if type {@linkcode SingleOrArrayT}, `false` otherwise.
+ */
 export const isSingleOrArrayT = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

@@ -8,6 +8,20 @@ import { reduceFnMap } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { fromDescriber } from '~types';
 
+/**
+ * Function signature for converting an action describer to an executable action function.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Public context type.
+ * @template {string} T - State path string type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param action - Action describer or string key.
+ * @param actions - Optional map of async actions.
+ * @param events - List of machine event strings.
+ *
+ * @returns Executable action function of type {@linkcode AsyncAction2} or `undefined`.
+ */
 export type ToAction_F = {
   <
     Pc = any,

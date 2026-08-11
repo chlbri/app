@@ -11,25 +11,29 @@ import { SubscriberBase } from './subscriber.base';
  * Subscriber class that manages the subscription state and provides methods
  * to handle state changes and unsubscribe.
  *
- * @template : {@linkcode PrimitiveObject} [Tc] - Type of the context
- * @template : [R] - Type of the return value
- *
+ * @template {PrimitiveObject} Tc - Type of the context
+ * @template {string} T - State path string type
+ * @template {EventObject} Eo - Event object type
  */
 class Subscriber<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
   Eo extends EventObject = EventObject,
 > extends SubscriberBase<State<Eo, Tc, T>> {
+  /**
+   * Subscriber identifier getter.
+   */
   get id() {
     return this._id;
   }
 
   /**
-   * Creates an instance of SubscriberMapClass.
-   * @param subscriber - The {@linkcode FnSubReduced} subscriber function or object.
-   * @param equals - Function to compare two {@linkcode State}s for equality (optional).
-   * @param _id - Unique identifier for the subscriber (optional).
+   * Creates an instance of type {@linkcode Subscriber}.
+   * @param _subscriber - Subscriber function or object map.
+   * @param equals - Function to compare two state instances for equality.
+   * @param _id - Unique identifier for the subscriber.
    * @param events - The events list.
+   * @param firstTime - Initial trigger execution flag.
    */
   constructor(
     _subscriber: FnMapR<Eo, Tc, T, void>,
@@ -73,16 +77,45 @@ class Subscriber<
 
 export type { Subscriber };
 
+/**
+ * Options for configuring a subscriber instance.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ */
 export type SubscriberOptions<
   E extends EventObject = EventObject,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
+  /**
+   * Optional subscriber identifier string.
+   */
   id?: string;
+  /**
+   * Optional equality comparator function.
+   */
   equals?: (a: State<E, Tc, T>, b: State<E, Tc, T>) => boolean;
+  /**
+   * Optional initial trigger flag.
+   */
   firstTime?: boolean;
 };
 
+/**
+ * Function signature for subscriber creation factory.
+ *
+ * @template {PrimitiveObject} Tc - Context type.
+ * @template {string} T - State path string type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param subscriber - Subscriber map or function.
+ * @param options - Subscriber options object.
+ * @param events - Machine event names list.
+ *
+ * @returns Instance of type {@linkcode Subscriber}.
+ */
 export type CreateSubscriber_F = <
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,

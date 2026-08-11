@@ -3,6 +3,21 @@ import type { EventObject } from '#events';
 import { reduceFnMap } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 
+/**
+ * Function signature for converting child identifier into child machine function.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ * @template {EventObject} Eo - Event object type.
+ * @template R - Child machine return type.
+ *
+ * @param child - Child identifier string.
+ * @param children - Children map.
+ * @param events - List of machine event strings.
+ *
+ * @returns Child machine function or `undefined`.
+ */
 export type ToChildSrc_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -17,10 +32,10 @@ export type ToChildSrc_F = <
 
 /**
  * Converts a child configuration to a child machine object.
- * @param child of type {@linkcode string}, the machine child identifier.
- * @param children of type {@linkcode ChildrenMap}, the map of children to look up the child configuration.
- * @param events of type {@linkcode string[]}, list of events of the machine.
- * @returns an emitter object with an id, or undefined if the emitter is not found.
+ * @param child - The machine child identifier.
+ * @param children - The map of children to look up the child configuration.
+ * @param events - List of events of the machine.
+ * @returns An emitter object with an id, or undefined if the emitter is not found.
  */
 export const toChildSrc: ToChildSrc_F = (child, children, ...events) => {
   const fn = children?.[child];

@@ -1,6 +1,9 @@
 import type { DeepPartial } from '@bemedev/app-utils-bemedev';
 import { deepmergeCustom } from 'deepmerge-ts';
 
+/**
+ * Custom deep merge instance configured with `deepmerge-ts` ({@linkcode deepmergeCustom}).
+ */
 export const _merge = deepmergeCustom({
   mergeArrays: false,
   mergeMaps: false,
@@ -15,14 +18,28 @@ export const _merge = deepmergeCustom({
 
 const UNEFINED_KEY = '##__FilterUndefined__';
 
+/**
+ * Class representing a sentinel object for merging undefined values.
+ */
 class MergeUndefined {
+  /**
+   * Sentinel property key identifier.
+   */
   readonly [UNEFINED_KEY] = UNEFINED_KEY;
 }
 
+/**
+ * Sentinel constant instance of class {@linkcode MergeUndefined}.
+ */
 export const MERGE_UNDEFINED = new MergeUndefined();
 
-// create a function that transform MERGE_UNDEFINED to undefined in all cases deep nested array or object, recursive
-
+/**
+ * Recursively converts sentinel class {@linkcode MergeUndefined} markers into `undefined`.
+ *
+ * @param value - Target value or nested structure.
+ *
+ * @returns Deeply transformed object or array with `undefined` values.
+ */
 export const transformMergeUndefined = (value: any): any => {
   if (Array.isArray(value)) {
     return value.map(transformMergeUndefined);
@@ -43,6 +60,13 @@ export const transformMergeUndefined = (value: any): any => {
   return value;
 };
 
+/**
+ * Checks if a value is an instance of sentinel marker class {@linkcode MergeUndefined}.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if sentinel marker, `false` otherwise.
+ */
 export const isMergeUndefined = (value: any) => {
   const check1 = value[UNEFINED_KEY] === UNEFINED_KEY;
   return check1;

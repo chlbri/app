@@ -1,5 +1,12 @@
 import { isDescriber, type Describer } from '~types';
 
+/**
+ * Signature for function that reduces a string or type {@linkcode Describer} to a string state name.
+ *
+ * @param value - String or type {@linkcode Describer}.
+ *
+ * @returns String representation of the state name.
+ */
 export type ReduceDescriber_F = (value: string | Describer) => string;
 
 /**

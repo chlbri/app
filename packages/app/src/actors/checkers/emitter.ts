@@ -7,12 +7,26 @@ import {
 } from '../../transitions/functions/is/transition';
 import type { EmitterConfig, FinallyConfig } from '../types';
 
+/**
+ * Type guard for checking single completion transition entry.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if single completion transition config, `false` otherwise.
+ */
 export const isFinallyConfig1 = (value: unknown) => {
   const check1 = checkAction(value);
   if (check1) return true;
   return isTransitionConfigMapActions(value) && value.target === undefined;
 };
 
+/**
+ * Type guard for checking completion transition configurations.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if type {@linkcode FinallyConfig}, `false` otherwise.
+ */
 export const isFinallyConfig = (
   value: unknown,
 ): value is FinallyConfig => {
@@ -41,6 +55,16 @@ isFinallyConfig.orUndefined = (
   return isFinallyConfig(value);
 };
 
+/**
+ * Type guard for checking if a value is a valid emitter configuration.
+ *
+ * @template {string[]} T - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target state paths.
+ *
+ * @returns `true` if type {@linkcode EmitterConfig}, `false` otherwise.
+ */
 export const isEmitterConfig = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

@@ -2,6 +2,13 @@ import { DEFAULT_DELIMITER } from '#constants';
 import { merge } from '#utils';
 import type { NodeConfig2 } from '../types';
 
+/**
+ * Function signature for URL shape recomposition.
+ *
+ * @template T - Value type.
+ * @param shape - Shape string.
+ * @param value - Target value.
+ */
 type Url_F = <T>(shape: string, value: T) => any;
 
 /**
@@ -11,8 +18,7 @@ type Url_F = <T>(shape: string, value: T) => any;
  * @param value - The value to recompose into the URL.
  * @returns A recomposed object URL.
  *
- * @see {@linkcode Url_F} for type details.
- * @see {@linkcode DEFAULT_DELIMITER} for the default delimiter used in the URL.
+ * @see {@linkcode DEFAULT_DELIMITER}
  */
 const recomposeObjectUrl: Url_F = (shape, value) => {
   const obj: any = {};
@@ -38,6 +44,14 @@ const recomposeObjectUrl: Url_F = (shape, value) => {
   return obj;
 };
 
+/**
+ * Function signature for configuration object recomposition.
+ *
+ * @template {NodeConfig2} T - Configuration type.
+ * @param shape - Target configuration shape.
+ *
+ * @returns Recomposed configuration object of type {@linkcode NodeConfig2}.
+ */
 export type RecomposeConfig_F = <T extends NodeConfig2>(
   shape: T,
 ) => NodeConfig2;
@@ -48,9 +62,7 @@ export type RecomposeConfig_F = <T extends NodeConfig2>(
  * @param shape - The shape of the configuration to recompose.
  * @returns A recomposed configuration object.
  *
- * @see {@linkcode RecomposeConfig_F} for type details.
- * @see {@linkcode recomposeObjectUrl} for the implementation of the recomposition logic.
- * @see {@linkcode merge} for merging objects.
+ * @see {@linkcode merge}
  */
 export const recomposeConfig: RecomposeConfig_F = shape => {
   const entries = Object.entries(shape);

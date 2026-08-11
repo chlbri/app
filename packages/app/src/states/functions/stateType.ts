@@ -1,6 +1,9 @@
 import type { Fn } from '@bemedev/app-utils-bemedev';
 import type { NodeConfig2, StateType } from '../types';
 
+/**
+ * Function signature for determining state category type.
+ */
 export type StateType_F = Fn<[state: NodeConfig2], StateType>;
 
 /**

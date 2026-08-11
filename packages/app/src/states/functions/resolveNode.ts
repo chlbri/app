@@ -9,6 +9,20 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import type { Node, NodeConfig2 } from '../types';
 import { stateType } from './stateType';
 
+/**
+ * Function signature for resolving state node configuration into an executable type {@linkcode Node}.
+ *
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - Tags type.
+ * @template {EventObject} Eo - Event object type.
+ *
+ * @param config - Node configuration object.
+ * @param options - Machine options object.
+ * @param events - List of machine event strings.
+ *
+ * @returns Resolved type {@linkcode Node} object.
+ */
 export type ResolveNode_F = <
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -28,13 +42,7 @@ export type ResolveNode_F = <
  * @param events - The list of events of the machine.
  * @returns A structured representation of the node with its properties and transitions.
  *
- * @see {@linkcode ResolveNode_F} for more details
- * @see {@linkcode toAction} for converting actions
- * @see {@linkcode toTransition} for converting transitions
- * @see {@linkcode toArray.typed} for ensuring typed arrays
- * @see {@linkcode stateType} for determining the type of the state
- * @see {@linkcode identify} for identifying properties in the configuration
- *
+ * @see {@linkcode toAction}, {@linkcode toTransition}, {@linkcode stateType}
  */
 export const resolveNode: ResolveNode_F = (config, options, ...events) => {
   // #region functions for mapping

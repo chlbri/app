@@ -4,8 +4,18 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import { isFunction, type FnMap } from '~types';
 
 /**
- * Runtime validation function to check if a value is an async function map.
- * An async function map contains functions that return Promises.
+ * Runtime validation function to check if a value is a function map.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ * @template R - Return type.
+ * @template {string} Ex - Exception string type.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if value is type {@linkcode FnMap}, `false` otherwise.
  */
 export const isFnMap = <
   E extends EventObject = EventObject,
@@ -33,9 +43,21 @@ export const isFnMap = <
   const functions = Object.values(obj);
   return functions.every(isFunction);
 };
+
 /**
  * Runtime validation function to check if a value is an async function map.
  * An async function map contains functions that return Promises.
+ *
+ * @template {EventObject} E - Event object type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {string} T - State path type.
+ * @template R - Return type.
+ * @template {string} Ex - Exception string type.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if value is an async type {@linkcode FnMap}, `false` otherwise.
  */
 export const isAsyncFnMap = <
   E extends EventObject = EventObject,
