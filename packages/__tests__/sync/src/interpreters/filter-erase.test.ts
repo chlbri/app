@@ -18,7 +18,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('state1', 2));
@@ -73,7 +73,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -132,7 +132,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -192,7 +192,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -234,7 +234,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -284,14 +284,14 @@ describe('Filter and Erase actions', () => {
 
     describe('#03 => Erase multiple properties with batch', () => {
       const machine = _machine6;
-    
+
       const service = interpret(machine, { context: {} });
 
       const {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));

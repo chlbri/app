@@ -57,7 +57,7 @@ describe('machine coverage', () => {
       useIterator,
       useInput,
       useData,
-    } = constructTests(vi, service, ({ waiter: w, sender, contexts }) => {
+    } = constructTests(service, ({ waiter: w, sender, contexts }) => {
       const useData = (index: number, ...datas: any[]) => {
         const inviteStrict = `#02 => Check strict data`;
 

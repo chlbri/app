@@ -19,7 +19,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('state1', 2));
@@ -74,7 +74,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -133,7 +133,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -192,7 +192,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -234,7 +234,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -287,7 +287,7 @@ describe('Filter and Erase actions', () => {
         useStateValue: useValue,
         send: useSend,
         start,
-      } = constructTests(vi, service);
+      } = constructTests(service);
 
       test(...start(1));
       test(...useValue('idle', 2));
@@ -355,7 +355,7 @@ describe('Filter and Erase actions', () => {
         setData,
         start,
         useContext,
-      } = constructTests(vi, service, ({ contexts, sender }) => ({
+      } = constructTests(service, ({ contexts, sender }) => ({
         useContext: contexts(c => c.context),
         clearAll: sender('CLEAR_ALL'),
         setData: sender('SET_DATA'),

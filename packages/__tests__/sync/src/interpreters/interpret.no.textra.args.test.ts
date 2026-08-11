@@ -17,7 +17,6 @@ describe('TESTS', () => {
   const service = interpret(machine);
 
   const { start, stop, next, useStateValue } = constructTests(
-    vi,
     service,
     ({ sender }) => ({ next: sender('NEXT') }),
   );

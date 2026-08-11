@@ -14,6 +14,7 @@ import type {
 } from '../../types';
 import { stateType } from '../stateType';
 
+/** Allowed keys for state node configuration objects. */
 const ALLKEYS = [
   'on',
   'after',
@@ -30,6 +31,7 @@ const ALLKEYS = [
   'after',
 ];
 
+/** Allowed keys for activity configuration objects. */
 const ACTIVITY_KEYS = ['guards', 'actions'];
 
 // const ACTION_KEYS = ['description', 'name'];

@@ -3,6 +3,14 @@ import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
 export type { CreateMachine_F } from './types.types';
 
+/**
+ * Internal helper function to instantiate state machine instance based on options.
+ *
+ * @param _config - State machine configuration object.
+ * @param types - Type definitions or options map.
+ *
+ * @returns Synchronous or asynchronous state machine instance.
+ */
 const builder = (_config: any, types: any) => {
   const check = types?.sync === true;
   const fn = check ? createSyncMachine : createAsyncMachine;

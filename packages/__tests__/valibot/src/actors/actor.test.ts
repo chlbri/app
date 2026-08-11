@@ -1,5 +1,5 @@
 import { ActorConfig_Schema } from '@bemedev/app-valibot';
-import { createValibotTests } from "../fixtures";
+import { createValibotTests } from '../fixtures';
 
 describe('TESTS', () => {
   const schema = ActorConfig_Schema('target1', 'target2');

@@ -16,8 +16,11 @@ import type {
   ReduceArray,
 } from '~types';
 
+/** Internal type representation of GUARD_TYPE. */
 type gType = typeof GUARD_TYPE;
+/** Internal type representation of logical AND key. */
 type and = gType['and'];
+/** Internal type representation of logical OR key. */
 type or = gType['or'];
 
 /**

@@ -1,4 +1,4 @@
-import { createValibotTests } from "../fixtures";
+import { createValibotTests } from '../fixtures';
 import { GuardConfig_Schema } from '@bemedev/app-valibot';
 
 describe('TESTS', () => {

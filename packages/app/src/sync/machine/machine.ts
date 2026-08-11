@@ -55,7 +55,11 @@ export class SyncMachine<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
+  /**
+   * Machine type identifier string.
+   */
   readonly TYPE = 'sync';
+
   /**
    * @deprecated Use the action function type.
    */
@@ -63,6 +67,9 @@ export class SyncMachine<
     return _unknown<SyncAction2<Eo, Pc, Tc, Ta>>();
   }
 
+  /**
+   * The public accessor for the flat map representation of the configuration.
+   */
   get flat() {
     return this.__flat as FlatMapN<C, true>;
   }

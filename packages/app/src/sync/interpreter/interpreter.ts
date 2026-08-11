@@ -392,7 +392,7 @@ export class SyncInterpreter<
    *
    * @returns The flat state nodes object.
    */
-  private get __flat() {
+  private get _flat() {
     return this.machine.flat;
   }
 
@@ -402,7 +402,7 @@ export class SyncInterpreter<
    * @returns An array of tuples containing state node paths and their `always` configurations of type {@linkcode AlwaysConfig}.
    */
   protected get __collectedAlways() {
-    const entriesFlat = Object.entries(this.__flat);
+    const entriesFlat = Object.entries(this._flat);
     const entries: [from: string, always: AlwaysConfig][] = [];
 
     entriesFlat.forEach(([from, node]) => {
@@ -467,7 +467,7 @@ export class SyncInterpreter<
    * @returns An array of tuples containing state node paths and their `after` configurations of type {@linkcode DelayedTransitions}.
    */
   private get __collectedAfters() {
-    const entriesFlat = Object.entries(this.__flat);
+    const entriesFlat = Object.entries(this._flat);
     const entries: [from: string, after: DelayedTransitions][] = [];
 
     entriesFlat.forEach(([from, node]) => {

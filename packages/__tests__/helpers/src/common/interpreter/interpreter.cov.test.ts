@@ -45,11 +45,13 @@ describe('TESTS', () => {
     test('#05 => state value is active', () =>
       expect(service.state.value).toBe('active'));
 
-    test('#06 => context count is 1', () => expect(service.state.context.count).toBe(1));
+    test('#06 => context count is 1', () =>
+      expect(service.state.context.count).toBe(1));
 
     test('#07 => softReset', service.softReset);
 
-    test('#08 => state value is reset', () => expect(service.state.value).toBe('idle'));
+    test('#08 => state value is reset', () =>
+      expect(service.state.value).toBe('idle'));
 
     test('#09 => context count is reset', () =>
       expect(service.state.context.count).toBe(0));
@@ -73,7 +75,8 @@ describe('TESTS', () => {
     test('#03 => state value is active', () =>
       expect(service.state.value).toBe('active'));
 
-    test('#04 => context count is 1', () => expect(service.state.context.count).toBe(1));
+    test('#04 => context count is 1', () =>
+      expect(service.state.context.count).toBe(1));
 
     test('#05 => reset', () => {
       service.reset();
@@ -83,7 +86,8 @@ describe('TESTS', () => {
     test('#06 => spy call count matches after reset', () =>
       expect(spy).toHaveBeenCalledTimes(callsLength));
 
-    test('#07 => state value is reset', () => expect(service.state.value).toBe('idle'));
+    test('#07 => state value is reset', () =>
+      expect(service.state.value).toBe('idle'));
 
     test('#08 => context count is reset', () =>
       expect(service.state.context.count).toBe(0));

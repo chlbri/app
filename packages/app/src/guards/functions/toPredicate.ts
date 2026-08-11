@@ -133,6 +133,15 @@ export type ToPredicateAsync_F = <
  */
 export type ToPredicate = ToPredicate_F & { async: ToPredicateAsync_F };
 
+/**
+ * Internal implementation to convert a synchronous guard configuration into a predicate structure.
+ *
+ * @param guard - Guard configuration.
+ * @param _guards - Map of predicates.
+ * @param events - List of event names.
+ *
+ * @returns Object containing optional predicate function and accumulated error strings.
+ */
 const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
   const errors: string[] = [];
 
@@ -178,6 +187,15 @@ const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
   return { func: { or }, errors };
 };
 
+/**
+ * Internal implementation to convert an asynchronous guard configuration into a predicate structure.
+ *
+ * @param guard - Guard configuration.
+ * @param _guards - Map of predicates.
+ * @param events - List of event names.
+ *
+ * @returns Object containing optional predicate function and accumulated error strings.
+ */
 const _toPredicateAsyncFn: _ToPredicateAsyncF = (
   guard,
   _guards,

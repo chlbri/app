@@ -33,7 +33,7 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
         <head>
           <HeadContent />
         </head>
-        <body className='font-sans antialiased wrap-anywhere selection:bg-[rgba(79,184,178,0.24)] flex flex-col min-h-screen bg-slate-950/80'>
+        <body className='flex min-h-screen flex-col bg-slate-950/80 font-sans wrap-anywhere antialiased selection:bg-[rgba(79,184,178,0.24)]'>
           <Header />
           <div className='flex-1'>{children}</div>
           <Footer />

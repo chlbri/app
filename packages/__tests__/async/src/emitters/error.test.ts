@@ -11,6 +11,7 @@ describe('Error transitions testing)', () => {
     const sub = new Subject<number>();
     const mock = vi.fn();
     const DELAY = 100;
+
     sub.subscribe({
       next: value => {
         console.warn('Next received in subject subscription:', value);
@@ -52,7 +53,7 @@ describe('Error transitions testing)', () => {
       start,
       waiter,
       useFull,
-    } = constructTests(vi, service, ({ getIndex, contexts, waiter }) => ({
+    } = constructTests(service, ({ getIndex, contexts, waiter }) => ({
       useNext: (value: number) => {
         const invite = `#${getIndex()} => sub1.next(${value})`;
         return tupleOf(invite, () => {
@@ -99,5 +100,3 @@ describe('Error transitions testing)', () => {
     test(...useFull({ context: 15, pContext: undefined }));
   });
 });
-
-afterAll(() => vi.useRealTimers());

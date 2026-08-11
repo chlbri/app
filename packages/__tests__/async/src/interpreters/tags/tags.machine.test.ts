@@ -9,7 +9,8 @@ describe('Machine Tag Interpreter', () => {
     });
 
     test('#02 => context', () => expect(machine.context).toBeUndefined());
-    test('#03 => pContext', () => expect(machine.pContext).toBeUndefined());
+    test('#03 => pContext', () =>
+      expect(machine.pContext).toBeUndefined());
 
     test('#04 => __allPaths', () => {
       expect(machine.__allPaths).toBeUndefined();
@@ -20,7 +21,7 @@ describe('Machine Tag Interpreter', () => {
     const service = interpret(machine);
 
     const { start, useStateValue, useNext, usePrev, useTags } =
-      constructTests(vi, service, ({ sender }) => ({
+      constructTests(service, ({ sender }) => ({
         useNext: sender('NEXT'),
         usePrev: sender('PREV'),
       }));

@@ -6,18 +6,17 @@ import {
 } from '../constants';
 import type { EventStrings } from '../types';
 
+/** Array of system event string values. */
 const VALUES: string[] = [INIT_EVENT, MAX_EXCEEDED_EVENT_TYPE];
 
 /**
- * Checks if the provided event is a {@linkcode EventStrings}.
- * @param event of type any, the event to check
- * @returns true if the event is a {@linkcode EventStrings}
- * @satisfies typechecker
+ * Checks if the provided event is of type {@linkcode EventStrings}.
  *
- * @see {@linkcode INIT_EVENT} for the initial event.
- * @see {@linkcode ALWAYS_EVENT} for the always event.
- * @see {@linkcode AFTER_EVENT} for the after event.
- * @see {@linkcode MAX_EXCEEDED_EVENT_TYPE} for the max exceeded event.
+ * @param event - The event value to check.
+ *
+ * @returns `true` if the event is of type {@linkcode EventStrings}, `false` otherwise.
+ *
+ * @see {@linkcode INIT_EVENT}, {@linkcode ALWAYS_EVENT}, {@linkcode AFTER_EVENT}, {@linkcode MAX_EXCEEDED_EVENT_TYPE}
  */
 export const isStringEvent = (event: any): event is EventStrings => {
   const out =

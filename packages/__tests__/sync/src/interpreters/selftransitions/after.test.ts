@@ -210,7 +210,6 @@ describe('after', () => {
       });
 
       const { start, waiter, useStateValue, changeIndex } = constructTests(
-        vi,
         service1,
         ({ waiter }) => ({ waiter: waiter(DELAY) }),
       );
@@ -237,7 +236,6 @@ describe('after', () => {
       });
 
       const { start, waiter, useStateValue } = constructTests(
-        vi,
         service1,
         ({ waiter }) => ({ waiter: waiter(DELAY) }),
       );

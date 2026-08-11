@@ -72,69 +72,62 @@ describe('machine coverage', () => {
     useInput,
     useData,
     useConsole,
-  } = constructTests(
-    vi,
-    service,
-    ({ waiter: _waiter, sender, contexts }) => ({
-      useWaiter: _waiter(DELAY),
-      useWrite: sender('WRITE'),
-      useIterator: contexts(
-        ({ context }) => context?.iterator,
-        'iterator',
-      ),
-      useIteratorC: contexts(
-        ({ pContext }) => (pContext as any)?.iterator,
-        'private iterator',
-      ),
-      useInput: contexts(({ context }) => context?.input, 'input'),
-      useData: (index: number, ...datas: any[]) => {
-        const inviteStrict = `#02 => Check strict data`;
+  } = constructTests(service, ({ waiter: _waiter, sender, contexts }) => ({
+    useWaiter: _waiter(DELAY),
+    useWrite: sender('WRITE'),
+    useIterator: contexts(({ context }) => context?.iterator, 'iterator'),
+    useIteratorC: contexts(
+      ({ pContext }) => (pContext as any)?.iterator,
+      'private iterator',
+    ),
+    useInput: contexts(({ context }) => context?.input, 'input'),
+    useData: (index: number, ...datas: any[]) => {
+      const inviteStrict = `#02 => Check strict data`;
 
-        const strict = () => {
-          expect(service.context?.data).toStrictEqual(datas);
-        };
+      const strict = () => {
+        expect(service.context?.data).toStrictEqual(datas);
+      };
 
-        const inviteLength = `#01 => Length of data is ${datas.length}`;
+      const inviteLength = `#01 => Length of data is ${datas.length}`;
 
-        const length = () => {
-          expect(service.context?.data?.length).toBe(datas.length);
-        };
+      const length = () => {
+        expect(service.context?.data?.length).toBe(datas.length);
+      };
 
-        const _index = index < 10 ? '0' + index : index;
-        const invite = `#${_index} => Check data`;
-        const func = () => {
-          test(inviteLength, length);
-          test(inviteStrict, strict);
-        };
+      const _index = index < 10 ? '0' + index : index;
+      const invite = `#${_index} => Check data`;
+      const func = () => {
+        test(inviteLength, length);
+        test(inviteStrict, strict);
+      };
 
-        return tupleOf(invite, func);
-      },
-      useConsole: (index: number, ..._strings: (string | string[])[]) => {
-        const inviteStrict = `#02 => Check strict string`;
+      return tupleOf(invite, func);
+    },
+    useConsole: (index: number, ..._strings: (string | string[])[]) => {
+      const inviteStrict = `#02 => Check strict string`;
 
-        const strict = () => {
-          const calls = strings.map(data => [data].flat());
-          expect(log.mock.calls).toStrictEqual(calls);
-        };
+      const strict = () => {
+        const calls = strings.map(data => [data].flat());
+        expect(log.mock.calls).toStrictEqual(calls);
+      };
 
-        const inviteLength = `#01 => Length of calls is : ${_strings.length}`;
+      const inviteLength = `#01 => Length of calls is : ${_strings.length}`;
 
-        const length = () => {
-          strings.push(..._strings);
-          expect(log.mock.calls.length).toBe(strings.length);
-        };
+      const length = () => {
+        strings.push(..._strings);
+        expect(log.mock.calls.length).toBe(strings.length);
+      };
 
-        const _index = index < 10 ? '0' + index : index;
-        const invite = `#${_index} => Check the console`;
-        const func = () => {
-          test(inviteLength, length);
-          test(inviteStrict, strict);
-        };
+      const _index = index < 10 ? '0' + index : index;
+      const invite = `#${_index} => Check the console`;
+      const func = () => {
+        test(inviteLength, length);
+        test(inviteStrict, strict);
+      };
 
-        return tupleOf(invite, func);
-      },
-    }),
-  );
+      return tupleOf(invite, func);
+    },
+  }));
 
   // #endregion
 
@@ -700,7 +693,7 @@ describe('#04 = > coverage retrieve initial', () => {
   const machine = _machine1;
 
   const service = interpret(machine);
-  const { useStateValue, start, send } = constructTests(vi, service);
+  const { useStateValue, start, send } = constructTests(service);
   test(...start());
   test(...useStateValue('idle'));
   test(...send('NEXT'));
@@ -783,62 +776,62 @@ describe('#04 = > coverage retrieve initial', () => {
   });
 });
 
-  describe('#06 => machine id is not defined', () => {
-    describe('#01 => string', () => {
-      const idM = 'machineNotDefined' as const;
-      const machineT = _machineT2;
+describe('#06 => machine id is not defined', () => {
+  describe('#01 => string', () => {
+    const idM = 'machineNotDefined' as const;
+    const machineT = _machineT2;
 
-      const service = interpret(machineT);
-      const { start } = constructTests(vi, service);
+    const service = interpret(machineT);
+    const { start } = constructTests(service);
 
-      test(...start(0));
+    test(...start(0));
 
-      describe('#01 => log', () => {
-        test('#01 => errors is empty', () =>
-          expect(service._errorsCollector).toHaveLength(0));
+    describe('#01 => log', () => {
+      test('#01 => errors is empty', () =>
+        expect(service._errorsCollector).toHaveLength(0));
 
-        describe('#02 => It has some watnings', () => {
-          test('#01 => warnings is not empty', () =>
-            expect(service._warningsCollector).not.toHaveLength(0));
+      describe('#02 => It has some watnings', () => {
+        test('#01 => warnings is not empty', () =>
+          expect(service._warningsCollector).not.toHaveLength(0));
 
-          test('#02 => warnings has length 1', () =>
-            expect(service._warningsCollector).toHaveLength(1));
+        test('#02 => warnings has length 1', () =>
+          expect(service._warningsCollector).toHaveLength(1));
 
-          test(`#02 => contains warning for machine : "${idM}"`, () => {
-            const expected = `Machine (${idM}) is not defined`;
-            expect(service._warningsCollector).toContain(expected);
-          });
-        });
-      });
-    });
-
-    describe('#01 => object', () => {
-      const idM = { name: 'machineNotDefined', description: 'Not defined' };
-      const machineT = _machineT3;
-
-      const service = interpret(machineT);
-
-      test('#01 => start', service.start.bind(service));
-
-      describe('#01 => log', () => {
-        test('#01 => errors is empty', () =>
-          expect(service._errorsCollector).toHaveLength(0));
-
-        describe('#02 => It has some watnings', () => {
-          test('#01 => warnings is not empty', () =>
-            expect(service._warningsCollector).not.toHaveLength(0));
-
-          test('#02 => warnings has length 1', () =>
-            expect(service._warningsCollector).toHaveLength(1));
-
-          test(`#02 => contains warning for machine : "${reduceDescriber(idM)}"`, () => {
-            const expected = `Machine (${reduceDescriber(idM)}) is not defined`;
-            expect(service._warningsCollector).toContain(expected);
-          });
+        test(`#02 => contains warning for machine : "${idM}"`, () => {
+          const expected = `Machine (${idM}) is not defined`;
+          expect(service._warningsCollector).toContain(expected);
         });
       });
     });
   });
+
+  describe('#01 => object', () => {
+    const idM = { name: 'machineNotDefined', description: 'Not defined' };
+    const machineT = _machineT3;
+
+    const service = interpret(machineT);
+
+    test('#01 => start', service.start.bind(service));
+
+    describe('#01 => log', () => {
+      test('#01 => errors is empty', () =>
+        expect(service._errorsCollector).toHaveLength(0));
+
+      describe('#02 => It has some watnings', () => {
+        test('#01 => warnings is not empty', () =>
+          expect(service._warningsCollector).not.toHaveLength(0));
+
+        test('#02 => warnings has length 1', () =>
+          expect(service._warningsCollector).toHaveLength(1));
+
+        test(`#02 => contains warning for machine : "${reduceDescriber(idM)}"`, () => {
+          const expected = `Machine (${reduceDescriber(idM)}) is not defined`;
+          expect(service._warningsCollector).toContain(expected);
+        });
+      });
+    });
+  });
+});
 
 test('#01 => my', () => {
   console.warn(

@@ -37,7 +37,7 @@ export const useComponents = (service: Service) => {
           className,
         )}
         title={({ isOpen }) => (
-          <div className='w-full px-4 py-3 bg-slate-900 hover:bg-slate-800/80 text-slate-300 font-medium text-sm flex items-center justify-between transition-colors cursor-pointer'>
+          <div className='flex w-full cursor-pointer items-center justify-between bg-slate-900 px-4 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/80'>
             <div className='flex items-center space-x-2.5'>
               <Code2 className='size-4 text-yellow-700' />
               <h2 className='font-semibold text-slate-200'>
@@ -46,7 +46,7 @@ export const useComponents = (service: Service) => {
             </div>
 
             <div className='flex items-center space-x-2'>
-              <span className='text-xs text-slate-400 font-medium'>
+              <span className='text-xs font-medium text-slate-400'>
                 {isOpen ? 'Hide State' : 'Show State'}
               </span>
 
@@ -61,20 +61,20 @@ export const useComponents = (service: Service) => {
         )}
 
         content={
-          <div className='p-4 border-t border-slate-800 bg-slate-950 relative group'>
+          <div className='group relative border-t border-slate-800 bg-slate-950 p-4'>
             <button
               type='button'
               onClick={e => {
                 e.stopPropagation();
                 setJson();
               }}
-              className='absolute top-3 right-3 px-2.5 py-1 text-xs font-sans rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer z-10'
+              className='absolute top-3 right-3 z-10 flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-700 bg-slate-800 px-2.5 py-1 font-sans text-xs text-slate-300 transition-all hover:bg-slate-700'
               title='Fetch current machine state'
             >
-              <RefreshCw className='w-3.5 h-3.5 text-yellow-700' />
+              <RefreshCw className='h-3.5 w-3.5 text-yellow-700' />
               <span>Refresh</span>
             </button>
-            <pre className='font-mono text-xs text-yellow-200/90 overflow-x-auto max-h-64 p-2 leading-relaxed selection:bg-yellow-200/30'>
+            <pre className='max-h-64 overflow-x-auto p-2 font-mono text-xs leading-relaxed text-yellow-200/90 selection:bg-yellow-200/30'>
               {json}
             </pre>
           </div>
@@ -119,15 +119,15 @@ export const useComponents = (service: Service) => {
     open => (
       <div
         className={cn(
-          `p-4 rounded-xl border transition-all`,
+          `rounded-xl border p-4 transition-all`,
           open
             ? 'bg-cyan-950/40 border-cyan-500/50 shadow-md shadow-cyan-500/10'
             : 'bg-slate-900/40 border-slate-800 opacity-60',
         )}
       >
-        <div className='text-xs text-slate-400 mb-1'>State 1</div>
-        <div className='font-bold text-lg text-cyan-400'>idle</div>
-        <div className='text-xs text-slate-500 mt-2'>Initial State</div>
+        <div className='mb-1 text-xs text-slate-400'>State 1</div>
+        <div className='text-lg font-bold text-cyan-400'>idle</div>
+        <div className='mt-2 text-xs text-slate-500'>Initial State</div>
       </div>
     ),
   );
@@ -147,11 +147,11 @@ export const useComponents = (service: Service) => {
             : 'bg-slate-900/40 border-slate-800 opacity-60',
         )}
       >
-        <div className='text-xs text-slate-400 mb-1'>State 2 (Nested)</div>
-        <div className='font-bold text-lg text-teal-400'>active</div>
+        <div className='mb-1 text-xs text-slate-400'>State 2 (Nested)</div>
+        <div className='text-lg font-bold text-teal-400'>active</div>
         <StateValue
           render={stateValue => (
-            <div className='text-xs text-slate-400 mt-2 truncate'>
+            <div className='mt-2 truncate text-xs text-slate-400'>
               {stateValue}
             </div>
           )}
@@ -169,15 +169,15 @@ export const useComponents = (service: Service) => {
     open => (
       <div
         className={cn(
-          `p-4 rounded-xl border transition-all`,
+          `rounded-xl border p-4 transition-all`,
           open
             ? 'bg-rose-950/40 border-rose-500/50 shadow-md shadow-rose-500/10'
             : 'bg-slate-900/40 border-slate-800 opacity-60',
         )}
       >
-        <div className='text-xs text-slate-400 mb-1'>State 3</div>
-        <div className='font-bold text-lg text-rose-400'>final</div>
-        <div className='text-xs text-slate-500 mt-2'>Terminal State</div>
+        <div className='mb-1 text-xs text-slate-400'>State 3</div>
+        <div className='text-lg font-bold text-rose-400'>final</div>
+        <div className='mt-2 text-xs text-slate-500'>Terminal State</div>
       </div>
     ),
   );
@@ -215,7 +215,7 @@ export const useComponents = (service: Service) => {
         variant='default'
         onClick={sendEvent('START')}
         disabled={disabled}
-        className='flex space-x-2 min-w-max'
+        className='flex min-w-max space-x-2'
       >
         <Play className='size-4' /> ACTIVATE COUNTERS
       </Button>
@@ -236,11 +236,11 @@ export const useComponents = (service: Service) => {
     },
     canReset =>
       canReset && (
-        <div className='mt-4 pt-4 border-t border-slate-800 flex justify-end'>
+        <div className='mt-4 flex justify-end border-t border-slate-800 pt-4'>
           <Button
             variant='outline'
             onClick={sendEvent('RESET')}
-            className='gap-2 text-emerald-400 border-emerald-500/30'
+            className='gap-2 border-emerald-500/30 text-emerald-400'
           >
             <RotateCcw className='size-4' /> Reset Machine to Idle
           </Button>
@@ -310,22 +310,22 @@ useComponents.test = (service: Service) => {
                 </div>
                 <Pause className='h-3.5 w-3.5 fill-emerald-300 text-emerald-300 transition-transform group-hover:scale-110' />
                 <div className='flex flex-col text-left'>
-                  <span className='text-[9px] font-bold tracking-wider text-emerald-300 uppercase leading-none'>
+                  <span className='text-[9px] leading-none font-bold tracking-wider text-emerald-300 uppercase'>
                     Tests Running
                   </span>
-                  <span className='text-xs font-extrabold text-white leading-tight'>
+                  <span className='text-xs leading-tight font-extrabold text-white'>
                     Pause Tests
                   </span>
                 </div>
               </>
             ) : (
               <>
-                <Play className='h-3.5 w-3.5 text-cyan-300 animate-pulse' />
+                <Play className='h-3.5 w-3.5 animate-pulse text-cyan-300' />
                 <div className='flex flex-col text-left'>
-                  <span className='text-[9px] font-bold tracking-wider text-cyan-300 uppercase leading-none'>
+                  <span className='text-[9px] leading-none font-bold tracking-wider text-cyan-300 uppercase'>
                     Tests Stopped
                   </span>
-                  <span className='text-xs font-extrabold text-white leading-tight'>
+                  <span className='text-xs leading-tight font-extrabold text-white'>
                     Start Tests
                   </span>
                 </div>
@@ -354,7 +354,7 @@ useComponents.test = (service: Service) => {
           className,
         )}
         title={({ isOpen }) => (
-          <div className='w-full px-4 py-3 bg-slate-900 hover:bg-slate-800/80 text-slate-300 font-medium text-sm flex items-center justify-between transition-colors cursor-pointer'>
+          <div className='flex w-full cursor-pointer items-center justify-between bg-slate-900 px-4 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/80'>
             <div className='flex items-center space-x-2.5'>
               <Code2 className='size-4 text-yellow-700' />
               <h2 className='font-semibold text-slate-200'>
@@ -363,7 +363,7 @@ useComponents.test = (service: Service) => {
             </div>
 
             <div className='flex items-center space-x-2'>
-              <span className='text-xs text-slate-400 font-medium'>
+              <span className='text-xs font-medium text-slate-400'>
                 {isOpen ? 'Hide State' : 'Show State'}
               </span>
 
@@ -378,8 +378,8 @@ useComponents.test = (service: Service) => {
         )}
 
         content={
-          <div className='p-4 border-t border-slate-800 bg-slate-950 relative group'>
-            <pre className='font-mono text-xs text-yellow-200/90 overflow-x-auto max-h-64 p-2 leading-relaxed selection:bg-yellow-200/30'>
+          <div className='group relative border-t border-slate-800 bg-slate-950 p-4'>
+            <pre className='max-h-64 overflow-x-auto p-2 font-mono text-xs leading-relaxed text-yellow-200/90 selection:bg-yellow-200/30'>
               {json}
             </pre>
           </div>

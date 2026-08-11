@@ -9,12 +9,11 @@ describe('Tests not defined emitters -> Machine1', () => {
     vi.useFakeTimers();
     log.mockClear();
   });
-  afterAll(() => {
-    log.mockRestore();
-  });
+
+  afterAll(() => log.mockRestore());
 
   const service = interpret(machineEmitter1, { context: 0 });
-  const { start } = constructTests(vi, service);
+  const { start } = constructTests(service);
 
   test(...start());
 
@@ -22,5 +21,3 @@ describe('Tests not defined emitters -> Machine1', () => {
     expect(log).toHaveBeenCalledWith('Emitter (interval) is not defined');
   });
 });
-
-afterAll(() => vi.useRealTimers());

@@ -31,7 +31,7 @@ describe('machine coverage', () => {
       resume,
       stop,
       send,
-    } = constructTests(vi, service, ({ contexts, waiter, sender }) => ({
+    } = constructTests(service, ({ contexts, waiter, sender }) => ({
       useWaiter: waiter(DELAY),
       useContext: contexts(({ context }) => context),
       useInput: contexts(({ context }) => context?.input, 'input'),

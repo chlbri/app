@@ -73,8 +73,9 @@ export type TransformTargetDef<T extends TargetDef> =
       ? EmptyObject
       : {
           readonly states: {
-            [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
-              TargetDef
+            [
+              Key in keyof T['states']
+            ]: T['states'][Key] extends infer TK extends TargetDef
               ? TransformTargetDef<TK>
               : never;
           };
@@ -98,8 +99,9 @@ export type TransformTargetDef2<
     ? EmptyObject
     : {
         readonly states: {
-          [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
-            TargetDef
+          [
+            Key in keyof T['states']
+          ]: T['states'][Key] extends infer TK extends TargetDef
             ? TransformTargetDef<TK>
             : never;
         };
@@ -193,31 +195,129 @@ export interface AnyMachine<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
 > {
+  /**
+   * Machine options object.
+   */
   options: any;
+
+  /**
+   * Machine configuration object.
+   */
   config: CommonConfig3;
+
+  /**
+   * Classification type of the machine ('sync' or 'async').
+   */
   readonly TYPE: MachineType;
+
+  /**
+   * Flat map representation of node configurations.
+   */
   flat: Record<string, any>;
+
+  /**
+   * Machine context object.
+   */
   context: Tc;
+
+  /**
+   * Machine private context object.
+   */
   pContext: Pc;
+
+  /**
+   * Map of machine events.
+   */
   eventsMap: E;
+
+  /**
+   * Map of machine actor configurations.
+   */
   actorsMap: A;
+
+  /**
+   * Internal event object type marker.
+   */
   __events: any;
+
+  /**
+   * Internal state object type marker.
+   */
   __state: any;
+
+  /**
+   * Internal decomposed state path object type marker.
+   */
   __decomposedState: any;
+
+  /**
+   * Method to add options to the machine.
+   */
   addOptions: any;
+
+  /**
+   * Registered actions map.
+   */
   actions: any;
+
+  /**
+   * Registered guards map.
+   */
   guards: any;
+
+  /**
+   * Registered delays map.
+   */
   delays: any;
+
+  /**
+   * Internal state path string type marker.
+   */
   __allPaths: string;
+
+  /**
+   * Internal state tag string type marker.
+   */
   __tag: string;
+
+  /**
+   * Array of state tag strings defined on the machine.
+   */
   tags: string[];
+
+  /**
+   * Registered child actors map.
+   */
   children: any;
+
+  /**
+   * Method returning a renewed instance of the machine.
+   */
   renew: any;
+
+  /**
+   * Initial node configuration object.
+   */
   initialConfig: any;
+
+  /**
+   * Initial state value object.
+   */
   initialValue: StateValue;
 
+  /**
+   * Function checking if a target state path is an initial node.
+   */
   isInitial: Fn<[string], boolean>;
+
+  /**
+   * Function retrieving parent configuration node from initial target path.
+   */
   retrieveParentFromInitial: Fn<[string], any>;
+
+  /**
+   * Function converting a state value into a node configuration.
+   */
   toNode: Fn<[StateValue], any>;
 }
 
@@ -281,6 +381,11 @@ export type GetIO_F = (
   node?: any,
 ) => WithDescriber[];
 
+/**
+ * Internal standard output properties type picker.
+ *
+ * @template {ObjectT} T - Target object type.
+ */
 type StandardOutput2<T extends ObjectT> = Pick<Sh<T>, StandardKey>;
 
 /**
@@ -385,6 +490,11 @@ export type ChildEvents<
   A extends ActorsConfigMap = ActorsConfigMap,
 > = NotUndefined<A['children']>[K] extends infer P ? P : never;
 
+/**
+ * Internal type for extracting event keys from flat map nodes.
+ *
+ * @template {FlatMapN} Flat - Type of flat map of nodes.
+ */
 type _GetEventKeysFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]: Flat[key] extends { on: infer V } ? keyof V : never;
 }[keyof Flat];

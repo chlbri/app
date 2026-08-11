@@ -291,19 +291,24 @@ describe('isNodeConfig', () => {
   });
 
   describe('invalid node configs', () => {
-    test('#01 => returns false for null', () => expect(isNodeConfig(null)).toBe(false));
+    test('#01 => returns false for null', () =>
+      expect(isNodeConfig(null)).toBe(false));
 
     test('#02 => returns false for undefined', () => {
       expect(isNodeConfig(undefined)).toBe(false);
     });
 
-    test('#03 => returns false for string', () => expect(isNodeConfig('state')).toBe(false));
+    test('#03 => returns false for string', () =>
+      expect(isNodeConfig('state')).toBe(false));
 
-    test('#04 => returns false for number', () => expect(isNodeConfig(42)).toBe(false));
+    test('#04 => returns false for number', () =>
+      expect(isNodeConfig(42)).toBe(false));
 
-    test('#05 => returns false for array', () => expect(isNodeConfig([])).toBe(false));
+    test('#05 => returns false for array', () =>
+      expect(isNodeConfig([])).toBe(false));
 
-    test('#06 => returns false for boolean', () => expect(isNodeConfig(true)).toBe(false));
+    test('#06 => returns false for boolean', () =>
+      expect(isNodeConfig(true)).toBe(false));
 
     test('#07 => returns false for object without required on property', () => {
       expect(isNodeConfig({ type: 'atomic' })).toBe(true);

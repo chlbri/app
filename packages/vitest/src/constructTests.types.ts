@@ -8,7 +8,7 @@ import type {
   SyncInterpreter,
   PrimitiveObject,
 } from '@bemedev/app/types';
-import type { VitestUtils } from 'vitest';
+// import type { VitestUtils } from 'vitest';
 import type { ConstructTestsResult, Option } from './types';
 
 /**
@@ -46,7 +46,7 @@ export type ConstructTests_F = <
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const T extends object = object,
 >(
-  vi: VitestUtils,
+  // vi: VitestUtils,
   service:
     | SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>
     | AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>,

@@ -243,7 +243,6 @@ describe('Composition', () => {
       });
 
       const { start, useWaiter, useErrors } = constructTests(
-        vi,
         service,
         ({ waiter }) => ({
           useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
@@ -348,13 +347,9 @@ describe('Composition', () => {
     }));
 
     const service = interpret(machine);
-    const { start, waiter } = constructTests(
-      vi,
-      service,
-      ({ waiter }) => ({
-        waiter: waiter(1000),
-      }),
-    );
+    const { start, waiter } = constructTests(service, ({ waiter }) => ({
+      waiter: waiter(1000),
+    }));
 
     test(...start());
     test(...waiter());
@@ -379,9 +374,7 @@ describe('Composition', () => {
       delays: { DELAY: 1000 },
     }));
 
-    const service = interpret(machine, {
-      context: { iterator: 0 },
-    });
+    const service = interpret(machine, { context: { iterator: 0 } });
 
     test('#00 => Reset all mocks', () => {
       inc.mockClear();
@@ -418,13 +411,9 @@ describe('Composition', () => {
         exact: true,
       });
 
-      const { start, waiter } = constructTests(
-        vi,
-        service,
-        ({ waiter }) => ({
-          waiter: waiter(DELAY),
-        }),
-      );
+      const { start, waiter } = constructTests(service, ({ waiter }) => ({
+        waiter: waiter(DELAY),
+      }));
 
       const subscriber = service.subscribe(
         {

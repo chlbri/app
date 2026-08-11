@@ -82,28 +82,20 @@ import type {
 } from '../actors/types';
 
 /**
- * The `Interpreter` class is responsible for interpreting and managing the state of a machine.
+ * The class {@linkcode AsyncInterpreter} is responsible for interpreting and managing the state of an asynchronous machine.
  * It provides methods to start, stop, pause, and resume the machine, as well as to send events
  * and subscribe to state changes.
  *
- * @template : type {@linkcode AsyncConfig} [C] - The configuration type of the machine.
- * @template : [Pc] - The private context type, which can be any type.
- * @template : type {@linkcode types} [Tc] - The context type.
- * @template : type {@linkcode EventsMap} [E] - The events map type, which maps event names to their
- * @template : type {@linkcode PromiseeMap} [P] - The promisees map type, which maps promise names to their
- * @template Mo : type {@linkcode SimpleMachineOptions2} - The machine options type, which includes various configurations for the machine. Default to {@linkcode SimpleMachineOptions2}.
- *
- * @implements : {@linkcode AnyInterpreter}
- *
- * @remarks
- * The `Interpreter` class is a core component of the state machine implementation,
- * allowing for the execution of state transitions, handling of events, and management of the machine's lifecycle.
- * It supports various modes of operation, including strict and normal modes,
- * and provides mechanisms for error and warning handling.
- * * It also allows for the execution of actions, guards, and delays,
- * * as well as the management of child interpreters and scheduled tasks.
- *
- * @see {@linkcode GetEventsFromConfig} for extracting events from the machine configuration.
+ * @template {CommonConfig3} C - The configuration type of the machine.
+ * @template Pc - The private context type.
+ * @template {PrimitiveObject} Tc - The context type.
+ * @template {EventsMap} E - The events map type.
+ * @template {ActorsConfigMap} A - The actors config map type.
+ * @template {string} Ta - Tag string type.
+ * @template {EventObject} Eo - Event object type.
+ * @template {string} AllPaths - All state paths type.
+ * @template {SimpleMachineOptions2} Mo - Machine options type.
+ * @template {SimpleMachineOptions2} L - Additional options type.
  */
 export class AsyncInterpreter<
   const C extends CommonConfig3 = CommonConfig3,
@@ -117,11 +109,15 @@ export class AsyncInterpreter<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const L extends SimpleMachineOptions2 = EmptyObject,
 > extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
-  readonly TYPE = 'async';
   /**
-   * @deprecated Use the `machine` getter instead to access the inner machine of this interpreter.
+   * The interpreter type identifier, set to `'async'`.
+   */
+  readonly TYPE = 'async';
+
+  /**
+   * Gets the inner class {@linkcode AsyncMachine} being interpreted.
    *
-   * The {@linkcode AsyncMachine} machine being interpreted.
+   * @returns The inner class {@linkcode AsyncMachine} instance.
    */
   get machine() {
     return super.machine as AsyncMachine<
@@ -138,7 +134,9 @@ export class AsyncInterpreter<
   }
 
   /**
-   * Create a new {@linkcode AsyncInterpreter} instance with the same initial configuration as this instance.
+   * Creates a new class {@linkcode AsyncInterpreter} instance with the same initial configuration as this instance.
+   *
+   * @returns A fresh class {@linkcode AsyncInterpreter} instance.
    */
   get renew() {
     const out = new AsyncInterpreter<
@@ -160,6 +158,9 @@ export class AsyncInterpreter<
     return out;
   }
 
+  /**
+   * Initializes internal scheduler instances for context, state value, events, and status notifications.
+   */
   #initSchedulers = () => {
     this.__schedulerContexts = createScheduler();
     this.__schedulerValue = createScheduler();
@@ -168,10 +169,11 @@ export class AsyncInterpreter<
   };
 
   /**
-   * Where everything is initialized
-   * @param machine, the {@linkcode AsyncMachine} to interpret.
-   * @param mode, the {@linkcode Mode} of the interpreter, default is 'strict'.
-   * @param exact, whether to use exact intervals or not, default is false.
+   * Initializes a new instance of the class {@linkcode AsyncInterpreter}.
+   *
+   * @param machine - The class {@linkcode AsyncMachine} or interface {@linkcode AnyMachine} to interpret.
+   * @param mode - The type {@linkcode Mode} of the interpreter, defaults to `'strict'`.
+   * @param exact - Whether to use exact interval calculations, defaults to `true`.
    */
   constructor(
     machine: AnyMachine<E, A, Pc, Tc>,
@@ -184,8 +186,9 @@ export class AsyncInterpreter<
   }
 
   /**
-   * Performs all self transitions and activities of this {@linkcode AsyncInterpreter} service.
-   * @remarks Throw if the number of self transitions exceeds {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
+   * Performs all self transitions and activities of this class {@linkcode AsyncInterpreter} service.
+   *
+   * @throws Throws an error if the number of self transitions exceeds the constant {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
    */
   protected _next = async () => {
     // eslint-disable-next-line no-useless-assignment
@@ -211,6 +214,13 @@ export class AsyncInterpreter<
     this.__selfTransitionsCounter = 0;
   };
 
+  /**
+   * Internal function to execute an action asynchronously with optional timeout tracking.
+   *
+   * @param action - The action function to execute.
+   *
+   * @returns A promise resolving to the result of the action execution.
+   */
   protected __performAction: AsyncPerformActionLater_F<Eo, Pc, Tc, Ta> =
     action => {
       this._iterate();
@@ -224,12 +234,15 @@ export class AsyncInterpreter<
     };
 
   /**
-   * Force transition to performs inner actions despite the current state.
-   * This is useful for sending events that are not part of the current state transitions.
-   * @param transitions, the transitions to perform.
-   * @returns the result of the transitions.
+   * Forces state transitions to perform inner actions regardless of current state transitions.
+   * Useful for sending events that are not explicitly part of the current state transitions.
    *
-   * @see {@linkcode TransitionConfig} for more information about transitions.
+   * @param from - The origin state path or `false` if not specified.
+   * @param forceSend - The type {@linkcode EventArgObject} event to send forcibly.
+   *
+   * @returns A promise resolving when the forced send action finishes.
+   *
+   * @see -- type {@linkcode TransitionConfig}
    */
   protected __performForceSendAction = async (
     from: string | false,
@@ -245,6 +258,14 @@ export class AsyncInterpreter<
     }
   };
 
+  /**
+   * Executes extended actions such as sending events, scheduling, pausing/resuming activities or timers, and handling forced or resent events.
+   *
+   * @param from - The origin state path or `false`.
+   * @param params - The type {@linkcode ExtendedActionsParams} containing extended action definitions.
+   *
+   * @returns A promise resolving to the result of forced or resent actions.
+   */
   protected __performsExtendedActions = async (
     from: string | false,
     {
@@ -277,6 +298,14 @@ export class AsyncInterpreter<
     return result;
   };
 
+  /**
+   * Executes a single action, updates working status, merges context changes, and performs extended actions.
+   *
+   * @param from - The origin state path or `false`.
+   * @param action - The action function to perform.
+   *
+   * @returns A promise resolving when the action execution completes.
+   */
   protected __executeAction: AsyncPerformAction_F<Eo, Pc, Tc, Ta> = async (
     from,
     action,
@@ -291,6 +320,14 @@ export class AsyncInterpreter<
     await this.__performsExtendedActions(from, extendeds);
   };
 
+  /**
+   * Sequentially converts and executes multiple action describers or functions.
+   *
+   * @param from - The origin state path or `false`.
+   * @param actions - Array of type {@linkcode WithDescriber} action definitions to execute.
+   *
+   * @returns A promise resolving when all actions have finished.
+   */
   protected __performActions = async (
     from: string | false,
     ...actions: WithDescriber[]
@@ -303,12 +340,26 @@ export class AsyncInterpreter<
     }
   };
 
+  /**
+   * Executes a predicate guard evaluation function asynchronously.
+   *
+   * @param predicate - The predicate guard function to evaluate.
+   *
+   * @returns The boolean result or a promise resolving to a boolean.
+   */
   #performPredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
     predicate => {
       this._iterate();
       return predicate(this.__cloneState);
     };
 
+  /**
+   * Evaluates a predicate guard while updating internal working status.
+   *
+   * @param predicate - The predicate guard function to execute.
+   *
+   * @returns The boolean result or a promise resolving to a boolean.
+   */
   #executePredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
     predicate => {
       this.__setStatus('busy');
@@ -319,6 +370,13 @@ export class AsyncInterpreter<
       return out;
     };
 
+  /**
+   * Converts a type {@linkcode GuardConfig} into an executable predicate guard function.
+   *
+   * @param guard - The guard configuration to convert.
+   *
+   * @returns An executable predicate function or `undefined` if conversion failed.
+   */
   override toPredicateFn = (guard: GuardConfig) => {
     const events = this.__machine.eventsList;
     const guards = this.__machine.guards;
@@ -334,6 +392,13 @@ export class AsyncInterpreter<
     return;
   };
 
+  /**
+   * Evaluates a series of type {@linkcode GuardConfig} guards in order.
+   *
+   * @param guards - List of guard configurations to evaluate.
+   *
+   * @returns A promise resolving to `true` if all guards pass, `false` otherwise.
+   */
   #performPredicates = async (...guards: GuardConfig[]) => {
     if (guards.length < 1) return true;
     const predicates = guards.map(this.toPredicateFn).filter(isDefined);
@@ -345,11 +410,25 @@ export class AsyncInterpreter<
     return true;
   };
 
+  /**
+   * Evaluates a delay function asynchronously against state.
+   *
+   * @param delay - The delay evaluator function.
+   *
+   * @returns The computed delay in milliseconds.
+   */
   #performDelay: AsyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this._iterate();
     return delay(this.__cloneState);
   };
 
+  /**
+   * Evaluates a delay function while updating internal working status.
+   *
+   * @param delay - The delay evaluator function to execute.
+   *
+   * @returns The computed delay duration in milliseconds.
+   */
   #executeDelay: AsyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this.__setStatus('busy');
     const out = this.#performDelay(delay);
@@ -357,6 +436,14 @@ export class AsyncInterpreter<
     return out;
   };
 
+  /**
+   * Registers and executes periodic activities (interval timers) associated with a given state path.
+   *
+   * @param from - The state path originating the activities.
+   * @param _activities - Map of delay strings to activity definitions.
+   *
+   * @returns An array of activity identifier strings.
+   */
   __executeActivities: ExecuteActivities_F = (from, _activities) => {
     const entries = Object.entries(_activities);
     const outs: string[] = [];
@@ -439,12 +526,25 @@ export class AsyncInterpreter<
     return outs;
   };
 
+  /**
+   * Triggers and executes initial entry actions defined on the machine's initial state node.
+   *
+   * @returns A promise resolving when initial entry actions finish, or `undefined`.
+   */
   protected __startInitialEntries = () => {
     const actions = getEntries(this.__initialConfig);
     if (actions.length < 1) return;
     return this.__performActions(false, ...actions);
   };
 
+  /**
+   * Performs a single state transition, checking guards and invoking exit/entry actions.
+   *
+   * @param from - The current state path string or `false`.
+   * @param transition - The target state path string or transition configuration.
+   *
+   * @returns A promise resolving to the target state path string if successful, or `false` otherwise.
+   */
   protected __performTransition: AsyncPerformTransition_F = async (
     from,
     transition,
@@ -473,6 +573,14 @@ export class AsyncInterpreter<
     return false;
   };
 
+  /**
+   * Evaluates a sequence of transitions until one succeeds.
+   *
+   * @param from - The current state path string or `false`.
+   * @param transitions - The list of transition configurations to evaluate.
+   *
+   * @returns A promise resolving to the matched target state path string, or `false` if none matched.
+   */
   protected __performTransitions: AsyncPerformTransitions_F = async (
     from,
     ...transitions
@@ -486,6 +594,14 @@ export class AsyncInterpreter<
     return false;
   };
 
+  /**
+   * Executes finalizer actions and guards associated with an actor or activity completion.
+   *
+   * @param from - The state path string.
+   * @param _finally - The type {@linkcode FinallyConfig} configuration or list of configurations.
+   *
+   * @returns A promise resolving when finalizers are executed.
+   */
   protected __performFinally = async (
     from: string,
     _finally?: FinallyConfig,
@@ -520,6 +636,11 @@ export class AsyncInterpreter<
     return;
   };
 
+  /**
+   * Gets the internal class {@linkcode AsyncMachine} typed instance.
+   *
+   * @returns The internal class {@linkcode AsyncMachine}.
+   */
   get #machine() {
     return this.__machine as unknown as AsyncMachine<
       C,
@@ -535,10 +656,23 @@ export class AsyncInterpreter<
     >;
   }
 
+  /**
+   * Indicates whether long-running promises without default timeout limits are enabled.
+   *
+   * @returns `true` if long runs are enabled, `false` otherwise.
+   */
   get longRuns() {
     return this.#machine.longRuns;
   }
 
+  /**
+   * Schedules delayed (`after`) transitions for a given state path.
+   *
+   * @param from - The state path originating the delayed transition.
+   * @param after - The type {@linkcode DelayedTransitions} configuration map.
+   *
+   * @returns A promise resolving to the target state path string or `false`.
+   */
   #performAfter: AsyncPerformAfter_F = (from, after) => {
     const entries = Object.entries(after);
     const promises: TimeoutPromise<string | false>[] = [];
@@ -590,16 +724,34 @@ export class AsyncInterpreter<
     return promise;
   };
 
+  /**
+   * Gets the flattened nodes map of the current machine.
+   *
+   * @returns The flattened nodes map.
+   */
   get #flat() {
     return this.machine.flat;
   }
 
+  /**
+   * Evaluates `always` (transitional/eventless) transitions for a given state path.
+   *
+   * @param from - The originating state path.
+   * @param alway - The transition configuration(s) for always events.
+   *
+   * @returns A promise resolving to the matched state path string or `false`.
+   */
   #performAlways: AsyncPerformAlway_F = (from, alway) => {
     this.__changeEvent(transformEventArg(ALWAYS_EVENT));
     const always = toArray<TransitionConfig>(alway);
     return this.__performTransitions(from, ...always);
   };
 
+  /**
+   * Collects all delayed transition definitions across all flattened nodes in the machine.
+   *
+   * @returns An array of tuples containing originating state path and delayed transition configurations.
+   */
   get #collectedAfters() {
     const entriesFlat = Object.entries(this.#flat);
     const entries: [from: string, after: DelayedTransitions][] = [];
@@ -615,7 +767,9 @@ export class AsyncInterpreter<
   }
 
   /**
-   * Get all brut self transitions of the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode AsyncInterpreter} service.
+   * Collects raw self transitions (`always` and `after`) across all machine states.
+   *
+   * @returns A map of state paths to their collected raw transition routines.
    */
   protected get __collectedSelfTransitions0() {
     const entries = new Map<string, AsyncCollected0>();
@@ -636,6 +790,11 @@ export class AsyncInterpreter<
     return entries;
   }
 
+  /**
+   * Evaluates self transitions active within the current state value.
+   *
+   * @returns A promise resolving when self transitions process, or `undefined` if none exist.
+   */
   protected get __collectedSelfTransitions() {
     const entries = Array.from(this.__collectedSelfTransitions0).filter(
       ([from]) => this.__isInsideValue(from),
@@ -673,6 +832,11 @@ export class AsyncInterpreter<
     return anyPromises('self-transition', ...out);
   }
 
+  /**
+   * Instantiates and subscribes to pausable observable emitters active within the current state value.
+   *
+   * @returns An array of collected active pausable subscription handles.
+   */
   protected __collectPausables = () => {
     type _Emitter = EmitterConfig & {
       emitterFn: AsyncEmitterFunction<Eo, Pc, Tc, Ta>;
@@ -733,6 +897,11 @@ export class AsyncInterpreter<
       .flat();
   };
 
+  /**
+   * Executes active self transitions and flushes subscriber updates if the state changes.
+   *
+   * @returns A promise resolving when self transitions complete.
+   */
   protected __performSelfTransitions = async () => {
     this.__setStatus('busy');
     const previousState = structuredClone(this.__state);
@@ -744,7 +913,11 @@ export class AsyncInterpreter<
   };
 
   /**
-   * Add options to the inner {@linkcode AsyncMachine} of this {@linkcode AsyncInterpreter} service.
+   * Adds options to the inner class {@linkcode AsyncMachine} of this class {@linkcode AsyncInterpreter} service.
+   *
+   * @param helper - Option configuration helper or partial options.
+   *
+   * @returns A new class {@linkcode AsyncInterpreter} with the updated options applied.
    */
   addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
@@ -753,9 +926,9 @@ export class AsyncInterpreter<
   /**
    * Provides options for the interpreter and returns a new interpreter instance.
    *
-   * @param option a function that provides options for the machine.
-   * Options can include actions, guards, delays, promises, and child machines.
-   * @returns a new interpreter instance with the provided options applied.
+   * @param option - Function or object providing options for the machine (actions, guards, delays, child machines, etc.).
+   *
+   * @returns A new class {@linkcode AsyncInterpreter} instance with the provided options applied.
    */
   provideOptions: AsyncProvideMachineOptions_F<
     C,
@@ -774,6 +947,13 @@ export class AsyncInterpreter<
 
   // #region Next
 
+  /**
+   * Pre-processes sending an event, resolving state transitions without triggering asynchronous activity runs.
+   *
+   * @param event - The type {@linkcode EventObject} to process.
+   *
+   * @returns A promise resolving to the next configuration node or `undefined` if unchanged.
+   */
   protected __presend: _AsyncSend_F<Eo> = async event => {
     this.__sent = true;
     this.__changeEvent(event);
@@ -804,10 +984,11 @@ export class AsyncInterpreter<
   };
 
   /**
-   * Sends an event without cheching to the current {@linkcode AsyncInterpreter} service.
+   * Sends an event to the current class {@linkcode AsyncInterpreter} service.
    *
-   * @param _event - the {@linkcode EventArg} event to send.
+   * @param _event - The type {@linkcode EventArgObject} event argument to send.
    *
+   * @returns A promise resolving when event processing and state updates complete.
    */
   protected __send = async (_event: EventArgObject<Eo>) => {
     const event = transformEventArg(_event);
@@ -821,6 +1002,11 @@ export class AsyncInterpreter<
     } else return this.__setStatus('working');
   };
 
+  /**
+   * Spawns child interpreter services configured for active states and connects event/context subscriptions.
+   *
+   * @returns An array of spawned child service records.
+   */
   protected __collectChildren = () => {
     type _Child = ChildConfig & {
       childFn: CommonChildFunction2<Eo, Pc, Tc, Ta>;
@@ -930,6 +1116,13 @@ export class AsyncInterpreter<
       });
   };
 
+  /**
+   * Instantiates a child machine interpreter using a child factory function.
+   *
+   * @param child - The factory function for creating the child machine instance.
+   *
+   * @returns The created child interpreter instance of interface {@linkcode AnyInterpreter}.
+   */
   #executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
     const instance = child(this.__cloneState);
     return instance;
@@ -938,12 +1131,14 @@ export class AsyncInterpreter<
   // #endregion
 
   /**
-   * Sends an event to a specific child service by its ID.
+   * Sends an event to a specific spawned child service by its identifier.
    *
-   * @param to - The ID of the child service to which the event will be sent.
-   * @param : the {@linkcode EventObject} event to send to the child service.
+   * @template {EventObject} T - The event object type.
    *
-   * @see {@linkcode send} for sending events to the current service.
+   * @param to - The identifier of the child service target.
+   * @param event - The type {@linkcode EventObject} event to send to the child service.
+   *
+   * @returns A promise resolving when the event is sent to all matching child services.
    */
   protected __sendTo = async <T extends EventObject>(
     to: string,
@@ -960,16 +1155,11 @@ export class AsyncInterpreter<
 }
 
 /**
- * Retrieves the {@linkcode AsyncInterpreter} service from the given {@linkcode AnyMachine} machine.
+ * Utility type to infer the class {@linkcode AsyncInterpreter} type corresponding to a given interface {@linkcode AnyMachine}.
  *
- * @template : type {@linkcode AnyMachine} [M] - The type of the machine from which to retrieve the interpreter.
+ * @template {AnyMachine} M - The machine type from which to infer the interpreter type.
  *
- * @see {@linkcode ConfigFrom}
- * @see {@linkcode PrivateContextFrom}
- * @see {@linkcode ContextFrom}
- * @see {@linkcode EventsMapFrom}
- * @see {@linkcode PromiseesMapFrom}
- * @see {@linkcode MachineOptionsFrom}
+ * @see -- type {@linkcode ConfigFrom}, -- type {@linkcode PrivateContextFrom}, -- type {@linkcode ContextFrom}, -- type {@linkcode EventsMapFrom}, -- type {@linkcode ActorsMapFrom}, -- type {@linkcode TagFrom}, -- type {@linkcode EventsFrom}, -- type {@linkcode AllPathsFrom}, -- type {@linkcode MachineOptionsFrom}
  */
 export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
   ConfigFrom<M>,
@@ -984,13 +1174,11 @@ export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
 >;
 
 /**
- * Creates an {@linkcode AsyncInterpreter} service from the given {@linkcode MachineConfig} machine.
+ * Creates and initializes a class {@linkcode AsyncInterpreter} instance for a given machine.
  *
- * @param machine - The {@linkcode MachineConfig} machine to create the interpreter from.
- * @param options - The options for the interpreter, including context, private context, mode, and exact.
- * @returns an {@linkcode AsyncInterpreter} service.
+ * @param _args - Machine instance and options parameters.
  *
- * @see {@linkcode MachineConfig}
+ * @returns A newly created class {@linkcode AsyncInterpreter} instance.
  */
 export const interpretAsync: AsyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;

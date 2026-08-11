@@ -14,7 +14,6 @@ describe('Delay is too long', () => {
 
   const service = interpret(machine);
   const { useStateValue, start, stop, waiter } = constructTests(
-    vi,
     service,
     ({ waiter }) => ({ waiter: waiter(DEFAULT_MAX_TIME_PROMISE * 2) }),
   );

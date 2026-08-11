@@ -13,13 +13,13 @@ import { Badge } from './badge';
 import { Card, CardHeader, CardTitle } from './card';
 
 const EmptyPlaceholder: FC = () => (
-  <div className='text-center py-8 text-slate-500 text-xs italic'>
+  <div className='py-8 text-center text-xs text-slate-500 italic'>
     No transitions logged yet. Start service and send events!
   </div>
 );
 
 const ScrollSeekPlaceholder: FC = () => (
-  <div className='text-center py-8 text-slate-500 text-xs italic'>
+  <div className='py-8 text-center text-xs text-slate-500 italic'>
     This can scroll fast
   </div>
 );
@@ -36,7 +36,7 @@ export const Logs = ({ service }: Props) => {
     len => (
       <Badge
         variant='secondary'
-        className='text-[10px] w-28 justify-center'
+        className='w-28 justify-center text-[10px]'
       >
         New {len} Events
       </Badge>
@@ -64,9 +64,9 @@ export const Logs = ({ service }: Props) => {
   return (
     <Card className='flex flex-col'>
       <CardHeader className='pb-3'>
-        <CardTitle className='text-sm flex items-center justify-between'>
+        <CardTitle className='flex items-center justify-between text-sm'>
           <span className='flex items-center gap-2'>
-            <History className='w-4 h-4 text-purple-400' /> Transition Log
+            <History className='h-4 w-4 text-purple-400' /> Transition Log
           </span>
           <button
             type='button'
@@ -74,10 +74,10 @@ export const Logs = ({ service }: Props) => {
               e.stopPropagation();
               setLogs();
             }}
-            className='px-2.5 py-1 text-xs font-sans rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer z-10'
+            className='z-10 flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-700 bg-slate-800 px-2.5 py-1 font-sans text-xs text-slate-300 transition-all hover:bg-slate-700'
             title='Fetch current machine state'
           >
-            <RefreshCw className='w-3.5 h-3.5 text-yellow-700' />
+            <RefreshCw className='h-3.5 w-3.5 text-yellow-700' />
             <span>fetch</span>
           </button>
           <Length />
@@ -87,7 +87,7 @@ export const Logs = ({ service }: Props) => {
       <Virtuoso
         data={logs}
         context={logs.length}
-        className='overflow-y-auto pr-1 flex flex-col space-y-2'
+        className='flex flex-col space-y-2 overflow-y-auto pr-1'
         style={{ height }}
         fixedItemHeight={ITEMS_SIZE}
         computeItemKey={(_, log) => log.id}
@@ -101,7 +101,7 @@ export const Logs = ({ service }: Props) => {
 
             return (
               <button
-                className='px-2 py-3 rounded-lg bg-slate-950/70 border border-slate-800/60 text-xs flex items-center justify-between gap-2 w-full cursor-pointer'
+                className='flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-slate-800/60 bg-slate-950/70 px-2 py-3 text-xs'
                 onClick={() =>
                   service.send({
                     type: 'TOGGLE_LOG_EXPAND',
@@ -109,8 +109,8 @@ export const Logs = ({ service }: Props) => {
                   })
                 }
               >
-                <div className='space-y-0.5 flex-col'>
-                  <div className='font-mono font-bold text-amber-300 text-start'>
+                <div className='flex-col space-y-0.5'>
+                  <div className='text-start font-mono font-bold text-amber-300'>
                     {_index} {' => '} {item.event}
                   </div>
 
@@ -124,7 +124,7 @@ export const Logs = ({ service }: Props) => {
                     State → {JSON.stringify(item.state, null, 2)}
                   </div>
                 </div>
-                <div className='text-[10px] text-slate-500 font-mono shrink-0'>
+                <div className='shrink-0 font-mono text-[10px] text-slate-500'>
                   {item.timestamp}
                 </div>
               </button>
@@ -143,7 +143,7 @@ Logs.test = (({ service }) => {
     len => (
       <Badge
         variant='secondary'
-        className='text-[10px] w-28 justify-center'
+        className='w-28 justify-center text-[10px]'
       >
         New {len} Events
       </Badge>
@@ -168,9 +168,9 @@ Logs.test = (({ service }) => {
   return (
     <Card className='flex flex-col'>
       <CardHeader className='pb-3'>
-        <CardTitle className='text-sm flex items-center justify-between'>
+        <CardTitle className='flex items-center justify-between text-sm'>
           <span className='flex items-center gap-2'>
-            <History className='w-4 h-4 text-purple-400' /> Transition Log
+            <History className='h-4 w-4 text-purple-400' /> Transition Log
           </span>
 
           <Length />
@@ -180,7 +180,7 @@ Logs.test = (({ service }) => {
       <Virtuoso
         data={logs}
         context={logs.length}
-        className='overflow-y-auto pr-1 flex flex-col space-y-2'
+        className='flex flex-col space-y-2 overflow-y-auto pr-1'
         style={{ height }}
         fixedItemHeight={ITEMS_SIZE}
         computeItemKey={(_, log) => log.id}
@@ -194,7 +194,7 @@ Logs.test = (({ service }) => {
 
             return (
               <button
-                className='px-2 py-3 rounded-lg bg-slate-950/70 border border-slate-800/60 text-xs flex items-center justify-between gap-2 w-full cursor-pointer'
+                className='flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-slate-800/60 bg-slate-950/70 px-2 py-3 text-xs'
                 onClick={() =>
                   service.send({
                     type: 'TOGGLE_LOG_EXPAND',
@@ -202,8 +202,8 @@ Logs.test = (({ service }) => {
                   })
                 }
               >
-                <div className='space-y-0.5 flex-col'>
-                  <div className='font-mono font-bold text-amber-300 text-start'>
+                <div className='flex-col space-y-0.5'>
+                  <div className='text-start font-mono font-bold text-amber-300'>
                     {_index} {' => '} {item.event}
                   </div>
 
@@ -217,7 +217,7 @@ Logs.test = (({ service }) => {
                     State → {JSON.stringify(item.state, null, 2)}
                   </div>
                 </div>
-                <div className='text-[10px] text-slate-500 font-mono shrink-0'>
+                <div className='shrink-0 font-mono text-[10px] text-slate-500'>
                   {item.timestamp}
                 </div>
               </button>

@@ -64,6 +64,11 @@ export type EventsR<T extends EventsMap> = {
   [K in keyof T & string]: { type: K; payload: T[K] };
 }[keyof T & string];
 
+/**
+ * Internal helper to construct reduced emitter event union types.
+ *
+ * @template T - Emitter configuration map.
+ */
 type _EmitterConfigR<T extends EmitterConfigMap> =
   Unionize<T> extends infer U extends EmitterConfigMap
     ? U extends any
@@ -79,6 +84,11 @@ type _EmitterConfigR<T extends EmitterConfigMap> =
       : never
     : never;
 
+/**
+ * Internal helper to construct reduced child actor event union types.
+ *
+ * @template T - Child actor configuration map.
+ */
 type _ChildConfigR<T extends ChildConfigMap> = {
   [key in keyof T & string]: Unionize<T[key]> extends infer U
     ? U extends any

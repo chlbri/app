@@ -38,35 +38,19 @@
   },
   "scripts": {
     "build": "pnpm rm:lib && pnpm run rolldown",
-    "_ci": "pnpm run lint && pnpm run test",
+    "_ci": "pnpm run lint && pnpm run build",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
-    "ci:admin": "CI_START=$(date +%s) && pnpm run rm && pnpm run upgrade:fast && pnpm run _ci && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_START))s\n\"",
-    "config": "pnpm install",
-    "config:off": "pnpm run config --offline",
-    "_lint": "oxlint",
-    "lint:fix": "oxlint --fix",
-    "generate": "app-cli generate -c ./src/__tests__",
-    "lint": "pnpm run fmt && pnpm run lint:fix",
-    "lint:watch": "onchange --await-write-finish 1500 -d 10000 -v \"**/*.ts\" -- pnpm run lint",
-    "build:watch": "onchange --await-write-finish 1500 -d 10000 -v \"**/*.ts\" -- pnpm run build",
-    "p-q": "pretty-quick",
-    "posttest": "pnpm run fmt",
-    "prepublishOnly": "",
-    "pretest": "pnpm run build && pnpm run generate",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "rinit": "pnpm clean --lockfile && pnpm run rm && pnpm run config",
-    "rinit:off": "pnpm run rm && pnpm run config:off",
+    "_lint": "oxlint",
+    "postbuild": "pnpm run size && pnpm run fmt",
+    "lint:fix": "oxlint --fix",
+    "lint": "pnpm run fmt && pnpm run lint:fix",
+    "p-q": "pretty-quick",
     "rm": "pnpx rimraf ./node_modules ./pnpm-lock.yaml",
     "rm:lib": "pnpx rimraf ./lib",
-    "rolldown": "rolldown -c",
-    "test:coverage": "vitest run",
-    "test": "pnpm run test:coverage",
-    "test:only": "pnpm run test:coverage --no-coverage",
-    "test:ui": "vitest --ui",
-    "test:watch": "vitest",
-    "upgrade": "pnpm dlx @bemedev/upgrade-npm-package",
-    "upgrade:fast": "pnpm up --latest"
+    "size": "size-limit",
+    "rolldown": "rolldown -c"
   },
   "devDependencies": {
     "@bemedev/app": "workspace:^",
@@ -75,19 +59,35 @@
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/sleep": "^0.2.2",
     "@bemedev/typings": "^1.3.0",
+    "@size-limit/file": "^13.0.3",
     "@types/node": "^26.2.0",
     "@vitest/coverage-v8": "^4.1.10",
     "@vitest/ui": "^4.1.10",
-    "oxfmt": "^0.62.0",
-    "oxlint": "^1.77.0",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
     "pretty-quick": "^4.2.2",
     "rimraf": "^6.1.3",
     "rolldown": "1.2.3",
+    "size-limit": "^13.0.3",
     "tslib": "^2.8.1",
     "tsx": "^4.23.12",
     "typescript": "6.0.3",
     "vitest": "^4.1.10"
   },
+  "size-limit": [
+    {
+      "path": "lib/*.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "lib/*.cjs",
+      "limit": "10 KB"
+    },
+    {
+      "path": "lib/*.d.ts",
+      "limit": "10 KB"
+    }
+  ],
   "peerDependencies": {
     "@bemedev/app": "workspace:^",
     "vitest": "^4.1.10"

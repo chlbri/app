@@ -16,6 +16,7 @@ export const _merge = deepmergeCustom({
   },
 });
 
+/** Sentinel key for filtering undefined values during object merging. */
 const UNEFINED_KEY = '##__FilterUndefined__';
 
 /**

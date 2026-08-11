@@ -29,7 +29,6 @@ describe('Pause activities on events', () => {
   });
 
   const { send, waiter, useIterator, start, dispose } = constructTests(
-    vi,
     service,
     ({ contexts, waiter }) => ({
       useIterator: contexts(

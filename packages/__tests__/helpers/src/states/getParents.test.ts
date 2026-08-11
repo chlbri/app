@@ -15,11 +15,7 @@ describe('getParents', () => {
     // Parents include: root, the path itself, and intermediate paths
 
     test('#01 => result is correct', () =>
-      expect(result).toStrictEqual([
-        '/',
-        '/state1/state2',
-        '/state1',
-      ]));
+      expect(result).toStrictEqual(['/', '/state1/state2', '/state1']));
   });
 
   test('#03 => should return correct parents for deeply nested state', () =>
@@ -46,9 +42,5 @@ describe('getParents', () => {
     expect(getParents('//state1')).toEqual(['/', '//state1']));
 
   test('#07 => should handle path ending with delimiter correctly', () =>
-    expect(getParents('/state1/')).toEqual([
-      '/',
-      '/state1/',
-      '/state1',
-    ]));
+    expect(getParents('/state1/')).toEqual(['/', '/state1/', '/state1']));
 });

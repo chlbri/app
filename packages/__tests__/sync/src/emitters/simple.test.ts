@@ -52,7 +52,6 @@ describe('Simple Machine2 (from Machine1)', () => {
     useStateValue,
     useMock,
   } = constructTests(
-    vi,
     service,
     ({ contexts, sender, waiter, tupleOf, getIndex }) => ({
       useContext: contexts(({ context }) => context),

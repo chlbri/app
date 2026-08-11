@@ -31,7 +31,6 @@ describe('Integration testing for interpret, Children', () => {
     const service = interpret(parent, { pContext: 0 });
 
     const { start, waiter, useIterator, dispose } = constructTests(
-      vi,
       service,
       ({ contexts, waiter }) => ({
         useIterator: contexts(({ pContext }) => pContext, 'iterator'),
@@ -60,7 +59,6 @@ describe('Integration testing for interpret, Children', () => {
     });
 
     const { start, waiter, useIterator, send, dispose } = constructTests(
-      vi,
       service,
       ({ contexts, waiter, sender }) => ({
         useIterator: contexts(
@@ -103,7 +101,6 @@ describe('Integration testing for interpret, Children', () => {
 
     let calls = 0;
     const { useNext, useNotify, start } = constructTests(
-      vi,
       service,
       ({ getIndex, tupleOf, sender }) => {
         return {

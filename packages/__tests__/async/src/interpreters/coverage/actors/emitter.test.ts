@@ -35,7 +35,7 @@ describe('Coverage actors', () => {
 
     const service = interpret(machine, { context: 0 });
     const { start, stop, useStateValue, useNext, waiter, useContext } =
-      constructTests(vi, service, ({ sender, waiter, contexts }) => ({
+      constructTests(service, ({ sender, waiter, contexts }) => ({
         useNext: sender('NEXT'),
         waiter: waiter(SHORT),
         useContext: contexts(({ context }) => context),

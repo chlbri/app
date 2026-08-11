@@ -26,4 +26,7 @@ export const typings = {
   any: type,
 };
 
+/**
+ * Helper schema validators re-exported from `@bemedev/typings/helpers`.
+ */
 export { helpers };

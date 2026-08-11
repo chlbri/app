@@ -202,8 +202,9 @@ export type NodeConfig<T extends TargetDef> = CommonNodeConfig<
       }
     : {
         readonly states: {
-          [key in keyof T['states']]: T['states'][key] extends infer TK extends
-            TargetDef
+          [
+            key in keyof T['states']
+          ]: T['states'][key] extends infer TK extends TargetDef
             ? NodeConfig<TK>
             : CommonNodeConfig & {
                 readonly type?: 'atomic';
@@ -279,6 +280,11 @@ export type WorkingStatus =
   | 'stopped'
   | 'busy';
 
+/**
+ * Internal helper to extract state tags from a flat node map.
+ *
+ * @template | {@linkcode FlatMapN} `Flat` - Flat map of state nodes.
+ */
 type _ExtractTagsFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]: Flat[key] extends infer S extends {
     tags: SingleOrArrayL<string>;
@@ -369,13 +375,22 @@ export type StatePextended<
 > = { pContext: Pc } & StateP<E, Tc, T>;
 // #endregion
 
+/**
+ * Internal helper to compute a recursive flat map of state node configurations.
+ *
+ * @template | {@linkcode NodeConfig3} `T` - Node configuration object.
+ * @template | {@linkcode boolean} `withChildren` - Whether to include child states.
+ * @template | {@linkcode string} `Remaining` - Current path prefix.
+ */
 type FlatMapNodeConfig<
   T extends NodeConfig3,
   withChildren extends boolean = true,
   Remaining extends string = '/',
 > = 'states' extends keyof T
   ? {
-      readonly [key in keyof T['states'] as `${Remaining}${key & string}`]: withChildren extends true
+      readonly [
+        key in keyof T['states'] as `${Remaining}${key & string}`
+      ]: withChildren extends true
         ? T['states'][key]
         : Omit<T['states'][key], 'states'>;
     } & {
@@ -404,6 +419,7 @@ export type FlatMapN<
 };
 // #endregion
 
+/** Internal pattern type for always transition event keys. */
 type AlwaysEnd = `${string}.always` | `${string}.always.[${number}]`;
 
 /**

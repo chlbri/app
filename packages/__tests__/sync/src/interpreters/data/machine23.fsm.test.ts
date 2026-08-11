@@ -39,7 +39,7 @@ describe('Machine 23 -> Tests for inner machines', () => {
         stop,
         send,
         useWaiter,
-      } = constructTests(vi, service, ({ contexts, waiter, sender }) => ({
+      } = constructTests(service, ({ contexts, waiter, sender }) => ({
         useWaiter: waiter(DELAY),
         useInput: contexts(({ context }) => context?.input, 'input'),
         useWrite: sender('WRITE'),

@@ -1,6 +1,6 @@
 import { _any, tupleOf } from '@bemedev/app/bemedev';
 import { identity, sleep } from '@bemedev/app/utils';
-import { expect, test } from 'vitest';
+import { vi, expect, test } from 'vitest';
 import type { ConstructTests_F } from './constructTests.types';
 import { fakeWaiter } from './helpers';
 import { buildIndex, buildInvite } from './invite';
@@ -19,7 +19,6 @@ export { ConstructTests_F };
  * @returns Constructed test helpers object.
  */
 export const constructTests: ConstructTests_F = (
-  vi,
   service,
   helper,
   startIndex = 0,

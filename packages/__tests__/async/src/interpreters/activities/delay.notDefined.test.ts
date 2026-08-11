@@ -10,7 +10,6 @@ describe('delay is not defined', () => {
 
   const service = interpret(machine);
   const { send, useStateValue, start, waiter } = constructTests(
-    vi,
     service,
     ({ waiter }) => ({ waiter: waiter(DELAY) }),
   );

@@ -50,6 +50,11 @@ export type AsyncConfig<
     NoExtraKeysTargetDef<TargetDef>,
 > = CommonConfig<Paths>;
 
+/**
+ * Extracts state tags union from an async machine configuration `T`.
+ *
+ * @template T - Async configuration type {@linkcode AsyncConfig}.
+ */
 export type ExtractTagsFromConfig<T extends AsyncConfig> =
   ExtractTagsFromFlat<FlatMapN<T>>;
 
@@ -109,6 +114,11 @@ type _GetKeyGuardsFromFlat<Flat extends FlatMapN> = {
     : never;
 }[keyof Flat];
 
+/**
+ * Internal helper type to extract emitter source keys from a flat map of nodes.
+ *
+ * @template | {@linkcode FlatMapN} `Flat` - Flat map of nodes.
+ */
 type _GetEmitterSrcKeyFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]: ExtractEmitterSrcKeyFromTransitions<
     Extract<Flat[key], TransitionsConfig>
@@ -119,6 +129,11 @@ type _GetEmitterSrcKeyFromFlat<Flat extends FlatMapN> = {
     : never;
 }[keyof Flat];
 
+/**
+ * Internal helper type to extract child keys from a flat map of nodes.
+ *
+ * @template | {@linkcode FlatMapN} `Flat` - Flat map of nodes.
+ */
 type _GetChildKeysFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]: ExtractChildKeysFromTransitions<
     Extract<Flat[key], TransitionsConfig>
@@ -127,9 +142,10 @@ type _GetChildKeysFromFlat<Flat extends FlatMapN> = {
 
 /**
  * Type representing all event types from a flat map of nodes.
- * @template : {@linkcode FlatMapN} [Flat] - type of the flat map of nodes
- * @returns A type representing all event types from this flat map.
  *
+ * @template | {@linkcode FlatMapN} `Flat` - Type of the flat map of nodes.
+ *
+ * @returns A type representing all event types from this flat map.
  */
 type _GetEventKeysFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]: Flat[key] extends { on: infer V } ? keyof V : never;
@@ -253,11 +269,26 @@ export type GetEventsFromConfig<C extends AsyncConfig> = GetEventsFromFlat<
 export type GetEventsFromMachine<T extends KeyU<'config'>> =
   GetEventsFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
 
+/**
+ * Record type mapping emitter source keys to emitter definition.
+ *
+ * @template Flat - Flat map of nodes.
+ */
 export type GetEmittersSrcKeyFromFlat<Flat extends FlatMapN> = Record<
   _GetEmitterSrcKeyFromFlat<Flat>,
   EmitterDef
 >;
 
+/**
+ * Record type mapping emitter source keys to async emitter function signatures.
+ *
+ * @template Flat - Flat map of nodes.
+ * @template E - Event object type.
+ * @template A - Actors config map type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
 export type GetEmittersSrcFromFlat<
   Flat extends FlatMapN,
   E extends EventObject = EventObject,
@@ -301,6 +332,11 @@ export type GetEmittersSrcFromConfig<C extends AsyncConfig> =
 export type GetEmittersSrcFromMachine<T extends KeyU<'config'>> =
   GetEmittersSrcFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
 
+/**
+ * Extracts child machine source keys mapping to their events record.
+ *
+ * @template Flat - Flat map of nodes.
+ */
 export type GetChildrenSrcKeysFromFlat<
   Flat extends FlatMapN,
   G extends _GetChildKeysFromFlat<Flat> = _GetChildKeysFromFlat<Flat>,
@@ -308,6 +344,11 @@ export type GetChildrenSrcKeysFromFlat<
   [key in G['src']]: Record<Extract<G, { src: key }>['on'], any>;
 };
 
+/**
+ * Detailed child machine source keys extraction mapping contexts and events.
+ *
+ * @template Flat - Flat map of nodes.
+ */
 export type GetChildrenSrcKeysFromFlat2<
   Flat extends FlatMapN,
   G extends _GetChildKeysFromFlat<Flat> = _GetChildKeysFromFlat<Flat>,
@@ -321,6 +362,15 @@ export type GetChildrenSrcKeysFromFlat2<
     : never;
 };
 
+/**
+ * Function type signature for instantiating an async child machine.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ * @template R - Result type with `eventsMap`.
+ */
 export type AsyncChildFunction2<
   E extends EventObject = EventObject,
   Pc = any,
@@ -329,6 +379,16 @@ export type AsyncChildFunction2<
   R extends { eventsMap: any } = { eventsMap: any },
 > = FnR<E, Pc, Tc, T, MaybePromise<R>>;
 
+/**
+ * Record type mapping child keys to async child machine functions.
+ *
+ * @template Flat - Flat map of nodes.
+ * @template E - Event object type.
+ * @template A - Actors config map type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
 export type GetChildrenSrcFromFlat<
   Flat extends FlatMapN,
   E extends EventObject = EventObject,
@@ -376,6 +436,16 @@ export type GetChildrenSrcFromConfig<C extends AsyncConfig> =
 export type GetChildrenSrcFromMachine<T extends KeyU<'config'>> =
   GetChildrenSrcFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
 
+/**
+ * Structure containing all children and emitters from a flat map.
+ *
+ * @template Flat - Flat map of nodes.
+ * @template E - Event object type.
+ * @template A - Actors config map type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
 export type GetActorsFromFlat<
   Flat extends FlatMapN,
   E extends EventObject = EventObject,
@@ -388,6 +458,16 @@ export type GetActorsFromFlat<
   emitters: Partial<GetEmittersSrcFromFlat<Flat, E, A, Pc, Tc, T>>;
 };
 
+/**
+ * Structure containing all actors from a machine configuration `C`.
+ *
+ * @template C - Machine configuration type {@linkcode AsyncConfig}.
+ * @template E - Event object type.
+ * @template A - Actors config map type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
 export type GetActorsFromConfig<
   C extends AsyncConfig,
   E extends EventObject = EventObject,
@@ -397,6 +477,16 @@ export type GetActorsFromConfig<
   T extends string = string,
 > = GetActorsFromFlat<FlatMapN<C>, E, A, Pc, Tc, T>;
 
+/**
+ * Structure containing all actors from a machine type `M`.
+ *
+ * @template M - Machine object type.
+ * @template E - Event object type.
+ * @template A - Actors config map type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
 export type GetActorsFromMachine<
   M extends KeyU<'config'>,
   E extends EventObject = EventObject,
@@ -413,11 +503,21 @@ export type GetActorsFromMachine<
   T
 >;
 
+/**
+ * Actor source keys structure extracted from a flat map.
+ *
+ * @template Flat - Flat map of nodes.
+ */
 export type GetActorsSrcKeysFromFlat<Flat extends FlatMapN> = {
   children: GetChildrenSrcKeysFromFlat<Flat>;
   emitters: GetEmittersSrcKeyFromFlat<Flat>;
 };
 
+/**
+ * Recomposes property key path `P` into an object type.
+ *
+ * @template P - Property path string keys.
+ */
 export type Recomposer<P extends Keys> =
   Equals<P, '.'> extends true
     ? any
@@ -425,6 +525,11 @@ export type Recomposer<P extends Keys> =
       ? any
       : Recompose<Record<Exclude<P, '' | '.'>, unknown>>;
 
+/**
+ * Detailed actor source keys structure extracted from a flat map.
+ *
+ * @template Flat - Flat map of nodes.
+ */
 export type GetActorsSrcKeysFromFlat2<
   Flat extends FlatMapN,
   G extends _GetChildKeysFromFlat<Flat> = _GetChildKeysFromFlat<Flat>,
@@ -436,15 +541,39 @@ export type GetActorsSrcKeysFromFlat2<
   pContext: Recomposer<G['contexts'][keyof G['contexts']]>;
 };
 
+/**
+ * Actor keys extracted from machine configuration `C`.
+ *
+ * @template C - Machine configuration type {@linkcode AsyncConfig}.
+ */
 export type GetActorKeysFromConfig<C extends AsyncConfig> =
   GetActorsSrcKeysFromFlat<FlatMapN<C>>;
 
+/**
+ * Detailed actor keys extracted from machine configuration `C`.
+ *
+ * @template C - Machine configuration type {@linkcode AsyncConfig}.
+ */
 export type GetActorKeysFromConfig2<C extends AsyncConfig> =
   GetActorsSrcKeysFromFlat2<FlatMapN<C>>;
 
+/**
+ * Actor keys extracted from machine type `T`.
+ *
+ * @template T - Machine type.
+ */
 export type GetActorKeysFromMachine<T extends KeyU<'config'>> =
   GetActorKeysFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
 
+/**
+ * Structure representing an async child machine definition.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ * @template R - Result type.
+ */
 export type AsyncChild<
   E extends EventObject = EventObject,
   Pc = any,
@@ -459,6 +588,15 @@ export type AsyncChild<
   contexts: string[];
 };
 
+/**
+ * Options for async machine registered with type {@linkcode RegisterOptions}.
+ *
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ * @template Eo - Event object type.
+ * @template O - Register options type.
+ */
 export type AsyncMachineOptions2<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -503,10 +641,20 @@ export type AsyncSimpleMachineOptions<
   }>;
 }>;
 
+/**
+ * Extracts context keys from child machine object `T`.
+ *
+ * @template T - Child object shape with `contexts`.
+ */
 export type ExtractContextsKeyFromChild<
   T extends { contexts: Record<string, string> },
 > = keyof T['contexts'];
 
+/**
+ * Extracts event keys from child machine object `T`.
+ *
+ * @template T - Child object shape with `on`.
+ */
 export type ExtractEventsKeyFromChild<
   T extends { on: Record<string, any> },
 > = keyof T['on'];

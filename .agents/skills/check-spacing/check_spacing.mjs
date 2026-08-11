@@ -7,7 +7,7 @@ const tests = [];
 let i = 0;
 while (i < lines.length) {
   const line = lines[i];
-  if (/^\s+test(?:\.\w+)*\(/ .test(line)) {
+  if (/^\s+test(?:\.\w+)*\(/.test(line)) {
     const isSingle = /^\s+test(?:\.\w+)*\(.*\);\s*(?:\/\/.*)?$/.test(line);
     if (isSingle) {
       tests.push({ lineNum: i + 1, type: 'single', endLine: i + 1 });
@@ -37,7 +37,7 @@ let violations = 0;
 for (let x = 0; x < tests.length - 1; x++) {
   const t1 = tests[x];
   const t2 = tests[x + 1];
-  
+
   // Check if there is a block/scope boundary between t1 and t2
   let hasDescribeBoundary = false;
   for (let l = t1.endLine; l < t2.lineNum - 1; l++) {
@@ -67,12 +67,8 @@ for (let x = 0; x < tests.length - 1; x++) {
         `gap=${gap} expected=${expected} ` +
         `(${t1.type} → ${t2.type})`,
     );
-    console.log(
-      `  line ${t1.lineNum}: ${lines[t1.lineNum - 1].trim()}`,
-    );
-    console.log(
-      `  line ${t2.lineNum}: ${lines[t2.lineNum - 1].trim()}`,
-    );
+    console.log(`  line ${t1.lineNum}: ${lines[t1.lineNum - 1].trim()}`);
+    console.log(`  line ${t2.lineNum}: ${lines[t2.lineNum - 1].trim()}`);
   }
 }
 if (violations === 0) console.log('No spacing violations found.');

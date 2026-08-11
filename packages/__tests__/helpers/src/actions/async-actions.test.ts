@@ -52,7 +52,6 @@ describe('Async action helpers', () => {
     const service = interpret(machine, { context: { name: '' } });
 
     const { start, send, useName, waiter, stop } = constructTests(
-      vi,
       service,
       ({ contexts: constructContexts, waiter }) => ({
         useName: constructContexts(({ context }) => context.name, 'name'),
@@ -83,10 +82,7 @@ describe('Async action helpers', () => {
             await sleep(TINY_DELAY);
             return 'Bob';
           },
-          {
-            max: 5_000,
-            catch: emptyActionFn,
-          },
+          { max: 5_000, catch: emptyActionFn },
         ),
       },
     }));
@@ -94,7 +90,6 @@ describe('Async action helpers', () => {
     const service = interpret(machine, { context: { name: '' } });
 
     const { start, LOAD, useName, waiter } = constructTests(
-      vi,
       service,
       ({ contexts: constructContexts, waiter, sender }) => ({
         useName: constructContexts(({ context }) => context?.name, 'name'),
@@ -127,7 +122,6 @@ describe('Async action helpers', () => {
     const service = interpret(machine, { context: { name: '' } });
 
     const { start, send, useName, waiter } = constructTests(
-      vi,
       service,
       ({ contexts: constructContexts, waiter }) => ({
         useName: constructContexts(({ context }) => context?.name, 'name'),
@@ -159,7 +153,6 @@ describe('Async action helpers', () => {
     const service = interpret(machine);
 
     const { start, send, waiter, checkEffect } = constructTests(
-      vi,
       service,
       ({ waiter, getIndex, tupleOf }) => ({
         waiter: waiter(TINY_DELAY + 50),
@@ -194,7 +187,7 @@ describe('Async action helpers', () => {
     const service = interpret(machine, { context: { errored: false } });
 
     const { start, send, waiter, checkErrorTimes, checkEffect } =
-      constructTests(vi, service, ({ waiter, getIndex, tupleOf }) => ({
+      constructTests(service, ({ waiter, getIndex, tupleOf }) => ({
         waiter: waiter(TINY_DELAY + 50),
         checkErrorTimes: (times: number) =>
           tupleOf(
@@ -243,7 +236,6 @@ describe('Async action helpers', () => {
     } as any);
 
     const { start, send, waiter, checkWarnings } = constructTests(
-      vi,
       service,
       ({ waiter, getIndex, tupleOf }) => ({
         waiter: waiter(TINY_DELAY + 50),
@@ -279,7 +271,6 @@ describe('Async action helpers', () => {
 
     const { start, send, useName, waiter, stop, callError } =
       constructTests(
-        vi,
         service,
         ({ contexts: constructContexts, waiter, tupleOf, getIndex }) => ({
           useName: constructContexts(
@@ -288,9 +279,12 @@ describe('Async action helpers', () => {
           ),
           waiter: waiter(TINY_DELAY / 4),
           callError: (times = 0) =>
-            tupleOf(`#${getIndex()} => call error fn ${times} times`, () => {
-              expect(error).toHaveBeenCalledTimes(times);
-            }),
+            tupleOf(
+              `#${getIndex()} => call error fn ${times} times`,
+              () => {
+                expect(error).toHaveBeenCalledTimes(times);
+              },
+            ),
         }),
       );
 
@@ -323,7 +317,6 @@ describe('Async action helpers', () => {
     const service = interpret(machine, { context: 0 });
 
     const { start, send, useValue, waiter } = constructTests(
-      vi,
       service,
       ({ contexts: constructContexts, waiter }) => ({
         useValue: constructContexts(({ context }) => context, 'context'),
@@ -358,7 +351,6 @@ describe('Async action helpers', () => {
     const service = interpret(machine, { context: 0 });
 
     const { start, send, useValue, waiter, checkEffect } = constructTests(
-      vi,
       service,
       ({ contexts: constructContexts, waiter, tupleOf, getIndex }) => ({
         useValue: constructContexts(({ context }) => context, 'context'),

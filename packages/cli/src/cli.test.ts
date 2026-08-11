@@ -153,7 +153,9 @@ export default createMachine(
     onTestFinished(() => console.warn('generated file for dry-run'));
   });
 
-  test('#08 => delete the only machine left', async ({ onTestFinished }) => {
+  test('#08 => delete the only machine left', async ({
+    onTestFinished,
+  }) => {
     await sleep(WAITER / 5).then(() => {
       const exists = existsSync(
         resolve(process.cwd(), `${DIR}/app.gen.ts`),

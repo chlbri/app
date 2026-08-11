@@ -64,6 +64,9 @@ export class AsyncMachine<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const L extends SimpleMachineOptions2 = EmptyObject,
 > extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
+  /**
+   * Machine type identifier string.
+   */
   readonly TYPE = 'async';
 
   /**
@@ -417,6 +420,9 @@ export class AsyncMachine<
     return out as any;
   };
 
+  /**
+   * Flag indicating whether the machine contains long-running operations.
+   */
   readonly longRuns: boolean;
 
   /**
@@ -580,6 +586,13 @@ export class AsyncMachine<
   };
 }
 
+/**
+ * Helper function to create a new instance of class {@linkcode AsyncMachine}.
+ *
+ * @param config - The machine configuration object.
+ *
+ * @returns A new instance of class {@linkcode AsyncMachine}.
+ */
 export const createAsyncMachine: CommonCreateMachine_F = config => {
   return new AsyncMachine(config);
 };

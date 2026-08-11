@@ -20,7 +20,6 @@ describe('Integration testing for interpret, Children', () => {
     const service = interpret(machine);
 
     const { useStateValue, useWaiter, start } = constructTests(
-      vi,
       service,
       ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
@@ -41,7 +40,6 @@ describe('Integration testing for interpret, Children', () => {
     const service = interpret(machine);
 
     const { useStateValue, useWaiter, start } = constructTests(
-      vi,
       service,
       ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
@@ -67,7 +65,6 @@ describe('Integration testing for interpret, Children', () => {
     const service = interpret(machine);
 
     const { useStateValue, useWaiter, start } = constructTests(
-      vi,
       service,
       ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );

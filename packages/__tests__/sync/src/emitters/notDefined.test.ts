@@ -14,7 +14,7 @@ describe('Tests not defined emitters -> Machine1', () => {
   });
 
   const service = interpret(machineEmitter1, { context: 0 });
-  const { start } = constructTests(vi, service);
+  const { start } = constructTests(service);
 
   test(...start());
 

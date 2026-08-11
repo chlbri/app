@@ -12,12 +12,12 @@ import {
 export const Route = createFileRoute('/about')({
   component: () => {
     return (
-      <main className='h-full text-slate-100 font-sans p-4 sm:p-8 mx-auto max-w-4xl'>
+      <main className='mx-auto h-full max-w-4xl p-4 font-sans text-slate-100 sm:p-8'>
         <Card className='p-4 sm:p-8'>
           <CardHeader>
-            <div className='flex items-center gap-2 mb-2'>
+            <div className='mb-2 flex items-center gap-2'>
               <Badge variant='purple'>
-                <Sparkles className='w-3.5 h-3.5' /> About @bemedev
+                <Sparkles className='h-3.5 w-3.5' /> About @bemedev
                 Workspace
               </Badge>
             </div>
@@ -29,24 +29,24 @@ export const Route = createFileRoute('/about')({
               shadcn-inspired components.
             </CardDescription>
           </CardHeader>
-          <CardContent className='space-y-6 text-sm text-slate-300 leading-relaxed'>
+          <CardContent className='space-y-6 text-sm leading-relaxed text-slate-300'>
             <p>
               This app is designed to visually test and interact with{' '}
-              <code className='text-emerald-400 font-mono'>
+              <code className='font-mono text-emerald-400'>
                 @bemedev/app
               </code>{' '}
               core state machine logic and its React middleware package{' '}
-              <code className='text-teal-400 font-mono'>
+              <code className='font-mono text-teal-400'>
                 @bemedev/app-reactjs
               </code>{' '}
-              (<code className='text-teal-400 font-mono'>useService</code>
+              (<code className='font-mono text-teal-400'>useService</code>
               ).
             </p>
 
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4'>
-              <div className='p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2'>
+            <div className='grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2'>
+              <div className='space-y-2 rounded-xl border border-slate-800 bg-slate-900 p-4'>
                 <div className='flex items-center gap-2 font-semibold text-white'>
-                  <CheckCircle2 className='w-4 h-4 text-emerald-400' />{' '}
+                  <CheckCircle2 className='h-4 w-4 text-emerald-400' />{' '}
                   State Selection
                 </div>
                 <p className='text-xs text-slate-400'>
@@ -55,9 +55,9 @@ export const Route = createFileRoute('/about')({
                 </p>
               </div>
 
-              <div className='p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2'>
+              <div className='space-y-2 rounded-xl border border-slate-800 bg-slate-900 p-4'>
                 <div className='flex items-center gap-2 font-semibold text-white'>
-                  <CheckCircle2 className='w-4 h-4 text-teal-400' /> Deep
+                  <CheckCircle2 className='h-4 w-4 text-teal-400' /> Deep
                   Equality Comparison
                 </div>
                 <p className='text-xs text-slate-400'>

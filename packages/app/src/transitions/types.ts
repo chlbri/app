@@ -281,6 +281,11 @@ export type DelayedTransitions<Paths = string> = RecordS<
   SingleOrArrayT<Paths>
 >;
 
+/**
+ * Extracts event key path strings from a type {@linkcode DelayedTransitions} object.
+ *
+ * @template T - The delayed transitions configuration object.
+ */
 export type GetEventKeysFromDelayed<T> = {
   [key in keyof T & string]: T[key] extends AnyArray
     ? `${key}.[${IndexesOfArray<T[key]>}]`
@@ -345,6 +350,11 @@ export type TransitionsConfig<Paths extends string = string> = {
   readonly actors?: RecordS<ActorConfig<Paths>>;
 };
 
+/**
+ * Internal partial transitions configuration structure.
+ *
+ * @template Paths - State path union string type.
+ */
 export type _TransitionsConfig<Paths extends string = string> = Partial<
   Record<'on' | 'after', Record<string, SoA<_TransitionConfig<Paths>>>> & {
     actors: RecordS<ActorConfig<Paths>>;
@@ -352,18 +362,38 @@ export type _TransitionsConfig<Paths extends string = string> = Partial<
   }
 >;
 
+/**
+ * Extracts event key strings from an emitter configuration.
+ *
+ * @template T - Emitter configuration type {@linkcode EmitterConfig}.
+ */
 export type GetEventKeysFromEmitter<T extends EmitterConfig> =
   GetEventKeysFromDelayed<Pick<T, 'next' | 'error'>>;
 
+/**
+ * Extracts event key strings from a child machine configuration.
+ *
+ * @template T - Child configuration type {@linkcode ChildConfig}.
+ */
 export type GetEventKeysFromMachineConfig<T extends ChildConfig> =
   `on.${GetEventKeysFromDelayed<T['on']>}`;
 
+/**
+ * Extracts event key strings from an actor configuration.
+ *
+ * @template T - Actor configuration type.
+ */
 export type GetEventKeysFromActor<T> = T extends EmitterConfig
   ? GetEventKeysFromEmitter<T>
   : T extends ChildConfig
     ? GetEventKeysFromMachineConfig<T>
     : never;
 
+/**
+ * Extracts all event key paths from a transitions configuration `T`.
+ *
+ * @template T - Transitions configuration type.
+ */
 export type GetEventKeysFromTransitions<T> =
   | ('on' extends keyof T
       ? `on.${GetEventKeysFromDelayed<NotUndefined<T['on']>>}`
@@ -379,8 +409,9 @@ export type GetEventKeysFromTransitions<T> =
   | ('actors' extends keyof T
       ? `${NotUndefined<T['actors']> extends infer TP
           ? `actors.${{
-              [key in keyof TP &
-                string]: `${key}.${GetEventKeysFromActor<TP[key]>}`;
+              [
+                key in keyof TP & string
+              ]: `${key}.${GetEventKeysFromActor<TP[key]>}`;
             }[keyof TP & string]}`
           : never}`
       : never);
@@ -399,6 +430,11 @@ export type GetEventKeysFromTransitions<T> =
 export type ExtractDelayKeysFromTransitions<T extends TransitionsConfig> =
   T['after'] extends undefined ? never : keyof T['after'];
 
+/**
+ * Internal helper to extract actions from transition map structure.
+ *
+ * @template T - Transition map type.
+ */
 type _ExtractActionsFromMap<T> = ExtractActionsFromTransition<
   Extract<
     ReduceArray<NotUndefined<T>>,
@@ -416,19 +452,35 @@ type _ExtractActionsFromFinally<T> =
       : _ExtractActionsFromMap<Tr>
     : never;
 
+/**
+ * Extracts action keys from an emitter configuration.
+ *
+ * @template T - Emitter configuration type {@linkcode EmitterConfig}.
+ */
 export type ExtractActionKeysFromEmitter<T extends EmitterConfig> =
   | _ExtractActionsFromMap<T['next']>
   | _ExtractActionsFromMap<T['error']>
   | _ExtractActionsFromFinally<NotUndefined<T['complete']>>;
 
+/**
+ * Extracts action keys from a child configuration.
+ *
+ * @template T - Child configuration type {@linkcode ChildConfig}.
+ */
 export type ExtractActionKeysFromChild<T extends ChildConfig> =
   ExtractActionKeysFromDelayed<T['on']>;
 
+/**
+ * Extracts action keys from an actor configuration.
+ *
+ * @template T - Actor configuration type.
+ */
 export type ExtractActionKeysFromActor<T> = T extends EmitterConfig
   ? ExtractActionKeysFromEmitter<T>
   : T extends ChildConfig
     ? ExtractActionKeysFromChild<T>
     : never;
+
 /**
  * Extracts actions keys from a {@linkcode TransitionsConfig}.
  *
@@ -459,6 +511,11 @@ export type ExtractActionKeysFromTransitions<T extends TransitionsConfig> =
           }[keyof Ta]
         : never);
 
+/**
+ * Internal helper to extract guard keys from transition map structure.
+ *
+ * @template T - Transition map type.
+ */
 type _ExtractGuardKeysFromMap<T> = ExtractGuardKeysFromTransition<
   Extract<
     ReduceArray<NotUndefined<T>>,
@@ -466,14 +523,29 @@ type _ExtractGuardKeysFromMap<T> = ExtractGuardKeysFromTransition<
   >
 >;
 
+/**
+ * Extracts guard keys from an emitter configuration.
+ *
+ * @template T - Emitter configuration type {@linkcode EmitterConfig}.
+ */
 export type ExtractGuardKeysFromEmitter<T extends EmitterConfig> =
   | _ExtractGuardKeysFromMap<T['next']>
   | _ExtractGuardKeysFromMap<T['error']>
   | ExtractGuardKeysFromDelayed<T['complete']>;
 
+/**
+ * Extracts guard keys from a child machine configuration.
+ *
+ * @template T - Child configuration type {@linkcode ChildConfig}.
+ */
 export type ExtractGuardsKeysFromChild<T extends ChildConfig> =
   ExtractGuardKeysFromDelayed<T['on']>;
 
+/**
+ * Extracts guard keys from an actor configuration.
+ *
+ * @template T - Actor configuration type.
+ */
 export type ExtractGuardsKeysFromActor<T> = T extends EmitterConfig
   ? ExtractGuardKeysFromEmitter<T>
   : T extends ChildConfig
@@ -510,6 +582,13 @@ export type ExtractGuardKeysFromTransitions<T extends TransitionsConfig> =
         }[keyof Ta]
       : never);
 
+/**
+ * Extracts source keys from transitions configuration matching a specific filter shape.
+ *
+ * @template T - Transitions configuration type {@linkcode TransitionsConfig}.
+ * @template Filter - Filter shape object type.
+ * @template A - Actors record type.
+ */
 export type ExtractSrcKeyFromTransitions<
   T extends TransitionsConfig,
   Filter extends object = object,
@@ -518,10 +597,20 @@ export type ExtractSrcKeyFromTransitions<
   [K in keyof A]: A[K] extends Filter ? K : never;
 }[keyof A];
 
+/**
+ * Extracts emitter source keys from transitions configuration.
+ *
+ * @template T - Transitions configuration type {@linkcode TransitionsConfig}.
+ */
 export type ExtractEmitterSrcKeyFromTransitions<
   T extends TransitionsConfig,
 > = ExtractSrcKeyFromTransitions<T, { next: any }>;
 
+/**
+ * Extracts child keys from actors configuration object `T`.
+ *
+ * @template T - Actors configuration record.
+ */
 export type ExtractChildKeysFromActors<
   T extends NotUndefined<TransitionsConfig['actors']>,
 > = {
@@ -534,6 +623,11 @@ export type ExtractChildKeysFromActors<
     : never;
 }[keyof T];
 
+/**
+ * Extracts child machine keys from transitions configuration `T`.
+ *
+ * @template T - Transitions configuration type {@linkcode TransitionsConfig}.
+ */
 export type ExtractChildKeysFromTransitions<T extends TransitionsConfig> =
   ExtractChildKeysFromActors<NotUndefined<T['actors']>>;
 
@@ -560,6 +654,14 @@ export type AsyncTransition<
   readonly description?: string;
 };
 
+/**
+ * Represents a synchronous transition configuration in a state machine.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
 export type SyncTransition<
   E extends EventObject = EventObject,
   Pc = any,
@@ -572,6 +674,15 @@ export type SyncTransition<
   readonly description?: string;
 };
 
+/**
+ * Structure representing an async emitter configuration.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ * @template R - Value emitted by Observable `src`.
+ */
 export type AsyncEmiter4<
   E extends EventObject = EventObject,
   Pc = any,
@@ -585,6 +696,16 @@ export type AsyncEmiter4<
   catch: AsyncTransition<E, Pc, Tc, T>[];
   finally: AsyncTransition<E, Pc, Tc, T>[];
 };
+
+/**
+ * Structure representing a synchronous emitter configuration.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ * @template R - Value emitted by Observable `src`.
+ */
 export type SyncEmiter4<
   E extends EventObject = EventObject,
   Pc = any,
@@ -622,6 +743,14 @@ export type AsyncTransitions<
   children: CommonChild<E, Pc, Tc, T>[];
 };
 
+/**
+ * Represents all synchronous transitions inside a state config with fully defined functions.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
 export type SyncTransitions<
   E extends EventObject = EventObject,
   Pc = any,

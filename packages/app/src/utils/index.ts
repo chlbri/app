@@ -29,4 +29,13 @@ export * from './fn';
 export * from './typings';
 export * from '@bemedev/sleep';
 
+/**
+ * Performs a deep equality comparison between two values of type `T`.
+ *
+ * @template T - Type of the values being compared.
+ * @param a - First value.
+ * @param b - Second value.
+ *
+ * @returns `true` if `a` and `b` are deeply equal, `false` otherwise.
+ */
 export const deepEqual = <T>(a: T, b: T) => equal(a, b);

@@ -6,8 +6,8 @@ export function getRouter() {
     routeTree,
     defaultPreload: 'intent',
     defaultErrorComponent: err => (
-      <div class='p-6 bg-red-950/80 text-red-200 rounded-xl border border-red-800 font-mono text-sm'>
-        <h3 class='font-bold text-lg mb-2'>Router Error</h3>
+      <div class='rounded-xl border border-red-800 bg-red-950/80 p-6 font-mono text-sm text-red-200'>
+        <h3 class='mb-2 text-lg font-bold'>Router Error</h3>
         <pre class='overflow-x-auto whitespace-pre-wrap'>
           {err.error.stack ?? String(err.error)}
         </pre>
@@ -15,7 +15,7 @@ export function getRouter() {
     ),
     defaultNotFoundComponent: () => (
       <div class='p-12 text-center text-slate-400'>
-        <h2 class='text-2xl font-bold text-slate-200 mb-2'>
+        <h2 class='mb-2 text-2xl font-bold text-slate-200'>
           404 - Not Found
         </h2>
         <p>The requested route could not be found.</p>

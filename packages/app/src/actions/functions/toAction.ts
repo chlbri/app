@@ -35,6 +35,15 @@ export type ToAction_F = {
   ): AsyncAction2<Eo, Pc, Tc, T> | undefined;
 };
 
+/**
+ * Internal helper function to convert an action configuration into an executable function.
+ *
+ * @param action - Action configuration.
+ * @param actions - Map of actions.
+ * @param events - List of event names.
+ *
+ * @returns Executable action function or `undefined`.
+ */
 const _toAction = (action: any, actions: any, ...events: string[]) => {
   const name = fromDescriber(action);
   const fn = actions?.[name];
@@ -43,12 +52,14 @@ const _toAction = (action: any, actions: any, ...events: string[]) => {
 };
 
 /**
- * Converts an ActionConfig to a function that can be executed with the provided events list.
- * @param action of type {@linkcode WithDescriber}, action configuration to convert.
- * @param actions of type {@linkcode AsyncActionMap}, The actions map containing functions to execute.
- * @param events of type {@linkcode string[]}, list of events of the machine.
+ * Converts an action configuration of type {@linkcode WithDescriber} into an executable action function.
  *
- * @see {@linkcode PrimitiveObject}
- * @see {@linkcode reduceFnMap}
+ * @param action - Action configuration of type {@linkcode WithDescriber}.
+ * @param actions - Map of actions of type {@linkcode AsyncActionMap}.
+ * @param events - List of event names.
+ *
+ * @returns Executable action function of type {@linkcode AsyncAction2} or `undefined`.
+ *
+ * @see -- type {@linkcode PrimitiveObject}, {@linkcode reduceFnMap}
  */
 export const toAction: ToAction_F = _toAction as any;

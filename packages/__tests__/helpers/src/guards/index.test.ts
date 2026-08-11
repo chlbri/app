@@ -19,7 +19,7 @@ describe('Interpret for guards', () => {
 
     const service = interpret(machine);
 
-    const { start, useStateValue } = constructTests(vi, service);
+    const { start, useStateValue } = constructTests(service);
 
     test(...start());
     test(...useStateValue('state2'));
@@ -29,7 +29,7 @@ describe('Interpret for guards', () => {
     const machine = _machine2;
 
     const service = interpret(machine, defaultC);
-    const { useStateValue, send, start } = constructTests(vi, service);
+    const { useStateValue, send, start } = constructTests(service);
 
     test(...start(1));
     test(...useStateValue('state2', 2));
@@ -72,7 +72,7 @@ describe('Interpret for guards', () => {
   describe('#03 => describer', () => {
     const machine = _machine3;
     const service = interpret(machine, defaultC);
-    const { useStateValue, send, start } = constructTests(vi, service);
+    const { useStateValue, send, start } = constructTests(service);
 
     test(...start(1));
     test(...useStateValue('state2', 2));
@@ -127,7 +127,7 @@ describe('Interpret for guards', () => {
       pContext: { data: 'avion' },
     });
 
-    const { useStateValue, start } = constructTests(vi, service);
+    const { useStateValue, start } = constructTests(service);
 
     test(...start(1));
     test(...useStateValue('state2', 2));

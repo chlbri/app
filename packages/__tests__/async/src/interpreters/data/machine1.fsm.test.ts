@@ -9,7 +9,6 @@ describe('machine1', () => {
   const service1 = interpret(machine1, { context: { iterator: 0 } });
 
   const { useIterator, useWaiter, start, stop, dispose } = constructTests(
-    vi,
     service1,
     ({ contexts: constructContexts, waiter: constructWaiter }) => ({
       useWaiter: constructWaiter(DELAY),

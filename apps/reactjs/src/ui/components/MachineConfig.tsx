@@ -18,11 +18,11 @@ export const MachineConfig: React.FC<MachineConfigProps> = ({
     typeof config === 'string' ? config : JSON.stringify(config, null, 2);
 
   const Title = (titleProps: ExpandSlotProps) => (
-    <div className='w-full px-4 py-3 bg-slate-900 hover:bg-slate-800/80 text-slate-300 font-medium text-sm flex items-center justify-between transition-colors cursor-pointer'>
+    <div className='flex w-full cursor-pointer items-center justify-between bg-slate-900 px-4 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/80'>
       <div className='flex items-center space-x-2.5'>
-        <div className='p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'>
+        <div className='rounded-lg border border-indigo-500/20 bg-indigo-500/10 p-1.5 text-indigo-400'>
           <svg
-            className='w-4 h-4'
+            className='h-4 w-4'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'
@@ -36,17 +36,17 @@ export const MachineConfig: React.FC<MachineConfigProps> = ({
           </svg>
         </div>
         <h2 className='font-semibold text-slate-200'>{title}</h2>
-        <span className='px-2 py-0.5 text-[10px] uppercase font-mono tracking-wider font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-md'>
+        <span className='rounded-md border border-indigo-500/30 bg-indigo-500/20 px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider text-indigo-300 uppercase'>
           Config
         </span>
       </div>
 
       <div className='flex items-center space-x-2'>
-        <span className='text-xs text-slate-400 font-medium'>
+        <span className='text-xs font-medium text-slate-400'>
           {titleProps.isOpen ? 'Hide Config' : 'Show Config'}
         </span>
         <svg
-          className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
+          className={`h-4 w-4 text-slate-400 transition-transform duration-300 ${
             titleProps.isOpen ? 'rotate-180' : ''
           }`}
           fill='none'
@@ -65,7 +65,7 @@ export const MachineConfig: React.FC<MachineConfigProps> = ({
   );
 
   const Content = (
-    <div className='p-4 border-t border-slate-800 bg-slate-950 relative group'>
+    <div className='group relative border-t border-slate-800 bg-slate-950 p-4'>
       <button
         onClick={async e => {
           e.stopPropagation();
@@ -77,13 +77,13 @@ export const MachineConfig: React.FC<MachineConfigProps> = ({
             console.error('Failed to copy machine config:', err);
           }
         }}
-        className='absolute top-3 right-3 px-2.5 py-1 text-xs font-sans rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer z-10'
+        className='absolute top-3 right-3 z-10 flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-700 bg-slate-800 px-2.5 py-1 font-sans text-xs text-slate-300 transition-all hover:bg-slate-700'
         type='button'
       >
         {copied ? (
           <>
             <svg
-              className='w-3.5 h-3.5 text-emerald-400'
+              className='h-3.5 w-3.5 text-emerald-400'
               fill='none'
               viewBox='0 0 24 24'
               stroke='currentColor'
@@ -95,12 +95,12 @@ export const MachineConfig: React.FC<MachineConfigProps> = ({
                 d='M5 13l4 4L19 7'
               />
             </svg>
-            <span className='text-emerald-400 font-medium'>Copied!</span>
+            <span className='font-medium text-emerald-400'>Copied!</span>
           </>
         ) : (
           <>
             <svg
-              className='w-3.5 h-3.5 text-slate-400'
+              className='h-3.5 w-3.5 text-slate-400'
               fill='none'
               viewBox='0 0 24 24'
               stroke='currentColor'
@@ -116,7 +116,7 @@ export const MachineConfig: React.FC<MachineConfigProps> = ({
           </>
         )}
       </button>
-      <pre className='font-mono text-xs text-indigo-300 overflow-x-auto max-h-96 p-2 leading-relaxed selection:bg-indigo-500/30'>
+      <pre className='max-h-96 overflow-x-auto p-2 font-mono text-xs leading-relaxed text-indigo-300 selection:bg-indigo-500/30'>
         {formattedCode}
       </pre>
     </div>

@@ -21,17 +21,28 @@ class SubscriberClass<
   Eo extends EventObject = EventObject,
   St extends State<Eo, Tc, T> = State<Eo, Tc, T>,
 > {
-  #subscriber: FnMapR<Eo, Tc, T, void>;
-  #events: string[];
-
-  #state: TimerState = 'idle';
+  /**
+   * Internal subscriber handler callback or function map.
+   */
+  private _subscriber: FnMapR<Eo, Tc, T, void>;
 
   /**
-   * Function to compare two {@linkcode State}s for equality.
-   * @param previous of type {@linkcode State} - First state to compare
-   * @param next of type {@linkcode State} - Second state to compare
+   * Internal list of event string names.
    */
-  #equals: (previous: St, next: St) => boolean;
+  private _events: string[];
+
+  /**
+   * Internal timer execution state.
+   */
+  private _state: TimerState = 'idle';
+
+  /**
+   * Function to compare two type {@linkcode State} instances for equality.
+   *
+   * @param previous - First state to compare.
+   * @param next - Second state to compare.
+   */
+  private _equals: (previous: St, next: St) => boolean;
 
   /**
    * Subscriber identifier getter.
@@ -42,6 +53,7 @@ class SubscriberClass<
 
   /**
    * Creates an instance of type {@linkcode SubscriberClass}.
+   *
    * @param subscriber - Subscriber function or object map.
    * @param equals - Function to compare two state instances for equality.
    * @param _id - Unique identifier for the subscriber.
@@ -53,25 +65,24 @@ class SubscriberClass<
     private _id?: string,
     events: string[] = [],
   ) {
-    this.#subscriber = subscriber;
-    this.#events = events;
-    this.#equals = equals;
+    this._subscriber = subscriber;
+    this._events = events;
+    this._equals = equals;
 
-    this.#state = 'active';
+    this._state = 'active';
   }
 
   /**
-   * Function that returns a reduced function based on the subscriber's logic.
-   * @returns A function that reduces the state based on the subscriber's logic.
+   * Getter that returns a reduced state handling function based on subscriber logic.
    *
-   * @see {@linkcode isFunction}, {@linkcode nothing}
+   * @returns State handler function.
    */
-  get #reduceFn() {
-    const sub = this.#subscriber;
+  private get _reduceFn() {
+    const sub = this._subscriber;
     const check1 = isFunction(sub);
     if (check1) return _any(sub);
 
-    const keys = this.#events;
+    const keys = this._events;
 
     return ({ event, ...rest }: St) => {
       const _else = sub.else ?? nothing;
@@ -90,14 +101,18 @@ class SubscriberClass<
     };
   }
 
-  get #cannotPerform() {
-    return !(this.#state === 'active');
+  /**
+   * Check if subscriber is not in active state.
+   */
+  private get _cannotPerform() {
+    return !(this._state === 'active');
   }
 
   /**
    * Function to handle state changes.
-   * @param previous - Previous state
-   * @param next - Next state
+   *
+   * @param previous - Previous state.
+   * @param next - Next state.
    *
    * @remarks
    * This function checks if the subscriber can perform its action,
@@ -105,33 +120,33 @@ class SubscriberClass<
    * and if they are not equal, it calls the subscriber with the next state.
    */
   fn = (previous: St, next: St) => {
-    if (this.#cannotPerform) return;
+    if (this._cannotPerform) return;
 
-    const _equals = this.#equals(previous, next);
+    const _equals = this._equals(previous, next);
     if (_equals) return;
 
-    return this.#reduceFn(next);
+    return this._reduceFn(next);
   };
 
   /**
    * Subscriber state getter.
    */
   get state() {
-    return this.#state;
+    return this._state;
   }
 
   /**
    * Pauses the subscriber.
    */
   close = () => {
-    if (this.state !== 'disposed') this.#state = 'paused';
+    if (this.state !== 'disposed') this._state = 'paused';
   };
 
   /**
    * Activates the subscriber.
    */
   open = () => {
-    if (this.state !== 'disposed') this.#state = 'active';
+    if (this.state !== 'disposed') this._state = 'active';
   };
 
   /**
@@ -139,7 +154,7 @@ class SubscriberClass<
    */
   unsubscribe = () => {
     this.close();
-    this.#state = 'disposed';
+    this._state = 'disposed';
   };
 }
 

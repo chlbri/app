@@ -18,7 +18,8 @@ describe('reduceFnMap tests', () => {
       const result = reduceFnMap(directFn, ...Object.keys(events));
 
       // Assert
-      test('#01 => result is the direct function', () => expect(result).toBe(directFn));
+      test('#01 => result is the direct function', () =>
+        expect(result).toBe(directFn));
 
       test('#02 => result returns "result" when called', () =>
         expect(
@@ -65,7 +66,8 @@ describe('reduceFnMap tests', () => {
           tags: [],
         }));
 
-      test('#02 => result is "else result"', () => expect(result).toBe('else result'));
+      test('#02 => result is "else result"', () =>
+        expect(result).toBe('else result'));
     });
 
     describe('#03 => uses appropriate function based on event type', () => {
@@ -143,9 +145,12 @@ describe('reduceFnMap tests', () => {
           tags: [],
         }));
 
-      test('#04 => result1 is "event1 result"', () => expect(result1).toBe('event1 result'));
-      test('#05 => result2 is "event2 result"', () => expect(result2).toBe('event2 result'));
-      test('#06 => result3 is "else result"', () => expect(result3).toBe('else result'));
+      test('#04 => result1 is "event1 result"', () =>
+        expect(result1).toBe('event1 result'));
+      test('#05 => result2 is "event2 result"', () =>
+        expect(result2).toBe('event2 result'));
+      test('#06 => result3 is "else result"', () =>
+        expect(result3).toBe('else result'));
     });
 
     test('#04 => uses nothing as default else function', () => {
@@ -179,22 +184,17 @@ describe('reduceFnMap tests', () => {
       const directFn = () => 'result';
 
       // Act
-      const result = reduceFnMapReduced(
-        directFn,
-        ...Object.keys(events),
-      );
+      const result = reduceFnMapReduced(directFn, ...Object.keys(events));
 
       // Assert
-      test('#01 => result is the direct function', () => expect(result).toBe(directFn));
+      test('#01 => result is the direct function', () =>
+        expect(result).toBe(directFn));
 
       test('#02 => result returns "result" when called', () =>
         expect(
           result({
             context: {},
-            event: {
-              type: MAX_EXCEEDED_EVENT_TYPE,
-              payload: {},
-            },
+            event: { type: MAX_EXCEEDED_EVENT_TYPE, payload: {} },
             status: 'active' as any,
             value: 'test',
             tags: [],
@@ -213,10 +213,7 @@ describe('reduceFnMap tests', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(
-        fnMap,
-        ...Object.keys(events),
-      );
+      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
       const result = reducedFn({
         context: {},
         event: INIT_EVENT,
@@ -235,7 +232,8 @@ describe('reduceFnMap tests', () => {
           tags: [],
         }));
 
-      test('#02 => result is "else result"', () => expect(result).toBe('else result'));
+      test('#02 => result is "else result"', () =>
+        expect(result).toBe('else result'));
     });
 
     describe('#03 => uses appropriate function based on event type', () => {
@@ -256,10 +254,7 @@ describe('reduceFnMap tests', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(
-        fnMap,
-        ...Object.keys(events),
-      );
+      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
       const result1 = reducedFn({
         context: {},
         event: { type: 'EVENT1', payload: 'test' },
@@ -310,9 +305,12 @@ describe('reduceFnMap tests', () => {
           tags: [],
         }));
 
-      test('#04 => result1 is "event1 result"', () => expect(result1).toBe('event1 result'));
-      test('#05 => result2 is "event2 result"', () => expect(result2).toBe('event2 result'));
-      test('#06 => result3 is "else result"', () => expect(result3).toBe('else result'));
+      test('#04 => result1 is "event1 result"', () =>
+        expect(result1).toBe('event1 result'));
+      test('#05 => result2 is "event2 result"', () =>
+        expect(result2).toBe('event2 result'));
+      test('#06 => result3 is "else result"', () =>
+        expect(result3).toBe('else result'));
     });
 
     test('#04 => uses nothing as default else function', () => {
@@ -324,10 +322,7 @@ describe('reduceFnMap tests', () => {
       };
 
       // Act
-      const reducedFn = reduceFnMapReduced(
-        fnMap,
-        ...Object.keys(events),
-      );
+      const reducedFn = reduceFnMapReduced(fnMap, ...Object.keys(events));
       const result = reducedFn({
         context: {},
         event: { type: 'UNKNOWN', payload: null },

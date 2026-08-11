@@ -33,7 +33,7 @@ describe('My Machine Integration', () => {
   const service = interpret(myMachine, { context: { count: 0 } });
 
   // 1. Initialize the declarative helpers
-  const { start, useStateValue, send, stop } = constructTests(vi, service);
+  const { start, useStateValue, send, stop } = constructTests(service);
 
   // 2. Define sequence tests by spreading the generated tuples
   test(...start());
@@ -48,7 +48,7 @@ describe('My Machine Integration', () => {
 
 ## API Reference
 
-### `constructTests(vi, service, helper?, startIndex?)`
+### `constructTests( service, helper?, startIndex?)`
 
 | Parameter    | Type          | Description                                                                                   |
 | ------------ | ------------- | --------------------------------------------------------------------------------------------- |
@@ -141,7 +141,6 @@ describe('Timer Machine tests', () => {
   const service = interpret(timerMachine, { context: { duration: 1000 } });
 
   const { start, useStateValue, wait, send } = constructTests(
-    vi,
     service,
     ({ waiter }) => ({ waitSecond: waiter(1000) }),
   );

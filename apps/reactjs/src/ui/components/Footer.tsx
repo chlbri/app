@@ -3,7 +3,7 @@ export default function Footer() {
 
   return (
     <footer className='border-t border-slate-800 bg-slate-950 px-4 py-2 text-slate-400 backdrop-blur-xl'>
-      <div className='max-w-7xl mx-auto flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left'>
+      <div className='mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left'>
         <p className='m-0 text-sm'>
           &copy; {year} Your name here. All rights reserved.
         </p>
@@ -27,7 +27,7 @@ export default function Footer() {
             </svg>
           </a>
         </div>
-        <p className='m-0 text-xs font-bold uppercase tracking-wider text-emerald-400'>
+        <p className='m-0 text-xs font-bold tracking-wider text-emerald-400 uppercase'>
           Built with TanStack Start
         </p>
       </div>

@@ -11,7 +11,6 @@ describe('EDGES CASES', () => {
   describe('#01 => Atomic machine', () => {
     const service = interpret(atomicMachine, { context: 'fr' });
     const { setlang, start, stop, lang } = constructTests(
-      vi,
       service,
       ({ sender, contexts }) => ({
         setlang: sender('SET_LANG'),
@@ -34,7 +33,7 @@ describe('EDGES CASES', () => {
         context: { number1: 0, number2: 0 },
       });
       const { incTheArray, start, stop, number1, number2 } =
-        constructTests(vi, service, ({ sender, contexts }) => ({
+        constructTests(service, ({ sender, contexts }) => ({
           incTheArray: sender('INC'),
           number1: contexts(c => c.context.number1, 'number1'),
           number2: contexts(c => c.context.number2, 'number2'),
@@ -54,7 +53,7 @@ describe('EDGES CASES', () => {
         context: { number1: 0, number2: 0 },
       });
       const { incTheArray, start, stop, number1, number2 } =
-        constructTests(vi, service, ({ sender, contexts }) => ({
+        constructTests(service, ({ sender, contexts }) => ({
           incTheArray: sender('INC'),
           number1: contexts(c => c.context.number1, 'number1'),
           number2: contexts(c => c.context.number2, 'number2'),
@@ -74,7 +73,7 @@ describe('EDGES CASES', () => {
         context: { number1: 0, number2: 0 },
       });
       const { incTheArray, start, stop, number1, number2 } =
-        constructTests(vi, service, ({ sender, contexts }) => ({
+        constructTests(service, ({ sender, contexts }) => ({
           incTheArray: sender('INC'),
           number1: contexts(c => c.context.number1, 'number1'),
           number2: contexts(c => c.context.number2, 'number2'),
@@ -98,7 +97,7 @@ describe('EDGES CASES', () => {
         },
       });
       const { incDeep, start, stop, number1, number2, number3, number4 } =
-        constructTests(vi, service, ({ sender, contexts }) => ({
+        constructTests(service, ({ sender, contexts }) => ({
           incDeep: sender('INC'),
           number1: contexts(c => c.context.number1, 'number1'),
           number2: contexts(c => c.context.number2, 'number2'),
@@ -133,7 +132,7 @@ describe('EDGES CASES', () => {
         },
       });
       const { incDeep, start, stop, number1, number2, number3, number4 } =
-        constructTests(vi, service, ({ sender, contexts }) => ({
+        constructTests(service, ({ sender, contexts }) => ({
           incDeep: sender('INC'),
           number1: contexts(c => c.context.number1, 'number1'),
           number2: contexts(c => c.context.number2, 'number2'),
@@ -163,4 +162,3 @@ describe('EDGES CASES', () => {
     });
   });
 });
-

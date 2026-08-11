@@ -92,6 +92,22 @@ import type {
   TagFrom,
 } from './types';
 
+/**
+ * Abstract base class for state machine interpreters.
+ *
+ * Implements state management, event dispatching, subscriber notifications,
+ * child actor spawning, activity scheduling, and lifecycle management.
+ *
+ * @template {CommonConfig3} C - Machine configuration type extending type {@linkcode CommonConfig3}.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
+ * @template {EventsMap} E - Events map type extending type {@linkcode EventsMap}.
+ * @template {ActorsConfigMap} A - Actors configuration map type extending type {@linkcode ActorsConfigMap}.
+ * @template {string} Ta - Tag type string.
+ * @template {EventObject} Eo - Event object type extending interface {@linkcode EventObject}.
+ * @template {string} AllPaths - All paths type string.
+ * @template {SimpleMachineOptions2} Mo - Machine options type extending type {@linkcode SimpleMachineOptions2}.
+ */
 export abstract class CommonInterpreter<
   const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
@@ -105,6 +121,9 @@ export abstract class CommonInterpreter<
 >
   implements AnyInterpreter, Disposable, AsyncDisposable
 {
+  /**
+   * The inner class {@linkcode CommonMachine} instance associated with this interpreter.
+   */
   protected __machine!: CommonMachine<
     C,
     Pc,
@@ -117,177 +136,222 @@ export abstract class CommonInterpreter<
     Mo
   >;
 
+  /**
+   * Accessor for the inner class {@linkcode CommonMachine} instance.
+   *
+   * @returns The class {@linkcode CommonMachine} instance.
+   */
   get machine() {
     return this.__machine;
   }
 
+  /**
+   * The machine type classifier of type {@linkcode MachineType}.
+   */
   abstract readonly TYPE: MachineType;
 
   /**
-   * The current {@linkcode WorkingStatus} status of the this {@linkcode Interpreter} service.
+   * The current working status of this interpreter service of type {@linkcode WorkingStatus}.
    */
-  #status: WorkingStatus = 'idle';
+  private __status: WorkingStatus = 'idle';
 
   /**
-   * The public accessor of initial {@linkcode WorkingStatus} status of the this {@linkcode Interpreter} service.
+   * Public accessor for the current working status of type {@linkcode WorkingStatus}.
+   *
+   * @returns The current status of type {@linkcode WorkingStatus}.
    */
   get status() {
-    return this.#status;
+    return this.__status;
   }
 
+  /**
+   * The active node configuration state of this interpreter service.
+   */
   protected __config: any;
 
   /**
-   * The public accessor of current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service.
+   * Public accessor for the active node configuration state.
+   *
+   * @returns The current node configuration object.
    */
   get config() {
     return this.__config;
   }
 
-  #flat!: Record<string, any>;
+  /**
+   * Flattened map representation of the state machine nodes.
+   */
+  private __flat!: Record<string, any>;
 
   /**
-   * The current {@linkcode StateValue}> of this {@linkcode Interpreter} service.
+   * The current state value of this interpreter service of type {@linkcode StateValue}.
    */
   __value!: StateValue;
 
   /**
-   * The public accessor of current {@linkcode StateValue}> of this {@linkcode Interpreter} service.
+   * Public accessor for the current state value of type {@linkcode StateValue}.
+   *
+   * @returns The current state value of type {@linkcode StateValue}.
    */
   get value() {
     return this.__value;
   }
 
   /**
-   * The {@linkcode Mode} of this {@linkcode Interpreter} service
+   * The execution mode of this interpreter service of type {@linkcode Mode}.
    */
   protected __mode!: Mode;
 
   /**
-   * The initial {@linkcode Node} of the inner {@linkcode Machine}.
+   * The initial node resolved from the machine configuration.
    */
-  readonly #initialNode: any;
+  private readonly __initialNode: any;
 
+  /**
+   * Public accessor for the initial resolved node.
+   *
+   * @returns The initial node instance.
+   */
   get initialNode() {
-    return this.#initialNode;
+    return this.__initialNode;
   }
 
   /**
-   * The current {@linkcode Node} of this {@linkcode Interpreter} service.
+   * The current resolved state node instance.
    */
-  #node!: any;
+  private __node!: any;
 
   /**
-   * The accessor of current {@linkcode Node} of this {@linkcode Interpreter} service.
+   * Public accessor for the current resolved state node instance.
+   *
+   * @returns The current state node instance.
    */
   get node() {
-    return this.#node;
+    return this.__node;
   }
 
   /**
-   * an iiner ietrator to count the number of operations performed by this {@linkcode Interpreter} service.
+   * Internal step iterator count tracking transition operations performed by this interpreter.
    */
-  #iterator = 0;
+  private __iterator = 0;
 
   /**
-   * The current {@linkcode ToEvents} event of this {@linkcode Interpreter} service.
+   * The active event object currently processed by this interpreter service.
    */
-  #event: Eo = transformEventArg(INIT_EVENT);
+  private __event: Eo = transformEventArg(INIT_EVENT);
 
   /**
-   * The initial {@linkcode NodeConfigWithInitials} of the inner {@linkcode Machine}.
+   * The initial node configuration of the state machine.
    */
   protected readonly __initialConfig: any;
 
   /**
-   * The public accessor of initial {@linkcode NodeConfigWithInitials} of the inner {@linkcode Machine}.
+   * Public accessor for the initial node configuration of the state machine.
+   *
+   * @returns The initial node configuration object.
    */
   get initialConfig() {
     return this.__initialConfig;
   }
 
   /**
-   * The public accessor of initial {@linkcode StateValue} of the inner {@linkcode Machine}.
+   * Public accessor for the initial state value of the inner class {@linkcode CommonMachine}.
+   *
+   * @returns The initial state value of type {@linkcode StateValue}.
    */
   get initialValue() {
     return this.__machine.initialValue;
   }
 
   /**
-   * The initial {@linkcode Pc} private context of this {@linkcode Interpreter} service.
+   * The initial private context snapshot of type `Pc`.
    */
   protected __initialPpc!: Pc;
 
   /**
-   * The initial {@linkcode Tc} context of this {@linkcode Interpreter} service.
+   * The initial public context snapshot of type `Tc`.
    */
   protected __initialContext!: Tc;
 
   /**
-   * The current {@linkcode Pc} private context of this {@linkcode Interpreter} service.
+   * The active private context state of type `Pc`.
    */
   protected __pContext!: Pc;
 
   /**
-   * The current {@linkcode Tc} context of this {@linkcode Interpreter} service.
+   * The active public context state of type `Tc`.
    */
   protected __context!: Tc;
 
   /**
-   * The public accessor of current {@linkcode Tc} context of this {@linkcode Interpreter} service.
+   * Public accessor for the current public context of type `Tc`.
+   *
+   * @returns The active context object of type `Tc`.
    */
   get context() {
     return this.__context;
   }
 
   /**
-   * The previous {@linkcode State} of this {@linkcode Interpreter} service.
-   */
-
-  /**
-   * The current {@linkcode State} of this {@linkcode Interpreter} service.
+   * The active public state object of type {@linkcode State}.
    */
   protected __state!: State<Eo, Tc, Ta>;
 
   /**
-   * All {@linkcode AnyInterpreter} service subscribers of this {@linkcode Interpreter} service.
+   * Flag indicating whether an event has been dispatched during execution.
    */
-
   protected __sent = false;
 
+  /**
+   * Flag indicating whether precise interval timing is enabled for activity schedulers.
+   */
   protected __exact!: boolean;
 
   /**
-   * Public getter of the service subscribers of this {@linkcode Interpreter} service.
+   * Public accessor for all collected child interpreter services.
+   *
+   * @returns An array of collected child services of type {@linkcode CommonCollectedService}.
    */
   get children() {
     return this.__collectedChildren;
   }
 
   /**
-   * Returns a service subscriber of this {@linkcode Interpreter} service with a specific id.
-   * @param id - The id of the service subscriber to get.
-   * @return The service subscriber {@linkcode AnyInterpreter} of this {@linkcode Interpreter} service with the specified id, or undefined if not found.
+   * Retrieves a spawned child interpreter service by its identifier.
    *
-   * @see {@linkcode children} for all children.
+   * @param id - The unique identifier of the target child service.
+   *
+   * @returns The child service object of type {@linkcode CommonCollectedService}, or `undefined` if not found.
+   *
+   * @see {@linkcode children} for accessing all children.
    */
   getChildAt = (id: string) => this.children.find(f => f.id === id);
 
   /**
-   * Allias of {@linkcode getChildAt} function.
+   * Alias for method {@linkcode CommonInterpreter.getChildAt}.
    */
   at = this.getChildAt;
 
   /**
-   * Checks if the given value is inside the current state value.
-   * @param value - the state value to check if it is inside the current state value.
-   * @returns true if the value is inside the current state value, false otherwise.
+   * Checks whether a state path string is active within the current state value.
+   *
+   * @param value - The state path string to test.
+   *
+   * @returns `true` if the state path is active; otherwise, `false`.
    */
   protected __isInsideValue = (value: string) => {
     const out = this.__isInsideValue2(this.__value, value);
     return out;
   };
 
+  /**
+   * Evaluates if a given state path is active within a specific state value of type {@linkcode StateValue}.
+   *
+   * @param sv - The state value structure of type {@linkcode StateValue}.
+   * @param value - The state path string to evaluate.
+   *
+   * @returns `true` if the value is active within the state value; otherwise, `false`.
+   */
   protected __isInsideValue2 = (sv: StateValue, value: string) => {
     if (value === DEFAULT_DELIMITER) {
       return true;
@@ -303,33 +367,53 @@ export abstract class CommonInterpreter<
     return values.includes(state);
   };
 
+  /**
+   * Scheduler instance of type {@linkcode SimpleScheduler} managing state value update timing.
+   */
   protected __schedulerValue!: SimpleScheduler;
+
+  /**
+   * Scheduler instance of type {@linkcode SimpleScheduler} managing context mutation batching.
+   */
   protected __schedulerContexts!: SimpleScheduler;
+
+  /**
+   * Scheduler instance of type {@linkcode SimpleScheduler} managing event handling queues.
+   */
   protected __schedulerEvent!: SimpleScheduler;
+
+  /**
+   * Scheduler instance of type {@linkcode SimpleScheduler} managing working status transitions.
+   */
   protected __schedulerStatus!: SimpleScheduler;
 
   /**
-   * The id of the current {@linkcode Interpreter} service.
-   * Used for child machines identification.
+   * Optional unique identifier for this interpreter instance.
    */
   id?: string;
 
+  /**
+   * Optional parent state node path that spawned this interpreter.
+   */
   from?: string;
 
   /**
-   * The accessor of {@linkcode Mode} of this {@linkcode Interpreter} service
+   * Accessor for the execution mode of this interpreter of type {@linkcode Mode}.
+   *
+   * @returns The current mode of type {@linkcode Mode}.
    */
   get mode() {
     return this.__mode;
   }
 
   /**
-   * @deprecated
-   * Just use for testing
-   * @returns the current {@linkcode Pc} private context of this {@linkcode Interpreter} service.
-   * @remarks returns nothing in prod
+   * Accessor for private context, intended solely for test inspection.
    *
-   * @see {@linkcode context} to get the current context.
+   * @deprecated Use for testing only. Returns `undefined` in production.
+   *
+   * @returns The active private context object of type `Pc`, or `undefined` in production.
+   *
+   * @see {@linkcode context} to get the current public context.
    */
   get _pContext() {
     /* v8 ignore else -- @preserve */
@@ -343,20 +427,22 @@ export abstract class CommonInterpreter<
     /* v8 ignore stop -- @preserve */
   }
 
+  /**
+   * Indicates whether the interpreter has started and is currently operational.
+   *
+   * @returns `true` if the working status is neither `'idle'` nor `'stopped'`; otherwise, `false`.
+   */
   get isReady() {
-    return this.#status !== 'idle' && this.#status !== 'stopped';
+    return this.__status !== 'idle' && this.__status !== 'stopped';
   }
 
   /**
-   * Select a path from the current {@linkcode Tc} context of this {@linkcode Interpreter} service.
+   * Selects a value from the public context using a key path string.
    *
-   * @param path, the key to select from the current {@linkcode Tc} context of this {@linkcode Interpreter} service.
-   *
-   * @returns the value from the path from the current {@linkcode Tc} context of this {@linkcode Interpreter} service.
+   * @returns A selector function of type {@linkcode Selector_F}.
    *
    * @see {@linkcode getByKey} for retrieving values by key.
    */
-
   get select(): Selector_F<Tc> {
     const check = isPrimitive(this.__context);
     if (check) return undefined as any;
@@ -365,14 +451,11 @@ export abstract class CommonInterpreter<
   }
 
   /**
-   * @deprecated
-   * Select a path from the current {@linkcode Pc} private context of this {@linkcode Interpreter} service.
+   * Selects a value from the private context using a key path string.
    *
-   * @param path, the key to select from the current {@linkcode Pc} private context of this {@linkcode Interpreter} service.
+   * @deprecated Use for testing only. Returns `undefined` in production.
    *
-   * @returns the value from the path from the current {@linkcode Pc} private context of this {@linkcode Interpreter} service.
-   *
-   * @remarks returns nothing in prod
+   * @returns A selector function of type {@linkcode Selector_F}.
    *
    * @see {@linkcode getByKey} for retrieving values by key.
    */
@@ -397,49 +480,68 @@ export abstract class CommonInterpreter<
   }
 
   /**
-   * @deprecated
+   * Accessor for the current event object of type `Eo`.
    *
-   * Used for typings only
-   * The accessor of current {@linkcode ToEvents} of this {@linkcode Interpreter} service
+   * @deprecated Intended primarily for type inference and debugging.
    *
-   * @remarks Usually for typings
+   * @returns The active event object.
    */
   get event() {
-    return this.#event;
+    return this.__event;
   }
 
+  /**
+   * Accessor for the events map of type {@linkcode EventsMap} from the inner class {@linkcode CommonMachine}.
+   *
+   * @returns The events map object of type {@linkcode EventsMap}.
+   */
   get eventsMap() {
     return this.__machine.eventsMap;
   }
 
   /**
-   * The accessor of the list of events from the inner {@linkcode Machine}.
+   * Accessor for the array of event names supported by the inner class {@linkcode CommonMachine}.
+   *
+   * @returns An array of event type strings.
    */
   get eventsList() {
     return this.__machine.eventsList;
   }
 
+  /**
+   * Accessor for the active state tags of type `Ta[]`.
+   *
+   * @returns An array of active state tag strings.
+   */
   get tags() {
     return getTags<Ta>(this.__config);
   }
 
   /**
-   * Where everything is initialized
-   * @param machine, the {@linkcode Machine} to interpret.
-   * @param mode, the {@linkcode Mode} of the interpreter, default is 'strict'.
-   * @param exact, whether to use exact intervals or not, default is false.
+   * Initializes a new class {@linkcode CommonInterpreter} instance.
+   *
+   * @param machine - The state machine instance of interface {@linkcode AnyMachine}.
+   * @param mode - The execution mode of type {@linkcode Mode}. Defaults to `'strict'`.
+   * @param exact - Whether to use exact timer intervals. Defaults to `true`.
    */
   constructor(
     machine: AnyMachine<E, A, Pc, Tc>,
     mode: Mode = 'strict',
     exact = true,
   ) {
-    this.#init(machine.renew, mode, exact);
+    this.__init(machine.renew, mode, exact);
     this.__initialConfig = this.__machine.initialConfig;
-    this.#initialNode = this.#resolveNode(this.__initialConfig);
+    this.__initialNode = this.__resolveNode(this.__initialConfig);
   }
 
-  #init = (
+  /**
+   * Internal initialization helper configuring state machine reference and structures.
+   *
+   * @param machine - The state machine instance of interface {@linkcode AnyMachine}.
+   * @param mode - The execution mode of type {@linkcode Mode}.
+   * @param exact - Whether exact timer intervals are configured.
+   */
+  private __init = (
     machine: AnyMachine<E, A, Pc, Tc>,
     mode: Mode = 'strict',
     exact = true,
@@ -450,33 +552,32 @@ export abstract class CommonInterpreter<
     this.__exact = exact;
 
     this.__state = {
-      status: this.#status,
+      status: this.__status,
       context: this.__context,
       event: { type: INIT_EVENT, payload: {} } as any,
       value: this.__value,
       tags: toArray.typed(this.tags),
     };
 
-    this.#collectEmitterConfigs();
-    this.#collectChildrenConfig();
+    this.__collectEmitterConfigs();
+    this.__collectChildrenConfig();
     this.__throwing();
   };
 
   /**
-   * Resets the interpreter to its initial state.
-   * does not pause any running actions
+   * Resets the interpreter to its initial state without pausing or stopping background operations.
    */
   softReset = () => {
     this.__value = nodeToValue(this.__initialConfig);
     this.__context = this.__initialContext;
     this.__pContext = this.__initialPpc;
-    this.#status = 'idle';
-    this.#init(this.__machine, this.__mode, this.__exact);
+    this.__status = 'idle';
+    this.__init(this.__machine, this.__mode, this.__exact);
     this.__flush();
   };
 
   /**
-   * Resets the interpreter to its initial state.
+   * Resets the interpreter to its initial state and pauses all running activities and timers.
    */
   reset = () => {
     this.softReset();
@@ -484,22 +585,33 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Changes the current {@linkcode ToEvents} event of this {@linkcode Interpreter} service.
+   * Schedules a change to the current active event.
    *
-   * @param event - the {@linkcode ToEventsR} event to change the current {@linkcode Interpreter} service state.
+   * @param event - The new event object of type `Eo`.
+   *
+   * @returns The scheduled task result.
    */
   protected __changeEvent = (event: Eo) => {
     const cb = () => {
       this.__performStates({ event });
-      this.#event = event;
+      this.__event = event;
     };
 
     return this.__schedulerEvent.schedule(cb, this.__sent);
   };
+
+  /**
+   * Abstract method performing state transitions based on active events.
+   */
   protected abstract __performTransitions: Fn;
 
+  /**
+   * Accessor collecting always (eventless) transition configurations across active nodes.
+   *
+   * @returns An array of tuples containing state paths and always configurations.
+   */
   protected get __collectedAlways() {
-    const entriesFlat = Object.entries(this.#flat);
+    const entriesFlat = Object.entries(this.__flat);
 
     const entries: [from: string, always: AlwaysConfig][] = [];
 
@@ -513,8 +625,13 @@ export abstract class CommonInterpreter<
     return entries;
   }
 
-  get #collectedActivities() {
-    const entriesFlat = Object.entries(this.#flat);
+  /**
+   * Accessor collecting activity configurations across active state nodes.
+   *
+   * @returns An array of tuples containing state paths and activity configurations of type {@linkcode ActivityConfig}.
+   */
+  private get __collectedActivities() {
+    const entriesFlat = Object.entries(this.__flat);
 
     const entries: [from: string, activities: ActivityConfig][] = [];
 
@@ -527,8 +644,13 @@ export abstract class CommonInterpreter<
     return entries;
   }
 
-  get #currentActivities() {
-    const collected = this.#collectedActivities.filter(([from]) =>
+  /**
+   * Accessor filtering and gathering active intervals matching current state activities.
+   *
+   * @returns An array of active interval instances of type {@linkcode Interval2}, or `undefined`.
+   */
+  private get __currentActivities() {
+    const collected = this.__collectedActivities.filter(([from]) =>
       this.__isInsideValue(from),
     );
     const check = collected.length < 1;
@@ -542,36 +664,54 @@ export abstract class CommonInterpreter<
     return this.__cachedIntervals.filter(({ id }) => ids.includes(id));
   }
 
-  #performActivities = () => {
-    return this.#currentActivities?.forEach(this.#start);
-  };
-
   /**
-   * Pause the collection of all currents {@linkcode Interval2} intervals, related to current {@linkcode ActivityConfig}s of this {@linkcode Interpreter} service.
-   *
+   * Triggers the start of all active state activities.
    */
-  #pauseAllActivities = () => {
-    this.__cachedIntervals.forEach(this.#pause);
+  private __performActivities = () => {
+    return this.__currentActivities?.forEach(this.__start);
   };
 
   /**
-   * Used to track number of self transitions
+   * Pauses all currently active interval activities.
+   */
+  private __pauseAllActivities = () => {
+    this.__cachedIntervals.forEach(this.__pause);
+  };
+
+  /**
+   * Counter tracking consecutive self-transitions to prevent infinite loop recursion.
    */
   protected __selfTransitionsCounter = 0;
 
+  /**
+   * Collection of pausable actor metadata objects of type {@linkcode CollectedPausable}.
+   */
   protected __collectedPausables: CollectedPausable[] = [];
 
+  /**
+   * Abstract method responsible for gathering pausable emitters and services from active state nodes.
+   *
+   * @returns An array of pausable item structures.
+   */
   protected abstract __collectPausables: () => {
     pausable: Pausable;
     id: string;
     from: string;
   }[];
 
-  #startPausables = () => {
+  /**
+   * Starts execution for all collected pausable emitters.
+   */
+  private __startPausables = () => {
     this.__collectedPausables.forEach(({ pausable }) => pausable.start());
   };
 
-  #resumePausables = (
+  /**
+   * Resumes execution for collected pausable emitters matching the filter predicate.
+   *
+   * @param filter - Predicate function filtering pausable items.
+   */
+  private __resumePausables = (
     filter: (value: CollectedPausable) => boolean = () => true,
   ) => {
     this.__collectedPausables
@@ -579,7 +719,12 @@ export abstract class CommonInterpreter<
       .forEach(({ pausable }) => pausable.resume());
   };
 
-  #stopPausables = (
+  /**
+   * Stops execution and removes collected pausable emitters matching the filter predicate.
+   *
+   * @param filter - Predicate function filtering pausable items.
+   */
+  private __stopPausables = (
     filter: Parameters<Array<CollectedPausable>['filter']>[0] = () => true,
   ) => {
     this.__collectedPausables
@@ -592,7 +737,12 @@ export abstract class CommonInterpreter<
       });
   };
 
-  #pausePausables = (
+  /**
+   * Pauses execution for collected pausable emitters matching the filter predicate.
+   *
+   * @param filter - Predicate function filtering pausable items.
+   */
+  private __pausePausables = (
     filter: (value: CollectedPausable) => boolean = () => true,
   ) => {
     this.__collectedPausables
@@ -600,15 +750,30 @@ export abstract class CommonInterpreter<
       .forEach(({ pausable }) => pausable.pause());
   };
 
+  /**
+   * Abstract storage map tracking initial self-transitions.
+   */
   protected abstract __collectedSelfTransitions0: Map<string, any>;
+
+  /**
+   * Abstract storage tracking active self-transition definitions.
+   */
   protected abstract __collectedSelfTransitions: any;
 
+  /**
+   * Collected emitter configurations grouped by state node origin path.
+   */
   protected __collectedEmitterConfigs: [
     from: string,
     ...emitters: (EmitterConfig & { id: string })[],
   ][] = [];
 
-  #collectEmitterConfigs = () => {
+  /**
+   * Collects emitter configurations defined across machine state nodes.
+   *
+   * @returns The array of collected emitter configuration entries.
+   */
+  private __collectEmitterConfigs = () => {
     const entriesFlat = Object.entries<any>(this.__machine.flat);
     const entries: [
       from: string,
@@ -629,12 +794,20 @@ export abstract class CommonInterpreter<
     return entries;
   };
 
+  /**
+   * Collected child machine configurations grouped by state node origin path.
+   */
   protected __collectedChildrenConfig: [
     from: string,
     ...children: (ChildConfig & { id: string })[],
   ][] = [];
 
-  #collectChildrenConfig = () => {
+  /**
+   * Collects child machine configurations defined across state nodes.
+   *
+   * @returns The array of collected child configuration entries.
+   */
+  private __collectChildrenConfig = () => {
     const entriesFlat = Object.entries<any>(this.__machine.flat);
     const entries: [
       from: string,
@@ -655,12 +828,26 @@ export abstract class CommonInterpreter<
     return entries;
   };
 
+  /**
+   * Array of active child service instances of type {@linkcode CommonCollectedService}.
+   */
   protected __collectedChildren: CommonCollectedService[] = [];
 
+  /**
+   * Abstract method executing self-transitions for active state nodes.
+   */
   protected abstract __performSelfTransitions: () => any;
 
+  /**
+   * Abstract method executing action describer functions.
+   */
   protected abstract __performActions: Fn;
 
+  /**
+   * Triggers entry actions defined on the initial state configuration.
+   *
+   * @returns The result of performing initial entry actions.
+   */
   protected __startInitialEntries = () => {
     const actions = getEntries(this.__initialConfig);
     if (actions.length < 1) return;
@@ -668,57 +855,82 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * @deprecated
-   * A mapper function that returns a function to call a method on a value.
-   * @param key - the key of the method to be called on the value.
-   * @returns a function that calls the method on the value.
+   * Creates a method invoking mapper function for objects of type `T`.
    *
-   * @see {@linkcode AllowedNames} for more information about allowed names.
-   * @see {@linkcode Fn} for more information about function
+   * @template T - Target object type.
+   *
+   * @param key - The method name key of type {@linkcode AllowedNames}.
+   *
+   * @returns A function invoking the named method on the target object.
+   *
+   * @deprecated Internal helper function.
    */
-  #mapperFn = <T>(key: AllowedNames<T, Fn>) => {
+  private __mapperFn = <T>(key: AllowedNames<T, Fn>) => {
     return (value: T) => (value as any)[key]();
   };
 
-  #pause = this.#mapperFn('pause');
+  /** Helper invoking method `pause` on a target object. */
+  private __pause = this.__mapperFn('pause');
 
-  #open = this.#mapperFn('open');
-  #start = this.#mapperFn('start');
+  /** Helper invoking method `open` on a target object. */
+  private __open = this.__mapperFn('open');
 
-  #close = this.#mapperFn('close');
+  /** Helper invoking method `start` on a target object. */
+  private __start = this.__mapperFn('start');
 
-  #resume = this.#mapperFn('resume');
-  #unsubscribe = this.#mapperFn('unsubscribe');
-  #stop = this.#mapperFn('stop');
-  #dispose = this.#mapperFn('dispose');
+  /** Helper invoking method `close` on a target object. */
+  private __close = this.__mapperFn('close');
 
-  protected __subscribers = new Set<Subscriber<Tc, Ta, Eo>>();
-  #innerSubscribers = new Set<Subscriber<Tc, Ta, Eo>>();
+  /** Helper invoking method `resume` on a target object. */
+  private __resume = this.__mapperFn('resume');
+
+  /** Helper invoking method `unsubscribe` on a target object. */
+  private __unsubscribe = this.__mapperFn('unsubscribe');
+
+  /** Helper invoking method `stop` on a target object. */
+  private __stop = this.__mapperFn('stop');
+
+  /** Helper invoking method `dispose` on a target object. */
+  private __dispose = this.__mapperFn('dispose');
 
   /**
-   * Flushes all subscribers and map subscribers of this {@linkcode Interpreter} service.
-   *
-   * @see {@linkcode Subscriber} for more information about subscribers.
-   * @see {@linkcode Subscriber} for more information about map subscribers.
+   * Set of public subscribers attached to this interpreter of type {@linkcode Subscriber}.
+   */
+  protected __subscribers = new Set<Subscriber<Tc, Ta, Eo>>();
+
+  /**
+   * Set of internal subscribers attached to this interpreter of type {@linkcode Subscriber}.
+   */
+  private __innerSubscribers = new Set<Subscriber<Tc, Ta, Eo>>();
+
+  /**
+   * Flushes and notifies all registered subscribers with the current state.
    */
   protected __flush = () => {
-    const all = [...this.#innerSubscribers, ...this.__subscribers];
+    const all = [...this.__innerSubscribers, ...this.__subscribers];
     all.forEach(({ fn }) => fn(this.__state));
   };
 
   /**
-   * All actions that are currently scheduled to be performed.
-   * @returns an array of {@linkcode Timeout2} that are currently scheduled to be performed.
+   * Array of active timer instances of type {@linkcode Timeout2} scheduled for action execution.
    */
   protected __timeoutActions: Timeout2[] = [];
 
-  #startChildren = () => {
+  /**
+   * Starts execution of all spawned child services.
+   */
+  private __startChildren = () => {
     this.__collectedChildren.forEach(({ service }) => {
       service.start();
     });
   };
 
-  #pauseChildren = (
+  /**
+   * Pauses execution of spawned child services matching the filter predicate.
+   *
+   * @param filter - Predicate filtering child service entries.
+   */
+  private __pauseChildren = (
     filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
       true,
   ) => {
@@ -727,7 +939,12 @@ export abstract class CommonInterpreter<
       .forEach(({ service }) => service.pause());
   };
 
-  #stopChildren = (
+  /**
+   * Stops and disposes spawned child services matching the filter predicate.
+   *
+   * @param filter - Predicate filtering child service entries.
+   */
+  private __stopChildren = (
     filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
       true,
   ) => {
@@ -744,7 +961,12 @@ export abstract class CommonInterpreter<
     });
   };
 
-  #resumeChildren = (
+  /**
+   * Resumes execution of spawned child services matching the filter predicate.
+   *
+   * @param filter - Predicate filtering child service entries.
+   */
+  private __resumeChildren = (
     filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
       true,
   ) => {
@@ -754,88 +976,101 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Create a new {@linkcode Interpreter} instance with the same initial configuration as this instance.
+   * Abstract property returning a new interpreter instance initialized with identical state parameters.
    */
   abstract renew: any;
 
   /**
-   * Helper to format inner errors and warnings.
-   * @param messages - an iterable of messages to format.
-   * @returns an array of messages joined by new line.
+   * Formats an iterable of log messages into a single newline-separated string.
    *
-   * @remarks Used to display console messages in a readable format.
+   * @param messages - An iterable of log message strings.
+   *
+   * @returns Formatted newline-delimited message string.
    */
-  #displayConsole = (messages: Iterable<string>) => {
+  private __displayConsole = (messages: Iterable<string>) => {
     return Array.from(messages).join('\n');
   };
 
   /**
-   * Use to manage internal errors and warnings.
+   * Handles collected warnings and errors according to the current execution mode of type {@linkcode Mode}.
+   *
+   * @throws type {@linkcode Error} Throws an error in `'strict'` mode if errors are present.
    */
   protected __throwing = () => {
     if (this.__mode === 'strict') {
-      const check1 = this.#warningsCollector.size > 0;
+      const check1 = this.__warningsCollector.size > 0;
       if (check1) {
-        const warnings = this.#displayConsole(this.#warningsCollector);
+        const warnings = this.__displayConsole(this.__warningsCollector);
         console.log(warnings);
       }
 
-      const check2 = this.#errorsCollector.size > 0;
+      const check2 = this.__errorsCollector.size > 0;
       if (check2) {
-        const errors = this.#displayConsole(this.#errorsCollector);
+        const errors = this.__displayConsole(this.__errorsCollector);
         throw new Error(errors);
       }
     } else {
-      const check3 = this.#errorsCollector.size > 0;
+      const check3 = this.__errorsCollector.size > 0;
       if (check3) {
-        const errors = this.#displayConsole(this.#errorsCollector);
+        const errors = this.__displayConsole(this.__errorsCollector);
         console.error(errors);
       }
 
-      const check4 = this.#warningsCollector.size > 0;
+      const check4 = this.__warningsCollector.size > 0;
       if (check4) {
-        const warnings = this.#displayConsole(this.#warningsCollector);
+        const warnings = this.__displayConsole(this.__warningsCollector);
         console.log(warnings);
       }
     }
   };
 
+  /**
+   * Starts the interpreter service, initializing children, pausable services, and entry actions.
+   */
   start = () => {
     this.__setStatus('starting');
     this.__collectChildren();
     this.__collectPausables();
     this.__throwing();
     this.__setStatus('started');
-    this.#startPausables();
+    this.__startPausables();
     this.__flush();
     this.__startInitialEntries();
-    this.#startChildren();
+    this.__startChildren();
     this.__throwing();
     this._next();
   };
 
   /**
-   * Assign the current {@linkcode State} and the previous {@linkcode State} of the {@linkcode Interpreter} service and flush all subscribers.
-   * @param parts, Partial {@linkcode State}
-   *
-   * @see {@linkcode Subscriber}
-   * @see {@linkcode Subscriber}
+   * Merges partial state updates into the current state and triggers subscriber notifications.
    */
   protected __performStates = (parts?: Partial<State<Eo, Tc, Ta>>) => {
     this.__state = { ...this.__state, ...parts };
     this.__flush();
   };
 
+  /**
+   * Schedules an update to the interpreter working status of type {@linkcode WorkingStatus}.
+   *
+   * @param status - Target working status of type {@linkcode WorkingStatus}.
+   *
+   * @returns Scheduled status update result.
+   */
   protected __setStatus = (status: WorkingStatus) => {
     const cb = () => {
       this.__performStates({ status });
-      return (this.#status = status);
+      return (this.__status = status);
     };
 
     return this.__schedulerStatus.schedule(cb, this.__sent);
   };
 
-  get #schedulers() {
+  /**
+   * Accessor collecting all scheduler instances of type {@linkcode SimpleScheduler}.
+   *
+   * @returns Array of scheduler instances.
+   */
+  private get __schedulers() {
     return [
       this.__schedulerValue,
       this.__schedulerContexts,
@@ -844,48 +1079,65 @@ export abstract class CommonInterpreter<
     ];
   }
 
-  #stopSchedulers = () => {
-    this.#schedulers.forEach(this.#stop);
+  /**
+   * Stops all internal scheduler instances.
+   */
+  private __stopSchedulers = () => {
+    this.__schedulers.forEach(this.__stop);
   };
 
+  /**
+   * Pauses the interpreter, activities, timers, child services, and subscribers.
+   */
   pause = () => {
     this.__setStatus('busy');
-    this.#pauseAllActivities();
-    this.#pauseChildren();
-    this.#pausePausables();
-    this.__timeoutActions.forEach(this.#pause);
+    this.__pauseAllActivities();
+    this.__pauseChildren();
+    this.__pausePausables();
+    this.__timeoutActions.forEach(this.__pause);
     this.__setStatus('paused');
-    this.__subscribers.forEach(this.#close);
+    this.__subscribers.forEach(this.__close);
   };
 
+  /**
+   * Resumes the interpreter from a paused state, restarting activities and subscribers.
+   */
   resume = () => {
-    if (this.#status === 'paused') {
-      this.#performActivities();
+    if (this.__status === 'paused') {
+      this.__performActivities();
       this.__setStatus('busy');
-      this.__subscribers.forEach(this.#open);
-      this.__timeoutActions.forEach(this.#resume);
-      this.#resumeChildren();
-      this.#resumePausables();
+      this.__subscribers.forEach(this.__open);
+      this.__timeoutActions.forEach(this.__resume);
+      this.__resumeChildren();
+      this.__resumePausables();
       this.__setStatus('working');
     }
   };
 
+  /**
+   * Stops the interpreter service and cleans up all active timers, child services, and subscribers.
+   */
   stop = () => {
     this.__setStatus('busy');
-    this.#pauseAllActivities();
-    this.__cachedIntervals.forEach(this.#dispose);
-    this.__timeoutActions.forEach(this.#dispose);
-    this.#stopPausables();
-    this.#stopChildren();
+    this.__pauseAllActivities();
+    this.__cachedIntervals.forEach(this.__dispose);
+    this.__timeoutActions.forEach(this.__dispose);
+    this.__stopPausables();
+    this.__stopChildren();
     this.__setStatus('stopped');
-    this.__subscribers.forEach(this.#close);
-    this.__subscribers.forEach(this.#unsubscribe);
-    this.#stopSchedulers();
+    this.__subscribers.forEach(this.__close);
+    this.__subscribers.forEach(this.__unsubscribe);
+    this.__stopSchedulers();
   };
 
   /**
-   * @deprecated
-   * Used internally
+   * Provides custom initial context to the inner machine.
+   *
+   * @deprecated Internal method.
+   *
+   * @param context - The context object of type `Tc`.
+   *
+   * @returns The updated inner machine instance.
    */
   _provideContext = (context: Tc) => {
     this.__initialContext = this.__context = context;
@@ -895,7 +1147,11 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Add options to the inner {@linkcode Machine} of this {@linkcode Interpreter} service.
+   * Configures additional machine options on the current interpreter instance.
+   *
+   * @param helper - Option provider callback function of type {@linkcode Fn}.
+   *
+   * @returns Updated machine options structure.
    */
   addOptions(helper: Fn) {
     this.__machine = this.__machine.provideOptions(helper);
@@ -903,11 +1159,11 @@ export abstract class CommonInterpreter<
   }
 
   /**
-   * Provides options for the interpreter and returns a new interpreter instance.
+   * Creates a renewed interpreter instance with custom machine options applied.
    *
-   * @param helper a function that provides options for the machine.
-   * Options can include actions, guards, delays, promises, and child machines.
-   * @returns a new interpreter instance with the provided options applied.
+   * @param helper - Option provider callback function of type {@linkcode Fn}.
+   *
+   * @returns A new interpreter instance.
    */
   provideOptions(helper: Fn) {
     const out = this.renew;
@@ -915,6 +1171,14 @@ export abstract class CommonInterpreter<
     return out as any;
   }
 
+  /**
+   * Subscribes a listener to state changes of this interpreter.
+   *
+   * @param _subscriber - Subscriber callback function.
+   * @param options - Subscription configuration options.
+   *
+   * @returns A subscriber object of type {@linkcode Subscriber}.
+   */
   subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.__machine.eventsList;
     const id = options?.id;
@@ -928,6 +1192,14 @@ export abstract class CommonInterpreter<
     return subscriber as any;
   };
 
+  /**
+   * Subscribes an internal listener to state changes.
+   *
+   * @param _subscriber - Subscriber callback function.
+   * @param options - Subscription configuration options.
+   *
+   * @returns A subscriber object of type {@linkcode Subscriber}.
+   */
   // @ts-expect-error Already used recursively
   private __subscribe: AddSubscriber_F<Tc, Ta, Eo> = (
     _subscriber,
@@ -935,26 +1207,36 @@ export abstract class CommonInterpreter<
   ) => {
     const events = this.__machine.eventsList;
     const subscriber = createSubscriber(_subscriber, options, ...events);
-    this.#innerSubscribers.add(subscriber as any);
+    this.__innerSubscribers.add(subscriber as any);
     return subscriber as any;
   };
 
+  /**
+   * Public accessor for a deep-cloned immutable snapshot of the current state.
+   *
+   * @returns Immutable snapshot object of type {@linkcode State}.
+   */
   get state() {
     return Object.freeze(structuredClone(this.__state));
   }
 
-  #errorsCollector = new Set<string>();
-  #warningsCollector = new Set<string>();
+  /** Collector set containing internal error strings. */
+  private __errorsCollector = new Set<string>();
+
+  /** Collector set containing internal warning strings. */
+  private __warningsCollector = new Set<string>();
 
   /**
-   * @deprecated
-   * Just use for testing
-   * @remarks returns nothing in prod
+   * Accessor for collected error strings, intended for testing.
+   *
+   * @deprecated Use for testing only. Returns `undefined` in production.
+   *
+   * @returns Collector set of error strings, or `undefined` in production.
    */
   get _errorsCollector() {
     /* v8 ignore else -- @preserve */
     if (IS_TEST()) {
-      return this.#errorsCollector;
+      return this.__errorsCollector;
     }
 
     /* v8 ignore start -- @preserve */
@@ -964,14 +1246,16 @@ export abstract class CommonInterpreter<
   }
 
   /**
-   * @deprecated
-   * Just use for testing
-   * @remarks returns nothing in prod
+   * Accessor for collected warning strings, intended for testing.
+   *
+   * @deprecated Use for testing only. Returns `undefined` in production.
+   *
+   * @returns Collector set of warning strings, or `undefined` in production.
    */
   get _warningsCollector() {
     /* v8 ignore else -- @preserve */
     if (IS_TEST()) {
-      return this.#warningsCollector;
+      return this.__warningsCollector;
     }
     /* v8 ignore start -- @preserve */
     console.error('warningsCollector is not available in production');
@@ -979,17 +1263,34 @@ export abstract class CommonInterpreter<
     /* v8 ignore stop -- @preserve */
   }
 
+  /**
+   * Records internal error messages into the error collector.
+   *
+   * @param errors - Error message strings to record.
+   */
   protected _addError = (...errors: string[]) => {
-    errors.forEach(error => this.#errorsCollector.add(error));
+    errors.forEach(error => this.__errorsCollector.add(error));
   };
 
+  /**
+   * Records internal warning messages into the warning collector.
+   *
+   * @param warnings - Warning message strings to record.
+   */
   protected _addWarning = (...warnings: string[]) => {
-    warnings.forEach(warning => this.#warningsCollector.add(warning));
+    warnings.forEach(warning => this.__warningsCollector.add(warning));
   };
 
+  /**
+   * Extracts valid transition definitions matching a given event.
+   *
+   * @param event - Event object of type `Eo`.
+   *
+   * @returns Sorted array of state path and transition tuples.
+   */
   protected __extractTransitions = (event: Eo) => {
     type FlatArray = [from: string, transitions: TransitionConfig[]][];
-    const entriesFlat = Object.entries(this.#flat);
+    const entriesFlat = Object.entries(this.__flat);
     const flat: FlatArray = [];
     const flat2: FlatArray = [];
 
@@ -1030,28 +1331,52 @@ export abstract class CommonInterpreter<
     return flat2;
   };
 
+  /**
+   * Abstract pre-send handler hook.
+   */
   protected abstract __presend: Fn<[event: Eo], any>;
 
+  /**
+   * Accessor for all event types that can currently trigger state transitions.
+   *
+   * @returns Array of possible event type strings.
+   */
   get possibleEvents() {
-    return possibleEvents(this.#flat);
+    return possibleEvents(this.__flat);
   }
 
+  /**
+   * Evaluates whether all specified event types are currently accepted.
+   *
+   * @param events - Array of event type strings.
+   *
+   * @returns `true` if all events can be performed; otherwise, `false`.
+   */
   canEvents = (...events: Eo['type'][]) => {
     return events.every(event => this.possibleEvents.includes(event));
   };
 
-  #cannotPerformEvents = (_event: EventArgObject<Eo>) => {
+  /**
+   * Evaluates whether an event argument cannot be processed by the current state.
+   *
+   * @param _event - Event argument object of type {@linkcode EventArgObject}.
+   *
+   * @returns `true` if the event cannot be processed; otherwise, `false`.
+   */
+  private __cannotPerformEvents = (_event: EventArgObject<Eo>) => {
     const type = eventToType(_event);
     const check = !this.possibleEvents.includes(type);
     return check;
   };
 
   /**
-   * Creates a sender function for the given event type.
-   * @param type - the {@linkcode EventArgT} type of the event to send.
-   * @returns a function with the payload as Parameter that sends the event with the given type and payload.
+   * Creates a curried event sender function for a specific event type.
    *
-   * @see {@linkcode send} for sending events directly.
+   * @template T - Event type string extending `Eo['type']`.
+   *
+   * @param type - Target event type string.
+   *
+   * @returns Function accepting payload data and sending the event.
    */
   sender = <const T extends Eo['type']>(type: T) => {
     return (...data: ExtractSender<Eo, T>) => {
@@ -1062,41 +1387,36 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Resolves a {@linkcode Node} from the given {@linkcode NodeConfigWithInitials} configuration.
+   * Resolves a state node instance from a node configuration object.
    *
-   * @param config of type {@linkcode NodeConfigWithInitials}, the configuration to resolve.
+   * @param config - Node configuration object.
    *
-   * @returns a {@linkcode Node} resolved from the configuration.
-   *
-   * @see {@linkcode resolveNode} for the actual resolution logic.
-   * @see {@linkcode E}
-   * @see {@linkcode P}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @returns Resolved state node instance.
    */
-  #resolveNode = (config: any) => {
+  private __resolveNode = (config: any) => {
     const options = this.__machine.options;
     const events = this.__machine.eventsList;
 
     return resolveNode<Pc, Tc, Ta, Eo>(config, options as any, ...events);
   };
 
+  /**
+   * Abstract method gathering child machine service configurations.
+   */
   protected abstract __collectChildren: Fn;
 
   /**
-   * Set the current {@linkcode Mode} of this {@linkcode Interpreter} service to 'strict'.
-   * In this mode, all errors are thrown and warnings are logged to the console.
+   * Sets the execution mode of type {@linkcode Mode} to `'strict'`.
    */
   makeStrict = () => (this.__mode = 'strict' as Mode);
 
   /**
-   * Set the current {@linkcode Mode} of this {@linkcode Interpreter} service to 'normal'.
-   * In this mode, errors are logged to the console, but not thrown.
+   * Sets the execution mode of type {@linkcode Mode} to `'normal'`.
    */
   makeNormal = () => (this.__mode = 'normal' as Mode);
 
   /**
-   * Performs computations, after transitioning to the next target, to update the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode CommonInterpreter} service
+   * Updates state value and node configuration after a state transition.
    */
   protected _performConfig = () => {
     const value = nodeToValue(this.__config as any);
@@ -1105,100 +1425,106 @@ export abstract class CommonInterpreter<
       // this.__performStates({ value });
     };
     this.__schedulerValue.schedule(cb, this.__sent);
-    this.#node = this.#resolveNode(this.__config);
+    this.__node = this.__resolveNode(this.__config);
     const configForFlat = _any(this.__config);
-    this.#flat = flatMap.low(configForFlat, true);
+    this.__flat = flatMap.low(configForFlat, true);
   };
 
   /**
-   * Proposes the next state value based on the current state value and the target.
-   * @param target - the target state to propose the next state value.
-   * @returns the next {@linkcode StateValue} based on the current state value and the target.
+   * Calculates the proposed next state value for a target path without applying mutations.
    *
-   * @remarks
-   * This method calculates the next state value based on the current state value and the target.
-   * It does not change the current state value, but returns the proposed next state value.
-   * It is used internally to calculate the next state value before sending an event.
+   * @param target - Target state path string.
+   *
+   * @returns Proposed state value of type {@linkcode StateValue}.
    */
-  #proposedNextSV = (target: string) => nextSV(this.__value, target);
+  private __proposedNextSV = (target: string) =>
+    nextSV(this.__value, target);
 
   /**
-   * Proposes the next configuration based on the current state value and the target.
-   * @param target - the target state to propose the next configuration.
-   * @returns the proposed next {@linkcode NodeConfigWithInitials} based on the current state value and the target.
+   * Calculates the proposed next node configuration for a target path without applying mutations.
    *
-   * @remarks
-   * Only proposes next config, does not change the current config.
+   * @param target - Target state path string.
    *
-   * //
-   *
-  //  * @see {@linkcode Machine.valueToConfig} for more details.
-   *
-   * //
+   * @returns Proposed node configuration object.
    */
   protected proposedNextConfig = (target: string) => {
-    const nextValue = this.#proposedNextSV(target);
+    const nextValue = this.__proposedNextSV(target);
     const out = this.__machine.valueToConfig(nextValue);
     return out;
   };
 
-  protected get __currentActivities() {
-    const collected = this.#collectedActivities.filter(([from]) =>
-      this.__isInsideValue(from),
-    );
-
-    const ids: string[] = [];
-    for (const args of collected) {
-      ids.push(...this.__executeActivities(...args));
-    }
-
-    return this.__cachedIntervals.filter(({ id }) => ids.includes(id));
-  }
-
+  /**
+   * Pauses an activity by its identifier.
+   *
+   * @param id - Optional activity identifier.
+   */
   protected __performPauseActivityAction = (id?: string) => {
     if (!id) return;
     this.__currentActivities
       ?.filter(f => f.id === id)
-      .forEach(this.#pause);
+      .forEach(this.__pause);
   };
 
+  /**
+   * Resumes an activity by its identifier.
+   *
+   * @param id - Optional activity identifier.
+   */
   protected __performResumeActivityAction = (id?: string) => {
     if (!id) return;
     this.__currentActivities
       ?.filter(f => f.id === id)
-      .forEach(this.#resume);
+      .forEach(this.__resume);
   };
 
+  /**
+   * Stops an activity by its identifier.
+   *
+   * @param id - Optional activity identifier.
+   */
   protected __performStopActivityAction = (id?: string) => {
     if (!id) return;
     this.__currentActivities
       ?.filter(f => f.id === id)
-      .forEach(this.#dispose);
-  };
-
-  protected __performPauseTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.#pause);
-  };
-
-  protected __performResumeTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.#resume);
-  };
-
-  protected __performStopTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.#dispose);
+      .forEach(this.__dispose);
   };
 
   /**
-   * Calculates the difference between the current and next configuration.
-   * @param target - the target state to calculate the difference.
-   * @returns an {@linkcode DiffNext} object containing the proposed next state value, entry actions, and exit actions.
+   * Pauses a scheduled action timer by its identifier.
    *
-   * @remarks
-   * This method is used to calculate the entry and exit actions when transitioning to a new state.
-   * It compares the current configuration with the proposed next configuration and returns the differences.
+   * @param id - Optional timer identifier.
+   */
+  protected __performPauseTimerAction = (id?: string) => {
+    if (!id) return;
+    this.__timeoutActions.filter(f => f.id === id).forEach(this.__pause);
+  };
+
+  /**
+   * Resumes a paused action timer by its identifier.
+   *
+   * @param id - Optional timer identifier.
+   */
+  protected __performResumeTimerAction = (id?: string) => {
+    if (!id) return;
+    this.__timeoutActions.filter(f => f.id === id).forEach(this.__resume);
+  };
+
+  /**
+   * Stops and disposes a scheduled action timer by its identifier.
+   *
+   * @param id - Optional timer identifier.
+   */
+  protected __performStopTimerAction = (id?: string) => {
+    if (!id) return;
+    this.__timeoutActions.filter(f => f.id === id).forEach(this.__dispose);
+  };
+
+  /**
+   * Computes entry and exit action diffs for transitioning to a target state path.
+   *
+   * @param target - Optional target state path string.
+   *
+   * @returns Diff result object of type {@linkcode DiffNext}.
    */
   protected __diffNext = (target?: string): DiffNext => {
     if (!target) {
@@ -1208,7 +1534,7 @@ export abstract class CommonInterpreter<
     const next = initialConfig(this.proposedNextConfig(target));
     const flatNext = flatMap.low(next);
 
-    const entriesCurrent = Object.entries(this.#flat);
+    const entriesCurrent = Object.entries(this.__flat);
     const keysNext = Object.keys(flatNext);
 
     const keys = entriesCurrent.map(([key]) => key);
@@ -1241,12 +1567,14 @@ export abstract class CommonInterpreter<
       }
     });
     // #endregion
-    const sv = this.#proposedNextSV(target);
+    const sv = this.__proposedNextSV(target);
     return { sv, diffEntries, diffExits };
   };
 
   /**
-   * Performs all self transitions and activities of this {@linkcode Interpreter} service.
+   * Prepares interpreter state prior to executing a transition, running self-transitions and managing activity states.
+   *
+   * @returns Self-transition execution result.
    */
   protected __preNext = () => {
     const filter: Parameters<
@@ -1267,20 +1595,25 @@ export abstract class CommonInterpreter<
     this.__collectChildren();
     this.__collectPausables();
     this.__selfTransitionsCounter++;
-    this.#pauseAllActivities();
-    this.#performActivities();
-    this.#stopPausables(filter);
-    this.#pausePausables(({ from }) => this.__isInsideValue(from));
-    this.#pauseChildren(({ from }) => this.__isInsideValue(from));
-    this.#stopChildren(filter);
-    this.#startChildren();
-    this.#resumeChildren(({ from }) => !this.__isInsideValue(from));
-    this.#startPausables();
-    this.#resumePausables(({ from }) => this.__isInsideValue(from));
+    this.__pauseAllActivities();
+    this.__performActivities();
+    this.__stopPausables(filter);
+    this.__pausePausables(({ from }) => this.__isInsideValue(from));
+    this.__pauseChildren(({ from }) => this.__isInsideValue(from));
+    this.__stopChildren(filter);
+    this.__startChildren();
+    this.__resumeChildren(({ from }) => !this.__isInsideValue(from));
+    this.__startPausables();
+    this.__resumePausables(({ from }) => this.__isInsideValue(from));
 
     return this.__performSelfTransitions();
   };
 
+  /**
+   * Handles maximum self-transition overflow limit.
+   *
+   * @throws type {@linkcode Error} Throws when exceeding maximum self-transitions limit.
+   */
   protected __throwMaxCounter() {
     const error = `Too much self transitions, exceeded ${DEFAULT_MAX_SELF_TRANSITIONS} transitions`;
 
@@ -1293,8 +1626,11 @@ export abstract class CommonInterpreter<
   }
 
   /**
-   * Performs computations, to update the current {@linkcode NodeConfigWithInitials} config state of this {@linkcode Interpreter} service
-   * @param target, the target to perform the config for.
+   * Applies target configuration updates to the interpreter state.
+   *
+   * @param target - Optional target state path string or `true`.
+   *
+   * @returns State update result.
    */
   protected __performConfig = (target?: string | true) => {
     if (target === true) {
@@ -1314,33 +1650,45 @@ export abstract class CommonInterpreter<
     }
   };
 
+  /**
+   * Abstract method executing the next transition step.
+   */
   protected abstract _next: Fn<[]>;
 
-  protected _iterate = () => this.#iterator++;
+  /**
+   * Increments internal step counter iterator.
+   *
+   * @returns Updated iterator count.
+   */
+  protected _iterate = () => this.__iterator++;
 
   /**
-   * Sends an event without cheching to the current {@linkcode Interpreter} service.
+   * Abstract internal method dispatching an event argument object.
    *
-   * @param _event - the {@linkcode EventArg} event to send.
-   *
+   * @param _event - Event argument object of type {@linkcode EventArgObject}.
    */
   protected abstract __send: (_event: EventArgObject<Eo>) => any;
 
   /**
-   * Sends an event to the current {@linkcode Interpreter} service.
+   * Dispatches an event to the interpreter if permitted by active state rules.
    *
-   * @param _event - the {@linkcode EventArg} event to send.
+   * @param _event - Event argument object of type {@linkcode EventArgObject}.
    *
-   * @remarks
-   * If the event cannot be performed, it will not be sent.
-   * If the event is sent, it will be processed and the state will be updated.
+   * @returns Dispatch operation result.
    */
   send = (_event: EventArgObject<Eo>) => {
-    const check = this.#cannotPerformEvents(_event);
+    const check = this.__cannotPerformEvents(_event);
     if (check) return;
     return this.__send(_event);
   };
 
+  /**
+   * Forwards an event to a target child service.
+   *
+   * @param sentEvent - Optional target routing object.
+   *
+   * @returns Send to operation result.
+   */
   protected __performSendToAction = (sentEvent?: {
     to: string;
     event: any;
@@ -1349,19 +1697,38 @@ export abstract class CommonInterpreter<
     return this.__sendTo(sentEvent.to, sentEvent.event);
   };
 
+  /**
+   * Re-dispatches an event back to this interpreter instance.
+   *
+   * @param resend - Optional event argument object of type {@linkcode EventArgObject}.
+   *
+   * @returns Event dispatch result.
+   */
   protected __performResendAction = (resend?: EventArgObject<Eo>) => {
     if (!resend) return;
-    const cannot = this.#cannotPerformEvents(resend);
+    const cannot = this.__cannotPerformEvents(resend);
     if (cannot) return;
 
     return this.send(resend);
   };
 
+  /**
+   * Accessor generating a deep-cloned state snapshot of type {@linkcode StateExtended}.
+   *
+   * @returns Cloned extended state snapshot of type {@linkcode StateExtended}.
+   */
   protected get __cloneState(): StateExtended<Eo, Pc, Tc, Ta> {
     const pContext = cloneDeep(this.__pContext);
     return { pContext, ...structuredClone(this.__state) };
   }
 
+  /**
+   * Merges partial context results into private and public contexts.
+   *
+   * @param result - Partial action result object.
+   *
+   * @returns Scheduled context merge result.
+   */
   protected __mergeContexts: DirectMerge_F<Pc, Tc> = result => {
     const cb = () => {
       this.__pContext = merge(this.__pContext, _any(result?.pContext));
@@ -1374,21 +1741,36 @@ export abstract class CommonInterpreter<
     return this.__schedulerContexts.schedule(cb, this.__sent);
   };
 
+  /**
+   * Schedules a delayed context update action.
+   *
+   * @param scheduled - Optional scheduled action configuration of type {@linkcode ScheduledData}.
+   */
   protected __performScheduledAction = (
     scheduled?: ScheduledData<Pc, Tc>,
   ) => {
     if (!scheduled) return;
     const { data, ms: timeout, id } = scheduled;
     const callback = () => this.__mergeContexts(data);
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.#dispose);
+    this.__timeoutActions.filter(f => f.id === id).forEach(this.__dispose);
     this.__timeoutActions = this.__timeoutActions.filter(f => f.id !== id);
     const timer = createTimeout({ callback, timeout, id });
     this.__timeoutActions.push(timer);
     timer.start();
   };
 
+  /**
+   * Abstract method executing activities configured for active states.
+   */
   protected abstract __executeActivities: ExecuteActivities_F;
 
+  /**
+   * Creates an interval instance of type {@linkcode Interval2}.
+   *
+   * @param config - Interval parameters object.
+   *
+   * @returns New interval instance of type {@linkcode Interval2}.
+   */
   protected createInterval: CreateInterval2_F = ({
     callback,
     id,
@@ -1401,32 +1783,47 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Collection of all currents {@linkcode Interval2} intervals, related to current {@linkcode ActivityConfig}s of this {@linkcode Interpreter} service.
+   * Cached array of active interval instances of type {@linkcode Interval2}.
    */
   protected __cachedIntervals: Interval2[] = [];
 
+  /**
+   * Abstract method executing final state cleanup hooks.
+   */
   protected abstract __performFinally: Fn;
 
-  get #sending() {
-    return this.#status === 'sending';
+  /**
+   * Accessor checking whether an event dispatch is in progress.
+   *
+   * @returns `true` if currently dispatching; otherwise, `false`.
+   */
+  private get __sending() {
+    return this.__status === 'sending';
   }
 
   /**
-   * Checks if sent events cannot be performed.
-   * @param from - the config value from which the events are sent.
-   * @returns true if the events cannot be performed, false otherwise.
+   * Evaluates whether operations originating from a state path are prohibited.
+   *
+   * @param from - State path string.
+   *
+   * @returns `true` if prohibited; otherwise, `false`.
    */
   protected __cannotPerform = (from: string) => {
-    const check = this.#sending || !this.__isInsideValue(from);
+    const check = this.__sending || !this.__isInsideValue(from);
     return check;
   };
 
   /**
-   * Returns the output value with a warning if it is not defined.
-   * @param out of type [T], the output value to check if it is defined.
-   * @param messages - the messages to add to the warnings collector if the output is not defined. it's a parram array
+   * Helper returning a value or recording warnings if undefined.
+   *
+   * @template T - Value type.
+   *
+   * @param out - Optional value of type `T`.
+   * @param messages - Warning messages to record.
+   *
+   * @returns Provided value of type `T`, or `undefined`.
    */
-  #returnWithWarning = <T = any>(
+  private __returnWithWarning = <T = any>(
     out: T | undefined,
     ...messages: string[]
   ) => {
@@ -1438,8 +1835,13 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * @deprecated
-   * Used internally
+   * Provides initial private context object.
+   *
+   * @deprecated Internal method.
+   *
+   * @param pContext - Private context object of type `Pc`.
+   *
+   * @returns Updated machine instance.
    */
   _providePrivateContext = (pContext: Pc) => {
     this.__initialPpc = this.__pContext = pContext;
@@ -1448,18 +1850,24 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * @deprecated
-   * Used internally
+   * Alias for method {@linkcode CommonInterpreter._providePrivateContext}.
    *
-   * Alias of {@linkcode _providePrivateContext}
+   * @deprecated Internal method.
    */
   _ppC = this._providePrivateContext;
 
+  /**
+   * Resolves an action function from an action describer object.
+   *
+   * @param action - Action describer of type {@linkcode WithDescriber}.
+   *
+   * @returns Resolved action function, or `undefined`.
+   */
   toActionFn = (action: WithDescriber) => {
     const events = this.__machine.eventsList;
     const actions = this.__machine.actions;
 
-    const out = this.#returnWithWarning(
+    const out = this.__returnWithWarning(
       toAction<Pc, Tc, Ta, Eo>(action, actions, ...events),
       `Action (${reduceDescriber(action)}) is not defined`,
     );
@@ -1467,6 +1875,13 @@ export abstract class CommonInterpreter<
     return out;
   };
 
+  /**
+   * Resolves a predicate guard function from a guard configuration object.
+   *
+   * @param guard - Guard configuration of type {@linkcode GuardConfig}.
+   *
+   * @returns Resolved predicate function, or `undefined`.
+   */
   toPredicateFn = (guard: GuardConfig): any => {
     const events = this.__machine.eventsList;
     const guards = this.__machine.guards;
@@ -1477,45 +1892,66 @@ export abstract class CommonInterpreter<
       ...events,
     );
 
-    return this.#returnWithWarning(predicate, ...errors);
+    return this.__returnWithWarning(predicate, ...errors);
   };
 
+  /**
+   * Resolves a delay duration provider function from a delay key string.
+   *
+   * @param delay - Delay identifier string.
+   *
+   * @returns Resolved delay function, or `undefined`.
+   */
   toDelayFn = (delay: string) => {
     const events = this.__machine.eventsList;
     const delays = this.__machine.delays;
 
-    return this.#returnWithWarning(
+    return this.__returnWithWarning(
       toDelay<Pc, Tc, Ta, Eo>(delay, delays, ...events),
       `Delay (${delay}) is not defined`,
     );
   };
 
+  /**
+   * Resolves a child machine factory function from a child key string.
+   *
+   * @param machine - Child machine identifier string.
+   *
+   * @returns Resolved child factory function, or `undefined`.
+   */
   toChildFn = (machine: string) => {
     const events = this.__machine.eventsList;
     const machines = this.__machine.children;
 
-    return this.#returnWithWarning(
+    return this.__returnWithWarning(
       toChildSrc<Pc, Tc, Ta>(machine, machines as any, ...events),
       `Machine (${reduceDescriber(machine)}) is not defined`,
     );
   };
 
+  /**
+   * Resolves an emitter factory function from an emitter key string.
+   *
+   * @param emitter - Emitter identifier string.
+   *
+   * @returns Resolved emitter source function, or `undefined`.
+   */
   toEmitterSrc = (emitter: string) => {
     const emitters = this.__machine.emitters;
 
-    return this.#returnWithWarning(
+    return this.__returnWithWarning(
       toEmitterSrc<Pc, Tc, Ta>(emitter, emitters as any),
       `Emitter (${reduceDescriber(emitter)}) is not defined`,
     );
   };
 
   /**
-   * Sends an event to a specific child service by its ID.
+   * Abstract method dispatching an event to a child service by ID.
    *
-   * @param to - The ID of the child service to which the event will be sent.
-   * @param : the {@linkcode EventObject} event to send to the child service.
+   * @template T - Event type extending interface {@linkcode EventObject}.
    *
-   * @see {@linkcode send} for sending events to the current service.
+   * @param to - Target child service identifier string.
+   * @param event - Event object of type `T`.
    */
   protected abstract __sendTo: <T extends EventObject>(
     to: string,
@@ -1523,15 +1959,26 @@ export abstract class CommonInterpreter<
   ) => any;
 
   // #region Disposable
+  /**
+   * Synchronously disposes resources, stopping timers and subscribers.
+   */
   dispose = () => {
     this.stop();
-    this.__timeoutActions.forEach(this.#dispose);
-    this.__subscribers.forEach(this.#dispose);
-    this.#innerSubscribers.forEach(this.#dispose);
+    this.__timeoutActions.forEach(this.__dispose);
+    this.__subscribers.forEach(this.__dispose);
+    this.__innerSubscribers.forEach(this.__dispose);
   };
 
+  /**
+   * Implementation of `Disposable` symbol contract.
+   */
   [Symbol.dispose] = this.dispose;
 
+  /**
+   * Implementation of `AsyncDisposable` symbol contract.
+   *
+   * @returns A promise resolving upon disposal completion.
+   */
   [Symbol.asyncDispose] = () => {
     const out = asyncfy(this[Symbol.dispose]);
     return out();
@@ -1540,16 +1987,9 @@ export abstract class CommonInterpreter<
 }
 
 /**
- * Retrieves the {@linkcode Interpreter} service from the given {@linkcode AnyMachine} machine.
+ * Type alias retrieving the type {@linkcode CommonInterpreter} service type from an interface {@linkcode AnyMachine}.
  *
- * @template : type {@linkcode AnyMachine} [M] - The type of the machine from which to retrieve the interpreter.
- *
- * @see {@linkcode ConfigFrom}
- * @see {@linkcode PrivateContextFrom}
- * @see {@linkcode ContextFrom}
- * @see {@linkcode EventsMapFrom}
- * @see {@linkcode PromiseesMapFrom}
- * @see {@linkcode MachineOptionsFrom}
+ * @template M - Machine type extending interface {@linkcode AnyMachine}.
  */
 export type CommonInterpreterFrom<M extends AnyMachine> =
   CommonInterpreter<

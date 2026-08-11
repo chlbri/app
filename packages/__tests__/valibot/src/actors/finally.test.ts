@@ -1,5 +1,5 @@
 import { FinallyConfigSchema } from '@bemedev/app-valibot';
-import { createValibotTests } from "../fixtures";
+import { createValibotTests } from '../fixtures';
 
 describe('TESTS', () => {
   const { acceptation, success } = createValibotTests(FinallyConfigSchema);

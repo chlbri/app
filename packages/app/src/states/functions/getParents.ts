@@ -1,6 +1,13 @@
 import { DEFAULT_DELIMITER } from '#constants';
 import { isStringEmpty } from '#utils';
 
+/**
+ * Internal function signature for getting parent paths.
+ *
+ * @param value - Target state path string.
+ *
+ * @returns Array of parent path strings.
+ */
 type _GetParents_F = (value: string) => string[];
 
 /**
@@ -12,6 +19,13 @@ type _GetParents_F = (value: string) => string[];
  */
 type GetParents_F = (value: `/${string}`) => string[];
 
+/**
+ * Internal recursive helper to retrieve all parent ancestor path strings for a path.
+ *
+ * @param value - Target state path string.
+ *
+ * @returns Array of parent path strings.
+ */
 const _getParents: _GetParents_F = value => {
   const last = value.lastIndexOf(DEFAULT_DELIMITER);
   const out = new Set('/');

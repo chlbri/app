@@ -27,7 +27,6 @@ export const hook = () => {
   const service = interpret(machine1, { context: { iterator: 0 } });
 
   const { useNext, useIterator, waiter, start, stop } = constructTests(
-    vi,
     service,
     ({ contexts, sender, waiter }) => ({
       useNext: sender('NEXT'),

@@ -6,7 +6,9 @@
   "scripts": {
     "prebuild": "pnpm --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-solidjs run -r --sort build",
     "dev": "vite dev",
+    "_build": "vite build",
     "build": "vite build",
+    "_ci": "pnpm run _build && pnpm run test",
     "start": "vite start",
     "preview": "pnpm run build && vite start",
     "up": "pnpm up --latest",

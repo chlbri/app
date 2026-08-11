@@ -17,14 +17,14 @@ export const Route = createFileRoute('/counter')({
     const canStart = hooks.can('START');
 
     return (
-      <div class='max-w-5xl mx-auto space-y-8'>
+      <div class='mx-auto max-w-5xl space-y-8'>
         <div>
           <h2 class='text-3xl font-extrabold text-white'>
             Counter Machine Tester
           </h2>
-          <p class='text-sm text-slate-400 mt-1'>
+          <p class='mt-1 text-sm text-slate-400'>
             {'Testing '}
-            <code class='text-indigo-400 font-mono'>
+            <code class='font-mono text-indigo-400'>
               useService(service, &#123; selector, equality &#125;)
             </code>
             {' signals from `@bemedev/app-solidjs`'}
@@ -38,12 +38,12 @@ export const Route = createFileRoute('/counter')({
         />
 
         {/* Counter Visual Display */}
-        <div class='p-8 rounded-2xl bg-linear-to-b from-slate-900 to-slate-950 border border-slate-800 shadow-2xl flex flex-col items-center justify-center space-y-6 w-sm mx-auto'>
-          <div class='text-center space-y-1'>
-            <span class='text-xs uppercase font-bold tracking-widest text-slate-500'>
+        <div class='mx-auto flex w-sm flex-col items-center justify-center space-y-6 rounded-2xl border border-slate-800 bg-linear-to-b from-slate-900 to-slate-950 p-8 shadow-2xl'>
+          <div class='space-y-1 text-center'>
+            <span class='text-xs font-bold tracking-widest text-slate-500 uppercase'>
               Current Value
             </span>
-            <div class='text-6xl font-black text-transparent bg-linear-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text'>
+            <div class='bg-linear-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-6xl font-black text-transparent'>
               {countOnly()}
             </div>
           </div>
@@ -51,7 +51,7 @@ export const Route = createFileRoute('/counter')({
           <div class='flex items-center space-x-3'>
             <button
               onClick={() => service.send('DEC')}
-              class='w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xl border border-slate-700 flex items-center justify-center transition-all cursor-pointer disabled:opacity-40'
+              class='flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl border border-slate-700 bg-slate-800 text-xl font-bold text-white transition-all hover:bg-slate-700 disabled:opacity-40'
               disabled={canStart()}
             >
               -
@@ -59,7 +59,7 @@ export const Route = createFileRoute('/counter')({
 
             <button
               onClick={() => service.send('INC')}
-              class='w-12 h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-lg shadow-indigo-600/30 flex items-center justify-center transition-all cursor-pointer disabled:opacity-40'
+              class='flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl bg-indigo-600 text-xl font-bold text-white shadow-lg shadow-indigo-600/30 transition-all hover:bg-indigo-500 disabled:opacity-40'
               disabled={canStart()}
             >
               +
@@ -67,14 +67,14 @@ export const Route = createFileRoute('/counter')({
 
             <button
               onClick={() => service.send('RESET')}
-              class='px-4 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-sm border border-slate-700 transition-all cursor-pointer'
+              class='h-12 cursor-pointer rounded-xl border border-slate-700 bg-slate-800 px-4 text-sm font-semibold text-slate-300 transition-all hover:bg-slate-700'
             >
               Reset
             </button>
 
             <button
               onClick={() => service.send(canStart() ? 'START' : 'STOP')}
-              class='px-5 h-12 rounded-xl  text-white font-semibold text-sm shadow-lg transition-all cursor-pointer ease-in-out duration-300'
+              class='h-12 cursor-pointer rounded-xl px-5 text-sm font-semibold text-white shadow-lg transition-all duration-300 ease-in-out'
               classList={{
                 'bg-red-600 hover:bg-red-500 shadow-red-600/30':
                   !canStart(),
@@ -88,24 +88,24 @@ export const Route = createFileRoute('/counter')({
         </div>
 
         {/* Diagnostic Inspector */}
-        <div class='p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4 font-mono text-xs'>
-          <h3 class='text-sm font-bold text-slate-200 font-sans'>
+        <div class='space-y-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 font-mono text-xs'>
+          <h3 class='font-sans text-sm font-bold text-slate-200'>
             State Inspector
           </h3>
-          <div class='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div class='p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 flex flex-col'>
-              <span class='text-slate-500 font-bold'>
+          <div class='grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div class='flex flex-col space-y-1 rounded-xl border border-slate-800 bg-slate-950 p-4'>
+              <span class='font-bold text-slate-500'>
                 State Value Accessor:
               </span>
-              <pre class='text-indigo-300 font-bold'>
+              <pre class='font-bold text-indigo-300'>
                 {JSON.stringify(stateValue(), null, 2)}
               </pre>
             </div>
-            <div class='p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 flex flex-col'>
-              <span class='text-slate-500 font-bold'>
+            <div class='flex flex-col space-y-1 rounded-xl border border-slate-800 bg-slate-950 p-4'>
+              <span class='font-bold text-slate-500'>
                 Full Machine State Object:
               </span>
-              <pre class='text-emerald-300 overflow-x-auto text-[11px] max-h-40'>
+              <pre class='max-h-40 overflow-x-auto text-[11px] text-emerald-300'>
                 {JSON.stringify(fullState(), null, 2)}
               </pre>
             </div>

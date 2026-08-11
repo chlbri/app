@@ -56,4 +56,3 @@ describe('Coverage', () => {
     expect(() => validate({ activities: [] })).toThrow('Not an array');
   });
 });
-

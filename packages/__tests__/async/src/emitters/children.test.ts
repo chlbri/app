@@ -16,7 +16,7 @@ describe('Children', () => {
       resume,
       stop,
       useStateValue,
-    } = constructTests(vi, service, ({ contexts, sender, waiter }) => ({
+    } = constructTests(service, ({ contexts, sender, waiter }) => ({
       useContext: contexts(({ context }) => context),
       useNext: sender('NEXT'),
       waiter: waiter(WAITERS.short),
@@ -93,6 +93,7 @@ describe('Children', () => {
 
   describe('#02 => Emitter Machine3, with complete #2', () => {
     const mockFn = vi.fn();
+
     const machine = machineEmitter3.provideOptions(({ voidAction }) => ({
       actions: {
         //@ts-expect-error intented
@@ -103,9 +104,9 @@ describe('Children', () => {
     }));
 
     const service = interpret(machine, { context: 0 });
+
     const { useContext, waiter, useMock, useNext, start, stop } =
       constructTests(
-        vi,
         service,
         ({ contexts, sender, waiter, tupleOf, getIndex }) => ({
           useContext: contexts(({ context }) => context),

@@ -51,7 +51,6 @@ describe('Simple Machine2 (from Machine1)', () => {
     useStateValue,
     useMock,
   } = constructTests(
-    vi,
     service,
     ({ contexts, sender, waiter, tupleOf, getIndex }) => ({
       useContext: contexts(({ context }) => context),
@@ -112,5 +111,3 @@ describe('Simple Machine2 (from Machine1)', () => {
   test(...useContext(75));
   test(...stop());
 });
-
-afterAll(() => vi.useRealTimers());

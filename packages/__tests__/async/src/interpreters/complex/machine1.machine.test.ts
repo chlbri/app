@@ -21,7 +21,7 @@ describe('Complex machine 1', () => {
     useIntermediariesLength,
     stop,
     useStateValue,
-  } = constructTests(vi, service, ({ waiter, contexts }) => ({
+  } = constructTests(service, ({ waiter, contexts }) => ({
     wait500: waiter(500),
     wait50: waiter(50),
     wait150: waiter(150),

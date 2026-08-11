@@ -3,6 +3,9 @@ import { isOn } from '#transitions';
 import { checkKeys, isStringOrUndefined } from '#utils';
 import { isString } from '~types';
 
+/**
+ * Allowed property keys for child actor configurations.
+ */
 const CHILD_KEYS = ['on', 'contexts', 'description'] as const;
 
 /**

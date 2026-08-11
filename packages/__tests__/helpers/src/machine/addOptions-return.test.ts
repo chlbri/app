@@ -15,7 +15,8 @@ describe('Machine addOptions return', () => {
     }));
 
     test('#01 => result is defined', () => expect(result).toBeDefined());
-    test('#02 => result.actions is defined', () => expect(result?.actions).toBeDefined());
+    test('#02 => result.actions is defined', () =>
+      expect(result?.actions).toBeDefined());
 
     test('#03 => result.actions.increment is defined', () =>
       expect(result?.actions?.increment).toBeDefined());
@@ -42,9 +43,12 @@ describe('Machine addOptions return', () => {
     }));
 
     test('#01 => result is defined', () => expect(result).toBeDefined());
-    test('#02 => result.actions is defined', () => expect(result?.actions).toBeDefined());
-    test('#03 => result.guards is defined', () => expect(result?.guards).toBeDefined());
-    test('#04 => result.delays is defined', () => expect(result?.delays).toBeDefined());
+    test('#02 => result.actions is defined', () =>
+      expect(result?.actions).toBeDefined());
+    test('#03 => result.guards is defined', () =>
+      expect(result?.guards).toBeDefined());
+    test('#04 => result.delays is defined', () =>
+      expect(result?.delays).toBeDefined());
   });
 
   describe('#04 => should still add options to machine even when capturing return value', () => {

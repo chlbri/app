@@ -23,7 +23,6 @@ describe('after', () => {
     const service = interpret(machine);
 
     const { useStateValue, useWaiter, start } = constructTests(
-      vi,
       service,
       ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
@@ -44,7 +43,6 @@ describe('after', () => {
     const service = interpret(machine);
 
     const { useStateValue, useWaiter, start } = constructTests(
-      vi,
       service,
       ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
@@ -69,7 +67,6 @@ describe('after', () => {
     const service = interpret(machine);
 
     const { useStateValue, useWaiter, start } = constructTests(
-      vi,
       service,
       ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
@@ -95,7 +92,6 @@ describe('after', () => {
     const service = interpret(machine);
 
     const { useStateValue, useWaiter, start, send } = constructTests(
-      vi,
       service,
       ({ waiter }) => ({ useWaiter: waiter(DELAY) }),
     );
@@ -153,7 +149,6 @@ describe('after', () => {
 
     const service = interpret(machine);
     const { useStateValue, start, stop, useLong } = constructTests(
-      vi,
       service,
       ({ waiter }) => ({ useLong: waiter(DEFAULT_MAX_TIME_PROMISE) }),
     );

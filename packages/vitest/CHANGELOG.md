@@ -335,8 +335,8 @@
 
 - **Signature Change**: Change `constructTests` signature to require `vi`
   (VitestUtils) as the first argument:
-  `constructTests(vi, service, helper?, startIndex?)` to allow checking
-  fake timers and advancing them contextually.
+  `constructTests( service, helper?, startIndex?)` to allow checking fake
+  timers and advancing them contextually.
 
 ### Features
 

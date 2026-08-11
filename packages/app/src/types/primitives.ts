@@ -18,12 +18,25 @@ import type {
 import { checkKeys } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 
+/**
+ * Type guard function signature for checking if a value is of type `string`.
+ *
+ * @param value - The value to check.
+ *
+ * @returns `true` if `value` is a string, `false` otherwise.
+ */
 export type IsString_F = (value: unknown) => value is string;
 
 /**
  * Single or readonly array type of {@linkcode T}.
  */
 export type SingleOrArrayR<T> = T | readonly T[];
+
+/**
+ * Single element or array type with at least two elements of type {@linkcode T}.
+ *
+ * @template T - The element type.
+ */
 export type SingleOrArrayL2<T> = T | [T, T, ...T[]];
 
 /**
@@ -55,19 +68,49 @@ export type FromDescriber<T extends Describer> = T['name'];
 export type Describer2 = NOmit<Describer, 'description'> &
   Partial<Pick<Describer, 'description'>>;
 
+/**
+ * Type guard that checks if a given value is a function.
+ *
+ * @param value - The value to inspect.
+ *
+ * @returns `true` if `value` is a function, `false` otherwise.
+ */
 export const isFunction = (value: unknown): value is Fn => {
   return typeof value === 'function';
 };
 
+/**
+ * Type guard that checks if a given value is a string.
+ *
+ * @param value - The value to inspect.
+ *
+ * @returns `true` if `value` is a string, `false` otherwise.
+ *
+ * @see type {@linkcode IsString_F}
+ */
 export const isString: IsString_F = value => {
   return typeof value === 'string';
 };
 
+/**
+ * Type guard that checks if an argument conforms to interface {@linkcode Describer}.
+ *
+ * @param arg - The value to check.
+ *
+ * @returns `true` if `arg` is a valid {@linkcode Describer}, `false` otherwise.
+ */
 export const isDescriber = (arg: any): arg is Describer => {
   const out = checkKeys.strict(arg, ...DESCRIBER_KEYS);
   return out;
 };
 
+/**
+ * Extracts the string name from a string or interface {@linkcode Describer}.
+ *
+ * @param value - The input string or {@linkcode Describer} object.
+ *
+ * @returns The string name or the original string.
+ */
 export const fromDescriber = (value: string | Describer) => {
   return isDescriber(value) ? value.name : value;
 };
@@ -133,6 +176,13 @@ export type ChangeProperty<
     : never);
 // #endregion
 
+/**
+ * Internal helper type for mapping object keys to key strings structure.
+ *
+ * @template T - Target object type.
+ * @template | {@linkcode boolean} `AddObjectKey` - Flag to include object key.
+ * @template | keyof `T` `Key` - Property key union.
+ */
 type _KeyStrings<
   T extends object,
   AddObjectKey extends boolean = true,
@@ -150,27 +200,45 @@ type _KeyStrings<
     : { [key in Key]: string }
   : never;
 
+/**
+ * Maps all object property paths to string representation types.
+ *
+ * @template T - Target object type.
+ * @template AddObjectKey - Whether to append object key marker. Defaults to `true`.
+ * @template Key - Keys of `T`. Defaults to `keyof T`.
+ */
 export type KeyStrings<
   T extends object,
   AddObjectKey extends boolean = true,
   Key extends keyof T = keyof T,
 > = _UnionToIntersection2<_KeyStrings<T, AddObjectKey, Key>>;
 
+/**
+ * Internal property key marker type for object key mapping.
+ */
 export type HighMy = '@my';
 
+/**
+ * Internal recursive helper type to change object properties.
+ *
+ * @template T - Source object type.
+ * @template U - Deep partial key mapping.
+ */
 type __ChangeProperties<
   T extends object,
   U extends DeepPartial<KeyStrings<T>> = DeepPartial<KeyStrings<T>>,
 > = {
-  [key in keyof T as key extends keyof U
-    ? U[key] extends infer U1
-      ? U1 extends { [key in HighMy]: string }
-        ? U1[HighMy]
-        : U1 extends string
-          ? U1
-          : key
-      : never
-    : key]: key extends keyof U
+  [
+    key in keyof T as key extends keyof U
+      ? U[key] extends infer U1
+        ? U1 extends { [key in HighMy]: string }
+          ? U1[HighMy]
+          : U1 extends string
+            ? U1
+            : key
+        : never
+      : key
+  ]: key extends keyof U
     ? T[key] extends infer T1 extends object
       ? Omit<U[key], HighMy> extends infer U1 extends DeepPartial<
           KeyStrings<T1, true>
@@ -181,6 +249,13 @@ type __ChangeProperties<
     : T[key];
 };
 
+/**
+ * Internal helper type to change object property key mappings.
+ *
+ * @template T - Source object type.
+ * @template U - Deep partial key mapping.
+ * @template option - Property change option mode.
+ */
 type _ChangeProperties<
   T extends object,
   U extends DeepPartial<KeyStrings<T>> = DeepPartial<KeyStrings<T>>,
@@ -290,6 +365,11 @@ export type FnReduced<
   R = any,
 > = (state: State<E, Tc, T>) => R;
 
+/**
+ * Extracts the string event type from an event type or string literal `T`.
+ *
+ * @template T - The event type or string.
+ */
 export type EventToType<T extends string | { type: string }> = T extends {
   type: infer U extends string;
 }
@@ -298,6 +378,17 @@ export type EventToType<T extends string | { type: string }> = T extends {
     ? T
     : never;
 
+/**
+ * Internal helper function map type keyed by event types.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template Pc - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template T - State tag string type.
+ * @template R - Return value type.
+ * @template Ex - Event types to exclude.
+ * @template TT - Filtered event type.
+ */
 type _FnMap<
   E extends EventObject = EventObject,
   Pc = any,
@@ -317,6 +408,15 @@ type _FnMap<
   ) => R;
 } & { else?: FnR<E, Pc, Tc, T, R> };
 
+/**
+ * Internal helper type for reduced function maps.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template T - State tag string type.
+ * @template R - Return value type.
+ * @template Ex - Event types to exclude.
+ */
 type _FnMapReduced<
   E extends EventObject = EventObject,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -334,6 +434,16 @@ type _FnMapReduced<
   ) => R;
 } & { else?: FnReduced<E, Tc, T, R> };
 
+/**
+ * Maps event types to their corresponding handler function signatures or fallback handler.
+ *
+ * @template E - The event object type extending interface {@linkcode EventObject}.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ * @template R - Return type.
+ * @template Ex - Event type strings to exclude.
+ */
 export type FnMap<
   E extends EventObject = EventObject,
   Pc = any,
@@ -363,6 +473,9 @@ export type FnMapR<
   Ex extends string = never,
 > = FnReduced<E, Tc, T, R> | _FnMapReduced<E, Tc, T, R, Ex>;
 
+/**
+ * Represents an empty object type with no properties.
+ */
 // oxlint-disable-next-line typescript/no-empty-object-type
 export type EmptyObject = {};
 
@@ -439,6 +552,9 @@ export type TrueObject = Ru & {
  */
 export type NoValue = void | undefined | null;
 
+/**
+ * Type alias for constant {@linkcode DEFAULT_DELIMITER}.
+ */
 export type Delimiter = typeof DEFAULT_DELIMITER;
 
 // #region NoExtraKeys
@@ -600,16 +716,39 @@ export type FilterArray<
     : FilterArray<Tail, Condition>
   : [];
 
+/**
+ * Utility type representing a deep partial type or `undefined`.
+ *
+ * @template T - The object type.
+ */
 export type DeeperPartial<T> = DeepPartial<T> | undefined;
 
+/**
+ * Internal helper to construct optional property definition.
+ *
+ * @template P - Property value type.
+ * @template V - Property key string.
+ */
 type _OptionalDefinition<P, V extends string> = undefined extends P
   ? { [K in V]?: P }
   : { [K in V]: P };
 
+/**
+ * Defines an optional or required property object based on whether property type `P` includes `undefined`.
+ *
+ * @template P - Property type.
+ * @template V - Property key name string.
+ * @template R - Resolved object structure.
+ */
 export type OptionalDefinition<
   P,
   V extends string,
   R extends _OptionalDefinition<P, V> = _OptionalDefinition<P, V>,
 > = R extends never | RecordS<never> ? EmptyObject : R;
 
+/**
+ * Type wrapping `T` or a `Promise` resolving to `T`.
+ *
+ * @template T - The resolved value type.
+ */
 export type MaybePromise<T> = T | Promise<T>;

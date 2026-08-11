@@ -52,6 +52,19 @@ import type {
   SwapFunction_F,
 } from './types';
 
+/**
+ * Abstract base class for state machines (synchronous and asynchronous).
+ *
+ * @template {CommonConfig3} C - Configuration type.
+ * @template Pc - Private context type.
+ * @template {PrimitiveObject} Tc - Internal context type.
+ * @template {EventsMap} E - Events map type.
+ * @template {ActorsConfigMap} A - Actors configuration map type.
+ * @template {string} Ta - Tag string type.
+ * @template {EventObject} Eo - Event object type.
+ * @template {string} AllPaths - All state paths type.
+ * @template {SimpleMachineOptions2} Mo - Machine options type.
+ */
 export abstract class CommonMachine<
   const C extends CommonConfig3 = CommonConfig3,
   const Pc = any,
@@ -69,18 +82,30 @@ export abstract class CommonMachine<
    * @see {@linkcode Config}
    * @see {@linkcode C}
    */
-  #config: C;
+  private _config: C;
 
+  /**
+   * The machine configuration getter.
+   */
   get config() {
-    return this.#config;
+    return this._config;
   }
 
+  /**
+   * Protected event name list.
+   */
   protected readonly __eventsList: Extract<keyof E, string>[];
 
+  /**
+   * List of event name strings getter.
+   */
   get eventsList() {
     return this.__eventsList;
   }
 
+  /**
+   * Protected flat map representation of state nodes.
+   */
   protected __flat: any;
 
   /**
@@ -92,8 +117,14 @@ export abstract class CommonMachine<
    */
   abstract get flat(): any;
 
+  /**
+   * Decomposed path mapping representation of the configuration.
+   */
+  /**
+   * Decomposed path mapping representation of the configuration.
+   */
   get decomposed() {
-    return decompose(this.#config, {
+    return decompose(this._config, {
       sep: '.',
       start: false,
       object: 'both',
@@ -157,6 +188,9 @@ export abstract class CommonMachine<
     return _unknown<Eo>();
   }
 
+  /**
+   * Abstract action function getter signature.
+   */
   abstract __actionFn: any;
 
   /**
@@ -167,7 +201,7 @@ export abstract class CommonMachine<
    * @remarks Used for typing purposes only.
    */
   get __actionKey() {
-    return this.#typingsByKey('actions');
+    return this._typingsByKey('actions');
   }
 
   /**
@@ -265,7 +299,10 @@ export abstract class CommonMachine<
     return _unknown<StatePextended<Eo, Pc, Tc, Ta>>();
   }
 
-  #typingsByKey = <
+  /**
+   * Internal helper to extract typing key names.
+   */
+  private _typingsByKey = <
     K extends AllowedNames<AnyMachine<E, A, Pc, Tc>, object | undefined>,
   >(
     key: K,
@@ -286,9 +323,12 @@ export abstract class CommonMachine<
    * @remarks Used for typing purposes only.
    */
   get __guardKey() {
-    return this.#typingsByKey('guards');
+    return this._typingsByKey('guards');
   }
 
+  /**
+   * Abstract predicate function getter signature.
+   */
   abstract __predicate: any;
 
   /**
@@ -299,7 +339,7 @@ export abstract class CommonMachine<
    * @remarks Used for typing purposes only.
    */
   get __delayKey() {
-    return this.#typingsByKey('delays');
+    return this._typingsByKey('delays');
   }
 
   /**
@@ -337,7 +377,7 @@ export abstract class CommonMachine<
    * @remarks Used for typing purposes only.
    */
   get __childKey() {
-    return this.#typingsByKey('children');
+    return this._typingsByKey('children');
   }
 
   /**
@@ -351,18 +391,32 @@ export abstract class CommonMachine<
     return _unknown<this>();
   }
 
+  /**
+   * Internal state tag string marker getter.
+   */
   get __tag() {
     return _unknown<Ta>();
   }
 
-  // #region private
-  #actions?: Mo['actions'];
+  /**
+   * Private actions map store.
+   */
+  private _actions?: Mo['actions'];
 
-  #guards?: Mo['guards'];
+  /**
+   * Private guards map store.
+   */
+  private _guards?: Mo['guards'];
 
-  #delays?: Mo['delays'];
+  /**
+   * Private delays map store.
+   */
+  private _delays?: Mo['delays'];
 
-  #actors?: Mo['actors'];
+  /**
+   * Private actors map store.
+   */
+  private _actors?: Mo['actors'];
 
   /**
    * Context for this {@linkcode Machine}.
@@ -379,27 +433,38 @@ export abstract class CommonMachine<
    */
   protected __pContext!: Pc;
 
-  #tags: Ta[];
-
-  get tags() {
-    return this.#tags;
-  }
-
-  #initialKeys: string[] = [];
+  /**
+   * Private tags array store.
+   */
+  private _tags: Ta[];
 
   /**
-   * The initial node config of this {@linkcode Machine}.
+   * Array of state tag strings defined on this machine.
    */
-  #initialConfig: any;
-  // #endregion
+  get tags() {
+    return this._tags;
+  }
 
-  #getInitialKeys = () => {
+  /**
+   * Private initial keys store.
+   */
+  private _initialKeys: string[] = [];
+
+  /**
+   * Private initial node config store.
+   */
+  private _initialConfig: any;
+
+  /**
+   * Private method to resolve initial state node keys.
+   */
+  private _getInitialKeys = () => {
     const entries = Object.entries<any>(this.__flat);
     entries.forEach(([key, { initial }]) => {
       const check1 = initial !== undefined;
       if (check1) {
         const toPush = `${key}${DEFAULT_DELIMITER}${initial}`;
-        this.#initialKeys.push(toPush);
+        this._initialKeys.push(toPush);
       }
     });
   };
@@ -414,18 +479,21 @@ export abstract class CommonMachine<
    * It flattens the configuration and prepares it for further operations ({@linkcode flat}).
    */
   constructor(config: C) {
-    this.#config = config;
-    this.__flat = flatMap.low(this.#config as any, true);
+    this._config = config;
+    this.__flat = flatMap.low(this._config as any, true);
 
-    this.#tags = Object.values<any>(this.__flat)
+    this._tags = Object.values<any>(this.__flat)
       .map(({ tags }) => toArray.typed(tags))
       .filter(Boolean)
       .flat() as any;
-    this.#initialConfig = initialConfig(this.#config as any);
-    this.#getInitialKeys();
-    this.__eventsList = constructEvents(this.#config as any) as any;
+    this._initialConfig = initialConfig(this._config as any);
+    this._getInitialKeys();
+    this.__eventsList = constructEvents(this._config as any) as any;
   }
 
+  /**
+   * Swaps state arguments in functional transitions.
+   */
   swap: SwapFunction_F<Eo, Pc, Tc, Ta> = (fn, ev) => types => {
     const _swappped = _swap(fn).constraint()(types);
     const __fn = ev ? { [ev]: _swappped } : _swappped;
@@ -454,24 +522,42 @@ export abstract class CommonMachine<
     return out;
   }
 
+  /**
+   * Registered actions map getter.
+   */
+  /**
+   * Registered actions map getter.
+   */
   get actions() {
-    return this.#actions;
+    return this._actions;
   }
 
+  /**
+   * Registered guards map getter.
+   */
   get guards() {
-    return this.#guards;
+    return this._guards;
   }
 
+  /**
+   * Registered delays map getter.
+   */
   get delays() {
-    return this.#delays;
+    return this._delays;
   }
 
+  /**
+   * Registered child actors map getter.
+   */
   get children() {
-    return this.#actors?.children;
+    return this._actors?.children;
   }
 
+  /**
+   * Registered emitters map getter.
+   */
   get emitters() {
-    return this.#actors?.emitters;
+    return this._actors?.emitters;
   }
 
   /**
@@ -485,10 +571,24 @@ export abstract class CommonMachine<
     return _unknown<AllPaths>();
   }
 
+  /**
+   * Checks if a target path is an initial state node.
+   *
+   * @param target - State node target path.
+   *
+   * @returns `true` if target is an initial node, `false` otherwise.
+   */
   isInitial = (target: string) => {
-    return this.#initialKeys.includes(target);
+    return this._initialKeys.includes(target);
   };
 
+  /**
+   * Recursively retrieves parent node from initial state target.
+   *
+   * @param target - Initial target state path.
+   *
+   * @returns Parent node configuration object.
+   */
   retrieveParentFromInitial = (target: string): any => {
     const check1 = this.isInitial(target);
     const flat: any = this.__flat;
@@ -505,23 +605,48 @@ export abstract class CommonMachine<
     return flat[target];
   };
 
-  #addActions = (actions?: Mo['actions']) =>
-    (this.#actions = merge(this.#actions, actions));
+  /**
+   * Internal helper method to merge actions into machine options.
+   */
+  private _addActions = (actions?: Mo['actions']) =>
+    (this._actions = merge(this._actions, actions));
 
-  #addGuards = (guards?: Mo['guards']) =>
-    (this.#guards = merge(this.#guards, guards));
+  /**
+   * Internal helper method to merge guards into machine options.
+   */
+  private _addGuards = (guards?: Mo['guards']) =>
+    (this._guards = merge(this._guards, guards));
 
-  #addDelays = (delays?: Mo['delays']) =>
-    (this.#delays = merge(this.#delays, delays));
+  /**
+   * Internal helper method to merge delays into machine options.
+   */
+  private _addDelays = (delays?: Mo['delays']) =>
+    (this._delays = merge(this._delays, delays));
 
-  #addChildren = (children?: NotUndefined<Mo['actors']>['children']) =>
-    (this.#actors = merge(this.#actors, _any({ children })));
+  /**
+   * Internal helper method to merge child actors into machine options.
+   */
+  private _addChildren = (
+    children?: NotUndefined<Mo['actors']>['children'],
+  ) => (this._actors = merge(this._actors, _any({ children })));
 
-  #addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
-    (this.#actors = merge(this.#actors, _any({ emitters })));
+  /**
+   * Internal helper method to merge emitters into machine options.
+   */
+  private _addEmitters = (
+    emitters?: NotUndefined<Mo['actors']>['emitters'],
+  ) => (this._actors = merge(this._actors, _any({ emitters })));
 
+  /**
+   * Abstract factory function for creating machine options.
+   *
+   * @param helper - Option helper callback function.
+   */
   abstract createOptions: (helper: Fn) => Mo | undefined;
 
+  /**
+   * Machine classification type ('sync' or 'async').
+   */
   abstract readonly TYPE: MachineType;
 
   /**
@@ -533,11 +658,11 @@ export abstract class CommonMachine<
   addOptions(helper: Fn) {
     const out = this.createOptions(helper);
 
-    this.#addActions(out?.actions);
-    this.#addGuards(out?.guards);
-    this.#addDelays(out?.delays);
-    this.#addChildren(out?.actors?.children);
-    this.#addEmitters(out?.actors?.emitters);
+    this._addActions(out?.actions);
+    this._addGuards(out?.guards);
+    this._addDelays(out?.delays);
+    this._addChildren(out?.actors?.children);
+    this._addEmitters(out?.actors?.emitters);
 
     return out;
   }
@@ -588,21 +713,31 @@ export abstract class CommonMachine<
    * @see {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2}, {@linkcode Mo}
    */
   protected get __elements(): CommonElements<C, Pc, Tc, Mo> {
-    const config = structuredClone(this.#config);
+    const config = structuredClone(this._config);
     const pContext = cloneDeep(this.__pContext);
     const context = structuredClone(this.__context);
-    const actions = cloneDeep(this.#actions);
-    const guards = cloneDeep(this.#guards);
-    const delays = cloneDeep(this.#delays);
-    const actors = cloneDeep(this.#actors);
+    const actions = cloneDeep(this._actions);
+    const guards = cloneDeep(this._guards);
+    const delays = cloneDeep(this._delays);
+    const actors = cloneDeep(this._actors);
 
     return { config, pContext, context, actions, guards, delays, actors };
   }
 
+  /**
+   * Sets the private context `pContext` for this machine.
+   *
+   * @param pContext - Private context value.
+   */
   addPrivateContext = (pContext: Pc) => {
     this.__pContext = pContext;
   };
 
+  /**
+   * Sets the context `context` for this machine.
+   *
+   * @param context - Internal context value.
+   */
   addContext = (context: Tc) => {
     this.__context = context;
   };
@@ -616,14 +751,14 @@ export abstract class CommonMachine<
    * @see {@linkcode valueToNodeConfig}
    */
   valueToConfig = (from: StateValue) => {
-    return valueToNodeConfig(this.#config as any, from);
+    return valueToNodeConfig(this._config as any, from);
   };
 
   /**
    * The accessor of the initial node config of this {@linkcode Machine}.
    */
   get initialConfig() {
-    return this.#initialConfig;
+    return this._initialConfig;
   }
 
   /**
@@ -632,7 +767,7 @@ export abstract class CommonMachine<
    * @see {@linkcode nodeToValue}
    */
   get initialValue() {
-    return nodeToValue(this.#initialConfig as any);
+    return nodeToValue(this._initialConfig as any);
   }
 
   /**
@@ -640,11 +775,14 @@ export abstract class CommonMachine<
    */
   toNode = this.valueToConfig;
 
+  /**
+   * Machine options object getter containing actions, guards, delays, and actors.
+   */
   get options() {
-    const guards = this.#guards;
-    const actions = this.#actions;
-    const delays = this.#delays;
-    const actors = this.#actors;
+    const guards = this._guards;
+    const actions = this._actions;
+    const delays = this._delays;
+    const actors = this._actors;
 
     const out = _unknown<Mo>({
       guards,
@@ -719,15 +857,36 @@ export abstract class CommonMachine<
    *
    * @see {@linkcode reduceFnMap}
    */
+  /**
+   * Abstract helper function to send an event to a target child service.
+   */
   protected abstract __sendTo: <M extends AnyMachine>(_?: M) => Fn;
 
+  /**
+   * Abstract helper function to execute a void action.
+   */
   protected abstract __voidAction: Fn;
+
+  /**
+   * Clones extended state object.
+   *
+   * @param state - Extended state object.
+   *
+   * @returns Cloned extended state object.
+   */
   protected __cloneStateExtended = (
     state: StateExtended<Eo, Pc, Tc, Ta>,
   ) => {
     return structuredClone(state);
   };
 
+  /**
+   * Helper function for creating timer or activity actions.
+   *
+   * @param name - Timer action name string.
+   *
+   * @returns Action function builder.
+   */
   protected __timeAction: CommonTimeAction_F<Eo, Pc, Tc, Ta> = name => {
     return id =>
       ({ context, pContext }) => {

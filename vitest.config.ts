@@ -37,13 +37,13 @@ export default defineConfig({
     },
 
     projects: [
-      './packages/__tests__/sync/vitest.config.ts',
-      './packages/__tests__/async/vitest.config.ts',
-      './packages/__tests__/helpers/vitest.config.ts',
-      './packages/__tests__/valibot/vitest.config.ts',
-      './packages/cli/vitest.config.ts',
-      './apps/reactjs/vitest.config.ts',
-      './apps/solidjs/vitest.config.ts',
+      'packages/__tests__/sync/vitest.config.ts',
+      'packages/__tests__/async/vitest.config.ts',
+      'packages/__tests__/helpers/vitest.config.ts',
+      'packages/__tests__/valibot/vitest.config.ts',
+      'packages/cli/vitest.config.ts',
+      'apps/reactjs/vitest.config.ts',
+      'apps/solidjs/vitest.config.ts',
     ],
   },
 });

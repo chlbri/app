@@ -11,6 +11,7 @@ import type {
   TransitionConfigMapF,
 } from '../../types';
 
+/** Allowed key names for transition configuration objects. */
 const TRANSITIONS_KEYS = ['target', 'actions', 'guards', 'description'];
 
 /**

@@ -2,6 +2,7 @@ import { checkAction } from '#actions';
 import { checkKeys } from '#utils';
 import type { GuardConfig } from '~types';
 
+/** Allowed key names for guard combination objects. */
 const GUARD_KEYS = ['and', 'or'];
 
 /**

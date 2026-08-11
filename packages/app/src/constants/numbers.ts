@@ -14,4 +14,8 @@ export const DEFAULT_MIN_ACTIVITY_TIME = 10;
  */
 export const DEFAULT_MAX_SELF_TRANSITIONS = 100;
 
+/**
+ * Time interval in milliseconds used to re-initialize the self transition counter.
+ * Calculated as double constant {@linkcode DEFAULT_MIN_ACTIVITY_TIME}.
+ */
 export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;

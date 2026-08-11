@@ -13,7 +13,7 @@ describe('Delay is too long', () => {
   }));
 
   const service = interpret(machine);
-  const { useStateValue, start } = constructTests(vi, service);
+  const { useStateValue, start } = constructTests(service);
 
   test(...start());
   test(...useStateValue('state1', 1));

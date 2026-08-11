@@ -17,19 +17,12 @@ import { emitRegisterEntry, extractMachineInfo } from './helpers';
 // ── Public API ────────────────────────────────────────────────────────
 
 /**
- * 
- * @param options - Configuration object
- * @param output [options.output='app.gen.ts'] - Output file path (relative to cwd)
- * @param excludes [options.excludes] - Glob patterns to exclude (e.g., ['node_modules', 'dist'])
- * @param cwd [options.cwd] - Working directory (defaults to process.cwd())
- * @param dryRun [options.dryRun=false] - If true, output to stdout instead of writing file
- *
  * Generate app.gen.ts from all *.machine.ts / *.fsm.ts files in the workspace.
  *
  * Main entry point for CLI commands. Orchestrates the entire 4-phase generation pipeline:
  * 1. **Discovery**: Find all machine files matching the glob pattern
  * 2. **Extraction**: Use ts-morph to parse and extract config + typings from each file
- * 3. **Analysis**: Delegate to parseTree for symbol set extraction
+ * 3. **Analysis**: Delegate to function {@linkcode parseTree} for symbol set extraction
  * 4. **Emission**: Generate TypeScript type definitions inlined into app.gen.ts
  *
  * The resulting file is a single module declaration augmenting '@bemedev/app':
@@ -49,16 +42,18 @@ import { emitRegisterEntry, extractMachineInfo } from './helpers';
  * - **Type-safe**: All string options become exact literal unions
  * - **Timestamped**: Output marked with generation time for tracking
  *
- *
-
+ * @param options - Configuration object.
+ * @param options.excludes - Glob patterns to exclude (e.g., `['node_modules', 'dist']`).
+ * @param options.cwd - Working directory path.
+ * @param options.dryRun - Optional flag. If `true`, outputs content to stdout without writing to file.
  *
  * @example
  * // One-time generation
- * await generator({ output: 'app.gen.ts', cwd: process.cwd() });
+ * await generator({ excludes: [], cwd: process.cwd() });
  *
  * @example
  * // Dry-run for inspection
- * await generator({ dryRun: true });
+ * await generator({ excludes: [], cwd: process.cwd(), dryRun: true });
  *
  * @example
  * // With custom excludes
@@ -66,6 +61,8 @@ import { emitRegisterEntry, extractMachineInfo } from './helpers';
  *   excludes: ['node_modules', 'dist', 'temp'],
  *   cwd: '/path/to/project'
  * });
+ *
+ * @see {@linkcode extractMachineInfo}, {@linkcode emitRegisterEntry}
  */
 export const generator = async (options: {
   excludes: string[];

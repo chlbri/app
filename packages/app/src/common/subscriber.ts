@@ -46,6 +46,14 @@ class Subscriber<
     super(subscriber, undefined, equals, firstTime);
   }
 
+  /**
+   * Transforms subscriber function or map into a unified subscriber handler.
+   *
+   * @param _subscriber - Subscriber callback or event function map.
+   * @param events - List of event string keys.
+   *
+   * @returns Unified subscriber state handling function.
+   */
   private static transformSub = <
     Tc extends PrimitiveObject = PrimitiveObject,
     T extends string = string,

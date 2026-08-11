@@ -45,7 +45,7 @@ describe('Error transitions testing)', () => {
     const service = interpret(machine, { context: 0 });
 
     const { useNext, useError, useContext, useMock, start, waiter } =
-      constructTests(vi, service, ({ getIndex, contexts, waiter }) => ({
+      constructTests(service, ({ getIndex, contexts, waiter }) => ({
         useNext: (value: number) => {
           const invite = `#${getIndex()} => sub1.next(${value})`;
           return tupleOf(invite, () => {

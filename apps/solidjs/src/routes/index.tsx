@@ -23,13 +23,13 @@ export const Route = createFileRoute('/')({
     return (
       <div class='space-y-8'>
         {/* Hero Section */}
-        <section class='p-8 rounded-2xl bg-linear-to-r from-indigo-950/80 via-slate-900 to-purple-950/80 border border-indigo-500/20 shadow-2xl relative overflow-hidden'>
-          <div class='absolute -right-12 -top-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none' />
-          <div class='max-w-3xl relative z-10 space-y-4 flex flex-col'>
-            <span class='px-3 py-1 text-xs font-semibold rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'>
+        <section class='relative overflow-hidden rounded-2xl border border-indigo-500/20 bg-linear-to-r from-indigo-950/80 via-slate-900 to-purple-950/80 p-8 shadow-2xl'>
+          <div class='pointer-events-none absolute -top-12 -right-12 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl' />
+          <div class='relative z-10 flex max-w-3xl flex-col space-y-4'>
+            <span class='rounded-full border border-indigo-500/30 bg-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-300'>
               TanStack Start + SolidJS Monorepo Integration
             </span>
-            <h2 class='text-3xl md:text-4xl font-extrabold text-white tracking-tight'>
+            <h2 class='text-3xl font-extrabold tracking-tight text-white md:text-4xl'>
               {'Visual Tester for '}
               <span class='bg-linear-to-r from-indigo-400 via-pink-400 to-purple-400 bg-clip-text text-transparent'>
                 @bemedev/app
@@ -39,27 +39,27 @@ export const Route = createFileRoute('/')({
                 @bemedev/app-solidjs
               </span>
             </h2>
-            <p class='text-slate-300 leading-relaxed text-sm md:text-base'>
+            <p class='text-sm leading-relaxed text-slate-300 md:text-base'>
               {
                 'This application tests the reactivity middleware connecting '
               }
-              <code class='text-pink-300 font-mono'>@bemedev/app</code>
+              <code class='font-mono text-pink-300'>@bemedev/app</code>
               {' state machines with SolidJS fine-grained signals using '}
-              <code class='text-cyan-300 font-mono'>useService</code>.
+              <code class='font-mono text-cyan-300'>useService</code>.
             </p>
           </div>
         </section>
 
         {/* Live Machine Cards Grid */}
-        <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+        <div class='grid grid-cols-1 gap-6 md:grid-cols-2'>
           {/* Machine 1: Counter */}
-          <div class='p-6 rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur shadow-xl space-y-5 flex flex-col justify-between'>
+          <div class='flex flex-col justify-between space-y-5 rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl backdrop-blur'>
             <div class='space-y-3'>
               <div class='flex items-center justify-between'>
-                <span class='text-xs font-bold uppercase tracking-wider text-indigo-400'>
+                <span class='text-xs font-bold tracking-wider text-indigo-400 uppercase'>
                   Machine 01
                 </span>
-                <span class='px-2.5 pt-0.5 pb-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'>
+                <span class='rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2.5 pt-0.5 pb-1 text-xs font-semibold text-emerald-300'>
                   {':: '}
                   {counterState().status}
                 </span>
@@ -69,22 +69,22 @@ export const Route = createFileRoute('/')({
               </h3>
               <p class='text-xs text-slate-400'>
                 Tests basic transitions (
-                <code class='text-indigo-300 font-mono'>START</code>,{' '}
-                <code class='text-indigo-300 font-mono'>INC</code>,{' '}
-                <code class='text-indigo-300 font-mono'>DEC</code>,{' '}
-                <code class='text-indigo-300 font-mono'>STOP</code>) and
+                <code class='font-mono text-indigo-300'>START</code>,{' '}
+                <code class='font-mono text-indigo-300'>INC</code>,{' '}
+                <code class='font-mono text-indigo-300'>DEC</code>,{' '}
+                <code class='font-mono text-indigo-300'>STOP</code>) and
                 reactive context accessors.
               </p>
             </div>
 
-            <div class='p-4 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-3 font-mono text-xs'>
-              <div class='flex justify-between items-center'>
+            <div class='space-y-3 rounded-xl border border-slate-800/80 bg-slate-950/80 p-4 font-mono text-xs'>
+              <div class='flex items-center justify-between'>
                 <span class='text-slate-500'>State Value:</span>
-                <span class='text-indigo-300 font-bold px-2 py-0.5 rounded bg-indigo-950 border border-indigo-800'>
+                <span class='rounded border border-indigo-800 bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300'>
                   {JSON.stringify(counterValue())}
                 </span>
               </div>
-              <div class='flex justify-between items-center'>
+              <div class='flex items-center justify-between'>
                 <span class='text-slate-500'>Count (via selector):</span>
                 <span class='text-2xl font-black text-white'>
                   {counterCount()}
@@ -95,13 +95,13 @@ export const Route = createFileRoute('/')({
             <div class='flex flex-wrap gap-2 pt-2'>
               <button
                 onClick={() => counterService.send('INC')}
-                class='px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30 transition-all active:scale-95 cursor-pointer'
+                class='cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-indigo-600/30 transition-all hover:bg-indigo-500 active:scale-95'
               >
                 Send INC
               </button>
               <button
                 onClick={() => counterService.send('DEC')}
-                class='px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all active:scale-95 cursor-pointer'
+                class='cursor-pointer rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-200 transition-all hover:bg-slate-700 active:scale-95'
               >
                 Send DEC
               </button>
@@ -111,7 +111,7 @@ export const Route = createFileRoute('/')({
                     counterValue() === 'idle' ? 'START' : 'STOP',
                   )
                 }
-                class='px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-lg shadow-purple-600/30 transition-all active:scale-95 cursor-pointer'
+                class='cursor-pointer rounded-lg bg-purple-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-purple-600/30 transition-all hover:bg-purple-500 active:scale-95'
               >
                 {counterValue() === 'idle'
                   ? 'Start Machine'
@@ -119,7 +119,7 @@ export const Route = createFileRoute('/')({
               </button>
               <Link
                 to='/counter'
-                class='ml-auto px-3 py-2 rounded-lg text-xs font-semibold text-indigo-400 hover:text-indigo-300 underline'
+                class='ml-auto rounded-lg px-3 py-2 text-xs font-semibold text-indigo-400 underline hover:text-indigo-300'
               >
                 Full Test Route &rarr;
               </Link>
@@ -127,17 +127,17 @@ export const Route = createFileRoute('/')({
           </div>
 
           {/* Machine 2: Traffic Light */}
-          <div class='p-6 rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur shadow-xl space-y-5 flex flex-col justify-between'>
+          <div class='flex flex-col justify-between space-y-5 rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl backdrop-blur'>
             <div class='space-y-3'>
               <div class='flex items-center justify-between'>
-                <span class='text-xs font-bold uppercase tracking-wider text-purple-400'>
+                <span class='text-xs font-bold tracking-wider text-purple-400 uppercase'>
                   Machine 02
                 </span>
                 <div class='flex gap-3'>
-                  <span class='px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30'>
+                  <span class='rounded-full border border-purple-500/30 bg-purple-500/20 px-2.5 py-0.5 text-xs font-semibold text-purple-300'>
                     Nested States
                   </span>
-                  <span class='px-2.5 pt-0.5 pb-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'>
+                  <span class='rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2.5 pt-0.5 pb-1 text-xs font-semibold text-emerald-300'>
                     {':: '}
                     {trafficState().status}
                   </span>
@@ -148,24 +148,24 @@ export const Route = createFileRoute('/')({
               </h3>
               <p class='text-xs text-slate-400'>
                 Tests nested states (
-                <code class='text-purple-300 font-mono'>green.normal</code>
-                , <code class='text-purple-300 font-mono'>green.fast</code>
+                <code class='font-mono text-purple-300'>green.normal</code>
+                , <code class='font-mono text-purple-300'>green.fast</code>
                 ) and state tags.
               </p>
             </div>
 
-            <div class='p-4 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-3 font-mono text-xs'>
-              <div class='flex justify-between items-center'>
+            <div class='space-y-3 rounded-xl border border-slate-800/80 bg-slate-950/80 p-4 font-mono text-xs'>
+              <div class='flex items-center justify-between'>
                 <span class='text-slate-500'>State Value:</span>
-                <span class='text-purple-300 font-bold px-2 py-0.5 rounded bg-purple-950 border border-purple-800'>
+                <span class='rounded border border-purple-800 bg-purple-950 px-2 py-0.5 font-bold text-purple-300'>
                   {JSON.stringify(trafficState().value)}
                 </span>
               </div>
-              <div class='flex justify-between items-center'>
+              <div class='flex items-center justify-between'>
                 <span class='text-slate-500'>Active Tags:</span>
                 <div class='flex flex-wrap gap-1'>
                   {trafficTags().map((tag: string) => (
-                    <span class='px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30'>
+                    <span class='rounded-full border border-purple-500/30 bg-purple-500/20 px-2 py-0.5 text-[10px] font-semibold text-purple-300'>
                       #{tag}
                     </span>
                   ))}
@@ -176,14 +176,14 @@ export const Route = createFileRoute('/')({
             <div class='flex flex-wrap gap-2 pt-2'>
               <button
                 onClick={() => trafficService.send('NEXT')}
-                class='px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-lg shadow-purple-600/30 transition-all active:scale-95 cursor-pointer'
+                class='cursor-pointer rounded-lg bg-purple-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-purple-600/30 transition-all hover:bg-purple-500 active:scale-95'
               >
                 Send NEXT
               </button>
 
               <Link
                 to='/traffic'
-                class='ml-auto px-3 py-2 rounded-lg text-xs font-semibold text-purple-400 hover:text-purple-300 underline'
+                class='ml-auto rounded-lg px-3 py-2 text-xs font-semibold text-purple-400 underline hover:text-purple-300'
               >
                 Full Test Route &rarr;
               </Link>

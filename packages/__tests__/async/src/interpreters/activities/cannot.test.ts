@@ -12,8 +12,8 @@ describe('Cannot perform Activity', () => {
   }));
 
   const service = interpret(machine);
+
   const { useStateValue, start, waiter, send } = constructTests(
-    vi,
     service,
     ({ waiter }) => ({ waiter: waiter(DELAY) }),
   );
@@ -32,6 +32,7 @@ describe('Cannot perform Activity', () => {
   test(...send('NEXT', 10));
   test(...useStateValue('state1', 11));
   test(...waiter(3));
+
   describe('#13 => Check Activity', () => {
     it('#01 => activity1 is called one time', () => {
       expect(activity1).toHaveBeenCalledTimes(1);

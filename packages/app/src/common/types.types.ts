@@ -14,6 +14,9 @@ export type TimeActionsTypes =
   | 'resumeTimer'
   | 'stopTimer';
 
+/**
+ * Internal union of base action category strings.
+ */
 type _ActionTypes =
   | 'assign'
   | 'void'

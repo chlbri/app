@@ -17,5 +17,5 @@
     "types": ["node", "vitest/globals"],
     "paths": {}
   },
-  "exclude": ["vitest.config.ts"]
+  "exclude": ["vitest.config.ts", "vitest.setup.ts"]
 }

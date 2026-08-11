@@ -2,13 +2,8 @@ import { defineConfig } from 'oxlint';
 
 export default defineConfig({
   plugins: ['typescript'],
-  categories: {
-    correctness: 'off',
-  },
-  env: {
-    builtin: true,
-    node: true,
-  },
+  categories: { correctness: 'off' },
+  env: { builtin: true, node: true },
   ignorePatterns: [
     '**/node_modules',
     '**/publish',

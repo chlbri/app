@@ -77,7 +77,6 @@ describe('TESTS', () => {
       });
 
       const { start, useWaiter, useErrors } = constructTests(
-        vi,
         service,
         ({ waiter }) => ({
           useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
@@ -109,7 +108,7 @@ describe('TESTS', () => {
           mode: 'strict',
         });
 
-        const { unhandledRejection } = constructTests(vi, service);
+        const { unhandledRejection } = constructTests(service);
         test(...unhandledRejection(service.start, error));
       });
     });
@@ -128,7 +127,7 @@ describe('TESTS', () => {
     }));
 
     const service = interpret(machine, { mode: 'strict' });
-    const { unhandledRejection } = constructTests(vi, service);
+    const { unhandledRejection } = constructTests(service);
     test(...unhandledRejection(service.start, 'error'));
   });
 });

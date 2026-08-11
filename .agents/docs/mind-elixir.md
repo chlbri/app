@@ -4,29 +4,46 @@
 [![license](https://img.shields.io/npm/l/mind-elixir)](https://github.com/ssshooter/mind-elixir-core/blob/master/LICENSE)
 [![bundlephobia](https://badgen.net/bundlephobia/dependency-count/mind-elixir)](https://bundlephobia.com/result?p=mind-elixir)
 
-**Mind Elixir** is an open-source, framework-agnostic JavaScript mind map core library. Lightweight, high-performance, and feature-rich, it allows developers to build interactive mind mapping tools and integrate them smoothly into modern web applications including **React**, Vue, and Vanilla JS.
+**Mind Elixir** is an open-source, framework-agnostic JavaScript mind map
+core library. Lightweight, high-performance, and feature-rich, it allows
+developers to build interactive mind mapping tools and integrate them
+smoothly into modern web applications including **React**, Vue, and Vanilla
+JS.
 
 ---
 
 ## 🚀 Key Features
 
 ### 🎨 User Experience
-- **Fluent & Smooth UX**: Intuitive node editing, drag-and-drop, and navigation.
-- **Mobile Friendly**: Native support for touch interactions on mobile devices.
+
+- **Fluent & Smooth UX**: Intuitive node editing, drag-and-drop, and
+  navigation.
+- **Mobile Friendly**: Native support for touch interactions on mobile
+  devices.
 - **Keyboard Shortcuts**: Full set of keyboard shortcuts for power users.
-- **Multi-node Operations**: Selection and manipulation of multiple nodes concurrently.
+- **Multi-node Operations**: Selection and manipulation of multiple nodes
+  concurrently.
 
 ### ⚡ Performance & Architecture
-- **Lightweight**: Minimal bundle size with zero external runtime dependencies.
-- **High Performance**: Optimized rendering engine capable of handling large mind maps seamlessly.
-- **Framework Agnostic**: Easily wrapped within React components, Vue instances, or standard JS scripts.
-- **Extensible Architecture**: Plugin system and operation guards to extend behavior.
+
+- **Lightweight**: Minimal bundle size with zero external runtime
+  dependencies.
+- **High Performance**: Optimized rendering engine capable of handling
+  large mind maps seamlessly.
+- **Framework Agnostic**: Easily wrapped within React components, Vue
+  instances, or standard JS scripts.
+- **Extensible Architecture**: Plugin system and operation guards to extend
+  behavior.
 
 ### 🛠️ Core Capabilities
-- **Node Editing & Layouts**: Flexible structure supporting root node, topic nodes, sub-nodes, connections, and summaries.
+
+- **Node Editing & Layouts**: Flexible structure supporting root node,
+  topic nodes, sub-nodes, connections, and summaries.
 - **Undo / Redo**: Built-in history stack for changes.
-- **Node Connections & Summaries**: Connect arbitrary nodes or group children with summary nodes.
-- **Export Formats**: Support for exporting data and rendering maps to SVG, PNG, and HTML formats.
+- **Node Connections & Summaries**: Connect arbitrary nodes or group
+  children with summary nodes.
+- **Export Formats**: Support for exporting data and rendering maps to SVG,
+  PNG, and HTML formats.
 
 ---
 
@@ -56,13 +73,18 @@ import 'mind-elixir/style.css';
 
 ## ⚛️ React Integration
 
-In React, Mind Elixir directly manages canvas/DOM elements, so it is recommended to bind it to a DOM container using `useRef` within a `useEffect` hook.
+In React, Mind Elixir directly manages canvas/DOM elements, so it is
+recommended to bind it to a DOM container using `useRef` within a
+`useEffect` hook.
 
 ### Complete React Component Example
 
 ```tsx
 import React, { useEffect, useRef } from 'react';
-import MindElixir, { MindElixirData, MindElixirInstance } from 'mind-elixir';
+import MindElixir, {
+  MindElixirData,
+  MindElixirInstance,
+} from 'mind-elixir';
 import 'mind-elixir/style.css';
 
 interface MindMapProps {
@@ -122,7 +144,7 @@ export const ReactMindMap: React.FC<MindMapProps> = ({
 
     // 3. Register Event Listeners
     if (onSelectNode) {
-      me.bus.addListener('selectNode', (node) => {
+      me.bus.addListener('selectNode', node => {
         onSelectNode(node);
       });
     }
@@ -160,21 +182,13 @@ Mind Elixir uses a JSON structure rooted at `nodeData`.
   "nodeData": {
     "id": "root",
     "topic": "Central Topic",
-    "style": {
-      "color": "#333333",
-      "background": "#f5f5f5"
-    },
+    "style": { "color": "#333333", "background": "#f5f5f5" },
     "children": [
       {
         "id": "node_1",
         "topic": "Main Branch 1",
         "direction": 0,
-        "children": [
-          {
-            "id": "node_1_1",
-            "topic": "Subtopic A"
-          }
-        ]
+        "children": [{ "id": "node_1_1", "topic": "Subtopic A" }]
       }
     ]
   },
@@ -184,52 +198,59 @@ Mind Elixir uses a JSON structure rooted at `nodeData`.
 ```
 
 ### Node Object Attributes
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `id` | `string` | Unique identifier for the node |
-| `topic` | `string` | Text content of the node |
-| `children` | `NodeObj[]` | Array of child nodes |
-| `expanded` | `boolean` | Whether sub-branches are expanded |
-| `style` | `object` | Inline CSS attributes (`color`, `background`, `fontSize`, etc.) |
-| `hyperLink` | `string` | URL attached to the node |
-| `icons` | `string[]` | Array of icon strings |
-| `tags` | `string[]` | Array of tag text strings |
+
+| Property    | Type        | Description                                                     |
+| :---------- | :---------- | :-------------------------------------------------------------- |
+| `id`        | `string`    | Unique identifier for the node                                  |
+| `topic`     | `string`    | Text content of the node                                        |
+| `children`  | `NodeObj[]` | Array of child nodes                                            |
+| `expanded`  | `boolean`   | Whether sub-branches are expanded                               |
+| `style`     | `object`    | Inline CSS attributes (`color`, `background`, `fontSize`, etc.) |
+| `hyperLink` | `string`    | URL attached to the node                                        |
+| `icons`     | `string[]`  | Array of icon strings                                           |
+| `tags`      | `string[]`  | Array of tag text strings                                       |
 
 ---
 
 ## ⚙️ Configuration & Options
 
-When calling `new MindElixir(options)`, the following configuration options are available:
+When calling `new MindElixir(options)`, the following configuration options
+are available:
 
-| Option | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `el` | `string \| HTMLElement` | *(Required)* | Container selector or HTML element |
-| `direction` | `number` | `MindElixir.SIDE` | Layout direction (`MindElixir.LEFT`, `RIGHT`, or `SIDE`) |
-| `draggable` | `boolean` | `true` | Enable drag-and-drop node reordering |
-| `editable` | `boolean` | `true` | Allow node topic editing |
-| `contextMenu` | `boolean` | `true` | Enable right-click context menu |
-| `toolBar` | `boolean` | `true` | Show floating toolbar controls |
-| `nodeMenu` | `boolean` | `true` | Show node configuration popup menu |
-| `keypress` | `boolean` | `true` | Enable default keyboard shortcuts |
-| `locale` | `string` | `'en'` | UI language (`'en'`, `'zh_CN'`, `'ja'`, etc.) |
-| `before` | `object` | `{}` | Operation guard callbacks for async hooks |
+| Option        | Type                    | Default           | Description                                              |
+| :------------ | :---------------------- | :---------------- | :------------------------------------------------------- |
+| `el`          | `string \| HTMLElement` | _(Required)_      | Container selector or HTML element                       |
+| `direction`   | `number`                | `MindElixir.SIDE` | Layout direction (`MindElixir.LEFT`, `RIGHT`, or `SIDE`) |
+| `draggable`   | `boolean`               | `true`            | Enable drag-and-drop node reordering                     |
+| `editable`    | `boolean`               | `true`            | Allow node topic editing                                 |
+| `contextMenu` | `boolean`               | `true`            | Enable right-click context menu                          |
+| `toolBar`     | `boolean`               | `true`            | Show floating toolbar controls                           |
+| `nodeMenu`    | `boolean`               | `true`            | Show node configuration popup menu                       |
+| `keypress`    | `boolean`               | `true`            | Enable default keyboard shortcuts                        |
+| `locale`      | `string`                | `'en'`            | UI language (`'en'`, `'zh_CN'`, `'ja'`, etc.)            |
+| `before`      | `object`                | `{}`              | Operation guard callbacks for async hooks                |
 
 ---
 
 ## 🛠️ Instance API Methods
 
-Once instantiated (`const me = new MindElixir(...)`), you can interact with the map programmatically:
+Once instantiated (`const me = new MindElixir(...)`), you can interact with
+the map programmatically:
 
 ### Data Export & Operations
+
 - **`me.getData()`**: Returns the full mind map data object.
 - **`me.getDataString()`**: Returns the stringified JSON data object.
 - **`me.refresh(data?)`**: Re-renders the map with updated data.
 - **`me.init(data)`**: Initializes and renders the mind map.
 
 ### Node Manipulation
+
 - **`me.selectNode(el, single)`**: Programmatically select a node element.
-- **`me.addChild(parentEl, nodeData)`**: Insert a child node into a target parent.
-- **`me.insertSibling(type, targetEl, nodeData)`**: Insert a sibling node (`'before'` or `'after'`).
+- **`me.addChild(parentEl, nodeData)`**: Insert a child node into a target
+  parent.
+- **`me.insertSibling(type, targetEl, nodeData)`**: Insert a sibling node
+  (`'before'` or `'after'`).
 - **`me.removeNode(el)`**: Remove a target node.
 - **`me.beginEdit(el)`**: Enter editing mode for a node.
 
@@ -241,26 +262,29 @@ Mind Elixir includes an event bus for monitoring interactions:
 
 ```typescript
 // Subscribe to an event
-me.bus.addListener('selectNode', (nodeObj) => {
+me.bus.addListener('selectNode', nodeObj => {
   console.log('Selected Node:', nodeObj);
 });
 
-me.bus.addListener('expandNode', (nodeObj) => {
+me.bus.addListener('expandNode', nodeObj => {
   console.log('Expanded Node:', nodeObj);
 });
 ```
 
 ### Common Events
+
 - `'selectNode'` / `'selectNodes'`: Node selection changes.
 - `'unselectNode'`: Node selection cleared.
 - `'expandNode'` / `'collapseNode'`: Node visibility toggled.
-- `'operation'`: Emitted on node mutation operations (add, move, edit, delete).
+- `'operation'`: Emitted on node mutation operations (add, move, edit,
+  delete).
 
 ---
 
 ## 🛡️ Operation Guards (`before`)
 
-Operation guards allow intercepting user operations for asynchronous checks (e.g. confirming deletion or saving to a database):
+Operation guards allow intercepting user operations for asynchronous checks
+(e.g. confirming deletion or saving to a database):
 
 ```typescript
 const me = new MindElixir({
@@ -281,20 +305,23 @@ const me = new MindElixir({
 
 ## ⌨️ Useful Keyboard Shortcuts
 
-| Key | Action |
-| :--- | :--- |
-| `Enter` | Insert sibling node |
-| `Tab` | Insert child node |
-| `F2` | Edit topic |
-| `Delete` / `Backspace` | Delete selected node |
-| `Ctrl` / `Cmd` + `Z` | Undo |
-| `Ctrl` / `Cmd` + `Y` | Redo |
-| `Space` | Center map on root node |
+| Key                    | Action                  |
+| :--------------------- | :---------------------- |
+| `Enter`                | Insert sibling node     |
+| `Tab`                  | Insert child node       |
+| `F2`                   | Edit topic              |
+| `Delete` / `Backspace` | Delete selected node    |
+| `Ctrl` / `Cmd` + `Z`   | Undo                    |
+| `Ctrl` / `Cmd` + `Y`   | Redo                    |
+| `Space`                | Center map on root node |
 
 ---
 
 ## 🔗 Useful Links & Resources
 
-- **NPM Package**: [https://www.npmjs.com/package/mind-elixir](https://www.npmjs.com/package/mind-elixir)
-- **GitHub Repository**: [https://github.com/ssshooter/mind-elixir-core](https://github.com/ssshooter/mind-elixir-core)
-- **Official Documentation**: [https://docs.mind-elixir.com/](https://docs.mind-elixir.com/)
+- **NPM Package**:
+  [https://www.npmjs.com/package/mind-elixir](https://www.npmjs.com/package/mind-elixir)
+- **GitHub Repository**:
+  [https://github.com/ssshooter/mind-elixir-core](https://github.com/ssshooter/mind-elixir-core)
+- **Official Documentation**:
+  [https://docs.mind-elixir.com/](https://docs.mind-elixir.com/)

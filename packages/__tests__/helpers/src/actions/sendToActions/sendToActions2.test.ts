@@ -33,7 +33,7 @@ describe('cov => Performs send to itself actions', () => {
   const service = interpret(machine, { exact: true, context: {} });
 
   const { useIterator, start, dispose, useStateValue, send } =
-    constructTests(vi, service, ({ contexts: constructContexts }) => ({
+    constructTests(service, ({ contexts: constructContexts }) => ({
       useIterator: constructContexts(
         ({ context }) => context?.iterator,
         'iterator',

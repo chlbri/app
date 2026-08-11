@@ -29,7 +29,7 @@ describe('Machine Tag Interpreter', () => {
     const service = interpret(machine);
 
     const { start, useStateValue, useNext, usePrev, useTags } =
-      constructTests(vi, service, ({ sender }) => ({
+      constructTests(service, ({ sender }) => ({
         useNext: sender('NEXT'),
         usePrev: sender('PREV'),
       }));

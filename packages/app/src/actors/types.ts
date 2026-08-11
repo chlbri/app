@@ -31,6 +31,11 @@ export type FinallyConfigArray = readonly [
   _FinallyConfig | WithDescriber,
 ];
 
+/**
+ * Internal utility type to enforce no extra keys on finally transition configuration objects.
+ *
+ * @template T - Transition target or configuration type.
+ */
 type _NoExtraKeysFinallyConfig<T> = T extends string
   ? T
   : T extends Describer

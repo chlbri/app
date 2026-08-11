@@ -46,7 +46,7 @@ export const Expand: React.FC<ExpandProps> = ({
     >
       <div
         onClick={toggle}
-        className='w-full text-left cursor-pointer'
+        className='w-full cursor-pointer text-left'
         role='button'
         tabIndex={0}
         onKeyDown={e => {

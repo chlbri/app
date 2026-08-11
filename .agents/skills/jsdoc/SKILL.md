@@ -43,13 +43,45 @@ source files.
   `CommonScheduler.stop`), **do NOT prefix with `-- type`, `-- class`, or
   `-- interface`**.
 
-### 4. `@see` section
+### 4. `@template` Parameter Typing with `{@linkcode}`
+
+- When using `@template` and you need to type the template parameter using
+  `{@linkcode ...}`, put `| {@linkcode TargetType} \`ParamName\`` to type
+  the template parameter.
+- Wrap the template parameter name in backticks.
+
+Example:
+
+```ts
+/**
+ * Function type signature for adding options to an async machine configuration.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template Ta - State tag string type.
+ * @template Mo - Simple machine options type.
+ * @template L - Existing options type.
+ */
+export type AsyncAddOptions_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  Ta extends string = string,
+  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+> = <const T extends Mo>(
+  option: AsyncAddOptionsParam_F<E, Pc, Tc, Ta, T, L>,
+) => L & T;
+```
+
+### 5. `@see` section
 
 This section concerns all main tokens (functions, methods, interfaces,
 types, classes, variables, etc...) used inside the elements we want to
 document. Put only relevant tokens
 
-### 5. `@see` Reference Deduplication
+### 6. `@see` Reference Deduplication
 
 - **Do NOT list a token in `@see` if it is already mentioned in the JSDoc
   body description, `@param`, or `@returns`.**
@@ -58,7 +90,7 @@ document. Put only relevant tokens
 - Omit the `@see` tag entirely if all relevant symbols are already linked
   in the description or parameter/return tags.
 
-### 6. `@see` Formatting Rules
+### 7. `@see` Formatting Rules
 
 - **Only one `@see` tag per JSDoc block.** Combine multiple references into
   a single `@see` tag line.
@@ -73,7 +105,7 @@ document. Put only relevant tokens
   - Example: -- class {@linkcode CommonScheduler}
   - Example: -- interface {@linkcode SchedulerConfig}
 
-### 7. Functions with Multiple Signatures (Overloads)
+### 8. Functions with Multiple Signatures (Overloads)
 
 - For functions or methods with multiple overload signatures, **only add
   JSDoc comments to the overload definitions (signatures)**.

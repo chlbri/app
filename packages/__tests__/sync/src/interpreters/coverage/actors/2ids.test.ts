@@ -42,7 +42,7 @@ describe('Coverage actors', () => {
       useIter1,
       useIter2,
       useAll,
-    } = constructTests(vi, service, ({ waiter, contexts }) => ({
+    } = constructTests(service, ({ waiter, contexts }) => ({
       waiter: waiter(DELAY),
       useIter1: contexts(({ pContext }) => pContext.iter1, 'iter1'),
       useIter2: contexts(({ pContext }) => pContext.iter2, 'iter2'),

@@ -1,5 +1,5 @@
 import { EventObjectSchema } from '@bemedev/app-valibot';
-import { createValibotTests } from "../fixtures";
+import { createValibotTests } from '../fixtures';
 
 describe('TESTS', () => {
   describe('#01 => EventObjectSchema', () => {

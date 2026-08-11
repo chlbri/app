@@ -58,7 +58,8 @@ describe('#01 => parseTree', () => {
       expect(result.events.toArray).toEqual([]);
     });
 
-    test('#14 => tags is empty', () => expect(result.tags.toArray).toEqual([]));
+    test('#14 => tags is empty', () =>
+      expect(result.tags.toArray).toEqual([]));
   });
 
   describe('#02 => entry and exit actions', () => {

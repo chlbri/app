@@ -44,7 +44,7 @@ describe('REAL LIFE TESTS', () => {
     // #endregion
 
     describe('TESTS', () => {
-      const { start } = constructTests(vi, service);
+      const { start } = constructTests(service);
       test(...start(0));
       test(...useValue('idle', 1));
       test(...useIterator(2, 2));
@@ -127,7 +127,7 @@ describe('REAL LIFE TESTS', () => {
     // #endregion
 
     describe('TESTS', () => {
-      const { start } = constructTests(vi, service);
+      const { start } = constructTests(service);
 
       test(...start(0));
       test(...useValue('idle', 1));
@@ -700,7 +700,6 @@ describe('REAL LIFE TESTS', () => {
     // #region Hooks
 
     const { start, waiter, send, useLang, useStateValue } = constructTests(
-      vi,
       service,
       ({ waiter, contexts }) => ({
         waiter: waiter(500),
