@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-valibot",
-  "version": "1.9.4",
+  "version": "1.10.0",
   "description": "Valibot schemas and validation helpers for @bemedev/app",
   "author": {
     "email": "bri_lvi@icloud.com",
