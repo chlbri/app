@@ -3,6 +3,7 @@ import nodeWatch from 'node-watch';
 import { DEFAULT_REGEX } from '../core/constants';
 import { generator } from '../core/generator';
 import { createStarter } from '../core/helpers/starter';
+import { relative } from 'path';
 
 /**
  * CLI command: `app watch`
@@ -107,7 +108,8 @@ export const watch = command({
 
       if (event === 'update') {
         console.warn('path', '=>', path);
-        await createStarter(path, options.cwd);
+        const relativePath = relative(options.cwd, path);
+        await createStarter(relativePath, options.cwd);
         return generate();
       } else {
         console.log(`\nChange detected: ${path}`);

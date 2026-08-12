@@ -19,11 +19,16 @@ export const Route = createRootRoute({
 
   shellComponent: ({ children }) => {
     return (
-      <html lang='en' className='dark h-full w-full overflow-hidden'>
+      <html
+        lang='en'
+        className='dark h-full w-full overflow-hidden'
+        suppressHydrationWarning
+        suppressContentEditableWarning
+      >
         <head>
           <HeadContent />
         </head>
-        <body className='h-screen w-screen m-0 p-0 overflow-hidden bg-slate-950 text-slate-100 font-sans antialiased selection:bg-cyan-500/30'>
+        <body className='m-0 h-screen w-screen overflow-hidden bg-slate-950 p-0 font-sans text-slate-100 antialiased selection:bg-cyan-500/30'>
           {children}
           <Scripts />
         </body>

@@ -8,7 +8,9 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -19,12 +21,15 @@ html, body, #root {
 }
 
 /* Custom ReactFlow styles */
+
 .react-flow {
   background-color: #030712 !important;
 }
 
 .react-flow__controls {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.6),
+    0 8px 10px -6px rgba(0, 0, 0, 0.5);
   border-radius: 0.75rem;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -58,7 +63,9 @@ html, body, #root {
 
 .react-flow__edge-path {
   stroke-width: 2.5;
-  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+  transition:
+    stroke 0.3s ease,
+    stroke-width 0.3s ease;
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
@@ -72,7 +79,9 @@ html, body, #root {
   border-radius: 50%;
   border: 2px solid #0f172a;
   background-color: #38bdf8;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .react-flow__handle:hover {
@@ -80,7 +89,7 @@ html, body, #root {
   background-color: #818cf8;
 }
 
-.glow-box-cyan {
+@utility glow-box-cyan {
   box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.3);
 }
 

@@ -6,10 +6,14 @@
   "scripts": {
     "dev": "vite dev",
     "generate-routes": "tsr generate",
+    "app:types": "app-cli generate -c ./src/services",
+    "app:types:watch": "app-cli watch -c ./src/services",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@bemedev/app": "workspace:^",
+    "@bemedev/app-reactjs": "workspace:^",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",
@@ -26,6 +30,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@bemedev/app-cli": "workspace:^",
     "@tailwindcss/typography": "^0.5.20",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.167.27",

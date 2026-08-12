@@ -88,6 +88,12 @@ importers:
 
   apps/graph-app:
     dependencies:
+      '@bemedev/app':
+        specifier: workspace:^
+        version: link:../../packages/app
+      '@bemedev/app-reactjs':
+        specifier: workspace:^
+        version: link:../../packages/reactjs
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.2)(tsx@4.23.12))
@@ -131,6 +137,9 @@ importers:
         specifier: ^4.3.3
         version: 4.3.3
     devDependencies:
+      '@bemedev/app-cli':
+        specifier: workspace:^
+        version: link:../../packages/cli
       '@tailwindcss/typography':
         specifier: ^0.5.20
         version: 0.5.20(tailwindcss@4.3.3)

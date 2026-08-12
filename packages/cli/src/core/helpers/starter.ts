@@ -50,7 +50,6 @@ export const createStarter = async (
   cwd = process.cwd(),
 ) => {
   if (!isMachineFile(filePath)) return;
-
   const absolutePath = resolve(cwd, filePath);
   let existing = '';
 
@@ -60,6 +59,7 @@ export const createStarter = async (
     if (err?.code !== 'ENOENT') {
       console.error(`Failed to inspect created file ${filePath}:`, err);
     }
+
     return;
   }
 

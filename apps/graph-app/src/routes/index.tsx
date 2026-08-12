@@ -1,3 +1,4 @@
+import { Handles } from '#/ui/components/Handles';
 import { createFileRoute } from '@tanstack/react-router';
 import {
   AlertCircle,
@@ -15,43 +16,46 @@ import {
   XCircle,
   Zap,
 } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ReactFlow, {
   Background,
   BackgroundVariant,
+  ConnectionMode,
   Controls,
   Handle,
   MarkerType,
-  MiniMap,
+  // MiniMap,
+  NodeResizer,
   Panel,
   Position,
   addEdge,
   useEdgesState,
+  useNodes,
   useNodesState,
+  // useUpdateNodeInternals,
   type Edge,
   type Node,
   type NodeProps,
-  type OnConnect,
 } from 'reactflow';
 
 export const Route = createFileRoute('/')({
   component: GraphAppIndexPage,
 });
 
+const statusColors = {
+  online: 'bg-emerald-700 text-emerald-200 border-emerald-500/30',
+  warning: 'bg-amber-700 text-amber-200 border-amber-500/30',
+  offline: 'bg-rose-700 text-rose-200 border-rose-500/30',
+} as const;
+
+const statusIcons = {
+  online: <CheckCircle2 className='size-4 text-emerald-400' />,
+  warning: <AlertCircle className='size-4 text-amber-400' />,
+  offline: <XCircle className='size-4 text-rose-400' />,
+} as const;
+
 // Custom Node Components
-const ServiceNode = ({ data, selected }: NodeProps) => {
-  const statusColors = {
-    online: 'bg-emerald-500 text-emerald-400 border-emerald-500/30',
-    warning: 'bg-amber-500 text-amber-400 border-amber-500/30',
-    offline: 'bg-rose-500 text-rose-400 border-rose-500/30',
-  };
-
-  const statusIcons = {
-    online: <CheckCircle2 className='h-3 w-3 text-emerald-400' />,
-    warning: <AlertCircle className='h-3 w-3 text-amber-400' />,
-    offline: <XCircle className='h-3 w-3 text-rose-400' />,
-  };
-
+const ServiceNode = ({ data, selected, id }: NodeProps) => {
   const statusKey = (data.status as keyof typeof statusColors) || 'online';
 
   return (
@@ -63,9 +67,18 @@ const ServiceNode = ({ data, selected }: NodeProps) => {
       }`}
     >
       <Handle
+        id={`${id}->targetTop#1`}
         type='target'
         position={Position.Top}
-        className='!-top-1.5 !h-3 !w-3 !bg-cyan-400'
+        className='-left-5 size-3 bg-cyan-400'
+        style={{ left: 37, top: '-0.375rem' }}
+      />
+      <Handle
+        id={`${id}->targetTop#2`}
+        type='target'
+        position={Position.Top}
+        className='-top-1.5 size-3 bg-cyan-400'
+        style={{ top: '-0.375rem' }}
       />
       <div className='mb-2 flex items-center justify-between gap-3'>
         <div className='flex items-center gap-2'>
@@ -99,7 +112,7 @@ const ServiceNode = ({ data, selected }: NodeProps) => {
       <Handle
         type='source'
         position={Position.Bottom}
-        className='!-bottom-1.5 !h-3 !w-3 !bg-cyan-400'
+        className='-bottom-1.5 h-3 w-3 bg-cyan-400'
       />
     </div>
   );
@@ -117,7 +130,7 @@ const DatabaseNode = ({ data, selected }: NodeProps) => {
       <Handle
         type='target'
         position={Position.Top}
-        className='!-top-1.5 !h-3 !w-3 !bg-purple-400'
+        className='-top-1.5 h-3 w-3 bg-purple-400'
       />
       <div className='mb-2 flex items-center gap-2.5'>
         <div className='rounded-lg border border-purple-500/20 bg-purple-500/10 p-2 text-purple-400'>
@@ -143,7 +156,7 @@ const DatabaseNode = ({ data, selected }: NodeProps) => {
       <Handle
         type='source'
         position={Position.Bottom}
-        className='!-bottom-1.5 !h-3 !w-3 !bg-purple-400'
+        className='-bottom-1.5 h-3 w-3 bg-purple-400'
       />
     </div>
   );
@@ -161,7 +174,7 @@ const ApiNode = ({ data, selected }: NodeProps) => {
       <Handle
         type='target'
         position={Position.Left}
-        className='!-left-1.5 !h-3 !w-3 !bg-emerald-400'
+        className='-left-1.5 h-3 w-3 bg-emerald-400'
       />
       <div className='mb-2 flex items-center gap-2.5'>
         <div className='rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-2 text-emerald-400'>
@@ -187,64 +200,108 @@ const ApiNode = ({ data, selected }: NodeProps) => {
       <Handle
         type='source'
         position={Position.Right}
-        className='!-right-1.5 !h-3 !w-3 !bg-emerald-400'
+        className='-right-1.5 h-3 w-3 bg-emerald-400'
       />
       <Handle
         type='source'
         position={Position.Bottom}
         id='bottom'
-        className='!-bottom-1.5 !h-3 !w-3 !bg-emerald-400'
+        className='-bottom-1.5 h-3 w-3 bg-emerald-400'
       />
     </div>
   );
 };
 
-const AnalyticsNode = ({ data, selected }: NodeProps) => {
+const AnalyticsNode = ({ id, data, selected }: NodeProps) => {
+  const nodes = useNodes();
+
+  const childNodes = useMemo(() => {
+    return nodes.filter(n => n.parentId === id);
+  }, [nodes, id]);
+
+  const { minWidth, minHeight } = useMemo(() => {
+    let maxRight = 200;
+    let maxBottom = 110;
+    const padding = 20;
+
+    childNodes.forEach(child => {
+      const childW =
+        typeof child.style?.width === 'number'
+          ? child.style.width
+          : child.width || 200;
+      const childH =
+        typeof child.style?.height === 'number'
+          ? child.style.height
+          : child.height || 120;
+
+      const right = (child.position?.x || 0) + childW + padding;
+      const bottom = (child.position?.y || 0) + childH + padding;
+
+      if (right > maxRight) maxRight = right;
+      if (bottom > maxBottom) maxBottom = bottom;
+    });
+
+    return { minWidth: maxRight, minHeight: maxBottom };
+  }, [childNodes]);
+
   return (
-    <div
-      className={`min-w-[200px] rounded-xl border bg-slate-900/90 px-4 py-3 shadow-xl backdrop-blur-md transition-all duration-200 ${
-        selected
-          ? 'glow-box-amber border-amber-400 ring-2 ring-amber-500/30'
-          : 'border-slate-800 hover:border-slate-700'
-      }`}
-    >
-      <Handle
-        type='target'
-        position={Position.Top}
-        className='!-top-1.5 !h-3 !w-3 !bg-amber-400'
+    <div className='relative h-full w-full rounded-xl border border-slate-800 shadow-xl transition-all duration-200 hover:border-slate-700'>
+      <NodeResizer
+        color='#f59e0b'
+        isVisible={selected}
+        minWidth={minWidth}
+        minHeight={minHeight}
+        // handleClassName='size-5 bg-amber-400 border-2 border-slate-900 rounded-full'
+        // lineClassName='border-blue-400/60! p-1'
+        handleStyle={{}}
+        lineStyle={{
+          borderRadius: '50%',
+          borderWidth: 1,
+          overflow: 'hidden',
+          zIndex: 300,
+        }}
+        // keepAspectRatio
       />
-      <div className='mb-2 flex items-center gap-2.5'>
-        <div className='rounded-lg border border-amber-500/20 bg-amber-500/10 p-2 text-amber-400'>
-          <BarChart3 className='h-4 w-4' />
+
+      <Handles id={id} color='var(--color-amber-400)' size={14} />
+
+      <div className='overflow-hidden rounded-xl bg-stone-400/10 px-4 pt-4 pb-1.5 backdrop-blur-xs'>
+        <div className='mb-2 flex items-center gap-2.5'>
+          <div className='rounded-lg border border-amber-500/20 bg-amber-500/10 p-2 text-amber-400'>
+            <BarChart3 className='h-4 w-4' />
+          </div>
+          <div>
+            <div className='text-xs font-semibold tracking-wide text-slate-200'>
+              {data.label}
+            </div>
+            <div className='font-mono text-[10px] text-amber-400'>
+              {data.stream || 'Kafka Telemetry'}
+            </div>
+          </div>
         </div>
-        <div>
-          <div className='text-xs font-semibold tracking-wide text-slate-200'>
-            {data.label}
-          </div>
-          <div className='font-mono text-[10px] text-amber-400'>
-            {data.stream || 'Kafka Telemetry'}
-          </div>
+
+        <div className='flex items-center justify-between rounded-md border border-slate-800/80 bg-slate-950/60 p-1.5 font-mono text-[11px] text-slate-400'>
+          <span>Events/sec:</span>
+          <span className='font-semibold text-amber-300'>
+            {data.events || '18.4K'}
+          </span>
         </div>
       </div>
-
-      <div className='flex items-center justify-between rounded-md border border-slate-800/80 bg-slate-950/60 p-1.5 font-mono text-[11px] text-slate-400'>
-        <span>Events/sec:</span>
-        <span className='font-semibold text-amber-300'>
-          {data.events || '18.4K'}
-        </span>
-      </div>
-
-      <Handle
-        type='source'
-        position={Position.Bottom}
-        className='!-bottom-1.5 !h-3 !w-3 !bg-amber-400'
-      />
     </div>
   );
 };
+
+const nodeTypes = {
+  serviceNode: ServiceNode,
+  databaseNode: DatabaseNode,
+  apiNode: ApiNode,
+  analyticsNode: AnalyticsNode,
+} as const;
+
+type NodeKeys = keyof typeof nodeTypes;
 
 // Initial topology dataset
-const initialNodes: Node[] = [
+const initialNodes: Node<any, NodeKeys>[] = [
   {
     id: 'api-gateway',
     type: 'apiNode',
@@ -280,18 +337,45 @@ const initialNodes: Node[] = [
   {
     id: 'user-db',
     type: 'databaseNode',
-    position: { x: 420, y: 420 },
+    position: { x: 620, y: 420 },
     data: { label: 'Primary DB', dbType: 'PostgreSQL 16', qps: '8,450/s' },
   },
   {
     id: 'telemetry-stream',
     type: 'analyticsNode',
-    position: { x: 140, y: 420 },
+    position: { x: 40, y: 420 },
+    style: { width: 480, height: 350 },
     data: {
-      label: 'Event Telemetry',
-      stream: 'Realtime Pipeline',
+      label: 'Event Telemetry (Parent)',
+      stream: 'Realtime Pipeline Container',
       events: '32.1k/s',
     },
+  },
+  {
+    id: 'telemetry-stream-child',
+    type: 'analyticsNode',
+    position: { x: 10, y: 120 },
+    data: {
+      label: 'Child Telemetry Worker',
+      stream: 'Sub-Stream Processor',
+      events: '16.0k/s',
+    },
+    parentId: 'telemetry-stream',
+    expandParent: true,
+    extent: 'parent',
+  },
+  {
+    id: 'telemetry-stream-child2',
+    type: 'analyticsNode',
+    position: { x: 240, y: 200 },
+    data: {
+      label: 'Child Telemetry Worker',
+      stream: 'Sub-Stream Processor',
+      events: '16.0k/s',
+    },
+    parentId: 'telemetry-stream',
+    expandParent: true,
+    extent: 'parent',
   },
 ];
 
@@ -310,7 +394,8 @@ const initialEdges: Edge[] = [
     target: 'user-service',
     animated: true,
     style: { stroke: '#38bdf8' },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#38bdf8' },
+    markerEnd: { type: MarkerType.Arrow, color: '#38bdf8' },
+    targetHandle: 'user-service->targetTop#2',
   },
   {
     id: 'e3-4',
@@ -334,61 +419,25 @@ function GraphAppIndexPage() {
   const [mounted, setMounted] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node>();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const nodeTypes = useMemo(
-    () => ({
-      serviceNode: ServiceNode,
-      databaseNode: DatabaseNode,
-      apiNode: ApiNode,
-      analyticsNode: AnalyticsNode,
-    }),
-    [],
-  );
-
-  const onConnect: OnConnect = useCallback(
-    params =>
-      setEdges(eds =>
-        addEdge(
-          {
-            ...params,
-            animated: true,
-            style: { stroke: '#38bdf8' },
-            markerEnd: { type: MarkerType.ArrowClosed, color: '#38bdf8' },
-          },
-          eds,
-        ),
-      ),
-    [setEdges],
-  );
-
-  const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
-    setSelectedNode(node);
-  }, []);
-
-  const onPaneClick = useCallback(() => {
-    setSelectedNode(null);
-  }, []);
-
-  const handleAddNode = (
-    type: 'serviceNode' | 'databaseNode' | 'apiNode' | 'analyticsNode',
-  ) => {
-    const id = `node-${Date.now().toString().slice(-4)}`;
+  const handleAddNode = (type: NodeKeys) => {
+    const id = `node->${type}->${Date.now().toString().slice(-4)}`;
     const xPos = 200 + Math.floor(Math.random() * 200);
     const yPos = 150 + Math.floor(Math.random() * 200);
 
-    const labelMap = {
+    const labelMap: Record<NodeKeys, string> = {
       serviceNode: 'Payment Service',
       databaseNode: 'Cache DB',
       apiNode: 'Webhook Gateway',
       analyticsNode: 'Metric Collector',
     };
 
-    const newNode: Node = {
+    const newNode: Node<any, NodeKeys> = {
       id,
       type,
       position: { x: xPos, y: yPos },
@@ -406,55 +455,56 @@ function GraphAppIndexPage() {
       },
     };
 
-    setNodes(nds => [...nds, newNode]);
+    setNodes(prev => [...prev, newNode]);
   };
+
+  useEffect(() => {
+    console.log(edges);
+  }, [edges]);
 
   const handleResetLayout = () => {
     setNodes(initialNodes);
     setEdges(initialEdges);
-    setSelectedNode(null);
+    setSelectedNode(undefined);
   };
 
   const handleDeleteSelected = () => {
-    if (!selectedNode) return;
-    setNodes(nds => nds.filter(n => n.id !== selectedNode.id));
+    const id = selectedNode!.id;
+    setNodes(nds => nds.filter(n => n.id !== id));
     setEdges(eds =>
-      eds.filter(
-        e => e.source !== selectedNode.id && e.target !== selectedNode.id,
-      ),
+      eds.filter(({ source, target }) => source !== id && target !== id),
     );
-    setSelectedNode(null);
+
+    setSelectedNode(undefined);
   };
 
-  const handleUpdateNodeLabel = (newLabel: string) => {
-    if (!selectedNode) return;
+  const handleUpdateNodeLabel = (label: string) => {
     setNodes(nds =>
       nds.map(n => {
-        if (n.id === selectedNode.id) {
-          return { ...n, data: { ...n.data, label: newLabel } };
+        if (n.id === selectedNode!.id) {
+          return { ...n, data: { ...n.data, label } };
         }
         return n;
       }),
     );
     setSelectedNode(prev =>
-      prev ? { ...prev, data: { ...prev.data, label: newLabel } } : null,
+      prev ? { ...prev, data: { ...prev!.data, label } } : undefined,
     );
   };
 
   const handleUpdateNodeStatus = (
-    newStatus: 'online' | 'warning' | 'offline',
+    status: 'online' | 'warning' | 'offline',
   ) => {
-    if (!selectedNode) return;
     setNodes(nds =>
       nds.map(n => {
-        if (n.id === selectedNode.id) {
-          return { ...n, data: { ...n.data, status: newStatus } };
+        if (n.id === selectedNode!.id) {
+          return { ...n, data: { ...n.data, status } };
         }
         return n;
       }),
     );
     setSelectedNode(prev =>
-      prev ? { ...prev, data: { ...prev.data, status: newStatus } } : null,
+      prev ? { ...prev, data: { ...prev!.data, status } } : undefined,
     );
   };
 
@@ -491,12 +541,39 @@ function GraphAppIndexPage() {
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onNodeClick={onNodeClick}
-        onPaneClick={onPaneClick}
+        connectionMode={ConnectionMode.Loose}
+        elevateEdgesOnSelect
+
+        onConnect={params =>
+          setEdges(eds => {
+            return addEdge(
+              {
+                ...params,
+                animated: true,
+                style: { /* stroke: '#38bdf8', */ zIndex: 1500 },
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                  // color: '#38bdf8',
+                },
+                id: `${params.source}->${params.target}`,
+              },
+              eds,
+            );
+          })
+        }
+        onNodeDoubleClick={(_, node) => setSelectedNode(node)}
+        onNodeClick={(_, node) => {
+          if (node.id === selectedNode?.id) setSelectedNode(undefined);
+        }}
+        onPaneClick={() => setSelectedNode(undefined)}
+        onNodesDelete={nodes => {
+          const find = nodes.find(n => n.id === selectedNode?.id);
+          if (find) setSelectedNode(undefined);
+        }}
         fitView
         fitViewOptions={{ padding: 0.2 }}
         className='h-full w-full'
+        proOptions={{ hideAttribution: true }}
       >
         <Background
           variant={BackgroundVariant.Dots}
@@ -505,7 +582,7 @@ function GraphAppIndexPage() {
           color='#334155'
         />
         <Controls position='bottom-left' />
-        <MiniMap
+        {/* <MiniMap
           position='bottom-right'
           nodeColor={n => {
             if (n.type === 'serviceNode') return '#38bdf8';
@@ -515,12 +592,15 @@ function GraphAppIndexPage() {
             return '#64748b';
           }}
           maskColor='rgba(15, 23, 42, 0.7)'
-        />
+        /> */}
 
         {/* Header Glass Overlay Panel */}
-        <Panel position='top-left' className='!m-4'>
+        <Panel
+          position='top-left'
+          className='m-4 cursor-pointer opacity-45 transition-opacity duration-200 hover:opacity-100'
+        >
           <div className='flex items-center gap-3 rounded-2xl border border-slate-800/80 bg-slate-900/80 p-3 px-4 shadow-2xl backdrop-blur-xl'>
-            <div className='rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-500 p-2 font-bold text-slate-950 shadow-lg shadow-cyan-500/20'>
+            <div className='rounded-xl bg-linear-to-tr from-cyan-500 to-indigo-500 p-2 font-bold text-slate-950 shadow-lg shadow-cyan-500/20'>
               <Zap className='h-5 w-5' />
             </div>
             <div>
@@ -543,7 +623,7 @@ function GraphAppIndexPage() {
         </Panel>
 
         {/* Quick Toolbar Panel */}
-        <Panel position='top-right' className='!m-4'>
+        <Panel position='top-right' className='m-4'>
           <div className='flex items-center gap-2 rounded-2xl border border-slate-800/80 bg-slate-900/80 p-2 shadow-2xl backdrop-blur-xl'>
             <button
               onClick={() => handleAddNode('serviceNode')}
@@ -601,7 +681,7 @@ function GraphAppIndexPage() {
               </h3>
             </div>
             <button
-              onClick={() => setSelectedNode(null)}
+              onClick={() => setSelectedNode(undefined)}
               className='rounded-lg p-1 text-slate-400 transition-all hover:bg-slate-800 hover:text-slate-200'
             >
               <X className='h-4 w-4' />
@@ -636,19 +716,28 @@ function GraphAppIndexPage() {
                   Health Status
                 </label>
                 <div className='grid grid-cols-3 gap-2'>
-                  {(['online', 'warning', 'offline'] as const).map(st => (
-                    <button
-                      key={st}
-                      onClick={() => handleUpdateNodeStatus(st)}
-                      className={`rounded-lg border px-2 py-1.5 font-mono text-xs capitalize transition-all ${
-                        selectedNode.data.status === st
-                          ? 'border-cyan-500/40 bg-cyan-500/20 font-semibold text-cyan-300'
-                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
-                      }`}
-                    >
-                      {st}
-                    </button>
-                  ))}
+                  {(
+                    Object.keys(
+                      statusColors,
+                    ) as (keyof typeof statusColors)[]
+                  ).map(st => {
+                    const isSelected = selectedNode.data.status === st;
+
+                    return (
+                      <button
+                        key={st}
+                        onClick={() => handleUpdateNodeStatus(st)}
+                        className={`flex cursor-pointer items-center justify-center space-x-1 rounded-lg border px-2 py-1.5 font-mono text-xs capitalize transition-all ${
+                          isSelected
+                            ? statusColors[st]
+                            : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                        }`}
+                      >
+                        {isSelected && statusIcons[st]}
+                        <span>{st}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
