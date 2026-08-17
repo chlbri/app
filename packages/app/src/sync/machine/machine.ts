@@ -152,7 +152,7 @@ export class SyncMachine<
             for (const fn of fns.filter(f => !!f)) {
               if (!out) out = fn(state);
               else {
-                const _state = Object.assign(out, rest);
+                const _state = _merge(state, Object.assign(out, rest));
                 out = _merge(out, fn(_state));
               }
             }

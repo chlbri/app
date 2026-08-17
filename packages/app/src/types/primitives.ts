@@ -409,6 +409,96 @@ type _FnMap<
 } & { else?: FnR<E, Pc, Tc, T, R> };
 
 /**
+ * Internal helper function map type keyed by event types.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template Pc - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template T - State tag string type.
+ * @template Item - Type of the item to filter.
+ * @template Ex - Event types to exclude.
+ * @template TT - Filtered event type.
+ */
+type _FnMapFilterArray<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  Item = any,
+  Ex extends string = never,
+  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
+> = {
+  [key in EventToType<TT>]?: (
+    item: Item,
+    index: number,
+    state: StatePextended<
+      Extract<TT, { type: key }>['payload'],
+      Pc,
+      Tc,
+      T
+    >,
+  ) => boolean;
+} & { else?: FnR<E, Pc, Tc, T, boolean> };
+
+export type FnMapFilterArray<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  Item = any,
+  Ex extends string = never,
+  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
+> = (
+  item: Item,
+  index: number,
+  state: StateExtended<E, Pc, Tc, T>,
+) => boolean | _FnMapFilterArray<E, Pc, Tc, T, Item, Ex, TT>;
+
+/**
+ * Internal helper function map type keyed by event types.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template Pc - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template T - State tag string type.
+ * @template Item - Type of the item to filter.
+ * @template Ex - Event types to exclude.
+ * @template TT - Filtered event type.
+ */
+type _FnMapFilterObject<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  Item = any,
+  Ex extends string = never,
+  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
+> = {
+  [key in EventToType<TT>]?: (
+    item: Item,
+    state: StatePextended<
+      Extract<TT, { type: key }>['payload'],
+      Pc,
+      Tc,
+      T
+    >,
+  ) => boolean;
+} & { else?: FnR<E, Pc, Tc, T, boolean> };
+
+export type FnMapFilterObject<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+  Item = any,
+  Ex extends string = never,
+  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
+> = (
+  item: Item,
+  state: StateExtended<E, Pc, Tc, T>,
+) => boolean | _FnMapFilterObject<E, Pc, Tc, T, Item, Ex, TT>;
+
+/**
  * Internal helper type for reduced function maps.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.

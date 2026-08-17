@@ -257,7 +257,7 @@ export class AsyncMachine<
             for (const fn of fns.filter(f => !!f)) {
               if (!out) out = await fn(state);
               else {
-                const _state = Object.assign(out, rest);
+                const _state = _merge(state, Object.assign(out, rest));
                 const temp = await fn(_state);
                 out = _merge(out, temp);
               }
