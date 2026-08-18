@@ -11,6 +11,40 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <details>
 <summary>
 
+## **[1.11.0] - 18/08/2026** => _11:15_
+
+</summary>
+
+### Features
+
+- **`filter`**: Enhance `filter` action to support event-keyed function
+  maps (`FnMapFilterArray` and `FnMapFilterObject`) with event payload
+  access and `else` fallback handlers.
+- **`reduceFnMap`**: Introduce `reduceFnMapFilterArray` and
+  `reduceFnMapFilterObject` reducers to compile filter function maps.
+- **`bemedev`**: Re-export additional utility types from
+  `@bemedev/typings`.
+
+### Refactor
+
+- **`SyncMachine` / `AsyncMachine`**: Update action option type definitions
+  `SyncFilterAction_F` and `AsyncFilterAction_F` to accept `FnMap`
+  structures.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to align with the 1.11.0
+  workspace release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.10.0] - 11/08/2026** => _10:27_
 
 </summary>

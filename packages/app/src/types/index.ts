@@ -305,6 +305,8 @@ export type {
   RecomposeSV_F,
   ReduceDescriber_F,
   ReduceFnMap2_F,
+  ReduceFnMapFilterArray_F,
+  ReduceFnMapFilterObject_F,
   ReduceFnMap_F,
   ReplaceAll_F,
   ToFunction_F,

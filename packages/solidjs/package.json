@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-solidjs",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "Middleware between @bemedev/app-ts and solidjs",
   "keywords": [
     "app",
@@ -68,12 +68,12 @@
     "@size-limit/file": "^13.0.3",
     "@solidjs/testing-library": "^0.8.10",
     "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/user-event": "^14.6.3",
+    "@testing-library/user-event": "^14.6.5",
     "@types/node": "^26.2.0",
     "@vitest/coverage-v8": "^4.1.10",
     "@vitest/ui": "4.1.10",
     "glob": "^13.0.6",
-    "globals": "^17.9.0",
+    "globals": "^17.11.0",
     "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "onchange": "^7.1.0",
@@ -81,10 +81,10 @@
     "oxlint": "^1.78.0",
     "prettier": "^3.9.6",
     "pretty-quick": "^4.2.2",
-    "rolldown": "1.2.3",
-    "rolldown-plugin-dts": "^0.28.1",
+    "rolldown": "1.2.4",
+    "rolldown-plugin-dts": "^0.28.2",
     "size-limit": "^13.0.3",
-    "solid-js": "^1.9.14",
+    "solid-js": "^1.9.15",
     "tslib": "^2.8.1",
     "tsx": "^4.23.12",
     "typescript": "6.0.3",
@@ -93,7 +93,7 @@
   },
   "peerDependencies": {
     "@bemedev/app": "workspace:^",
-    "solid-js": "^1.9.14"
+    "solid-js": "^1.9.15"
   },
   "size-limit": [
     {

@@ -5,6 +5,25 @@
 <details>
 <summary>
 
+## **[1.11.0] - 18/08/2026** => _11:15_
+
+</summary>
+
+### Dependencies
+
+- **Dependencies**: Update `rolldown` to 1.2.4.
+- **Workspace Dependencies**: Bump version to align with the 1.11.0
+  workspace release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.10.0] - 11/08/2026** => _10:27_
 
 </summary>

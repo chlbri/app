@@ -5,6 +5,27 @@
 <details>
 <summary>
 
+## **[1.11.0] - 18/08/2026** => _11:15_
+
+</summary>
+
+### Dependencies
+
+- **Dependencies**: Update `solid-js` to 1.9.15,
+  `@testing-library/user-event` to 14.6.5, `globals` to 17.11.0, `rolldown`
+  to 1.2.4, and `rolldown-plugin-dts` to 0.28.2.
+- **Workspace Dependencies**: Bump version to align with the 1.11.0
+  workspace release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.10.0] - 11/08/2026** => _10:27_
 
 </summary>

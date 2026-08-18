@@ -678,8 +678,15 @@ stored in context:
 
 ```typescript
 actions: {
-  // Keep only even numbers
+  // Keep only even numbers (predicate function)
   keepEvens:    filter('context.numbers', (n: number) => n % 2 === 0),
+
+  // Event-specific filtering with fallback (function map)
+  filterItems: filter('context.items', {
+    FILTER_ACTIVE: item => item.active,
+    FILTER_BY_ROLE: (item, index, { payload }) => item.role === payload.role,
+    else: item => item.valid,
+  }),
 
   // Keep active users
   keepActive:   filter('context.users', ({ active }) => active === true),

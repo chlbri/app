@@ -29,10 +29,7 @@ describe('Filter and Erase actions', () => {
             addNumbers: assign('context.numbers', {
               ADD: ({ payload }) => payload.values,
             }),
-            filterEven: filter(
-              'context.numbers',
-              (num: number) => num % 2 === 0,
-            ),
+            filterEven: filter('context.numbers', num => num % 2 === 0),
           },
         }));
       });
@@ -59,12 +56,6 @@ describe('Filter and Erase actions', () => {
     });
 
     describe('#02 => Filter array of objects', () => {
-      interface Person {
-        name: string;
-        age: number;
-        active: boolean;
-      }
-
       const machine = _machine2;
 
       const service = interpret(machine, { context: { people: [] } });
@@ -114,8 +105,8 @@ describe('Filter and Erase actions', () => {
       test('#08 => Check filtered people (only active)', () => {
         const people = service.select('people');
         expect(people).toHaveLength(3);
-        expect(people?.every((p: Person) => p.active)).toBe(true);
-        expect(people?.map((p: Person) => p.name)).toEqual([
+        expect(people?.every(p => p.active)).toBe(true);
+        expect(people?.map(p => p.name)).toEqual([
           'Alice',
           'Charlie',
           'Eve',
@@ -149,6 +140,115 @@ describe('Filter and Erase actions', () => {
               'context.scores',
               score => score >= 80,
             ),
+          },
+        }));
+      });
+
+      test(
+        ...useSend({
+          type: 'SET_SCORES',
+          payload: {
+            scores: {
+              user1: 95,
+              user2: 60,
+              user3: 85,
+              user4: 45,
+              user5: 90,
+            },
+          },
+        }),
+      );
+
+      test('#04 => Check scores', () => {
+        expect(Object.keys(service.select('scores') ?? {}).length).toBe(5);
+      });
+
+      test(...useSend('FILTER_HIGH_SCORES', 5));
+
+      test('#06 => Check filtered scores (>= 80)', () => {
+        const scores = service.select('scores');
+
+        expect(scores).toEqual({ user1: 95, user3: 85, user5: 90 });
+      });
+    });
+
+    describe('#04 => Filter array with function map (FnMap)', () => {
+      const machine = _machine1;
+
+      const service = interpret(machine, { context: { numbers: [] } });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test(...start(1));
+      test(...useValue('state1', 2));
+
+      test('#03 => Add actions', () => {
+        service.addOptions(({ assign, filter }) => ({
+          actions: {
+            addNumbers: assign('context.numbers', {
+              ADD: ({ payload }) => payload.values,
+            }),
+            filterEven: filter('context.numbers', {
+              FILTER: (num, index, state) => {
+                expect(state).toHaveProperty('context');
+                return num % 2 === 0;
+              },
+            }),
+          },
+        }));
+      });
+
+      test('#04 => Add numbers', () => {
+        service.send({
+          type: 'ADD',
+          payload: { values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+        });
+      });
+
+      test('#05 => Check numbers', () => {
+        expect(service.select('numbers')).toEqual([
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        ]);
+      });
+
+      test(...useSend('FILTER', 6));
+      test(...useValue('state2', 7));
+
+      test('#08 => Check filtered numbers (only even)', () => {
+        expect(service.select('numbers')).toEqual([2, 4, 6, 8, 10]);
+      });
+    });
+
+    describe('#05 => Filter object with function map (FnMap)', () => {
+      const machine = _machine3;
+
+      const service = interpret(machine, { context: { scores: {} } });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test(...start(1));
+      test(...useValue('idle', 2));
+
+      test('#03 => Add actions', () => {
+        service.addOptions(({ assign, filter }) => ({
+          actions: {
+            setScores: assign('context.scores', {
+              SET_SCORES: ({ payload }) => payload.scores,
+            }),
+            filterHighScores: filter('context.scores', {
+              FILTER_HIGH_SCORES: (score, state) => {
+                expect(state).toHaveProperty('payload');
+                return score >= 80;
+              },
+            }),
           },
         }));
       });

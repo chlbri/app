@@ -22,6 +22,8 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,
   FnMap,
+  FnMapFilterArray,
+  FnMapFilterObject,
   FnR,
   SingleOrArrayL2,
   TraversableTuple,
@@ -202,9 +204,9 @@ export type AsyncFilterAction_F<
 >(
   key: K,
   fn: D[K] extends Array<infer Item>
-    ? (item: Item, index: number, array: Item[]) => boolean
+    ? FnMapFilterArray<E, Pc, Tc, T, Item>
     : D[K] extends Ru
-      ? (value: ValuesOf<D[K]>, all: D[K]) => boolean
+      ? FnMapFilterObject<E, Pc, Tc, T, ValuesOf<D[K]>>
       : never,
 ) => AsyncAction2<E, Pc, Tc, T>;
 

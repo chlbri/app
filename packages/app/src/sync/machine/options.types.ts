@@ -28,6 +28,8 @@ import type {
   Decompose,
   EmptyObject,
   FnMap,
+  FnMapFilterArray,
+  FnMapFilterObject,
   FnR,
   RecordS,
   SingleOrArrayL2,
@@ -58,9 +60,9 @@ export type SyncFilterAction_F<
 >(
   key: K,
   fn: D[K] extends Array<infer Item>
-    ? (item: Item, index: number, array: Item[]) => boolean
+    ? FnMapFilterArray<E, Pc, Tc, T, Item>
     : D[K] extends Ru
-      ? (value: ValuesOf<D[K]>, all: D[K]) => boolean
+      ? FnMapFilterObject<E, Pc, Tc, T, ValuesOf<D[K]>>
       : never,
 ) => SyncAction2<E, Pc, Tc, T>;
 

@@ -438,7 +438,13 @@ type _FnMapFilterArray<
       T
     >,
   ) => boolean;
-} & { else?: FnR<E, Pc, Tc, T, boolean> };
+} & {
+  else?: (
+    item: Item,
+    index: number,
+    state: StateExtended<E, Pc, Tc, T>,
+  ) => boolean;
+};
 
 export type FnMapFilterArray<
   E extends EventObject = EventObject,
@@ -448,11 +454,13 @@ export type FnMapFilterArray<
   Item = any,
   Ex extends string = never,
   TT extends Exclude<E, Ex> = Exclude<E, Ex>,
-> = (
-  item: Item,
-  index: number,
-  state: StateExtended<E, Pc, Tc, T>,
-) => boolean | _FnMapFilterArray<E, Pc, Tc, T, Item, Ex, TT>;
+> =
+  | ((
+      item: Item,
+      index: number,
+      state: StateExtended<E, Pc, Tc, T>,
+    ) => boolean)
+  | _FnMapFilterArray<E, Pc, Tc, T, Item, Ex, TT>;
 
 /**
  * Internal helper function map type keyed by event types.
@@ -483,7 +491,7 @@ type _FnMapFilterObject<
       T
     >,
   ) => boolean;
-} & { else?: FnR<E, Pc, Tc, T, boolean> };
+} & { else?: (item: Item, state: StateExtended<E, Pc, Tc, T>) => boolean };
 
 export type FnMapFilterObject<
   E extends EventObject = EventObject,
@@ -493,10 +501,9 @@ export type FnMapFilterObject<
   Item = any,
   Ex extends string = never,
   TT extends Exclude<E, Ex> = Exclude<E, Ex>,
-> = (
-  item: Item,
-  state: StateExtended<E, Pc, Tc, T>,
-) => boolean | _FnMapFilterObject<E, Pc, Tc, T, Item, Ex, TT>;
+> =
+  | ((item: Item, state: StateExtended<E, Pc, Tc, T>) => boolean)
+  | _FnMapFilterObject<E, Pc, Tc, T, Item, Ex, TT>;
 
 /**
  * Internal helper type for reduced function maps.

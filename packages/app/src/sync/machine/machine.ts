@@ -15,6 +15,8 @@ import {
   isMergeUndefined,
   MERGE_UNDEFINED,
   reduceFnMap,
+  reduceFnMapFilterArray,
+  reduceFnMapFilterObject,
 } from '#utils';
 import { _any, _unknown } from '@bemedev/app-utils-bemedev';
 import { getByKey, recompose } from '@bemedev/decompose';
@@ -161,17 +163,25 @@ export class SyncMachine<
         },
 
         filter: (key, fn) => {
-          return ({ context, pContext }) => {
-            const currentValue = getByKey.low({ context, pContext }, key);
-
-            const predicate = fn as any;
+          return ({ context, pContext, ...rest }) => {
+            const state = this.__cloneStateExtended({
+              context,
+              pContext,
+              ...rest,
+            });
+            const currentValue = getByKey.low(state, key);
 
             let filteredValue: any;
 
             /* v8 ignore else -- @preserve */
             if (Array.isArray(currentValue)) {
-              // Filter array elements
-              filteredValue = currentValue.filter(predicate);
+              const predicate = reduceFnMapFilterArray(
+                fn as any,
+                ...this.__eventsList,
+              );
+              filteredValue = currentValue.filter((item, index) =>
+                predicate(item, index, state),
+              );
             } else if (
               currentValue !== null &&
               typeof currentValue === 'object'
@@ -179,10 +189,13 @@ export class SyncMachine<
               if (isMergeUndefined(currentValue)) {
                 return MERGE_UNDEFINED as any;
               }
-              // Filter object properties
+              const predicate = reduceFnMapFilterObject(
+                fn as any,
+                ...this.__eventsList,
+              );
               filteredValue = Object.entries(currentValue).reduce(
                 (acc, [objKey, value]) => {
-                  const check = predicate(value, currentValue);
+                  const check = predicate(value, state);
                   if (check) acc[objKey] = value;
                   else acc[objKey] = MERGE_UNDEFINED;
                   return acc;
