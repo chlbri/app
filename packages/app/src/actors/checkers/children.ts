@@ -43,11 +43,7 @@ export const isChildConfig = <T extends string[] = string[]>(
   const check4 = isOn.orUndefined(on, ...keys);
   if (!check4) return false;
   if (contexts === undefined) return true;
-  if (
-    typeof contexts !== 'object' ||
-    contexts === null ||
-    Array.isArray(contexts)
-  )
+  if (typeof contexts !== 'object' || contexts === null || Array.isArray(contexts))
     return false;
   const valueContexts = Object.values(contexts);
 

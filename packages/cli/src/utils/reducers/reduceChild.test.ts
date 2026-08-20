@@ -19,12 +19,7 @@ describe('reduceChild', () => {
       {
         invite: 'empty child config',
         parameters: [{} as any],
-        expected: {
-          actions: [],
-          guards: [],
-          targets: [],
-          pContextKeys: [],
-        },
+        expected: { actions: [], guards: [], targets: [], pContextKeys: [] },
       },
       {
         invite: 'child config with contexts only',

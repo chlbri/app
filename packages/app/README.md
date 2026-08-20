@@ -1,12 +1,11 @@
 # @bemedev/app
 
-A TypeScript library for building **finite state machines** with a fully
-type-safe, declarative API. It models states, transitions, context,
-asynchronous operations, and reactive streams through a unified **actors**
-model.
+A TypeScript library for building **finite state machines** with a fully type-safe,
+declarative API. It models states, transitions, context, asynchronous operations, and
+reactive streams through a unified **actors** model.
 
-The core idea: **write machines as pure data, wire implementations
-separately, generate types automatically.**
+The core idea: **write machines as pure data, wire implementations separately,
+generate types automatically.**
 
 <br/>
 
@@ -16,8 +15,7 @@ Live interactive demonstrations are available on Vercel:
 
 - **ReactJS Demo**:
   [https://bemedev-app-reactjs.vercel.app](https://bemedev-app-reactjs.vercel.app)
-- **SolidJS Demo**:
-  [https://app-solidjs.vercel.app](https://app-solidjs.vercel.app)
+- **SolidJS Demo**: [https://app-solidjs.vercel.app](https://app-solidjs.vercel.app)
 
 <br/>
 
@@ -25,10 +23,9 @@ Live interactive demonstrations are available on Vercel:
 
 ### The machine defines _what can happen_. The interpreter _makes it happen_.
 
-A machine is **purely declarative**. Its configuration is plain data: state
-names, transitions, guard names, action names. It never calls external
-code, never imports side-effects. You can serialise, clone, inspect, and
-test it in complete isolation.
+A machine is **purely declarative**. Its configuration is plain data: state names,
+transitions, guard names, action names. It never calls external code, never imports
+side-effects. You can serialise, clone, inspect, and test it in complete isolation.
 
 ```
 Machine config           provideOptions / addOptions
@@ -46,20 +43,19 @@ states: {                actions: {
 }
 ```
 
-The **interpreter** receives the machine and brings it to life at runtime.
-It holds context, processes events, schedules timers, and subscribes to
-actors.
+The **interpreter** receives the machine and brings it to life at runtime. It holds
+context, processes events, schedules timers, and subscribes to actors.
 
 ### Names, not references
 
-Every action, guard, delay, and actor is referred to by a **string name**
-in the config. This is intentional:
+Every action, guard, delay, and actor is referred to by a **string name** in the
+config. This is intentional:
 
 - The machine config is serialisable (JSON-friendly)
 - Implementations are swappable without touching the config
 - Tests can verify the config shape independently of side-effects
-- The CLI code generator can statically extract all names and produce
-  accurate TypeScript types
+- The CLI code generator can statically extract all names and produce accurate
+  TypeScript types
 
 ### Actors — two kinds of external work
 
@@ -68,9 +64,9 @@ in the config. This is intentional:
 | `emitters` | `() => Pausable<T>`      | **Source → Machine** (read-only) | None         |
 | `children` | `() => Interpreter<...>` | **Bidirectional**                | `sendTo` API |
 
-An **emitter** is a pausable stream the machine _listens to_. It never
-receives events from the machine. A **child** is a nested interpreter the
-parent can _talk to_.
+An **emitter** is a pausable stream the machine _listens to_. It never receives
+events from the machine. A **child** is a nested interpreter the parent can _talk
+to_.
 
 ## Installation
 
@@ -210,8 +206,8 @@ await service[Symbol.asyncDispose]();
 
 ## 1. Machine Configuration
 
-`createMachine(config, types?)` is the entry point. The first argument is
-the machine config; the second is optional type information.
+`createMachine(config, types?)` is the entry point. The first argument is the machine
+config; the second is optional type information.
 
 ```typescript
 import { createMachine, typings } from '@bemedev/app';
@@ -256,10 +252,7 @@ const machine = createMachine(
     },
   },
   typings({
-    context: {
-      data: typings.array('string'),
-      error: typings.maybe('string'),
-    },
+    context: { data: typings.array('string'), error: typings.maybe('string') },
     eventsMap: {
       FETCH: 'primitive',
       SUCCESS: { data: typings.array('string') },
@@ -284,11 +277,10 @@ export const myConfig = createConfig({
 
 ### Synchronous vs Asynchronous Machines
 
-By default, machines are asynchronous (all transitions and actions are
-wrapped in promises to naturally support async operations). If you require
-strict synchronous execution (e.g., for performance or integration with
-synchronous UI frameworks), you can opt into a synchronous machine via the
-`sync` typings configuration:
+By default, machines are asynchronous (all transitions and actions are wrapped in
+promises to naturally support async operations). If you require strict synchronous
+execution (e.g., for performance or integration with synchronous UI frameworks), you
+can opt into a synchronous machine via the `sync` typings configuration:
 
 ```typescript
 const syncMachine = createMachine(
@@ -301,19 +293,18 @@ const syncMachine = createMachine(
 );
 ```
 
-Synchronous machines throw a type error if you attempt to use async
-configurations. The `interpret` function automatically detects and runs
-synchronous machines without creating promises.
+Synchronous machines throw a type error if you attempt to use async configurations.
+The `interpret` function automatically detects and runs synchronous machines without
+creating promises.
 
 ### Strict Configuration Type Checking (`NoExtraKeysConfig`)
 
-To ensure your machine configs are free of spelling errors and invalid
-configuration keys, `@bemedev/app` enforces compile-time strictness. If you
-add any unrecognized options at the root or within state configuration
-blocks, TypeScript will raise an error.
+To ensure your machine configs are free of spelling errors and invalid configuration
+keys, `@bemedev/app` enforces compile-time strictness. If you add any unrecognized
+options at the root or within state configuration blocks, TypeScript will raise an
+error.
 
-For example, typing `init` instead of `initial` will produce a compilation
-error:
+For example, typing `init` instead of `initial` will produce a compilation error:
 
 ```typescript
 const machine = createMachine({
@@ -322,8 +313,8 @@ const machine = createMachine({
 });
 ```
 
-This ensures that state hierarchies, actions, and guards are always defined
-using correct keywords.
+This ensures that state hierarchies, actions, and guards are always defined using
+correct keywords.
 
 <br/>
 
@@ -331,16 +322,15 @@ using correct keywords.
 
 ## 2. Typings System
 
-TypeScript cannot always infer complex generic types from nested object
-literals alone. `@bemedev/app` relies on `@bemedev/typings` to let you
-describe TypeScript types as plain schema values that the machine can read
-at compile and build time.
+TypeScript cannot always infer complex generic types from nested object literals
+alone. `@bemedev/app` relies on `@bemedev/typings` to let you describe TypeScript
+types as plain schema values that the machine can read at compile and build time.
 
 ### Schema Builders
 
-Type schemas are built using `type` from `@bemedev/typings`, along with
-structural helpers (e.g. from `@bemedev/typings/helpers` or dynamically
-within the `type` callback):
+Type schemas are built using `type` from `@bemedev/typings`, along with structural
+helpers (e.g. from `@bemedev/typings/helpers` or dynamically within the `type`
+callback):
 
 ```typescript
 import { type } from '@bemedev/typings';
@@ -354,19 +344,16 @@ import {
 } from '@bemedev/typings/helpers';
 
 // Define schemas
-const user = type(({ partial }) =>
-  partial({ name: 'string', age: 'number' }),
-);
+const user = type(({ partial }) => partial({ name: 'string', age: 'number' }));
 ```
 
 ### Supported Schemas
 
-- **Primitives**: `'string'`, `'number'`, `'boolean'`, `'undefined'`,
-  `'never'`.
-- **Objects**: `partial({ ... })` for optional fields, `any({ ... })` for
-  strict objects.
-- **Collections**: `array(...)` for arrays, `record(...)` for maps,
-  `tuple(...)` for tuples.
+- **Primitives**: `'string'`, `'number'`, `'boolean'`, `'undefined'`, `'never'`.
+- **Objects**: `partial({ ... })` for optional fields, `any({ ... })` for strict
+  objects.
+- **Collections**: `array(...)` for arrays, `record(...)` for maps, `tuple(...)` for
+  tuples.
 - **Unions & Literals**: `union(...)` and `litterals(...)`.
 
 ### Full Machine Typings Example
@@ -379,10 +366,7 @@ import { type } from '@bemedev/typings';
 
 const machine = createMachine(
   'auth-machine',
-  {
-    initial: 'idle',
-    states: { idle: { on: { FETCH: '/loading' } }, loading: {} },
-  },
+  { initial: 'idle', states: { idle: { on: { FETCH: '/loading' } }, loading: {} } },
   {
     // Public context (exposed via service.context)
     context: type(({ partial, array }) =>
@@ -415,9 +399,8 @@ const machine = createMachine(
 
 ## 3. Interpreter
 
-The interpreter is the runtime engine. It receives a configured machine,
-holds state and context, processes events, schedules timers, and manages
-actor subscriptions.
+The interpreter is the runtime engine. It receives a configured machine, holds state
+and context, processes events, schedules timers, and manages actor subscriptions.
 
 ```typescript
 import { interpret } from '@bemedev/app';
@@ -469,9 +452,7 @@ service.dispose();
 
 ```typescript
 service.addOptions(({ assign }) => ({
-  actions: {
-    storeData: assign('context.items', ({ event }) => event.payload.data),
-  },
+  actions: { storeData: assign('context.items', ({ event }) => event.payload.data) },
 }));
 ```
 
@@ -491,8 +472,7 @@ const enrichedService = service.provideOptions(({ voidAction }) => ({
 
 ### Subscribe to all state changes
 
-The subscriber receives `(previousState, currentState)` on every
-transition:
+The subscriber receives `(previousState, currentState)` on every transition:
 
 ```typescript
 const sub = service.subscribe((prev, curr) => {
@@ -529,11 +509,11 @@ sub.close();
 
 ## 5. Actions
 
-Actions are **side-effects** that run during transitions. They are always
-declared by name in the config and implemented using options helpers in
-`createOptions`, `provideOptions`, or `addOptions`. The library provides a
-rich set of **action helpers** that cover state mutation, side-effects,
-event sending, and activity/timer management.
+Actions are **side-effects** that run during transitions. They are always declared by
+name in the config and implemented using options helpers in `createOptions`,
+`provideOptions`, or `addOptions`. The library provides a rich set of **action
+helpers** that cover state mutation, side-effects, event sending, and activity/timer
+management.
 
 All helpers are injected as parameters of the options helper callback:
 
@@ -555,8 +535,8 @@ const options = machine.createOptions(({
 
 ### 5.1 assign
 
-Updates context values using decomposed dot-notation paths. Supports
-single-key assignments or multi-variable array assignments.
+Updates context values using decomposed dot-notation paths. Supports single-key
+assignments or multi-variable array assignments.
 
 ```typescript
 actions: {
@@ -587,19 +567,18 @@ actions: {
 }
 ```
 
-The path follows `@bemedev/decompose` conventions: `'context'`,
-`'context.field'`, `'context.nested.deep'`.
+The path follows `@bemedev/decompose` conventions: `'context'`, `'context.field'`,
+`'context.nested.deep'`.
 
 ### 5.2 swap
 
 Remaps and adapts standard functions into machine options using parameter
 decomposition powered by `@bemedev/function-swap`.
 
-`swap` converts any standard function `fn` into a machine selector function
-(`FnR`), remapping parameter positions from state, context, or event
-payload paths. Because it returns a standard machine selector, **`swap` can
-be used across actions, `assign`, `guards`, `delays`, and standalone
-options.**
+`swap` converts any standard function `fn` into a machine selector function (`FnR`),
+remapping parameter positions from state, context, or event payload paths. Because it
+returns a standard machine selector, **`swap` can be used across actions, `assign`,
+`guards`, `delays`, and standalone options.**
 
 ```typescript
 // 1. Inside assign (remap event payload into context assignment)
@@ -652,8 +631,8 @@ actions: {
 
 ### 5.4 batch
 
-Groups multiple actions into a single named action. Useful when a
-transition needs to perform several operations atomically.
+Groups multiple actions into a single named action. Useful when a transition needs to
+perform several operations atomically.
 
 ```typescript
 actions: {
@@ -673,8 +652,8 @@ actions: {
 
 ### 5.5 filter & erase
 
-**`filter`** — removes elements from arrays, object arrays, or records
-stored in context:
+**`filter`** — removes elements from arrays, object arrays, or records stored in
+context:
 
 ```typescript
 actions: {
@@ -696,8 +675,7 @@ actions: {
 }
 ```
 
-**`erase`** — sets a context property to `undefined` (removing it from
-context):
+**`erase`** — sets a context property to `undefined` (removing it from context):
 
 ```typescript
 actions: {
@@ -713,8 +691,8 @@ actions: {
 
 ### 5.6 debounce
 
-Schedules a debounced context update after a specified time delay `ms`
-under a unique identifier `id`.
+Schedules a debounced context update after a specified time delay `ms` under a unique
+identifier `id`.
 
 ```typescript
 actions: {
@@ -743,8 +721,8 @@ actions: {
 
 Re-dispatch events from within an action back to the current machine.
 
-- **`resend(event)`** — only dispatches if the machine is not in a blocked
-  state (e.g. `'stopped'`).
+- **`resend(event)`** — only dispatches if the machine is not in a blocked state
+  (e.g. `'stopped'`).
 - **`forceSend(event)`** — always dispatches, regardless of machine state.
 
 ```typescript
@@ -758,8 +736,7 @@ actions: {
 
 Action helpers to manage active activity actors and timers directly:
 
-- **`pauseActivity(name)`**, **`resumeActivity(name)`**,
-  **`stopActivity(name)`**
+- **`pauseActivity(name)`**, **`resumeActivity(name)`**, **`stopActivity(name)`**
 - **`pauseTimer(name)`**, **`resumeTimer(name)`**, **`stopTimer(name)`**
 
 ```typescript
@@ -776,22 +753,21 @@ actions: {
 
 ### 5.10 Async actions & AsyncOptions (AsyncMachine vs SyncMachine)
 
-In **`AsyncMachine`** (created via `createAsyncMachine` or
-`createMachine`), action helpers (`assign`, `voidAction`, `sendTo`) accept
-`async` functions and support an optional `AsyncOptions` configuration
-object as their final parameter:
+In **`AsyncMachine`** (created via `createAsyncMachine` or `createMachine`), action
+helpers (`assign`, `voidAction`, `sendTo`) accept `async` functions and support an
+optional `AsyncOptions` configuration object as their final parameter:
 
-- `max`: Optional timeout in milliseconds. If execution exceeds `max` ms,
-  it is aborted via a timeout exception (`withTimeout`).
-- `catch`: A curried function `(err) => Action` that captures exceptions
-  and executes a fallback action inline. If omitted, rejections flow to the
-  interpreter's internal error channel.
-- `then`: An optional post-action `(state) => Action` executed sequentially
-  after successful resolution.
+- `max`: Optional timeout in milliseconds. If execution exceeds `max` ms, it is
+  aborted via a timeout exception (`withTimeout`).
+- `catch`: A curried function `(err) => Action` that captures exceptions and executes
+  a fallback action inline. If omitted, rejections flow to the interpreter's internal
+  error channel.
+- `then`: An optional post-action `(state) => Action` executed sequentially after
+  successful resolution.
 
-> **Note:** In **`SyncMachine`** (`createSyncMachine`), action execution is
-> purely synchronous; `AsyncOptions` (`max`, `catch`, `then`) are not used
-> in synchronous mode.
+> **Note:** In **`SyncMachine`** (`createSyncMachine`), action execution is purely
+> synchronous; `AsyncOptions` (`max`, `catch`, `then`) are not used in synchronous
+> mode.
 
 ```typescript
 actions: {
@@ -836,38 +812,34 @@ actions: {
 
 ## 6. Guards
 
-Guards are **predicates** that gate transitions. They receive the current
-state snapshot and return a `boolean` (or `Promise<boolean>` in async
-machines).
+Guards are **predicates** that gate transitions. They receive the current state
+snapshot and return a `boolean` (or `Promise<boolean>` in async machines).
 
 ### 6.1 Built-in Guard Helpers
 
-All guard helpers evaluate context properties using decomposed path
-strings:
+All guard helpers evaluate context properties using decomposed path strings:
 
-- **`isValue(key, expectedValue)`** — returns `true` if property at `key`
-  strictly equals `expectedValue`.
-- **`isNotValue(key, expectedValue)`** — returns `true` if property at
-  `key` does not equal `expectedValue`.
-- **`isDefined(key)`** — returns `true` if property at `key` is defined
-  (neither `undefined` nor `null`).
-- **`isNotDefined(key)`** — returns `true` if property at `key` is
-  `undefined` or `null`.
+- **`isValue(key, expectedValue)`** — returns `true` if property at `key` strictly
+  equals `expectedValue`.
+- **`isNotValue(key, expectedValue)`** — returns `true` if property at `key` does not
+  equal `expectedValue`.
+- **`isDefined(key)`** — returns `true` if property at `key` is defined (neither
+  `undefined` nor `null`).
+- **`isNotDefined(key)`** — returns `true` if property at `key` is `undefined` or
+  `null`.
 
 ```typescript
-machine.createOptions(
-  ({ isValue, isNotValue, isDefined, isNotDefined }) => ({
-    guards: {
-      // Check property values
-      isEmpty: isValue('context.items', []),
-      hasToken: isNotValue('context.pContext.token', undefined),
+machine.createOptions(({ isValue, isNotValue, isDefined, isNotDefined }) => ({
+  guards: {
+    // Check property values
+    isEmpty: isValue('context.items', []),
+    hasToken: isNotValue('context.pContext.token', undefined),
 
-      // Check presence or absence
-      hasUserData: isDefined('context.user'),
-      isUnauthenticated: isNotDefined('context.session'),
-    },
-  }),
-);
+    // Check presence or absence
+    hasUserData: isDefined('context.user'),
+    isUnauthenticated: isNotDefined('context.session'),
+  },
+}));
 ```
 
 ### 6.2 Custom & Async Predicates
@@ -880,9 +852,7 @@ machine.provideOptions(({ isValue, swap }) => ({
       context.token !== undefined && !isExpired(context.token),
 
     // Remapped predicate with swap
-    isAdult: swap((age: number) => age >= 18)({
-      '[0]': '[0].context.user.age',
-    }),
+    isAdult: swap((age: number) => age >= 18)({ '[0]': '[0].context.user.age' }),
 
     // Predicate with event payload
     isValidInput: ({ event }) =>
@@ -898,10 +868,10 @@ machine.provideOptions(({ isValue, swap }) => ({
 }));
 ```
 
-> **Async guards** are fully supported in `AsyncInterpreter`. Predicates
-> are evaluated sequentially and short-circuit on the first `false`
-> (fail-fast). A predicate that throws or rejects is treated as `false`.
-> Sync machines do **not** support async guards.
+> **Async guards** are fully supported in `AsyncInterpreter`. Predicates are
+> evaluated sequentially and short-circuit on the first `false` (fail-fast). A
+> predicate that throws or rejects is treated as `false`. Sync machines do **not**
+> support async guards.
 
 ### Using guards in config
 
@@ -976,8 +946,8 @@ on: {
 
 ### `after` — timed / delayed
 
-The transition fires automatically after the named delay elapses. If
-multiple delays are defined, the **shortest one whose guard passes** wins.
+The transition fires automatically after the named delay elapses. If multiple delays
+are defined, the **shortest one whose guard passes** wins.
 
 ```typescript
 // Simple: fixed number (ms)
@@ -1022,8 +992,8 @@ delays: { FAST: 2000, SLOW: 10000 }
 
 ### `always` — immediate / eventless
 
-Evaluated every time the state is entered, before any event is processed.
-First matching guard wins. No match → nothing happens.
+Evaluated every time the state is entered, before any event is processed. First
+matching guard wins. No match → nothing happens.
 
 ```typescript
 states: {
@@ -1037,8 +1007,8 @@ states: {
 }
 ```
 
-> **Order matters.** `always` is evaluated synchronously on entry. Circular
-> chains (A always → B always → A) are treated as no-ops.
+> **Order matters.** `always` is evaluated synchronously on entry. Circular chains (A
+> always → B always → A) are treated as no-ops.
 
 <br/>
 
@@ -1046,9 +1016,8 @@ states: {
 
 ## 8. Activities
 
-An **activity** is an action that fires **repeatedly** on a named interval
-while the state is active. It supports **pause**, **resume**, and **stop**
-controls.
+An **activity** is an action that fires **repeatedly** on a named interval while the
+state is active. It supports **pause**, **resume**, and **stop** controls.
 
 ```typescript
 const machine = createMachine(
@@ -1068,32 +1037,23 @@ const machine = createMachine(
   },
   typings({
     context: { data: typings.maybe('string') },
-    eventsMap: {
-      PAUSE: 'primitive',
-      RESUME: 'primitive',
-      STOP: 'primitive',
-    },
+    eventsMap: { PAUSE: 'primitive', RESUME: 'primitive', STOP: 'primitive' },
   }),
-).provideOptions(
-  ({ assign, pauseActivity, resumeActivity, stopActivity }) => ({
-    actions: {
-      refresh: assign(
-        'context.data',
-        async () => (await fetchData()).value,
-      ),
-      // The path '/polling::POLL' identifies the activity (state::delay)
-      pausePoll: pauseActivity('/polling::POLL'),
-      resumePoll: resumeActivity('/polling::POLL'),
-      stopPoll: stopActivity('/polling::POLL'),
-    },
-    delays: { POLL: 3000 },
-  }),
-);
+).provideOptions(({ assign, pauseActivity, resumeActivity, stopActivity }) => ({
+  actions: {
+    refresh: assign('context.data', async () => (await fetchData()).value),
+    // The path '/polling::POLL' identifies the activity (state::delay)
+    pausePoll: pauseActivity('/polling::POLL'),
+    resumePoll: resumeActivity('/polling::POLL'),
+    stopPoll: stopActivity('/polling::POLL'),
+  },
+  delays: { POLL: 3000 },
+}));
 ```
 
-The activity `refresh` runs every 3 000 ms. `PAUSE` freezes it (timer
-stopped, context preserved), `RESUME` restarts the timer, `STOP` terminates
-it permanently for the current state visit.
+The activity `refresh` runs every 3 000 ms. `PAUSE` freezes it (timer stopped,
+context preserved), `RESUME` restarts the timer, `STOP` terminates it permanently for
+the current state visit.
 
 <br/>
 
@@ -1103,9 +1063,9 @@ it permanently for the current state visit.
 
 > **Core principle — emitters are NEVER touched during the flow.**
 
-An emitter is a **pausable stream source** that the machine subscribes to
-on state entry and unsubscribes from on state exit. The machine **only
-reacts** to its emissions. It never sends events _to_ the emitter.
+An emitter is a **pausable stream source** that the machine subscribes to on state
+entry and unsubscribes from on state exit. The machine **only reacts** to its
+emissions. It never sends events _to_ the emitter.
 
 ### 9.1 Lifecycle
 
@@ -1144,11 +1104,10 @@ reacts** to its emissions. It never sends events _to_ the emitter.
    }))
    ```
 
-   > `Pausable<T>` is a framework-agnostic interface exported by this
-   > library. Any object satisfying
-   > `{ subscribe, start, stop, pause, resume }` qualifies. Use
-   > `createPausable` from `@bemedev/rx-pausable` to wrap RxJS observables
-   > — it is **not** a required dependency.
+   > `Pausable<T>` is a framework-agnostic interface exported by this library. Any
+   > object satisfying `{ subscribe, start, stop, pause, resume }` qualifies. Use
+   > `createPausable` from `@bemedev/rx-pausable` to wrap RxJS observables — it is
+   > **not** a required dependency.
 
 3. **Runtime** — the interpreter manages everything automatically:
    - State entry → factory called → `subscribe()` + `start()`
@@ -1176,9 +1135,7 @@ const machine = createMachine(
   },
   typings({
     context: 'number',
-    actorsMap: {
-      emitters: { ticker: { next: 'number', error: 'never' } },
-    },
+    actorsMap: { emitters: { ticker: { next: 'number', error: 'never' } } },
   }),
 ).provideOptions(({ assign, voidAction }) => ({
   actions: {
@@ -1208,8 +1165,8 @@ service.start();
 
 ### 9.3 Error handling
 
-When the source emits an error, the `error` handler fires. The machine
-remains healthy — it simply routes the error value to the declared actions.
+When the source emits an error, the `error` handler fires. The machine remains
+healthy — it simply routes the error value to the declared actions.
 
 ```typescript
 actors: {
@@ -1228,8 +1185,8 @@ actions: {
 
 ### 9.4 State-scoped emitters
 
-Emitters declared **inside a specific state** only run while that state is
-active. Exiting unsubscribes; re-entering creates a fresh subscription.
+Emitters declared **inside a specific state** only run while that state is active.
+Exiting unsubscribes; re-entering creates a fresh subscription.
 
 ```typescript
 states: {
@@ -1262,18 +1219,15 @@ states: {
 
 ## 10. Actors: Children
 
-A **child actor** is a nested interpreter. The parent can send events to it
-via `sendTo`, and the child's events bubble up via declared `on` handlers.
-Context can be mapped from child to parent (`pContext`).
+A **child actor** is a nested interpreter. The parent can send events to it via
+`sendTo`, and the child's events bubble up via declared `on` handlers. Context can be
+mapped from child to parent (`pContext`).
 
 ### 10.1 Sending events to a child
 
 ```typescript
 const child = createMachine(
-  {
-    initial: 'idle',
-    states: { idle: { on: { PING: '/pong' } }, pong: {} },
-  },
+  { initial: 'idle', states: { idle: { on: { PING: '/pong' } }, pong: {} } },
   typings({ eventsMap: { PING: 'primitive' } }),
 );
 
@@ -1327,9 +1281,8 @@ actors: {
 
 ## 11. Tags
 
-Tags are **metadata labels** on states. They let consumers ask "what
-category is the machine in?" without hard-coding state names. A state can
-carry multiple tags.
+Tags are **metadata labels** on states. They let consumers ask "what category is the
+machine in?" without hard-coding state names. A state can carry multiple tags.
 
 ```typescript
 const machine = createMachine(
@@ -1355,8 +1308,8 @@ service.tags; // ['busy']
 
 ### Tags in action callbacks
 
-Tag literals are propagated into `provideOptions` callbacks as a **typed
-union** — enabling narrowing inside actions:
+Tag literals are propagated into `provideOptions` callbacks as a **typed union** —
+enabling narrowing inside actions:
 
 ```typescript
 .provideOptions(({ voidAction }) => ({
@@ -1376,20 +1329,20 @@ union** — enabling narrowing inside actions:
 
 ## 12. Registry & Code Generation
 
-`@bemedev/app` ships a **CLI and a type-level registry** that together give
-you **full compile-time types for every machine in your project** — paths,
-events, options, context — with zero manual annotation.
+`@bemedev/app` ships a **CLI and a type-level registry** that together give you
+**full compile-time types for every machine in your project** — paths, events,
+options, context — with zero manual annotation.
 
 The CLI helpers are provided by the companion package `@bemedev/app-cli`, a
-complementary library for better typing and CLI-driven code generation,
-similar in purpose to TanStack Start.
+complementary library for better typing and CLI-driven code generation, similar in
+purpose to TanStack Start.
 
 The pattern is inspired by TanStack Router's `declare module` augmentation.
 
 #### CLI Binary Entry Point
 
-The package includes a built-in CLI executable. After installation, invoke
-commands directly via `npx`:
+The package includes a built-in CLI executable. After installation, invoke commands
+directly via `npx`:
 
 ```bash
 npx @bemedev/app generate
@@ -1417,8 +1370,8 @@ src/
   app.gen.ts              ← generated — do not edit manually
 ```
 
-Inside a machine file, call `registerMachine` to enroll the machine in the
-global registry:
+Inside a machine file, call `registerMachine` to enroll the machine in the global
+registry:
 
 ```typescript
 // src/auth/auth.machine.ts
@@ -1457,8 +1410,8 @@ pnpm run generate
 
 ### 12.3 CLI: watch / dev
 
-Long-running watcher that regenerates `app.gen.ts` automatically on every
-machine file change. Ideal during development:
+Long-running watcher that regenerates `app.gen.ts` automatically on every machine
+file change. Ideal during development:
 
 ```bash
 npx @bemedev/app watch
@@ -1473,10 +1426,10 @@ pnpm run generate:watch
 **Behaviour:**
 
 1. Performs a full initial generation on startup.
-2. Watches all `*.machine.ts` and `*.fsm.ts` files (excludes
-   `node_modules`, `lib`, `dist` by default).
-3. Debounces 300 ms of filesystem stability before regenerating (handles
-   editor auto-saves and git checkouts gracefully).
+2. Watches all `*.machine.ts` and `*.fsm.ts` files (excludes `node_modules`, `lib`,
+   `dist` by default).
+3. Debounces 300 ms of filesystem stability before regenerating (handles editor
+   auto-saves and git checkouts gracefully).
 4. Logs every detected change to stderr.
 5. Responds to Ctrl+C with a clean watcher shutdown.
 
@@ -1504,9 +1457,8 @@ declare module '@bemedev/app' {
 }
 ```
 
-**Import `app.gen.ts` once at your app entry point** and every
-`getMachine`, `registerMachine`, and state path will be fully typed
-throughout the codebase:
+**Import `app.gen.ts` once at your app entry point** and every `getMachine`,
+`registerMachine`, and state path will be fully typed throughout the codebase:
 
 ```typescript
 // main.ts
@@ -1535,9 +1487,9 @@ console.log(Object.keys(MACHINES));
 
 ## 13. Legacy Options (\_legacy)
 
-Both `provideOptions` and `addOptions` receive a second parameter
-`{ _legacy }` containing **all options defined in previous calls**. This
-enables safe composition without manual cross-referencing.
+Both `provideOptions` and `addOptions` receive a second parameter `{ _legacy }`
+containing **all options defined in previous calls**. This enables safe composition
+without manual cross-referencing.
 
 ### Composing on a Machine
 
@@ -1545,19 +1497,13 @@ enables safe composition without manual cross-referencing.
 const machine = createMachine(config, types)
   .provideOptions(({ assign }) => ({
     actions: {
-      increment: assign(
-        'context.count',
-        ({ context }) => context.count + 1,
-      ),
+      increment: assign('context.count', ({ context }) => context.count + 1),
     },
   }))
   .provideOptions(({ batch }, { _legacy }) => ({
     actions: {
       // Reuse 'increment' defined above — no import, no circular reference
-      doubleIncrement: batch(
-        _legacy.actions.increment!,
-        _legacy.actions.increment!,
-      ),
+      doubleIncrement: batch(_legacy.actions.increment!, _legacy.actions.increment!),
     },
   }));
 ```
@@ -1589,8 +1535,8 @@ service.addOptions(({ batch }, { _legacy }) => ({
 **Key guarantees:**
 
 - **Frozen** — `_legacy` is immutable; mutations throw at runtime.
-- **Cumulative** — each call sees options from _all_ previous calls, not
-  just the immediately preceding one.
+- **Cumulative** — each call sees options from _all_ previous calls, not just the
+  immediately preceding one.
 - **Type-safe** — fully typed; IntelliSense completes option names.
 
 <br/>
@@ -1599,15 +1545,14 @@ service.addOptions(({ batch }, { _legacy }) => ({
 
 ## 14. Internal Utilities
 
-These lower-level building blocks are used by the library internally. They
-are exported for advanced use cases such as building tooling, custom
-generators, or extending the framework.
+These lower-level building blocks are used by the library internally. They are
+exported for advanced use cases such as building tooling, custom generators, or
+extending the framework.
 
 ### 14.1 `BetterSet<T>`
 
-An enhanced `Set` with optional custom equality, extra collection
-operations (`union`, `intersection`, `difference`, `symmetricDifference`),
-and a richer API:
+An enhanced `Set` with optional custom equality, extra collection operations
+(`union`, `intersection`, `difference`, `symmetricDifference`), and a richer API:
 
 ```typescript
 import { createBetterSet } from '@bemedev/app';
@@ -1634,8 +1579,8 @@ byId.add({ id: 1 }, { id: 1 }); // deduplicated — size = 1
 
 ### 14.2 `parseTree`
 
-Traverses a machine's `NodeConfig` and returns a complete structural
-analysis in a single pass:
+Traverses a machine's `NodeConfig` and returns a complete structural analysis in a
+single pass:
 
 ```typescript
 import { parseTree } from '@bemedev/app';
@@ -1655,8 +1600,8 @@ result.pContextKeys; // BetterSet<string> — pContext mapping keys
 result.flat; // flat record: path → NodeConfig
 ```
 
-`parseTree` powers the CLI generator — it extracts everything the type
-generator needs from the machine config without executing any runtime code.
+`parseTree` powers the CLI generator — it extracts everything the type generator
+needs from the machine config without executing any runtime code.
 
 ### 14.3 `reduceGuards`
 
@@ -1675,10 +1620,10 @@ reduceGuards(
 
 ### 14.4 `betterTimeout`
 
-A callback-based timeout helper designed to prevent long-running or hung
-async operations. It executes a callback after a specified delay, but
-throws a `MAX_EXCEEDED` error to the `onError` handler if the delay exceeds
-a specified `maxTime` threshold limit.
+A callback-based timeout helper designed to prevent long-running or hung async
+operations. It executes a callback after a specified delay, but throws a
+`MAX_EXCEEDED` error to the `onError` handler if the delay exceeds a specified
+`maxTime` threshold limit.
 
 ```typescript
 import { betterTimeout } from '@bemedev/app/utils';
@@ -1835,15 +1780,13 @@ type EmitterObserver<T> = {
 | `inferSh<Schema>`  | `@bemedev/typings` | Extracts schema shape                                   |
 | `Fn<Args, Return>` | `@bemedev/typings` | Helper for strongly-typed functions                     |
 
-For schema building, import builders directly from
-`@bemedev/typings/helpers` (e.g. `array`, `record`, `partial`, `litterals`,
-`union`, `optional`).
+For schema building, import builders directly from `@bemedev/typings/helpers` (e.g.
+`array`, `record`, `partial`, `litterals`, `union`, `optional`).
 
 ### Advanced Exported Types
 
-These advanced helper and registry types are exported from `@bemedev/app`
-for strict compile-time checks, tooling integration, or typing extension
-points:
+These advanced helper and registry types are exported from `@bemedev/app` for strict
+compile-time checks, tooling integration, or typing extension points:
 
 | Type                                | Purpose                                                                                                                    |
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |

@@ -30,10 +30,7 @@ export const checkValues = expandFn(
      *
      * @returns `true` if {@linkcode value} is `undefined` or included in {@linkcode values}, `false` otherwise.
      */
-    undefined: <T = any>(
-      value: unknown,
-      ...values: T[]
-    ): value is T | undefined => {
+    undefined: <T = any>(value: unknown, ...values: T[]): value is T | undefined => {
       if (value === undefined) return true;
       return checkValues(value, ...values);
     },

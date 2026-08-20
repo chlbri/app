@@ -11,11 +11,10 @@
 
 ### Dependencies
 
-- **Dependencies**: Update `@testing-library/user-event` to 14.6.5,
-  `globals` to 17.11.0, `rolldown` to 1.2.4, and `rolldown-plugin-dts` to
-  0.28.2.
-- **Workspace Dependencies**: Bump version to align with the 1.11.0
-  workspace release.
+- **Dependencies**: Update `@testing-library/user-event` to 14.6.5, `globals` to
+  17.11.0, `rolldown` to 1.2.4, and `rolldown-plugin-dts` to 0.28.2.
+- **Workspace Dependencies**: Bump version to align with the 1.11.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -32,13 +31,13 @@
 
 ### Docs
 
-- **`JSDoc`**: Add comprehensive JSDoc annotations to `useService`,
-  `useState`, `useCan`, `useIsInside`, and options types.
+- **`JSDoc`**: Add comprehensive JSDoc annotations to `useService`, `useState`,
+  `useCan`, `useIsInside`, and options types.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.10.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.10.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -82,8 +81,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.4
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.4 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -100,11 +98,10 @@
 
 ### Refactor
 
-- **`useState` / `useCan` / `useIsInside`**: Refine selector memoization
-  and deep equality checks to keep hook subscriptions stable and reduce
-  redundant renders.
-- **`useService`**: Tighten state comparison logic for more predictable
-  reactivity while preserving existing hook behavior.
+- **`useState` / `useCan` / `useIsInside`**: Refine selector memoization and deep
+  equality checks to keep hook subscriptions stable and reduce redundant renders.
+- **`useService`**: Tighten state comparison logic for more predictable reactivity
+  while preserving existing hook behavior.
 
 ### Dependencies
 
@@ -126,10 +123,10 @@
 
 ### Refactor
 
-- **`useState`**: Optimize selector memoization and equality comparison
-  using `useCallback` for stable subscription handling.
-- **`useCan` / `useIsInside`**: Simplify initial state evaluation and
-  refine subscription equality comparison using deep value comparison.
+- **`useState`**: Optimize selector memoization and equality comparison using
+  `useCallback` for stable subscription handling.
+- **`useCan` / `useIsInside`**: Simplify initial state evaluation and refine
+  subscription equality comparison using deep value comparison.
 - **`Imports`**: Update utility imports to consume modular exports from
   `@bemedev/app/utils`.
 
@@ -148,16 +145,14 @@
 
 ### Features
 
-- **`useState` / `useCan` / `useIsInside`**: Add modular React hooks for
-  state selection, transition predicate checks, and nested state location
-  checks.
-- **`useService` / `createHooks`**: Update hook factory structure to expose
-  `state`, `can`, and `isInside` helpers.
+- **`useState` / `useCan` / `useIsInside`**: Add modular React hooks for state
+  selection, transition predicate checks, and nested state location checks.
+- **`useService` / `createHooks`**: Update hook factory structure to expose `state`,
+  `can`, and `isInside` helpers.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
-  `1.9.1`.
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app` `1.9.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -174,13 +169,12 @@
 
 ### Refactor
 
-- **`useService`**: Refactor hook implementation and selector state
-  comparison logic to support both sync and async machines seamlessly.
+- **`useService`**: Refactor hook implementation and selector state comparison logic
+  to support both sync and async machines seamlessly.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
-  `1.9.0`.
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app` `1.9.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -197,10 +191,9 @@
 
 ### Dependencies
 
-- **Peer Dependencies**: Update `react` peer dependency to `^19.2.8` and
-  remove `@bemedev/decompose`.
-- **Dependencies**: Upgrade build tool dependencies including `rolldown` to
-  `1.2.1`.
+- **Peer Dependencies**: Update `react` peer dependency to `^19.2.8` and remove
+  `@bemedev/decompose`.
+- **Dependencies**: Upgrade build tool dependencies including `rolldown` to `1.2.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -235,16 +228,15 @@
 
 ### Features
 
-- **ReactJS Integration**: Add `useService` hook to bind `@bemedev/app`
-  state machine interpreter services to ReactJS component state, using
-  `useState` and `useEffect` with unsubscribe cleanup, and employing deep
-  state selector comparisons.
+- **ReactJS Integration**: Add `useService` hook to bind `@bemedev/app` state machine
+  interpreter services to ReactJS component state, using `useState` and `useEffect`
+  with unsubscribe cleanup, and employing deep state selector comparisons.
 
 ### Tests
 
-- **Hook Coverage**: Add integration and unit test suites for `useService`
-  hook using `@testing-library/react` renderHook, covering various state
-  selectors and transitions.
+- **Hook Coverage**: Add integration and unit test suites for `useService` hook using
+  `@testing-library/react` renderHook, covering various state selectors and
+  transitions.
 
 - <u>Test coverage **_100%_**</u>
 

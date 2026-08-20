@@ -14,9 +14,7 @@ import { AlwaysConfig_Schema, DelayedTransitions_Config } from './edges';
  *
  * @see {@linkcode DelayedTransitions_Config}, {@linkcode AlwaysConfig_Schema}, {@linkcode ActorConfig_Schema}, {@linkcode recordV}
  */
-export const Transitions_Schema = <T extends ReadonlyArray<string>>(
-  ...paths: T
-) => {
+export const Transitions_Schema = <T extends ReadonlyArray<string>>(...paths: T) => {
   const on = v.optional(DelayedTransitions_Config(...paths));
 
   return v.object({

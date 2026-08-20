@@ -2,9 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on
-[Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
-adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
+this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <br/>
 
@@ -17,24 +16,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **`filter`**: Enhance `filter` action to support event-keyed function
-  maps (`FnMapFilterArray` and `FnMapFilterObject`) with event payload
-  access and `else` fallback handlers.
-- **`reduceFnMap`**: Introduce `reduceFnMapFilterArray` and
-  `reduceFnMapFilterObject` reducers to compile filter function maps.
-- **`bemedev`**: Re-export additional utility types from
-  `@bemedev/typings`.
+- **`filter`**: Enhance `filter` action to support event-keyed function maps
+  (`FnMapFilterArray` and `FnMapFilterObject`) with event payload access and `else`
+  fallback handlers.
+- **`reduceFnMap`**: Introduce `reduceFnMapFilterArray` and `reduceFnMapFilterObject`
+  reducers to compile filter function maps.
+- **`bemedev`**: Re-export additional utility types from `@bemedev/typings`.
 
 ### Refactor
 
 - **`SyncMachine` / `AsyncMachine`**: Update action option type definitions
-  `SyncFilterAction_F` and `AsyncFilterAction_F` to accept `FnMap`
-  structures.
+  `SyncFilterAction_F` and `AsyncFilterAction_F` to accept `FnMap` structures.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.11.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.11.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -51,13 +48,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Docs
 
-- **`JSDoc`**: Add comprehensive JSDoc annotations and `{@linkcode}`
-  references across source files.
+- **`JSDoc`**: Add comprehensive JSDoc annotations and `{@linkcode}` references
+  across source files.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.10.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.10.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -74,17 +71,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **`CommonInterpreter`**: Add `reset()` and `softReset()` methods to reset
-  service state to its initial configuration.
-- **`canEvents`**: Replace `canEvent` with `canEvents` to support variadic
-  event capability checking.
+- **`CommonInterpreter`**: Add `reset()` and `softReset()` methods to reset service
+  state to its initial configuration.
+- **`canEvents`**: Replace `canEvent` with `canEvents` to support variadic event
+  capability checking.
 
 ### Refactor
 
-- **`SyncInterpreter`**: Preserve `mode` and `exact` options when calling
-  `renew`.
-- **`CommonMachine`**: Refine `eventsList` typing for better event key
-  extraction.
+- **`SyncInterpreter`**: Preserve `mode` and `exact` options when calling `renew`.
+- **`CommonMachine`**: Refine `eventsList` typing for better event key extraction.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -101,8 +96,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.3
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.3 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -119,8 +113,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
-  `1.9.1`.
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app` `1.9.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -137,8 +130,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Refactor
 
-- **Valibot Migration**: Extract Valibot schemas and validation helpers
-  into `@bemedev/app-valibot` package.
+- **Valibot Migration**: Extract Valibot schemas and validation helpers into
+  `@bemedev/app-valibot` package.
 - **State Schemas**: Streamline machine configuration and interpreter state
   validation.
 
@@ -161,9 +154,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Swap Helper**: Document and expand `swap` helper integration to
-  showcase usage inside `assign`, `guards`, `delays`, and standalone
-  options.
+- **Swap Helper**: Document and expand `swap` helper integration to showcase usage
+  inside `assign`, `guards`, `delays`, and standalone options.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -180,22 +172,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Assign Helper**: Add support for multi-variable assignments in state
-  machine actions.
-- **State Machine Core**: Introduce synchronous (`SyncMachine`) and
-  asynchronous (`AsyncMachine`) interpreters with unified `interpret`
-  interface.
-- **Async Actions**: Enhance async actions with error handling, timeout
-  options, and error propagation (`errorFn`).
+- **Assign Helper**: Add support for multi-variable assignments in state machine
+  actions.
+- **State Machine Core**: Introduce synchronous (`SyncMachine`) and asynchronous
+  (`AsyncMachine`) interpreters with unified `interpret` interface.
+- **Async Actions**: Enhance async actions with error handling, timeout options, and
+  error propagation (`errorFn`).
 
 ### Refactor
 
-- **Machine Actions**: Refactor machine actions to utilize
-  `@bemedev/function-swap`.
-- **Node Config**: Streamline `isNodeConfig` checks and state resolution
-  logic.
-- **Decompose Integration**: Update `@bemedev/decompose` integration across
-  machine type definitions and schemas.
+- **Machine Actions**: Refactor machine actions to utilize `@bemedev/function-swap`.
+- **Node Config**: Streamline `isNodeConfig` checks and state resolution logic.
+- **Decompose Integration**: Update `@bemedev/decompose` integration across machine
+  type definitions and schemas.
 
 ### Dependencies
 
@@ -235,8 +224,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to `1.6.0` to align with the
-  core release.
+- **Workspace Dependencies**: Bump version to `1.6.0` to align with the core release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -253,16 +241,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Multi-variable assignment**: Support array of keys in `assign` helper
-  for both sync and async machines to allow multi-variable assignments.
+- **Multi-variable assignment**: Support array of keys in `assign` helper for both
+  sync and async machines to allow multi-variable assignments.
 
 ### Refactor
 
-- **Simplify assign logic**: Remove `expandFnMap` utility and refactor the
-  `assign` implementation to use `reduceFnMap` directly.
-- **Rename interpreter export**: Rename the internal `interpret` from
-  `#interpreter` to `interpretAsync` for consistency with async-specific
-  machine logic.
+- **Simplify assign logic**: Remove `expandFnMap` utility and refactor the `assign`
+  implementation to use `reduceFnMap` directly.
+- **Rename interpreter export**: Rename the internal `interpret` from `#interpreter`
+  to `interpretAsync` for consistency with async-specific machine logic.
 
 - <u>Test coverage **_99.86%_**</u>
 
@@ -279,21 +266,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Atomic state machine verification**: Add support for atomic state
-  machine verification and edge cases testing.
-- **`any` type validator helper**: Add `any` type validator helper to
-  `typings`.
+- **Atomic state machine verification**: Add support for atomic state machine
+  verification and edge cases testing.
+- **`any` type validator helper**: Add `any` type validator helper to `typings`.
 
 ### Fixes
 
-- **Initial config check**: Handle null/undefined values in initial
-  configuration parsing.
+- **Initial config check**: Handle null/undefined values in initial configuration
+  parsing.
 
 ### Refactor
 
-- **Simplify test configuration**: Simplify test config by replacing custom
-  TS aliases plugin with native `resolve.tsconfigPaths` in
-  `vitest.config.ts`.
+- **Simplify test configuration**: Simplify test config by replacing custom TS
+  aliases plugin with native `resolve.tsconfigPaths` in `vitest.config.ts`.
 - **Remove type assertion**: Remove unnecessary type assertion in
   `valueToNodeConfig`.
 
@@ -312,23 +297,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Breaking Changes
 
-- **Update options type parameters**: Rename `error` parameter to `catch`
-  in option parameter schemas for `assign`, `voidAction`, and `sendTo`
-  helpers, aligning it with the native Promise `.catch` syntax.
-- **Refactor engine structure**: Move engine implementation from
-  `src/machine/` to `src/asyncMachine/` and update internal exports.
+- **Update options type parameters**: Rename `error` parameter to `catch` in option
+  parameter schemas for `assign`, `voidAction`, and `sendTo` helpers, aligning it
+  with the native Promise `.catch` syntax.
+- **Refactor engine structure**: Move engine implementation from `src/machine/` to
+  `src/asyncMachine/` and update internal exports.
 
 ### Features
 
-- **Add `then` chaining support**: Implement the `then` option in `assign`
-  and `voidAction` helper options to support executing sequential actions
-  after a promise resolves.
+- **Add `then` chaining support**: Implement the `then` option in `assign` and
+  `voidAction` helper options to support executing sequential actions after a promise
+  resolves.
 
 ### Refactor
 
-- **Update path mappings**: Re-point path aliases `#machine` and
-  `#machines` in `tsconfig.json` to the new `src/asyncMachine/` directory
-  and update related imports.
+- **Update path mappings**: Re-point path aliases `#machine` and `#machines` in
+  `tsconfig.json` to the new `src/asyncMachine/` directory and update related
+  imports.
 
 - <u>Test coverage **_99.82%_**</u>
 
@@ -345,31 +330,30 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Async Predicate Evaluation**: Guards can now return `Promise<boolean>`
-  in addition to `boolean`. The `AsyncInterpreter` evaluates all predicates
-  sequentially using `await`, enabling async data fetches, token
-  validation, and other async checks directly in guard functions
-- **`toPredicate.async`**: Expose `_toPredicate.async` and
-  `toPredicate.async` variants via `expandFn`, allowing async AND/OR guard
-  composition with full error-safety (rejected promises resolve to `false`)
-- **`MaybePromise<boolean>` in types**: `AsyncPredicateS`,
-  `AsyncPredicateS3`, and `AsyncPerformPredicate_F` now accept
-  `MaybePromise<boolean>` instead of `boolean`, aligning the type surface
-  with runtime behaviour
+- **Async Predicate Evaluation**: Guards can now return `Promise<boolean>` in
+  addition to `boolean`. The `AsyncInterpreter` evaluates all predicates sequentially
+  using `await`, enabling async data fetches, token validation, and other async
+  checks directly in guard functions
+- **`toPredicate.async`**: Expose `_toPredicate.async` and `toPredicate.async`
+  variants via `expandFn`, allowing async AND/OR guard composition with full
+  error-safety (rejected promises resolve to `false`)
+- **`MaybePromise<boolean>` in types**: `AsyncPredicateS`, `AsyncPredicateS3`, and
+  `AsyncPerformPredicate_F` now accept `MaybePromise<boolean>` instead of `boolean`,
+  aligning the type surface with runtime behaviour
 
 ### Refactor
 
-- **Error Handler Signatures**: `errorFn` in async machine actions now
-  follows a two-step curried signature — `errorFn(error)` returns an action
-  function `(state) => Promise<result>`, making error handlers composable
-  and consistent with the action pipeline
+- **Error Handler Signatures**: `errorFn` in async machine actions now follows a
+  two-step curried signature — `errorFn(error)` returns an action function
+  `(state) => Promise<result>`, making error handlers composable and consistent with
+  the action pipeline
 - **`#performPredicates` made async**: The private predicate runner in
-  `AsyncInterpreter` is now `async` and short-circuits on the first `false`
-  result (fail-fast semantics)
-- **`__performFinally` made async**: The finally handler in
-  `AsyncInterpreter` now properly `await`s actions and predicate checks
-- **`toPredicateFn` override**: `AsyncInterpreter` overrides
-  `toPredicateFn` to use `toPredicate.async` instead of the sync variant
+  `AsyncInterpreter` is now `async` and short-circuits on the first `false` result
+  (fail-fast semantics)
+- **`__performFinally` made async**: The finally handler in `AsyncInterpreter` now
+  properly `await`s actions and predicate checks
+- **`toPredicateFn` override**: `AsyncInterpreter` overrides `toPredicateFn` to use
+  `toPredicate.async` instead of the sync variant
 
 - <u>Test coverage **_100%_**</u>
 
@@ -386,17 +370,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Machine Property**: Add `machine` getter to `CommonInterpreter` class
-  returning the underlying machine instance
+- **Machine Property**: Add `machine` getter to `CommonInterpreter` class returning
+  the underlying machine instance
 
 ### Refactor
 
-- **Centralized Constants**: Move `TIME_TO_RINIT_SELF_COUNTER` constant
-  from interpreter modules to centralized
-  `packages/app/src/constants/numbers.ts` file
-- **Interpreter Generics**: Refactor `constructTests` utility signature in
-  fixtures to accept `SyncInterpreter` or `AsyncInterpreter` with explicit
-  type parameters, improving type safety and inference
+- **Centralized Constants**: Move `TIME_TO_RINIT_SELF_COUNTER` constant from
+  interpreter modules to centralized `packages/app/src/constants/numbers.ts` file
+- **Interpreter Generics**: Refactor `constructTests` utility signature in fixtures
+  to accept `SyncInterpreter` or `AsyncInterpreter` with explicit type parameters,
+  improving type safety and inference
 
 - <u>Test coverage **_99.89%_**</u>
 
@@ -413,19 +396,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Strict Schema Verification**: Update `Config_Schema` and
-  `NodeConfig_Schema` to use stricter `NodeConfig2` type mapping
-- **Strict Parsing Context**: Update `ParseTreeContext` type definitions to
-  use the new `NodeConfig3` type to align with stricter validation
-  constraints
+- **Strict Schema Verification**: Update `Config_Schema` and `NodeConfig_Schema` to
+  use stricter `NodeConfig2` type mapping
+- **Strict Parsing Context**: Update `ParseTreeContext` type definitions to use the
+  new `NodeConfig3` type to align with stricter validation constraints
 - **Export Stricter Config Types**: Add `NodeConfig2`, `NodeConfig3` and
   `CommonConfig2`, `CommonConfig3` exports to the package root
 
 ### Fixes
 
 - **CLI Binary Permissions**: Update build script to execute
-  `chmod +x lib/cli/index.js` to ensure CLI binary has execution
-  permissions
+  `chmod +x lib/cli/index.js` to ensure CLI binary has execution permissions
 
 - <u>Test coverage **_100%_**</u>
 
@@ -442,8 +423,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Dependencies
 
-- **Workspace Protocols**: Update workspace protocols to use range
-  specifiers (`workspace:^`) for workspace-managed packages
+- **Workspace Protocols**: Update workspace protocols to use range specifiers
+  (`workspace:^`) for workspace-managed packages
 
 - <u>Test coverage **_100%_**</u>
 
@@ -460,22 +441,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **betterTimeout**: Add custom timeout utility that rejects with a
-  specific `MAX_EXCEEDED` error or custom error handler
-- **NoExtraKeysConfig**: Implement compile-time type validation enforcing
-  strict object shape constraints on state machine configurations
-- **Valibot Schemas**: Integrate `valibot` schema definitions for runtime
-  validation of states, transitions, actions, and guards
-- **Asynchronous Delays**: Add asynchronous delay options support to the
-  interpreter
+- **betterTimeout**: Add custom timeout utility that rejects with a specific
+  `MAX_EXCEEDED` error or custom error handler
+- **NoExtraKeysConfig**: Implement compile-time type validation enforcing strict
+  object shape constraints on state machine configurations
+- **Valibot Schemas**: Integrate `valibot` schema definitions for runtime validation
+  of states, transitions, actions, and guards
+- **Asynchronous Delays**: Add asynchronous delay options support to the interpreter
 
 ### Refactor
 
-- **Simplified Machine Types**: Remove generic events and actors maps from
-  root machine and interpreter definitions to simplify type hierarchy and
-  internals
-- **Standardized Schemas**: Align naming conventions for internal
-  transition and state validation schemas
+- **Simplified Machine Types**: Remove generic events and actors maps from root
+  machine and interpreter definitions to simplify type hierarchy and internals
+- **Standardized Schemas**: Align naming conventions for internal transition and
+  state validation schemas
 
 - <u>Test coverage **_100%_**</u>
 
@@ -490,15 +469,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-- Breaking: Rename async machine helper types to explicit `Async*` names
-  and remove legacy aliases from exported type surface
-- Add: Re-export core utility helpers (`expandFn`, `switchValue`,
-  `toArray`, `tupleOf`, and related helpers) from the package root
-  entrypoint
-- Update: Expand exported type utilities for events, guards, delays,
-  emitters, transitions, actions, and interpreter internals
-- Refactor: Move shared `ByKey_F` typing helper to common types and align
-  internal imports to shared machine/common modules
+- Breaking: Rename async machine helper types to explicit `Async*` names and remove
+  legacy aliases from exported type surface
+- Add: Re-export core utility helpers (`expandFn`, `switchValue`, `toArray`,
+  `tupleOf`, and related helpers) from the package root entrypoint
+- Update: Expand exported type utilities for events, guards, delays, emitters,
+  transitions, actions, and interpreter internals
+- Refactor: Move shared `ByKey_F` typing helper to common types and align internal
+  imports to shared machine/common modules
 - <u>Test coverage **_100%_**</u>
 
 </details>
@@ -514,8 +492,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Dependencies: Update Vitest stack to `4.1.8` (`vitest`, `@vitest/ui`,
   `@vitest/coverage-v8`)
-- Dependencies: Update Ox tooling (`oxfmt` to `0.53.0`, `oxlint` to
-  `1.68.0`)
+- Dependencies: Update Ox tooling (`oxfmt` to `0.53.0`, `oxlint` to `1.68.0`)
 - <u>Test coverage **_100%_**</u>
 
 </details>
@@ -529,8 +506,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-- Fix: Add explicit module entry points (main, types, module fields) in
-  package.json for improved module resolution
+- Fix: Add explicit module entry points (main, types, module fields) in package.json
+  for improved module resolution
 - <u>Test coverage **_100%_**</u>
 
 </details>
@@ -544,8 +521,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-- Refactor: Migrate interpreter and machine types to common module exports
-  for improved accessibility
+- Refactor: Migrate interpreter and machine types to common module exports for
+  improved accessibility
 - Refactor: Rename internal CollectedService to CommonCollectedService for
   consistency
 - Refactor: Update PrimitiveObject type imports to use @bemedev/typings
@@ -564,8 +541,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 </summary>
 
 - Fix module declaration to use `~types` instead of `@bemedev/app`
-- Adjust build scripts to ensure type declaration generation in pretest
-  phase
+- Adjust build scripts to ensure type declaration generation in pretest phase
 - Update TypeScript configuration for proper module resolution
 - <u>Test coverage **_100%_**</u>
 
@@ -581,17 +557,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **CLI Binary**: Package now includes executable CLI entry point (`bin`
-  field), allowing direct invocation via `npx @bemedev/app` or global
-  installation
-- **CLI Commands**: Introduce `generate` and `watch` commands for machine
-  files with fast-glob pattern matching
+- **CLI Binary**: Package now includes executable CLI entry point (`bin` field),
+  allowing direct invocation via `npx @bemedev/app` or global installation
+- **CLI Commands**: Introduce `generate` and `watch` commands for machine files with
+  fast-glob pattern matching
 - **Sync Interpreter**: Implement synchronous interpreter for state machine
   interpretation
-- **Sync Machine**: Add synchronous machine implementation for sync-only
-  state management
-- **Expression Evaluation**: Support spread operators and enhance
-  expression evaluation capabilities
+- **Sync Machine**: Add synchronous machine implementation for sync-only state
+  management
+- **Expression Evaluation**: Support spread operators and enhance expression
+  evaluation capabilities
 - **API Methods**: Enhance `addOptions` and `provideOptions` methods across
   interpreters and machines
 
@@ -599,19 +574,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - **Error Handler**: Fixed error handler for unhandledRejection in Vitest
   configuration
-- **Package Manager**: Fixed package manager initialization and import
-  handling in CLI generator
-- **CLI Paths**: Fixed file exclusion paths for CLI files in Vitest
-  configuration
+- **Package Manager**: Fixed package manager initialization and import handling in
+  CLI generator
+- **CLI Paths**: Fixed file exclusion paths for CLI files in Vitest configuration
 
 ### Refactoring
 
-- **Tests**: Reorganized test structure with separate `async/` and `sync/`
-  test directories
-- **Examples**: Removed `examples/tan-solid/` directory for simplified
-  project maintenance
-- **CLI Constants**: Refactored to use centralized `LIB` variable for
-  consistency
+- **Tests**: Reorganized test structure with separate `async/` and `sync/` test
+  directories
+- **Examples**: Removed `examples/tan-solid/` directory for simplified project
+  maintenance
+- **CLI Constants**: Refactored to use centralized `LIB` variable for consistency
 
 ### Documentation
 
@@ -638,33 +611,30 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Interpreter**: Implement unified interpret function for sync and async
-  contexts.
+- **Interpreter**: Implement unified interpret function for sync and async contexts.
 - **Sync**: Introduce `SyncMachine` and related types for synchronous state
   management.
 - **Actions**: Enhance `expandFnMap` to support synchronous actions.
 - **Hooks**: Add utility hooks for scroll, sleep, and window management.
-- **State Management**: Add interpreter and subscriber types for enhanced
-  state management, and `ScheduledData` type.
+- **State Management**: Add interpreter and subscriber types for enhanced state
+  management, and `ScheduledData` type.
 - **Documentation**: Add project overview and conventions in `GEMINI.md`.
-- **Environment**: Enhance devcontainer configuration with increased CPU,
-  additional extensions, and optimized type checks.
+- **Environment**: Enhance devcontainer configuration with increased CPU, additional
+  extensions, and optimized type checks.
 
 ### Updates
 
-- **Typings**: Update `@bemedev/typings` to version 1.2.0 and adjust CI
-  scripts.
+- **Typings**: Update `@bemedev/typings` to version 1.2.0 and adjust CI scripts.
 
 ### Refactors
 
-- **Machine**: Streamline machine class by removing deprecated properties
-  and methods, rename private methods to protected.
+- **Machine**: Streamline machine class by removing deprecated properties and
+  methods, rename private methods to protected.
 - **Interpreter**: Clean up imports and remove deprecated methods in
   `SyncInterpreter`.
-- **Checks**: Simplify `isNodeConfig` and related checks, remove unused
-  strict and `__longRuns` properties.
-- **Guards**: Update `isAfter` function to use `Object.values` for key
-  checks.
+- **Checks**: Simplify `isNodeConfig` and related checks, remove unused strict and
+  `__longRuns` properties.
+- **Guards**: Update `isAfter` function to use `Object.values` for key checks.
 - **Utilities**: Reorganize async utilities and tests.
 
 - <u>Test coverage **_95.09%_**</u>
@@ -680,41 +650,37 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-> 🚀 **Stable release** — CLI extraction, test infrastructure upgrade, and
-> enhanced developer experience.
+> 🚀 **Stable release** — CLI extraction, test infrastructure upgrade, and enhanced
+> developer experience.
 
 ### Breaking Changes
 
-- **CLI Removal**: Remove embedded CLI commands from core package; use
-  external `@bemedev/app-cli` package instead (`generate` and
-  `generate:watch` scripts now use `pnpm dlx @bemedev/app-cli`).
+- **CLI Removal**: Remove embedded CLI commands from core package; use external
+  `@bemedev/app-cli` package instead (`generate` and `generate:watch` scripts now use
+  `pnpm dlx @bemedev/app-cli`).
 
 ### Features
 
-- **Error Handling**: Add `unhandledRejection` utility to fixtures for
-  robust unhandled promise rejection tracking in tests.
+- **Error Handling**: Add `unhandledRejection` utility to fixtures for robust
+  unhandled promise rejection tracking in tests.
 
 ### Updates
 
 - **Test Infrastructure**: Upgrade Vitest from `3.2.4` to `4.1.7` and
-  `@vitest/coverage-v8`, `@vitest/ui` to `4.1.7` for enhanced testing
-  capabilities.
-- **Build Tools**: Update `oxfmt` to `0.51.0` and `oxlint` to `1.66.0` for
-  improved code formatting and linting.
-- **Development Experience**: Enhance devcontainer configuration with
-  optimized extension handling and CI/admin scripts refinement.
-- **Dependencies**: Update `typescript` to `6.0.3`, `tsx` to `4.22.3`,
-  `@types/node` to `25.9.1`, `rolldown` to `1.0.2`, and typings utilities
-  for consistency.
+  `@vitest/coverage-v8`, `@vitest/ui` to `4.1.7` for enhanced testing capabilities.
+- **Build Tools**: Update `oxfmt` to `0.51.0` and `oxlint` to `1.66.0` for improved
+  code formatting and linting.
+- **Development Experience**: Enhance devcontainer configuration with optimized
+  extension handling and CI/admin scripts refinement.
+- **Dependencies**: Update `typescript` to `6.0.3`, `tsx` to `4.22.3`, `@types/node`
+  to `25.9.1`, `rolldown` to `1.0.2`, and typings utilities for consistency.
 
 ### Refactors
 
-- **CLI Migration**: Move generate/watch functionality to external
-  `@bemedev/app-cli` package.
-- **Scripts**: Refactor CI and admin scripts for cleaner separation of
-  concerns.
-- **Type Exports**: Consolidate registry implementation into
-  `registry.types.ts`.
+- **CLI Migration**: Move generate/watch functionality to external `@bemedev/app-cli`
+  package.
+- **Scripts**: Refactor CI and admin scripts for cleaner separation of concerns.
+- **Type Exports**: Consolidate registry implementation into `registry.types.ts`.
 
 ### Dependencies
 
@@ -740,17 +706,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Exports**: Add new public exports from `src/index.ts` and
-  `src/types/index.ts` for `EventArgObject`, `EventObject`, `EventsMap`,
-  `AllEvent`, `InitEvent`, `MAX_EXCEEDED_EVENT_TYPE`, state/node config
-  types, emitter helpers, and guard predicate utilities.
+- **Exports**: Add new public exports from `src/index.ts` and `src/types/index.ts`
+  for `EventArgObject`, `EventObject`, `EventsMap`, `AllEvent`, `InitEvent`,
+  `MAX_EXCEEDED_EVENT_TYPE`, state/node config types, emitter helpers, and guard
+  predicate utilities.
 - **Type utilities**: Export `inferSh` from `@bemedev/typings` through
   `src/utils/typings.ts`.
 
 ### Updates
 
-- **Package exports**: Expose `./constants` in `package.json` to support
-  package-wide `constants` imports.
+- **Package exports**: Expose `./constants` in `package.json` to support package-wide
+  `constants` imports.
 
 </details>
 
@@ -768,34 +734,33 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Features
 
-- **Public Exports**: Add public type exports in `src/index.ts` to expose
-  `Action2`, `ActorsConfigMap`, `ToEventObject`, `ToEvents`,
-  `DelayFunction2`, `EmitterFunction2`, and `PredicateS` to package
-  consumers.
+- **Public Exports**: Add public type exports in `src/index.ts` to expose `Action2`,
+  `ActorsConfigMap`, `ToEventObject`, `ToEvents`, `DelayFunction2`,
+  `EmitterFunction2`, and `PredicateS` to package consumers.
 - **Devcontainer**: Add a development container configuration
-  (`.devcontainer/devcontainer.json`) for seamless out-of-the-box
-  development environments.
+  (`.devcontainer/devcontainer.json`) for seamless out-of-the-box development
+  environments.
 
 ### Fixes
 
-- **Repository URL**: Fix repository URL in `package.json` pointing to
-  correct repo (`github.com/chlbri/app`).
-- **Build Script**: Remove `generate` command execution from the main
-  `build` script in `package.json` for a cleaner, faster build pipeline.
+- **Repository URL**: Fix repository URL in `package.json` pointing to correct repo
+  (`github.com/chlbri/app`).
+- **Build Script**: Remove `generate` command execution from the main `build` script
+  in `package.json` for a cleaner, faster build pipeline.
 
 ### Refactors
 
-- **Migration**: Migrate configuration files and documentation from
-  `.claude/` to `.agents/` directory structure.
-- **Verification**: Enhance development workflows with a spacing
-  verification utility.
-- **Tooling**: Streamline devcontainer specs for increased memory/CPU
-  allocation and optimize VSCode configuration settings.
+- **Migration**: Migrate configuration files and documentation from `.claude/` to
+  `.agents/` directory structure.
+- **Verification**: Enhance development workflows with a spacing verification
+  utility.
+- **Tooling**: Streamline devcontainer specs for increased memory/CPU allocation and
+  optimize VSCode configuration settings.
 
 ### Dependencies
 
-- **Package Manager**: Update workspace to explicitly declare and use
-  `pnpm` as the package manager.
+- **Package Manager**: Update workspace to explicitly declare and use `pnpm` as the
+  package manager.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -810,22 +775,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-> ⚠️ **Canary update** — unstable release with package and tooling
-> improvements.
+> ⚠️ **Canary update** — unstable release with package and tooling improvements.
 
 ### Refactors
 
-- **parseTree**: adopt new `@bemedev/pipe` Monad APIs (`monad`,
-  `toggleMonad`) in `src/utils/parseTree.helpers.ts`
+- **parseTree**: adopt new `@bemedev/pipe` Monad APIs (`monad`, `toggleMonad`) in
+  `src/utils/parseTree.helpers.ts`
 
 ### Dependencies
 
-- **Dependencies**: update `@bemedev/better-set` to `^0.2.1`,
-  `@bemedev/pipe` to `^1.6.1`, `@bemedev/typings` to `^0.5.5`, `nanoid` to
-  `^5.1.11`
-- **Dev tooling**: update `rolldown` to `1.0.2`, `vitest` to `^4.1.7`,
-  `oxlint` to `^1.66.0`, `oxfmt` to `^0.51.0`, `@types/node` to `^25.9.1`,
-  and other developer utilities
+- **Dependencies**: update `@bemedev/better-set` to `^0.2.1`, `@bemedev/pipe` to
+  `^1.6.1`, `@bemedev/typings` to `^0.5.5`, `nanoid` to `^5.1.11`
+- **Dev tooling**: update `rolldown` to `1.0.2`, `vitest` to `^4.1.7`, `oxlint` to
+  `^1.66.0`, `oxfmt` to `^0.51.0`, `@types/node` to `^25.9.1`, and other developer
+  utilities
 
 - <u>Test coverage **_100%_**</u>
 
@@ -840,22 +803,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-> ⚠️ **Canary update** — unstable release with package and tooling
-> improvements.
+> ⚠️ **Canary update** — unstable release with package and tooling improvements.
 
 ### Updates
 
 - **Version**: bumped from `0.1.0-canary` to `0.1.1-canary`
-- **Package**: added modern `exports` map and improved `generate` script
-  support
+- **Package**: added modern `exports` map and improved `generate` script support
 - **Dependencies**: updated `@bemedev/dev-utils`, `@vitest/coverage-v8`,
   `@vitest/ui`, `vitest`, `@bemedev/pipe`
 - **Add**: `@bemedev/app-cli` and `@bemedev/better-set`
-- **Note**: CLI helpers and type-generation tooling are delivered via the
-  companion `@bemedev/app-cli` package, a complementary library for better
-  typing similar to TanStack Start
-- **Dev tooling**: align build/test tooling with the rewritten package
-  structure
+- **Note**: CLI helpers and type-generation tooling are delivered via the companion
+  `@bemedev/app-cli` package, a complementary library for better typing similar to
+  TanStack Start
+- **Dev tooling**: align build/test tooling with the rewritten package structure
 
 </details>
 
@@ -868,8 +828,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 </summary>
 
-> ⚠️ **Complete rewrite** — unstable canary version intended for testers.
-> Do not use in production.
+> ⚠️ **Complete rewrite** — unstable canary version intended for testers. Do not use
+> in production.
 
 ### Breaking Changes
 
@@ -877,56 +837,52 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Version**: reset to `0.1.0-canary` (new version line)
 - **Node.js**: minimum version raised from ≥ 22 to ≥ 24
 - **TypeScript**: upgraded to TypeScript 6.x (≥ 6.0.3)
-- **Removed** `src/actor.types.ts` — types merged into
-  `src/actors/types.ts`
+- **Removed** `src/actor.types.ts` — types merged into `src/actors/types.ts`
 - **Removed** `src/machine/registry.ts` — replaced by `src/registry.ts`
-- **Test convention**: machine fixtures are now in `*.machine.ts` files
-  separate from `*.test.ts` files
+- **Test convention**: machine fixtures are now in `*.machine.ts` files separate from
+  `*.test.ts` files
 
 ### New Features
 
 - **`registry.ts`**: global machine registry exported from the package —
-  `registerMachine`, `getMachine`, `MACHINES`, `Register` interface
-  (augmentable via `declare module`)
-- **`actors/` module**: `reduceActors`, `reduceChild`, `reduceEmitter` —
-  reduces actor configurations (emitters and children) into sets of
-  actions, guards and targets
-- **`utils/parseTree.ts`**: full traversal of a machine config — extracts
-  all paths, actions, guards, emitters, children, delays, events, tags and
-  pContext keys in a single call
-- **`utils/set.ts`**: `BetterSet<T>` class — enhanced Set with custom
-  equality, iterable, extended API (`add`, `has`, `values`, `size`,
-  `isEmpty`, `toArray`, `map`, `filter`)
-- **`utils/reduceDescribers.ts`**: `reduceDescribers` utility to flatten
-  describer configurations without duplicates
-- **`guards/helpers/reduceGuards.ts`**: `reduceGuards` — recursively
-  flattens AND/OR guard unions into a flat array of `WithDescriber[]`,
-  without duplicates
-- **`transitions/functions/reduceTransitions.ts`**: `reduceTransitions` —
-  extracts targets, actions and guards from a list of transition
-  configurations
-- **`transitions/functions/reduceTransitionsConfig.ts`**:
-  `reduceTransitionsConfig` — reduces a transition map by event
-- **`states/functions/reduceActivity.ts`**: `reduceActivity` — reduces the
-  activity configurations of a state
-- **CLI**: `--dry-run` flag on the `generate` command — prints output
-  without writing to disk
+  `registerMachine`, `getMachine`, `MACHINES`, `Register` interface (augmentable via
+  `declare module`)
+- **`actors/` module**: `reduceActors`, `reduceChild`, `reduceEmitter` — reduces
+  actor configurations (emitters and children) into sets of actions, guards and
+  targets
+- **`utils/parseTree.ts`**: full traversal of a machine config — extracts all paths,
+  actions, guards, emitters, children, delays, events, tags and pContext keys in a
+  single call
+- **`utils/set.ts`**: `BetterSet<T>` class — enhanced Set with custom equality,
+  iterable, extended API (`add`, `has`, `values`, `size`, `isEmpty`, `toArray`,
+  `map`, `filter`)
+- **`utils/reduceDescribers.ts`**: `reduceDescribers` utility to flatten describer
+  configurations without duplicates
+- **`guards/helpers/reduceGuards.ts`**: `reduceGuards` — recursively flattens AND/OR
+  guard unions into a flat array of `WithDescriber[]`, without duplicates
+- **`transitions/functions/reduceTransitions.ts`**: `reduceTransitions` — extracts
+  targets, actions and guards from a list of transition configurations
+- **`transitions/functions/reduceTransitionsConfig.ts`**: `reduceTransitionsConfig` —
+  reduces a transition map by event
+- **`states/functions/reduceActivity.ts`**: `reduceActivity` — reduces the activity
+  configurations of a state
+- **CLI**: `--dry-run` flag on the `generate` command — prints output without writing
+  to disk
 - **CLI**: `dev` alias for the `watch` command
-- **CLI**: machine detection pattern extended — `*.machine.ts` and
-  `*.fsm.ts`
+- **CLI**: machine detection pattern extended — `*.machine.ts` and `*.fsm.ts`
 
 ### Refactors
 
-- `cli/core/generator.ts` fully rebuilt around `parseTree` for more
-  reliable and complete type extraction
+- `cli/core/generator.ts` fully rebuilt around `parseTree` for more reliable and
+  complete type extraction
 - `flatMap` (states) refactored via `expandFn` — centralised logic
 - `Machine` class: enriched generic parameters (`AllPaths`, `Eo`)
 - `Interpreter`: event and actor type handling refined
 - `transitions/` module reorganised with modular reduction logic
 - `utils` exports simplified: `buildPaths` now exported directly from
   `src/utils/index.ts`
-- `typings` helpers rewired for stricter `actorsMap` inference and cleaner
-  type utilities in `src/utils/typings.ts`
+- `typings` helpers rewired for stricter `actorsMap` inference and cleaner type
+  utilities in `src/utils/typings.ts`
 
 ### Dependencies
 

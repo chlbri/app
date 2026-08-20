@@ -122,8 +122,7 @@ export type DeepPartial<T> = T extends Primitive
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export type Require<T, K extends keyof T> = NOmit<T, K> &
-  Required<Pick<T, K>>;
+export type Require<T, K extends keyof T> = NOmit<T, K> & Required<Pick<T, K>>;
 /**
  * Unionize type - Auto-generated expression
  *
@@ -155,10 +154,7 @@ type FilterFlagsLow<Base, Condition> = {
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export type AllowedNames<Base, Condition> = FilterFlags<
-  Base,
-  Condition
->[keyof Base];
+export type AllowedNames<Base, Condition> = FilterFlags<Base, Condition>[keyof Base];
 /**
  * AllowedNamesLow type - Auto-generated expression
  *
@@ -283,10 +279,7 @@ export type NoExtraKeys<T, Schema> = T extends Primitive
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export type NoExtraKeysStrict<T extends Schema, Schema> = NoExtraKeys<
-  T,
-  Schema
->;
+export type NoExtraKeysStrict<T extends Schema, Schema> = NoExtraKeys<T, Schema>;
 // #endregion NoExtraKeys
 
 /**

@@ -25,10 +25,7 @@ export function useIsInside<
   Tc extends PrimitiveObject,
   Ta extends string,
   Eo extends EventObject,
->(service: {
-  subscribe: AddSubscriber_F<Tc, Ta, Eo>;
-  state: State<Eo, Tc, Ta>;
-}) {
+>(service: { subscribe: AddSubscriber_F<Tc, Ta, Eo>; state: State<Eo, Tc, Ta> }) {
   const selector1 = (_state: State<Eo, Tc, Ta>) => {
     return decomposeSV(_state.value);
   };

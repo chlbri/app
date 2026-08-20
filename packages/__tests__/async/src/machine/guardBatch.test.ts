@@ -35,8 +35,10 @@ describe('AsyncMachine - guardBatch', () => {
     ({ guardBatch, isValue }) => ({
       guards: {
         checkAnd: guardBatch(
+          true,
           isValue('context.role', 'admin'),
           isValue('context.active', true),
+          undefined,
         ),
         checkOr: guardBatch(isValue('context.active', true), {
           or: [
@@ -49,10 +51,12 @@ describe('AsyncMachine - guardBatch', () => {
           {
             or: [
               isValue('context.role', 'admin'),
-              guardBatch(
-                isValue('context.role', 'editor'),
-                async ({ context }) => context?.active === true,
-              ),
+              guardBatch({
+                and: [
+                  isValue('context.role', 'editor'),
+                  async ({ context }) => context?.active === true,
+                ],
+              }),
             ],
           },
         ),

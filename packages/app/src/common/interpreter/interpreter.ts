@@ -14,10 +14,7 @@ import { _any } from '@bemedev/app-utils-bemedev';
 import { toAction, type WithDescriber } from '#actions';
 import type { ChildConfig, EmitterConfig } from '#actor';
 import { getTags, toChildSrc } from '#common/functions';
-import {
-  DEFAULT_DELIMITER,
-  DEFAULT_MAX_SELF_TRANSITIONS,
-} from '#constants';
+import { DEFAULT_DELIMITER, DEFAULT_MAX_SELF_TRANSITIONS } from '#constants';
 import { toDelay } from '#delays';
 import { toEmitterSrc } from '#emitters';
 import { toPredicate, type GuardConfig } from '#guards';
@@ -43,11 +40,7 @@ import {
   replaceAll,
 } from '#utils';
 import type { AllowedNames } from '@bemedev/app-utils-bemedev';
-import {
-  isDefined,
-  isPrimitive,
-  toArray,
-} from '@bemedev/app-utils-bemedev';
+import { isDefined, isPrimitive, toArray } from '@bemedev/app-utils-bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { getByKey } from '@bemedev/decompose';
 import {
@@ -124,17 +117,7 @@ export abstract class CommonInterpreter<
   /**
    * The inner class {@linkcode CommonMachine} instance associated with this interpreter.
    */
-  protected __machine!: CommonMachine<
-    C,
-    Pc,
-    Tc,
-    E,
-    A,
-    Ta,
-    Eo,
-    AllPaths,
-    Mo
-  >;
+  protected __machine!: CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
 
   /**
    * Accessor for the inner class {@linkcode CommonMachine} instance.
@@ -358,11 +341,7 @@ export abstract class CommonInterpreter<
     }
     const values = decomposeSV(sv);
     const entry = value.substring(1);
-    const state = replaceAll({
-      entry,
-      match: DEFAULT_DELIMITER,
-      replacement: '.',
-    });
+    const state = replaceAll({ entry, match: DEFAULT_DELIMITER, replacement: '.' });
 
     return values.includes(state);
   };
@@ -730,14 +709,10 @@ export abstract class CommonInterpreter<
   private __stopPausables = (
     filter: Parameters<Array<CollectedPausable>['filter']>[0] = () => true,
   ) => {
-    this.__collectedPausables
-      .filter(filter)
-      .forEach(({ pausable, id }) => {
-        pausable.stop();
-        this.__collectedPausables = this.__collectedPausables.filter(
-          f => f.id !== id,
-        );
-      });
+    this.__collectedPausables.filter(filter).forEach(({ pausable, id }) => {
+      pausable.stop();
+      this.__collectedPausables = this.__collectedPausables.filter(f => f.id !== id);
+    });
   };
 
   /**
@@ -812,10 +787,8 @@ export abstract class CommonInterpreter<
    */
   private __collectChildrenConfig = () => {
     const entriesFlat = Object.entries<any>(this.__machine.flat);
-    const entries: [
-      from: string,
-      ...children: (ChildConfig & { id: string })[],
-    ][] = [];
+    const entries: [from: string, ...children: (ChildConfig & { id: string })[]][] =
+      [];
 
     entriesFlat.forEach(([from, node]) => {
       const actors = Object.entries(node.actors ?? {});
@@ -934,8 +907,7 @@ export abstract class CommonInterpreter<
    * @param filter - Predicate filtering child service entries.
    */
   private __pauseChildren = (
-    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
-      true,
+    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () => true,
   ) => {
     this.__collectedChildren
       .filter(filter)
@@ -948,8 +920,7 @@ export abstract class CommonInterpreter<
    * @param filter - Predicate filtering child service entries.
    */
   private __stopChildren = (
-    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
-      true,
+    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () => true,
   ) => {
     this.__collectedChildren.filter(filter).forEach(({ service, id }) => {
       service.stop();
@@ -958,9 +929,7 @@ export abstract class CommonInterpreter<
         .filter(f => f.id === id)
         .forEach(({ service }) => service.dispose());
 
-      this.__collectedChildren = this.__collectedChildren.filter(
-        f => f.id !== id,
-      );
+      this.__collectedChildren = this.__collectedChildren.filter(f => f.id !== id);
     });
   };
 
@@ -970,8 +939,7 @@ export abstract class CommonInterpreter<
    * @param filter - Predicate filtering child service entries.
    */
   private __resumeChildren = (
-    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () =>
-      true,
+    filter: Parameters<Array<CommonCollectedService>['filter']>[0] = () => true,
   ) => {
     this.__collectedChildren
       .filter(filter)
@@ -1204,10 +1172,7 @@ export abstract class CommonInterpreter<
    * @returns A subscriber object of type {@linkcode Subscriber}.
    */
   // @ts-expect-error Already used recursively
-  private __subscribe: AddSubscriber_F<Tc, Ta, Eo> = (
-    _subscriber,
-    options,
-  ) => {
+  private __subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.__machine.eventsList;
     const subscriber = createSubscriber(_subscriber, options, ...events);
     this.__innerSubscribers.add(subscriber as any);
@@ -1440,8 +1405,7 @@ export abstract class CommonInterpreter<
    *
    * @returns Proposed state value of type {@linkcode StateValue}.
    */
-  private __proposedNextSV = (target: string) =>
-    nextSV(this.__value, target);
+  private __proposedNextSV = (target: string) => nextSV(this.__value, target);
 
   /**
    * Calculates the proposed next node configuration for a target path without applying mutations.
@@ -1463,9 +1427,7 @@ export abstract class CommonInterpreter<
    */
   protected __performPauseActivityAction = (id?: string) => {
     if (!id) return;
-    this.__currentActivities
-      ?.filter(f => f.id === id)
-      .forEach(this.__pause);
+    this.__currentActivities?.filter(f => f.id === id).forEach(this.__pause);
   };
 
   /**
@@ -1475,9 +1437,7 @@ export abstract class CommonInterpreter<
    */
   protected __performResumeActivityAction = (id?: string) => {
     if (!id) return;
-    this.__currentActivities
-      ?.filter(f => f.id === id)
-      .forEach(this.__resume);
+    this.__currentActivities?.filter(f => f.id === id).forEach(this.__resume);
   };
 
   /**
@@ -1487,9 +1447,7 @@ export abstract class CommonInterpreter<
    */
   protected __performStopActivityAction = (id?: string) => {
     if (!id) return;
-    this.__currentActivities
-      ?.filter(f => f.id === id)
-      .forEach(this.__dispose);
+    this.__currentActivities?.filter(f => f.id === id).forEach(this.__dispose);
   };
 
   /**
@@ -1580,9 +1538,11 @@ export abstract class CommonInterpreter<
    * @returns Self-transition execution result.
    */
   protected __preNext = () => {
-    const filter: Parameters<
-      Array<{ from: string; id: string }>['filter']
-    >[0] = ({ from, id }, _, all) => {
+    const filter: Parameters<Array<{ from: string; id: string }>['filter']>[0] = (
+      { from, id },
+      _,
+      all,
+    ) => {
       const isOutside = !this.__isInsideValue(from);
 
       const hasSiblingsWithSameId = all
@@ -1692,10 +1652,7 @@ export abstract class CommonInterpreter<
    *
    * @returns Send to operation result.
    */
-  protected __performSendToAction = (sentEvent?: {
-    to: string;
-    event: any;
-  }) => {
+  protected __performSendToAction = (sentEvent?: { to: string; event: any }) => {
     if (!sentEvent) return;
     return this.__sendTo(sentEvent.to, sentEvent.event);
   };
@@ -1749,9 +1706,7 @@ export abstract class CommonInterpreter<
    *
    * @param scheduled - Optional scheduled action configuration of type {@linkcode ScheduledData}.
    */
-  protected __performScheduledAction = (
-    scheduled?: ScheduledData<Pc, Tc>,
-  ) => {
+  protected __performScheduledAction = (scheduled?: ScheduledData<Pc, Tc>) => {
     if (!scheduled) return;
     const { data, ms: timeout, id } = scheduled;
     const callback = () => this.__mergeContexts(data);
@@ -1774,11 +1729,7 @@ export abstract class CommonInterpreter<
    *
    * @returns New interval instance of type {@linkcode Interval2}.
    */
-  protected createInterval: CreateInterval2_F = ({
-    callback,
-    id,
-    interval,
-  }) => {
+  protected createInterval: CreateInterval2_F = ({ callback, id, interval }) => {
     const exact = this.__exact;
     const out = createInterval({ callback, id, interval, exact });
 
@@ -1948,10 +1899,7 @@ export abstract class CommonInterpreter<
    * @param to - Target child service identifier string.
    * @param event - Event object of type `T`.
    */
-  protected abstract __sendTo: <T extends EventObject>(
-    to: string,
-    event: T,
-  ) => any;
+  protected abstract __sendTo: <T extends EventObject>(to: string, event: T) => any;
 
   // #region Disposable
   /**
@@ -1986,15 +1934,14 @@ export abstract class CommonInterpreter<
  *
  * @template M - Machine type extending interface {@linkcode AnyMachine}.
  */
-export type CommonInterpreterFrom<M extends AnyMachine> =
-  CommonInterpreter<
-    ConfigFrom<M>,
-    PrivateContextFrom<M>,
-    ContextFrom<M>,
-    EventsMapFrom<M>,
-    ActorsMapFrom<M>,
-    TagFrom<M>,
-    EventsFrom<M>,
-    AllPathsFrom<M>,
-    MachineOptionsFrom<M>
-  >;
+export type CommonInterpreterFrom<M extends AnyMachine> = CommonInterpreter<
+  ConfigFrom<M>,
+  PrivateContextFrom<M>,
+  ContextFrom<M>,
+  EventsMapFrom<M>,
+  ActorsMapFrom<M>,
+  TagFrom<M>,
+  EventsFrom<M>,
+  AllPathsFrom<M>,
+  MachineOptionsFrom<M>
+>;

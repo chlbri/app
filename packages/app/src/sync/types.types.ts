@@ -25,8 +25,8 @@ export type SyncTransitionsConfig<Paths extends string = string> = {
  *
  * @template {string} Paths - State path union.
  */
-export type SyncCommonNodeConfig<Paths extends string = string> =
-  BaseConfig & SyncTransitionsConfig<Paths>;
+export type SyncCommonNodeConfig<Paths extends string = string> = BaseConfig &
+  SyncTransitionsConfig<Paths>;
 
 /**
  * State node configuration structure for synchronous state machines.
@@ -59,8 +59,7 @@ export type SyncNodeConfig<Paths extends string = string> =
  * @template {NoExtraKeysTargetDef<TargetDef>} Paths - Target definitions.
  */
 export type SyncConfig<
-  Paths extends NoExtraKeysTargetDef<TargetDef> =
-    NoExtraKeysTargetDef<TargetDef>,
+  Paths extends NoExtraKeysTargetDef<TargetDef> = NoExtraKeysTargetDef<TargetDef>,
 > = SyncNodeConfig<Paths['targets']> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;

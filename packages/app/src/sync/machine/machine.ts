@@ -127,36 +127,24 @@ export class SyncMachine<
             if (typeof guard === 'boolean') return () => guard;
             if (typeof guard === 'function') return guard;
 
-            if (typeof guard === 'object' && guard !== null) {
+            if (typeof guard === 'object') {
               if ('or' in guard) {
                 const or = guard.or.map(reduceGuardItem);
                 return { or };
               }
 
-              if ('and' in guard) {
-                const and = guard.and.map(reduceGuardItem);
-                return { and };
-              }
-
-              return reduceFnMap(guard, ...this.__eventsList);
+              const and = guard.and.map(reduceGuardItem);
+              return { and };
             }
 
-            return guard;
+            return undefined;
           };
 
-          const prepared = guards.map(reduceGuardItem);
-          const fn = recursive(...prepared);
-
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({
-              context,
-              pContext,
-              ...rest,
-            });
-
-            return fn(state);
-          };
+          const prepareds = guards.map(reduceGuardItem).filter(Boolean);
+          const fn = recursive(...prepareds);
+          return fn;
         },
+
         swap: this.swap,
 
         assign: (keys, fn) => {
@@ -180,11 +168,7 @@ export class SyncMachine<
 
         batch: (...fns) => {
           return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({
-              context,
-              pContext,
-              ...rest,
-            });
+            const state = this.__cloneStateExtended({ context, pContext, ...rest });
 
             let out: any;
             for (const fn of fns.filter(f => !!f)) {
@@ -200,11 +184,7 @@ export class SyncMachine<
 
         filter: (key, fn) => {
           return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({
-              context,
-              pContext,
-              ...rest,
-            });
+            const state = this.__cloneStateExtended({ context, pContext, ...rest });
             const currentValue = getByKey.low(state, key);
 
             let filteredValue: any;
@@ -218,10 +198,7 @@ export class SyncMachine<
               filteredValue = currentValue.filter((item, index) =>
                 predicate(item, index, state),
               );
-            } else if (
-              currentValue !== null &&
-              typeof currentValue === 'object'
-            ) {
+            } else if (currentValue !== null && typeof currentValue === 'object') {
               if (isMergeUndefined(currentValue)) {
                 return MERGE_UNDEFINED as any;
               }
@@ -250,11 +227,7 @@ export class SyncMachine<
 
         debounce: (fn, { id, ms = 100 }) => {
           return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({
-              context,
-              pContext,
-              ...rest,
-            });
+            const state = this.__cloneStateExtended({ context, pContext, ...rest });
 
             const data = fn(state);
             const scheduled: ScheduledData<Pc, Tc> = { data, ms, id };
@@ -303,18 +276,8 @@ export class SyncMachine<
    * @param helper - A function that provides options for the machine.
    * @returns A new instance of the machine with the provided options applied.
    */
-  provideOptions: SyncProvideOptions_F<
-    C,
-    Pc,
-    Tc,
-    E,
-    A,
-    Ta,
-    Eo,
-    AllPaths,
-    Mo,
-    L
-  > = helper => super.provideOptions(helper);
+  provideOptions: SyncProvideOptions_F<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L> =
+    helper => super.provideOptions(helper);
 
   // #endregion
 
@@ -327,9 +290,7 @@ export class SyncMachine<
     const { config, pContext, context, guards, actions, delays, actors } =
       this.__elements;
 
-    const out = new SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
-      config,
-    );
+    const out = new SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(config);
 
     out.__pContext = pContext;
     out.__context = context;
@@ -348,11 +309,7 @@ export class SyncMachine<
     return fn => {
       const fn2 = reduceFnMap(fn, ...this.__eventsList);
       return ({ context, pContext, ...rest }) => {
-        const state = this.__cloneStateExtended({
-          context,
-          pContext,
-          ...rest,
-        });
+        const state = this.__cloneStateExtended({ context, pContext, ...rest });
         const { event, to } = fn2(state) as any;
 
         const sentEvent = { to, event };
@@ -370,11 +327,7 @@ export class SyncMachine<
   protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
     return ({ context, pContext, ...rest }) => {
       const _fn = reduceFnMap(fn, ...this.__eventsList);
-      const state = this.__cloneStateExtended({
-        context,
-        pContext,
-        ...rest,
-      });
+      const state = this.__cloneStateExtended({ context, pContext, ...rest });
       _fn(state);
 
       return _any({ context, pContext });

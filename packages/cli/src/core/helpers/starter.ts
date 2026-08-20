@@ -45,10 +45,7 @@ export default createMachine('${name}', { initial: 'idle', states: { idle: {} } 
  * @param filePath - Target machine file path.
  * @param cwd - Working directory (defaults to process.cwd()).
  */
-export const createStarter = async (
-  filePath: string,
-  cwd = process.cwd(),
-) => {
+export const createStarter = async (filePath: string, cwd = process.cwd()) => {
   if (!isMachineFile(filePath)) return;
   const absolutePath = resolve(cwd, filePath);
   let existing = '';

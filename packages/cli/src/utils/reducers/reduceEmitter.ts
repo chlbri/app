@@ -1,9 +1,5 @@
 import { reduceTransitions } from './reduceTransitions';
-import {
-  toArray,
-  type EmitterConfig,
-  type TransitionConfig,
-} from '@bemedev/app';
+import { toArray, type EmitterConfig, type TransitionConfig } from '@bemedev/app';
 
 /**
  * Reduces an emitter configuration (complete, next, error handlers) into transition symbol sets.

@@ -152,6 +152,133 @@ declare module '@bemedev/app' {
       pContext: any;
     };
 
+    'src/__tests__/interpreters/assign-map.1.machine': {
+      paths: {
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
+        };
+      };
+        all: '/' | '/idle';
+      };
+      events: 'SET_VALUE' | 'SET_COUNT' | 'RESET' | 'UNKNOWN_EVENT';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'setValue' | 'setCount' | 'reset' | 'handleUnknown';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/interpreters/assign-map.2.machine': {
+      paths: {
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
+        };
+      };
+        all: '/' | '/idle';
+      };
+      events: 'UPDATE_ALL' | 'PARTIAL_UPDATE' | 'RESET_ALL';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'updateAll' | 'partialUpdate' | 'resetAll';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/interpreters/assign-map.3.machine': {
+      paths: {
+        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          };
+        };
+      };
+        all: '/' | '/init_state' | '/always_state' | '/final_state';
+      };
+      events: 'TRIGGER_ALWAYS';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'initProp' | 'alwaysProp';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/interpreters/assign-map.4.machine': {
+      paths: {
+        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          };
+        };
+      };
+        all: '/' | '/init_state' | '/always_state' | '/final_state';
+      };
+      events: 'TRIGGER_ALWAYS';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'initRoot' | 'alwaysRoot';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/interpreters/assign-map.5.machine': {
+      paths: {
+        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          };
+        };
+      };
+        all: '/' | '/init_state' | '/always_state' | '/final_state';
+      };
+      events: 'TRIGGER_ALWAYS';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'initAction' | 'alwaysAction';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
     'src/__tests__/interpreters/children.1.machine': {
       paths: {
         map: { targets: ('/idle'); 
@@ -666,6 +793,60 @@ declare module '@bemedev/app' {
         emitters: never;
         tags:     never;
         actions:  'setData' | 'clearAll';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/interpreters/filter-erase.7.machine': {
+      paths: {
+        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          };
+        };
+      };
+        all: '/' | '/init_state' | '/always_state' | '/final_state';
+      };
+      events: 'TRIGGER_ALWAYS';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'filterInit' | 'filterAlways';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
+    'src/__tests__/interpreters/filter-erase.8.machine': {
+      paths: {
+        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          };
+        };
+      };
+        all: '/' | '/init_state' | '/always_state' | '/final_state';
+      };
+      events: 'TRIGGER_ALWAYS';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'filterInit' | 'filterAlways';
         delays:   never;
         guards:   never;
       };

@@ -6,11 +6,7 @@ import type {
   SingleOrArrayT,
   TransitionConfigMapA,
 } from '#transitions';
-import type {
-  NoExtraKeys,
-  NOmit,
-  Require,
-} from '@bemedev/app-utils-bemedev';
+import type { NoExtraKeys, NOmit, Require } from '@bemedev/app-utils-bemedev';
 import type { Describer } from '~types';
 
 /**
@@ -42,10 +38,7 @@ type _NoExtraKeysFinallyConfig<T> = T extends string
     ? NoExtraKeys<T, Describer>
     : T extends _FinallyConfig
       ? NoExtraKeysTransitionConfig<T> &
-          Record<
-            Exclude<keyof T, 'guards' | 'actions' | 'description'>,
-            never
-          >
+          Record<Exclude<keyof T, 'guards' | 'actions' | 'description'>, never>
       : never;
 
 /**
@@ -59,10 +52,7 @@ export type NoExtraKeysFinallyConfigArray<
   infer H extends _FinallyConfig | WithDescriber,
   ...infer Rest extends ReadonlyArray<_FinallyConfig | WithDescriber>,
 ]
-  ? readonly [
-      _NoExtraKeysFinallyConfig<H>,
-      ...NoExtraKeysFinallyConfigArray<Rest>,
-    ]
+  ? readonly [_NoExtraKeysFinallyConfig<H>, ...NoExtraKeysFinallyConfigArray<Rest>]
   : [];
 
 /**
@@ -70,9 +60,7 @@ export type NoExtraKeysFinallyConfigArray<
  *
  * @see {@linkcode TransitionConfigMapA}, {@linkcode WithDescriber}
  */
-export type FinallyConfig =
-  | (_FinallyConfig | WithDescriber)
-  | FinallyConfigArray;
+export type FinallyConfig = (_FinallyConfig | WithDescriber) | FinallyConfigArray;
 
 /**
  * Enforces no extra keys on completion configurations.
@@ -109,14 +97,11 @@ export type EmitterConfig<Paths = string> = CommonActor & {
  *
  * @template {EmitterConfig} T - Input emitter config.
  */
-export type NoExtraKeysEmitterConfig<T extends EmitterConfig> =
-  CommonActor & {
-    readonly next: NoExtraKeysTransitionConfigSoA<T['next']>;
-    readonly error?: NoExtraKeysTransitionConfigSoA<T['error']>;
-    readonly complete?: NoExtraKeysFinallyConfig<
-      NonNullable<T['complete']>
-    >;
-  };
+export type NoExtraKeysEmitterConfig<T extends EmitterConfig> = CommonActor & {
+  readonly next: NoExtraKeysTransitionConfigSoA<T['next']>;
+  readonly error?: NoExtraKeysTransitionConfigSoA<T['error']>;
+  readonly complete?: NoExtraKeysFinallyConfig<NonNullable<T['complete']>>;
+};
 
 /**
  * Helper extracting source identifier `src` from an actor configuration.
@@ -149,9 +134,7 @@ export type ChildConfig<Paths = string> = CommonActor &
  */
 export type NoExtraKeysChildConfig<T extends ChildConfig> = T & {
   [key1 in Extract<keyof T, 'on'>]: {
-    [key2 in keyof T[key1]]?: NoExtraKeysTransitionConfigSoA<
-      T[key1][key2]
-    >;
+    [key2 in keyof T[key1]]?: NoExtraKeysTransitionConfigSoA<T[key1][key2]>;
   };
 };
 
@@ -160,9 +143,7 @@ export type NoExtraKeysChildConfig<T extends ChildConfig> = T & {
  *
  * @template Paths - State path union. Defaults to `string`.
  */
-export type ActorConfig<Paths = string> =
-  | EmitterConfig<Paths>
-  | ChildConfig<Paths>;
+export type ActorConfig<Paths = string> = EmitterConfig<Paths> | ChildConfig<Paths>;
 
 /**
  * Enforces no extra keys on any actor configuration (emitter or child).

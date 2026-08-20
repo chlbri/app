@@ -94,11 +94,7 @@ export type AnyInterpreter = {
 /**
  * Structure holding collected pausable emitter metadata.
  */
-export type CollectedPausable = {
-  from: string;
-  pausable: Pausable;
-  id: string;
-};
+export type CollectedPausable = { from: string; pausable: Pausable; id: string };
 
 /**
  * Structure holding collected child interpreter service metadata.
@@ -227,9 +223,7 @@ export type DecomposedStateFrom<T extends KeyU<'__decomposedState'>> =
  * @template {string} Ex - Exception string type.
  */
 export type FnMapFrom<
-  T extends KeyU<
-    '__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'
-  >,
+  T extends KeyU<'__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'>,
   R = any,
   Ex extends string = never,
 > = FnMapR<
@@ -306,9 +300,7 @@ export type EventsFrom<T extends KeyU<'__events'>> = Extract<
  *
  * @see {@linkcode NotUndefined}
  */
-export type ActionsMapFrom<T extends KeyU<'actions'>> = NotUndefined<
-  T['actions']
->;
+export type ActionsMapFrom<T extends KeyU<'actions'>> = NotUndefined<T['actions']>;
 
 /**
  * Getting options added to machine.
@@ -337,16 +329,16 @@ export type ActionFnFrom<T extends KeyU<'__actionFn'>> = NotUndefined<
  *
  * @see {@linkcode NotUndefined}
  */
-export type ActionParamsFrom<T extends KeyU<'__actionParams'>> =
-  NotUndefined<T['__actionParams']>;
+export type ActionParamsFrom<T extends KeyU<'__actionParams'>> = NotUndefined<
+  T['__actionParams']
+>;
 
 /**
  * Get the action keys from a machine.
  *
  * @template {KeyU<'__actionKey'>} T - Type of machine actions.
  */
-export type ActionKeysFrom<T extends KeyU<'__actionKey'>> =
-  T['__actionKey'];
+export type ActionKeysFrom<T extends KeyU<'__actionKey'>> = T['__actionKey'];
 
 /**
  * Get all guards map from a machine.
@@ -355,9 +347,7 @@ export type ActionKeysFrom<T extends KeyU<'__actionKey'>> =
  *
  * @see {@linkcode NotUndefined}
  */
-export type PredicatesMapFrom<T extends KeyU<'guards'>> = NotUndefined<
-  T['guards']
->;
+export type PredicatesMapFrom<T extends KeyU<'guards'>> = NotUndefined<T['guards']>;
 
 /**
  * Get the predicate function from a machine.
@@ -386,9 +376,7 @@ export type GuardKeysFrom<T extends KeyU<'__guardKey'>> = T['__guardKey'];
  *
  * @see {@linkcode NotUndefined}
  */
-export type DelaysMapFrom<T extends KeyU<'delays'>> = NotUndefined<
-  T['delays']
->;
+export type DelaysMapFrom<T extends KeyU<'delays'>> = NotUndefined<T['delays']>;
 
 /**
  * Get the delay keys from a machine.
@@ -406,9 +394,7 @@ export type DelayKeysFrom<T extends KeyU<'__delayKey'>> = T['__delayKey'];
  *
  * @see {@linkcode NotUndefined}
  */
-export type DelayFnFrom<T extends KeyU<'__delay'>> = NotUndefined<
-  T['__delay']
->;
+export type DelayFnFrom<T extends KeyU<'__delay'>> = NotUndefined<T['__delay']>;
 
 /**
  * Get the machines map from a machine.
@@ -426,8 +412,7 @@ export type MachinesMapFrom<T extends KeyU<'machines'>> = NotUndefined<
  *
  * @template {KeyU<'__childKey'>} T - Type of machine child keys.
  */
-export type ChildrenKeysFrom<T extends KeyU<'__childKey'>> =
-  T['__childKey'];
+export type ChildrenKeysFrom<T extends KeyU<'__childKey'>> = T['__childKey'];
 
 /**
  * Getting the options from a machine.
@@ -447,10 +432,10 @@ export type MachineOptionsFrom<T extends KeyU<'options'>> = Extract<
  * @template Pc - Private context type.
  * @template {PrimitiveObject} Tc - Internal context type.
  */
-export type Contexts<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = { pContext?: Pc; context?: Tc };
+export type Contexts<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> = {
+  pContext?: Pc;
+  context?: Tc;
+};
 
 /**
  * Alias of {@linkcode MachineOptionsFrom}.
@@ -519,9 +504,6 @@ export type InterpreterOptions<
  * @template {AnyMachine} M - Machine type.
  */
 export type InterpretArgs<M extends AnyMachine> =
-  Equals<
-    InterpreterOptions<M>,
-    Partial<InterpreterOptions<M>>
-  > extends true
+  Equals<InterpreterOptions<M>, Partial<InterpreterOptions<M>>> extends true
     ? [machine: M, config?: InterpreterOptions<M>]
     : [machine: M, config: InterpreterOptions<M>];

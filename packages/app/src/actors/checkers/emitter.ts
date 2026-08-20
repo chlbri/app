@@ -27,9 +27,7 @@ export const isFinallyConfig1 = (value: unknown) => {
  *
  * @returns `true` if type {@linkcode FinallyConfig}, `false` otherwise.
  */
-export const isFinallyConfig = (
-  value: unknown,
-): value is FinallyConfig => {
+export const isFinallyConfig = (value: unknown): value is FinallyConfig => {
   if (Array.isArray(value)) {
     const _value = [...value];
     const pop = _value.pop();

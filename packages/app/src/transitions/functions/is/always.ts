@@ -1,9 +1,6 @@
 import { checkGuards } from '#guards';
 import type { AlwaysConfig } from '../../types';
-import {
-  isTransitionConfigMapTarget,
-  isTransitionConfigTarget,
-} from './transition';
+import { isTransitionConfigMapTarget, isTransitionConfigTarget } from './transition';
 
 /**
  * Type guard for checking always transition configuration.

@@ -29,9 +29,7 @@
       "#fixtures": ["./src/fixtures/index.ts"],
       "#common/*": ["./src/common/*"],
       "#exports/*": ["./src/exports/*"],
-      "#fixturesData": [
-        "./src/__tests__/interpreters/async/data/index.ts"
-      ],
+      "#fixturesData": ["./src/__tests__/interpreters/async/data/index.ts"],
       "#sync/*": ["./src/sync/*"],
       "#utils": ["./src/utils/index.ts"],
       "#utils/*": ["./src/utils/*"],
@@ -54,9 +52,5 @@
       "#config": ["./src/config/index.ts"]
     }
   },
-  "exclude": [
-    "./rolldown.config.ts",
-    "./vitest.config.ts",
-    "./vitest.setup.ts"
-  ]
+  "exclude": ["./rolldown.config.ts", "./vitest.config.ts", "./vitest.setup.ts"]
 }

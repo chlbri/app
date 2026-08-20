@@ -114,13 +114,10 @@ export type AsyncAssignAction_F<
   >,
 > = <
   const K extends SingleOrArrayL2<keyof D>,
-  const F extends TraversableTupleAsync<D, K> = TraversableTupleAsync<
-    D,
-    K
-  >,
+  const F extends TraversableTupleAsync<D, K> = TraversableTupleAsync<D, K>,
 >(
   keys: K,
-  fn: FnMap<E, Pc, Tc, T, F>,
+  fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
   ...args: F extends Promise<any> ? [AsyncOptions<E, Pc, Tc, T>] : []
 ) => AsyncAction2<E, Pc, Tc, T>;
 
@@ -261,10 +258,7 @@ export type AsyncSendAction_F<
     | Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }>,
 >(
   fn: FnMap<E, Pc, Tc, T, F>,
-  ...args: F extends Promise<{
-    to: string;
-    event: EventArg<EventsMapFrom<M>>;
-  }>
+  ...args: F extends Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }>
     ? [AsyncOptions<E, Pc, Tc, T>]
     : []
 ) => AsyncAction2<E, Pc, Tc, T>;
@@ -286,10 +280,7 @@ export type AsyncValueCheckerGuard_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (
-  path: DefinedValue<Pc, Tc>,
-  ...values: any[]
-) => FnR<E, Pc, Tc, T, boolean>;
+> = (path: DefinedValue<Pc, Tc>, ...values: any[]) => FnR<E, Pc, Tc, T, boolean>;
 
 /**
  * Function type signature for creating a property definition guard helper.
@@ -397,6 +388,7 @@ export type AsyncGuardUnionOption<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > =
+  | undefined
   | AsyncPredicateS<E, Pc, Tc, T>
   | AsyncGuardAndOption<E, Pc, Tc, T>
   | AsyncGuardOrOption<E, Pc, Tc, T>;

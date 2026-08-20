@@ -12,9 +12,7 @@ import * as v from 'valibot';
  *
  * @see type {@linkcode SingleOrArrayL}
  */
-export const SoaLSchema = <
-  T extends v.BaseSchema<any, any, v.BaseIssue<unknown>>,
->(
+export const SoaLSchema = <T extends v.BaseSchema<any, any, v.BaseIssue<unknown>>>(
   schema: T,
 ): v.BaseSchema<
   SingleOrArrayL<v.InferOutput<T>>,

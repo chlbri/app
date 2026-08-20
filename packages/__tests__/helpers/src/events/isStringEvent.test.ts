@@ -1,10 +1,5 @@
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
-import {
-  AFTER_EVENT,
-  ALWAYS_EVENT,
-  INIT_EVENT,
-  MAX_EXCEEDED_EVENT_TYPE,
-} from '@bemedev/app/events';
+import { AFTER_EVENT, ALWAYS_EVENT, INIT_EVENT } from '@bemedev/app/events';
 import { isStringEvent } from '@bemedev/app/events';
 
 describe('isStringEvent', () => {
@@ -18,11 +13,6 @@ describe('isStringEvent', () => {
       {
         invite: 'should return true for INIT_EVENT',
         parameters: INIT_EVENT,
-        expected: true,
-      },
-      {
-        invite: 'should return true for MAX_EXCEEDED_EVENT_TYPE',
-        parameters: MAX_EXCEEDED_EVENT_TYPE,
         expected: true,
       },
       {

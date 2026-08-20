@@ -1,10 +1,5 @@
 import { DEFAULT_DELIMITER } from '#constants';
-import {
-  deleteFirst,
-  isStringEmpty,
-  recomposeSV,
-  replaceAll,
-} from '#utils';
+import { deleteFirst, isStringEmpty, recomposeSV, replaceAll } from '#utils';
 import { _any, isDefined, trueO } from '@bemedev/app-utils-bemedev';
 import { decompose, decomposeKeys, recompose } from '@bemedev/decompose';
 import { isString } from '~types';
@@ -72,11 +67,7 @@ export const nextSV: NextStateValue_F = (from, target) => {
 
   const entry = target.substring(0, last);
 
-  const _target2 = replaceAll({
-    entry,
-    match: DEFAULT_DELIMITER,
-    replacement: '.',
-  });
+  const _target2 = replaceAll({ entry, match: DEFAULT_DELIMITER, replacement: '.' });
 
   const target2 = deleteFirst(_target2, '.');
   const keysD = decomposeKeys.low(from);

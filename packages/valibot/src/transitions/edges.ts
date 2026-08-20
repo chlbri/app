@@ -7,14 +7,8 @@ import type {
 import * as v from 'valibot';
 import { NotArray_Schema } from '../utils/array';
 import { recordV } from '../utils/record';
-import {
-  TransitionConfigF_Schema,
-  TransitionConfig_Schema,
-} from './config';
-import {
-  TransitionConfigMapFG_Schema,
-  TransitionConfigMapG_Schema,
-} from './map';
+import { TransitionConfigF_Schema, TransitionConfig_Schema } from './config';
+import { TransitionConfigMapFG_Schema, TransitionConfigMapG_Schema } from './map';
 
 /**
  * Valibot schema builder for non-empty transition arrays.

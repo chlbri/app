@@ -17,11 +17,7 @@ import type { AsyncInterpreterFrom } from '#interpreter';
 import type { AsyncMachine } from '../asyncMachine/machine';
 import type { AsyncMachineOptions2 } from '../asyncMachine';
 import type { Register, RegisterOptions } from '#registry';
-import type {
-  inferT,
-  PrimitiveObject,
-  StandardOutput,
-} from '@bemedev/typings';
+import type { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 
@@ -98,12 +94,11 @@ export type OutMachine<
 export type CreateMachineNoName_F = <
   const C extends CommonConfig2,
   const Pc extends StandardOutput<any> = StandardOutput<any>,
-  const Tc extends StandardOutput<PrimitiveObject> =
-    StandardOutput<undefined>,
-  const E extends StandardOutput<Record<string, PrimitiveObject>> =
-    StandardOutput<Record<string, never>>,
-  const A extends StandardOutput<ActorsConfigMap> =
-    StandardOutput<ActorsConfigMap>,
+  const Tc extends StandardOutput<PrimitiveObject> = StandardOutput<undefined>,
+  const E extends StandardOutput<Record<string, PrimitiveObject>> = StandardOutput<
+    Record<string, never>
+  >,
+  const A extends StandardOutput<ActorsConfigMap> = StandardOutput<ActorsConfigMap>,
   _E extends inferT<E> = inferT<E>,
   _A extends inferT<A> = inferT<A>,
   _Pc extends inferT<Pc> = inferT<Pc>,
@@ -113,25 +108,8 @@ export type CreateMachineNoName_F = <
   Sync extends true | undefined = undefined,
 >(
   config: NoExtraKeysConfig<C>,
-  types?: {
-    context?: Tc;
-    pContext?: Pc;
-    eventsMap?: E;
-    actorsMap?: A;
-    sync?: Sync;
-  },
-) => OutMachine<
-  C,
-  _Pc,
-  _Tc,
-  _E,
-  _A,
-  Tags,
-  Eo,
-  string,
-  RegisterOptions,
-  Sync
->;
+  types?: { context?: Tc; pContext?: Pc; eventsMap?: E; actorsMap?: A; sync?: Sync },
+) => OutMachine<C, _Pc, _Tc, _E, _A, Tags, Eo, string, RegisterOptions, Sync>;
 
 /**
  * Function overload signature for creating a named state machine backed by type {@linkcode Register}.
@@ -166,21 +144,13 @@ export type CreateMachineNamed_F = <
   const Pc extends StandardOutput<Current['pContext']> = StandardOutput<
     Current['pContext']
   >,
-  const Tc extends StandardOutput<PrimitiveObject> =
-    StandardOutput<undefined>,
-  const E extends StandardOutput<
-    Record<Current['events'], PrimitiveObject>
-  > = StandardOutput<Record<Current['events'], never>>,
+  const Tc extends StandardOutput<PrimitiveObject> = StandardOutput<undefined>,
+  const E extends StandardOutput<Record<Current['events'], PrimitiveObject>> =
+    StandardOutput<Record<Current['events'], never>>,
   const A extends StandardOutput<
-    ActorsConfigMap<
-      Current['options']['children'],
-      Current['options']['emitters']
-    >
+    ActorsConfigMap<Current['options']['children'], Current['options']['emitters']>
   > = StandardOutput<
-    ActorsConfigMap<
-      Current['options']['children'],
-      Current['options']['emitters']
-    >
+    ActorsConfigMap<Current['options']['children'], Current['options']['emitters']>
   >,
   _E extends inferT<E> = inferT<E>,
   _A extends inferT<A> = inferT<A>,
@@ -195,13 +165,7 @@ export type CreateMachineNamed_F = <
 >(
   _: Name,
   config: NoExtraKeysConfig<C>,
-  types?: {
-    context?: Tc;
-    pContext?: Pc;
-    eventsMap?: E;
-    actorsMap?: A;
-    sync?: Sync;
-  },
+  types?: { context?: Tc; pContext?: Pc; eventsMap?: E; actorsMap?: A; sync?: Sync },
 ) => OutMachine<
   C,
   _Pc,

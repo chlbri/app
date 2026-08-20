@@ -20,15 +20,11 @@ const log10 = (index = 0) => {
  */
 export const buildIndex = (index = 0, max = 0) => {
   if (index < 0 || max < 0) {
-    throw new Error(
-      `index (${index}) and max (${max}) must be positive integers`,
-    );
+    throw new Error(`index (${index}) and max (${max}) must be positive integers`);
   }
 
   if (index > max) {
-    throw new Error(
-      `index (${index}) must be less than or equal to max (${max})`,
-    );
+    throw new Error(`index (${index}) must be less than or equal to max (${max})`);
   }
 
   const logIndex = log10(index);

@@ -31,10 +31,7 @@ const _FG_Schema = v.strictObject({
  *
  * @see {@linkcode _F_Schema}, {@linkcode ActionConfig_Schema}
  */
-export const _FinallyConfigSchema = v.union([
-  _F_Schema,
-  ActionConfig_Schema,
-]);
+export const _FinallyConfigSchema = v.union([_F_Schema, ActionConfig_Schema]);
 
 /**
  * Valibot schema for complete actor finally handler configuration, validating single or array of handlers.

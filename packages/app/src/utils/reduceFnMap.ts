@@ -95,46 +95,6 @@ export type ReduceFnMap2_F = <
 ) => FnReduced<Eo, Tc, T, R>;
 
 /**
- * Reduces a function map to a single function that processes events with a context.
- *
- * @param fn - The function map to reduce.
- * @param events - The list of expected events to match against.
- *
- * @returns A function that takes a context and an event, returning the result of the function map.
- *
- * @remarks
- * This version is specifically designed to work with a context and an events map.
- * Similar to {@linkcode reduceFnMap}, but it does not take a private context.
- *
- * @see {@linkcode isFunction}, {@linkcode nothing}
- */
-export const reduceFnMapReduced: ReduceFnMap2_F = (fn, ...events) => {
-  const check1 = isFunction(fn);
-  if (check1) return _any(fn);
-
-  return ({ event, ...rest }) => {
-    const check5 = typeof event === 'string';
-    const _else = fn.else ?? nothing;
-    if (check5) {
-      return _any(_else({ ...rest, event }));
-    }
-
-    const { payload, type } = event;
-
-    for (const key of events) {
-      const check2 = type === key;
-      const func = _any(fn)[key];
-      const check3 = !!func;
-
-      const check4 = check2 && check3;
-      if (check4) return func({ ...rest, payload });
-    }
-
-    return _any(_else({ ...rest, event }));
-  };
-};
-
-/**
  * Signature for function that reduces an array filter function map to a unified filter predicate.
  *
  * @template Pc - Public context type. Defaults to `any`.
@@ -157,11 +117,7 @@ export type ReduceFnMapFilterArray_F = <
 >(
   fn: FnMapFilterArray<Eo, Pc, Tc, T, Item>,
   ...events: string[]
-) => (
-  item: Item,
-  index: number,
-  state: StateExtended<Eo, Pc, Tc, T>,
-) => boolean;
+) => (item: Item, index: number, state: StateExtended<Eo, Pc, Tc, T>) => boolean;
 
 /**
  * Reduces an array filter function map to a unified array filter predicate function.
@@ -173,10 +129,7 @@ export type ReduceFnMapFilterArray_F = <
  *
  * @see {@linkcode isFunction}, {@linkcode nothing}
  */
-export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (
-  fn,
-  ...events
-) => {
+export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (fn, ...events) => {
   const check1 = isFunction(fn);
   if (check1) return fn;
 

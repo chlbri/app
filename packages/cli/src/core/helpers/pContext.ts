@@ -73,10 +73,7 @@ const objectToTypeString = (objNode: any): string => {
 const valueNodeToTypeString = (node: any): string => {
   const kind = node.getKindName?.();
 
-  if (
-    kind === 'StringLiteral' ||
-    kind === 'NoSubstitutionTemplateLiteral'
-  ) {
+  if (kind === 'StringLiteral' || kind === 'NoSubstitutionTemplateLiteral') {
     const val = node.getLiteralValue?.();
     switch (val) {
       case 'string':
@@ -114,10 +111,7 @@ const valueNodeToTypeString = (node: any): string => {
  */
 export const extractPContextType = (typingsArg: any): string => {
   try {
-    if (
-      !typingsArg ||
-      typingsArg.getKindName?.() !== 'ObjectLiteralExpression'
-    ) {
+    if (!typingsArg || typingsArg.getKindName?.() !== 'ObjectLiteralExpression') {
       return ANY;
     }
 

@@ -8,14 +8,8 @@ describe('SyncMachine - guardBatch', () => {
     states: {
       idle: {
         on: {
-          TEST_AND: {
-            target: '/andSuccess',
-            guards: 'checkAnd',
-          },
-          TEST_OR: {
-            target: '/orSuccess',
-            guards: 'checkOr',
-          },
+          TEST_AND: { target: '/andSuccess', guards: 'checkAnd' },
+          TEST_OR: { target: '/orSuccess', guards: 'checkOr' },
           TEST_COMPLEX: {
             target: '/complexSuccess',
             guards: 'checkComplex',
@@ -29,11 +23,7 @@ describe('SyncMachine - guardBatch', () => {
   });
 
   const typings = {
-    context: type({
-      age: 'number',
-      role: 'string',
-      active: 'boolean',
-    }),
+    context: type({ age: 'number', role: 'string', active: 'boolean' }),
     eventsMap: type({
       TEST_AND: 'never',
       TEST_OR: 'never',
@@ -47,27 +37,28 @@ describe('SyncMachine - guardBatch', () => {
   }).provideOptions(({ guardBatch, isValue }) => ({
     guards: {
       checkAnd: guardBatch(
+        true,
         isValue('context.role', 'admin'),
         isValue('context.active', true),
+        undefined,
       ),
-      checkOr: guardBatch(
-        isValue('context.active', true),
-        {
-          or: [
-            isValue('context.role', 'admin'),
-            isValue('context.role', 'editor'),
-          ],
-        },
-      ),
+      checkOr: guardBatch(isValue('context.active', true), {
+        or: [
+          isValue('context.role', 'admin'),
+          isValue('context.role', 'editor'),
+        ],
+      }),
       checkComplex: guardBatch(
         ({ context }) => (context?.age ?? 0) >= 18,
         {
           or: [
             isValue('context.role', 'admin'),
-            guardBatch(
-              isValue('context.role', 'editor'),
-              isValue('context.active', true),
-            ),
+            guardBatch({
+              and: [
+                isValue('context.role', 'editor'),
+                isValue('context.active', true),
+              ],
+            }),
           ],
         },
       ),

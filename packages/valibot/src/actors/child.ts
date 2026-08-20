@@ -21,9 +21,7 @@ export const ContextsSchema = recordV(v.string(), v.string());
  *
  * @see {@linkcode CommonActorSchema}, {@linkcode ContextsSchema}, {@linkcode DelayedTransitions_Config}
  */
-export const ChildConfig_Schema = <T extends ReadonlyArray<string>>(
-  ...paths: T
-) =>
+export const ChildConfig_Schema = <T extends ReadonlyArray<string>>(...paths: T) =>
   v.union([
     v.strictObject({
       ...CommonActorSchema.entries,

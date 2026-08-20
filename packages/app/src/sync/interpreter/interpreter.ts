@@ -12,13 +12,14 @@ import {
   type TagFrom,
 } from '#common/interpreter';
 import {
-  ALWAYS_EVENT,
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
 } from '#constants';
 import { type AsyncEmitterFunction } from '#emitters';
 import {
+  ALWAYS_EVENT,
+  AFTER_EVENT,
   eventToType,
   transformEventArg,
   type ActorsConfigMap,
@@ -34,12 +35,7 @@ import type {
   DelayedTransitions,
   TransitionConfig,
 } from '#transitions';
-import {
-  _any,
-  isDefined,
-  switchV,
-  toArray,
-} from '@bemedev/app-utils-bemedev';
+import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
 import { createInterval } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
@@ -116,17 +112,7 @@ export class SyncInterpreter<
    * @returns The class {@linkcode SyncMachine} instance.
    */
   get machine() {
-    return super.machine as SyncMachine<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      Mo
-    >;
+    return super.machine as SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
   }
 
   /**
@@ -179,9 +165,7 @@ export class SyncInterpreter<
    *
    * @param forceSend - The optional event payload of type {@linkcode EventArgObject} to force send.
    */
-  protected __performForceSendAction = (
-    forceSend?: EventArgObject<Eo>,
-  ) => {
+  protected __performForceSendAction = (forceSend?: EventArgObject<Eo>) => {
     if (!forceSend) return;
     const values = Object.values(this.machine.flat);
 
@@ -223,8 +207,7 @@ export class SyncInterpreter<
 
     // ForceSendAction returns the result to make further actions
     const result =
-      this.__performForceSendAction(forceSend) ??
-      this.__performResendAction(resend);
+      this.__performForceSendAction(forceSend) ?? this.__performResendAction(resend);
 
     return result;
   };
@@ -234,17 +217,14 @@ export class SyncInterpreter<
    *
    * @param action - The action function of type {@linkcode SyncPerformAction_F}.
    */
-  protected __executeAction: SyncPerformAction_F<Eo, Pc, Tc, Ta> =
-    action => {
-      this.__setStatus('busy');
-      this._iterate();
-      const { pContext, context, ...extendeds } = action(
-        this.__cloneState,
-      );
+  protected __executeAction: SyncPerformAction_F<Eo, Pc, Tc, Ta> = action => {
+    this.__setStatus('busy');
+    this._iterate();
+    const { pContext, context, ...extendeds } = action(this.__cloneState);
 
-      this.__mergeContexts({ pContext, context });
-      this.__performsExtendedActions(extendeds);
-    };
+    this.__mergeContexts({ pContext, context });
+    this.__performsExtendedActions(extendeds);
+  };
 
   /**
    * Performs multiple actions in sequence.
@@ -266,11 +246,10 @@ export class SyncInterpreter<
    *
    * @returns `true` if the predicate condition is met, `false` otherwise.
    */
-  private __performPredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
-    predicate => {
-      this._iterate();
-      return predicate(this.__cloneState);
-    };
+  private __performPredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
+    this._iterate();
+    return predicate(this.__cloneState);
+  };
 
   /**
    * Executes a predicate function while managing the status of the interpreter.
@@ -279,13 +258,12 @@ export class SyncInterpreter<
    *
    * @returns `true` if the predicate condition is met, `false` otherwise.
    */
-  private __executePredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
-    predicate => {
-      this.__setStatus('busy');
-      const out = this.__performPredicate(predicate);
-      this.__setStatus('working');
-      return out;
-    };
+  private __executePredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
+    this.__setStatus('busy');
+    const out = this.__performPredicate(predicate);
+    this.__setStatus('working');
+    return out;
+  };
 
   /**
    * Evaluates an array of guard configurations against the state.
@@ -322,9 +300,7 @@ export class SyncInterpreter<
     const { guards, actions, target } = transition;
     const { diffEntries, diffExits } = this.__diffNext(target);
 
-    const response = this.__performPredicates(
-      ...toArray<GuardConfig>(guards),
-    );
+    const response = this.__performPredicates(...toArray<GuardConfig>(guards));
 
     if (response) {
       this.__performActions(...toArray.typed(diffExits));
@@ -342,9 +318,7 @@ export class SyncInterpreter<
    *
    * @returns The target state path string if a transition succeeded, or `false` otherwise.
    */
-  protected __performTransitions: SyncPerformTransitions_F = (
-    ...transitions
-  ) => {
+  protected __performTransitions: SyncPerformTransitions_F = (...transitions) => {
     for (const _transition of transitions) {
       const transition = this.__performTransition(_transition);
       const check1 = typeof transition === 'string';
@@ -375,9 +349,7 @@ export class SyncInterpreter<
         continue;
       }
 
-      const response = this.__performPredicates(
-        ...toArray.typed(final.guards),
-      );
+      const response = this.__performPredicates(...toArray.typed(final.guards));
 
       /* v8 ignore else -- @preserve */
       if (response) {
@@ -443,10 +415,9 @@ export class SyncInterpreter<
         const transitions = toArray.typed(transition);
         setTimeout(() => {
           if (this.__cannotPerform(from)) return;
+          this.__changeEvent(transformEventArg(`${from}/${AFTER_EVENT}`));
 
-          const target = this.__performTransitions(
-            ...(transitions as any),
-          );
+          const target = this.__performTransitions(...(transitions as any));
 
           if (target === false) {
             this._addWarning(
@@ -513,11 +484,7 @@ export class SyncInterpreter<
    *
    * @returns The created interval handle.
    */
-  protected createInterval: CreateInterval2_F = ({
-    callback,
-    id,
-    interval,
-  }) => {
+  protected createInterval: CreateInterval2_F = ({ callback, id, interval }) => {
     const exact = this.__exact;
     const out = createInterval({ callback, id, interval, exact });
 
@@ -532,10 +499,7 @@ export class SyncInterpreter<
    *
    * @returns An array of activity interval identifiers.
    */
-  protected __executeActivities: ExecuteActivities_F = (
-    from,
-    _activities,
-  ) => {
+  protected __executeActivities: ExecuteActivities_F = (from, _activities) => {
     const entries = Object.entries(_activities);
     const outs: string[] = [];
 
@@ -598,8 +562,7 @@ export class SyncInterpreter<
       };
 
       if (_interval) {
-        const check =
-          _interval.state === 'idle' || _interval.state === 'paused';
+        const check = _interval.state === 'idle' || _interval.state === 'paused';
         if (check) {
           this.__cachedIntervals.splice(index, 1);
           const result = buildCallback();
@@ -625,8 +588,8 @@ export class SyncInterpreter<
    *
    * @returns The target state path string if successful, or `false` otherwise.
    */
-  private __performAlways = (alway: AlwaysConfig) => {
-    this.__changeEvent(transformEventArg(ALWAYS_EVENT));
+  private __performAlways = (from: string, alway: AlwaysConfig) => {
+    this.__changeEvent(transformEventArg(`${from}/${ALWAYS_EVENT}`));
     const always = toArray<TransitionConfig>(alway);
     return this.__performTransitions(...always);
   };
@@ -643,7 +606,7 @@ export class SyncInterpreter<
     >();
 
     this.__collectedAlways.forEach(([from, always]) => {
-      entries.set(from, { always: () => this.__performAlways(always) });
+      entries.set(from, { always: () => this.__performAlways(from, always) });
     });
 
     this.__collectedAfters.forEach(([from, after]) => {
@@ -663,8 +626,8 @@ export class SyncInterpreter<
    * @returns A parameterless function that executes all active self-transitions, or `undefined` if none active.
    */
   protected get __collectedSelfTransitions() {
-    const entries = Array.from(this.__collectedSelfTransitions0).filter(
-      ([from]) => this.__isInsideValue(from),
+    const entries = Array.from(this.__collectedSelfTransitions0).filter(([from]) =>
+      this.__isInsideValue(from),
     );
 
     const out = entries.map(([, { always, after }]) => {
@@ -717,10 +680,7 @@ export class SyncInterpreter<
             // Wire the interpreter's transition callbacks into the pausable.
             pausable.subscribe({
               next: payload => {
-                const event = {
-                  type: `${id}::next`,
-                  payload,
-                } satisfies EventObject;
+                const event = { type: `${id}::next`, payload } satisfies EventObject;
 
                 this.__changeEvent(_any(event));
                 const transitions = toArray<TransitionConfig>(next);
@@ -833,9 +793,7 @@ export class SyncInterpreter<
     // #endregion
 
     for (const [, transitions] of flat2) {
-      const target = this.__performTransitions(
-        ...toArray.typed(transitions),
-      );
+      const target = this.__performTransitions(...toArray.typed(transitions));
 
       const diffTarget = target === false ? undefined : target;
       sv = nextSV(sv, diffTarget);
@@ -945,9 +903,7 @@ export class SyncInterpreter<
       })
       .map(([from, ..._services]) => {
         const services = _services.map(({ service, on, contexts, id }) => {
-          const si = service as AnyInterpreter & {
-            __subscribe: AddSubscriber_F;
-          };
+          const si = service as AnyInterpreter & { __subscribe: AddSubscriber_F };
 
           const checkOn = on !== undefined && Object.keys(on).length > 0;
           if (checkOn) {
@@ -986,8 +942,7 @@ export class SyncInterpreter<
                       ? structuredClone(context)
                       : getByKey.low(context, key);
 
-                  if (path === '.')
-                    return this.__mergeContexts({ pContext });
+                  if (path === '.') return this.__mergeContexts({ pContext });
                   return this.__mergeContexts(
                     recompose({ [`pContext.${path}`]: pContext }),
                   );
@@ -1030,9 +985,7 @@ export class SyncInterpreter<
    *
    * @returns The spawned child machine interpreter instance.
    */
-  private __executeChild = (
-    child: CommonChildFunction2<Eo, Pc, Tc, Ta>,
-  ) => {
+  private __executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
     const instance = child(this.__cloneState);
     return instance;
   };

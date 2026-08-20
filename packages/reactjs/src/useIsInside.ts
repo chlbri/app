@@ -26,10 +26,7 @@ export function useIsInside<
   Tc extends PrimitiveObject,
   Ta extends string,
   Eo extends EventObject,
->(service: {
-  subscribe: AddSubscriber_F<Tc, Ta, Eo>;
-  state: State<Eo, Tc, Ta>;
-}) {
+>(service: { subscribe: AddSubscriber_F<Tc, Ta, Eo>; state: State<Eo, Tc, Ta> }) {
   const selector1 = (value: StateValue) => {
     return decomposeSV(value);
   };
@@ -37,9 +34,7 @@ export function useIsInside<
   const dispatch = (matcher: 'some' | 'every') => {
     return (...states: string[]) => {
       const selector = () =>
-        states[matcher](state =>
-          selector1(service.state.value).includes(state),
-        );
+        states[matcher](state => selector1(service.state.value).includes(state));
       return useSync(
         listener => {
           const { unsubscribe } = service.subscribe(listener, {

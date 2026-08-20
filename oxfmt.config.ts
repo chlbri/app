@@ -7,7 +7,7 @@ export default defineConfig({
   htmlWhitespaceSensitivity: 'css',
   jsxSingleQuote: true,
   bracketSameLine: false,
-  printWidth: 75,
+  printWidth: 85,
   proseWrap: 'always',
   requirePragma: false,
   semi: true,

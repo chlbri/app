@@ -6,8 +6,9 @@ import type { NotReadonly, SingleOrArrayL2 } from './primitives';
  *
  * @template T - The string array type extending `ReadonlyArray<string>`.
  */
-export type RefineStringArray<T extends ReadonlyArray<string>> =
-  T extends [] ? string : T[number];
+export type RefineStringArray<T extends ReadonlyArray<string>> = T extends []
+  ? string
+  : T[number];
 
 /**
  * Recursively enforces that elements of array `T` contain no extra keys relative to type `Parent`.
@@ -15,10 +16,7 @@ export type RefineStringArray<T extends ReadonlyArray<string>> =
  * @template T - Array type extending `ReadonlyArray<any>`.
  * @template Parent - Expected parent structure.
  */
-export type NoExtraKeysArray<
-  T extends ReadonlyArray<any>,
-  Parent,
-> = T extends [
+export type NoExtraKeysArray<T extends ReadonlyArray<any>, Parent> = T extends [
   infer Head extends Parent,
   ...infer Rest extends ReadonlyArray<any>,
 ]

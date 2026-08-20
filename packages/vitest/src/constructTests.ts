@@ -31,9 +31,7 @@ export const constructTests: ConstructTests_F = (
     return out;
   };
 
-  const errorsOrWarnings = (
-    type: '_errorsCollector' | '_warningsCollector',
-  ) => {
+  const errorsOrWarnings = (type: '_errorsCollector' | '_warningsCollector') => {
     const str = type === '_errorsCollector' ? 'errors' : 'warnings';
     return (...warnings: string[]) => {
       const invite = `#${index()} => Expect ${str} : ${warnings.join(', ')}`;
@@ -78,9 +76,7 @@ export const constructTests: ConstructTests_F = (
         const isNo = value === undefined || value === null;
         const _selector = selector ?? identity;
 
-        const _value = isNo
-          ? 'undefined'
-          : JSON.stringify(value).substring(0, 15);
+        const _value = isNo ? 'undefined' : JSON.stringify(value).substring(0, 15);
 
         const _name = name ?? 'context';
         const invite = `#${index(_index)} => ${_name} equal : ${_value}`;
@@ -136,8 +132,7 @@ export const constructTests: ConstructTests_F = (
       const invite = `#${index()} => Error : ${error} should be thrown`;
 
       const handler: RejectionHandler = (_error: any) => {
-        const msg =
-          _error instanceof Error ? _error.message : String(_error);
+        const msg = _error instanceof Error ? _error.message : String(_error);
         expect(msg).toEqual(error);
       };
 

@@ -58,8 +58,7 @@ describe('#01 => parseTree', () => {
       expect(result.events.toArray).toEqual([]);
     });
 
-    test('#14 => tags is empty', () =>
-      expect(result.tags.toArray).toEqual([]));
+    test('#14 => tags is empty', () => expect(result.tags.toArray).toEqual([]));
   });
 
   describe('#02 => entry and exit actions', () => {
@@ -273,16 +272,13 @@ describe('#01 => parseTree', () => {
   describe('#06 => activities', () => {
     test('#01 => activity as string action extracts action key', () => {
       expect(
-        parseTree({ activities: { polling: 'pollAction' } }).actions
-          .toArray,
+        parseTree({ activities: { polling: 'pollAction' } }).actions.toArray,
       ).toContain('pollAction');
     });
 
     describe('#02 => activity as object with guards and actions', () => {
       const config = readonly({
-        activities: {
-          polling: { guards: ['canPoll'], actions: ['startPoll'] },
-        },
+        activities: { polling: { guards: ['canPoll'], actions: ['startPoll'] } },
       });
 
       const result = parseTree(config);
@@ -314,9 +310,7 @@ describe('#01 => parseTree', () => {
 
   describe('#08 => actors children', () => {
     const config = {
-      actors: {
-        myChild: { on: { DONE: '/done' }, contexts: { parentId: 'id' } },
-      },
+      actors: { myChild: { on: { DONE: '/done' }, contexts: { parentId: 'id' } } },
     };
     const result = parseTree(config);
 
@@ -421,9 +415,7 @@ describe('#01 => parseTree', () => {
           states: {
             level2: {
               initial: 'level3',
-              states: {
-                level3: { entry: 'deepAction', on: { GO: '/level1' } },
-              },
+              states: { level3: { entry: 'deepAction', on: { GO: '/level1' } } },
             },
           },
         },
@@ -449,9 +441,7 @@ describe('#01 => parseTree', () => {
 
     test('#05 => paths.map recursively has nested states', () => {
       const map = result.paths.map as any;
-      expect(map.states.level1.states.level2.states).toHaveProperty(
-        'level3',
-      );
+      expect(map.states.level1.states.level2.states).toHaveProperty('level3');
     });
 
     test('#06 => paths.map.initial set at root level', () => {
@@ -471,9 +461,7 @@ describe('#01 => parseTree', () => {
 
     test('#09 => leaf node has no initial in paths.map', () => {
       const map = result.paths.map as any;
-      expect(
-        map.states.level1.states.level2.states.level3.initial,
-      ).toBeUndefined();
+      expect(map.states.level1.states.level2.states.level3.initial).toBeUndefined();
     });
 
     test('#10 => paths.map.targets does not contain root', () => {
@@ -505,9 +493,7 @@ describe('#01 => parseTree', () => {
     });
 
     test('#02 => sharedAction appears exactly once', () => {
-      const count = result.actions.toArray.filter(
-        a => a === 'sharedAction',
-      ).length;
+      const count = result.actions.toArray.filter(a => a === 'sharedAction').length;
       expect(count).toBe(1);
     });
   });
@@ -519,11 +505,7 @@ describe('#01 => parseTree', () => {
       states: {
         idle: {
           on: {
-            START: {
-              target: '/active',
-              guards: ['canStart'],
-              actions: ['doStart'],
-            },
+            START: { target: '/active', guards: ['canStart'], actions: ['doStart'] },
           },
           after: { 5000: { target: '/timeout', actions: ['onIdle'] } },
         },

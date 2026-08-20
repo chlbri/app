@@ -1,11 +1,7 @@
 import type { AsyncAction } from '#actions';
 
 import type { AsyncDelayFunction } from '#delays';
-import {
-  ActorsConfigMap,
-  type EventObject,
-  type EventsMap,
-} from '#events';
+import { ActorsConfigMap, type EventObject, type EventsMap } from '#events';
 import { type FlatMapN } from '#states';
 import {
   _merge,
@@ -175,35 +171,22 @@ export class AsyncMachine<
             if (typeof guard === 'boolean') return () => guard;
             if (typeof guard === 'function') return guard;
 
-            if (typeof guard === 'object' && guard !== null) {
+            if (typeof guard === 'object') {
               if ('or' in guard) {
                 const or = guard.or.map(reduceGuardItem);
                 return { or };
               }
 
-              if ('and' in guard) {
-                const and = guard.and.map(reduceGuardItem);
-                return { and };
-              }
-
-              return reduceFnMap(guard, ...this.__eventsList);
+              const and = guard.and.map(reduceGuardItem);
+              return { and };
             }
 
-            return guard;
+            return undefined;
           };
 
-          const prepared = guards.map(reduceGuardItem);
+          const prepared = guards.map(reduceGuardItem).filter(Boolean);
           const fn = asyncRecursive(...prepared);
-
-          return async ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({
-              context,
-              pContext,
-              ...rest,
-            });
-
-            return await fn(state);
-          };
+          return fn;
         },
 
         swap: this.swap,
@@ -274,22 +257,14 @@ export class AsyncMachine<
               return res;
             } catch (e: any) {
               const errorAction = errorFn(e);
-              return await errorAction({
-                ..._state,
-                event,
-                ...rest,
-              } as any);
+              return await errorAction({ ..._state, event, ...rest } as any);
             }
           };
         },
 
         batch: (...fns) => {
           return async ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({
-              context,
-              pContext,
-              ...rest,
-            });
+            const state = this.__cloneStateExtended({ context, pContext, ...rest });
 
             let out: any;
             for (const fn of fns.filter(f => !!f)) {
@@ -306,11 +281,7 @@ export class AsyncMachine<
 
         filter: (key, fn) => {
           return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({
-              context,
-              pContext,
-              ...rest,
-            });
+            const state = this.__cloneStateExtended({ context, pContext, ...rest });
             const currentValue = getByKey.low(state, key);
 
             let filteredValue: any;
@@ -324,10 +295,7 @@ export class AsyncMachine<
               filteredValue = currentValue.filter((item, index) =>
                 predicate(item, index, state),
               );
-            } else if (
-              currentValue !== null &&
-              typeof currentValue === 'object'
-            ) {
+            } else if (currentValue !== null && typeof currentValue === 'object') {
               if (isMergeUndefined(currentValue)) {
                 return MERGE_UNDEFINED as any;
               }
@@ -356,11 +324,7 @@ export class AsyncMachine<
 
         debounce: (fn, { id, ms = 100 }) => {
           return async ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({
-              context,
-              pContext,
-              ...rest,
-            });
+            const state = this.__cloneStateExtended({ context, pContext, ...rest });
 
             const data = await fn(state);
             const scheduled: ScheduledData<Pc, Tc> = { data, ms, id };
@@ -411,18 +375,8 @@ export class AsyncMachine<
    * Options can include actions, guards, delays, promises, and child machines.
    * @returns a new instance of the machine with the provided options applied.
    */
-  provideOptions: AsyncProvideOptions_F<
-    C,
-    Pc,
-    Tc,
-    E,
-    A,
-    Ta,
-    Eo,
-    AllPaths,
-    Mo,
-    L
-  > = helper => super.provideOptions(helper);
+  provideOptions: AsyncProvideOptions_F<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L> =
+    helper => super.provideOptions(helper);
 
   // #endregion
 
@@ -451,9 +405,7 @@ export class AsyncMachine<
     const { config, pContext, context, guards, actions, delays, actors } =
       this.__elements;
 
-    const out = new AsyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
-      config,
-    );
+    const out = new AsyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(config);
 
     out.__pContext = pContext;
     out.__context = context;
@@ -499,11 +451,7 @@ export class AsyncMachine<
       if (!options) {
         const fn2 = reduceFnMap(fn, ...this.__eventsList);
         return ({ context, pContext, ...rest }) => {
-          const state = this.__cloneStateExtended({
-            context,
-            pContext,
-            ...rest,
-          });
+          const state = this.__cloneStateExtended({ context, pContext, ...rest });
           const { event, to } = fn2(state) as any;
 
           const sentEvent = { to, event };
@@ -538,12 +486,7 @@ export class AsyncMachine<
           return await execute();
         } catch (e: any) {
           const errorAction = errorFn(e);
-          return await errorAction({
-            context,
-            pContext,
-            event,
-            ...rest,
-          } as any);
+          return await errorAction({ context, pContext, event, ...rest } as any);
         }
       };
     };
@@ -560,18 +503,11 @@ export class AsyncMachine<
    *
    * @see {@linkcode AsyncVoidAction_F}
    */
-  protected __voidAction: AsyncVoidAction_F<Eo, Pc, Tc, Ta> = (
-    fn,
-    options?,
-  ) => {
+  protected __voidAction: AsyncVoidAction_F<Eo, Pc, Tc, Ta> = (fn, options?) => {
     if (!options) {
       return ({ context, pContext, ...rest }) => {
         const _fn = reduceFnMap(fn, ...this.__eventsList);
-        const state = this.__cloneStateExtended({
-          context,
-          pContext,
-          ...rest,
-        });
+        const state = this.__cloneStateExtended({ context, pContext, ...rest });
         _fn(state);
 
         return _any({ context, pContext });
@@ -582,12 +518,7 @@ export class AsyncMachine<
 
     return async ({ context, pContext, event, ...rest }) => {
       const out = _any({ context, pContext });
-      const state = this.__cloneStateExtended({
-        context,
-        pContext,
-        event,
-        ...rest,
-      });
+      const state = this.__cloneStateExtended({ context, pContext, event, ...rest });
 
       const execute = async () => {
         const _fn = reduceFnMap(fn, ...this.__eventsList);
@@ -605,24 +536,14 @@ export class AsyncMachine<
         }
 
         if (thenFn) {
-          const thenRes = await thenFn({
-            ...rest,
-            event,
-            context,
-            pContext,
-          } as any);
+          const thenRes = await thenFn({ ...rest, event, context, pContext } as any);
           return _merge(res, thenRes);
         }
 
         return res;
       } catch (e: any) {
         const errorAction = errorFn(e);
-        return await errorAction({
-          context,
-          pContext,
-          event,
-          ...rest,
-        } as any);
+        return await errorAction({ context, pContext, event, ...rest } as any);
       }
     };
   };

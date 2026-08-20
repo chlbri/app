@@ -76,20 +76,14 @@ export type ConstructTestsResult2 = CommonTestsResult & {
 /**
  * Helper tuple builder function signature.
  */
-type OptionTupleOf = (
-  invite: string,
-  assertion: () => any,
-) => [string, () => any];
+type OptionTupleOf = (invite: string, assertion: () => any) => [string, () => any];
 
 /**
  * Waiter function builder signature.
  */
 type ConstructWaiter_F = (
   DELAY?: number,
-) => (
-  times?: number,
-  index?: number,
-) => readonly [string, () => Promise<void>];
+) => (times?: number, index?: number) => readonly [string, () => Promise<void>];
 
 /**
  * Context selector test builder function signature.
@@ -97,10 +91,9 @@ type ConstructWaiter_F = (
  * @template Pc - Protected context type.
  * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
  */
-type ConstructContexts_F<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = <R = { context: Tc; pContext: Pc }>(
+type ConstructContexts_F<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> = <
+  R = { context: Tc; pContext: Pc },
+>(
   selector?: (result: { context: Tc; pContext: Pc }) => R,
   name?: string,
 ) => (value?: R, index?: number) => readonly [string, () => void];

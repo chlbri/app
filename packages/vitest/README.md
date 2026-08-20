@@ -1,11 +1,11 @@
 # @bemedev/app-vitest
 
-Declarative test sequence generator for `@bemedev/app` state machines
-inside **Vitest**.
+Declarative test sequence generator for `@bemedev/app` state machines inside
+**Vitest**.
 
-`@bemedev/app-vitest` allows you to write state machine integration tests
-as a list of sequentially run, declarative test assertions, removing the
-boilerplate of manual await-tick-assert cycles.
+`@bemedev/app-vitest` allows you to write state machine integration tests as a list
+of sequentially run, declarative test assertions, removing the boilerplate of manual
+await-tick-assert cycles.
 
 <br/>
 
@@ -57,44 +57,40 @@ describe('My Machine Integration', () => {
 | `helper`     | `Function`    | Optional callback to define custom helpers (e.g. context assertions or custom event senders). |
 | `startIndex` | `number`      | Optional starting sequence index (defaults to `0`).                                           |
 
-Returns an object containing built-in assertions and any custom helpers
-returned by the `helper` callback.
+Returns an object containing built-in assertions and any custom helpers returned by
+the `helper` callback.
 
 #### Built-in Assertion Helpers
 
-Every function returns a `TestArr` (tuple of
-`[inviteString, testCallback]`) designed to be spread directly into
-Vitest's `test(...)` function:
+Every function returns a `TestArr` (tuple of `[inviteString, testCallback]`) designed
+to be spread directly into Vitest's `test(...)` function:
 
-- **`start(index?)`**: Starts the service and awaits initial task
-  settlement.
+- **`start(index?)`**: Starts the service and awaits initial task settlement.
 - **`stop(index?)`**: Stops the service cleanly.
 - **`dispose(index?)`**: Alias for `stop(index?)`.
-- **`pause(index?)`**: Pauses the interpreter service activities and
-  timers.
+- **`pause(index?)`**: Pauses the interpreter service activities and timers.
 - **`resume(index?)`**: Resumes the interpreter service.
-- **`send(event, index?)`**: Sends an event to the service and awaits
-  transition settlement.
-- **`useStateValue(value, index?)`**: Asserts that the current active state
-  value matches `value`.
-- **`useTags(...tags)`**: Asserts that the current state carries the
-  specified active tags.
-- **`useWarnings(...warnings)`**: Asserts that the service has logged the
-  specified warning messages in its warning collector.
-- **`useErrors(...errors)`**: Asserts that the service has logged the
-  specified error messages in its error collector.
-- **`changeIndex(fn)`**: Modifies the running test sequence index
-  dynamically.
-- **`unhandledRejection(testFn, error, timeout?)`**: Asserts that running
-  `testFn` rejects with the expected `error` message (setup for
-  `unhandledRejection` and `uncaughtException`).
+- **`send(event, index?)`**: Sends an event to the service and awaits transition
+  settlement.
+- **`useStateValue(value, index?)`**: Asserts that the current active state value
+  matches `value`.
+- **`useTags(...tags)`**: Asserts that the current state carries the specified active
+  tags.
+- **`useWarnings(...warnings)`**: Asserts that the service has logged the specified
+  warning messages in its warning collector.
+- **`useErrors(...errors)`**: Asserts that the service has logged the specified error
+  messages in its error collector.
+- **`changeIndex(fn)`**: Modifies the running test sequence index dynamically.
+- **`unhandledRejection(testFn, error, timeout?)`**: Asserts that running `testFn`
+  rejects with the expected `error` message (setup for `unhandledRejection` and
+  `uncaughtException`).
 
 ---
 
 ### Custom Option Helpers
 
-The third argument `helper` receives a configuration object exposing helper
-factories to create customized, type-safe assertions:
+The third argument `helper` receives a configuration object exposing helper factories
+to create customized, type-safe assertions:
 
 ```typescript
 const { wait, sendFetch, checkCount } = constructTests(
@@ -115,15 +111,15 @@ const { wait, sendFetch, checkCount } = constructTests(
 
 #### Helper Factories:
 
-- **`service`**: The underlying interpreter service instance (Sync or
-  Async) under test.
+- **`service`**: The underlying interpreter service instance (Sync or Async) under
+  test.
 - **`waiter(defaultDelay?)`**: Returns a function to wait for a delay in
-  milliseconds. If Vitest fake timers are active, it automatically advances
-  them using `vi.advanceTimersByTimeAsync()`.
-- **`sender(eventType)`**: Returns a function to send a specific event type
-  with its payload arguments.
-- **`contexts(selector?, name?)`**: Returns a function asserting that the
-  resolved value from the selector matches the expected value.
+  milliseconds. If Vitest fake timers are active, it automatically advances them
+  using `vi.advanceTimersByTimeAsync()`.
+- **`sender(eventType)`**: Returns a function to send a specific event type with its
+  payload arguments.
+- **`contexts(selector?, name?)`**: Returns a function asserting that the resolved
+  value from the selector matches the expected value.
 
 <br/>
 

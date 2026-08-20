@@ -17,10 +17,7 @@ import type {
 } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject, MaybePromise } from '~types';
-import {
-  type AsyncInterpreter,
-  type AsyncInterpreterFrom,
-} from './interpreter';
+import { type AsyncInterpreter, type AsyncInterpreterFrom } from './interpreter';
 
 /**
  * Factory function signature for instantiating an async interpreter class {@linkcode AsyncInterpreterFrom}.
@@ -69,10 +66,7 @@ export type AsyncPerformAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (
-  from: string | false,
-  action: AsyncAction2<E, Pc, Tc, T>,
-) => Promise<void>;
+> = (from: string | false, action: AsyncAction2<E, Pc, Tc, T>) => Promise<void>;
 
 /**
  * Function type signature for evaluating an async predicate guard.

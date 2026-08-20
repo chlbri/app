@@ -7,9 +7,7 @@ import type { Fn } from '@bemedev/app-utils-bemedev';
  *
  * @returns `true` if `value` is an `AsyncFunction`, `false` otherwise.
  */
-export const isFnPromise = (
-  value: unknown,
-): value is Fn<any[], Promise<any>> => {
+export const isFnPromise = (value: unknown): value is Fn<any[], Promise<any>> => {
   return (
     !!value &&
     typeof value === 'function' &&

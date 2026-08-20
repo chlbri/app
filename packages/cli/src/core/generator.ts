@@ -4,12 +4,7 @@ import { writeFile } from 'fs/promises';
 import fg from 'fast-glob';
 import { relative, resolve } from 'node:path';
 import { Project } from 'ts-morph';
-import {
-  DEFAULT_EXCLUDES,
-  DEFAULT_OUTPUT,
-  LIB,
-  MACHINE_GLOB,
-} from './constants';
+import { DEFAULT_EXCLUDES, DEFAULT_OUTPUT, LIB, MACHINE_GLOB } from './constants';
 import { emitRegisterEntry, extractMachineInfo } from './helpers';
 
 // ── Helpers delegated to src/core/helpers ─────────────────────────────────

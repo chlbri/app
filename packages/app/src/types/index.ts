@@ -19,7 +19,6 @@ export type {
   EventsR,
   ExtractSender,
   InitEvent,
-  MaxExceededEvent,
   ToEventObject,
   ToEvents,
   ToEventsR,

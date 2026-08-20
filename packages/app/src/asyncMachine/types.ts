@@ -46,8 +46,7 @@ import { RecordS } from '../types/primitives';
  * @see {@linkcode CommonConfig}
  */
 export type AsyncConfig<
-  Paths extends NoExtraKeysTargetDef<TargetDef> =
-    NoExtraKeysTargetDef<TargetDef>,
+  Paths extends NoExtraKeysTargetDef<TargetDef> = NoExtraKeysTargetDef<TargetDef>,
 > = CommonConfig<Paths>;
 
 /**
@@ -55,8 +54,9 @@ export type AsyncConfig<
  *
  * @template T - Async configuration type {@linkcode AsyncConfig}.
  */
-export type ExtractTagsFromConfig<T extends AsyncConfig> =
-  ExtractTagsFromFlat<FlatMapN<T>>;
+export type ExtractTagsFromConfig<T extends AsyncConfig> = ExtractTagsFromFlat<
+  FlatMapN<T>
+>;
 
 /**
  * Type representing all action keys from a flat map of nodes.
@@ -72,15 +72,9 @@ export type ExtractTagsFromConfig<T extends AsyncConfig> =
  */
 export type _GetKeyActionsFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]:
-    | ExtractActionKeysFromTransitions<
-        Extract<Flat[key], TransitionsConfig>
-      >
-    | ExtractActionsFromActivity<
-        Extract<Flat[key], { activities: ActivityConfig }>
-      >
-    | FromActionConfig<
-        ReduceArray<Extract<Flat[key], { entry: any }>['entry']>
-      >
+    | ExtractActionKeysFromTransitions<Extract<Flat[key], TransitionsConfig>>
+    | ExtractActionsFromActivity<Extract<Flat[key], { activities: ActivityConfig }>>
+    | FromActionConfig<ReduceArray<Extract<Flat[key], { entry: any }>['entry']>>
     | FromActionConfig<
         ReduceArray<Extract<Flat[key], { exit: any }>['exit']>
       > extends infer V
@@ -102,9 +96,7 @@ export type _GetKeyActionsFromFlat<Flat extends FlatMapN> = {
  */
 type _GetKeyGuardsFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]:
-    | ExtractGuardKeysFromTransitions<
-        Extract<Flat[key], TransitionsConfig>
-      >
+    | ExtractGuardKeysFromTransitions<Extract<Flat[key], TransitionsConfig>>
     | ExtractGuardsFromActivity<
         Extract<Flat[key], { activities: ActivityConfig }>
       > extends infer V
@@ -163,9 +155,7 @@ type _GetEventKeysFromFlat<Flat extends FlatMapN> = {
  */
 type _GetDelayKeysFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]:
-    | ExtractDelayKeysFromTransitions<
-        Extract<Flat[key], TransitionsConfig>
-      >
+    | ExtractDelayKeysFromTransitions<Extract<Flat[key], TransitionsConfig>>
     | ExtractDelaysFromActivity<Flat[key]> extends infer V
     ? unknown extends V
       ? never
@@ -266,8 +256,9 @@ export type GetEventsFromConfig<C extends AsyncConfig> = GetEventsFromFlat<
  * @see {@linkcode ConfigFrom} for extracting the config from the machine.
  * @see {@linkcode GetEventsFromConfig} for extracting events from the machine.
  */
-export type GetEventsFromMachine<T extends KeyU<'config'>> =
-  GetEventsFromConfig<Extract<ConfigFrom<T>, AsyncConfig>>;
+export type GetEventsFromMachine<T extends KeyU<'config'>> = GetEventsFromConfig<
+  Extract<ConfigFrom<T>, AsyncConfig>
+>;
 
 /**
  * Record type mapping emitter source keys to emitter definition.
@@ -494,14 +485,7 @@ export type GetActorsFromMachine<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = GetActorsFromConfig<
-  Extract<ConfigFrom<M>, AsyncConfig>,
-  E,
-  A,
-  Pc,
-  Tc,
-  T
->;
+> = GetActorsFromConfig<Extract<ConfigFrom<M>, AsyncConfig>, E, A, Pc, Tc, T>;
 
 /**
  * Actor source keys structure extracted from a flat map.
@@ -546,8 +530,9 @@ export type GetActorsSrcKeysFromFlat2<
  *
  * @template C - Machine configuration type {@linkcode AsyncConfig}.
  */
-export type GetActorKeysFromConfig<C extends AsyncConfig> =
-  GetActorsSrcKeysFromFlat<FlatMapN<C>>;
+export type GetActorKeysFromConfig<C extends AsyncConfig> = GetActorsSrcKeysFromFlat<
+  FlatMapN<C>
+>;
 
 /**
  * Detailed actor keys extracted from machine configuration `C`.
@@ -655,6 +640,5 @@ export type ExtractContextsKeyFromChild<
  *
  * @template T - Child object shape with `on`.
  */
-export type ExtractEventsKeyFromChild<
-  T extends { on: Record<string, any> },
-> = keyof T['on'];
+export type ExtractEventsKeyFromChild<T extends { on: Record<string, any> }> =
+  keyof T['on'];

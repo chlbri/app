@@ -13,9 +13,3 @@ export const ALWAYS_EVENT = 'machine$$always' as const;
  * The event that is triggered when the machine peforms an after transition.
  */
 export const AFTER_EVENT = 'machine$$after' as const;
-
-/**
- * The event that is triggered when the machine exceeds its maximum allowed transitions.
- * This is used to prevent infinite loops or excessive transitions.
- */
-export const MAX_EXCEEDED_EVENT_TYPE = 'machine$$exceeded' as const;

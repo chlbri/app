@@ -12,8 +12,8 @@
 ### Dependencies
 
 - **Dependencies**: Update `rolldown` to 1.2.4.
-- **Workspace Dependencies**: Bump version to align with the 1.11.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.11.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -30,13 +30,13 @@
 
 ### Docs
 
-- **`JSDoc`**: Add comprehensive JSDoc annotations to validation schemas,
-  helpers, and fixtures.
+- **`JSDoc`**: Add comprehensive JSDoc annotations to validation schemas, helpers,
+  and fixtures.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.10.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.10.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -53,8 +53,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.4
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.4 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -71,8 +70,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.3
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.3 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -89,8 +87,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
-  `1.9.1`.
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app` `1.9.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -107,9 +104,9 @@
 
 ### Features
 
-- **Valibot Schemas**: Provide runtime Valibot schemas and validation
-  functions for `@bemedev/app` state machine definitions (states, actions,
-  guards, transitions, delays, actors, events).
+- **Valibot Schemas**: Provide runtime Valibot schemas and validation functions for
+  `@bemedev/app` state machine definitions (states, actions, guards, transitions,
+  delays, actors, events).
 
 - <u>Test coverage **_100%_**</u>
 

@@ -2,10 +2,7 @@ import type { UnionToIntersection } from '@bemedev/app-utils-bemedev';
 import type { STR } from './types';
 
 /** Action error descriptor mapping. */
-const action = {
-  normal: 'action',
-  capital: 'Action',
-} as const satisfies STR;
+const action = { normal: 'action', capital: 'Action' } as const satisfies STR;
 
 /** Guard error descriptor mapping. */
 const guard = { normal: 'guard', capital: 'Guard' } as const satisfies STR;
@@ -14,16 +11,10 @@ const guard = { normal: 'guard', capital: 'Guard' } as const satisfies STR;
 const delay = { normal: 'delay', capital: 'Delay' } as const satisfies STR;
 
 /** Promise error descriptor mapping. */
-const promise = {
-  normal: 'promise',
-  capital: 'Promise',
-} as const satisfies STR;
+const promise = { normal: 'promise', capital: 'Promise' } as const satisfies STR;
 
 /** Machine error descriptor mapping. */
-const machine = {
-  normal: 'machine',
-  capital: 'Machine',
-} as const satisfies STR;
+const machine = { normal: 'machine', capital: 'Machine' } as const satisfies STR;
 
 /** Sentinel string for undefined error state. */
 const notDefined = 'is undefined' as const;
@@ -114,10 +105,4 @@ const produceErrors = <const T extends STR[]>(...types: T) => {
  * - `notDescribed`: Indicates that the component is not described.
  * - `notProvided`: Indicates that the component is not provided.
  */
-export const ERRORS = produceErrors(
-  action,
-  guard,
-  delay,
-  promise,
-  machine,
-);
+export const ERRORS = produceErrors(action, guard, delay, promise, machine);

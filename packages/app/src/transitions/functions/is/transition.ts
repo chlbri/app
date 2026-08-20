@@ -69,9 +69,7 @@ export const isTransitionConfigMapTarget = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
 ): value is TransitionConfigMapF<T[number]> => {
-  return (
-    isTransitionConfigMap(value, ...keys) && value.target !== undefined
-  );
+  return isTransitionConfigMap(value, ...keys) && value.target !== undefined;
 };
 
 /**
@@ -84,15 +82,11 @@ export const isTransitionConfigMapTarget = <T extends string[] = string[]>(
  *
  * @returns `true` if type {@linkcode TransitionConfigMapA}, `false` otherwise.
  */
-export const isTransitionConfigMapActions = <
-  T extends string[] = string[],
->(
+export const isTransitionConfigMapActions = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
 ): value is TransitionConfigMapA<T[number]> => {
-  return (
-    isTransitionConfigMap(value, ...keys) && checkActions(value.actions)
-  );
+  return isTransitionConfigMap(value, ...keys) && checkActions(value.actions);
 };
 
 /**
@@ -178,9 +172,7 @@ export const isSingleOrArrayT = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T
 ): value is SingleOrArrayT<T[number]> => {
-  return (
-    isTransitionArray(value, ...keys) || isTransitionConfig(value, ...keys)
-  );
+  return isTransitionArray(value, ...keys) || isTransitionConfig(value, ...keys);
 };
 
 isSingleOrArrayT.orUndefined = <T extends string[] = string[]>(

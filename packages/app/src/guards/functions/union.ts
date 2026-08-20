@@ -38,9 +38,7 @@ export const checkGuards = (value: unknown): value is GuardConfig => {
   }
 };
 
-checkGuards.orUndefined = (
-  value: unknown,
-): value is GuardConfig | undefined => {
+checkGuards.orUndefined = (value: unknown): value is GuardConfig | undefined => {
   if (value === undefined) return true;
   return checkGuards(value);
 };

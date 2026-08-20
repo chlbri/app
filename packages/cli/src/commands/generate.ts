@@ -41,8 +41,7 @@ import { generator as handler } from '../core/generator';
  */
 export const generate = command({
   name: 'generate',
-  description:
-    'Generate app.gen.ts from all *.machine.ts / *.fsm.ts files',
+  description: 'Generate app.gen.ts from all *.machine.ts / *.fsm.ts files',
   args: {
     excludes: multioption({
       type: array(string),

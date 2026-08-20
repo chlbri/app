@@ -22,13 +22,8 @@ export const recordV = <
     string | number | symbol,
     v.BaseIssue<unknown>
   >,
-  const TValue extends v.BaseSchema<
-    unknown,
-    unknown,
-    v.BaseIssue<unknown>
-  >,
-  const TMessage extends v.ErrorMessage<v.RecordIssue> | undefined =
-    undefined,
+  const TValue extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+  const TMessage extends v.ErrorMessage<v.RecordIssue> | undefined = undefined,
 >(
   key: TKey,
   value: TValue,

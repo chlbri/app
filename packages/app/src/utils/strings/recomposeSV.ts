@@ -10,10 +10,7 @@ import type { StateValue } from '#states';
  *
  * @returns The recomposed type {@linkcode StateValue}.
  */
-export type RecomposeSV_F = Fn<
-  [arg: string, delimiter?: string],
-  StateValue
->;
+export type RecomposeSV_F = Fn<[arg: string, delimiter?: string], StateValue>;
 
 /**
  * Recombines a string into a type {@linkcode StateValue} object using constant {@linkcode DEFAULT_DELIMITER}.
@@ -25,10 +22,7 @@ export type RecomposeSV_F = Fn<
  *
  * @see type {@linkcode RecomposeSV_F}
  */
-export const recomposeSV: RecomposeSV_F = (
-  arg,
-  delimiter = DEFAULT_DELIMITER,
-) => {
+export const recomposeSV: RecomposeSV_F = (arg, delimiter = DEFAULT_DELIMITER) => {
   const arg1 = arg.startsWith(delimiter) ? arg.substring(1) : arg;
 
   const splits = arg1.split(delimiter);

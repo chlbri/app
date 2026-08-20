@@ -212,10 +212,5 @@ export const createSubscriber: CreateSubscriber_F = (
   options,
   ...events
 ) => {
-  return new SubscriberClass(
-    subscriber,
-    options?.equals,
-    options?.id,
-    events,
-  );
+  return new SubscriberClass(subscriber, options?.equals, options?.id, events);
 };

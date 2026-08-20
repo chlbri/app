@@ -9,10 +9,7 @@
 export const evaluateNode = (node: any, sourceFile: any): any => {
   const kind = node.getKindName?.();
 
-  if (
-    kind === 'StringLiteral' ||
-    kind === 'NoSubstitutionTemplateLiteral'
-  ) {
+  if (kind === 'StringLiteral' || kind === 'NoSubstitutionTemplateLiteral') {
     return node.getLiteralValue?.();
   }
   if (kind === 'NumericLiteral') {

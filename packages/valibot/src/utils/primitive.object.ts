@@ -15,8 +15,5 @@ export const PrimitiveObjectSchema: v.BaseSchema<
   PrimitiveObject,
   v.BaseIssue<unknown>
 > = SoraSchema(
-  v.union([
-    PrimitiveSchema,
-    MapSchema(v.lazy(() => PrimitiveObjectSchema)),
-  ]),
+  v.union([PrimitiveSchema, MapSchema(v.lazy(() => PrimitiveObjectSchema))]),
 ) as any;

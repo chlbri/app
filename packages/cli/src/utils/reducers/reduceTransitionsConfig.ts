@@ -13,9 +13,7 @@ import type { _TransitionsConfig } from '@bemedev/app/transitions';
  *
  * @returns Object containing symbol sets for actions, guards, targets, events, delays, pContext keys, emitters, and children.
  */
-export const reduceTransitionsConfig = (
-  transitions: _TransitionsConfig,
-) => {
+export const reduceTransitionsConfig = (transitions: _TransitionsConfig) => {
   const actions = createBetterSet<string>();
   const guards = createBetterSet<string>();
   const targets = createBetterSet<string>();
@@ -25,10 +23,7 @@ export const reduceTransitionsConfig = (
   const emitters = createBetterSet<string>();
   const children = createBetterSet<string>();
 
-  type _HelperRecord = Record<
-    'targets' | 'guards' | 'actions',
-    BetterSet<string>
-  >;
+  type _HelperRecord = Record<'targets' | 'guards' | 'actions', BetterSet<string>>;
 
   const helperTransition = (v: _HelperRecord) => {
     targets.add(...v.targets);

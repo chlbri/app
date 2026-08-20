@@ -11,9 +11,9 @@ import { useSync } from '@bemedev/react-sync';
 /**
  * React hook that creates reactive helpers for querying event capabilities from a service.
  *
- * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
- * @template {string} Ta - Tag type extending `string`.
- * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
+ * @template `Ta` - Tag type extending `string`.
+ * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
  *
  * @param service - Service object containing `subscribe`, `state`, and `canEvents`.
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
@@ -21,6 +21,8 @@ import { useSync } from '@bemedev/react-sync';
  * @param service.canEvents - Function checking if event types can be accepted.
  *
  * @returns Object helper with `or` and `and` methods to check event availability.
+ *
+ * @see {@linkcode useSync}, {@linkcode expandFn}, {@linkcode deepEqual}, {@linkcode identity}
  */
 export function useCan<
   Tc extends PrimitiveObject,
@@ -34,8 +36,7 @@ export function useCan<
   const dispatch =
     (matcher: 'some' | 'every') =>
     (...events: Eo['type'][]) => {
-      const selector = () =>
-        events[matcher](event => service.canEvents(event));
+      const selector = () => events[matcher](event => service.canEvents(event));
       return useSync(
         listener => {
           const { unsubscribe } = service.subscribe(listener, {

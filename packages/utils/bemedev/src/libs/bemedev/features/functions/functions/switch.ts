@@ -1,8 +1,4 @@
-type _SwitchValue_F = <T>(params: {
-  condition?: boolean;
-  truthy: T;
-  falsy: T;
-}) => T;
+type _SwitchValue_F = <T>(params: { condition?: boolean; truthy: T; falsy: T }) => T;
 
 const _switchValue: _SwitchValue_F = ({ condition, truthy, falsy }) => {
   const out = condition ? truthy : falsy;

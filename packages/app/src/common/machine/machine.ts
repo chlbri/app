@@ -31,11 +31,7 @@ import {
   type StateValue,
 } from '#states';
 import { constructEvents, merge, reduceFnMap } from '#utils';
-import type {
-  AllowedNames,
-  Fn,
-  NotUndefined,
-} from '@bemedev/app-utils-bemedev';
+import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-utils-bemedev';
 import { _unknown } from '@bemedev/app-utils-bemedev';
 import { decompose, type Decompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
@@ -124,11 +120,7 @@ export abstract class CommonMachine<
    * Decomposed path mapping representation of the configuration.
    */
   get decomposed() {
-    return decompose(this._config, {
-      sep: '.',
-      start: false,
-      object: 'both',
-    });
+    return decompose(this._config, { sep: '.', start: false, object: 'both' });
   }
 
   /**
@@ -146,10 +138,7 @@ export abstract class CommonMachine<
    */
   get __decomposedState() {
     return _unknown<
-      Decompose<
-        State<Eo, Tc, Ta>,
-        { sep: '.'; start: false; object: 'both' }
-      >
+      Decompose<State<Eo, Tc, Ta>, { sep: '.'; start: false; object: 'both' }>
     >();
   }
 
@@ -593,10 +582,7 @@ export abstract class CommonMachine<
     const check1 = this.isInitial(target);
     const flat: any = this.__flat;
     if (check1) {
-      const parent = target.substring(
-        0,
-        target.lastIndexOf(DEFAULT_DELIMITER),
-      );
+      const parent = target.substring(0, target.lastIndexOf(DEFAULT_DELIMITER));
       const check2 = this.isInitial(parent);
 
       if (check2) return this.retrieveParentFromInitial.bind(this)(parent);
@@ -626,16 +612,14 @@ export abstract class CommonMachine<
   /**
    * Internal helper method to merge child actors into machine options.
    */
-  private _addChildren = (
-    children?: NotUndefined<Mo['actors']>['children'],
-  ) => (this._actors = merge(this._actors, _any({ children })));
+  private _addChildren = (children?: NotUndefined<Mo['actors']>['children']) =>
+    (this._actors = merge(this._actors, _any({ children })));
 
   /**
    * Internal helper method to merge emitters into machine options.
    */
-  private _addEmitters = (
-    emitters?: NotUndefined<Mo['actors']>['emitters'],
-  ) => (this._actors = merge(this._actors, _any({ emitters })));
+  private _addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
+    (this._actors = merge(this._actors, _any({ emitters })));
 
   /**
    * Abstract factory function for creating machine options.
@@ -874,9 +858,7 @@ export abstract class CommonMachine<
    *
    * @returns Cloned extended state object.
    */
-  protected __cloneStateExtended = (
-    state: StateExtended<Eo, Pc, Tc, Ta>,
-  ) => {
+  protected __cloneStateExtended = (state: StateExtended<Eo, Pc, Tc, Ta>) => {
     return structuredClone(state);
   };
 

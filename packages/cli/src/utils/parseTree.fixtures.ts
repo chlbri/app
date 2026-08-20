@@ -15,10 +15,7 @@ export const config2 = createConfig({
             idle: {
               activities: { DELAY: 'sendPanelToUser' },
               on: {
-                FETCH: {
-                  guards: 'isInputNotEmpty',
-                  target: '/working/fetch/fetch',
-                },
+                FETCH: { guards: 'isInputNotEmpty', target: '/working/fetch/fetch' },
               },
             },
             fetch: { entry: 'insertData', always: '/working/fetch/idle' },
@@ -28,16 +25,11 @@ export const config2 = createConfig({
           initial: 'idle',
           states: {
             idle: {
-              on: {
-                WRITE: { actions: 'write', target: '/working/ui/input' },
-              },
+              on: { WRITE: { actions: 'write', target: '/working/ui/input' } },
             },
             input: {
               activities: {
-                DELAY: {
-                  guards: 'isInputEmpty',
-                  actions: 'askUsertoInput',
-                },
+                DELAY: { guards: 'isInputEmpty', actions: 'askUsertoInput' },
               },
               on: {
                 WRITE: [
@@ -82,16 +74,11 @@ export const config21 = createConfig({
           initial: 'idle',
           states: {
             idle: {
-              on: {
-                WRITE: { actions: 'write', target: '/working/ui/input' },
-              },
+              on: { WRITE: { actions: 'write', target: '/working/ui/input' } },
             },
             input: {
               activities: {
-                DELAY: {
-                  guards: 'isInputEmpty',
-                  actions: 'askUsertoInput',
-                },
+                DELAY: { guards: 'isInputEmpty', actions: 'askUsertoInput' },
               },
               on: {
                 WRITE: [

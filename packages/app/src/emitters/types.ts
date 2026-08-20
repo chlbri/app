@@ -87,10 +87,7 @@ export type EmitterDef = { next: PrimitiveObject; error: PrimitiveObject };
  *
  * @template {string} S - Key identifier string union.
  */
-export type EmitterConfigMap<S extends string = string> = Record<
-  S,
-  EmitterDef
->;
+export type EmitterConfigMap<S extends string = string> = Record<S, EmitterDef>;
 
 /**
  * Asynchronous emitter configuration structure.

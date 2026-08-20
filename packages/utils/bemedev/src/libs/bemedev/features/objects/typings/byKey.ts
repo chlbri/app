@@ -10,7 +10,6 @@ import { _unknown } from '../../../globals/utils/_unknown';
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-const fn = <T extends object, K extends keyof T>(_?: T, __?: K) =>
-  _unknown<T[K]>();
+const fn = <T extends object, K extends keyof T>(_?: T, __?: K) => _unknown<T[K]>();
 
 export default fn;

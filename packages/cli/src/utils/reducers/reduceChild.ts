@@ -1,9 +1,5 @@
 import { reduceTransitions } from './reduceTransitions';
-import {
-  toArray,
-  type ChildConfig,
-  type TransitionConfig,
-} from '@bemedev/app';
+import { toArray, type ChildConfig, type TransitionConfig } from '@bemedev/app';
 import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { paramArray, tap } from '@bemedev/pipe/extensions/common';

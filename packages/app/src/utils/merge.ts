@@ -8,11 +8,7 @@ export const _merge = deepmergeCustom({
   mergeArrays: false,
   mergeMaps: false,
   mergeRecords: (values, all, options) => {
-    return all.defaultMergeFunctions.mergeRecords(
-      values,
-      all as any,
-      options,
-    );
+    return all.defaultMergeFunctions.mergeRecords(values, all as any, options);
   },
 });
 

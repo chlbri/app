@@ -33,9 +33,8 @@ export function useService<
   canEvents: (...events: Eo['type'][]) => boolean;
 }) {
   return {
-    state: <T = State<Eo, Tc, Ta>>(
-      options?: UseServiceOptions<Tc, Ta, Eo, T>,
-    ) => useState<Tc, Ta, Eo, T>(service, options),
+    state: <T = State<Eo, Tc, Ta>>(options?: UseServiceOptions<Tc, Ta, Eo, T>) =>
+      useState<Tc, Ta, Eo, T>(service, options),
 
     can: useCan(service),
     isInside: useIsInside(service),

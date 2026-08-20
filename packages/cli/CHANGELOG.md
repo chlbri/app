@@ -11,15 +11,15 @@
 
 ### Fixes
 
-- **`watch`**: Improve file path resolution and starter execution handling
-  during file watching.
+- **`watch`**: Improve file path resolution and starter execution handling during
+  file watching.
 - **`starter`**: Correct helper initialization path resolution.
 
 ### Dependencies
 
 - **Dependencies**: Update `rolldown` to 1.2.4.
-- **Workspace Dependencies**: Bump version to align with the 1.11.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.11.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -36,13 +36,12 @@
 
 ### Docs
 
-- **`JSDoc`**: Add comprehensive JSDoc annotations across CLI tools and AST
-  parsers.
+- **`JSDoc`**: Add comprehensive JSDoc annotations across CLI tools and AST parsers.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.10.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.10.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -59,8 +58,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.4
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.4 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -77,8 +75,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.3
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.3 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -95,8 +92,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
-  `1.9.1`.
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app` `1.9.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -113,13 +109,12 @@
 
 ### Refactor
 
-- **Valibot Migration**: Update AST parseTree and extractor helpers to
-  import from `@bemedev/app-valibot`.
+- **Valibot Migration**: Update AST parseTree and extractor helpers to import from
+  `@bemedev/app-valibot`.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
-  `1.9.0`.
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app` `1.9.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -136,10 +131,10 @@
 
 ### Features
 
-- **CLI Tool**: Provide CLI entry point and commands (`generate`, `watch`)
-  for `@bemedev/app` state machine type generation.
-- **AST Parser**: Implement `parseTree` AST parser and reducers
-  (`reduceActivity`, `reduceGuards`, `reduceTransitions`).
+- **CLI Tool**: Provide CLI entry point and commands (`generate`, `watch`) for
+  `@bemedev/app` state machine type generation.
+- **AST Parser**: Implement `parseTree` AST parser and reducers (`reduceActivity`,
+  `reduceGuards`, `reduceTransitions`).
 
 - <u>Test coverage **_100%_**</u>
 

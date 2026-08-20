@@ -25,11 +25,7 @@ export type ReplaceAll_F = (params: {
  *
  * @see type {@linkcode ReplaceAll_F}
  */
-export const replaceAll: ReplaceAll_F = ({
-  entry,
-  match,
-  replacement,
-}) => {
+export const replaceAll: ReplaceAll_F = ({ entry, match, replacement }) => {
   const regex = escapeRegExp(match);
 
   return entry.replace(new RegExp(regex, 'g'), () => replacement);

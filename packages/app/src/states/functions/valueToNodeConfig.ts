@@ -59,11 +59,7 @@ export const valueToNodeConfig: ValueToNodeConfig_F = (body, from) => {
 
   const flatFrom = decomposeSV(from)
     .map(key =>
-      replaceAll({
-        entry: key,
-        match: '.',
-        replacement: DEFAULT_DELIMITER,
-      }),
+      replaceAll({ entry: key, match: '.', replacement: DEFAULT_DELIMITER }),
     )
     .map(key => `/${key}`);
 

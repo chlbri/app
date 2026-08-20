@@ -5,13 +5,12 @@ import * as v from 'valibot';
  *
  * @template {ReadonlyArray<string>} T - Array of string literals.
  */
-export type TransformLiterals<T extends ReadonlyArray<string>> =
-  T extends [
-    infer Head extends string,
-    ...infer Tail extends ReadonlyArray<string>,
-  ]
-    ? [v.LiteralSchema<Head, any>, ...TransformLiterals<Tail>]
-    : [];
+export type TransformLiterals<T extends ReadonlyArray<string>> = T extends [
+  infer Head extends string,
+  ...infer Tail extends ReadonlyArray<string>,
+]
+  ? [v.LiteralSchema<Head, any>, ...TransformLiterals<Tail>]
+  : [];
 
 /**
  * Determines the output Valibot schema type for target paths (string schema if empty, union schema otherwise).

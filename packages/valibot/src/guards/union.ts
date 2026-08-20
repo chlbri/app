@@ -30,15 +30,11 @@ export const GuardConfig_Schema: v.BaseSchema<
  *
  * @see {@linkcode GuardConfig_Schema}
  */
-export const GuardAnd_Schema = v.object({
-  and: v.array(GuardConfig_Schema),
-});
+export const GuardAnd_Schema = v.object({ and: v.array(GuardConfig_Schema) });
 
 /**
  * Valibot schema for OR-combined guard conditions.
  *
  * @see {@linkcode GuardConfig_Schema}
  */
-export const GuardOr_Schema = v.object({
-  or: v.array(GuardConfig_Schema),
-});
+export const GuardOr_Schema = v.object({ or: v.array(GuardConfig_Schema) });

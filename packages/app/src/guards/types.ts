@@ -8,13 +8,7 @@ import type { EventObject } from '#events';
 import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type {
-  FnMap,
-  FnR,
-  MaybePromise,
-  RecordS,
-  ReduceArray,
-} from '~types';
+import type { FnMap, FnR, MaybePromise, RecordS, ReduceArray } from '~types';
 
 /** Internal type representation of GUARD_TYPE. */
 type gType = typeof GUARD_TYPE;
@@ -73,14 +67,13 @@ export type NoExtraKeysGuardConfig<T> = T extends WithDescriber
  *
  * @template {ReadonlyArray<GuardConfig>} T - Array of guard configurations.
  */
-export type NoExtraKeysGuardConfigArray<
-  T extends ReadonlyArray<GuardConfig>,
-> = T extends [
-  infer S extends GuardConfig,
-  ...infer R extends ReadonlyArray<GuardConfig>,
-]
-  ? readonly [NoExtraKeysGuardConfig<S>, ...NoExtraKeysGuardConfigArray<R>]
-  : [];
+export type NoExtraKeysGuardConfigArray<T extends ReadonlyArray<GuardConfig>> =
+  T extends [
+    infer S extends GuardConfig,
+    ...infer R extends ReadonlyArray<GuardConfig>,
+  ]
+    ? readonly [NoExtraKeysGuardConfig<S>, ...NoExtraKeysGuardConfigArray<R>]
+    : [];
 
 /**
  * Enforces no extra keys across single value or array of guard configurations.
@@ -338,7 +331,8 @@ type _DefinedValue<
  * @template : [Pc] The type of the private context.
  * @template : type {@linkcode PrimitiveObject} [Tc] The type of the context.
  */
-export type DefinedValue<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = _DefinedValue<Pc, Tc> | 'events' | 'events.type' | 'events.payload';
+export type DefinedValue<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> =
+  | _DefinedValue<Pc, Tc>
+  | 'events'
+  | 'events.type'
+  | 'events.payload';

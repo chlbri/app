@@ -26,10 +26,7 @@ export const isSoa = <T = any>(
  *
  * @returns `true` if value is a string or an array of strings.
  */
-export const checkSoAString = partialCall(
-  isSoa,
-  str => typeof str === 'string',
-) as {
+export const checkSoAString = partialCall(isSoa, str => typeof str === 'string') as {
   (value: unknown): value is SoA<string>;
 
   orUndefined: (value: unknown) => value is SoA<string> | undefined;
@@ -42,9 +39,7 @@ export const checkSoAString = partialCall(
  *
  * @returns `true` if value is undefined, a string, or an array of strings.
  */
-checkSoAString.orUndefined = (
-  value: unknown,
-): value is SoA<string> | undefined => {
+checkSoAString.orUndefined = (value: unknown): value is SoA<string> | undefined => {
   if (value === undefined) return true;
   return checkSoAString(value);
 };

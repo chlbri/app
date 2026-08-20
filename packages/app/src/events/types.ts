@@ -1,24 +1,9 @@
-import type {
-  Equals,
-  NotUndefined,
-  Unionize,
-} from '@bemedev/app-utils-bemedev';
+import type { Equals, NotUndefined, Unionize } from '@bemedev/app-utils-bemedev';
 import type { EmitterConfigMap } from '#emitters';
 import type { ChildConfigMap } from '#common/machine';
 import { EmptyObject } from '@bemedev/decompose';
-import type {
-  ALWAYS_EVENT,
-  INIT_EVENT,
-  MAX_EXCEEDED_EVENT_TYPE,
-} from './constants';
+import type { AFTER_EVENT, ALWAYS_EVENT, INIT_EVENT } from './constants';
 import type { PrimitiveObject } from '@bemedev/typings';
-
-/**
- * Represents an event object with a type and payload.
- * @template T - The type of the payload.
- * @returns An object with a type and payload.
- */
-export type EventObject<T = any> = { type: string; payload: T };
 
 /**
  * Represents a map of events where the keys are event names and the values are the payloads.
@@ -33,19 +18,26 @@ export type EventsMap = Record<string, PrimitiveObject>;
 export type InitEvent = typeof INIT_EVENT;
 
 /**
- * Type alias for max exceeded machine event string type.
+ * Type alias for always machine event string type.
  */
-export type MaxExceededEvent = typeof MAX_EXCEEDED_EVENT_TYPE;
+export type AlwaysEvent = `${string}/${typeof ALWAYS_EVENT}`;
 
 /**
  * Type alias for always machine event string type.
  */
-export type AlwaysEvent = typeof ALWAYS_EVENT;
+export type AfterEvent = `${string}/${typeof AFTER_EVENT}`;
 
 /**
  * Represents a union of all event strings.
  */
-export type EventStrings = InitEvent | MaxExceededEvent | AlwaysEvent;
+export type EventStrings = InitEvent | AlwaysEvent | AfterEvent;
+
+/**
+ * Represents an event object with a type and payload.
+ * @template T - The type of the payload.
+ * @returns An object with a type and payload.
+ */
+export type EventObject<T = any> = { type: string; payload: T };
 
 /**
  * Union type representing an event object or event string.
@@ -73,14 +65,8 @@ type _EmitterConfigR<T extends EmitterConfigMap> =
   Unionize<T> extends infer U extends EmitterConfigMap
     ? U extends any
       ?
-          | {
-              type: `${keyof U & string}::next`;
-              payload: U[keyof U]['next'];
-            }
-          | {
-              type: `${keyof U & string}::error`;
-              payload: U[keyof U]['error'];
-            }
+          | { type: `${keyof U & string}::next`; payload: U[keyof U]['next'] }
+          | { type: `${keyof U & string}::error`; payload: U[keyof U]['error'] }
       : never
     : never;
 
@@ -181,10 +167,7 @@ export type EventArgT<E extends EventsMap> =
  * @template {AllEvent} T - Event string or event object type.
  * @template {string} Ex - Event types to exclude.
  */
-export type ToEventObject<
-  T extends AllEvent,
-  Ex extends string = never,
-> = Exclude<
+export type ToEventObject<T extends AllEvent, Ex extends string = never> = Exclude<
   T extends string ? { type: T; payload: EmptyObject } : T,
   { type: Ex }
 >;
@@ -199,10 +182,7 @@ export type ToEventObject<
 export type ExtractSender<
   T extends EventObject,
   E extends T['type'],
-  R extends Extract<T, { type: E }>['payload'] = Extract<
-    T,
-    { type: E }
-  >['payload'],
+  R extends Extract<T, { type: E }>['payload'] = Extract<T, { type: E }>['payload'],
 > =
   Equals<R, never> extends true
     ? []

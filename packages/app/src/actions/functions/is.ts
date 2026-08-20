@@ -8,9 +8,7 @@ import { isDescriber, isString, type Describer } from '~types';
  *
  * @returns `true` if string or type {@linkcode Describer}, `false` otherwise.
  */
-export const checkAction = (
-  entry: unknown,
-): entry is string | Describer => {
+export const checkAction = (entry: unknown): entry is string | Describer => {
   return entry !== null && (isString(entry) || isDescriber(entry));
 };
 
@@ -21,9 +19,7 @@ export const checkAction = (
  *
  * @returns `true` if single or array of action descriptors, `false` otherwise.
  */
-export const checkActions = (
-  action: unknown,
-): action is SoA<string | Describer> => {
+export const checkActions = (action: unknown): action is SoA<string | Describer> => {
   if (Array.isArray(action)) return action.every(checkAction);
   else return checkAction(action);
 };

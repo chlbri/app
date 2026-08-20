@@ -9,6 +9,7 @@ import { _any } from '@bemedev/app-utils-bemedev';
 
 import {
   ALWAYS_EVENT,
+  AFTER_EVENT,
   eventToType,
   transformEventArg,
   type ActorsConfigMap,
@@ -75,11 +76,7 @@ import type { AsyncAddOptions_F } from '../asyncMachine';
 import { getByKey, recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type {
-  ChildConfig,
-  EmitterConfig,
-  FinallyConfig,
-} from '../actors/types';
+import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types';
 
 /**
  * The class {@linkcode AsyncInterpreter} is responsible for interpreting and managing the state of an asynchronous machine.
@@ -120,17 +117,7 @@ export class AsyncInterpreter<
    * @returns The inner class {@linkcode AsyncMachine} instance.
    */
   get machine() {
-    return super.machine as AsyncMachine<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      Mo
-    >;
+    return super.machine as AsyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
   }
 
   /**
@@ -139,18 +126,11 @@ export class AsyncInterpreter<
    * @returns A fresh class {@linkcode AsyncInterpreter} instance.
    */
   get renew() {
-    const out = new AsyncInterpreter<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      Mo,
-      L
-    >(this.machine, this.__mode, this.__exact);
+    const out = new AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>(
+      this.machine,
+      this.__mode,
+      this.__exact,
+    );
 
     out._ppC(this.__initialPpc);
     out._provideContext(this.__initialContext);
@@ -221,17 +201,16 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving to the result of the action execution.
    */
-  protected __performAction: AsyncPerformActionLater_F<Eo, Pc, Tc, Ta> =
-    action => {
-      this._iterate();
-      const out = withTimeout(
-        async () => action(this.__cloneState),
-        'Action timed out',
-        ...(this.longRuns ? [] : [DEFAULT_MAX_TIME_PROMISE]),
-      );
+  protected __performAction: AsyncPerformActionLater_F<Eo, Pc, Tc, Ta> = action => {
+    this._iterate();
+    const out = withTimeout(
+      async () => action(this.__cloneState),
+      'Action timed out',
+      ...(this.longRuns ? [] : [DEFAULT_MAX_TIME_PROMISE]),
+    );
 
-      return out();
-    };
+    return out();
+  };
 
   /**
    * Forces state transitions to perform inner actions regardless of current state transitions.
@@ -312,8 +291,7 @@ export class AsyncInterpreter<
   ) => {
     this.__setStatus('busy');
 
-    const { pContext, context, ...extendeds } =
-      await this.__performAction(action);
+    const { pContext, context, ...extendeds } = await this.__performAction(action);
 
     if (from !== false && this.__cannotPerform(from)) return;
     this.__mergeContexts({ pContext, context });
@@ -347,11 +325,10 @@ export class AsyncInterpreter<
    *
    * @returns The boolean result or a promise resolving to a boolean.
    */
-  #performPredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
-    predicate => {
-      this._iterate();
-      return predicate(this.__cloneState);
-    };
+  #performPredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
+    this._iterate();
+    return predicate(this.__cloneState);
+  };
 
   /**
    * Evaluates a predicate guard while updating internal working status.
@@ -360,15 +337,14 @@ export class AsyncInterpreter<
    *
    * @returns The boolean result or a promise resolving to a boolean.
    */
-  #executePredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> =
-    predicate => {
-      this.__setStatus('busy');
-      const out = this.#performPredicate(predicate);
+  #executePredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
+    this.__setStatus('busy');
+    const out = this.#performPredicate(predicate);
 
-      this.__setStatus('working');
+    this.__setStatus('working');
 
-      return out;
-    };
+    return out;
+  };
 
   /**
    * Converts a type {@linkcode GuardConfig} into an executable predicate guard function.
@@ -506,8 +482,7 @@ export class AsyncInterpreter<
       };
 
       if (_interval) {
-        const check =
-          _interval.state === 'idle' || _interval.state === 'paused';
+        const check = _interval.state === 'idle' || _interval.state === 'paused';
         if (check) {
           this.__cachedIntervals.splice(index, 1);
           const result = buildCallback();
@@ -560,9 +535,7 @@ export class AsyncInterpreter<
     const { guards, actions, target } = transition;
     const { diffEntries, diffExits } = this.__diffNext(target);
 
-    const response = await this.#performPredicates(
-      ...toArray<GuardConfig>(guards),
-    );
+    const response = await this.#performPredicates(...toArray<GuardConfig>(guards));
 
     if (response) {
       await this.__performActions(from, ...toArray.typed(diffExits));
@@ -602,10 +575,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving when finalizers are executed.
    */
-  protected __performFinally = async (
-    from: string,
-    _finally?: FinallyConfig,
-  ) => {
+  protected __performFinally = async (from: string, _finally?: FinallyConfig) => {
     const check1 = _finally === undefined;
     if (check1) return;
 
@@ -621,16 +591,11 @@ export class AsyncInterpreter<
         continue;
       }
 
-      const response = await this.#performPredicates(
-        ...toArray.typed(final.guards),
-      );
+      const response = await this.#performPredicates(...toArray.typed(final.guards));
 
       /* v8 ignore else -- @preserve */
       if (response) {
-        return this.__performActions(
-          from,
-          ...toArray.typed(final.actions),
-        );
+        return this.__performActions(from, ...toArray.typed(final.actions));
       }
     }
     return;
@@ -695,9 +660,8 @@ export class AsyncInterpreter<
         await sleep(delay);
         if (this.__cannotPerform(from)) return false;
 
-        const func = () =>
-          this.__performTransitions(from, ...(transitions as any));
-
+        const func = () => this.__performTransitions(from, ...(transitions as any));
+        this.__changeEvent(transformEventArg(`${from}/${AFTER_EVENT}`));
         const out = await func();
 
         if (out === false) {
@@ -742,7 +706,7 @@ export class AsyncInterpreter<
    * @returns A promise resolving to the matched state path string or `false`.
    */
   #performAlways: AsyncPerformAlway_F = (from, alway) => {
-    this.__changeEvent(transformEventArg(ALWAYS_EVENT));
+    this.__changeEvent(transformEventArg(`${from}/${ALWAYS_EVENT}`));
     const always = toArray<TransitionConfig>(alway);
     return this.__performTransitions(from, ...always);
   };
@@ -775,9 +739,7 @@ export class AsyncInterpreter<
     const entries = new Map<string, AsyncCollected0>();
 
     this.__collectedAlways.forEach(([from, always]) => {
-      entries.set(from, {
-        always: () => this.#performAlways(from, always),
-      });
+      entries.set(from, { always: () => this.#performAlways(from, always) });
     });
 
     this.#collectedAfters.forEach(([from, after]) => {
@@ -796,8 +758,8 @@ export class AsyncInterpreter<
    * @returns A promise resolving when self transitions process, or `undefined` if none exist.
    */
   protected get __collectedSelfTransitions() {
-    const entries = Array.from(this.__collectedSelfTransitions0).filter(
-      ([from]) => this.__isInsideValue(from),
+    const entries = Array.from(this.__collectedSelfTransitions0).filter(([from]) =>
+      this.__isInsideValue(from),
     );
 
     const out = entries.map(([from, { after, always }]) => {
@@ -812,13 +774,10 @@ export class AsyncInterpreter<
           const _after = async () => {
             await after()
               .then(transition => {
-                if (transition !== false)
-                  return this.__performConfig(transition);
+                if (transition !== false) return this.__performConfig(transition);
               })
               .catch(() =>
-                this._addWarning(
-                  `${from}::after - No transitions reached!`,
-                ),
+                this._addWarning(`${from}::after - No transitions reached!`),
               );
           };
           await _after();
@@ -865,10 +824,7 @@ export class AsyncInterpreter<
             // Wire the interpreter's transition callbacks into the pausable.
             pausable.subscribe({
               next: payload => {
-                const event = {
-                  type: `${id}::next`,
-                  payload,
-                } satisfies EventObject;
+                const event = { type: `${id}::next`, payload } satisfies EventObject;
 
                 this.__changeEvent(_any(event));
                 const transitions = toArray<TransitionConfig>(next);
@@ -1038,9 +994,7 @@ export class AsyncInterpreter<
       })
       .map(([from, ..._services]) => {
         const services = _services.map(({ service, on, contexts, id }) => {
-          const si = service as AnyInterpreter & {
-            __subscribe: AddSubscriber_F;
-          };
+          const si = service as AnyInterpreter & { __subscribe: AddSubscriber_F };
 
           const checkOn = on !== undefined && Object.keys(on).length > 0;
           if (checkOn) {
@@ -1079,8 +1033,7 @@ export class AsyncInterpreter<
                       ? structuredClone(context)
                       : getByKey.low(context, key);
 
-                  if (path === '.')
-                    return this.__mergeContexts({ pContext });
+                  if (path === '.') return this.__mergeContexts({ pContext });
                   return this.__mergeContexts(
                     recompose({ [`pContext.${path}`]: pContext }),
                   );
@@ -1140,13 +1093,8 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving when the event is sent to all matching child services.
    */
-  protected __sendTo = async <T extends EventObject>(
-    to: string,
-    event: T,
-  ) => {
-    const collector = this.__collectedChildren.filter(
-      ({ id }) => id === to,
-    );
+  protected __sendTo = async <T extends EventObject>(to: string, event: T) => {
+    const collector = this.__collectedChildren.filter(({ id }) => id === to);
 
     for (const { service } of collector) {
       await service.send(event);

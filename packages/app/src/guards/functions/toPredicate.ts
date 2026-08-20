@@ -11,11 +11,7 @@ import recursive, {
 import asyncRecursive from '@bemedev/boolean-recursive/async';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { isDescriber, isString } from '../../types/primitives';
-import type {
-  AsyncPredicateS3,
-  SyncPredicateS3,
-  PredicateMap,
-} from '../types';
+import type { AsyncPredicateS3, SyncPredicateS3, PredicateMap } from '../types';
 
 /**
  * Signature for sync guard recursive parser function.
@@ -95,10 +91,7 @@ export type ToPredicate_F = <
   guard: GuardConfig,
   guards: PredicateMap<Eo, Pc, Tc, T> | undefined,
   ...events: string[]
-) => {
-  predicate?: SyncPredicateS3<Eo, Pc, Tc, T> | undefined;
-  errors: string[];
-};
+) => { predicate?: SyncPredicateS3<Eo, Pc, Tc, T> | undefined; errors: string[] };
 
 /**
  * Signature for converting guard config into executable async predicate.
@@ -121,10 +114,7 @@ export type ToPredicateAsync_F = <
   guard: GuardConfig,
   guards: PredicateMap<Eo, Pc, Tc, T> | undefined,
   ...events: string[]
-) => {
-  predicate?: AsyncPredicateS3<Eo, Pc, Tc, T> | undefined;
-  errors: string[];
-};
+) => { predicate?: AsyncPredicateS3<Eo, Pc, Tc, T> | undefined; errors: string[] };
 
 /**
  * Combined type for sync and async guard predicate converters.
@@ -196,11 +186,7 @@ const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
  *
  * @returns Object containing optional predicate function and accumulated error strings.
  */
-const _toPredicateAsyncFn: _ToPredicateAsyncF = (
-  guard,
-  _guards,
-  ...events
-) => {
+const _toPredicateAsyncFn: _ToPredicateAsyncF = (guard, _guards, ...events) => {
   const errors: string[] = [];
 
   if (isDescriber(guard)) {
@@ -269,11 +255,7 @@ export const toPredicate: ToPredicate = expandFn(
   },
   {
     async: ((guard, guards, ...events) => {
-      const { func, errors } = _toPredicate.async(
-        guard,
-        guards,
-        ...events,
-      );
+      const { func, errors } = _toPredicate.async(guard, guards, ...events);
 
       if (!func) return { errors };
       const _predicate = asyncRecursive(func as any);

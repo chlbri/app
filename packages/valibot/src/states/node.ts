@@ -33,11 +33,7 @@ export const CommonNodeConfigEntries = <
     activities: v.optional(recordV(v.string(), ActivityConfig_Schema)),
 
     type: v.optional(
-      v.union([
-        v.literal('compound'),
-        v.literal('parallel'),
-        v.literal('atomic'),
-      ]),
+      v.union([v.literal('compound'), v.literal('parallel'), v.literal('atomic')]),
     ),
   };
 };

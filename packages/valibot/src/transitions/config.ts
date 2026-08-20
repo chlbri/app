@@ -1,8 +1,5 @@
 import * as v from 'valibot';
-import {
-  TransitionConfigMapA_Schema,
-  TransitionConfigMapF_Schema,
-} from './map';
+import { TransitionConfigMapA_Schema, TransitionConfigMapF_Schema } from './map';
 import { TargetSchema } from './target';
 
 /**
@@ -19,10 +16,7 @@ import { TargetSchema } from './target';
 export const TransitionConfigF_Schema = <T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
-  return v.union([
-    TargetSchema(paths),
-    TransitionConfigMapF_Schema(...paths),
-  ]);
+  return v.union([TargetSchema(paths), TransitionConfigMapF_Schema(...paths)]);
 };
 
 /**

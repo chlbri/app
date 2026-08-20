@@ -21,10 +21,7 @@ export type DeleteFirst_F = Fn<[arg: string, toDelete?: string], string>;
  *
  * @see type {@linkcode DeleteFirst_F}
  */
-export const deleteFirst: DeleteFirst_F = (
-  arg,
-  toDelete = DEFAULT_DELIMITER,
-) => {
+export const deleteFirst: DeleteFirst_F = (arg, toDelete = DEFAULT_DELIMITER) => {
   const check = arg.startsWith(toDelete);
   return check ? arg.substring(1) : arg;
 };

@@ -29,17 +29,16 @@ export type NoExtraKeysWithDescriber<T> = T extends string
  *
  * @template {ReadonlyArray<WithDescriber>} T - Array of describer types.
  */
-export type NoExtraKeysWithDescriberArray<
-  T extends ReadonlyArray<WithDescriber>,
-> = T extends readonly [
-  infer Head extends WithDescriber,
-  ...infer Tail extends ReadonlyArray<WithDescriber>,
-]
-  ? readonly [
-      NoExtraKeysWithDescriber<Head>,
-      ...NoExtraKeysWithDescriberArray<Tail>,
-    ]
-  : [];
+export type NoExtraKeysWithDescriberArray<T extends ReadonlyArray<WithDescriber>> =
+  T extends readonly [
+    infer Head extends WithDescriber,
+    ...infer Tail extends ReadonlyArray<WithDescriber>,
+  ]
+    ? readonly [
+        NoExtraKeysWithDescriber<Head>,
+        ...NoExtraKeysWithDescriberArray<Tail>,
+      ]
+    : [];
 
 /**
  * Enforces no extra keys across single value, array, or read-only tuple of describers.
@@ -60,9 +59,7 @@ export type NoExtraKeysWithDescriberSoa<T> =
  *
  * @see {@linkcode FromDescriber} for more details.
  */
-export type FromActionConfig<T> = T extends Describer
-  ? FromDescriber<T>
-  : T;
+export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
 
 /**
  * Represents the result of executing an action, which includes the private context and the context.

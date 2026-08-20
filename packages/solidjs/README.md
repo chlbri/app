@@ -2,9 +2,8 @@
 
 SolidJS reactive signal binding for `@bemedev/app` state machines.
 
-`@bemedev/app-solidjs` provides a lightweight integration to track and
-select state from a `@bemedev/app` interpreter service inside SolidJS
-reactive contexts.
+`@bemedev/app-solidjs` provides a lightweight integration to track and select state
+from a `@bemedev/app` interpreter service inside SolidJS reactive contexts.
 
 <br/>
 
@@ -62,8 +61,8 @@ createRoot(dispose => {
 
 ### `useService(service, options?)`
 
-Creates a SolidJS signal that updates whenever the interpreter transitions,
-using deep comparison to prevent unnecessary reactive notifications.
+Creates a SolidJS signal that updates whenever the interpreter transitions, using
+deep comparison to prevent unnecessary reactive notifications.
 
 | Parameter | Type                | Description                                                                         |
 | --------- | ------------------- | ----------------------------------------------------------------------------------- |

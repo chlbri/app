@@ -37,8 +37,7 @@ export type NoExtraKeysConfigPaths<T extends ConfigPaths> = T & {
   [K in Exclude<keyof T, keyof ConfigPaths>]: never;
 } & {
   states?: {
-    [K in keyof T['states']]: T['states'][K] extends infer TK extends
-      ConfigPaths
+    [K in keyof T['states']]: T['states'][K] extends infer TK extends ConfigPaths
       ? NoExtraKeysConfigPaths<TK>
       : never;
   };

@@ -42,7 +42,7 @@ describe('Interpret for actions', () => {
       test('#02 => Called with the correct arguments', () => {
         expect(action1).toHaveBeenCalledWith({
           ...defaultC,
-          event: transformEventArg(ALWAYS_EVENT),
+          event: transformEventArg(`/state1/${ALWAYS_EVENT}`),
           status: 'busy',
           tags: [],
           value: 'state1',
@@ -88,7 +88,7 @@ describe('Interpret for actions', () => {
       test('#02 => Called with the correct arguments', () => {
         expect(action1).toHaveBeenCalledWith({
           ...defaultC,
-          event: transformEventArg(ALWAYS_EVENT),
+          event: transformEventArg(`/state1/${ALWAYS_EVENT}`),
           status: 'busy',
           tags: [],
           value: 'state1',

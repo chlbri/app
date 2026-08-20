@@ -9,12 +9,7 @@ import type {
 } from '@bemedev/app-utils-bemedev';
 import type { DEFAULT_DELIMITER } from '#constants';
 import type { EventObject } from '#events';
-import type {
-  State,
-  StateExtended,
-  StateP,
-  StatePextended,
-} from '#states';
+import type { State, StateExtended, StateP, StatePextended } from '#states';
 import { checkKeys } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 
@@ -259,8 +254,7 @@ type __ChangeProperties<
 type _ChangeProperties<
   T extends object,
   U extends DeepPartial<KeyStrings<T>> = DeepPartial<KeyStrings<T>>,
-  option extends Extract<ChangePropertyOption, 'normal' | 'undefined'> =
-    'normal',
+  option extends Extract<ChangePropertyOption, 'normal' | 'undefined'> = 'normal',
 > =
   __ChangeProperties<T, U> extends infer Tn
     ? option extends 'undefined'
@@ -285,12 +279,8 @@ type _ChangeProperties<
 export type ChangeProperties<
   T extends object,
   U extends DeepPartial<KeyStrings<T>> = DeepPartial<KeyStrings<T>>,
-  option extends Extract<ChangePropertyOption, 'normal' | 'undefined'> =
-    'normal',
-> =
-  DeepPartial<KeyStrings<T>> extends U
-    ? T
-    : _ChangeProperties<T, U, option>;
+  option extends Extract<ChangePropertyOption, 'normal' | 'undefined'> = 'normal',
+> = DeepPartial<KeyStrings<T>> extends U ? T : _ChangeProperties<T, U, option>;
 // #endregion
 
 // #endregion
@@ -399,12 +389,7 @@ type _FnMap<
   TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > = {
   [key in EventToType<TT>]?: (
-    state: StatePextended<
-      Extract<TT, { type: key }>['payload'],
-      Pc,
-      Tc,
-      T
-    >,
+    state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
   ) => R;
 } & { else?: FnR<E, Pc, Tc, T, R> };
 
@@ -431,19 +416,10 @@ type _FnMapFilterArray<
   [key in EventToType<TT>]?: (
     item: Item,
     index: number,
-    state: StatePextended<
-      Extract<TT, { type: key }>['payload'],
-      Pc,
-      Tc,
-      T
-    >,
+    state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
   ) => boolean;
 } & {
-  else?: (
-    item: Item,
-    index: number,
-    state: StateExtended<E, Pc, Tc, T>,
-  ) => boolean;
+  else?: (item: Item, index: number, state: StateExtended<E, Pc, Tc, T>) => boolean;
 };
 
 export type FnMapFilterArray<
@@ -455,11 +431,7 @@ export type FnMapFilterArray<
   Ex extends string = never,
   TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > =
-  | ((
-      item: Item,
-      index: number,
-      state: StateExtended<E, Pc, Tc, T>,
-    ) => boolean)
+  | ((item: Item, index: number, state: StateExtended<E, Pc, Tc, T>) => boolean)
   | _FnMapFilterArray<E, Pc, Tc, T, Item, Ex, TT>;
 
 /**
@@ -484,12 +456,7 @@ type _FnMapFilterObject<
 > = {
   [key in EventToType<TT>]?: (
     item: Item,
-    state: StatePextended<
-      Extract<TT, { type: key }>['payload'],
-      Pc,
-      Tc,
-      T
-    >,
+    state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
   ) => boolean;
 } & { else?: (item: Item, state: StateExtended<E, Pc, Tc, T>) => boolean };
 
@@ -588,9 +555,7 @@ export type RecordS<T = unknown> = Record<string, T>;
  *
  * @see {@linkcode NotUndefined}
  */
-export type ValuesOf<T> = NotUndefined<
-  NotUndefined<T>[keyof NotUndefined<T>]
->;
+export type ValuesOf<T> = NotUndefined<NotUndefined<T>[keyof NotUndefined<T>]>;
 
 /**
  * A type that represents a record with string keys and values of type {@linkcode R}.
@@ -733,10 +698,7 @@ export type NoExtraKeys<T, Schema> = T & {
  * type Strict = NoExtraKeysStrict<{ name: 'test'; value: 1 }, MySchema>;
  * ```
  */
-export type NoExtraKeysStrict<T extends Schema, Schema> = NoExtraKeys<
-  T,
-  Schema
->;
+export type NoExtraKeysStrict<T extends Schema, Schema> = NoExtraKeys<T, Schema>;
 
 /**
  * Deep version of {@linkcode NoExtraKeys} that processes Record types
@@ -785,10 +747,10 @@ export type NoExtraKeysRecord<T extends Record<string, any>, Schema> = {
  * }
  * ```
  */
-export type NoExtraKeysFor<
-  Schema,
-  T extends Partial<Schema>,
-> = NoExtraKeys<T, Schema>;
+export type NoExtraKeysFor<Schema, T extends Partial<Schema>> = NoExtraKeys<
+  T,
+  Schema
+>;
 
 // #endregion NoExtraKeys
 

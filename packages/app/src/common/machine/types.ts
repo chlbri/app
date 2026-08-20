@@ -1,11 +1,6 @@
 import type { ActionResult, AsyncAction2, WithDescriber } from '#actions';
 import type { NoExtraKeysActorConfig } from '#actors';
-import type {
-  ActorsConfigMap,
-  EventObject,
-  EventsMap,
-  EventStrings,
-} from '#events';
+import type { ActorsConfigMap, EventObject, EventsMap, EventStrings } from '#events';
 
 import type {
   FlatMapN,
@@ -30,19 +25,8 @@ import type {
   DecomposeString,
   Decompose as _Decompose,
 } from '@bemedev/function-swap';
-import type {
-  ObjectT,
-  PrimitiveObject,
-  Sh,
-  StandardKey,
-} from '@bemedev/typings';
-import type {
-  EmptyObject,
-  FnMap,
-  FnR,
-  MaybePromise,
-  RecordS,
-} from '~types';
+import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
+import type { EmptyObject, FnMap, FnR, MaybePromise, RecordS } from '~types';
 
 /**
  * Type guard for enforcing no extra keys on target definitions.
@@ -53,8 +37,7 @@ export type NoExtraKeysTargetDef<T extends TargetDef> = T & {
   [K in Exclude<keyof T, keyof TargetDef>]: never;
 } & {
   states?: {
-    [K in keyof T['states']]: T['states'][K] extends infer TK extends
-      TargetDef
+    [K in keyof T['states']]: T['states'][K] extends infer TK extends TargetDef
       ? NoExtraKeysTargetDef<TK>
       : never;
   };
@@ -65,21 +48,19 @@ export type NoExtraKeysTargetDef<T extends TargetDef> = T & {
  *
  * @template {TargetDef} T - Target definition type.
  */
-export type TransformTargetDef<T extends TargetDef> =
-  (undefined extends T['initial']
+export type TransformTargetDef<T extends TargetDef> = (undefined extends T['initial']
+  ? EmptyObject
+  : { readonly initial: T['initial'] }) &
+  (undefined extends T['states']
     ? EmptyObject
-    : { readonly initial: T['initial'] }) &
-    (undefined extends T['states']
-      ? EmptyObject
-      : {
-          readonly states: {
-            [
-              Key in keyof T['states']
-            ]: T['states'][Key] extends infer TK extends TargetDef
-              ? TransformTargetDef<TK>
-              : never;
-          };
-        });
+    : {
+        readonly states: {
+          [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
+            TargetDef
+            ? TransformTargetDef<TK>
+            : never;
+        };
+      });
 
 /**
  * Transforms target definition and node config into updated node config.
@@ -92,16 +73,15 @@ export type TransformTargetDef2<
   T extends TargetDef,
 > = (undefined extends T['initial']
   ? N
-  : Omit<N, 'initial'> & {
-      readonly initial: T['initial'];
-    } & TransitionsConfig<T['targets']>) &
+  : Omit<N, 'initial'> & { readonly initial: T['initial'] } & TransitionsConfig<
+        T['targets']
+      >) &
   (undefined extends T['states']
     ? EmptyObject
     : {
         readonly states: {
-          [
-            Key in keyof T['states']
-          ]: T['states'][Key] extends infer TK extends TargetDef
+          [Key in keyof T['states']]: T['states'][Key] extends infer TK extends
+            TargetDef
             ? TransformTargetDef<TK>
             : never;
         };
@@ -117,33 +97,30 @@ export type CommonConfigNode = NodeConfigCompound2 | NodeConfigParallel2;
  *
  * @template {TargetDef} Paths - Target definition type.
  */
-export type CommonConfig<Paths extends TargetDef = TargetDef> =
-  NodeConfig<Paths> & {
-    readonly strict?: boolean;
-    readonly __longRuns?: boolean;
-  };
+export type CommonConfig<Paths extends TargetDef = TargetDef> = NodeConfig<Paths> & {
+  readonly strict?: boolean;
+  readonly __longRuns?: boolean;
+};
 
 /**
  * Machine configuration version 2 with strict and longRuns flags.
  *
  * @template {string} Paths - State path union.
  */
-export type CommonConfig2<Paths extends string = string> =
-  NodeConfig2<Paths> & {
-    readonly strict?: boolean;
-    readonly __longRuns?: boolean;
-  };
+export type CommonConfig2<Paths extends string = string> = NodeConfig2<Paths> & {
+  readonly strict?: boolean;
+  readonly __longRuns?: boolean;
+};
 
 /**
  * Loose machine configuration version 3 with strict and longRuns flags.
  *
  * @template {string} Paths - State path union.
  */
-export type CommonConfig3<Paths extends string = string> =
-  NodeConfig3<Paths> & {
-    readonly strict?: boolean;
-    readonly __longRuns?: boolean;
-  };
+export type CommonConfig3<Paths extends string = string> = NodeConfig3<Paths> & {
+  readonly strict?: boolean;
+  readonly __longRuns?: boolean;
+};
 
 /**
  * Enforces no extra keys across full machine configuration object.
@@ -154,8 +131,7 @@ export type NoExtraKeysConfig<T extends CommonConfig3> = T & {
   [K in Exclude<keyof T, keyof CommonConfig3>]: never;
 } & {
   readonly states?: {
-    [K in keyof T['states']]?: T['states'][K] extends infer TK extends
-      CommonConfig3
+    [K in keyof T['states']]?: T['states'][K] extends infer TK extends CommonConfig3
       ? NoExtraKeysConfig<TK>
       : never;
   };
@@ -164,9 +140,7 @@ export type NoExtraKeysConfig<T extends CommonConfig3> = T & {
     [key in keyof T['on']]?: NoExtraKeysTransitionConfigSoA<T['on'][key]>;
   };
   readonly after?: {
-    [key in keyof T['after']]?: NoExtraKeysTransitionConfigSoA<
-      T['after'][key]
-    >;
+    [key in keyof T['after']]?: NoExtraKeysTransitionConfigSoA<T['after'][key]>;
   };
   readonly always?: NoExtraKeysTransitionConfigSoA<T['always']>;
   readonly actors?: {
@@ -348,8 +322,10 @@ export type CommonAddOptions_F<
  * @template {SimpleMachineOptions2} Mo - Options type.
  */
 export type CommonElements<
-  C extends { readonly strict?: boolean; readonly __longRuns?: boolean } =
-    { readonly strict?: boolean; readonly __longRuns?: boolean },
+  C extends { readonly strict?: boolean; readonly __longRuns?: boolean } = {
+    readonly strict?: boolean;
+    readonly __longRuns?: boolean;
+  },
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
@@ -376,10 +352,7 @@ export type SimpleMachineOptions2 = Partial<
 /**
  * Helper function for extracting entry or exit actions from a node.
  */
-export type GetIO_F = (
-  key: 'exit' | 'entry',
-  node?: any,
-) => WithDescriber[];
+export type GetIO_F = (key: 'exit' | 'entry', node?: any) => WithDescriber[];
 
 /**
  * Internal standard output properties type picker.
@@ -425,10 +398,11 @@ export type CommonCreateMachine_F<T = any> = (config: any) => T;
  *
  * @see {@linkcode ActionResult}
  */
-export type ScheduledData<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = { data: ActionResult<Pc, Tc>; ms: number; id: string };
+export type ScheduledData<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> = {
+  data: ActionResult<Pc, Tc>;
+  ms: number;
+  id: string;
+};
 
 /**
  * Map of child names to child actor machine functions.
@@ -518,8 +492,9 @@ export type GetEventsFromFlat<Flat extends FlatMapN> = Record<
  *
  * @see {@linkcode FlatMapN}, {@linkcode GetEventsFromFlat}, {@linkcode ConfigFrom}
  */
-export type GetEventsFromConfig<C extends CommonConfig3> =
-  GetEventsFromFlat<FlatMapN<C>>;
+export type GetEventsFromConfig<C extends CommonConfig3> = GetEventsFromFlat<
+  FlatMapN<C>
+>;
 
 /**
  * Child configuration definition alias for events map.
@@ -531,10 +506,7 @@ export type ChildConfigDef = EventsMap;
  *
  * @template {string} S - Key string type.
  */
-export type ChildConfigMap<S extends string = string> = Record<
-  S,
-  ChildConfigDef
->;
+export type ChildConfigMap<S extends string = string> = Record<S, ChildConfigDef>;
 
 /**
  * Child actor object representation.
@@ -580,9 +552,7 @@ export type SwapFunction_F<
     [
       EventStrings extends Ev
         ? StateExtended<E, Pc, Tc, T>
-        : Required<
-            StatePextended<Extract<E, { type: Ev }>['payload'], Pc, Tc, T>
-          >,
+        : Required<StatePextended<Extract<E, { type: Ev }>['payload'], Pc, Tc, T>>,
     ],
     _Decompose<Parameters<F2>>
   >,

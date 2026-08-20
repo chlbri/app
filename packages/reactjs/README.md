@@ -2,9 +2,8 @@
 
 ReactJS state hook binding for `@bemedev/app` state machines.
 
-`@bemedev/app-reactjs` provides a lightweight hook to track and select
-state from a `@bemedev/app` interpreter service inside ReactJS component
-trees.
+`@bemedev/app-reactjs` provides a lightweight hook to track and select state from a
+`@bemedev/app` interpreter service inside ReactJS component trees.
 
 <br/>
 
@@ -60,8 +59,8 @@ function MyComponent() {
 
 ## Available Hooks
 
-The package also exports `useState`, `useCan`, and `useIsInside` for common
-state selection patterns:
+The package also exports `useState`, `useCan`, and `useIsInside` for common state
+selection patterns:
 
 ```typescript
 const count = useState(service, state => state.context.count);
@@ -69,9 +68,9 @@ const canIncrement = useCan(service, 'INCREMENT');
 const isInside = useIsInside(service, 'some.state');
 ```
 
-These helpers are designed to work with the same interpreter service and
-provide a lightweight way to subscribe to state slices, transition
-permissions, and nested state location checks.
+These helpers are designed to work with the same interpreter service and provide a
+lightweight way to subscribe to state slices, transition permissions, and nested
+state location checks.
 
 <br/>
 
@@ -79,8 +78,8 @@ permissions, and nested state location checks.
 
 ### `useService(service, options?)`
 
-Creates a React state hook that updates whenever the interpreter
-transitions, using deep comparison to prevent unnecessary renders.
+Creates a React state hook that updates whenever the interpreter transitions, using
+deep comparison to prevent unnecessary renders.
 
 | Parameter | Type                | Description                                                                         |
 | --------- | ------------------- | ----------------------------------------------------------------------------------- |

@@ -151,9 +151,7 @@ export type _UnionToIntersection2<U> = {
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export type UnionToIntersection<U> = _UnionToIntersection2<
-  _UnionToIntersection1<U>
->;
+export type UnionToIntersection<U> = _UnionToIntersection2<_UnionToIntersection1<U>>;
 /**
  * LastOfUnion type - Auto-generated expression
  *
@@ -165,9 +163,7 @@ export type UnionToIntersection<U> = _UnionToIntersection2<
  * @author chlbri (bri_lvi@icloud.com)
  */
 export type LastOfUnion<T> = (
-  (T extends any ? (x: () => T) => void : never) extends (
-    x: infer I,
-  ) => void
+  (T extends any ? (x: () => T) => void : never) extends (x: infer I) => void
     ? I
     : never
 ) extends () => infer U
@@ -201,11 +197,7 @@ export type UnionToTuple<T, A extends any[] = []> = [T] extends [never]
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export type Equals<T, U> = T extends U
-  ? U extends T
-    ? true
-    : false
-  : false;
+export type Equals<T, U> = T extends U ? (U extends T ? true : false) : false;
 
 /**
  * UndefinedHelper class - Auto-generated expression

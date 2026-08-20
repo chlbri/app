@@ -29,10 +29,7 @@ export function useState<
   Eo extends EventObject,
   T = State<Eo, Tc, Ta>,
 >(
-  service: {
-    subscribe: AddSubscriber_F<Tc, Ta, Eo>;
-    state: State<Eo, Tc, Ta>;
-  },
+  service: { subscribe: AddSubscriber_F<Tc, Ta, Eo>; state: State<Eo, Tc, Ta> },
   options?: UseServiceOptions<Tc, Ta, Eo, T>,
 ) {
   const {

@@ -9,11 +9,7 @@ import type {
   EventObject,
   EventsMap,
 } from '#events';
-import type {
-  DefinedValue,
-  SyncPredicateS,
-  SyncPredicateS2,
-} from '#guards';
+import type { DefinedValue, SyncPredicateS, SyncPredicateS2 } from '#guards';
 import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
 
 import type {
@@ -118,10 +114,7 @@ export type SyncValueCheckerGuard_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (
-  path: DefinedValue<Pc, Tc>,
-  ...values: any[]
-) => FnR<E, Pc, Tc, T, boolean>;
+> = (path: DefinedValue<Pc, Tc>, ...values: any[]) => FnR<E, Pc, Tc, T, boolean>;
 
 /**
  * Synchronous traversable tuple type alias for type {@linkcode TraversableTuple}.
@@ -157,7 +150,7 @@ export type SyncAssignAction_F<
   const F extends TraversableTupleSync<D, K> = TraversableTupleSync<D, K>,
 >(
   keys: K,
-  fn: FnMap<E, Pc, Tc, T, F>,
+  fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
 ) => SyncAction2<E, Pc, Tc, T>;
 
 /**
@@ -338,6 +331,7 @@ export type SyncGuardUnionOption<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > =
+  | undefined
   | SyncPredicateS<E, Pc, Tc, T>
   | SyncGuardAndOption<E, Pc, Tc, T>
   | SyncGuardOrOption<E, Pc, Tc, T>;
@@ -358,9 +352,7 @@ export type SyncBatchGuard_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (
-  ...guards: SyncGuardUnionOption<E, Pc, Tc, T>[]
-) => FnR<E, Pc, Tc, T, boolean>;
+> = (...guards: SyncGuardUnionOption<E, Pc, Tc, T>[]) => FnR<E, Pc, Tc, T, boolean>;
 
 /**
  * Object containing all action, guard, timer, and activity helper functions for a synchronous machine.
@@ -447,9 +439,7 @@ export type SyncAddOptions_F<
   Ta extends string = string,
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> = <const T extends Mo>(
-  option: SyncAddOptionsParam_F<E, Pc, Tc, Ta, T, L>,
-) => Mo;
+> = <const T extends Mo>(option: SyncAddOptionsParam_F<E, Pc, Tc, Ta, T, L>) => Mo;
 
 /**
  * Function type signature for providing options to a synchronous machine class {@linkcode SyncMachine}.
@@ -517,9 +507,7 @@ export type SyncMachineOptions2<
   guards: Partial<Record<O['guards'], SyncPredicateS<Eo, Pc, Tc, T>>>;
   delays: Partial<Record<O['delays'], SyncDelayFunction2<Eo, Pc, Tc, T>>>;
   actors: Partial<{
-    children: Partial<
-      Record<O['children'], SyncChildFunction2<Eo, Pc, Tc, T, any>>
-    >;
+    children: Partial<Record<O['children'], SyncChildFunction2<Eo, Pc, Tc, T, any>>>;
     emitters: Partial<
       Record<O['emitters'], SyncEmitterFunction<Eo, Pc, Tc, T, any>>
     >;

@@ -52,9 +52,7 @@ const recomposeObjectUrl: Url_F = (shape, value) => {
  *
  * @returns Recomposed configuration object of type {@linkcode NodeConfig2}.
  */
-export type RecomposeConfig_F = <T extends NodeConfig2>(
-  shape: T,
-) => NodeConfig2;
+export type RecomposeConfig_F = <T extends NodeConfig2>(shape: T) => NodeConfig2;
 
 /**
  * Recompose a configuration object into a nested structure based on the provided shape.

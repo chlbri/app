@@ -44,9 +44,7 @@ const configPathsToType = (cp: ConfigPaths, indent = 0): string => {
   const nextPad = ' '.repeat(indent + 2);
 
   const targetUnion =
-    cp.targets.length === 0
-      ? 'never'
-      : cp.targets.map(t => `'${t}'`).join(' | ');
+    cp.targets.length === 0 ? 'never' : cp.targets.map(t => `'${t}'`).join(' | ');
 
   const lines: string[] = [`{ targets: (${targetUnion}); `];
 

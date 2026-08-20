@@ -19,11 +19,7 @@ import {
   tap,
   toggleMonad,
 } from '@bemedev/pipe/extensions/common';
-import type {
-  ConfigPaths,
-  ConfigPaths2,
-  ParseTreeContext,
-} from './parseTree.types';
+import type { ConfigPaths, ConfigPaths2, ParseTreeContext } from './parseTree.types';
 import type { _TransitionsConfig } from '@bemedev/app/transitions';
 
 /**

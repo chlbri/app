@@ -12,8 +12,8 @@
 ### Dependencies
 
 - **Dependencies**: Update `rolldown` to 1.2.4.
-- **Workspace Dependencies**: Bump version to align with the 1.11.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.11.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -30,13 +30,13 @@
 
 ### Docs
 
-- **`JSDoc`**: Add comprehensive JSDoc annotations to test helpers and
-  build utilities.
+- **`JSDoc`**: Add comprehensive JSDoc annotations to test helpers and build
+  utilities.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.10.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.10.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -53,8 +53,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.4
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.4 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -71,8 +70,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.3
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.3 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -89,8 +87,8 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump devDependencies and peerDependencies to
-  align with `@bemedev/app` version `1.9.1`.
+- **Workspace Dependencies**: Bump devDependencies and peerDependencies to align with
+  `@bemedev/app` version `1.9.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -107,8 +105,8 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump devDependencies and peerDependencies to
-  align with `@bemedev/app` version `1.9.0`.
+- **Workspace Dependencies**: Bump devDependencies and peerDependencies to align with
+  `@bemedev/app` version `1.9.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -125,10 +123,9 @@
 
 ### Dependencies
 
-- **Peer Dependencies**: Update `vitest` peer dependency to `^4.1.10` and
-  remove `@bemedev/typings`.
-- **Dependencies**: Upgrade build tool dependencies including `rolldown` to
-  `1.2.1`.
+- **Peer Dependencies**: Update `vitest` peer dependency to `^4.1.10` and remove
+  `@bemedev/typings`.
+- **Dependencies**: Upgrade build tool dependencies including `rolldown` to `1.2.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -163,8 +160,8 @@
 
 ### Dependencies
 
-- **Workspace and Dev Dependencies**: Bump devDependencies and
-  peerDependencies to align with `@bemedev/app` version `1.6.0`.
+- **Workspace and Dev Dependencies**: Bump devDependencies and peerDependencies to
+  align with `@bemedev/app` version `1.6.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -181,8 +178,8 @@
 
 ### Dependencies
 
-- **Workspace and Dev Dependencies**: Bump devDependencies and
-  peerDependencies to align with `@bemedev/app` version `1.5.0`.
+- **Workspace and Dev Dependencies**: Bump devDependencies and peerDependencies to
+  align with `@bemedev/app` version `1.5.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -199,14 +196,13 @@
 
 ### Refactor
 
-- **Simplify test configuration**: Simplify test config by replacing custom
-  TS aliases plugin with native `resolve.tsconfigPaths` in
-  `vitest.config.ts`.
+- **Simplify test configuration**: Simplify test config by replacing custom TS
+  aliases plugin with native `resolve.tsconfigPaths` in `vitest.config.ts`.
 
 ### Dependencies
 
-- **Workspace and Dev Dependencies**: Bump devDependencies and
-  peerDependencies to align with `@bemedev/app` version `1.4.0`.
+- **Workspace and Dev Dependencies**: Bump devDependencies and peerDependencies to
+  align with `@bemedev/app` version `1.4.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -223,13 +219,13 @@
 
 ### Features
 
-- **Test new options**: Add test cases verifying `assign` and `voidAction`
-  helpers with the new `then` sequential chaining handler.
+- **Test new options**: Add test cases verifying `assign` and `voidAction` helpers
+  with the new `then` sequential chaining handler.
 
 ### Refactor
 
-- **Align test cases with catch**: Update async action tests to use the
-  renamed `catch` option instead of `error`.
+- **Align test cases with catch**: Update async action tests to use the renamed
+  `catch` option instead of `error`.
 
 ### Dependencies
 
@@ -251,13 +247,13 @@
 
 ### Features
 
-- **`emptyActionFn`**: Add `emptyActionFn` test helper constant supporting
-  the new curried error action structure
+- **`emptyActionFn`**: Add `emptyActionFn` test helper constant supporting the new
+  curried error action structure
 
 ### Refactor
 
-- **Test Suite Alignment**: Refactor test suites to align with
-  `@bemedev/app`'s new curried error handler pattern
+- **Test Suite Alignment**: Refactor test suites to align with `@bemedev/app`'s new
+  curried error handler pattern
 
 - <u>Test coverage **_100%_**</u>
 
@@ -274,23 +270,23 @@
 
 ### Features
 
-- **Service Exposer**: Update `constructTests` utility options parameter to
-  expose `service` directly in the callback helper, allowing custom helpers
-  to access the interpreter service instance
+- **Service Exposer**: Update `constructTests` utility options parameter to expose
+  `service` directly in the callback helper, allowing custom helpers to access the
+  interpreter service instance
 
 ### Refactor
 
 - **Strict Interpreters**: Replace `CommonInterpreter` usages with explicit
   `SyncInterpreter` or `AsyncInterpreter` in `ConstructTests_F` and options
   parameters for better type safety
-- **Console Mocking Removal**: Remove unused `mockConsole` test helper
-  utility from helper modules
+- **Console Mocking Removal**: Remove unused `mockConsole` test helper utility from
+  helper modules
 
 ### Tests
 
 - **Index Generation**: Add unit test suite for `buildIndex` helper
-- **Integration Expansion**: Add integration test coverage for `exceed`
-  self transitions limits and various `constructTests` configurations
+- **Integration Expansion**: Add integration test coverage for `exceed` self
+  transitions limits and various `constructTests` configurations
 
 - <u>Test coverage **_100%_**</u>
 
@@ -307,17 +303,17 @@
 
 ### Refactor
 
-- **Stricter Type Signatures**: Update type signature of `ConstructTests_F`
-  to use stricter `CommonConfig3` type from `@bemedev/app`
-- **Standardize Imports**: Update `PrimitiveObject` imports to resolve
-  directly from `@bemedev/app/types` instead of `@bemedev/app/bemedev`
-- **Pretest Hook**: Add `pnpm run generate` to the `pretest` script to
-  ensure types are generated prior to test execution
+- **Stricter Type Signatures**: Update type signature of `ConstructTests_F` to use
+  stricter `CommonConfig3` type from `@bemedev/app`
+- **Standardize Imports**: Update `PrimitiveObject` imports to resolve directly from
+  `@bemedev/app/types` instead of `@bemedev/app/bemedev`
+- **Pretest Hook**: Add `pnpm run generate` to the `pretest` script to ensure types
+  are generated prior to test execution
 
 ### Dependencies
 
-- **Dev Dependencies**: Update `@types/node` to `^25.9.2`, `oxfmt` to
-  `^0.54.0`, `oxlint` to `^1.69.0`, and `rolldown` to `1.1.0`
+- **Dev Dependencies**: Update `@types/node` to `^25.9.2`, `oxfmt` to `^0.54.0`,
+  `oxlint` to `^1.69.0`, and `rolldown` to `1.1.0`
 
 - <u>Test coverage **_100%_**</u>
 
@@ -354,22 +350,21 @@
 
 - **Signature Change**: Change `constructTests` signature to require `vi`
   (VitestUtils) as the first argument:
-  `constructTests( service, helper?, startIndex?)` to allow checking fake
-  timers and advancing them contextually.
+  `constructTests( service, helper?, startIndex?)` to allow checking fake timers and
+  advancing them contextually.
 
 ### Features
 
-- **Fake Timers Auto-Advance**: Integrate automatic timing advancement in
-  test cases when fake timers are enabled via `vi.isFakeTimers()`.
+- **Fake Timers Auto-Advance**: Integrate automatic timing advancement in test cases
+  when fake timers are enabled via `vi.isFakeTimers()`.
 
 ### Refactor
 
-- **Decouple Types**: Clean up public exports and remove type definition
-  exports like `constructTests.types.ts` from the entrypoint to simplify
-  API.
-- **Lightweight Dependencies**: Replaced imports from `@bemedev/app/utils`
-  and `@bemedev/app/bemedev` with independent helper packages
-  (`@bemedev/sleep`, `@bemedev/typings`).
+- **Decouple Types**: Clean up public exports and remove type definition exports like
+  `constructTests.types.ts` from the entrypoint to simplify API.
+- **Lightweight Dependencies**: Replaced imports from `@bemedev/app/utils` and
+  `@bemedev/app/bemedev` with independent helper packages (`@bemedev/sleep`,
+  `@bemedev/typings`).
 
 - <u>Test coverage **_100%_**</u>
 
@@ -385,8 +380,7 @@
 </summary>
 
 - Update: Bump package version from `0.0.2` to `0.1.0`
-- Update: Set `@bemedev/app` dev dependency to `^1.1.4` instead of
-  `workspace:*`
+- Update: Set `@bemedev/app` dev dependency to `^1.1.4` instead of `workspace:*`
 - Remove: Drop `@bemedev/app` from peer dependencies
 - <u>Test coverage **_100%_**</u>
 

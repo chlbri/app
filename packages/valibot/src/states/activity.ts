@@ -53,7 +53,4 @@ const _ActivityArray = v.pipe(
  *
  * @see {@linkcode ActivityMap_Schema}, {@linkcode _ActivityArray}
  */
-export const ActivityConfig_Schema = v.union([
-  ActivityMap_Schema,
-  _ActivityArray,
-]);
+export const ActivityConfig_Schema = v.union([ActivityMap_Schema, _ActivityArray]);

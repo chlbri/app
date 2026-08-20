@@ -1,9 +1,4 @@
-import type {
-  Equals,
-  Fn,
-  Keys,
-  NotUndefined,
-} from '@bemedev/app-utils-bemedev';
+import type { Equals, Fn, Keys, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { FnMap, FnMapR } from '~types';
 
 /**
@@ -16,9 +11,7 @@ export type IsAsyncConfig<T> = T extends { after: any }
   : T extends { states: object }
     ? T['states'] extends infer T2
       ? {
-          [K in keyof T2]-?: IsAsyncConfig<T2[K]> extends true
-            ? true
-            : never;
+          [K in keyof T2]-?: IsAsyncConfig<T2[K]> extends true ? true : never;
         }[keyof T2] extends infer T3
         ? Equals<T3, never> extends true
           ? false
@@ -33,11 +26,7 @@ export type IsAsyncConfig<T> = T extends { after: any }
  * @template T - Input type.
  */
 export type IsPromise<T> =
-  Equals<any, T> extends true
-    ? false
-    : T extends Promise<any>
-      ? true
-      : false;
+  Equals<any, T> extends true ? false : T extends Promise<any> ? true : false;
 
 /**
  * Helper checking if a function type `T` returns a Promise.

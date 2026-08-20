@@ -11,11 +11,11 @@
 
 ### Dependencies
 
-- **Dependencies**: Update `solid-js` to 1.9.15,
-  `@testing-library/user-event` to 14.6.5, `globals` to 17.11.0, `rolldown`
-  to 1.2.4, and `rolldown-plugin-dts` to 0.28.2.
-- **Workspace Dependencies**: Bump version to align with the 1.11.0
-  workspace release.
+- **Dependencies**: Update `solid-js` to 1.9.15, `@testing-library/user-event` to
+  14.6.5, `globals` to 17.11.0, `rolldown` to 1.2.4, and `rolldown-plugin-dts` to
+  0.28.2.
+- **Workspace Dependencies**: Bump version to align with the 1.11.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -32,13 +32,13 @@
 
 ### Docs
 
-- **`JSDoc`**: Add comprehensive JSDoc annotations to `useService`,
-  `useState`, `useCan`, `useIsInside`, and options types.
+- **`JSDoc`**: Add comprehensive JSDoc annotations to `useService`, `useState`,
+  `useCan`, `useIsInside`, and options types.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.10.0
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.10.0 workspace
+  release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -61,8 +61,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.4
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.4 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -79,8 +78,7 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with the 1.9.3
-  workspace release.
+- **Workspace Dependencies**: Bump version to align with the 1.9.3 workspace release.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -97,16 +95,14 @@
 
 ### Features
 
-- **`useState` / `useCan` / `useIsInside`**: Add modular SolidJS reactive
-  signals for state selection, transition predicate checks, and nested
-  state location checks.
-- **`useService` / `createHooks`**: Update hook factory structure to expose
-  `state`, `can`, and `isInside` helpers.
+- **`useState` / `useCan` / `useIsInside`**: Add modular SolidJS reactive signals for
+  state selection, transition predicate checks, and nested state location checks.
+- **`useService` / `createHooks`**: Update hook factory structure to expose `state`,
+  `can`, and `isInside` helpers.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
-  `1.9.1`.
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app` `1.9.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -123,13 +119,12 @@
 
 ### Refactor
 
-- **`useService`**: Refactor hook implementation and reactivity signal
-  bindings to align with `@bemedev/app` `1.9.0`.
+- **`useService`**: Refactor hook implementation and reactivity signal bindings to
+  align with `@bemedev/app` `1.9.0`.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump version to align with `@bemedev/app`
-  `1.9.0`.
+- **Workspace Dependencies**: Bump version to align with `@bemedev/app` `1.9.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -146,10 +141,9 @@
 
 ### Dependencies
 
-- **Peer Dependencies**: Update `solid-js` peer dependency to `^1.9.14` and
-  remove `@bemedev/decompose`.
-- **Dependencies**: Upgrade build tool dependencies including `rolldown` to
-  `1.2.1`.
+- **Peer Dependencies**: Update `solid-js` peer dependency to `^1.9.14` and remove
+  `@bemedev/decompose`.
+- **Dependencies**: Upgrade build tool dependencies including `rolldown` to `1.2.1`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -184,8 +178,8 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump dependencies to align with
-  `@bemedev/app` version `1.6.0`.
+- **Workspace Dependencies**: Bump dependencies to align with `@bemedev/app` version
+  `1.6.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -202,8 +196,8 @@
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump dependencies to align with
-  `@bemedev/app` version `1.5.0`.
+- **Workspace Dependencies**: Bump dependencies to align with `@bemedev/app` version
+  `1.5.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -220,14 +214,13 @@
 
 ### Refactor
 
-- **Simplify test configuration**: Simplify test config by replacing custom
-  TS aliases plugin with native `resolve.tsconfigPaths` in
-  `vitest.config.ts`.
+- **Simplify test configuration**: Simplify test config by replacing custom TS
+  aliases plugin with native `resolve.tsconfigPaths` in `vitest.config.ts`.
 
 ### Dependencies
 
-- **Workspace Dependencies**: Bump dependencies to align with
-  `@bemedev/app` version `1.4.0`.
+- **Workspace Dependencies**: Bump dependencies to align with `@bemedev/app` version
+  `1.4.0`.
 
 - <u>Test coverage **_100%_**</u>
 
@@ -280,15 +273,14 @@
 
 ### Features
 
-- **SolidJS Integration**: Add `useService` hook to bind `@bemedev/app`
-  state machine interpreter services to SolidJS signals, automatically
-  utilizing deep state selector comparison to avoid unnecessary
-  reactiveness
+- **SolidJS Integration**: Add `useService` hook to bind `@bemedev/app` state machine
+  interpreter services to SolidJS signals, automatically utilizing deep state
+  selector comparison to avoid unnecessary reactiveness
 
 ### Tests
 
-- **Signal Coverage**: Add integration and unit test suites for
-  `useService` hook covering various selectors and async action transitions
+- **Signal Coverage**: Add integration and unit test suites for `useService` hook
+  covering various selectors and async action transitions
 
 - <u>Test coverage **_100%_**</u>
 

@@ -22,32 +22,18 @@ describe('reduceActivity', () => {
       },
       {
         invite: 'single describer object',
-        parameters: [
-          { after: { name: 'onEnter', description: 'Called' } },
-        ],
+        parameters: [{ after: { name: 'onEnter', description: 'Called' } }],
         expected: { actions: ['onEnter'], guards: [], delays: ['after'] },
       },
       {
         invite: 'single transition object',
-        parameters: [
-          { after: { actions: ['onEnter'], guards: ['isReady'] } },
-        ],
-        expected: {
-          actions: ['onEnter'],
-          guards: ['isReady'],
-          delays: ['after'],
-        },
+        parameters: [{ after: { actions: ['onEnter'], guards: ['isReady'] } }],
+        expected: { actions: ['onEnter'], guards: ['isReady'], delays: ['after'] },
       },
       {
         invite: 'mixed string and transition',
-        parameters: [
-          { a: 'act', b: { actions: ['act2'], guards: ['g1'] } },
-        ],
-        expected: {
-          actions: ['act', 'act2'],
-          guards: ['g1'],
-          delays: ['a', 'b'],
-        },
+        parameters: [{ a: 'act', b: { actions: ['act2'], guards: ['g1'] } }],
+        expected: { actions: ['act', 'act2'], guards: ['g1'], delays: ['a', 'b'] },
       },
       {
         invite: 'deduplicates values',
@@ -60,15 +46,9 @@ describe('reduceActivity', () => {
       },
       {
         invite: 'Array Activity',
-        parameters: {
-          array: [{ guards: ['g'], actions: ['act1'] }, 'act2'],
-        },
+        parameters: { array: [{ guards: ['g'], actions: ['act1'] }, 'act2'] },
 
-        expected: {
-          actions: ['act1', 'act2'],
-          guards: ['g'],
-          delays: ['array'],
-        },
+        expected: { actions: ['act1', 'act2'], guards: ['g'], delays: ['array'] },
       },
     ),
   );

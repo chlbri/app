@@ -7,7 +7,4 @@ import { EventsStringsSchema } from './strings';
  *
  * @see {@linkcode EventObjectSchema}, {@linkcode EventsStringsSchema}
  */
-export const AllEventsSchema = v.union([
-  EventObjectSchema,
-  EventsStringsSchema,
-]);
+export const AllEventsSchema = v.union([EventObjectSchema, EventsStringsSchema]);

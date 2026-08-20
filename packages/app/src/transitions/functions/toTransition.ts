@@ -43,11 +43,7 @@ export type ToTransition_F = <
  *
  * @see {@linkcode toAction}, {@linkcode toPredicate}
  */
-export const toTransition: ToTransition_F = (
-  config,
-  options,
-  ...events
-) => {
+export const toTransition: ToTransition_F = (config, options, ...events) => {
   const isString = typeof config === 'string';
   if (isString) return { target: config };
   const { description, target } = config;

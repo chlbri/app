@@ -105,11 +105,7 @@ export function resolve(basePath: string, relativePath: string): string {
 
   // Special handling: if the final segment in relative path exists in the original base path,
   // try to find the best match by looking for that segment in the base path
-  if (
-    nonParentSegments.length > 0 &&
-    !endsWithSlash &&
-    !startsWithCurrentDir
-  ) {
+  if (nonParentSegments.length > 0 && !endsWithSlash && !startsWithCurrentDir) {
     const finalSegment = nonParentSegments[nonParentSegments.length - 1];
     const originalBaseSegments = baseSegments.slice(0, -1); // Directory path of the base
 
@@ -117,10 +113,7 @@ export function resolve(basePath: string, relativePath: string): string {
     const segmentIndex = originalBaseSegments.indexOf(finalSegment);
     if (segmentIndex !== -1) {
       // If found, check if this would be a better resolution
-      const alternativeResult = originalBaseSegments.slice(
-        0,
-        segmentIndex + 1,
-      );
+      const alternativeResult = originalBaseSegments.slice(0, segmentIndex + 1);
 
       // Use the alternative if it makes more sense (contains the segment we're looking for)
       /* v8 ignore else -- @preserve */
@@ -129,9 +122,7 @@ export function resolve(basePath: string, relativePath: string): string {
         (alternativeResult.length === resultSegments.length &&
           alternativeResult[alternativeResult.length - 1] === finalSegment)
       ) {
-        return (
-          DEFAULT_DELIMITER + alternativeResult.join(DEFAULT_DELIMITER)
-        );
+        return DEFAULT_DELIMITER + alternativeResult.join(DEFAULT_DELIMITER);
       }
     }
   }

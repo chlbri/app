@@ -8,12 +8,7 @@ export const DEFAULT_OUTPUT = 'app.gen.ts';
 export const MACHINE_GLOB = '**/*.{machine,fsm}.ts';
 
 /** Default directory glob patterns to exclude from scanning. */
-export const DEFAULT_EXCLUDES = [
-  'node_modules/**',
-  'lib/**',
-  'dist/**',
-  'temp/**',
-];
+export const DEFAULT_EXCLUDES = ['node_modules/**', 'lib/**', 'dist/**', 'temp/**'];
 
 /** Core library package name. */
 export const LIB = '@bemedev/app';

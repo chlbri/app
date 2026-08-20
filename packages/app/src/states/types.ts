@@ -1,16 +1,8 @@
-import type {
-  AsyncAction,
-  FromActionConfig,
-  WithDescriber,
-} from '#actions';
+import type { AsyncAction, FromActionConfig, WithDescriber } from '#actions';
 import type { EventObject } from '#events';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { AsyncTransitions, TransitionsConfig } from '#transitions';
-import type {
-  Equals,
-  Keys,
-  UnionToIntersection,
-} from '@bemedev/app-utils-bemedev';
+import type { Equals, Keys, UnionToIntersection } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,
@@ -91,22 +83,20 @@ export type GuardsFromActivity<TS extends ActivityArray> = TS extends any
  *
  * @template T - Container object with `activities`.
  */
-export type ExtractActionsFromActivity<
-  T extends { activities: ActivityConfig },
-> = T['activities'] extends infer TA extends ActivityConfig
-  ? { [key in keyof TA]: ActionsFromActivity<TA[key]> }[keyof TA]
-  : never;
+export type ExtractActionsFromActivity<T extends { activities: ActivityConfig }> =
+  T['activities'] extends infer TA extends ActivityConfig
+    ? { [key in keyof TA]: ActionsFromActivity<TA[key]> }[keyof TA]
+    : never;
 
 /**
  * Extracts guard keys from an activity configuration container.
  *
  * @template T - Container object with `activities`.
  */
-export type ExtractGuardsFromActivity<
-  T extends { activities: ActivityConfig },
-> = T['activities'] extends infer TA extends ActivityConfig
-  ? { [key in keyof TA]: GuardsFromActivity<TA[key]> }[keyof TA]
-  : never;
+export type ExtractGuardsFromActivity<T extends { activities: ActivityConfig }> =
+  T['activities'] extends infer TA extends ActivityConfig
+    ? { [key in keyof TA]: GuardsFromActivity<TA[key]> }[keyof TA]
+    : never;
 
 /**
  * Extracts delay keys from an activity configuration container.
@@ -145,37 +135,31 @@ export type CommonNodeConfig<Paths extends string = string> = BaseConfig &
  *
  * @template {string} Paths - State path union. Defaults to `string`.
  */
-export type NodeConfig2<Paths extends string = string> =
-  CommonNodeConfig<Paths> &
-    (
-      | {
-          readonly type?: 'atomic';
-          readonly initial?: never;
-          readonly states?: never;
-        }
-      | {
-          readonly type?: 'compound';
-          readonly initial: string;
-          readonly states: RecordS<NodeConfig2<Paths>>;
-        }
-      | {
-          readonly type: 'parallel';
-          readonly initial?: never;
-          readonly states: RecordS<NodeConfig2<Paths>>;
-        }
-    );
+export type NodeConfig2<Paths extends string = string> = CommonNodeConfig<Paths> &
+  (
+    | { readonly type?: 'atomic'; readonly initial?: never; readonly states?: never }
+    | {
+        readonly type?: 'compound';
+        readonly initial: string;
+        readonly states: RecordS<NodeConfig2<Paths>>;
+      }
+    | {
+        readonly type: 'parallel';
+        readonly initial?: never;
+        readonly states: RecordS<NodeConfig2<Paths>>;
+      }
+  );
 
 /**
  * Loose node configuration structure allowing optional properties.
  *
  * @template {string} Paths - State path union. Defaults to `string`.
  */
-export type NodeConfig3<Paths extends string = string> =
-  CommonNodeConfig<Paths> & {
-    readonly type?: StateType;
-    readonly initial?: string;
-    readonly states?: RecordS<NodeConfig3<Paths>>;
-  };
+export type NodeConfig3<Paths extends string = string> = CommonNodeConfig<Paths> & {
+  readonly type?: StateType;
+  readonly initial?: string;
+  readonly states?: RecordS<NodeConfig3<Paths>>;
+};
 
 /**
  * Target definition hierarchy map.
@@ -191,20 +175,13 @@ export type TargetDef = {
  *
  * @template {TargetDef} T - Target definition type.
  */
-export type NodeConfig<T extends TargetDef> = CommonNodeConfig<
-  T['targets']
-> &
+export type NodeConfig<T extends TargetDef> = CommonNodeConfig<T['targets']> &
   (undefined extends T['states']
-    ? {
-        readonly type?: 'atomic';
-        readonly initial?: never;
-        readonly states?: never;
-      }
+    ? { readonly type?: 'atomic'; readonly initial?: never; readonly states?: never }
     : {
         readonly states: {
-          [
-            key in keyof T['states']
-          ]: T['states'][key] extends infer TK extends TargetDef
+          [key in keyof T['states']]: T['states'][key] extends infer TK extends
+            TargetDef
             ? NodeConfig<TK>
             : CommonNodeConfig & {
                 readonly type?: 'atomic';
@@ -396,11 +373,7 @@ type FlatMapNodeConfig<
     } & {
       [key in keyof T['states']]: T['states'][key] extends infer S extends
         NodeConfig2 & { states: RecordS<NodeConfig2> }
-        ? FlatMapNodeConfig<
-            S,
-            withChildren,
-            `${Remaining}${key & string}/`
-          >
+        ? FlatMapNodeConfig<S, withChildren, `${Remaining}${key & string}/`>
         : EmptyObject;
     }[keyof T['states']]
   : EmptyObject;
@@ -414,9 +387,7 @@ type FlatMapNodeConfig<
 export type FlatMapN<
   T extends NodeConfig3 = NodeConfig3,
   withChildren extends boolean = true,
-> = UnionToIntersection<FlatMapNodeConfig<T, withChildren>> & {
-  readonly '/': T;
-};
+> = UnionToIntersection<FlatMapNodeConfig<T, withChildren>> & { readonly '/': T };
 // #endregion
 
 /** Internal pattern type for always transition event keys. */

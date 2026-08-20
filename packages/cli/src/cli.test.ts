@@ -109,9 +109,7 @@ export default createMachine(
 
   test('#02 => create file', async ({ onTestFinished }) => {
     await sleep(WAITER).then(() => {
-      writeFileSync(resolve(process.cwd(), CREATED_FILE), '', {
-        mode: '777',
-      });
+      writeFileSync(resolve(process.cwd(), CREATED_FILE), '', { mode: '777' });
     });
     onTestFinished(() => console.warn('writing ....'));
   });
@@ -122,10 +120,7 @@ export default createMachine(
   });
 
   test('#04 => check file content', async ({ onTestFinished }) => {
-    const received = readFileSync(
-      resolve(process.cwd(), CREATED_FILE),
-      'utf-8',
-    );
+    const received = readFileSync(resolve(process.cwd(), CREATED_FILE), 'utf-8');
     expect(received).toBe(produceStarterContent(CREATED_FILE));
     onTestFinished(() => console.warn('file content checked'));
   });
@@ -153,13 +148,9 @@ export default createMachine(
     onTestFinished(() => console.warn('generated file for dry-run'));
   });
 
-  test('#08 => delete the only machine left', async ({
-    onTestFinished,
-  }) => {
+  test('#08 => delete the only machine left', async ({ onTestFinished }) => {
     await sleep(WAITER / 5).then(() => {
-      const exists = existsSync(
-        resolve(process.cwd(), `${DIR}/app.gen.ts`),
-      );
+      const exists = existsSync(resolve(process.cwd(), `${DIR}/app.gen.ts`));
       expect(exists).toBe(true);
       unlinkSync(resolve(process.cwd(), `${DIR}/actions.fsm.ts`));
     });

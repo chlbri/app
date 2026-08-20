@@ -15,9 +15,7 @@ import { TargetSchema } from './target';
  *
  * @see {@linkcode TargetSchema}, {@linkcode SoaLSchema}, {@linkcode ActionConfig_Schema}, {@linkcode GuardConfig_Schema}
  */
-export const TransitionConfigMapA_Schema = <
-  const T extends ReadonlyArray<string>,
->(
+export const TransitionConfigMapA_Schema = <const T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
   const target = v.optional(TargetSchema(paths));
@@ -41,9 +39,7 @@ export const TransitionConfigMapA_Schema = <
  *
  * @see {@linkcode TargetSchema}, {@linkcode SoaLSchema}, {@linkcode ActionConfig_Schema}, {@linkcode GuardConfig_Schema}
  */
-export const TransitionConfigMapF_Schema = <
-  const T extends ReadonlyArray<string>,
->(
+export const TransitionConfigMapF_Schema = <const T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
   const target = TargetSchema(paths);
@@ -67,9 +63,7 @@ export const TransitionConfigMapF_Schema = <
  *
  * @see {@linkcode TransitionConfigMapA_Schema}, {@linkcode TransitionConfigMapF_Schema}, {@linkcode GuardConfig_Schema}
  */
-export const TransitionConfigMapG_Schema = <
-  const T extends ReadonlyArray<string>,
->(
+export const TransitionConfigMapG_Schema = <const T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
   const out = v.union([
@@ -97,9 +91,7 @@ export const TransitionConfigMapG_Schema = <
  *
  * @see {@linkcode TransitionConfigMapF_Schema}, {@linkcode GuardConfig_Schema}
  */
-export const TransitionConfigMapFG_Schema = <
-  const T extends ReadonlyArray<string>,
->(
+export const TransitionConfigMapFG_Schema = <const T extends ReadonlyArray<string>>(
   ...paths: T
 ) => {
   return v.strictObject({

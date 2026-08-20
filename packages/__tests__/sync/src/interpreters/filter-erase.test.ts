@@ -1,4 +1,5 @@
 import { interpret } from '@bemedev/app';
+import { MERGE_UNDEFINED } from '@bemedev/app/utils';
 import { constructTests } from '@bemedev/app-vitest';
 import _machine1 from './filter-erase.1.machine';
 import _machine2 from './filter-erase.2.machine';
@@ -6,6 +7,8 @@ import _machine3 from './filter-erase.3.machine';
 import _machine4 from './filter-erase.4.machine';
 import _machine5 from './filter-erase.5.machine';
 import _machine6 from './filter-erase.6.machine';
+import _machine7 from './filter-erase.7.machine';
+import _machine8 from './filter-erase.8.machine';
 
 describe('Filter and Erase actions', () => {
   describe('#01 => Filter action', () => {
@@ -42,9 +45,7 @@ describe('Filter and Erase actions', () => {
       });
 
       test('#05 => Check numbers', () => {
-        expect(service.select('numbers')).toEqual([
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        ]);
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       });
 
       test(...useSend('FILTER', 6));
@@ -106,11 +107,7 @@ describe('Filter and Erase actions', () => {
         const people = service.select('people');
         expect(people).toHaveLength(3);
         expect(people?.every(p => p.active)).toBe(true);
-        expect(people?.map(p => p.name)).toEqual([
-          'Alice',
-          'Charlie',
-          'Eve',
-        ]);
+        expect(people?.map(p => p.name)).toEqual(['Alice', 'Charlie', 'Eve']);
       });
     });
 
@@ -136,10 +133,7 @@ describe('Filter and Erase actions', () => {
                 return payload.scores;
               },
             }),
-            filterHighScores: filter(
-              'context.scores',
-              score => score >= 80,
-            ),
+            filterHighScores: filter('context.scores', score => score >= 80),
           },
         }));
       });
@@ -148,13 +142,7 @@ describe('Filter and Erase actions', () => {
         ...useSend({
           type: 'SET_SCORES',
           payload: {
-            scores: {
-              user1: 95,
-              user2: 60,
-              user3: 85,
-              user4: 45,
-              user5: 90,
-            },
+            scores: { user1: 95, user2: 60, user3: 85, user4: 45, user5: 90 },
           },
         }),
       );
@@ -210,9 +198,7 @@ describe('Filter and Erase actions', () => {
       });
 
       test('#05 => Check numbers', () => {
-        expect(service.select('numbers')).toEqual([
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        ]);
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       });
 
       test(...useSend('FILTER', 6));
@@ -257,13 +243,7 @@ describe('Filter and Erase actions', () => {
         ...useSend({
           type: 'SET_SCORES',
           payload: {
-            scores: {
-              user1: 95,
-              user2: 60,
-              user3: 85,
-              user4: 45,
-              user5: 90,
-            },
+            scores: { user1: 95, user2: 60, user3: 85, user4: 45, user5: 90 },
           },
         }),
       );
@@ -278,6 +258,546 @@ describe('Filter and Erase actions', () => {
         const scores = service.select('scores');
 
         expect(scores).toEqual({ user1: 95, user3: 85, user5: 90 });
+      });
+    });
+
+    describe('#06 => Filter array with function map with else fallback', () => {
+      const machine = _machine1;
+
+      const service = interpret(machine, { context: { numbers: [] } });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test(...start(1));
+      test(...useValue('state1', 2));
+
+      test('#03 => Add actions', () => {
+        service.addOptions(({ assign, filter }) => ({
+          actions: {
+            addNumbers: assign('context.numbers', {
+              ADD: ({ payload }) => payload.values,
+            }),
+            filterEven: filter('context.numbers', {
+              RESET: num => num % 2 !== 0,
+              else: num => num % 2 === 0,
+            }),
+          },
+        }));
+      });
+
+      test('#04 => Add numbers', () => {
+        service.send({
+          type: 'ADD',
+          payload: { values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+        });
+      });
+
+      test('#05 => Check numbers', () => {
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      });
+
+      test(...useSend('FILTER', 6));
+      test(...useValue('state2', 7));
+
+      test('#08 => Check filtered numbers via else (only even)', () => {
+        expect(service.select('numbers')).toEqual([2, 4, 6, 8, 10]);
+      });
+    });
+
+    describe('#07 => Filter array with function map without else (fallback to nothing)', () => {
+      const machine = _machine1;
+
+      const service = interpret(machine, { context: { numbers: [] } });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test(...start(1));
+      test(...useValue('state1', 2));
+
+      test('#03 => Add actions', () => {
+        service.addOptions(({ assign, filter }) => ({
+          actions: {
+            addNumbers: assign('context.numbers', {
+              ADD: ({ payload }) => payload.values,
+            }),
+            filterEven: filter('context.numbers', { RESET: num => num % 2 !== 0 }),
+          },
+        }));
+      });
+
+      test('#04 => Add numbers', () => {
+        service.send({
+          type: 'ADD',
+          payload: { values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+        });
+      });
+
+      test('#05 => Check numbers', () => {
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      });
+
+      test(...useSend('FILTER', 6));
+      test(...useValue('state2', 7));
+
+      test('#08 => Check numbers kept via nothing (all preserved)', () => {
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      });
+    });
+
+    describe('#08 => Filter object with function map with else fallback', () => {
+      const machine = _machine3;
+
+      const service = interpret(machine, { context: { scores: {} } });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test(...start(1));
+      test(...useValue('idle', 2));
+
+      test('#03 => Add actions', () => {
+        service.addOptions(({ assign, filter }) => ({
+          actions: {
+            setScores: assign('context.scores', {
+              SET_SCORES: ({ payload }) => payload.scores,
+            }),
+            filterHighScores: filter('context.scores', {
+              SET_SCORES: score => score < 50,
+              else: score => score >= 80,
+            }),
+          },
+        }));
+      });
+
+      test(
+        ...useSend({
+          type: 'SET_SCORES',
+          payload: {
+            scores: { user1: 95, user2: 60, user3: 85, user4: 45, user5: 90 },
+          },
+        }),
+      );
+
+      test('#04 => Check scores', () => {
+        expect(Object.keys(service.select('scores') ?? {}).length).toBe(5);
+      });
+
+      test(...useSend('FILTER_HIGH_SCORES', 5));
+
+      test('#06 => Check filtered scores via else (>= 80)', () => {
+        const scores = service.select('scores');
+        expect(scores).toEqual({ user1: 95, user3: 85, user5: 90 });
+      });
+    });
+
+    describe('#09 => Filter object with function map without else (fallback to nothing)', () => {
+      const machine = _machine3;
+
+      const service = interpret(machine, { context: { scores: {} } });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test(...start(1));
+      test(...useValue('idle', 2));
+
+      test('#03 => Add actions', () => {
+        service.addOptions(({ assign, filter }) => ({
+          actions: {
+            setScores: assign('context.scores', {
+              SET_SCORES: ({ payload }) => payload.scores,
+            }),
+            filterHighScores: filter('context.scores', {
+              SET_SCORES: score => score < 50,
+            }),
+          },
+        }));
+      });
+
+      test(
+        ...useSend({
+          type: 'SET_SCORES',
+          payload: {
+            scores: { user1: 95, user2: 60, user3: 85, user4: 45, user5: 90 },
+          },
+        }),
+      );
+
+      test('#04 => Check scores', () => {
+        expect(Object.keys(service.select('scores') ?? {}).length).toBe(5);
+      });
+
+      test(...useSend('FILTER_HIGH_SCORES', 5));
+
+      test('#06 => Check scores kept via nothing (all preserved)', () => {
+        const scores = service.select('scores');
+        expect(scores).toEqual({
+          user1: 95,
+          user2: 60,
+          user3: 85,
+          user4: 45,
+          user5: 90,
+        });
+      });
+    });
+
+    describe('#10 => Filter array on lifecycle events with map and else', () => {
+      const machine = _machine7;
+
+      const service = interpret(machine, {
+        context: { numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+      });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test('#00 => Add actions', () => {
+        service.addOptions(({ filter }) => ({
+          actions: {
+            filterInit: filter('context.numbers', { else: num => num <= 8 }),
+            filterAlways: filter('context.numbers', { else: num => num <= 6 }),
+          },
+        }));
+      });
+
+      test(...start(1));
+      test(...useValue('init_state', 2));
+
+      test('#03 => Check filtered numbers after init entry', () => {
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+      });
+
+      test(...useSend('TRIGGER_ALWAYS', 4));
+      test(...useValue('final_state', 5));
+
+      test('#06 => Check filtered numbers after always transition', () => {
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6]);
+      });
+    });
+
+    describe('#11 => Filter array on lifecycle events with map without else', () => {
+      const machine = _machine7;
+
+      const service = interpret(machine, { context: { numbers: [1, 2, 3, 4] } });
+
+      const { useStateValue: useValue, start } = constructTests(service);
+
+      test('#00 => Add actions', () => {
+        service.addOptions(({ filter }) => ({
+          actions: {
+            filterInit: filter('context.numbers', {
+              TRIGGER_ALWAYS: num => num > 0,
+            }),
+          },
+        }));
+      });
+
+      test(...start(1));
+      test(...useValue('init_state', 2));
+
+      test('#03 => Check numbers kept without else on INIT_EVENT', () => {
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4]);
+      });
+    });
+
+    describe('#12 => Filter object on lifecycle events with map and else', () => {
+      const machine = _machine8;
+
+      const service = interpret(machine, {
+        context: { scores: { user1: 95, user2: 60, user3: 85 } },
+      });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test('#00 => Add actions', () => {
+        service.addOptions(({ filter }) => ({
+          actions: {
+            filterInit: filter('context.scores', { else: score => score >= 70 }),
+            filterAlways: filter('context.scores', { else: score => score >= 90 }),
+          },
+        }));
+      });
+
+      test(...start(1));
+      test(...useValue('init_state', 2));
+
+      test('#03 => Check filtered scores after init entry', () => {
+        expect(service.select('scores')).toEqual({ user1: 95, user3: 85 });
+      });
+
+      test(...useSend('TRIGGER_ALWAYS', 4));
+      test(...useValue('final_state', 5));
+
+      test('#06 => Check filtered scores after always transition', () => {
+        expect(service.select('scores')).toEqual({ user1: 95 });
+      });
+    });
+
+    describe('#13 => Filter object on lifecycle events with map without else', () => {
+      const machine = _machine8;
+
+      const service = interpret(machine, {
+        context: { scores: { user1: 95, user2: 60, user3: 85 } },
+      });
+
+      const { useStateValue: useValue, start } = constructTests(service);
+
+      test('#00 => Add actions', () => {
+        service.addOptions(({ filter }) => ({
+          actions: {
+            filterInit: filter('context.scores', {
+              TRIGGER_ALWAYS: score => score > 0,
+            }),
+          },
+        }));
+      });
+
+      test(...start(1));
+      test(...useValue('init_state', 2));
+
+      test('#03 => Check scores kept without else on INIT_EVENT', () => {
+        expect(service.select('scores')).toEqual({
+          user1: 95,
+          user2: 60,
+          user3: 85,
+        });
+      });
+    });
+
+    describe('#14 => Filter array with string event (reduceFnMapFilterArray check5)', () => {
+      const machine = _machine1;
+
+      describe('#01 => String event matching mapped key', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterEven: filter('context.numbers', {
+              FILTER: num => num > 5,
+              else: num => num <= 3,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+          event: 'FILTER',
+        } as any;
+
+        const result = actions?.filterEven?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters numbers matching key condition (> 5)', () => {
+          expect(result).toEqual({ context: { numbers: [6, 7, 8, 9, 10] } });
+        });
+      });
+
+      describe('#02 => String event matching mapped key but handler is undefined in map', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterEven: filter('context.numbers', {
+              FILTER: undefined as any,
+              else: num => num % 2 === 0,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { numbers: [1, 2, 3, 4, 5, 6] },
+          event: 'FILTER',
+        } as any;
+
+        const result = actions?.filterEven?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters numbers via else fallback (even numbers)', () => {
+          expect(result).toEqual({ context: { numbers: [2, 4, 6] } });
+        });
+      });
+
+      describe('#03 => Unmapped string event with else fallback', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterEven: filter('context.numbers', {
+              FILTER: num => num > 5,
+              else: num => num <= 3,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+          event: 'UNKNOWN_EVENT',
+        } as any;
+
+        const result = actions?.filterEven?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters numbers via else condition (<= 3)', () => {
+          expect(result).toEqual({ context: { numbers: [1, 2, 3] } });
+        });
+      });
+
+      describe('#04 => Unmapped string event without else (fallback to nothing)', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterEven: filter('context.numbers', { FILTER: num => num > 5 }),
+          },
+        }));
+
+        const state = {
+          context: { numbers: [1, 2, 3, 4, 5] },
+          event: 'UNKNOWN_EVENT',
+        } as any;
+
+        const result = actions?.filterEven?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => keeps numbers when falling back to nothing', () => {
+          expect(result).toEqual({ context: { numbers: [1, 2, 3, 4, 5] } });
+        });
+      });
+    });
+
+    describe('#15 => Filter object with string event (reduceFnMapFilterObject check5)', () => {
+      const machine = _machine3;
+
+      describe('#01 => String event matching mapped key', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('context.scores', {
+              FILTER_HIGH_SCORES: score => score >= 80,
+              else: score => score < 50,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { scores: { math: 90, physics: 75, history: 85, english: 45 } },
+          event: 'FILTER_HIGH_SCORES',
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters scores matching key condition (>= 80)', () => {
+          expect(result).toEqual({
+            context: {
+              scores: {
+                math: 90,
+                physics: MERGE_UNDEFINED,
+                history: 85,
+                english: MERGE_UNDEFINED,
+              },
+            },
+          });
+        });
+      });
+
+      describe('#02 => String event matching mapped key but handler is undefined in map', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('context.scores', {
+              FILTER_HIGH_SCORES: undefined as any,
+              else: score => score >= 70,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { scores: { math: 90, physics: 75, history: 60 } },
+          event: 'FILTER_HIGH_SCORES',
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters scores via else fallback (>= 70)', () => {
+          expect(result).toEqual({
+            context: { scores: { math: 90, physics: 75, history: MERGE_UNDEFINED } },
+          });
+        });
+      });
+
+      describe('#03 => Unmapped string event with else fallback', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('context.scores', {
+              FILTER_HIGH_SCORES: score => score >= 80,
+              else: score => score < 50,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { scores: { math: 90, physics: 75, history: 85, english: 45 } },
+          event: 'UNKNOWN_EVENT',
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters scores via else condition (< 50)', () => {
+          expect(result).toEqual({
+            context: {
+              scores: {
+                math: MERGE_UNDEFINED,
+                physics: MERGE_UNDEFINED,
+                history: MERGE_UNDEFINED,
+                english: 45,
+              },
+            },
+          });
+        });
+      });
+
+      describe('#04 => Unmapped string event without else (fallback to nothing)', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('context.scores', {
+              FILTER_HIGH_SCORES: score => score >= 80,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { scores: { math: 90, physics: 75 } },
+          event: 'UNKNOWN_EVENT',
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => keeps all scores when falling back to nothing', () => {
+          expect(result).toEqual({ context: { scores: { math: 90, physics: 75 } } });
+        });
       });
     });
   });
@@ -308,9 +828,7 @@ describe('Filter and Erase actions', () => {
         }));
       });
 
-      test(
-        ...useSend({ type: 'SET_NAME', payload: { name: 'John Doe' } }, 3),
-      );
+      test(...useSend({ type: 'SET_NAME', payload: { name: 'John Doe' } }, 3));
 
       test('#04 => Check name', () => {
         expect(service.select('name')).toBe('John Doe');
@@ -326,9 +844,7 @@ describe('Filter and Erase actions', () => {
     describe('#02 => Erase nested property', () => {
       const machine = _machine5;
 
-      const service = interpret(machine, {
-        context: { user: { name: '' } },
-      });
+      const service = interpret(machine, { context: { user: { name: '' } } });
 
       const {
         useStateValue: useValue,
@@ -399,9 +915,7 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, erase, batch }) => ({
           actions: {
-            setData: assign('context', {
-              SET_DATA: ({ payload }) => payload,
-            }),
+            setData: assign('context', { SET_DATA: ({ payload }) => payload }),
             clearAll: batch(
               erase('context.name'),
               erase('context.email'),
@@ -415,11 +929,7 @@ describe('Filter and Erase actions', () => {
         ...useSend(
           {
             type: 'SET_DATA',
-            payload: {
-              name: 'Alice',
-              email: 'alice@example.com',
-              age: 30,
-            },
+            payload: { name: 'Alice', email: 'alice@example.com', age: 30 },
           },
           4,
         ),

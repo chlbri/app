@@ -1,17 +1,8 @@
 import { checkAction, checkActions } from '#actions';
 import { checkGuards } from '#guards';
 import { isTransitionsConfig } from '#transitions';
-import {
-  checkKeys,
-  checkSoAString,
-  checkValues,
-  isStringOrUndefined,
-} from '#utils';
-import type {
-  ActivityConfig,
-  ActivityMap,
-  NodeConfig2,
-} from '../../types';
+import { checkKeys, checkSoAString, checkValues, isStringOrUndefined } from '#utils';
+import type { ActivityConfig, ActivityMap, NodeConfig2 } from '../../types';
 import { stateType } from '../stateType';
 
 /** Allowed keys for state node configuration objects. */
@@ -76,9 +67,7 @@ export const checkActivity = (value: unknown): value is ActivityMap => {
  *
  * @returns `true` if type {@linkcode ActivityConfig}, `false` otherwise.
  */
-export const checkActivities = (
-  value: unknown,
-): value is ActivityConfig => {
+export const checkActivities = (value: unknown): value is ActivityConfig => {
   if (typeof value !== 'object' || value === null || Array.isArray(value))
     return false;
 

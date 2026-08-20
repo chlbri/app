@@ -51,13 +51,12 @@ describe('Interpret for guards', () => {
     test(...send('NEXT', 5));
 
     describe('#04 => Check the action', () => {
-      test('#01 => Called one time', () =>
-        expect(guard1).toHaveBeenCalledTimes(1));
+      test('#01 => Called one time', () => expect(guard1).toHaveBeenCalledTimes(1));
 
       test('#02 => Called with the correct arguments', () =>
         expect(guard1).toHaveBeenCalledWith({
           ...defaultC,
-          event: transformEventArg(ALWAYS_EVENT),
+          event: transformEventArg(`/state1/${ALWAYS_EVENT}`),
           status: 'busy',
           tags: [],
           value: 'state1',
@@ -94,13 +93,12 @@ describe('Interpret for guards', () => {
     test(...send('NEXT', 5));
 
     describe('#04 => Check the action', () => {
-      test('#01 => Called one time', () =>
-        expect(guard1).toHaveBeenCalledTimes(1));
+      test('#01 => Called one time', () => expect(guard1).toHaveBeenCalledTimes(1));
 
       test('#02 => Called with the correct arguments', () =>
         expect(guard1).toHaveBeenCalledWith({
           ...defaultC,
-          event: transformEventArg(ALWAYS_EVENT),
+          event: transformEventArg(`/state1/${ALWAYS_EVENT}`),
           status: 'busy',
           tags: [],
           value: 'state1',

@@ -21,21 +21,12 @@ import type {
   SoA,
 } from '@bemedev/app-utils-bemedev';
 import type { Observable } from 'rxjs';
-import type {
-  ActorConfig,
-  ChildConfig,
-  EmitterConfig,
-} from '../actors/types';
+import type { ActorConfig, ChildConfig, EmitterConfig } from '../actors/types';
 
 import type { CommonChild } from '#common/machine';
 import type { AsyncEmitter } from '#emitters';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type {
-  Identify,
-  RecordS,
-  ReduceArray,
-  SingleOrArrayL,
-} from '~types';
+import type { Identify, RecordS, ReduceArray, SingleOrArrayL } from '~types';
 
 // type TargetDef = {
 //   readonly targets: string;
@@ -61,21 +52,16 @@ export type _TransitionConfigMap<Paths = string> = {
  *
  * @template { _TransitionConfigMap | string} T - Transition config input.
  */
-export type NoExtraKeysTransitionConfig<
-  T extends _TransitionConfigMap | string,
-> = T extends string
-  ? T
-  : T & {
-      [key in Extract<keyof T, 'actions'>]: NoExtraKeysWithDescriberSoa<
-        T[key]
-      >;
-    } & {
-      [key in Extract<keyof T, 'guards'>]: NoExtraKeysGuardConfigSoA<
-        T[key]
-      >;
-    } & {
-      [key in Exclude<keyof T, keyof _TransitionConfigMap>]?: never;
-    };
+export type NoExtraKeysTransitionConfig<T extends _TransitionConfigMap | string> =
+  T extends string
+    ? T
+    : T & {
+        [key in Extract<keyof T, 'actions'>]: NoExtraKeysWithDescriberSoa<T[key]>;
+      } & {
+        [key in Extract<keyof T, 'guards'>]: NoExtraKeysGuardConfigSoA<T[key]>;
+      } & {
+        [key in Exclude<keyof T, keyof _TransitionConfigMap>]?: never;
+      };
 
 /**
  * Enforces no extra keys on array of transition configurations.
@@ -88,10 +74,7 @@ export type NoExtraKeysTransitionConfigArray<
   infer S extends _TransitionConfigMap | string,
   ...infer R extends ReadonlyArray<_TransitionConfigMap | string>,
 ]
-  ? readonly [
-      NoExtraKeysTransitionConfig<S>,
-      ...NoExtraKeysTransitionConfigArray<R>,
-    ]
+  ? readonly [NoExtraKeysTransitionConfig<S>, ...NoExtraKeysTransitionConfigArray<R>]
   : [];
 
 /**
@@ -157,9 +140,7 @@ export type TransitionConfigMapA<Paths = string> = Require<
  *
  * @template Paths - State path union.
  */
-export type TransitionConfigA<Paths = string> =
-  | TransitionConfigMapA<Paths>
-  | Paths;
+export type TransitionConfigA<Paths = string> = TransitionConfigMapA<Paths> | Paths;
 
 /**
  * A type {@linkcode _TransitionConfigMap} that requires target.
@@ -176,9 +157,7 @@ export type TransitionConfigMapF<Paths = string> = Require<
  *
  * @template Paths - State path union.
  */
-export type TransitionConfigF<Paths = string> =
-  | TransitionConfigMapF<Paths>
-  | Paths;
+export type TransitionConfigF<Paths = string> = TransitionConfigMapF<Paths> | Paths;
 
 /**
  * Union of target-required and action-required transition maps.
@@ -217,18 +196,14 @@ export type TransitionConfigMapFG<Paths = string> = Require<
  *
  * @see {@linkcode TransitionConfigMapF}, {@linkcode TransitionConfigMapA}
  */
-export type TransitionConfig<Paths = string> =
-  | Paths
-  | TransitionConfigMap<Paths>;
+export type TransitionConfig<Paths = string> = Paths | TransitionConfigMap<Paths>;
 
 /**
  * String target path or transition configuration map helper.
  *
  * @template Paths - State path union.
  */
-export type _TransitionConfig<Paths = string> =
-  | Paths
-  | _TransitionConfigMap<Paths>;
+export type _TransitionConfig<Paths = string> = Paths | _TransitionConfigMap<Paths>;
 
 /**
  * An array of transitions that can be used in a state machine.
@@ -277,9 +252,7 @@ export type AlwaysConfig<Paths = string> =
  *
  * @remarks For the purpose of delay transition config.
  */
-export type DelayedTransitions<Paths = string> = RecordS<
-  SingleOrArrayT<Paths>
->;
+export type DelayedTransitions<Paths = string> = RecordS<SingleOrArrayT<Paths>>;
 
 /**
  * Extracts event key path strings from a type {@linkcode DelayedTransitions} object.
@@ -305,10 +278,7 @@ export type GetEventKeysFromDelayed<T> = {
  * @see {@linkcode ExtractGuardKeysFromTransition} for extracting guards from a transition configuration.
  */
 export type ExtractActionKeysFromDelayed<T> = ExtractActionsFromTransition<
-  Extract<
-    ReduceArray<T[keyof T]>,
-    { actions: SingleOrArrayL<WithDescriber> }
-  >
+  Extract<ReduceArray<T[keyof T]>, { actions: SingleOrArrayL<WithDescriber> }>
 >;
 
 /**
@@ -323,13 +293,9 @@ export type ExtractActionKeysFromDelayed<T> = ExtractActionsFromTransition<
  *
  * @see {@linkcode ExtractActionsFromTransition} for extracting actions from a transition configuration.
  */
-export type ExtractGuardKeysFromDelayed<T> =
-  ExtractGuardKeysFromTransition<
-    Extract<
-      ReduceArray<T[keyof T]>,
-      { guards: SingleOrArrayL<GuardConfig> }
-    >
-  >;
+export type ExtractGuardKeysFromDelayed<T> = ExtractGuardKeysFromTransition<
+  Extract<ReduceArray<T[keyof T]>, { guards: SingleOrArrayL<GuardConfig> }>
+>;
 
 /**
  * Represents a JSON configuration for delayed transitions.
@@ -409,9 +375,7 @@ export type GetEventKeysFromTransitions<T> =
   | ('actors' extends keyof T
       ? `${NotUndefined<T['actors']> extends infer TP
           ? `actors.${{
-              [
-                key in keyof TP & string
-              ]: `${key}.${GetEventKeysFromActor<TP[key]>}`;
+              [key in keyof TP & string]: `${key}.${GetEventKeysFromActor<TP[key]>}`;
             }[keyof TP & string]}`
           : never}`
       : never);
@@ -436,10 +400,7 @@ export type ExtractDelayKeysFromTransitions<T extends TransitionsConfig> =
  * @template T - Transition map type.
  */
 type _ExtractActionsFromMap<T> = ExtractActionsFromTransition<
-  Extract<
-    ReduceArray<NotUndefined<T>>,
-    { actions: SingleOrArrayL<WithDescriber> }
-  >
+  Extract<ReduceArray<NotUndefined<T>>, { actions: SingleOrArrayL<WithDescriber> }>
 >;
 
 /**
@@ -496,16 +457,11 @@ export type ExtractActionKeysFromActor<T> = T extends EmitterConfig
  * @see {@linkcode NotUndefined} for ensuring the type is not undefined.
  * @see {@linkcode Extract}
  */
-export type ExtractActionKeysFromTransitions<
-  T extends TransitionsConfig,
-> =
+export type ExtractActionKeysFromTransitions<T extends TransitionsConfig> =
   | ExtractActionKeysFromDelayed<T['on']>
   | ExtractActionKeysFromDelayed<T['after']>
   | ExtractActionsFromTransition<
-      Extract<
-        ReduceArray<T['always']>,
-        { actions: SingleOrArrayL<WithDescriber> }
-      >
+      Extract<ReduceArray<T['always']>, { actions: SingleOrArrayL<WithDescriber> }>
     >
   | (NotUndefined<T['actors']> extends infer Ta
       ? {
@@ -519,10 +475,7 @@ export type ExtractActionKeysFromTransitions<
  * @template T - Transition map type.
  */
 type _ExtractGuardKeysFromMap<T> = ExtractGuardKeysFromTransition<
-  Extract<
-    ReduceArray<NotUndefined<T>>,
-    { guards: SingleOrArrayL<GuardConfig> }
-  >
+  Extract<ReduceArray<NotUndefined<T>>, { guards: SingleOrArrayL<GuardConfig> }>
 >;
 
 /**
@@ -573,10 +526,7 @@ export type ExtractGuardKeysFromTransitions<T extends TransitionsConfig> =
   | ExtractGuardKeysFromDelayed<T['on']>
   | ExtractGuardKeysFromDelayed<T['after']>
   | ExtractGuardKeysFromTransition<
-      Extract<
-        ReduceArray<T['always']>,
-        { guards: SingleOrArrayL<GuardConfig> }
-      >
+      Extract<ReduceArray<T['always']>, { guards: SingleOrArrayL<GuardConfig> }>
     >
   | (NotUndefined<T['actors']> extends infer Ta
       ? {
@@ -604,9 +554,8 @@ export type ExtractSrcKeyFromTransitions<
  *
  * @template T - Transitions configuration type {@linkcode TransitionsConfig}.
  */
-export type ExtractEmitterSrcKeyFromTransitions<
-  T extends TransitionsConfig,
-> = ExtractSrcKeyFromTransitions<T, { next: any }>;
+export type ExtractEmitterSrcKeyFromTransitions<T extends TransitionsConfig> =
+  ExtractSrcKeyFromTransitions<T, { next: any }>;
 
 /**
  * Extracts child keys from actors configuration object `T`.

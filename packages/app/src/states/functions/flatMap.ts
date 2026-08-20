@@ -40,11 +40,7 @@ export const flatMap = expandFn(
     return flatByKey.low(node, 'states', { children, sep });
   }) as FlatMap_F,
   {
-    low: (
-      node: NodeConfig2,
-      children = false,
-      sep = DEFAULT_DELIMITER,
-    ) => {
+    low: (node: NodeConfig2, children = false, sep = DEFAULT_DELIMITER) => {
       return flatByKey.low(node, 'states', {
         children,
         sep,

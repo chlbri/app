@@ -1,16 +1,9 @@
 import type { SyncAction2 } from '#actions';
 import type { AnyInterpreter } from '#common/interpreter';
-import type {
-  CommonConfig3,
-  SimpleMachineOptions2,
-} from '#common/machine';
+import type { CommonConfig3, SimpleMachineOptions2 } from '#common/machine';
 import type { SyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
-import type {
-  GuardConfig,
-  SyncPredicateS2,
-  SyncPredicateS3,
-} from '#guards';
+import type { GuardConfig, SyncPredicateS2, SyncPredicateS3 } from '#guards';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject } from '~types';

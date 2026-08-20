@@ -18,11 +18,7 @@ export type Selector_F<T, R = any> = Fn<[T], R>;
 /**
  * Represents the lifecycle state of a subscriber node.
  */
-export type SubscriberState =
-  | 'paused'
-  | 'active'
-  | 'disposed'
-  | 'inactive';
+export type SubscriberState = 'paused' | 'active' | 'disposed' | 'inactive';
 
 /**
  * Function signature for a subscriber callback receiving state updates of type `T`.
@@ -56,9 +52,7 @@ export type Equals_F<T> = Fn<[T, T], boolean>;
  * @template T - Type of data emitted by the source.
  * @template R - Type of selected value derived from state, defaulting to `T`.
  */
-export class SubscriberBase<T, R = T>
-  implements Disposable, AsyncDisposable
-{
+export class SubscriberBase<T, R = T> implements Disposable, AsyncDisposable {
   /**
    * Current lifecycle state of the subscriber of type {@linkcode SubscriberState}.
    */
