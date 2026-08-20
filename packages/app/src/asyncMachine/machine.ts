@@ -78,7 +78,6 @@ export class AsyncMachine<
    * @remarks Used for typing purposes only.
    *
    * @see {@linkcode E}
-   * @see {@linkcode PromiseeMap}
    * @see {@linkcode A}
    * @see {@linkcode Pc}
    * @see {@linkcode PrimitiveObject}
@@ -397,11 +396,8 @@ export class AsyncMachine<
    * If not provided, the current elements will be returned.
    * @returns the elements of the machine with the provided key and value.
    *
-   * @see {@linkcode Elements}
-   *
    * @see type inferences :
-   *
-   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
+   * {@linkcode C}, {@linkcode E}  , {@linkcode A} , {@linkcode Pc}  , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
 
   /**
@@ -411,11 +407,8 @@ export class AsyncMachine<
    * If not provided, the current elements will be returned.
    * @returns a new instance of this {@linkcode AsyncMachine} with the provided key and value.
    *
-   * @see {@linkcode Elements}
-   *
    * @see type inferences :
-   *
-   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
+   * {@linkcode C}, {@linkcode E}  , {@linkcode A} , {@linkcode Pc}  , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
   protected __renew = (): this => {
     const { config, pContext, context, guards, actions, delays, actors } =
@@ -460,8 +453,7 @@ export class AsyncMachine<
    * @param _ an optional parameter of type {@linkcode AnyMachine} [{@linkcode T}] to specify the machine context. Only used for type inference.
    *
    * @see type inferences :
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
+   * {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
    * @see {@linkcode reduceFnMap}
    */
