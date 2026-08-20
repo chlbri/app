@@ -1,6 +1,6 @@
 import type { AsyncAction2 } from '#actions';
 
-import type { DefinedValue } from '#guards';
+import type { AsyncPredicateS, DefinedValue } from '#guards';
 import type { Decompose } from '@bemedev/decompose';
 
 import type { EventsMapFrom } from '#common/interpreter';
@@ -354,6 +354,74 @@ export type AsyncBatchAction_F<
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 /**
+ * Logical AND guard structure for async guard batching options.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template Pc - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template T - State tag string type.
+ */
+export type AsyncGuardAndOption<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = { and: AsyncGuardUnionOption<E, Pc, Tc, T>[] };
+
+/**
+ * Logical OR guard structure for async guard batching options.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template Pc - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template T - State tag string type.
+ */
+export type AsyncGuardOrOption<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = { or: AsyncGuardUnionOption<E, Pc, Tc, T>[] };
+
+/**
+ * Union of async guard items for batching.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template Pc - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template T - State tag string type.
+ */
+export type AsyncGuardUnionOption<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> =
+  | AsyncPredicateS<E, Pc, Tc, T>
+  | AsyncGuardAndOption<E, Pc, Tc, T>
+  | AsyncGuardOrOption<E, Pc, Tc, T>;
+
+/**
+ * Function type signature for batching multiple guards into a single async guard.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template Pc - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template T - State tag string type.
+ * @param guards - Variadic array of guard functions or logical guard objects.
+ *
+ * @returns Async guard function of type {@linkcode FnR}.
+ */
+export type AsyncBatchGuard_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (
+  ...guards: AsyncGuardUnionOption<E, Pc, Tc, T>[]
+) => FnR<E, Pc, Tc, T, Promise<boolean>>;
+
+/**
  * Object containing all action, guard, timer, and activity helper functions for an async machine.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
@@ -383,6 +451,10 @@ export type AsyncAddOption<
    * Guard helper to check if a property does not equal specific value(s).
    */
   isNotValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to batch multiple guards into a single async guard.
+   */
+  guardBatch: AsyncBatchGuard_F<E, Pc, Tc, T>;
   /**
    * Swap helper function of type {@linkcode SwapFunction_F}.
    */

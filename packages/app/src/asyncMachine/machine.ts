@@ -16,6 +16,7 @@ import {
   reduceFnMapFilterObject,
 } from '#utils';
 import { _any, _unknown } from '@bemedev/app-utils-bemedev';
+import asyncRecursive from '@bemedev/boolean-recursive/async';
 import { getByKey, recompose } from '@bemedev/decompose';
 
 import {
@@ -78,7 +79,6 @@ export class AsyncMachine<
    * @remarks Used for typing purposes only.
    *
    * @see {@linkcode E}
-   * @see {@linkcode PromiseeMap}
    * @see {@linkcode A}
    * @see {@linkcode Pc}
    * @see {@linkcode PrimitiveObject}
@@ -170,6 +170,42 @@ export class AsyncMachine<
         isNotValue,
         isDefined,
         isNotDefined,
+        guardBatch: (...guards) => {
+          const reduceGuardItem = (guard: any): any => {
+            if (typeof guard === 'boolean') return () => guard;
+            if (typeof guard === 'function') return guard;
+
+            if (typeof guard === 'object' && guard !== null) {
+              if ('or' in guard) {
+                const or = guard.or.map(reduceGuardItem);
+                return { or };
+              }
+
+              if ('and' in guard) {
+                const and = guard.and.map(reduceGuardItem);
+                return { and };
+              }
+
+              return reduceFnMap(guard, ...this.__eventsList);
+            }
+
+            return guard;
+          };
+
+          const prepared = guards.map(reduceGuardItem);
+          const fn = asyncRecursive(...prepared);
+
+          return async ({ context, pContext, ...rest }) => {
+            const state = this.__cloneStateExtended({
+              context,
+              pContext,
+              ...rest,
+            });
+
+            return await fn(state);
+          };
+        },
+
         swap: this.swap,
 
         assign: (keys, fn, options?) => {
@@ -397,11 +433,8 @@ export class AsyncMachine<
    * If not provided, the current elements will be returned.
    * @returns the elements of the machine with the provided key and value.
    *
-   * @see {@linkcode Elements}
-   *
    * @see type inferences :
-   *
-   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
+   * {@linkcode C}, {@linkcode E}  , {@linkcode A} , {@linkcode Pc}  , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
 
   /**
@@ -411,11 +444,8 @@ export class AsyncMachine<
    * If not provided, the current elements will be returned.
    * @returns a new instance of this {@linkcode AsyncMachine} with the provided key and value.
    *
-   * @see {@linkcode Elements}
-   *
    * @see type inferences :
-   *
-   *  {@linkcode AsyncConfig} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
+   * {@linkcode C}, {@linkcode E}  , {@linkcode A} , {@linkcode Pc}  , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
   protected __renew = (): this => {
     const { config, pContext, context, guards, actions, delays, actors } =
@@ -460,8 +490,7 @@ export class AsyncMachine<
    * @param _ an optional parameter of type {@linkcode AnyMachine} [{@linkcode T}] to specify the machine context. Only used for type inference.
    *
    * @see type inferences :
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
+   * {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
    * @see {@linkcode reduceFnMap}
    */

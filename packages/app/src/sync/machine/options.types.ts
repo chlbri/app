@@ -295,6 +295,74 @@ export type SyncAllActions_F<
   | SyncFilterAction_F<E, Pc, Tc, T>;
 
 /**
+ * Logical AND guard structure for synchronous guard batching options.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
+export type SyncGuardAndOption<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = { and: SyncGuardUnionOption<E, Pc, Tc, T>[] };
+
+/**
+ * Logical OR guard structure for synchronous guard batching options.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
+export type SyncGuardOrOption<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = { or: SyncGuardUnionOption<E, Pc, Tc, T>[] };
+
+/**
+ * Union of synchronous guard items for batching.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ */
+export type SyncGuardUnionOption<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> =
+  | SyncPredicateS<E, Pc, Tc, T>
+  | SyncGuardAndOption<E, Pc, Tc, T>
+  | SyncGuardOrOption<E, Pc, Tc, T>;
+
+/**
+ * Function type signature for batching multiple synchronous guards into a single guard.
+ *
+ * @template E - Event object type.
+ * @template Pc - Private context type.
+ * @template Tc - Type {@linkcode PrimitiveObject} context.
+ * @template T - State tag string type.
+ * @param guards - Variadic array of guard functions or logical guard objects.
+ *
+ * @returns Synchronous guard function of type {@linkcode FnR}.
+ */
+export type SyncBatchGuard_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (
+  ...guards: SyncGuardUnionOption<E, Pc, Tc, T>[]
+) => FnR<E, Pc, Tc, T, boolean>;
+
+/**
  * Object containing all action, guard, timer, and activity helper functions for a synchronous machine.
  *
  * @template E - Event object type.
@@ -312,6 +380,7 @@ export type SyncAddOption<
   isNotDefined: SyncDefineGuard_F<E, Pc, Tc, T>;
   isValue: SyncValueCheckerGuard_F<E, Pc, Tc, T>;
   isNotValue: SyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  guardBatch: SyncBatchGuard_F<E, Pc, Tc, T>;
   swap: SwapFunction_F<E, Pc, Tc, T>;
   assign: SyncAssignAction_F<E, Pc, Tc, T>;
   batch: SyncBatchAction_F<E, Pc, Tc, T>;
