@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
+    "test:only": "vitest run",
     "_ci": "pnpm run test",
     "generate:lib": "app-cli generate -c ./src",
     "generate": "app-cli generate -c ./src",
