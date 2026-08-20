@@ -32,8 +32,7 @@ const ActivityMapG_Schema = v.strictObject({
 /**
  * Internal schema for validating non-empty arrays of activity mappings.
  *
- * @see type {@linkcode ActivityArray}
- * @see {@linkcode ActivityMap_Schema}, {@linkcode ActivityMapG_Schema}
+ * @see -- type {@linkcode ActivityArray}, {@linkcode ActivityMap_Schema}, {@linkcode ActivityMapG_Schema}
  */
 const _ActivityArray = v.pipe(
   v.array(ActivityMap_Schema),

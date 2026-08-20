@@ -30,7 +30,7 @@ export type SingleOrArrayR<T> = T | readonly T[];
 /**
  * Single element or array type with at least two elements of type {@linkcode T}.
  *
- * @template T - The element type.
+ * @template `T` - The element type.
  */
 export type SingleOrArrayL2<T> = T | [T, T, ...T[]];
 
@@ -81,7 +81,7 @@ export const isFunction = (value: unknown): value is Fn => {
  *
  * @returns `true` if `value` is a string, `false` otherwise.
  *
- * @see type {@linkcode IsString_F}
+ * @see {@linkcode IsString_F}
  */
 export const isString: IsString_F = value => {
   return typeof value === 'string';
@@ -144,14 +144,14 @@ type ChangePropertyOption =
 /**
  * Changes the property access of a specific property in an object type.
  *
- * @template T - The object type to change.
- * @template name - The name of the property of {@linkcode T} to change.
- * @template replace - The name of the property to replace the original property with.
+ * @template `T` - The object type to change.
+ * @template `name` - The name of the property of {@linkcode T} to change.
+ * @template `replace` - The name of the property to replace the original property with.
  * @template : {@linkcode ChangePropertyOption} [option] - The option for changing the property access.
  *
  * @remarks Can be used
  *
- * @see {@linkcode NOmit} for removing a property from an object type.
+ * @see {@linkcode NOmit}
  */
 
 export type ChangeProperty<
@@ -174,7 +174,7 @@ export type ChangeProperty<
 /**
  * Internal helper type for mapping object keys to key strings structure.
  *
- * @template T - Target object type.
+ * @template `T` - Target object type.
  * @template | {@linkcode boolean} `AddObjectKey` - Flag to include object key.
  * @template | keyof `T` `Key` - Property key union.
  */
@@ -198,7 +198,7 @@ type _KeyStrings<
 /**
  * Maps all object property paths to string representation types.
  *
- * @template T - Target object type.
+ * @template `T` - Target object type.
  * @template AddObjectKey - Whether to append object key marker. Defaults to `true`.
  * @template Key - Keys of `T`. Defaults to `keyof T`.
  */
@@ -216,8 +216,8 @@ export type HighMy = '@my';
 /**
  * Internal recursive helper type to change object properties.
  *
- * @template T - Source object type.
- * @template U - Deep partial key mapping.
+ * @template `T` - Source object type.
+ * @template `U` - Deep partial key mapping.
  */
 type __ChangeProperties<
   T extends object,
@@ -247,9 +247,9 @@ type __ChangeProperties<
 /**
  * Internal helper type to change object property key mappings.
  *
- * @template T - Source object type.
- * @template U - Deep partial key mapping.
- * @template option - Property change option mode.
+ * @template `T` - Source object type.
+ * @template `U` - Deep partial key mapping.
+ * @template `option` - Property change option mode.
  */
 type _ChangeProperties<
   T extends object,
@@ -266,15 +266,13 @@ type _ChangeProperties<
 /**
  * Changes the properties of an object type based on a partial object type.
  *
- * @template T - The object type to change.
- * @template U - The partial object type that defines the changes.
+ * @template `T` - The object type to change.
+ * @template `U` - The partial object type that defines the changes.
  * @template : {@linkcode ChangePropertyOption} [option] - The option for changing the property access.
  *
  * @remarks This can be usefull after
  *
- * @see {@linkcode DeepPartial} for creating a deep partial type.
- * @see {@linkcode KeyStrings} for creating a type with string keys.
- * @see {@linkcode _ChangeProperties} for changing a single property access.
+ * @see -- type {@linkcode DeepPartial}, -- type {@linkcode KeyStrings}, -- type {@linkcode _ChangeProperties}
  */
 export type ChangeProperties<
   T extends object,
@@ -288,7 +286,7 @@ export type ChangeProperties<
 /**
  * Remap an object by adding an `__id` property.
  *
- * @template T - The object type to remap.
+ * @template `T` - The object type to remap.
  */
 export type Identify<T> = T extends object ? T & { __id: string } : T;
 
@@ -297,7 +295,7 @@ export type Identify<T> = T extends object ? T & { __id: string } : T;
  * It extracts the element type from an array type, whether it is a readonly array or a
  * mutable array.
  *
- * @template T - The type to reduce.
+ * @template `T` - The type to reduce.
  */
 export type ReduceArray<T> = T extends readonly (infer U1)[]
   ? U1
@@ -309,7 +307,7 @@ export type ReduceArray<T> = T extends readonly (infer U1)[]
  * The inverse of {@linkcode ReduceArray}.
  * Takes a type and wraps it in a readonly array, or returns it as-is if already an array.
  *
- * @template T - The type to wrap.
+ * @template `T` - The type to wrap.
  */
 export type ToArray<T> = T extends readonly unknown[]
   ? T
@@ -322,11 +320,11 @@ export type ToArray<T> = T extends readonly unknown[]
  *
  * @template : {@linkcode EventsMap} [E] - The events map used in the function.
  * @template : {@linkcode ActorsConfigMap} [A] - The actors configuration map used in the function.
- * @template Pc - The private context.
+ * @template `Pc` - The private context.
  * @template : {@linkcode PrimitiveObject} [Tc] - The context of the function, defaults to any object.
- * @template R - The return type of the function, defaults to any.
+ * @template `R` - The return type of the function, defaults to any.
  *
- * @see {@linkcode ToEvents2} for converting events and promisees to a map.
+ * @see -- type {@linkcode ToEvents2}
  */
 export type FnR<
   E extends EventObject = EventObject,
@@ -342,11 +340,11 @@ export type FnR<
  * @template : {@linkcode EventsMap} [E] - The events map used in the function.
  * @template : {@linkcode ActorsConfigMap} [A] - The actors configuration map used in the function.
  * @template : {@linkcode PrimitiveObject} [Tc] - The context of the function, defaults to any object.
- * @template R - The return type of the function, defaults to any.
+ * @template `R` - The return type of the function, defaults to any.
  *
  * @remarks This function signature is a reduced version of {@linkcode FnR} without the private context.
  *
- * @see {@linkcode ToEvents2} for converting events and promisees to a map.
+ * @see -- type {@linkcode ToEvents2}
  */
 export type FnReduced<
   E extends EventObject = EventObject,
@@ -358,7 +356,7 @@ export type FnReduced<
 /**
  * Extracts the string event type from an event type or string literal `T`.
  *
- * @template T - The event type or string.
+ * @template `T` - The event type or string.
  */
 export type EventToType<T extends string | { type: string }> = T extends {
   type: infer U extends string;
@@ -372,12 +370,12 @@ export type EventToType<T extends string | { type: string }> = T extends {
  * Internal helper function map type keyed by event types.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
- * @template R - Return value type.
- * @template Ex - Event types to exclude.
- * @template TT - Filtered event type.
+ * @template `T` - State tag string type.
+ * @template `R` - Return value type.
+ * @template `Ex` - Event types to exclude.
+ * @template `TT` - Filtered event type.
  */
 type _FnMap<
   E extends EventObject = EventObject,
@@ -397,12 +395,12 @@ type _FnMap<
  * Internal helper function map type keyed by event types.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
- * @template Item - Type of the item to filter.
- * @template Ex - Event types to exclude.
- * @template TT - Filtered event type.
+ * @template `T` - State tag string type.
+ * @template `Item` - Type of the item to filter.
+ * @template `Ex` - Event types to exclude.
+ * @template `TT` - Filtered event type.
  */
 type _FnMapFilterArray<
   E extends EventObject = EventObject,
@@ -422,6 +420,17 @@ type _FnMapFilterArray<
   else?: (item: Item, index: number, state: StateExtended<E, Pc, Tc, T>) => boolean;
 };
 
+/**
+ * Function map filter array type.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - State tag string type.
+ * @template `Item` - Type of the item to filter.
+ * @template `Ex` - Event types to exclude.
+ * @template `TT` - Filtered event type.
+ */
 export type FnMapFilterArray<
   E extends EventObject = EventObject,
   Pc = any,
@@ -438,12 +447,12 @@ export type FnMapFilterArray<
  * Internal helper function map type keyed by event types.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
- * @template Item - Type of the item to filter.
- * @template Ex - Event types to exclude.
- * @template TT - Filtered event type.
+ * @template `T` - State tag string type.
+ * @template `Item` - Type of the item to filter.
+ * @template `Ex` - Event types to exclude.
+ * @template `TT` - Filtered event type.
  */
 type _FnMapFilterObject<
   E extends EventObject = EventObject,
@@ -460,6 +469,17 @@ type _FnMapFilterObject<
   ) => boolean;
 } & { else?: (item: Item, state: StateExtended<E, Pc, Tc, T>) => boolean };
 
+/**
+ * Function map filter object type.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - State tag string type.
+ * @template `Item` - Type of the item to filter.
+ * @template `Ex` - Event types to exclude.
+ * @template `TT` - Filtered event type.
+ */
 export type FnMapFilterObject<
   E extends EventObject = EventObject,
   Pc = any,
@@ -477,9 +497,9 @@ export type FnMapFilterObject<
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
- * @template R - Return value type.
- * @template Ex - Event types to exclude.
+ * @template `T` - State tag string type.
+ * @template `R` - Return value type.
+ * @template `Ex` - Event types to exclude.
  */
 type _FnMapReduced<
   E extends EventObject = EventObject,
@@ -501,12 +521,12 @@ type _FnMapReduced<
 /**
  * Maps event types to their corresponding handler function signatures or fallback handler.
  *
- * @template E - The event object type extending interface {@linkcode EventObject}.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
- * @template R - Return type.
- * @template Ex - Event type strings to exclude.
+ * @template `E` - The event object type extending interface {@linkcode EventObject}.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
+ * @template `R` - Return type.
+ * @template `Ex` - Event type strings to exclude.
  */
 export type FnMap<
   E extends EventObject = EventObject,
@@ -523,11 +543,9 @@ export type FnMap<
  * @template : {@linkcode AllEvent} [E] - All Events map used in the function.
 
  * @template : {@linkcode PrimitiveObject} [Tc] - The context of the function, defaults to any object.
- * @template R - The return type of the function, defaults to any.
+ * @template `R` - The return type of the function, defaults to any.
  *
- * @see {@linkcode ToEvents2} for converting events and promisees to a map.
- * @see {@linkcode FnReduced} for a more generic function signature.
- * @see {@linkcode Extract}
+ * @see -- type {@linkcode ToEvents2}, -- type {@linkcode FnReduced}, -- type {@linkcode Extract}
  */
 export type FnMapR<
   E extends EventObject = EventObject,
@@ -546,24 +564,23 @@ export type EmptyObject = {};
 /**
  * A type that represents a record with string keys and values of type {@linkcode T}.
  *
- * @see {@linkcode Record} for more details.
+ * @see {@linkcode Record}
  */
 export type RecordS<T = unknown> = Record<string, T>;
 
 /**
  * A type that represents all values of type {@linkcode T},
  *
- * @see {@linkcode NotUndefined}
+ * @see -- type {@linkcode NotUndefined}
  */
 export type ValuesOf<T> = NotUndefined<NotUndefined<T>[keyof NotUndefined<T>]>;
 
 /**
  * A type that represents a record with string keys and values of type {@linkcode R}.
  *
- * @template S - The string keys of the record.
- * @template R - The type of the values in the record, optional
+ * @template `S` - The string keys of the record.
+ * @template `R` - The type of the values in the record, optional
  *
- * @see {@linkcode Record} for more details.
  * @remarks Simplified version of {@linkcode Record}
  */
 export type KeyU<S extends string, R = unknown> = Record<S, R>;
@@ -571,8 +588,8 @@ export type KeyU<S extends string, R = unknown> = Record<S, R>;
 /**
  * The partial version of {@linkcode KeyU}.
  *
- * @template S - The string keys of the record.
- * @template R - The type of the values in the record, optional
+ * @template `S` - The string keys of the record.
+ * @template `R` - The type of the values in the record, optional
  *
  * @see {@linkcode Partial}
  */
@@ -581,9 +598,9 @@ export type KeyO<S extends string, R = unknown> = Partial<KeyU<S, R>>;
 /**
  * Extracts the string type from a union type {@linkcode T}.
  *
- * @template T - The union type to extract the string type from.
+ * @template `T` - The union type to extract the string type from.
  *
- * @see {@linkcode Extract} for more details.
+ * @see -- type {@linkcode Extract}
  */
 export type ExtractS<T> = Extract<T, string>;
 
@@ -594,8 +611,7 @@ export type ExtractS<T> = Extract<T, string>;
  * @remarks This type is useful to ensure that the object is a plain object
  * without any special properties.
  *
- * @see {@linkcode Ru} for a utility type that represents a true object.
- * @see {@linkcode SymbolConstructor} for the symbol constructor type.
+ * @see -- type {@linkcode Ru}, -- type {@linkcode SymbolConstructor}
  */
 export type TrueObject = Ru & {
   [Symbol.iterator]?: never;
@@ -625,8 +641,8 @@ export type Delimiter = typeof DEFAULT_DELIMITER;
  * Extracts keys from type T that represent object properties which should be
  * recursively processed for no-extra-keys validation.
  *
- * @template T - The type to extract recursive keys from.
- * @template Schema - The schema type to compare against.
+ * @template `T` - The type to extract recursive keys from.
+ * @template `Schema` - The schema type to compare against.
  */
 type RecursiveObjectKeys<T, Schema> = {
   [K in keyof T & keyof Schema]: T[K] extends TrueObject ? K : never;
@@ -636,8 +652,8 @@ type RecursiveObjectKeys<T, Schema> = {
  * Generic type that restricts extra keys deeply on any object type.
  * Works with partial objects and ensures all keys match the schema exactly.
  *
- * @template T - The type to validate (the actual value type).
- * @template Schema - The schema type that defines allowed keys.
+ * @template `T` - The type to validate (the actual value type).
+ * @template `Schema` - The schema type that defines allowed keys.
  *
  * @remarks
  * This type performs deep validation ensuring:
@@ -665,7 +681,7 @@ type RecursiveObjectKeys<T, Schema> = {
  * type Invalid = NoExtraKeys<{ name: 'test'; extra: true }, MySchema>;
  * ```
  *
- * @see {@linkcode NoExtraKeysStrict} for a stricter version that requires exact match.
+ * @see {@linkcode NoExtraKeysStrict}
  */
 export type NoExtraKeys<T, Schema> = T & {
   [K in Exclude<keyof T, keyof Schema>]: never;
@@ -680,8 +696,8 @@ export type NoExtraKeys<T, Schema> = T & {
  * A stricter version of {@linkcode NoExtraKeys} that also validates
  * that all keys in the schema are present in the type T.
  *
- * @template T - The type to validate (the actual value type).
- * @template Schema - The schema type that defines allowed keys.
+ * @template `T` - The type to validate (the actual value type).
+ * @template `Schema` - The schema type that defines allowed keys.
  *
  * @remarks
  * Use this when you want to ensure not only that there are no extra keys,
@@ -704,8 +720,8 @@ export type NoExtraKeysStrict<T extends Schema, Schema> = NoExtraKeys<T, Schema>
  * Deep version of {@linkcode NoExtraKeys} that processes Record types
  * (objects with dynamic string keys).
  *
- * @template T - The Record type to validate.
- * @template Schema - The schema type for each value in the record.
+ * @template `T` - The Record type to validate.
+ * @template `Schema` - The schema type for each value in the record.
  *
  * @example
  * ```typescript
@@ -728,7 +744,7 @@ export type NoExtraKeysRecord<T extends Record<string, any>, Schema> = {
  * Utility type to create a no-extra-keys validator for a specific schema.
  * This is useful when you want to create reusable type validators.
  *
- * @template Schema - The schema type to validate against.
+ * @template `Schema` - The schema type to validate against.
  *
  * @example
  * ```typescript
@@ -757,8 +773,8 @@ export type NoExtraKeysFor<Schema, T extends Partial<Schema>> = NoExtraKeys<
 /**
  * Filters an array type to only include elements that match a condition type.
  *
- * @template Arr - The array type to filter.
- * @template Condition - The condition type to filter by.
+ * @template `Arr` - The array type to filter.
+ * @template `Condition` - The condition type to filter by.
  *
  * @example
  * ```typescript
@@ -778,15 +794,15 @@ export type FilterArray<
 /**
  * Utility type representing a deep partial type or `undefined`.
  *
- * @template T - The object type.
+ * @template `T` - The object type.
  */
 export type DeeperPartial<T> = DeepPartial<T> | undefined;
 
 /**
  * Internal helper to construct optional property definition.
  *
- * @template P - Property value type.
- * @template V - Property key string.
+ * @template `P` - Property value type.
+ * @template `V` - Property key string.
  */
 type _OptionalDefinition<P, V extends string> = undefined extends P
   ? { [K in V]?: P }
@@ -795,9 +811,9 @@ type _OptionalDefinition<P, V extends string> = undefined extends P
 /**
  * Defines an optional or required property object based on whether property type `P` includes `undefined`.
  *
- * @template P - Property type.
- * @template V - Property key name string.
- * @template R - Resolved object structure.
+ * @template `P` - Property type.
+ * @template `V` - Property key name string.
+ * @template `R` - Resolved object structure.
  */
 export type OptionalDefinition<
   P,
@@ -808,6 +824,6 @@ export type OptionalDefinition<
 /**
  * Type wrapping `T` or a `Promise` resolving to `T`.
  *
- * @template T - The resolved value type.
+ * @template `T` - The resolved value type.
  */
 export type MaybePromise<T> = T | Promise<T>;

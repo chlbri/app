@@ -15,7 +15,7 @@ export const returnFalse = () => false;
 /**
  * Default strict equality comparison comparator function.
  *
- * @template T - Value type.
+ * @template `T` - Value type.
  * @param a - First value.
  * @param b - Second value.
  *

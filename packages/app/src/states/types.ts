@@ -55,7 +55,7 @@ export type ActivityConfig = Record<string, ActivityArray>;
 /**
  * Helper extracting actions from an activity configuration array.
  *
- * @template {ActivityArray} TS - Activity array type.
+ * @template | {@linkcode ActivityArray} `TS` - Activity array type.
  */
 export type ActionsFromActivity<TS extends ActivityArray> = TS extends any
   ? ReduceArray<TS> extends infer TR
@@ -68,7 +68,7 @@ export type ActionsFromActivity<TS extends ActivityArray> = TS extends any
 /**
  * Helper extracting guards from an activity configuration array.
  *
- * @template {ActivityArray} TS - Activity array type.
+ * @template | {@linkcode ActivityArray} `TS` - Activity array type.
  */
 export type GuardsFromActivity<TS extends ActivityArray> = TS extends any
   ? ReduceArray<TS> extends infer TR
@@ -125,7 +125,7 @@ export type BaseConfig = {
 /**
  * Common configuration combining base options and transition declarations.
  *
- * @template {string} Paths - State path union. Defaults to `string`.
+ * @template `Paths` - State path union. Defaults to `string`.
  */
 export type CommonNodeConfig<Paths extends string = string> = BaseConfig &
   TransitionsConfig<Paths>;
@@ -133,7 +133,7 @@ export type CommonNodeConfig<Paths extends string = string> = BaseConfig &
 /**
  * Full state node configuration for atomic, compound, or parallel state nodes.
  *
- * @template {string} Paths - State path union. Defaults to `string`.
+ * @template `Paths` - State path union. Defaults to `string`.
  */
 export type NodeConfig2<Paths extends string = string> = CommonNodeConfig<Paths> &
   (
@@ -153,7 +153,7 @@ export type NodeConfig2<Paths extends string = string> = CommonNodeConfig<Paths>
 /**
  * Loose node configuration structure allowing optional properties.
  *
- * @template {string} Paths - State path union. Defaults to `string`.
+ * @template `Paths` - State path union. Defaults to `string`.
  */
 export type NodeConfig3<Paths extends string = string> = CommonNodeConfig<Paths> & {
   readonly type?: StateType;
@@ -173,7 +173,7 @@ export type TargetDef = {
 /**
  * Node configuration mapped to a target definition type `T`.
  *
- * @template {TargetDef} T - Target definition type.
+ * @template | {@linkcode TargetDef} `T` - Target definition type.
  */
 export type NodeConfig<T extends TargetDef> = CommonNodeConfig<T['targets']> &
   (undefined extends T['states']
@@ -196,7 +196,7 @@ export type NodeConfig<T extends TargetDef> = CommonNodeConfig<T['targets']> &
 /**
  * Atomic state node configuration.
  *
- * @template {string} Paths - Allowed state path union.
+ * @template `Paths` - Allowed state path union.
  */
 export type NodeConfigAtomic2<Paths extends string = string> =
   CommonNodeConfig<Paths> & {
@@ -208,7 +208,7 @@ export type NodeConfigAtomic2<Paths extends string = string> =
 /**
  * Compound state node configuration.
  *
- * @template {string} Paths - Allowed state path union.
+ * @template `Paths` - Allowed state path union.
  */
 export type NodeConfigCompound2<Paths extends string = string> =
   CommonNodeConfig<Paths> & {
@@ -220,7 +220,7 @@ export type NodeConfigCompound2<Paths extends string = string> =
 /**
  * Parallel state node configuration.
  *
- * @template {string} Paths - Allowed state path union.
+ * @template `Paths` - Allowed state path union.
  */
 export type NodeConfigParallel2<Paths extends string = string> =
   CommonNodeConfig<Paths> & {
@@ -273,7 +273,7 @@ type _ExtractTagsFromFlat<Flat extends FlatMapN> = {
 /**
  * Helper extracting all tags from a flattened state map type `Flat`.
  *
- * @template {FlatMapN} Flat - Flat map node configuration type.
+ * @template | {@linkcode FlatMapN} `Flat` - Flat map node configuration type.
  */
 export type ExtractTagsFromFlat<Flat extends FlatMapN> =
   _ExtractTagsFromFlat<Flat> extends infer Tags
@@ -287,8 +287,8 @@ export type ExtractTagsFromFlat<Flat extends FlatMapN> =
 /**
  * Common state properties structure.
  *
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - Tags string type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - Tags string type.
  */
 export type CommonState<
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -298,9 +298,9 @@ export type CommonState<
 /**
  * Full active state object containing event and context data.
  *
- * @template {EventObject} E - Event object type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - Tags string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - Tags string type.
  */
 export type State<
   E extends EventObject = EventObject,
@@ -311,9 +311,9 @@ export type State<
 /**
  * State object with custom event payload.
  *
- * @template E - Payload type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - Tags string type.
+ * @template `E` - Payload type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - Tags string type.
  */
 export type StateP<
   E = any,
@@ -324,10 +324,10 @@ export type StateP<
 /**
  * Extended active state object including private context `pContext`.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - Tags string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - Tags string type.
  */
 export type StateExtended<
   E extends EventObject = EventObject,
@@ -339,10 +339,10 @@ export type StateExtended<
 /**
  * Extended state object with payload and private context.
  *
- * @template E - Payload type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - Tags string type.
+ * @template `E` - Payload type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - Tags string type.
  */
 export type StatePextended<
   E = any,
@@ -381,8 +381,8 @@ type FlatMapNodeConfig<
 /**
  * Flattened map of all state paths to their respective node configurations.
  *
- * @template {NodeConfig3} T - Root node configuration.
- * @template {boolean} withChildren - Flag indicating whether child states are included.
+ * @template | {@linkcode NodeConfig3} `T` - Root node configuration.
+ * @template `withChildren` - Flag indicating whether child states are included.
  */
 export type FlatMapN<
   T extends NodeConfig3 = NodeConfig3,
@@ -396,24 +396,24 @@ type AlwaysEnd = `${string}.always` | `${string}.always.[${number}]`;
 /**
  * Filters keys that end with always transition string patterns.
  *
- * @template {Keys} T - Keys type.
+ * @template | {@linkcode Keys} `T` - Keys type.
  */
 export type EndWithAlways<T extends Keys> = Extract<T, AlwaysEnd>;
 
 /**
  * Alias for type {@linkcode EndWithAlways}.
  *
- * @template {Keys} T - Keys type.
+ * @template | {@linkcode Keys} `T` - Keys type.
  */
 export type EndwA<T extends Keys> = EndWithAlways<T>;
 
 /**
  * Internal state node structure holding executed functions and sub-nodes.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - Tags string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - Tags string type.
  */
 export type Node<
   E extends EventObject = EventObject,

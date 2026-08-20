@@ -3,7 +3,7 @@ import type { NotUndefined } from '@bemedev/app-utils-bemedev';
 /**
  * Casts a value of type `T` to type `NotUndefined<T>`.
  *
- * @template T - The input value type.
+ * @template `T` - The input value type.
  * @param value - The value to cast.
  *
  * @returns The casted value of type `NotUndefined<T>`.

@@ -4,7 +4,7 @@ import { toArray } from '@bemedev/app-utils-bemedev';
 /**
  * Retrieves all unique tag strings declared across a state node and its children.
  *
- * @template {string} T - Tag string type.
+ * @template `T` - Tag string type.
  * @param node - State node configuration object.
  *
  * @returns Array of unique tag strings.

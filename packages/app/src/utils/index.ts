@@ -28,7 +28,7 @@ export * from '@bemedev/sleep';
 /**
  * Performs a deep equality comparison between two values of type `T`.
  *
- * @template T - Type of the values being compared.
+ * @template `T` - Type of the values being compared.
  * @param a - First value.
  * @param b - Second value.
  *

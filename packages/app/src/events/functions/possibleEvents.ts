@@ -7,7 +7,7 @@ import type { RecordS } from '~types';
  * @param flat of type {@linkcode RecordS}<{@linkcode NodeConfig2}>, a flat record of NodeConfig.
  * @returns An array of event names.
  *
- * @see {@linkcode castings} for the utility function to check if a value is defined.
+ * @see {@linkcode castings}
  */
 export const possibleEvents = (flat: RecordS<NodeConfig2>) => {
   const events: string[] = [];

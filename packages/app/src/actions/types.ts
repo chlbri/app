@@ -6,19 +6,19 @@ import type { Describer, FnMap, FnR, FromDescriber } from '~types';
 /**
  * JSON configuration for an action.
  *
- * @see {@linkcode Describer} for more details.
+ * @see {@linkcode Describer}
  */
 /**
  * JSON configuration for an action.
  *
- * @see {@linkcode Describer} for more details.
+ * @see {@linkcode Describer}
  */
 export type WithDescriber = string | Describer;
 
 /**
  * Enforces no extra keys when value is a describer object.
  *
- * @template T - Input type.
+ * @template `T` - Input type.
  */
 export type NoExtraKeysWithDescriber<T> = T extends string
   ? T
@@ -27,7 +27,7 @@ export type NoExtraKeysWithDescriber<T> = T extends string
 /**
  * Enforces no extra keys on read-only tuple/array of describers.
  *
- * @template {ReadonlyArray<WithDescriber>} T - Array of describer types.
+ * @template | {@linkcode WithDescriber} `T` - Array of describer types.
  */
 export type NoExtraKeysWithDescriberArray<T extends ReadonlyArray<WithDescriber>> =
   T extends readonly [
@@ -43,7 +43,7 @@ export type NoExtraKeysWithDescriberArray<T extends ReadonlyArray<WithDescriber>
 /**
  * Enforces no extra keys across single value, array, or read-only tuple of describers.
  *
- * @template T - Target action describer type.
+ * @template `T` - Target action describer type.
  */
 export type NoExtraKeysWithDescriberSoa<T> =
   T extends ReadonlyArray<WithDescriber>
@@ -54,18 +54,18 @@ export type NoExtraKeysWithDescriberSoa<T> =
 
 /**
  * Retrieves the name of the action if it is a describer, otherwise returns the action itself.
- * @template T - ActionConfig to reduce
+ * @template `T` - ActionConfig to reduce
  * @returns The name of the action if it is a describer, otherwise the action itself.
  *
- * @see {@linkcode FromDescriber} for more details.
+ * @see {@linkcode FromDescriber}
  */
 export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
 
 /**
  * Represents the result of executing an action, which includes the private context and the context.
  *
- * @template Pc - The type of the private context.
- * @template {PrimitiveObject} Tc - The type of the context.
+ * @template `Pc` - The type of the private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
  * @returns an type {@linkcode ActionResult} object containing the private context and the type {@linkcode PrimitiveObject} context.
  */
 export type ActionResult<
@@ -79,8 +79,8 @@ export type ActionResult<
  * Any action (user-provided or produced by an `addOptions` helper except
  * `debounce`) may return type {@linkcode ActionResult} or a promise that resolves to one.
  *
- * @template Pc - The type of the private context.
- * @template {PrimitiveObject} Tc - The type of the context.
+ * @template `Pc` - The type of the private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
  */
 export type MaybeAsyncActionResult<
   Pc = any,
@@ -90,10 +90,10 @@ export type MaybeAsyncActionResult<
 /**
  * Async action function map.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type AsyncAction<
   E extends EventObject = EventObject,
@@ -105,10 +105,10 @@ export type AsyncAction<
 /**
  * Synchronous action function map.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type SyncAction<
   E extends EventObject = EventObject,
@@ -120,10 +120,10 @@ export type SyncAction<
 /**
  * Represents a collection of actions, where each action is identified by a string key.
  *
- * @template {EventObject} E - all events.
- * @template Pc - the type of the private context.
- * @template {PrimitiveObject} Tc - the type of the context.
- * @template {string} T - state path type.
+ * @template | {@linkcode EventObject} `E` - all events.
+ * @template `Pc` - the type of the private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - the type of the context.
+ * @template `T` - state path type.
  */
 export type AsyncActionMap<
   E extends EventObject = EventObject,
@@ -135,10 +135,10 @@ export type AsyncActionMap<
 /**
  * Sync action configuration map.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
  */
 export type SyncActionMap<
   E extends EventObject = EventObject,
@@ -150,10 +150,10 @@ export type SyncActionMap<
 /**
  * Async action function executor.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
  */
 export type AsyncAction2<
   E extends EventObject = EventObject,
@@ -165,10 +165,10 @@ export type AsyncAction2<
 /**
  * Sync action function executor.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
  */
 export type SyncAction2<
   E extends EventObject = EventObject,

@@ -7,7 +7,7 @@ import { isOn } from './on';
 /**
  * Type guard for checking if a value is a valid transitions configuration object.
  *
- * @template {string[]} T - Path keys tuple type.
+ * @template `T` - Path keys tuple type.
  *
  * @param value - Value to check.
  * @param keys - Allowed target paths.

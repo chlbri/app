@@ -84,7 +84,7 @@ checkActivities.orUndefined = (value: unknown): boolean => {
 /**
  * Validates atomic properties and transition options of a node config object.
  *
- * @template {string[]} T - Path keys tuple type.
+ * @template `T` - Path keys tuple type.
  *
  * @param value - Value to check.
  * @param keys - Allowed target state paths.
@@ -129,7 +129,7 @@ export const checkAtomic = <T extends string[] = string[]>(
 /**
  * Recursive type guard for validating complete state node configuration objects.
  *
- * @template {string[]} T - Path keys tuple type.
+ * @template `T` - Path keys tuple type.
  *
  * @param value - Value to check.
  * @param keys - Allowed target state paths.

@@ -4,7 +4,7 @@ import { isSingleOrArrayT } from './transition';
 /**
  * Type guard for checking delayed transitions configuration map.
  *
- * @template {string[]} T - Path keys tuple type.
+ * @template `T` - Path keys tuple type.
  *
  * @param value - Value to check.
  * @param keys - Allowed target paths.

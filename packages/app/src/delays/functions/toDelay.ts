@@ -6,10 +6,10 @@ import type { AsyncDelayFunction3, AsyncDelayMap } from '../types';
 /**
  * Function signature for converting a delay config string into an executable delay function.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Public context type.
- * @template {string} T - Event string type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - Event string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param delay - Delay configuration key or name.
  * @param delays - Optional delay map.
@@ -38,8 +38,7 @@ export type ToDelay_F = <
  * @param events of type {@linkcode string[]}, list of events of the machine.
  * @returns a function that returns the delay in milliseconds or undefined if not found.
  *
- * @see {@linkcode PrimitiveObject}
- * @see {@linkcode reduceFnMap}
+ * @see -- type {@linkcode PrimitiveObject}, {@linkcode reduceFnMap}
  */
 export const toDelay: ToDelay_F = (delay, delays, ...events) => {
   const fn = delays?.[delay];

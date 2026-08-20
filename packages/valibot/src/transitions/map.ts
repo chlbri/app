@@ -7,7 +7,7 @@ import { TargetSchema } from './target';
 /**
  * Valibot schema builder for transition configuration objects with actions (optional target).
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *
@@ -31,7 +31,7 @@ export const TransitionConfigMapA_Schema = <const T extends ReadonlyArray<string
 /**
  * Valibot schema builder for transition configuration objects requiring explicit target.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *
@@ -55,7 +55,7 @@ export const TransitionConfigMapF_Schema = <const T extends ReadonlyArray<string
 /**
  * Valibot schema builder for transition configuration objects requiring guards.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *
@@ -83,7 +83,7 @@ export const TransitionConfigMapG_Schema = <const T extends ReadonlyArray<string
 /**
  * Valibot schema builder for transition configuration objects requiring both target and guards.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *

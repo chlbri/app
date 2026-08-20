@@ -11,9 +11,9 @@ import { SubscriberBase } from './subscriber.base';
  * Subscriber class that manages the subscription state and provides methods
  * to handle state changes and unsubscribe.
  *
- * @template {PrimitiveObject} Tc - Type of the context
- * @template {string} T - State path string type
- * @template {EventObject} Eo - Event object type
+ * @template | {@linkcode PrimitiveObject} `Tc` - Type of the context
+ * @template `T` - State path string type
+ * @template | {@linkcode EventObject} `Eo` - Event object type
  */
 class Subscriber<
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -88,9 +88,9 @@ export type { Subscriber };
 /**
  * Options for configuring a subscriber instance.
  *
- * @template {EventObject} E - Event object type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
  */
 export type SubscriberOptions<
   E extends EventObject = EventObject,
@@ -114,9 +114,9 @@ export type SubscriberOptions<
 /**
  * Function signature for subscriber creation factory.
  *
- * @template {PrimitiveObject} Tc - Context type.
- * @template {string} T - State path string type.
- * @template {EventObject} Eo - Event object type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ * @template `T` - State path string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param subscriber - Subscriber map or function.
  * @param options - Subscriber options object.

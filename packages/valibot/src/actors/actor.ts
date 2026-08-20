@@ -5,7 +5,7 @@ import { EmitterConfig_Schema } from './emitter';
 /**
  * Valibot schema builder for actor configurations (child or emitter).
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *

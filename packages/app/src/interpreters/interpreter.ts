@@ -83,16 +83,16 @@ import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types'
  * It provides methods to start, stop, pause, and resume the machine, as well as to send events
  * and subscribe to state changes.
  *
- * @template {CommonConfig3} C - The configuration type of the machine.
- * @template Pc - The private context type.
- * @template {PrimitiveObject} Tc - The context type.
- * @template {EventsMap} E - The events map type.
- * @template {ActorsConfigMap} A - The actors config map type.
- * @template {string} Ta - Tag string type.
- * @template {EventObject} Eo - Event object type.
- * @template {string} AllPaths - All state paths type.
- * @template {SimpleMachineOptions2} Mo - Machine options type.
- * @template {SimpleMachineOptions2} L - Additional options type.
+ * @template | {@linkcode CommonConfig3} `C` - The configuration type of the machine.
+ * @template `Pc` - The private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - The context type.
+ * @template | {@linkcode EventsMap} `E` - The events map type.
+ * @template | {@linkcode ActorsConfigMap} `A` - The actors config map type.
+ * @template `Ta` - Tag string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template `AllPaths` - All state paths type.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Additional options type.
  */
 export class AsyncInterpreter<
   const C extends CommonConfig3 = CommonConfig3,
@@ -221,7 +221,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving when the forced send action finishes.
    *
-   * @see -- type {@linkcode TransitionConfig}
+   * @see {@linkcode TransitionConfig}
    */
   protected __performForceSendAction = async (
     from: string | false,
@@ -1086,7 +1086,7 @@ export class AsyncInterpreter<
   /**
    * Sends an event to a specific spawned child service by its identifier.
    *
-   * @template {EventObject} T - The event object type.
+   * @template | {@linkcode EventObject} `T` - The event object type.
    *
    * @param to - The identifier of the child service target.
    * @param event - The type {@linkcode EventObject} event to send to the child service.
@@ -1105,9 +1105,9 @@ export class AsyncInterpreter<
 /**
  * Utility type to infer the class {@linkcode AsyncInterpreter} type corresponding to a given interface {@linkcode AnyMachine}.
  *
- * @template {AnyMachine} M - The machine type from which to infer the interpreter type.
+ * @template | {@linkcode AnyMachine} `M` - The machine type from which to infer the interpreter type.
  *
- * @see -- type {@linkcode ConfigFrom}, -- type {@linkcode PrivateContextFrom}, -- type {@linkcode ContextFrom}, -- type {@linkcode EventsMapFrom}, -- type {@linkcode ActorsMapFrom}, -- type {@linkcode TagFrom}, -- type {@linkcode EventsFrom}, -- type {@linkcode AllPathsFrom}, -- type {@linkcode MachineOptionsFrom}
+ * @see {@linkcode ConfigFrom}, {@linkcode PrivateContextFrom}, {@linkcode ContextFrom}, {@linkcode EventsMapFrom}, {@linkcode ActorsMapFrom}, {@linkcode TagFrom}, {@linkcode EventsFrom}, {@linkcode AllPathsFrom}, {@linkcode MachineOptionsFrom}
  */
 export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
   ConfigFrom<M>,

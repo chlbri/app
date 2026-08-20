@@ -17,6 +17,8 @@ const log10 = (index = 0) => {
  * @param index - Current index number (default 0).
  * @param max - Maximum index number (default 0).
  * @returns Padded index string.
+ *
+ * @see {@linkcode log10}
  */
 export const buildIndex = (index = 0, max = 0) => {
   if (index < 0 || max < 0) {
@@ -41,6 +43,8 @@ export const buildIndex = (index = 0, max = 0) => {
  * @param index - Current test index (default 0).
  * @param max - Maximum index count (default 0).
  * @returns Formatted test title string.
+ *
+ * @see {@linkcode buildIndex}
  */
 export const buildInvite = (invite: string, index = 0, max = 0) => {
   const _index = buildIndex(index, max);

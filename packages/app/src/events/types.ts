@@ -8,7 +8,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
 /**
  * Represents a map of events where the keys are event names and the values are the payloads.
  *
- * @see {@linkcode PrimitiveObject} for the type of the payload.
+ * @see -- type {@linkcode PrimitiveObject}
  */
 export type EventsMap = Record<string, PrimitiveObject>;
 
@@ -34,7 +34,7 @@ export type EventStrings = InitEvent | AlwaysEvent | AfterEvent;
 
 /**
  * Represents an event object with a type and payload.
- * @template T - The type of the payload.
+ * @template `T` - The type of the payload.
  * @returns An object with a type and payload.
  */
 export type EventObject<T = any> = { type: string; payload: T };
@@ -47,10 +47,11 @@ export type AllEvent = EventObject | EventStrings;
 /**
  * Transforms a map of events into a union type of event objects.
  * Each event object has a type and payload.
- * @template {EventsMap} T - the map to transform.
+ * @template | {@linkcode EventsMap} `T` - the map to transform.
  *
- * @see {@linkcode Unionize} for the utility type that creates a union type from
  * the keys of the map.
+ *
+ * @see {@linkcode Unionize}
  */
 export type EventsR<T extends EventsMap> = {
   [K in keyof T & string]: { type: K; payload: T[K] };
@@ -59,7 +60,7 @@ export type EventsR<T extends EventsMap> = {
 /**
  * Internal helper to construct reduced emitter event union types.
  *
- * @template T - Emitter configuration map.
+ * @template `T` - Emitter configuration map.
  */
 type _EmitterConfigR<T extends EmitterConfigMap> =
   Unionize<T> extends infer U extends EmitterConfigMap
@@ -73,7 +74,7 @@ type _EmitterConfigR<T extends EmitterConfigMap> =
 /**
  * Internal helper to construct reduced child actor event union types.
  *
- * @template T - Child actor configuration map.
+ * @template `T` - Child actor configuration map.
  */
 type _ChildConfigR<T extends ChildConfigMap> = {
   [key in keyof T & string]: Unionize<T[key]> extends infer U
@@ -86,8 +87,8 @@ type _ChildConfigR<T extends ChildConfigMap> = {
 /**
  * Configuration map for children and emitter actors.
  *
- * @template {string} Sc - Children keys string union.
- * @template {string} Se - Emitters keys string union.
+ * @template `Sc` - Children keys string union.
+ * @template `Se` - Emitters keys string union.
  */
 export type ActorsConfigMap<
   Sc extends string = string,
@@ -97,8 +98,8 @@ export type ActorsConfigMap<
 /**
  * Represents a union type of all events, emitters, and child events.
  * It combines the transformed events, emitters, and child events into a single type.
- * @template {EventsMap} E - the map of events.
- * @template {ActorsConfigMap} A - the configuration map for actors which includes children and emitters.
+ * @template | {@linkcode EventsMap} `E` - the map of events.
+ * @template | {@linkcode ActorsConfigMap} `A` - the configuration map for actors which includes children and emitters.
  * @returns A union type of events, emitter-events, and child-events.
  */
 export type ToEventsR<E extends EventsMap, A extends ActorsConfigMap> =
@@ -109,8 +110,8 @@ export type ToEventsR<E extends EventsMap, A extends ActorsConfigMap> =
 /**
  * Comprehensive union of custom events, actor events, and built-in event strings.
  *
- * @template {EventsMap} E - Events map.
- * @template {ActorsConfigMap} A - Actors map.
+ * @template | {@linkcode EventsMap} `E` - Events map.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors map.
  */
 export type ToEvents<E extends EventsMap, A extends ActorsConfigMap> =
   | ToEventsR<E, A>
@@ -119,7 +120,7 @@ export type ToEvents<E extends EventsMap, A extends ActorsConfigMap> =
 /**
  * Resolves event argument types based on payload optionality.
  *
- * @template {EventObject} E - Event object type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
  */
 export type EventArgObject<E extends EventObject> = E extends any
   ? E['payload'] extends never
@@ -136,7 +137,7 @@ export type EventArgObject<E extends EventObject> = E extends any
 /**
  * Resolves event argument types for all events.
  *
- * @template {AllEvent} E - Event object or event string.
+ * @template | {@linkcode AllEvent} `E` - Event object or event string.
  */
 export type EventArgAll<E extends AllEvent> = E extends string
   ? E
@@ -146,17 +147,17 @@ export type EventArgAll<E extends AllEvent> = E extends string
 
 /**
  * Transforms an event map into arguments to send to the machine.
- * @template {EventsMap} E - the map of events.
+ * @template | {@linkcode EventsMap} `E` - the map of events.
  *
- * @see {@linkcode EventsR}, {@linkcode EventObject}
+ * @see {@linkcode EventsR}, -- type {@linkcode EventObject}
  */
 export type EventArg<E extends EventsMap> = EventArgObject<EventsR<E>>;
 
 /**
  * Extracts the type of the event from the event map.
- * @template {EventsMap} E - the map of events
+ * @template | {@linkcode EventsMap} `E` - the map of events
  *
- * @see {@linkcode EventsR}, {@linkcode EventObject}
+ * @see {@linkcode EventsR}, -- type {@linkcode EventObject}
  */
 export type EventArgT<E extends EventsMap> =
   EventsR<E> extends infer To extends EventObject ? To['type'] : never;
@@ -164,8 +165,8 @@ export type EventArgT<E extends EventsMap> =
 /**
  * Normalizes event strings and event objects into event objects of type {@linkcode EventObject}.
  *
- * @template {AllEvent} T - Event string or event object type.
- * @template {string} Ex - Event types to exclude.
+ * @template | {@linkcode AllEvent} `T` - Event string or event object type.
+ * @template `Ex` - Event types to exclude.
  */
 export type ToEventObject<T extends AllEvent, Ex extends string = never> = Exclude<
   T extends string ? { type: T; payload: EmptyObject } : T,
@@ -175,9 +176,9 @@ export type ToEventObject<T extends AllEvent, Ex extends string = never> = Exclu
 /**
  * Helper extracting tuple parameter list for event sender functions.
  *
- * @template {EventObject} T - Target event object.
- * @template {T['type']} E - Target event type key.
- * @template R - Inferred payload type.
+ * @template | {@linkcode EventObject} `T` - Target event object.
+ * @template `E` - Target event type key.
+ * @template `R` - Inferred payload type.
  */
 export type ExtractSender<
   T extends EventObject,

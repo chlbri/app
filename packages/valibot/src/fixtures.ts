@@ -4,7 +4,7 @@ import * as v from 'valibot';
 /**
  * Helper function for creating Vitest test suites for a given Valibot schema.
  *
- * @template {v.BaseSchema<any, any, v.BaseIssue<unknown>>} T - Valibot schema type.
+ * @template | {@linkcode v.BaseSchema} `T` - Valibot schema type.
  *
  * @param schema - The Valibot schema instance to validate against.
  *

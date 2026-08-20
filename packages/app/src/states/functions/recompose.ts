@@ -5,7 +5,7 @@ import type { NodeConfig2 } from '../types';
 /**
  * Function signature for URL shape recomposition.
  *
- * @template T - Value type.
+ * @template `T` - Value type.
  * @param shape - Shape string.
  * @param value - Target value.
  */
@@ -47,7 +47,7 @@ const recomposeObjectUrl: Url_F = (shape, value) => {
 /**
  * Function signature for configuration object recomposition.
  *
- * @template {NodeConfig2} T - Configuration type.
+ * @template | {@linkcode NodeConfig2} `T` - Configuration type.
  * @param shape - Target configuration shape.
  *
  * @returns Recomposed configuration object of type {@linkcode NodeConfig2}.

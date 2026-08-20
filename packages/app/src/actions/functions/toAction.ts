@@ -7,10 +7,10 @@ import { fromDescriber } from '~types';
 /**
  * Function signature for converting an action describer to an executable action function.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Public context type.
- * @template {string} T - State path string type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - State path string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param action - Action describer or string key.
  * @param actions - Optional map of async actions.

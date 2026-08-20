@@ -30,7 +30,7 @@ export type FinallyConfigArray = readonly [
 /**
  * Internal utility type to enforce no extra keys on finally transition configuration objects.
  *
- * @template T - Transition target or configuration type.
+ * @template `T` - Transition target or configuration type.
  */
 type _NoExtraKeysFinallyConfig<T> = T extends string
   ? T
@@ -44,7 +44,7 @@ type _NoExtraKeysFinallyConfig<T> = T extends string
 /**
  * Enforces no extra keys on read-only tuple of completion configurations.
  *
- * @template {ReadonlyArray<_FinallyConfig | WithDescriber>} T - Read-only array of completion configs.
+ * @template | {@linkcode _FinallyConfig} `T` - Read-only array of completion configs.
  */
 export type NoExtraKeysFinallyConfigArray<
   T extends ReadonlyArray<_FinallyConfig | WithDescriber>,
@@ -58,14 +58,14 @@ export type NoExtraKeysFinallyConfigArray<
 /**
  * The finally part of a completion configuration.
  *
- * @see {@linkcode TransitionConfigMapA}, {@linkcode WithDescriber}
+ * @see {@linkcode TransitionConfigMapA}, -- type {@linkcode WithDescriber}
  */
 export type FinallyConfig = (_FinallyConfig | WithDescriber) | FinallyConfigArray;
 
 /**
  * Enforces no extra keys on completion configurations.
  *
- * @template {FinallyConfig} T - Finally configuration type.
+ * @template | {@linkcode FinallyConfig} `T` - Finally configuration type.
  */
 export type NoExtraKeysFinallyConfig<T extends FinallyConfig> =
   T extends FinallyConfigArray
@@ -95,7 +95,7 @@ export type EmitterConfig<Paths = string> = CommonActor & {
 /**
  * Enforces no extra keys on emitter actor configurations.
  *
- * @template {EmitterConfig} T - Input emitter config.
+ * @template | {@linkcode EmitterConfig} `T` - Input emitter config.
  */
 export type NoExtraKeysEmitterConfig<T extends EmitterConfig> = CommonActor & {
   readonly next: NoExtraKeysTransitionConfigSoA<T['next']>;
@@ -106,7 +106,7 @@ export type NoExtraKeysEmitterConfig<T extends EmitterConfig> = CommonActor & {
 /**
  * Helper extracting source identifier `src` from an actor configuration.
  *
- * @template {object} T - Actor with `src` property.
+ * @template `T` - Actor with `src` property.
  */
 export type ExtractSrcFromActor<T extends { src: string }> = T['src'];
 
@@ -130,7 +130,7 @@ export type ChildConfig<Paths = string> = CommonActor &
 /**
  * Enforces no extra keys on child actor configurations.
  *
- * @template {ChildConfig} T - Child config type.
+ * @template | {@linkcode ChildConfig} `T` - Child config type.
  */
 export type NoExtraKeysChildConfig<T extends ChildConfig> = T & {
   [key1 in Extract<keyof T, 'on'>]: {
@@ -148,7 +148,7 @@ export type ActorConfig<Paths = string> = EmitterConfig<Paths> | ChildConfig<Pat
 /**
  * Enforces no extra keys on any actor configuration (emitter or child).
  *
- * @template T - Input actor config type.
+ * @template `T` - Input actor config type.
  */
 export type NoExtraKeysActorConfig<T> = T extends EmitterConfig
   ? NoExtraKeysEmitterConfig<T>

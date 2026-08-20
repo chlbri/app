@@ -210,6 +210,13 @@ export type Equals<T, U> = T extends U ? (U extends T ? true : false) : false;
  * @author chlbri (bri_lvi@icloud.com)
  */
 export class UndefinedHelper {
+  /**
+   * Marker property identifying missing/no-type values.
+   */
   readonly __NO_TYPE__ = '@bemedev/addons/NO_TYPE';
+
+  /**
+   * Private constructor to prevent instantiation.
+   */
   private constructor() {}
 }

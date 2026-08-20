@@ -7,10 +7,10 @@ import type { PrimitiveObject } from '@bemedev/typings';
 /**
  * Function signature for path value matcher guard helper.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
  *
  * @param path - Path string of type {@linkcode DefinedValue}.
  * @param values - Values to match against.

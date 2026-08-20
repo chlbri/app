@@ -6,7 +6,7 @@ import { AlwaysConfig_Schema, DelayedTransitions_Config } from './edges';
 /**
  * Valibot schema builder for transition definitions including `on`, `always`, `after`, and `actors`.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *

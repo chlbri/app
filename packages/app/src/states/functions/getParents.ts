@@ -46,7 +46,6 @@ const _getParents: _GetParents_F = value => {
  * @param value - The path to get parents for.
  * @returns An array of parent paths.
  *
- * @see {@linkcode GetParents_F} for type details.
- * @see {@linkcode _getParents} for the implementation.
+ * @see -- type {@linkcode GetParents_F}, {@linkcode _getParents}
  */
 export const getParents: GetParents_F = _getParents;

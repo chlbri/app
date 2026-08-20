@@ -24,16 +24,16 @@ import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 /**
  * Resolves to type {@linkcode SyncMachine} or type {@linkcode AsyncMachine} depending on the `Sync` type parameter.
  *
- * @template {CommonConfig3} C - Common configuration type.
- * @template Pc - Public context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {EventsMap} E - Events map.
- * @template {ActorsConfigMap} A - Actors map.
- * @template {string} Ta - Tags type.
- * @template {EventObject} Eo - Event object type.
- * @template {string} AllPaths - String union of all state paths.
- * @template {RegisterOptions} Options - Registry options type.
- * @template {true | undefined} Sync - Flag indicating sync machine execution.
+ * @template | {@linkcode CommonConfig3} `C` - Common configuration type.
+ * @template `Pc` - Public context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template | {@linkcode EventsMap} `E` - Events map.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors map.
+ * @template `Ta` - Tags type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template `AllPaths` - String union of all state paths.
+ * @template | {@linkcode RegisterOptions} `Options` - Registry options type.
+ * @template `Sync` - Flag indicating sync machine execution.
  */
 export type OutMachine<
   C extends CommonConfig3 = CommonConfig3,
@@ -73,18 +73,18 @@ export type OutMachine<
 /**
  * Function overload signature for creating an unnamed state machine.
  *
- * @template {CommonConfig2} C - Machine configuration type.
- * @template {StandardOutput<any>} Pc - Public context output type schema.
- * @template {StandardOutput<PrimitiveObject>} Tc - Internal context output type schema.
- * @template {StandardOutput<Record<string, PrimitiveObject>>} E - Events output type schema.
- * @template {StandardOutput<ActorsConfigMap>} A - Actors output type schema.
- * @template _E - Inferred events map type.
- * @template _A - Inferred actors map type.
- * @template _Pc - Inferred public context type.
- * @template _Tc - Inferred internal context type.
- * @template {string} Tags - State tags type.
- * @template {EventObject} Eo - Resulting event object type.
- * @template {true | undefined} Sync - Sync execution flag.
+ * @template | {@linkcode CommonConfig2} `C` - Machine configuration type.
+ * @template `Pc` - Public context output type schema.
+ * @template `Tc` - Internal context output type schema.
+ * @template `E` - Events output type schema.
+ * @template `A` - Actors output type schema.
+ * @template `_E` - Inferred events map type.
+ * @template `_A` - Inferred actors map type.
+ * @template `_Pc` - Inferred public context type.
+ * @template `_Tc` - Inferred internal context type.
+ * @template `Tags` - State tags type.
+ * @template | {@linkcode EventObject} `Eo` - Resulting event object type.
+ * @template `Sync` - Sync execution flag.
  *
  * @param config - The machine configuration object.
  * @param types - Optional type definition schemas for context, events, actors, and sync mode.
@@ -114,20 +114,20 @@ export type CreateMachineNoName_F = <
 /**
  * Function overload signature for creating a named state machine backed by type {@linkcode Register}.
  *
- * @template {keyof Register & string} Name - Registered machine identifier.
- * @template {Register[Name]} Current - Resolved registry entry for `Name`.
- * @template {CommonConfig<Current['paths']['map']>} C - Machine configuration type.
- * @template {StandardOutput<Current['pContext']>} Pc - Public context output type schema.
- * @template {StandardOutput<PrimitiveObject>} Tc - Internal context output type schema.
- * @template {StandardOutput<Record<Current['events'], PrimitiveObject>>} E - Events output type schema.
- * @template {StandardOutput<ActorsConfigMap<Current['options']['children'], Current['options']['emitters']>>} A - Actors output type schema.
- * @template _E - Inferred events map type.
- * @template _A - Inferred actors map type.
- * @template _Pc - Inferred public context type.
- * @template _Tc - Inferred internal context type.
- * @template {Exclude<Current['options']['tags'], undefined>} Tags - Allowed tags for state nodes.
- * @template {EventObject} Eo - Resulting event object type.
- * @template {true | undefined} Sync - Sync execution flag.
+ * @template `Name` - Registered machine identifier.
+ * @template `Current` - Resolved registry entry for `Name`.
+ * @template `C` - Machine configuration type.
+ * @template `Pc` - Public context output type schema.
+ * @template `Tc` - Internal context output type schema.
+ * @template `E` - Events output type schema.
+ * @template `A` - Actors output type schema.
+ * @template `_E` - Inferred events map type.
+ * @template `_A` - Inferred actors map type.
+ * @template `_Pc` - Inferred public context type.
+ * @template `_Tc` - Inferred internal context type.
+ * @template `Tags` - Allowed tags for state nodes.
+ * @template | {@linkcode EventObject} `Eo` - Resulting event object type.
+ * @template `Sync` - Sync execution flag.
  *
  * @param _ - Registered machine name string.
  * @param config - The machine configuration object.
@@ -182,14 +182,14 @@ export type CreateMachineNamed_F = <
 /**
  * Combined function signature for creating a state machine (named or unnamed).
  *
- * @see -- type {@linkcode CreateMachineNamed_F}, -- type {@linkcode CreateMachineNoName_F}
+ * @see {@linkcode CreateMachineNamed_F}, {@linkcode CreateMachineNoName_F}
  */
 export type CreateMachine_F = CreateMachineNamed_F & CreateMachineNoName_F;
 
 /**
  * Conditional type resolving to type {@linkcode SyncInterpreterFrom} or type {@linkcode AsyncInterpreterFrom} based on machine type.
  *
- * @template {AnyMachine} M - Target state machine type.
+ * @template | {@linkcode AnyMachine} `M` - Target state machine type.
  */
 export type OutInterpreter<M extends AnyMachine> = M['TYPE'] extends 'sync'
   ? SyncInterpreterFrom<M>
@@ -198,7 +198,7 @@ export type OutInterpreter<M extends AnyMachine> = M['TYPE'] extends 'sync'
 /**
  * Function signature for instantiating an interpreter for a machine instance.
  *
- * @template {AnyMachine} M - Target machine type.
+ * @template | {@linkcode AnyMachine} `M` - Target machine type.
  *
  * @param args - Arguments matching type {@linkcode InterpretArgs} for the target machine.
  *

@@ -19,7 +19,7 @@ export type DeleteFirst_F = Fn<[arg: string, toDelete?: string], string>;
  *
  * @returns The modified string with the first occurrence of the specified value removed, or the original string if the delimiter is not found at the start.
  *
- * @see type {@linkcode DeleteFirst_F}
+ * @see {@linkcode DeleteFirst_F}
  */
 export const deleteFirst: DeleteFirst_F = (arg, toDelete = DEFAULT_DELIMITER) => {
   const check = arg.startsWith(toDelete);

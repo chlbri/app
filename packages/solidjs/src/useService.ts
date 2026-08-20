@@ -12,9 +12,9 @@ import { useState } from './useState';
 /**
  * SolidJS hook that binds state signals, event checking, and hierarchy querying for a service.
  *
- * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
- * @template {string} Ta - Tag type extending `string`.
- * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
+ * @template `Ta` - Tag type extending `string`.
+ * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
  *
  * @param service - Service instance containing `subscribe`, `state`, and `canEvents`.
  * @param service.subscribe - Subscription function of type {@linkcode AddSubscriber_F}.
@@ -22,6 +22,8 @@ import { useState } from './useState';
  * @param service.canEvents - Method to check event execution capability.
  *
  * @returns Service hooks object containing `state`, `can`, and `isInside`.
+ *
+ * @see {@linkcode useState}, {@linkcode useCan}, {@linkcode useIsInside}, -- type {@linkcode UseServiceOptions}
  */
 export function useService<
   Tc extends PrimitiveObject,

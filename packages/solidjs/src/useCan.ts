@@ -10,9 +10,9 @@ import { createSignal, onCleanup } from 'solid-js';
 /**
  * SolidJS hook that creates reactive signal helpers for querying event capabilities from a service.
  *
- * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
- * @template {string} Ta - Tag type extending `string`.
- * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
+ * @template `Ta` - Tag type extending `string`.
+ * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
  *
  * @param service - Service object containing `subscribe`, `state`, and `canEvents`.
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
@@ -20,6 +20,8 @@ import { createSignal, onCleanup } from 'solid-js';
  * @param service.canEvents - Function checking if event types can be accepted.
  *
  * @returns Object helper with `or` and `and` methods returning signals.
+ *
+ * @see {@linkcode expandFn}, {@linkcode createSignal}, {@linkcode onCleanup}
  */
 export function useCan<
   Tc extends PrimitiveObject,

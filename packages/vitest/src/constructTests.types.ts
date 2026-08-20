@@ -14,17 +14,17 @@ import type { ConstructTestsResult, Option } from './types';
 /**
  * Type definition for the `constructTests` test builder function.
  *
- * @template {CommonConfig3} C - Machine configuration type extending type {@linkcode CommonConfig3}.
- * @template Pc - Protected context type.
- * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
- * @template {EventsMap} E - Events map type extending type {@linkcode EventsMap}.
- * @template {ActorsConfigMap} A - Actors configuration map extending type {@linkcode ActorsConfigMap}.
- * @template {string} Ta - Tag type extending `string`.
- * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
- * @template {string} AllPaths - All paths union type extending `string`.
- * @template {SimpleMachineOptions2} Mo - Machine options type extending type {@linkcode SimpleMachineOptions2}.
- * @template {SimpleMachineOptions2} L - Local machine options type extending type {@linkcode SimpleMachineOptions2}.
- * @template {object} T - Custom helper return type extending `object`.
+ * @template | {@linkcode CommonConfig3} `C` - Machine configuration type extending type {@linkcode CommonConfig3}.
+ * @template `Pc` - Protected context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
+ * @template | {@linkcode EventsMap} `E` - Events map type extending type {@linkcode EventsMap}.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map extending type {@linkcode ActorsConfigMap}.
+ * @template `Ta` - Tag type extending `string`.
+ * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
+ * @template `AllPaths` - All paths union type extending `string`.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Local machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * @template `T` - Custom helper return type extending `object`.
  *
  * @param vi - Vitest utility instance.
  * @param service - Interpreter service instance (type {@linkcode SyncInterpreter} or type {@linkcode AsyncInterpreter}).

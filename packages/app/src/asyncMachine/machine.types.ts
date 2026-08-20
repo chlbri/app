@@ -34,9 +34,9 @@ import type { AsyncMachine } from './machine';
  * Options for async action helpers.
  *
  * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  */
 export type AsyncOptions<
   Eo extends EventObject = EventObject,
@@ -65,9 +65,9 @@ export type AsyncOptions<
  * Error handler function signature for async options.
  *
  * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @param err - Thrown error value.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
@@ -82,7 +82,7 @@ export type ErrorFn<
 /**
  * Union type of traversable tuple `R` or Promise resolving to `R`.
  *
- * @template T - Source object type.
+ * @template `T` - Source object type.
  * @template | {@linkcode SingleOrArrayL2} `K` - Keys extending `keyof T`.
  * @template | {@linkcode TraversableTuple} `R` - Resolved traversable tuple type.
  */
@@ -96,9 +96,9 @@ export type TraversableTupleAsync<
  * Function type signature for creating an async assign action helper.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @template | {@linkcode Decompose} `D` - Decomposed context paths object type.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
@@ -125,9 +125,9 @@ export type AsyncAssignAction_F<
  * Function type signature for resending an event as an async action.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @param event - Event argument of type {@linkcode EventArgAll}.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
@@ -143,9 +143,9 @@ export type AsyncResendAction_F<
  * Function type signature for creating an activity or timer control action.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @param id - Activity or timer string identifier.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
@@ -161,9 +161,9 @@ export type AsyncTimeAction_F<
  * Function type signature for creating a void async action helper.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
@@ -181,9 +181,9 @@ export type AsyncVoidAction_F<
  * Function type signature for creating an array/object filter action helper.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
@@ -211,9 +211,9 @@ export type AsyncFilterAction_F<
  * Function type signature for creating an erase property action helper.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
@@ -237,9 +237,9 @@ export type AsyncEraseAction_F<
  * Function type signature for sending an event to an actor machine asynchronously.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  *
  * @returns Function returning an async action of type {@linkcode AsyncAction2}.
  */
@@ -267,9 +267,9 @@ export type AsyncSendAction_F<
  * Function type signature for creating a value checker guard helper.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @param path - Property path of type {@linkcode DefinedValue}.
  * @param values - Values to check against.
  *
@@ -286,9 +286,9 @@ export type AsyncValueCheckerGuard_F<
  * Function type signature for creating a property definition guard helper.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @param path - Property path of type {@linkcode DefinedValue}.
  *
  * @returns Guard function of type {@linkcode FnR}.
@@ -304,9 +304,9 @@ export type AsyncDefineGuard_F<
  * Function type signature for creating a debounced action helper.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @param fn - Async action of type {@linkcode AsyncAction2}.
  * @param options - Configuration options object.
  * @param options.ms - Optional debounce delay in milliseconds.
@@ -328,9 +328,9 @@ export type AsyncDebounceAction_F<
  * Function type signature for batching multiple actions into a single async action.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @param fns - Array of async actions of type {@linkcode AsyncAction2}.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
@@ -348,9 +348,9 @@ export type AsyncBatchAction_F<
  * Logical AND guard structure for async guard batching options.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  */
 export type AsyncGuardAndOption<
   E extends EventObject = EventObject,
@@ -363,9 +363,9 @@ export type AsyncGuardAndOption<
  * Logical OR guard structure for async guard batching options.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  */
 export type AsyncGuardOrOption<
   E extends EventObject = EventObject,
@@ -378,9 +378,9 @@ export type AsyncGuardOrOption<
  * Union of async guard items for batching.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  */
 export type AsyncGuardUnionOption<
   E extends EventObject = EventObject,
@@ -397,9 +397,9 @@ export type AsyncGuardUnionOption<
  * Function type signature for batching multiple guards into a single async guard.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @param guards - Variadic array of guard functions or logical guard objects.
  *
  * @returns Async guard function of type {@linkcode FnR}.
@@ -417,9 +417,9 @@ export type AsyncBatchGuard_F<
  * Object containing all action, guard, timer, and activity helper functions for an async machine.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  */
 export type AsyncAddOption<
   E extends EventObject = EventObject,
@@ -517,9 +517,9 @@ export type AsyncAddOption<
  * Parameters type signature for providing options to an async machine.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template T - State tag string type.
+ * @template `T` - State tag string type.
  * @template | {@linkcode SimpleMachineOptions2} `Mo` - Simple machine options type.
  * @template | {@linkcode SimpleMachineOptions2} `L` - Legacy options type.
  * @param option - Action and guard options object of type {@linkcode AsyncAddOption}.
@@ -547,9 +547,9 @@ export type AsyncAddOptionsParam_F<
  * Function type signature for adding options to an async machine configuration.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template Ta - State tag string type.
+ * @template `Ta` - State tag string type.
  * @template | {@linkcode SimpleMachineOptions2} `Mo` - Simple machine options type.
  * @template | {@linkcode SimpleMachineOptions2} `L` - Existing options type.
  */
@@ -568,13 +568,13 @@ export type AsyncAddOptions_F<
  * Function type signature for providing options to an async machine class {@linkcode AsyncMachine}.
  *
  * @template | {@linkcode CommonConfig3} `C` - Common machine config type.
- * @template Pc - Private context type.
+ * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template | {@linkcode EventsMap} `E` - Events map type.
  * @template | {@linkcode ActorsConfigMap} `A` - Actors config map type.
- * @template Ta - State tag string type.
+ * @template `Ta` - State tag string type.
  * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template AllPaths - All path strings type.
+ * @template `AllPaths` - All path strings type.
  * @template | {@linkcode SimpleMachineOptions2} `Mo` - Simple machine options type.
  * @template | {@linkcode EmptyObject} `L` - Existing options type.
  */

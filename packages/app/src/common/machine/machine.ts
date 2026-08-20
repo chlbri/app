@@ -51,15 +51,15 @@ import type {
 /**
  * Abstract base class for state machines (synchronous and asynchronous).
  *
- * @template {CommonConfig3} C - Configuration type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {EventsMap} E - Events map type.
- * @template {ActorsConfigMap} A - Actors configuration map type.
- * @template {string} Ta - Tag string type.
- * @template {EventObject} Eo - Event object type.
- * @template {string} AllPaths - All state paths type.
- * @template {SimpleMachineOptions2} Mo - Machine options type.
+ * @template | {@linkcode CommonConfig3} `C` - Configuration type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template | {@linkcode EventsMap} `E` - Events map type.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map type.
+ * @template `Ta` - Tag string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template `AllPaths` - All state paths type.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
  */
 export abstract class CommonMachine<
   const C extends CommonConfig3 = CommonConfig3,
@@ -75,8 +75,7 @@ export abstract class CommonMachine<
   /**
    * The configuration of the machine for this {@linkcode Machine}.
    *
-   * @see {@linkcode Config}
-   * @see {@linkcode C}
+   * @see -- type {@linkcode Config}, {@linkcode C}
    */
   private _config: C;
 
@@ -107,9 +106,7 @@ export abstract class CommonMachine<
   /**
    * The public accessor of the flat map of the configuration for this {@linkcode Machine}.
    *
-   * @see {@linkcode FlatMapN}
-   * @see {@linkcode Config}
-   * @see {@linkcode C}
+   * @see -- type {@linkcode FlatMapN}, -- type {@linkcode Config}, {@linkcode C}
    */
   abstract get flat(): any;
 
@@ -130,11 +127,7 @@ export abstract class CommonMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode State}
-   * @see {@linkcode Decompose}
-   * @see {@linkcode Eo}
-   * @see {@linkcode Tc}
-   * @see {@linkcode Ta}
+   * @see -- type {@linkcode State}, -- type {@linkcode Decompose}, {@linkcode Eo}, {@linkcode Tc}, {@linkcode Ta}
    */
   get __decomposedState() {
     return _unknown<
@@ -145,8 +138,7 @@ export abstract class CommonMachine<
   /**
    * Public accessor for the events map for this {@linkcode Machine}.
    *
-   * @see {@linkcode EventsMap}
-   * @see {@linkcode E}
+   * @see -- type {@linkcode EventsMap}, {@linkcode E}
    */
   get eventsMap() {
     return _unknown<E>();
@@ -155,8 +147,7 @@ export abstract class CommonMachine<
   /**
    * Public accessor for the promisees map for this {@linkcode Machine}.
    *
-   * @see {@linkcode PromiseeMap}
-   * @see {@linkcode A}
+   * @see -- type {@linkcode PromiseeMap}, {@linkcode A}
    */
   get actorsMap() {
     return _unknown<A>();
@@ -167,11 +158,10 @@ export abstract class CommonMachine<
    *
    * This property provides the events map for this {@linkcode Machine} as a type.
    *
-   * @see {@linkcode ToEvents}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
    *
    * @remarks Used for typing purposes only.
+   *
+   * @see -- type {@linkcode ToEvents}, {@linkcode E}, {@linkcode A}
    */
   get __events() {
     return _unknown<Eo>();
@@ -200,10 +190,7 @@ export abstract class CommonMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode E}
-   * @see {@linkcode Pc}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Tc}
+   * @see {@linkcode E}, {@linkcode Pc}, -- type {@linkcode PrimitiveObject}, {@linkcode Tc}
    */
   get __actionParams() {
     return _unknown<{ pContext: Pc; context: Tc; map: E }>();
@@ -216,13 +203,7 @@ export abstract class CommonMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode State}
-   * @see {@linkcode ToEventsR2}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode E}
-   * @see {@linkcode A}   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @see -- type {@linkcode State}, -- type {@linkcode ToEventsR2}, -- type {@linkcode PrimitiveObject}, -- type {@linkcode ActorsConfigMap}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __state() {
     return _unknown<State<Eo, Tc, Ta>>();
@@ -235,14 +216,7 @@ export abstract class CommonMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode StateExtended}
-   * @see {@linkcode ToEvents}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @see -- type {@linkcode StateExtended}, -- type {@linkcode ToEvents}, -- type {@linkcode PrimitiveObject}, -- type {@linkcode ActorsConfigMap}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __stateExtended() {
     return _unknown<StateExtended<Eo, Pc, Tc, Ta>>();
@@ -255,14 +229,7 @@ export abstract class CommonMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode StateP}
-   * @see {@linkcode ToEventsR2}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @see -- type {@linkcode StateP}, -- type {@linkcode ToEventsR2}, -- type {@linkcode PrimitiveObject}, -- type {@linkcode ActorsConfigMap}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __stateP() {
     return _unknown<StateP<Eo, Tc, Ta>>();
@@ -275,14 +242,7 @@ export abstract class CommonMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode StatePextended}
-   * @see {@linkcode ToEventsR2}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @see -- type {@linkcode StatePextended}, -- type {@linkcode ToEventsR2}, -- type {@linkcode PrimitiveObject}, -- type {@linkcode ActorsConfigMap}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __statePextended() {
     return _unknown<StatePextended<Eo, Pc, Tc, Ta>>();
@@ -349,10 +309,7 @@ export abstract class CommonMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode DefinedValue}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @see -- type {@linkcode PrimitiveObject}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __definedValue() {
     return _unknown<DefinedValue<Pc, Tc>>();
@@ -410,8 +367,7 @@ export abstract class CommonMachine<
   /**
    * Context for this {@linkcode Machine}.
    *
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Tc}
+   * @see -- type {@linkcode PrimitiveObject}, {@linkcode Tc}
    */
   protected __context!: Tc;
 
@@ -493,8 +449,7 @@ export abstract class CommonMachine<
   /**
    * The accessor of context for this {@linkcode Machine}.
    *
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Tc}
+   * @see -- type {@linkcode PrimitiveObject}, {@linkcode Tc}
    */
   get context() {
     const out = this.__elements.context;
@@ -658,11 +613,11 @@ export abstract class CommonMachine<
    * If not provided, the current elements will be returned.
    * @returns a new instance of this {@linkcode Machine} with the provided key and value.
    *
-   * @see {@linkcode Elements}
    *
-   * @see type inferences :
    *
    *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} ,  , {@linkcode Mo}
+   *
+   * @see -- type {@linkcode Elements}
    */
   protected abstract __renew: () => this;
 
@@ -690,11 +645,9 @@ export abstract class CommonMachine<
   /**
    * Get all meaningful elements of the machine.
    *
-   * @see {@linkcode Elements}
    *
-   * @see type inferences :
    *
-   * @see {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2}, {@linkcode Mo}
+   * @see -- type {@linkcode Elements}, -- type {@linkcode Config}, {@linkcode C}, -- type {@linkcode GetEventsFromConfig}, {@linkcode E}, -- type {@linkcode PromiseeMap}, -- type {@linkcode GetPromiseesSrcFromConfig}, {@linkcode A}, {@linkcode Pc}, -- type {@linkcode PrimitiveObject}, {@linkcode Tc}, -- type {@linkcode SimpleMachineOptions2}, {@linkcode Mo}
    */
   protected get __elements(): CommonElements<C, Pc, Tc, Mo> {
     const config = structuredClone(this._config);
@@ -782,7 +735,6 @@ export abstract class CommonMachine<
   /**
    * Function helper to check if a value matches the provided values
    *
-   * @see type inferences :
    *
    * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
@@ -795,7 +747,6 @@ export abstract class CommonMachine<
   /**
    * Function helper to check if a value is not one of the provided values.
    *
-   * @see type inferences :
    *
    *  {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
@@ -808,7 +759,6 @@ export abstract class CommonMachine<
   /**
    * Function helper to check if a value is defined
    *
-   * @see type inferences :
    *
    * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
@@ -820,7 +770,6 @@ export abstract class CommonMachine<
 
   /**
    * Function helper to check if a value is undefined or null
-   * @see type inferences :
    *
    * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
@@ -835,7 +784,6 @@ export abstract class CommonMachine<
    *
    * @param _ an optional parameter of type {@linkcode AnyMachine} [{@linkcode T}] to specify the machine context. Only used for type inference.
    *
-   * @see type inferences :
    *
    * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
@@ -880,10 +828,7 @@ export abstract class CommonMachine<
 /**
  * Helper to retrieve entry or exit actions from a node.
  *
- * @see {@linkcode GetIO_F}
- * @see {@linkcode toArray.typed}
- * @see {@linkcode isAtomic}
- * @see {@linkcode isCompound}
+ * @see -- type {@linkcode GetIO_F}, {@linkcode toArray.typed}, {@linkcode isAtomic}, {@linkcode isCompound}
  */
 const getIO: GetIO_F = (key, node) => {
   if (!node) return [];

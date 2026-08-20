@@ -35,16 +35,16 @@ import type {
  * A class representing a synchronous state machine.
  * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
- * @template {CommonConfig3} C - Configuration type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {EventsMap} E - Events map type.
- * @template {ActorsConfigMap} A - Actors configuration map type.
- * @template {string} Ta - Tag string type.
- * @template {EventObject} Eo - Event object type.
- * @template {string} AllPaths - All state paths type.
- * @template {SimpleMachineOptions2} Mo - Machine options type.
- * @template {SimpleMachineOptions2} L - Additional options type.
+ * @template | {@linkcode CommonConfig3} `C` - Configuration type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template | {@linkcode EventsMap} `E` - Events map type.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map type.
+ * @template `Ta` - Tag string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template `AllPaths` - All state paths type.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Additional options type.
  */
 export class SyncMachine<
   const C extends CommonConfig3 = CommonConfig3,

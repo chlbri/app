@@ -10,7 +10,7 @@ import { ActivityConfig_Schema } from './activity';
 /**
  * Creates common Valibot object schema entries for state node configurations.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *
@@ -77,7 +77,7 @@ export const checkNodeType = v.check(
 /**
  * Valibot schema builder for validating state machine configuration nodes.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *

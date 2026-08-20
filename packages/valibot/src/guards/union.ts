@@ -12,8 +12,7 @@ export const SimpleGuardConfig_Schema = ActionConfig_Schema;
 /**
  * Valibot schema for validating guard configurations (simple, AND logical combination, or OR logical combination).
  *
- * @see type {@linkcode GuardConfig}
- * @see {@linkcode SimpleGuardConfig_Schema}, {@linkcode GuardAnd_Schema}, {@linkcode GuardOr_Schema}
+ * @see -- type {@linkcode GuardConfig}, {@linkcode SimpleGuardConfig_Schema}, {@linkcode GuardAnd_Schema}, {@linkcode GuardOr_Schema}
  */
 export const GuardConfig_Schema: v.BaseSchema<
   GuardConfig,

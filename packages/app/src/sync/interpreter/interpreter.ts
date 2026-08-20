@@ -78,16 +78,16 @@ import type { SyncMachine } from '../machine/machine';
  * It provides methods to start, stop, pause, and resume the machine, as well as to send events
  * and subscribe to state changes.
  *
- * @template {CommonConfig3} C - The configuration type of the machine.
- * @template Pc - The private context type.
- * @template {PrimitiveObject} Tc - The context type.
- * @template {EventsMap} E - The events map type.
- * @template {ActorsConfigMap} A - The actors config map type.
- * @template {string} Ta - Tag string type.
- * @template {EventObject} Eo - Event object type.
- * @template {string} AllPaths - All state paths type.
- * @template {SimpleMachineOptions2} Mo - Machine options type.
- * @template {SimpleMachineOptions2} L - Additional options type.
+ * @template | {@linkcode CommonConfig3} `C` - The configuration type of the machine.
+ * @template `Pc` - The private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - The context type.
+ * @template | {@linkcode EventsMap} `E` - The events map type.
+ * @template | {@linkcode ActorsConfigMap} `A` - The actors config map type.
+ * @template `Ta` - Tag string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template `AllPaths` - All state paths type.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Additional options type.
  */
 export class SyncInterpreter<
   const C extends CommonConfig3 = CommonConfig3,
@@ -995,7 +995,7 @@ export class SyncInterpreter<
   /**
    * Sends an event to a specific child service by its ID.
    *
-   * @template T - The event object type extending interface {@linkcode EventObject}.
+   * @template `T` - The event object type extending interface {@linkcode EventObject}.
    *
    * @param to - The ID of the child service to which the event will be sent.
    * @param event - The event object of type {@linkcode EventObject} to send to the child service.
@@ -1014,14 +1014,14 @@ export class SyncInterpreter<
 /**
  * Type helper to extract the machine configuration property from a type {@linkcode KeyU}.
  *
- * @template T - The target type extending type {@linkcode KeyU}.
+ * @template `T` - The target type extending type {@linkcode KeyU}.
  */
 type SyncConfigFrom<T extends KeyU<'config'>> = T['config'];
 
 /**
  * Retrieves the type {@linkcode SyncInterpreter} service type from a given interface {@linkcode AnyMachine}.
  *
- * @template M - The machine type extending interface {@linkcode AnyMachine}.
+ * @template `M` - The machine type extending interface {@linkcode AnyMachine}.
  */
 export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
   SyncConfigFrom<M>,
@@ -1038,7 +1038,7 @@ export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
 /**
  * Function type signature for creating a type {@linkcode SyncInterpreterFrom} service from an interface {@linkcode AnyMachine}.
  *
- * @template M - The machine type extending interface {@linkcode AnyMachine}.
+ * @template `M` - The machine type extending interface {@linkcode AnyMachine}.
  *
  * @param args - The interpretation arguments of type {@linkcode InterpretArgs}.
  *

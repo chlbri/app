@@ -42,7 +42,7 @@ import type { EmptyObject } from '~types';
  * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
  * @template : {@linkcode AsyncConfig} [C] - The configuration type of the machine.
- * @template Pc : The private context type of the machine.
+ * @template `Pc` : The private context type of the machine.
  * @template : {@linkcode PrimitiveObject} [Pc] - The context type of the machine.
  * @template : {@linkcode GetEventsFromConfig}<{@linkcode C}> [E] - The events map type derived from the configuration.
  * @template : {@linkcode PromiseeMap} [P] - The promisees map type derived from the configuration.
@@ -74,11 +74,7 @@ export class AsyncMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode Tc}
+   * @see {@linkcode E}, {@linkcode A}, {@linkcode Pc}, -- type {@linkcode PrimitiveObject}, {@linkcode Tc}
    */
   get __actionFn() {
     return _unknown<AsyncAction<Eo, Pc, Tc, Ta>>();
@@ -91,13 +87,7 @@ export class AsyncMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode AsyncPredicateS}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @see -- type {@linkcode AsyncPredicateS}, -- type {@linkcode ActorsConfigMap}, -- type {@linkcode PrimitiveObject}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __predicate() {
     return _unknown<AsyncPredicateS<Eo, Pc, Tc, Ta>>();
@@ -110,13 +100,7 @@ export class AsyncMachine<
    *
    * @remarks Used for typing purposes only.
    *
-   * @see {@linkcode AsyncDelayFunction}
-   * @see {@linkcode ActorsConfigMap}
-   * @see {@linkcode PrimitiveObject}
-   * @see {@linkcode E}
-   * @see {@linkcode A}
-   * @see {@linkcode Pc}
-   * @see {@linkcode Tc}
+   * @see {@linkcode AsyncDelayFunction}, -- type {@linkcode ActorsConfigMap}, -- type {@linkcode PrimitiveObject}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __delay() {
     return _unknown<AsyncDelayFunction<Eo, Pc, Tc, Ta>>();
@@ -127,9 +111,7 @@ export class AsyncMachine<
   /**
    * The public accessor of the flat map of the configuration for this {@linkcode AsyncMachine}.
    *
-   * @see {@linkcode FlatMapN}
-   * @see {@linkcode AsyncConfig}
-   * @see {@linkcode C}
+   * @see -- type {@linkcode FlatMapN}, {@linkcode AsyncConfig}, {@linkcode C}
    */
   get flat() {
     return this.__flat as FlatMapN<C, true>;
@@ -387,7 +369,6 @@ export class AsyncMachine<
    * If not provided, the current elements will be returned.
    * @returns the elements of the machine with the provided key and value.
    *
-   * @see type inferences :
    * {@linkcode C}, {@linkcode E}  , {@linkcode A} , {@linkcode Pc}  , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
 
@@ -398,7 +379,6 @@ export class AsyncMachine<
    * If not provided, the current elements will be returned.
    * @returns a new instance of this {@linkcode AsyncMachine} with the provided key and value.
    *
-   * @see type inferences :
    * {@linkcode C}, {@linkcode E}  , {@linkcode A} , {@linkcode Pc}  , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
    */
   protected __renew = (): this => {
@@ -441,7 +421,6 @@ export class AsyncMachine<
    *
    * @param _ an optional parameter of type {@linkcode AnyMachine} [{@linkcode T}] to specify the machine context. Only used for type inference.
    *
-   * @see type inferences :
    * {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
    * @see {@linkcode reduceFnMap}
@@ -497,7 +476,6 @@ export class AsyncMachine<
    *
    * @param fn the action function to perform.
    *
-   * @see type inferences :
    *
    * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *

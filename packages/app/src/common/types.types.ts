@@ -39,10 +39,10 @@ export type AppTypes = ActionTypes | 'guards' | 'pContext' | 'context';
 /**
  * Function signature for accessing state properties by dot-delimited key.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type ByKey_F<
   E extends EventObject = EventObject,

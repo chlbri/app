@@ -5,7 +5,7 @@ import { isActor } from '#actors';
 /**
  * Type guard for checking actors map configuration object.
  *
- * @template {string[]} T - Path keys tuple type.
+ * @template `T` - Path keys tuple type.
  *
  * @param value - Value to check.
  * @param keys - Allowed target paths.

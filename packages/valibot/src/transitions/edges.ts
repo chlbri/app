@@ -13,7 +13,7 @@ import { TransitionConfigMapFG_Schema, TransitionConfigMapG_Schema } from './map
 /**
  * Valibot schema builder for non-empty transition arrays.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *
@@ -43,7 +43,7 @@ export const ArrayTransitions_Schema = <T extends ReadonlyArray<string>>(
 /**
  * Valibot schema builder for non-empty transition arrays requiring explicit targets.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *
@@ -73,7 +73,7 @@ export const ArrayTransitionsF_Schema = <T extends ReadonlyArray<string>>(
 /**
  * Valibot schema builder for single transition configuration or array of transition configurations.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *
@@ -93,7 +93,7 @@ export const SingleOrArrayT_Schema = <T extends ReadonlyArray<string>>(
 /**
  * Valibot schema builder for transient/always transition configurations.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *
@@ -117,7 +117,7 @@ export const AlwaysConfig_Schema = <T extends ReadonlyArray<string>>(
 /**
  * Valibot schema builder for delayed (`on` / `after`) transition configurations.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *

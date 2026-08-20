@@ -1,11 +1,22 @@
 import { Fn } from '../types';
 import { expandFn } from '../../../globals/utils/expandFn';
 
+/**
+ * Function type signature for partially applying object parameters.
+ */
 type _PartialCallO_F = <T extends object, U extends T, R>(
   f: Fn<[arg: U], R>,
   headArgs?: T,
 ) => Fn<[remainArgs: Omit<U, keyof T>], R>;
 
+/**
+ * Internal helper to partially apply object properties to a single-argument function.
+ *
+ * @param f - Function expecting an object parameter.
+ * @param headArgs - Default/preset object properties.
+ *
+ * @returns Function accepting remaining object properties.
+ */
 const __partialCallO = (f: Fn<[arg: any], any>, headArgs?: object) => {
   return (remainArgs: object) => {
     const params = { ...remainArgs, ...headArgs } as any;
@@ -13,6 +24,9 @@ const __partialCallO = (f: Fn<[arg: any], any>, headArgs?: object) => {
   };
 };
 
+/**
+ * Typed implementation of object partial call.
+ */
 const _partialCallO: _PartialCallO_F = __partialCallO;
 
 /**

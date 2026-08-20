@@ -56,7 +56,7 @@ isFinallyConfig.orUndefined = (
 /**
  * Type guard for checking if a value is a valid emitter configuration.
  *
- * @template {string[]} T - Path keys tuple type.
+ * @template `T` - Path keys tuple type.
  *
  * @param value - Value to check.
  * @param keys - Allowed target state paths.

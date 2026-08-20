@@ -23,7 +23,7 @@ export type ReplaceAll_F = (params: {
  *
  * @returns The modified string with all occurrences replaced.
  *
- * @see type {@linkcode ReplaceAll_F}
+ * @see {@linkcode ReplaceAll_F}
  */
 export const replaceAll: ReplaceAll_F = ({ entry, match, replacement }) => {
   const regex = escapeRegExp(match);

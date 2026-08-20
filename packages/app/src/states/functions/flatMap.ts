@@ -7,7 +7,7 @@ import type { RecordS } from '~types';
 /**
  * Function signature for flattening state node configuration map.
  *
- * @template {NodeConfig2} T - Root node configuration type.
+ * @template | {@linkcode NodeConfig2} `T` - Root node configuration type.
  *
  * @param config - State node configuration.
  * @param children - Whether to include child states.
@@ -33,7 +33,7 @@ export type FlatMap_F<T extends NodeConfig2 = NodeConfig2> = <
  * @param path - The current path in the output map (used for recursion).
  * @returns A flat map of the state node configuration.
  *
- * @see {@linkcode FlatMap_F} for more details.
+ * @see {@linkcode FlatMap_F}
  */
 export const flatMap = expandFn(
   ((node, children, sep = DEFAULT_DELIMITER) => {

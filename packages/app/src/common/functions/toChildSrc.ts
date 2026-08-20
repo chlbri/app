@@ -6,11 +6,11 @@ import type { PrimitiveObject } from '@bemedev/typings';
 /**
  * Function signature for converting child identifier into child machine function.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template {EventObject} Eo - Event object type.
- * @template R - Child machine return type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template `R` - Child machine return type.
  *
  * @param child - Child identifier string.
  * @param children - Children map.

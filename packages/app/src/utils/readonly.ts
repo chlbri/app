@@ -12,7 +12,7 @@ export const readonly = expandFn(
     /**
      * Freezes and returns a deeply read-only object.
      *
-     * @template {object} T - Object type.
+     * @template `T` - Object type.
      * @param obj - The object to freeze.
      *
      * @returns Deeply read-only frozen object.

@@ -7,13 +7,13 @@ import type { Describer, Describer2 } from '~types';
  * Merges multiple context functions into a single composite reducer function.
  *
  * @template Pc - Type of the public context. Defaults to `any`.
- * @template {PrimitiveObject} Tc - Type of the state context. Defaults to type {@linkcode PrimitiveObject}.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Type of the state context. Defaults to type {@linkcode PrimitiveObject}.
  *
  * @param remains - Rest parameter of functions returning target and context objects.
  *
  * @returns A composite function that deep-merges all remaining contexts.
  *
- * @see -- type {@linkcode Contexts}
+ * @see {@linkcode Contexts}
  */
 export const reduceRemainings = <
   Pc = any,
@@ -54,7 +54,7 @@ export type ToDescriber_F = (arg: string | Describer) => Describer2;
  *
  * @returns Normalized type {@linkcode Describer2} object.
  *
- * @see -- type {@linkcode ToDescriber_F}
+ * @see {@linkcode ToDescriber_F}
  */
 export const toDescriber: ToDescriber_F = name => {
   const check = typeof name === 'object';

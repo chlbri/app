@@ -26,7 +26,7 @@ const notProvided = 'is not provided' as const;
 /**
  * Creates error object for undefined state.
  *
- * @template T - Type name string.
+ * @template `T` - Type name string.
  * @param type - Category type string.
  *
  * @returns Error object container.
@@ -39,7 +39,7 @@ const notDefinedF = <T extends string>(type: T) => {
 /**
  * Creates error object for undescribed state.
  *
- * @template T - Type name string.
+ * @template `T` - Type name string.
  * @param type - Category type string.
  *
  * @returns Error object container.
@@ -52,7 +52,7 @@ const notDescribedF = <T extends string>(type: T) => {
 /**
  * Creates error object for unprovided state.
  *
- * @template T - Type name string.
+ * @template `T` - Type name string.
  * @param type - Category type string.
  *
  * @returns Error object container.
@@ -65,7 +65,7 @@ const notProvidedF = <T extends string>(type: T) => {
 /**
  * Helper to generate error object structures across specified category descriptors.
  *
- * @template T - Tuple array of category descriptors.
+ * @template `T` - Tuple array of category descriptors.
  * @param types - Category descriptor objects.
  *
  * @returns Object map of category error handlers.

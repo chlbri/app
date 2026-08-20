@@ -11,7 +11,7 @@ import { recordV } from './utils/record';
 /**
  * Valibot schema builder for machine state configuration node.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *

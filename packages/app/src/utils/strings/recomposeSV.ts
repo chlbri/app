@@ -20,7 +20,7 @@ export type RecomposeSV_F = Fn<[arg: string, delimiter?: string], StateValue>;
  *
  * @returns An object with the first part as the key and the recomposed value as the value.
  *
- * @see type {@linkcode RecomposeSV_F}
+ * @see {@linkcode RecomposeSV_F}
  */
 export const recomposeSV: RecomposeSV_F = (arg, delimiter = DEFAULT_DELIMITER) => {
   const arg1 = arg.startsWith(delimiter) ? arg.substring(1) : arg;

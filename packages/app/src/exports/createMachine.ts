@@ -26,7 +26,7 @@ const builder = (_config: any, types: any) => {
  *
  * @returns An instance of type {@linkcode SyncMachine} or type {@linkcode AsyncMachine}.
  *
- * @see -- type {@linkcode CreateMachine_F}
+ * @see {@linkcode CreateMachine_F}
  */
 // @ts-expect-error - This file is meant to be used in both sync and async contexts, so some types may not align perfectly.
 export const createMachine: CreateMachine_F = (

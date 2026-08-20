@@ -10,11 +10,11 @@ import { toEmitterSrc } from './src';
 /**
  * Function signature for converting emitter config to an type {@linkcode AsyncEmitter} object.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Return value type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Return value type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param emitter - Emitter config object with `__id`.
  * @param options - Machine options object.

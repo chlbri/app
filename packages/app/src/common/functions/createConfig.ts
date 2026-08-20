@@ -4,7 +4,7 @@ import { _any } from '@bemedev/app-utils-bemedev';
 /**
  * Function signature for machine configuration creation helper.
  *
- * @template {NodeConfig2} T - Node configuration type.
+ * @template | {@linkcode NodeConfig2} `T` - Node configuration type.
  *
  * @param config - Configuration object input.
  *

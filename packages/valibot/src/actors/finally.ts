@@ -36,8 +36,7 @@ export const _FinallyConfigSchema = v.union([_F_Schema, ActionConfig_Schema]);
 /**
  * Valibot schema for complete actor finally handler configuration, validating single or array of handlers.
  *
- * @see type {@linkcode FinallyConfig}
- * @see {@linkcode _FinallyConfigSchema}, {@linkcode _FG_Schema}
+ * @see -- type {@linkcode FinallyConfig}, {@linkcode _FinallyConfigSchema}, {@linkcode _FG_Schema}
  */
 export const FinallyConfigSchema = v.union([
   _FinallyConfigSchema,

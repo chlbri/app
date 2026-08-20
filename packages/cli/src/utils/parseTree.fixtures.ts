@@ -1,5 +1,8 @@
 import { createConfig } from '@bemedev/app';
 
+/**
+ * Test fixture configuration 2.
+ */
 export const config2 = createConfig({
   initial: 'idle',
   states: {
@@ -51,6 +54,9 @@ export const config2 = createConfig({
   },
 });
 
+/**
+ * Test fixture configuration 21.
+ */
 export const config21 = createConfig({
   initial: 'idle',
   states: {
@@ -100,6 +106,9 @@ export const config21 = createConfig({
   },
 });
 
+/**
+ * Test fixture configuration 3.
+ */
 export const config3 = createConfig({
   description: 'cdd',
   initial: 'state1',

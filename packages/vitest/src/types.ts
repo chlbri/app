@@ -50,9 +50,9 @@ type CommonTestsResult = Record<
 /**
  * Result object returned by type {@linkcode ConstructTests_F} containing generated test methods.
  *
- * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
- * @template {object} T - Custom helper return type extending `object`.
- * @template {string} Ta - Tag type extending `string`.
+ * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
+ * @template `T` - Custom helper return type extending `object`.
+ * @template `Ta` - Tag type extending `string`.
  */
 export type ConstructTestsResult<
   Eo extends EventObject,
@@ -88,8 +88,8 @@ type ConstructWaiter_F = (
 /**
  * Context selector test builder function signature.
  *
- * @template Pc - Protected context type.
- * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
+ * @template `Pc` - Protected context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
  */
 type ConstructContexts_F<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> = <
   R = { context: Tc; pContext: Pc },
@@ -101,17 +101,17 @@ type ConstructContexts_F<Pc = any, Tc extends PrimitiveObject = PrimitiveObject>
 /**
  * Configuration options object passed to custom test helper functions.
  *
- * @template {CommonConfig3} C - Machine configuration type extending type {@linkcode CommonConfig3}.
- * @template Pc - Protected context type.
- * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
- * @template {EventsMap} E - Events map type extending type {@linkcode EventsMap}.
- * @template {ActorsConfigMap} A - Actors configuration map extending type {@linkcode ActorsConfigMap}.
- * @template {string} Ta - Tag type extending `string`.
- * @template {EventObject} Eo - Event object type extending type {@linkcode EventObject}.
- * @template {string} AllPaths - All paths union type extending `string`.
- * @template {SimpleMachineOptions2} Mo - Machine options type extending type {@linkcode SimpleMachineOptions2}.
- * @template {SimpleMachineOptions2} L - Local machine options type extending type {@linkcode SimpleMachineOptions2}.
- * @template {MachineType} Type - Machine type ('sync' or 'async').
+ * @template | {@linkcode CommonConfig3} `C` - Machine configuration type extending type {@linkcode CommonConfig3}.
+ * @template `Pc` - Protected context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
+ * @template | {@linkcode EventsMap} `E` - Events map type extending type {@linkcode EventsMap}.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map extending type {@linkcode ActorsConfigMap}.
+ * @template `Ta` - Tag type extending `string`.
+ * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
+ * @template `AllPaths` - All paths union type extending `string`.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Local machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * @template | {@linkcode MachineType} `Type` - Machine type ('sync' or 'async').
  */
 export type Option<
   C extends CommonConfig3 = CommonConfig3,

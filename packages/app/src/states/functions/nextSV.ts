@@ -8,7 +8,7 @@ import type { StateValue } from '../types';
 /**
  * Function signature for calculating next state value.
  *
- * @template {StateValue} T - State value type.
+ * @template | {@linkcode StateValue} `T` - State value type.
  *
  * @param from - Current state value.
  * @param target - Target state path.

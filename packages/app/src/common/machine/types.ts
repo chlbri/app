@@ -31,7 +31,7 @@ import type { EmptyObject, FnMap, FnR, MaybePromise, RecordS } from '~types';
 /**
  * Type guard for enforcing no extra keys on target definitions.
  *
- * @template {TargetDef} T - Target definition input type.
+ * @template | {@linkcode TargetDef} `T` - Target definition input type.
  */
 export type NoExtraKeysTargetDef<T extends TargetDef> = T & {
   [K in Exclude<keyof T, keyof TargetDef>]: never;
@@ -46,7 +46,7 @@ export type NoExtraKeysTargetDef<T extends TargetDef> = T & {
 /**
  * Transforms target definition into initial state map structure.
  *
- * @template {TargetDef} T - Target definition type.
+ * @template | {@linkcode TargetDef} `T` - Target definition type.
  */
 export type TransformTargetDef<T extends TargetDef> = (undefined extends T['initial']
   ? EmptyObject
@@ -65,8 +65,8 @@ export type TransformTargetDef<T extends TargetDef> = (undefined extends T['init
 /**
  * Transforms target definition and node config into updated node config.
  *
- * @template {NodeConfig2} N - Base node configuration type.
- * @template {TargetDef} T - Target definition type.
+ * @template | {@linkcode NodeConfig2} `N` - Base node configuration type.
+ * @template | {@linkcode TargetDef} `T` - Target definition type.
  */
 export type TransformTargetDef2<
   N extends NodeConfig2,
@@ -95,7 +95,7 @@ export type CommonConfigNode = NodeConfigCompound2 | NodeConfigParallel2;
 /**
  * Machine configuration with strict and longRuns flags.
  *
- * @template {TargetDef} Paths - Target definition type.
+ * @template | {@linkcode TargetDef} `Paths` - Target definition type.
  */
 export type CommonConfig<Paths extends TargetDef = TargetDef> = NodeConfig<Paths> & {
   readonly strict?: boolean;
@@ -105,7 +105,7 @@ export type CommonConfig<Paths extends TargetDef = TargetDef> = NodeConfig<Paths
 /**
  * Machine configuration version 2 with strict and longRuns flags.
  *
- * @template {string} Paths - State path union.
+ * @template `Paths` - State path union.
  */
 export type CommonConfig2<Paths extends string = string> = NodeConfig2<Paths> & {
   readonly strict?: boolean;
@@ -115,7 +115,7 @@ export type CommonConfig2<Paths extends string = string> = NodeConfig2<Paths> & 
 /**
  * Loose machine configuration version 3 with strict and longRuns flags.
  *
- * @template {string} Paths - State path union.
+ * @template `Paths` - State path union.
  */
 export type CommonConfig3<Paths extends string = string> = NodeConfig3<Paths> & {
   readonly strict?: boolean;
@@ -125,7 +125,7 @@ export type CommonConfig3<Paths extends string = string> = NodeConfig3<Paths> & 
 /**
  * Enforces no extra keys across full machine configuration object.
  *
- * @template {CommonConfig3} T - Configuration type.
+ * @template | {@linkcode CommonConfig3} `T` - Configuration type.
  */
 export type NoExtraKeysConfig<T extends CommonConfig3> = T & {
   [K in Exclude<keyof T, keyof CommonConfig3>]: never;
@@ -156,12 +156,12 @@ export type MachineType = 'sync' | 'async';
 /**
  * Simple representation of a machine with meaningful properties.
  *
- * @template {EventsMap} E - Type of events map.
- * @template {ActorsConfigMap} A - Type of actors configuration map.
- * @template Pc - Type of private context.
- * @template {PrimitiveObject} Tc - Type of context.
+ * @template | {@linkcode EventsMap} `E` - Type of events map.
+ * @template | {@linkcode ActorsConfigMap} `A` - Type of actors configuration map.
+ * @template `Pc` - Type of private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Type of context.
  *
- * @see {@linkcode StateValue}, {@linkcode Fn}
+ * @see -- type {@linkcode StateValue}, -- type {@linkcode Fn}
  */
 export interface AnyMachine<
   E extends EventsMap = EventsMap,
@@ -298,7 +298,7 @@ export interface AnyMachine<
 /**
  * Options resolution function parameter type.
  *
- * @template {SimpleMachineOptions2} Mo - Machine options type.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
  */
 export type CommonAddOptionsParam_F<
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
@@ -307,7 +307,7 @@ export type CommonAddOptionsParam_F<
 /**
  * Options addition function signature.
  *
- * @template {SimpleMachineOptions2} Mo - Machine options type.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
  */
 export type CommonAddOptions_F<
   Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
@@ -316,10 +316,10 @@ export type CommonAddOptions_F<
 /**
  * Core elements of a state machine initialization payload.
  *
- * @template C - Configuration type.
- * @template Pc - Private context.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {SimpleMachineOptions2} Mo - Options type.
+ * @template `C` - Configuration type.
+ * @template `Pc` - Private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Options type.
  */
 export type CommonElements<
   C extends { readonly strict?: boolean; readonly __longRuns?: boolean } = {
@@ -357,24 +357,24 @@ export type GetIO_F = (key: 'exit' | 'entry', node?: any) => WithDescriber[];
 /**
  * Internal standard output properties type picker.
  *
- * @template {ObjectT} T - Target object type.
+ * @template | {@linkcode ObjectT} `T` - Target object type.
  */
 type StandardOutput2<T extends ObjectT> = Pick<Sh<T>, StandardKey>;
 
 /**
  * Alias for standard output mapping type.
  *
- * @template {ObjectT} T - Object type.
+ * @template | {@linkcode ObjectT} `T` - Object type.
  */
 export type StdO2<T extends ObjectT> = StandardOutput2<T>;
 
 /**
  * Common function signature for timer actions.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type CommonTimeAction_F<
   E extends EventObject = EventObject,
@@ -386,15 +386,15 @@ export type CommonTimeAction_F<
 /**
  * Generic machine creator function signature.
  *
- * @template T - Target machine type.
+ * @template `T` - Target machine type.
  */
 export type CommonCreateMachine_F<T = any> = (config: any) => T;
 
 /**
  * Represents a scheduled action with its data and execution time.
  *
- * @template Pc - Type of private context.
- * @template {PrimitiveObject} Tc - Type of context.
+ * @template `Pc` - Type of private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Type of context.
  *
  * @see {@linkcode ActionResult}
  */
@@ -407,10 +407,10 @@ export type ScheduledData<Pc = any, Tc extends PrimitiveObject = PrimitiveObject
 /**
  * Map of child names to child actor machine functions.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type ChildrenMap<
   E extends EventObject = EventObject,
@@ -422,11 +422,11 @@ export type ChildrenMap<
 /**
  * Child machine function map signature.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Machine return type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Machine return type.
  */
 export type CommonChildFunction<
   E extends EventObject = EventObject,
@@ -439,11 +439,11 @@ export type CommonChildFunction<
 /**
  * Child machine single function signature returning maybe promise of `R`.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Machine return type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Machine return type.
  */
 export type CommonChildFunction2<
   E extends EventObject = EventObject,
@@ -456,8 +456,8 @@ export type CommonChildFunction2<
 /**
  * Extract child event payload type by child key `K`.
  *
- * @template {string} K - Child key name.
- * @template {ActorsConfigMap} A - Actors configuration map type.
+ * @template `K` - Child key name.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map type.
  */
 export type ChildEvents<
   K extends string,
@@ -467,7 +467,7 @@ export type ChildEvents<
 /**
  * Internal type for extracting event keys from flat map nodes.
  *
- * @template {FlatMapN} Flat - Type of flat map of nodes.
+ * @template | {@linkcode FlatMapN} `Flat` - Type of flat map of nodes.
  */
 type _GetEventKeysFromFlat<Flat extends FlatMapN> = {
   [key in keyof Flat]: Flat[key] extends { on: infer V } ? keyof V : never;
@@ -476,7 +476,7 @@ type _GetEventKeysFromFlat<Flat extends FlatMapN> = {
 /**
  * Provide a record of all events by key and {@linkcode PrimitiveObject} payload.
  *
- * @template {FlatMapN} Flat - Type of flat map of nodes.
+ * @template | {@linkcode FlatMapN} `Flat` - Type of flat map of nodes.
  *
  * @see {@linkcode _GetEventKeysFromFlat}
  */
@@ -488,9 +488,9 @@ export type GetEventsFromFlat<Flat extends FlatMapN> = Record<
 /**
  * Get all events from a machine config.
  *
- * @template {CommonConfig3} C - Type of machine config.
+ * @template | {@linkcode CommonConfig3} `C` - Type of machine config.
  *
- * @see {@linkcode FlatMapN}, {@linkcode GetEventsFromFlat}, {@linkcode ConfigFrom}
+ * @see -- type {@linkcode FlatMapN}, {@linkcode GetEventsFromFlat}, {@linkcode ConfigFrom}
  */
 export type GetEventsFromConfig<C extends CommonConfig3> = GetEventsFromFlat<
   FlatMapN<C>
@@ -504,18 +504,18 @@ export type ChildConfigDef = EventsMap;
 /**
  * Map of child names to child configuration definitions.
  *
- * @template {string} S - Key string type.
+ * @template `S` - Key string type.
  */
 export type ChildConfigMap<S extends string = string> = Record<S, ChildConfigDef>;
 
 /**
  * Child actor object representation.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Child return type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Child return type.
  */
 export type CommonChild<
   E extends EventObject = EventObject,
@@ -534,10 +534,10 @@ export type CommonChild<
 /**
  * Helper function for swapping state signatures in functional transitions.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type SwapFunction_F<
   E extends EventObject = EventObject,

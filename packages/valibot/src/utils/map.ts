@@ -8,7 +8,7 @@ export const KeysSchema = v.union([v.string(), v.number(), v.symbol()]);
 /**
  * Custom Valibot schema builder for validating object key-value maps against a value schema.
  *
- * @template {v.BaseSchema<any, any, any>} TSchema - Valibot schema type for map values.
+ * @template | {@linkcode v.BaseSchema} `TSchema` - Valibot schema type for map values.
  *
  * @param schema - Valibot schema to validate each map value against.
  *

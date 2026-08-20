@@ -37,10 +37,10 @@ import type { SyncMachine } from './machine';
 /**
  * Function type signature for creating a synchronous filter action helper.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncFilterAction_F<
   E extends EventObject = EventObject,
@@ -65,10 +65,10 @@ export type SyncFilterAction_F<
 /**
  * Function type signature for creating a synchronous erase action helper.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncEraseAction_F<
   E extends EventObject = EventObject,
@@ -89,10 +89,10 @@ export type SyncEraseAction_F<
 /**
  * Function type signature for creating a synchronous property definition guard helper.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncDefineGuard_F<
   E extends EventObject = EventObject,
@@ -104,10 +104,10 @@ export type SyncDefineGuard_F<
 /**
  * Function type signature for creating a synchronous value checker guard helper.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncValueCheckerGuard_F<
   E extends EventObject = EventObject,
@@ -119,7 +119,7 @@ export type SyncValueCheckerGuard_F<
 /**
  * Synchronous traversable tuple type alias for type {@linkcode TraversableTuple}.
  *
- * @template T - Source object type.
+ * @template `T` - Source object type.
  * @template K - Keys extending type {@linkcode SingleOrArrayL2} of `keyof T`.
  */
 export type TraversableTupleSync<
@@ -130,11 +130,11 @@ export type TraversableTupleSync<
 /**
  * Function type signature for creating a synchronous assign action helper.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
- * @template D - Decomposed context paths object.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
+ * @template `D` - Decomposed context paths object.
  */
 export type SyncAssignAction_F<
   E extends EventObject = EventObject,
@@ -156,10 +156,10 @@ export type SyncAssignAction_F<
 /**
  * Function type signature for batching multiple synchronous actions into a single action.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncBatchAction_F<
   E extends EventObject = EventObject,
@@ -173,10 +173,10 @@ export type SyncBatchAction_F<
 /**
  * Function type signature for creating a void synchronous action helper.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncVoidAction_F<
   E extends EventObject = EventObject,
@@ -188,10 +188,10 @@ export type SyncVoidAction_F<
 /**
  * Function type signature for sending an event to an actor machine synchronously.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncSendAction_F<
   E extends EventObject = EventObject,
@@ -212,10 +212,10 @@ export type SyncSendAction_F<
 /**
  * Function type signature for creating a debounced synchronous action helper.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncDebounceAction_F<
   E extends EventObject = EventObject,
@@ -230,10 +230,10 @@ export type SyncDebounceAction_F<
 /**
  * Function type signature for resending an event as a synchronous action.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param event - Event argument.
  *
  * @returns Synchronous action type {@linkcode SyncAction2}.
@@ -248,10 +248,10 @@ export type SyncResendAction_F<
 /**
  * Function type signature for creating a synchronous activity or timer control action.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param id - Activity or timer string identifier.
  *
  * @returns Synchronous action type {@linkcode SyncAction2}.
@@ -266,10 +266,10 @@ export type SyncTimeAction_F<
 /**
  * Union of all supported synchronous action factory function types.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncAllActions_F<
   E extends EventObject = EventObject,
@@ -290,10 +290,10 @@ export type SyncAllActions_F<
 /**
  * Logical AND guard structure for synchronous guard batching options.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncGuardAndOption<
   E extends EventObject = EventObject,
@@ -305,10 +305,10 @@ export type SyncGuardAndOption<
 /**
  * Logical OR guard structure for synchronous guard batching options.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncGuardOrOption<
   E extends EventObject = EventObject,
@@ -320,10 +320,10 @@ export type SyncGuardOrOption<
 /**
  * Union of synchronous guard items for batching.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncGuardUnionOption<
   E extends EventObject = EventObject,
@@ -339,10 +339,10 @@ export type SyncGuardUnionOption<
 /**
  * Function type signature for batching multiple synchronous guards into a single guard.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param guards - Variadic array of guard functions or logical guard objects.
  *
  * @returns Synchronous guard function of type {@linkcode FnR}.
@@ -357,10 +357,10 @@ export type SyncBatchGuard_F<
 /**
  * Object containing all action, guard, timer, and activity helper functions for a synchronous machine.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  */
 export type SyncAddOption<
   E extends EventObject = EventObject,
@@ -399,12 +399,12 @@ export type SyncAddOption<
 /**
  * Parameters type signature for providing options to a synchronous machine.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
- * @template Mo - Simple machine options type.
- * @template L - Legacy options type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
+ * @template `Mo` - Simple machine options type.
+ * @template `L` - Legacy options type.
  */
 export type SyncAddOptionsParam_F<
   E extends EventObject = EventObject,
@@ -425,12 +425,12 @@ export type SyncAddOptionsParam_F<
 /**
  * Function type signature for adding options to a synchronous machine configuration.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template Ta - State tag string type.
- * @template Mo - Simple machine options type.
- * @template L - Existing options type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `Ta` - State tag string type.
+ * @template `Mo` - Simple machine options type.
+ * @template `L` - Existing options type.
  */
 export type SyncAddOptions_F<
   E extends EventObject = EventObject,
@@ -444,16 +444,16 @@ export type SyncAddOptions_F<
 /**
  * Function type signature for providing options to a synchronous machine class {@linkcode SyncMachine}.
  *
- * @template C - Common machine config type {@linkcode CommonConfig3}.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template E - Events map type.
- * @template A - Actors config map type.
- * @template Ta - State tag string type.
- * @template Eo - Event object type.
- * @template AllPaths - All path strings type.
- * @template Mo - Simple machine options type.
- * @template L - Existing options type.
+ * @template `C` - Common machine config type {@linkcode CommonConfig3}.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `E` - Events map type.
+ * @template `A` - Actors config map type.
+ * @template `Ta` - State tag string type.
+ * @template `Eo` - Event object type.
+ * @template `AllPaths` - All path strings type.
+ * @template `Mo` - Simple machine options type.
+ * @template `L` - Existing options type.
  */
 export type SyncProvideOptions_F<
   C extends CommonConfig3 = CommonConfig3,
@@ -473,10 +473,10 @@ export type SyncProvideOptions_F<
 /**
  * Helper type signature for defining a synchronous child machine function.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @template R - Result type with `eventsMap`.
  */
 export type SyncChildFunction2<
@@ -490,11 +490,11 @@ export type SyncChildFunction2<
 /**
  * Machine options for synchronous machines registered with type {@linkcode RegisterOptions}.
  *
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
- * @template Eo - Event object type.
- * @template O - Register options type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
+ * @template `Eo` - Event object type.
+ * @template `O` - Register options type.
  */
 export type SyncMachineOptions2<
   Pc = any,
@@ -519,7 +519,7 @@ export type SyncMachineOptions2<
  *
  * @template : {@linkcode EventsMap} [E] - type of the events map
  * @template : {@linkcode ActorsConfigMap} [A] - type of the actors config map
- * @template Pc - type of the private context
+ * @template `Pc` - type of the private context
  * @template : {@linkcode PrimitiveObject} [Tc] - type of the context
  *
  */

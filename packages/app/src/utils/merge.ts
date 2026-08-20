@@ -75,9 +75,7 @@ export const isMergeUndefined = (value: any) => {
  * @param mergers The values to merge with the original value
  * @returns The merged value, which is a new object containing the properties of the original value and the mergers.
  *
- * @see {@linkcode equal} for deep equality check
- * @see {@linkcode types} for partial type definition
- * @see {@linkcode NoInfer} for type inference utility
+ * @see {@linkcode equal}, {@linkcode types}, -- type {@linkcode NoInfer}
  */
 export const merge = <T = any>(
   value: T,

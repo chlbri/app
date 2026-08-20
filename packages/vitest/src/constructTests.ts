@@ -17,6 +17,8 @@ export { ConstructTests_F };
  * @param startIndex - Starting index for test step numbers (defaults to `0`).
  *
  * @returns Constructed test helpers object.
+ *
+ * @see -- type {@linkcode ConstructTests_F}, {@linkcode fakeWaiter}, {@linkcode buildIndex}, {@linkcode buildInvite}
  */
 export const constructTests: ConstructTests_F = (
   service,

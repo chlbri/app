@@ -9,11 +9,11 @@ import { toChildSrc } from './toChildSrc';
 /**
  * Function signature for converting child configuration into structured child actor instance.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Child machine return type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Child machine return type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param child - Child configuration input.
  * @param options - Machine options object.

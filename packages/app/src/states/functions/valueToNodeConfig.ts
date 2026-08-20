@@ -12,7 +12,7 @@ import { recomposeConfig } from './recompose';
 /**
  * Function signature for converting a state value into a node configuration.
  *
- * @template {StateValue} T - State value type.
+ * @template | {@linkcode StateValue} `T` - State value type.
  *
  * @param body - Node configuration body.
  * @param from - State value input.

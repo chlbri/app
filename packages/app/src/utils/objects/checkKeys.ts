@@ -34,7 +34,7 @@ export type CheckKeys_F = {
  *
  * @returns `true` if all keys are present, `false` otherwise.
  *
- * @see type {@linkcode CheckKeys_F}
+ * @see {@linkcode CheckKeys_F}
  */
 export const checkKeys: CheckKeys_F = (arg, ...keys) => {
   const argKeys = Object.keys(arg);

@@ -5,7 +5,7 @@ import { isTransitionConfigMapTarget, isTransitionConfigTarget } from './transit
 /**
  * Type guard for checking always transition configuration.
  *
- * @template {string[]} T - Path keys tuple type.
+ * @template `T` - Path keys tuple type.
  *
  * @param value - Value to check.
  * @param keys - Allowed target paths.

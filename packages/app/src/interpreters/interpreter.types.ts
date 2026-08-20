@@ -22,7 +22,7 @@ import { type AsyncInterpreter, type AsyncInterpreterFrom } from './interpreter'
 /**
  * Factory function signature for instantiating an async interpreter class {@linkcode AsyncInterpreterFrom}.
  *
- * @template M - Machine type extending interface {@linkcode AnyMachine}.
+ * @template `M` - Machine type extending interface {@linkcode AnyMachine}.
  * @param args - Interpreter initialization arguments.
  *
  * @returns Instance of class {@linkcode AsyncInterpreterFrom}.
@@ -34,10 +34,10 @@ export type AsyncInterpreter_F = <M extends AnyMachine>(
 /**
  * Function type signature for performing an action later asynchronously.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param action - Async action type {@linkcode AsyncAction2}.
  *
  * @returns Result type {@linkcode MaybeAsyncActionResult}.
@@ -52,10 +52,10 @@ export type AsyncPerformActionLater_F<
 /**
  * Function type signature for performing an async action immediately.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param from - Origin state identifier string or `false`.
  * @param action - Async action type {@linkcode AsyncAction2}.
  *
@@ -71,10 +71,10 @@ export type AsyncPerformAction_F<
 /**
  * Function type signature for evaluating an async predicate guard.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param predicate - Async predicate guard type {@linkcode AsyncPredicateS3}.
  *
  * @returns Promise or boolean result.
@@ -89,10 +89,10 @@ export type AsyncPerformPredicate_F<
 /**
  * Function type signature for evaluating an async delay value.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param delay - Async delay function type {@linkcode AsyncDelayFunction3}.
  *
  * @returns Delay duration in milliseconds.
@@ -173,7 +173,7 @@ export type AsyncPerformTransitions_F = (
 /**
  * Internal async event dispatcher function type.
  *
- * @template E - Event object type.
+ * @template `E` - Event object type.
  * @param event - Event instance of type `E`.
  *
  * @returns Promise resolving to state node configuration type {@linkcode NodeConfig2} or `undefined`.
@@ -185,16 +185,16 @@ export type _AsyncSend_F<E extends EventObject> = (
 /**
  * Function type signature for providing machine options to an async interpreter class {@linkcode AsyncInterpreter}.
  *
- * @template C - Common machine config type {@linkcode CommonConfig3}.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template E - Events map type.
- * @template A - Actors config map type.
- * @template Ta - State tag string type.
- * @template Eo - Event object type.
- * @template AllPaths - All path strings type.
- * @template Mo - Simple machine options type.
- * @template L - Existing options type.
+ * @template `C` - Common machine config type {@linkcode CommonConfig3}.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `E` - Events map type.
+ * @template `A` - Actors config map type.
+ * @template `Ta` - State tag string type.
+ * @template `Eo` - Event object type.
+ * @template `AllPaths` - All path strings type.
+ * @template `Mo` - Simple machine options type.
+ * @template `L` - Existing options type.
  * @param option - Machine options param.
  *
  * @returns Updated class {@linkcode AsyncInterpreter} instance.

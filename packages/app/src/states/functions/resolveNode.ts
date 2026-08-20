@@ -12,10 +12,10 @@ import { stateType } from './stateType';
 /**
  * Function signature for resolving state node configuration into an executable type {@linkcode Node}.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - Tags type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - Tags type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param config - Node configuration object.
  * @param options - Machine options object.

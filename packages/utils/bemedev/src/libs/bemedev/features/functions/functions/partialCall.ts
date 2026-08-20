@@ -2,6 +2,13 @@ import type { Parts, Fn, PartDiff } from '../types';
 import { AnyArray } from '../../../globals/types';
 import { expandFn } from '../../../globals/utils/expandFn';
 
+/**
+ * Function type signature for partially applying positional parameters.
+ *
+ * @template | {@linkcode Fn} `F` - Function type extending type {@linkcode Fn}.
+ * @template | {@linkcode Parts} `T` - Head arguments tuple type.
+ * @template | {@linkcode PartDiff} `U` - Tail arguments tuple type.
+ */
 type PartialCall_F = <
   const F extends Fn,
   const T extends Parts<Parameters<F>> = Parts<Parameters<F>>,
@@ -11,6 +18,13 @@ type PartialCall_F = <
   ...headArgs: T
 ) => (...tailArgs: U) => ReturnType<F>;
 
+/**
+ * Function type signature for partially applying array parameters.
+ *
+ * @template | {@linkcode AnyArray} `T` - Head arguments array type.
+ * @template | {@linkcode AnyArray} `U` - Tail arguments array type.
+ * @template `R` - Return type.
+ */
 type PartialCallArray_F = <
   T extends AnyArray = AnyArray,
   U extends AnyArray = AnyArray,
@@ -20,6 +34,13 @@ type PartialCallArray_F = <
   ...headArgs: T
 ) => (...tailArgs: U) => R;
 
+/**
+ * Function type signature for builder partial call.
+ *
+ * @template | {@linkcode Fn} `F` - Function type extending type {@linkcode Fn}.
+ * @template | {@linkcode Parts} `T` - Head arguments tuple type.
+ * @template | {@linkcode PartDiff} `U` - Tail arguments tuple type.
+ */
 type PartialCallBuild_F = <
   const F extends Fn,
   const T extends Parts<Parameters<F>> = Parts<Parameters<F>>,
@@ -31,10 +52,21 @@ type PartialCallBuild_F = <
   ...tailArgs: Parameters<T>
 ) => ReturnType<T>;
 
+/**
+ * Internal helper function to partially apply arguments to a function.
+ *
+ * @param f - Function to partially apply.
+ * @param headArgs - Initial arguments.
+ *
+ * @returns Partially applied function.
+ */
 const __partialCall = (f: Fn, ...headArgs: any[]) => {
   return (...tailArgs: any[]) => f(...headArgs, ...tailArgs);
 };
 
+/**
+ * Typed implementation of partial call function.
+ */
 const _partialCall: PartialCall_F = __partialCall;
 
 /**

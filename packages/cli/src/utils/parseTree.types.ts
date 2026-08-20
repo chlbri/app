@@ -1,6 +1,9 @@
 import type { NodeConfig2, RecordS } from '@bemedev/app';
 import type { BetterSet } from '@bemedev/better-set';
 
+/**
+ * Context object accumulating symbol sets during parseTree traversal.
+ */
 export type ParseTreeContext = {
   actions: BetterSet<string>;
   guards: BetterSet<string>;
@@ -15,10 +18,21 @@ export type ParseTreeContext = {
   __flat?: RecordS<NodeConfig2>;
 };
 
+/**
+ * Recursive configuration paths tree representing state hierarchy.
+ */
 export type ConfigPaths = ConfigPaths2 & { states?: RecordS<ConfigPaths> };
 
+/**
+ * Basic state targets and initial configuration paths object.
+ */
 export type ConfigPaths2 = { targets: string[]; initial?: string };
 
+/**
+ * Strict version of type {@linkcode ConfigPaths} ensuring no extra keys are permitted.
+ *
+ * @template | {@linkcode ConfigPaths} `T` - ConfigPaths type extending type {@linkcode ConfigPaths}.
+ */
 export type NoExtraKeysConfigPaths<T extends ConfigPaths> = T & {
   [K in Exclude<keyof T, keyof ConfigPaths>]: never;
 } & {

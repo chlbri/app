@@ -12,7 +12,7 @@ import type { EventObject, FnMap, FnR, Identify, RecordS } from '~types';
 /**
  * Transitions configuration container for synchronous state machines.
  *
- * @template {string} Paths - State path union.
+ * @template `Paths` - State path union.
  */
 export type SyncTransitionsConfig<Paths extends string = string> = {
   readonly on?: DelayedTransitions<Paths>;
@@ -23,7 +23,7 @@ export type SyncTransitionsConfig<Paths extends string = string> = {
 /**
  * Common node configuration options for synchronous state nodes.
  *
- * @template {string} Paths - State path union.
+ * @template `Paths` - State path union.
  */
 export type SyncCommonNodeConfig<Paths extends string = string> = BaseConfig &
   SyncTransitionsConfig<Paths>;
@@ -31,7 +31,7 @@ export type SyncCommonNodeConfig<Paths extends string = string> = BaseConfig &
 /**
  * State node configuration structure for synchronous state machines.
  *
- * @template {string} Paths - State path union.
+ * @template `Paths` - State path union.
  */
 export type SyncNodeConfig<Paths extends string = string> =
   SyncCommonNodeConfig<Paths> &
@@ -56,7 +56,7 @@ export type SyncNodeConfig<Paths extends string = string> =
 /**
  * Type representing the main JSON node config of a sync state machine.
  *
- * @template {NoExtraKeysTargetDef<TargetDef>} Paths - Target definitions.
+ * @template `Paths` - Target definitions.
  */
 export type SyncConfig<
   Paths extends NoExtraKeysTargetDef<TargetDef> = NoExtraKeysTargetDef<TargetDef>,
@@ -68,12 +68,12 @@ export type SyncConfig<
 /**
  * Represents a transition in a state machine with full defined functions.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  *
- * @see {@linkcode SyncAction}, {@linkcode AsyncPredicate}
+ * @see {@linkcode SyncAction}, -- type {@linkcode AsyncPredicate}
  */
 export type SyncTransition<
   E extends EventObject = EventObject,
@@ -90,11 +90,11 @@ export type SyncTransition<
 /**
  * Synchronous emitter configuration container.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Return value type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Return value type.
  */
 export type SyncEmitter<
   E extends EventObject = EventObject,
@@ -113,11 +113,11 @@ export type SyncEmitter<
 /**
  * Synchronous child function returning return type `R`.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template R - Return type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template `R` - Return type.
  */
 export type ChildFunction2<
   E extends EventObject = EventObject,
@@ -130,11 +130,11 @@ export type ChildFunction2<
 /**
  * Synchronous child actor configuration.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template R - Return type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template `R` - Return type.
  */
 export type SyncChild<
   E extends EventObject = EventObject,
@@ -153,11 +153,11 @@ export type SyncChild<
 /**
  * Synchronous child function map.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template R - Return type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template `R` - Return type.
  */
 export type SyncChildFunction<
   E extends EventObject = EventObject,
@@ -170,12 +170,12 @@ export type SyncChildFunction<
 /**
  * Represents all transitions inside a state config with full defined functions.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  *
- * @see {@linkcode SyncTransition}, {@linkcode Identify}
+ * @see {@linkcode SyncTransition}, -- type {@linkcode Identify}
  */
 export type SyncTransitions<
   E extends EventObject = EventObject,
@@ -193,10 +193,10 @@ export type SyncTransitions<
 /**
  * Synchronous executable state node structure.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type SyncNode<
   E extends EventObject = EventObject,

@@ -6,12 +6,12 @@ import { isFunction, type FnMap } from '~types';
 /**
  * Runtime validation function to check if a value is a function map.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template R - Return type.
- * @template {string} Ex - Exception string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template `R` - Return type.
+ * @template `Ex` - Exception string type.
  *
  * @param value - Value to check.
  *
@@ -48,12 +48,12 @@ export const isFnMap = <
  * Runtime validation function to check if a value is an async function map.
  * An async function map contains functions that return Promises.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template R - Return type.
- * @template {string} Ex - Exception string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template `R` - Return type.
+ * @template `Ex` - Exception string type.
  *
  * @param value - Value to check.
  *

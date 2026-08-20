@@ -3,7 +3,7 @@ import * as v from 'valibot';
 /**
  * Recursively maps a string array tuple type to a tuple of Valibot literal schemas.
  *
- * @template {ReadonlyArray<string>} T - Array of string literals.
+ * @template `T` - Array of string literals extending `ReadonlyArray<string>`.
  */
 export type TransformLiterals<T extends ReadonlyArray<string>> = T extends [
   infer Head extends string,
@@ -15,7 +15,7 @@ export type TransformLiterals<T extends ReadonlyArray<string>> = T extends [
 /**
  * Determines the output Valibot schema type for target paths (string schema if empty, union schema otherwise).
  *
- * @template {ReadonlyArray<string>} T - Array of target path strings.
+ * @template `T` - Array of target path strings extending `ReadonlyArray<string>`.
  *
  * @see {@linkcode TransformLiterals}
  */
@@ -26,7 +26,7 @@ export type Output<T extends ReadonlyArray<string>> = T extends []
 /**
  * Creates a Valibot schema for state transition target validation.
  *
- * @template {ReadonlyArray<string>} T - Array of target path string literals.
+ * @template `T` - Array of target path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Target path string literals array.
  *

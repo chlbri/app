@@ -7,8 +7,7 @@ import type { Keys, Primitive } from '../common/types';
  * @remarks This type is useful to ensure that the object is a plain object
  * without any special properties.
  *
- * @see {@linkcode Ru} for a utility type that represents a true object.
- * @see {@linkcode SymbolConstructor} for the symbol constructor type.
+ * @see -- type {@linkcode Ru}, {@linkcode SymbolConstructor}
  */
 /**
  * TrueObject type - Auto-generated expression
@@ -138,9 +137,22 @@ export type Unionize<T extends Record<string, any>> = {
 }[keyof T];
 // #region type _FlatMapByKey
 // #region SubTypes
+/**
+ * Maps keys whose values extend `Condition` to their key name, otherwise `never`.
+ *
+ * @template `Base` - Base object type.
+ * @template `Condition` - Condition type to match.
+ */
 type FilterFlags<Base, Condition> = {
   [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
 };
+
+/**
+ * Maps keys where `Condition` extends their value to their key name, otherwise `never`.
+ *
+ * @template `Base` - Base object type.
+ * @template `Condition` - Condition type to match.
+ */
 type FilterFlagsLow<Base, Condition> = {
   [Key in keyof Base]: Condition extends Base[Key] ? Key : never;
 };

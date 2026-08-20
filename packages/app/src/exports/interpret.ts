@@ -11,7 +11,7 @@ import type { CreateInterpreter_F } from './types.types';
  *
  * @returns Running interpreter instance of type {@linkcode OutInterpreter}.
  *
- * @see -- type {@linkcode CreateInterpreter_F}
+ * @see {@linkcode CreateInterpreter_F}
  */
 // @ts-expect-error - This file is meant to be used in both sync and async contexts, so some types may not align perfectly.
 export const interpret: CreateInterpreter_F = (machine, config) => {

@@ -4,8 +4,8 @@ import { type Fn } from '../bemedev';
 /**
  * Function signature for a selector function mapping state of type `T` to selected value `R`.
  *
- * @template T - Type of input state.
- * @template R - Type of selected value.
+ * @template `T` - Type of input state.
+ * @template `R` - Type of selected value.
  *
  * @param val - Input state value of type `T`.
  *
@@ -23,7 +23,7 @@ export type SubscriberState = 'paused' | 'active' | 'disposed' | 'inactive';
 /**
  * Function signature for a subscriber callback receiving state updates of type `T`.
  *
- * @template T - Type of data passed to the subscriber.
+ * @template `T` - Type of data passed to the subscriber.
  *
  * @see -- type {@linkcode Fn}
  */
@@ -32,7 +32,7 @@ export type Subscriber_F<T> = Fn<[T], void>;
 /**
  * Function signature for comparing two values of type `T` for equality.
  *
- * @template T - Type of values compared.
+ * @template `T` - Type of values compared.
  *
  * @param a - First value to compare.
  * @param b - Second value to compare.
@@ -49,7 +49,7 @@ export type Equals_F<T> = Fn<[T, T], boolean>;
  *
  * Serves as the common parent class for class {@linkcode SubscriberClass} and class {@linkcode ManagedSubscriberClass}.
  *
- * @template T - Type of data emitted by the source.
+ * @template `T` - Type of data emitted by the source.
  * @template R - Type of selected value derived from state, defaulting to `T`.
  */
 export class SubscriberBase<T, R = T> implements Disposable, AsyncDisposable {

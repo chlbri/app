@@ -91,15 +91,15 @@ import type {
  * Implements state management, event dispatching, subscriber notifications,
  * child actor spawning, activity scheduling, and lifecycle management.
  *
- * @template {CommonConfig3} C - Machine configuration type extending type {@linkcode CommonConfig3}.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Context type extending type {@linkcode PrimitiveObject}.
- * @template {EventsMap} E - Events map type extending type {@linkcode EventsMap}.
- * @template {ActorsConfigMap} A - Actors configuration map type extending type {@linkcode ActorsConfigMap}.
- * @template {string} Ta - Tag type string.
- * @template {EventObject} Eo - Event object type extending interface {@linkcode EventObject}.
- * @template {string} AllPaths - All paths type string.
- * @template {SimpleMachineOptions2} Mo - Machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * @template | {@linkcode CommonConfig3} `C` - Machine configuration type extending type {@linkcode CommonConfig3}.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
+ * @template | {@linkcode EventsMap} `E` - Events map type extending type {@linkcode EventsMap}.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map type extending type {@linkcode ActorsConfigMap}.
+ * @template `Ta` - Tag type string.
+ * @template | {@linkcode EventObject} `Eo` - Event object type extending interface {@linkcode EventObject}.
+ * @template `AllPaths` - All paths type string.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type extending type {@linkcode SimpleMachineOptions2}.
  */
 export abstract class CommonInterpreter<
   const C extends CommonConfig3 = CommonConfig3,
@@ -306,7 +306,7 @@ export abstract class CommonInterpreter<
    *
    * @returns The child service object of type {@linkcode CommonCollectedService}, or `undefined` if not found.
    *
-   * @see {@linkcode children} for accessing all children.
+   * @see {@linkcode children}
    */
   getChildAt = (id: string) => this.children.find(f => f.id === id);
 
@@ -392,7 +392,7 @@ export abstract class CommonInterpreter<
    *
    * @returns The active private context object of type `Pc`, or `undefined` in production.
    *
-   * @see {@linkcode context} to get the current public context.
+   * @see {@linkcode context}
    */
   get _pContext() {
     /* v8 ignore else -- @preserve */
@@ -424,7 +424,7 @@ export abstract class CommonInterpreter<
    *
    * @returns A selector function of type {@linkcode Selector_F}.
    *
-   * @see {@linkcode getByKey} for retrieving values by key.
+   * @see {@linkcode getByKey}
    */
   get select(): Selector_F<Tc> {
     const check = isPrimitive(this.__context);
@@ -440,7 +440,7 @@ export abstract class CommonInterpreter<
    *
    * @returns A selector function of type {@linkcode Selector_F}.
    *
-   * @see {@linkcode getByKey} for retrieving values by key.
+   * @see {@linkcode getByKey}
    */
   get _pSelect(): Selector_F<Pc> {
     /* v8 ignore else -- @preserve */
@@ -833,7 +833,7 @@ export abstract class CommonInterpreter<
   /**
    * Creates a method invoking mapper function for objects of type `T`.
    *
-   * @template T - Target object type.
+   * @template `T` - Target object type.
    *
    * @param key - The method name key of type {@linkcode AllowedNames}.
    *
@@ -1762,7 +1762,7 @@ export abstract class CommonInterpreter<
   /**
    * Helper returning a value or recording warnings if undefined.
    *
-   * @template T - Value type.
+   * @template `T` - Value type.
    *
    * @param out - Optional value of type `T`.
    * @param messages - Warning messages to record.
@@ -1894,7 +1894,7 @@ export abstract class CommonInterpreter<
   /**
    * Abstract method dispatching an event to a child service by ID.
    *
-   * @template T - Event type extending interface {@linkcode EventObject}.
+   * @template `T` - Event type extending interface {@linkcode EventObject}.
    *
    * @param to - Target child service identifier string.
    * @param event - Event object of type `T`.
@@ -1932,7 +1932,7 @@ export abstract class CommonInterpreter<
 /**
  * Type alias retrieving the type {@linkcode CommonInterpreter} service type from an interface {@linkcode AnyMachine}.
  *
- * @template M - Machine type extending interface {@linkcode AnyMachine}.
+ * @template `M` - Machine type extending interface {@linkcode AnyMachine}.
  */
 export type CommonInterpreterFrom<M extends AnyMachine> = CommonInterpreter<
   ConfigFrom<M>,

@@ -6,7 +6,7 @@ import { FinallyConfigSchema } from './finally';
 /**
  * Valibot schema builder for emitter actor configurations (handling next, error, complete events).
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *

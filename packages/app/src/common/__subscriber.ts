@@ -12,7 +12,7 @@ import type { PrimitiveObject } from '@bemedev/typings';
  * to handle state changes and unsubscribe.
  *
  * @template : {@linkcode PrimitiveObject} [Tc] - Type of the context
- * @template : [R] - Type of the return value
+ * @template `R` - Type of the return value
  *
  */
 class SubscriberClass<
@@ -163,9 +163,9 @@ export type { SubscriberClass };
 /**
  * Options for configuring a subscriber instance.
  *
- * @template {EventObject} E - Event object type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
  */
 export type SubscriberOptions<
   E extends EventObject = EventObject,
@@ -185,9 +185,9 @@ export type SubscriberOptions<
 /**
  * Function signature for creating subscriber instances.
  *
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template {EventObject} Eo - Event object type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  */
 export type CreateSubscriber_F = <
   Tc extends PrimitiveObject = PrimitiveObject,

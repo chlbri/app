@@ -65,4 +65,9 @@ export type RecursiveArrayOf<T> =
   | Array<_SingleOrRecursiveArrayOf<T>>
   | ReadonlyArray<_SingleOrRecursiveArrayOf<T>>;
 
+/**
+ * Single element or recursive array type.
+ *
+ * @template `T` - Element type.
+ */
 type _SingleOrRecursiveArrayOf<T> = T | RecursiveArrayOf<T>;

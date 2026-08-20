@@ -32,10 +32,10 @@ export type SyncCollectedService = {
 /**
  * Function type signature for performing a synchronous action.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param action - Action configuration type {@linkcode SyncAction2}.
  */
 export type SyncPerformAction_F<
@@ -48,10 +48,10 @@ export type SyncPerformAction_F<
 /**
  * Function type signature for building a synchronous predicate guard.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param predicate - Guard configuration type {@linkcode GuardConfig}.
  *
  * @returns Synchronous predicate guard type {@linkcode SyncPredicateS2}.
@@ -66,10 +66,10 @@ export type SyncToPredicate_F<
 /**
  * Function type signature for evaluating a synchronous predicate guard.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param predicate - Synchronous predicate guard type {@linkcode SyncPredicateS3}.
  *
  * @returns Boolean result.
@@ -115,7 +115,7 @@ export type SyncPerformAlway_F = (always: AlwaysConfig) => string | false;
 /**
  * Internal synchronous event dispatcher function type.
  *
- * @template E - Event object type.
+ * @template `E` - Event object type.
  * @param event - Event instance of type `E`.
  *
  * @returns Synchronous state node configuration type {@linkcode SyncNodeConfig} or `undefined`.
@@ -127,10 +127,10 @@ export type _SyncSend_F<E extends EventObject> = (
 /**
  * Function type signature for evaluating a synchronous delay value.
  *
- * @template E - Event object type.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template T - State tag string type.
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
  * @param delay - Synchronous delay function type {@linkcode SyncDelayFunction3}.
  *
  * @returns Delay duration in milliseconds.
@@ -145,16 +145,16 @@ export type SyncPerformDelay_F<
 /**
  * Function type signature for providing machine options to a synchronous interpreter class {@linkcode SyncInterpreter}.
  *
- * @template C - Common machine config type {@linkcode CommonConfig3}.
- * @template Pc - Private context type.
- * @template Tc - Type {@linkcode PrimitiveObject} context.
- * @template E - Events map type.
- * @template A - Actors config map type.
- * @template Ta - State tag string type.
- * @template Eo - Event object type.
- * @template AllPaths - All path strings type.
- * @template Mo - Simple machine options type.
- * @template L - Existing options type.
+ * @template `C` - Common machine config type {@linkcode CommonConfig3}.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `E` - Events map type.
+ * @template `A` - Actors config map type.
+ * @template `Ta` - State tag string type.
+ * @template `Eo` - Event object type.
+ * @template `AllPaths` - All path strings type.
+ * @template `Mo` - Simple machine options type.
+ * @template `L` - Existing options type.
  * @param option - Machine options param.
  *
  * @returns Updated class {@linkcode SyncInterpreter} instance.

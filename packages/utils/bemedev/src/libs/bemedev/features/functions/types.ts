@@ -38,6 +38,11 @@ export type _Requirify<T extends AnyArray> = Required<{
   [K in keyof T]-?: undefined extends T[K] ? T[K] | UndefinedHelper : T[K];
 }>;
 
+/**
+ * Converts tuple elements marked with UndefinedHelper back to optional elements.
+ *
+ * @template | {@linkcode AnyArray} `T` - Tuple type extending type {@linkcode AnyArray}.
+ */
 type _UndefinfyTuple<T extends AnyArray> = T extends readonly [
   infer U,
   ...infer Rest,

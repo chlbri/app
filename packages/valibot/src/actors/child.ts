@@ -13,7 +13,7 @@ export const ContextsSchema = recordV(v.string(), v.string());
 /**
  * Valibot schema builder for child actor configuration.
  *
- * @template {ReadonlyArray<string>} T - Array of valid state path string literals.
+ * @template `T` - Array of valid state path string literals extending `ReadonlyArray<string>`.
  *
  * @param paths - Allowed target state paths.
  *

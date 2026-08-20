@@ -29,7 +29,7 @@ export type Subscribable = {
  * Observer wired into a type {@linkcode Pausable} via its `subscribe` method.
  * Mirrors the shape expected by `@bemedev/rx-pausable`'s SubArgs.
  *
- * @template R - The emitted payload type.
+ * @template `R` - The emitted payload type.
  */
 export type EmitterObserver<R = any> = {
   /**
@@ -53,7 +53,7 @@ export type EmitterObserver<R = any> = {
  * Implementations (e.g. the class returned by `createPausable` from
  * `@bemedev/rx-pausable`) must satisfy this shape.
  *
- * @template R - The value type emitted by the underlying source.
+ * @template `R` - The value type emitted by the underlying source.
  */
 export type Pausable<R = any> = {
   /** Wire the observer that will receive forwarded events. */
@@ -85,18 +85,18 @@ export type EmitterDef = { next: PrimitiveObject; error: PrimitiveObject };
 /**
  * Record map of emitter names to emitter definitions.
  *
- * @template {string} S - Key identifier string union.
+ * @template `S` - Key identifier string union.
  */
 export type EmitterConfigMap<S extends string = string> = Record<S, EmitterDef>;
 
 /**
  * Asynchronous emitter configuration structure.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Return value type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Return value type.
  */
 export type AsyncEmitter<
   E extends EventObject = EventObject,
@@ -130,11 +130,11 @@ export type AsyncEmitter<
 /**
  * Synchronous emitter configuration structure.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Return value type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Return value type.
  */
 export type SyncEmitter<
   E extends EventObject = EventObject,
@@ -168,8 +168,8 @@ export type SyncEmitter<
 /**
  * Type helper extracting the return payload type for an emitter key `K`.
  *
- * @template {string} K - Emitter key string.
- * @template {ActorsConfigMap} A - Actors configuration map.
+ * @template `K` - Emitter key string.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map.
  */
 export type EmitterReturn<
   K extends string,
@@ -183,11 +183,11 @@ export type EmitterReturn<
 /**
  * Async emitter factory function signature.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Return value type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Return value type.
  *
  * @param state - Current extended state node of type {@linkcode StateExtended}.
  *
@@ -204,11 +204,11 @@ export type AsyncEmitterFunction<
 /**
  * Sync emitter factory function signature.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template R - Return value type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template `R` - Return value type.
  *
  * @param state - Current extended state node of type {@linkcode StateExtended}.
  *
@@ -225,10 +225,10 @@ export type SyncEmitterFunction<
 /**
  * Map of async emitter keys to their factory functions.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type AsyncEmittersMap<
   E extends EventObject = EventObject,
@@ -240,10 +240,10 @@ export type AsyncEmittersMap<
 /**
  * Map of sync emitter keys to their factory functions.
  *
- * @template {EventObject} E - Event object type.
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  */
 export type SyncEmittersMap<
   E extends EventObject = EventObject,

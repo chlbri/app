@@ -4,7 +4,7 @@ import type { FnMap, FnMapR } from '~types';
 /**
  * Helper checking if a state configuration object contains async transitions or child states.
  *
- * @template T - State node configuration object.
+ * @template `T` - State node configuration object.
  */
 export type IsAsyncConfig<T> = T extends { after: any }
   ? true
@@ -23,7 +23,7 @@ export type IsAsyncConfig<T> = T extends { after: any }
 /**
  * Helper checking if a type `T` is a Promise instance.
  *
- * @template T - Input type.
+ * @template `T` - Input type.
  */
 export type IsPromise<T> =
   Equals<any, T> extends true ? false : T extends Promise<any> ? true : false;
@@ -31,14 +31,14 @@ export type IsPromise<T> =
 /**
  * Helper checking if a function type `T` returns a Promise.
  *
- * @template T - Function type.
+ * @template `T` - Function type.
  */
 export type IsAsyncFn<T> = T extends Fn ? IsPromise<ReturnType<T>> : false;
 
 /**
  * Internal helper checking if a function map returns a Promise.
  *
- * @template T - Function map type.
+ * @template `T` - Function map type.
  */
 type _IsAsyncFnMap<T> =
   T extends FnMap<any, any, any, any, infer R> ? IsPromise<R> : false;
@@ -46,7 +46,7 @@ type _IsAsyncFnMap<T> =
 /**
  * Internal helper checking if a reduced function map returns a Promise.
  *
- * @template T - Function map type.
+ * @template `T` - Function map type.
  */
 type _IsAsyncFnMapR<T> =
   T extends FnMapR<any, any, any, infer R> ? IsPromise<R> : false;
@@ -54,7 +54,7 @@ type _IsAsyncFnMapR<T> =
 /**
  * Helper checking if a function map or handler `T` contains async handler functions.
  *
- * @template T - Function map or function type.
+ * @template `T` - Function map or function type.
  */
 export type IsAsyncFnMap<T> =
   _IsAsyncFnMap<T> extends true

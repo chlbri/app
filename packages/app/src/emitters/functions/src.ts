@@ -5,11 +5,11 @@ import type { AsyncEmitterFunction, AsyncEmittersMap } from '../types';
 /**
  * Function signature for resolving emitter source function from emitters map.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path string type.
- * @template {EventObject} Eo - Event object type.
- * @template R - Return type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template `R` - Return type.
  *
  * @param emitter - Emitter name string.
  * @param emitters - Optional map of async emitters.
@@ -35,7 +35,7 @@ export type ToEmitterSrc_F = <
  *
  * @returns Resolved emitter function or `undefined`.
  *
- * @see -- type {@linkcode ToEmitterSrc_F}
+ * @see {@linkcode ToEmitterSrc_F}
  */
 export const toEmitterSrc: ToEmitterSrc_F = (emitter, emitters) => {
   return emitters?.[emitter] as any;

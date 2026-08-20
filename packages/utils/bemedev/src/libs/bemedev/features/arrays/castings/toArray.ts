@@ -1,11 +1,21 @@
 import type { SoA } from '../../../globals/types';
 import { expandFn } from '../../../globals/utils/expandFn';
 
+/**
+ * Function interface for converting single items or arrays to standard arrays.
+ */
 type ToArray_F = {
   <T>(obj?: SoA<unknown>): T[];
   typed: <T>(obj: SoA<T>) => Exclude<T, undefined>[];
 };
 
+/**
+ * Internal implementation to convert a single value or array into an array.
+ *
+ * @param value - Value or array to convert.
+ *
+ * @returns Array representation of input value.
+ */
 const _toArray = (value?: unknown) => {
   if (!value) return [];
   const checkArray = Array.isArray(value);

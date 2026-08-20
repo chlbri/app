@@ -31,7 +31,7 @@ export type ConfigPaths = ConfigPaths2 & { states?: RecordS<ConfigPaths> };
 /**
  * Strict version of type {@linkcode ConfigPaths} ensuring no extra keys are permitted.
  *
- * @template {ConfigPaths} T - ConfigPaths type extending type {@linkcode ConfigPaths}.
+ * @template | {@linkcode ConfigPaths} `T` - ConfigPaths type extending type {@linkcode ConfigPaths}.
  */
 export type NoExtraKeysConfigPaths<T extends ConfigPaths> = T & {
   [K in Exclude<keyof T, keyof ConfigPaths>]: never;

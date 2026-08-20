@@ -7,7 +7,7 @@ export { isChildConfig, isEmitterConfig, isFinallyConfig };
 /**
  * Type guard function to check if a given value is an actor configuration object.
  *
- * @template T - State keys string array type.
+ * @template `T` - State keys string array type.
  * @param value - The value to check.
  * @param keys - List of valid state keys.
  *

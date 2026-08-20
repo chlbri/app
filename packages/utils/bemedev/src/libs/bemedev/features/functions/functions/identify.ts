@@ -1,5 +1,8 @@
 import type { Identitfy } from '../../../globals/types';
 
+/**
+ * Function interface to attach `__id` properties from object keys into array elements.
+ */
 type Identify_F = <const T>(arg?: Record<string, T>) => Identitfy<T>[];
 
 /**

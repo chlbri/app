@@ -16,7 +16,7 @@ export type EventToType_F = (event: EventObject | string) => string;
  *
  * @returns String representing the type of the event.
  *
- * @see type {@linkcode EventToType_F}
+ * @see {@linkcode EventToType_F}
  */
 export const eventToType: EventToType_F = event => {
   const check = typeof event === 'string';

@@ -4,9 +4,9 @@ import { NotArray_Schema } from './array';
 /**
  * Helper function building a non-array Valibot record schema with given key, value, and optional error message.
  *
- * @template {v.BaseSchema<string, string | number | symbol, v.BaseIssue<unknown>>} TKey - Key schema type.
- * @template {v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>} TValue - Value schema type.
- * @template {v.ErrorMessage<v.RecordIssue> | undefined} TMessage - Optional error message type.
+ * @template | {@linkcode v.BaseSchema} `TKey` - Key schema type.
+ * @template | {@linkcode v.BaseSchema} `TValue` - Value schema type.
+ * @template `TMessage` - Optional error message type.
  *
  * @param key - Valibot key schema.
  * @param value - Valibot value schema.

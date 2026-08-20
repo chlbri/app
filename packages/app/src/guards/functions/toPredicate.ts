@@ -16,10 +16,10 @@ import type { AsyncPredicateS3, SyncPredicateS3, PredicateMap } from '../types';
 /**
  * Signature for sync guard recursive parser function.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param guard - Guard configuration.
  * @param guards - Predicate map.
@@ -42,10 +42,10 @@ export type _ToPredicateF = <
 /**
  * Signature for async guard recursive parser function.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param guard - Guard configuration.
  * @param guards - Predicate map.
@@ -73,10 +73,10 @@ export type _ToPredicate = _ToPredicateF & { async: _ToPredicateAsyncF };
 /**
  * Signature for converting guard config into executable sync predicate.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param guard - Guard configuration.
  * @param guards - Predicate map.
@@ -96,10 +96,10 @@ export type ToPredicate_F = <
 /**
  * Signature for converting guard config into executable async predicate.
  *
- * @template Pc - Private context type.
- * @template {PrimitiveObject} Tc - Internal context type.
- * @template {string} T - State path type.
- * @template {EventObject} Eo - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  *
  * @param guard - Guard configuration.
  * @param guards - Predicate map.
@@ -119,7 +119,7 @@ export type ToPredicateAsync_F = <
 /**
  * Combined type for sync and async guard predicate converters.
  *
- * @see -- type {@linkcode ToPredicate_F}, -- type {@linkcode ToPredicateAsync_F}
+ * @see {@linkcode ToPredicate_F}, {@linkcode ToPredicateAsync_F}
  */
 export type ToPredicate = ToPredicate_F & { async: ToPredicateAsync_F };
 
