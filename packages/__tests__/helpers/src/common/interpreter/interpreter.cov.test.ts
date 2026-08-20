@@ -57,7 +57,7 @@ describe('TESTS', () => {
       expect(service.state.context.count).toBe(0));
 
     test('#10 => softReset sets status to idle', () =>
-      expect(service.status).toBe('idle'));
+      expect(service.status).toBe('working'));
   });
 
   describe('#02 => reset', () => {

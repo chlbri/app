@@ -3,7 +3,6 @@
 import {
   HeadContent,
   Link,
-  Outlet,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/solid-router';
@@ -28,14 +27,13 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
     ],
   }),
 
-  beforeLoad: ({ context: { counterService, trafficService } }) => {
-    counterService?.start();
-    trafficService?.start();
+  context: () => {
+    counterService.start();
+    trafficService.start();
+    return { counterService, trafficService };
   },
 
-  context: () => ({ counterService, trafficService }),
-
-  component: () => {
+  shellComponent: ({ children }) => {
     return (
       <html lang='en'>
         <head>
@@ -109,9 +107,7 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
             </div>
           </header>
 
-          <main class='mx-auto max-w-7xl p-4'>
-            <Outlet />
-          </main>
+          <main class='mx-auto max-w-7xl p-4'>{children}</main>
           <Scripts />
         </body>
       </html>

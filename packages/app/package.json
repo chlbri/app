@@ -23,45 +23,20 @@
       "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
     },
-    "./utils": {
-      "import": "./lib/utils/index.js",
-      "require": "./lib/utils/index.cjs",
-      "types": "./lib/utils/index.d.ts"
-    },
-    "./types": {
-      "import": "./lib/types/index.js",
-      "require": "./lib/types/index.cjs",
-      "types": "./lib/types/index.d.ts"
-    },
-    "./bemedev": {
-      "types": "./lib/bemedev.d.ts",
-      "import": "./lib/bemedev.js",
-      "require": "./lib/bemedev.cjs"
-    },
-    "./typings": {
-      "import": "./lib/utils/typings.js",
-      "require": "./lib/utils/typings.cjs",
-      "types": "./lib/utils/typings.d.ts"
-    },
-    "./constants": {
-      "import": "./lib/constants/index.js",
-      "require": "./lib/constants/index.cjs",
-      "types": "./lib/constants/index.d.ts"
-    },
-    "./states": {
-      "import": "./lib/states/index.js",
-      "require": "./lib/states/index.cjs",
-      "types": "./lib/states/index.d.ts"
-    },
     "./actions": {
       "import": "./lib/actions/index.js",
       "require": "./lib/actions/index.cjs",
       "types": "./lib/actions/index.d.ts"
     },
-    "./guards": {
-      "import": "./lib/guards/index.js",
-      "require": "./lib/guards/index.cjs",
-      "types": "./lib/guards/index.d.ts"
+    "./bemedev": {
+      "import": "./lib/bemedev.js",
+      "require": "./lib/bemedev.cjs",
+      "types": "./lib/bemedev.d.ts"
+    },
+    "./constants": {
+      "import": "./lib/constants/index.js",
+      "require": "./lib/constants/index.cjs",
+      "types": "./lib/constants/index.d.ts"
     },
     "./delays": {
       "import": "./lib/delays/index.js",
@@ -78,15 +53,40 @@
       "require": "./lib/events/index.cjs",
       "types": "./lib/events/index.d.ts"
     },
-    "./transitions": {
-      "import": "./lib/transitions/index.js",
-      "require": "./lib/transitions/index.cjs",
-      "types": "./lib/transitions/index.d.ts"
+    "./guards": {
+      "import": "./lib/guards/index.js",
+      "require": "./lib/guards/index.cjs",
+      "types": "./lib/guards/index.d.ts"
     },
     "./registry": {
       "import": "./lib/registry/index.js",
       "require": "./lib/registry/index.cjs",
       "types": "./lib/registry/index.d.ts"
+    },
+    "./states": {
+      "import": "./lib/states/index.js",
+      "require": "./lib/states/index.cjs",
+      "types": "./lib/states/index.d.ts"
+    },
+    "./transitions": {
+      "import": "./lib/transitions/index.js",
+      "require": "./lib/transitions/index.cjs",
+      "types": "./lib/transitions/index.d.ts"
+    },
+    "./types": {
+      "import": "./lib/types/index.js",
+      "require": "./lib/types/index.cjs",
+      "types": "./lib/types/index.d.ts"
+    },
+    "./typings": {
+      "import": "./lib/utils/typings.js",
+      "require": "./lib/utils/typings.cjs",
+      "types": "./lib/utils/typings.d.ts"
+    },
+    "./utils": {
+      "import": "./lib/utils/index.js",
+      "require": "./lib/utils/index.cjs",
+      "types": "./lib/utils/index.d.ts"
     }
   },
   "maintainers": [
@@ -116,12 +116,13 @@
   },
   "scripts": {
     "build": "pnpm rm:lib && pnpm run rolldown",
-    "_ci": "pnpm run lint && pnpm run build",
+    "_ci": "pnpm run lint && pnpm run test",
+    "pretest": "pnpm run build",
     "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "_lint": "oxlint",
-    "postbuild": "pnpm run size && pnpm run fmt",
+    "test": "pnpm run size && pnpm run fmt",
     "lint:fix": "oxlint --fix",
     "lint": "pnpm run fmt && pnpm run lint:fix",
     "p-q": "pretty-quick",
@@ -131,35 +132,34 @@
     "rolldown": "rolldown -c"
   },
   "devDependencies": {
-    "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-utils-bemedev": "workspace:^",
-    "@bemedev/dev-utils": "^1.1.1",
+    "@bemedev/dev-utils": "^1.2.0",
     "@bemedev/rolldown-config": "^0.5.0",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/sequence": "^1.0.0",
     "@size-limit/file": "^13.0.3",
     "@types/clone-deep": "^4.0.4",
     "@types/node": "^26.2.0",
-    "@vitest/coverage-v8": "^4.1.10",
-    "@vitest/ui": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/ui": "^4.1.11",
     "add": "^2.0.9",
     "glob": "^13.0.6",
     "globals": "^17.11.0",
     "husky": "^9.1.7",
     "is-online": "^12.0.2",
     "onchange": "^7.1.0",
-    "oxfmt": "^0.63.0",
-    "oxlint": "^1.78.0",
+    "oxfmt": "^0.64.0",
+    "oxlint": "^1.79.0",
     "pretty-quick": "^4.2.2",
     "rimraf": "^6.1.3",
-    "rolldown": "1.2.4",
+    "rolldown": "1.2.5",
     "rxjs": "^7.8.2",
     "size-limit": "^13.0.3",
     "tsc-alias": "^1.9.2",
     "tslib": "^2.8.1",
     "tsx": "^4.23.12",
     "typescript": "7.0.2",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.11",
     "zx": "^8.8.5"
   },
   "size-limit": [

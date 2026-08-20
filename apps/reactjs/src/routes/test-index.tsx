@@ -34,6 +34,11 @@ import { useComponents } from './-index.components';
 const TIMER_INTERVAL = 20_000;
 
 export const Route = createFileRoute('/test-index')({
+  context({ context }) {
+    context.counterServiceTest.start();
+    return context;
+  },
+
   component: () => {
     const service = Route.useRouteContext({
       select: s => s.counterServiceTest,
@@ -64,8 +69,8 @@ export const Route = createFileRoute('/test-index')({
         const seconds = `second${isPlural ? 's' : ''}`;
 
         const countClass = cn(
-          'text-lg w-7 text-center',
-          count <= secs / 4 ? 'text-red-400 font-semibold' : 'font-medium',
+          'text-sm w-5 text-center mt-0.5',
+          count <= secs / 4 ? 'text-red-400 font-bold' : 'font-semibold',
         );
 
         return { count, seconds, countClass };

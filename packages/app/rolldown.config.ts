@@ -4,5 +4,4 @@ export default defineConfig({
   declarationMap: true,
   sourcemap: true,
   ignoresJS: '**/*.example.ts',
-  externals: ['@bemedev/app-cli'],
 });

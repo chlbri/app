@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
+    "test:only": "vitest run",
     "_ci": "pnpm run test",
     "generate:lib": "app-cli generate -c ./src",
     "generate": "app-cli generate -c ./src",
@@ -15,10 +16,10 @@
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
-    "@bemedev/dev-utils": "^1.1.1",
+    "@bemedev/dev-utils": "^1.2.0",
     "@types/node": "^26.2.0",
     "tsx": "^4.23.12",
     "typescript": "6.0.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   }
 }

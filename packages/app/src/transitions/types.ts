@@ -496,20 +496,22 @@ export type ExtractActionKeysFromActor<T> = T extends EmitterConfig
  * @see {@linkcode NotUndefined} for ensuring the type is not undefined.
  * @see {@linkcode Extract}
  */
-export type ExtractActionKeysFromTransitions<T extends TransitionsConfig> =
-    | ExtractActionKeysFromDelayed<T['on']>
-    | ExtractActionKeysFromDelayed<T['after']>
-    | ExtractActionsFromTransition<
-        Extract<
-          ReduceArray<T['always']>,
-          { actions: SingleOrArrayL<WithDescriber> }
-        >
+export type ExtractActionKeysFromTransitions<
+  T extends TransitionsConfig,
+> =
+  | ExtractActionKeysFromDelayed<T['on']>
+  | ExtractActionKeysFromDelayed<T['after']>
+  | ExtractActionsFromTransition<
+      Extract<
+        ReduceArray<T['always']>,
+        { actions: SingleOrArrayL<WithDescriber> }
       >
-    | (NotUndefined<T['actors']> extends infer Ta
-        ? {
-            [K in keyof Ta]: ExtractActionKeysFromActor<Ta[K]>;
-          }[keyof Ta]
-        : never);
+    >
+  | (NotUndefined<T['actors']> extends infer Ta
+      ? {
+          [K in keyof Ta]: ExtractActionKeysFromActor<Ta[K]>;
+        }[keyof Ta]
+      : never);
 
 /**
  * Internal helper to extract guard keys from transition map structure.

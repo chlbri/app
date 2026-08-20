@@ -16,6 +16,7 @@ export const Route = createFileRoute('/')({
     const hooksTraffic = createHooks(trafficService);
     const counterState = hooksCounter.state();
     const counterValue = hooksCounter.state({ selector: s => s.value });
+    const canStartCounter = hooksCounter.can('START');
     const counterCount = () => counterState().context.count;
     const trafficState = hooksTraffic.state();
     const trafficTags = () => trafficState().tags;
@@ -107,15 +108,11 @@ export const Route = createFileRoute('/')({
               </button>
               <button
                 onClick={() =>
-                  counterService.send(
-                    counterValue() === 'idle' ? 'START' : 'STOP',
-                  )
+                  counterService.send(canStartCounter() ? 'START' : 'STOP')
                 }
                 class='cursor-pointer rounded-lg bg-purple-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-purple-600/30 transition-all hover:bg-purple-500 active:scale-95'
               >
-                {counterValue() === 'idle'
-                  ? 'Start Machine'
-                  : 'Stop Machine'}
+                {canStartCounter() ? 'Start Machine' : 'Stop Machine'}
               </button>
               <Link
                 to='/counter'
