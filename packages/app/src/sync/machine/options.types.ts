@@ -340,8 +340,7 @@ export type SyncGuardUnionOption<
 > =
   | SyncPredicateS<E, Pc, Tc, T>
   | SyncGuardAndOption<E, Pc, Tc, T>
-  | SyncGuardOrOption<E, Pc, Tc, T>
-  | undefined;
+  | SyncGuardOrOption<E, Pc, Tc, T>;
 
 /**
  * Function type signature for batching multiple synchronous guards into a single guard.

@@ -172,34 +172,27 @@ export class AsyncMachine<
         isNotDefined,
         guardBatch: (...guards) => {
           const reduceGuardItem = (guard: any): any => {
-            if (!guard && guard !== false) return undefined;
-            if (typeof guard === 'boolean') {
-              return () => guard;
-            }
-            if (typeof guard === 'function') {
-              return guard;
-            }
+            if (typeof guard === 'boolean') return () => guard;
+            if (typeof guard === 'function') return guard;
+
             if (typeof guard === 'object' && guard !== null) {
               if ('or' in guard) {
-                const or = guard.or
-                  .map(reduceGuardItem)
-                  .filter((g: any) => g !== undefined && g !== null);
+                const or = guard.or.map(reduceGuardItem);
                 return { or };
               }
+
               if ('and' in guard) {
-                const and = guard.and
-                  .map(reduceGuardItem)
-                  .filter((g: any) => g !== undefined && g !== null);
+                const and = guard.and.map(reduceGuardItem);
                 return { and };
               }
+
               return reduceFnMap(guard, ...this.__eventsList);
             }
+
             return guard;
           };
 
-          const prepared = guards
-            .map(reduceGuardItem)
-            .filter((g: any) => g !== undefined && g !== null);
+          const prepared = guards.map(reduceGuardItem);
           const fn = asyncRecursive(...prepared);
 
           return async ({ context, pContext, ...rest }) => {
@@ -208,9 +201,11 @@ export class AsyncMachine<
               pContext,
               ...rest,
             });
+
             return await fn(state);
           };
         },
+
         swap: this.swap,
 
         assign: (keys, fn, options?) => {

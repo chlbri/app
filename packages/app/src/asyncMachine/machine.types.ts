@@ -399,8 +399,7 @@ export type AsyncGuardUnionOption<
 > =
   | AsyncPredicateS<E, Pc, Tc, T>
   | AsyncGuardAndOption<E, Pc, Tc, T>
-  | AsyncGuardOrOption<E, Pc, Tc, T>
-  | undefined;
+  | AsyncGuardOrOption<E, Pc, Tc, T>;
 
 /**
  * Function type signature for batching multiple guards into a single async guard.
