@@ -48,7 +48,7 @@ export const isTransitionConfigMap = <T extends string[] = string[]>(
   if (!check2) return false;
   const check33 = isStringOrUndefined(target);
   if (!check33) return false;
-  const check3 = checkValues.orUndefined(target, ...keys);
+  const check3 = checkValues.undefined(target, ...keys);
   if (!check3) return false;
   const check4 = checkActions.orUndefined(actions);
   if (!check4) return false;

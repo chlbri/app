@@ -130,7 +130,7 @@ export const checkAtomic = <T extends string[] = string[]>(
   if (!checkActivities.orUndefined(activities)) return false;
   if (!isStringOrUndefined(type)) return false;
 
-  if (!checkValues.orUndefined(type, 'atomic', 'compound', 'parallel')) {
+  if (!checkValues.undefined(type, 'atomic', 'compound', 'parallel')) {
     return false;
   }
 

@@ -3,18 +3,14 @@
  *
  * @returns Constant boolean `true`.
  */
-export const returnTrue = () => {
-  return true;
-};
+export const returnTrue = () => true;
 
 /**
  * Helper function returning `false`.
  *
  * @returns Constant boolean `false`.
  */
-export const returnFalse = () => {
-  return false;
-};
+export const returnFalse = () => false;
 
 /**
  * Default strict equality comparison comparator function.

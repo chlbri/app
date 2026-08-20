@@ -430,10 +430,14 @@ export abstract class CommonInterpreter<
   /**
    * Indicates whether the interpreter has started and is currently operational.
    *
-   * @returns `true` if the working status is neither `'idle'` nor `'stopped'`; otherwise, `false`.
+   * @returns `true` if the working status is neither `'idle'` nor `'stopped'` nor `'starting'`; otherwise, `false`.
    */
   get isReady() {
-    return this.__status !== 'idle' && this.__status !== 'stopped';
+    return (
+      this.__status !== 'idle' &&
+      this.__status !== 'stopped' &&
+      this.__status !== 'starting'
+    );
   }
 
   /**
@@ -571,7 +575,6 @@ export abstract class CommonInterpreter<
     this.__value = nodeToValue(this.__initialConfig);
     this.__context = this.__initialContext;
     this.__pContext = this.__initialPpc;
-    this.__status = 'idle';
     this.__init(this.__machine, this.__mode, this.__exact);
     this.__flush();
   };
@@ -1793,15 +1796,6 @@ export abstract class CommonInterpreter<
   protected abstract __performFinally: Fn;
 
   /**
-   * Accessor checking whether an event dispatch is in progress.
-   *
-   * @returns `true` if currently dispatching; otherwise, `false`.
-   */
-  private get __sending() {
-    return this.__status === 'sending';
-  }
-
-  /**
    * Evaluates whether operations originating from a state path are prohibited.
    *
    * @param from - State path string.
@@ -1809,8 +1803,9 @@ export abstract class CommonInterpreter<
    * @returns `true` if prohibited; otherwise, `false`.
    */
   protected __cannotPerform = (from: string) => {
-    const check = this.__sending || !this.__isInsideValue(from);
-    return check;
+    const first = this.isReady && this.__status !== 'sending';
+    const check = !this.__isInsideValue(from);
+    return first && check;
   };
 
   /**
