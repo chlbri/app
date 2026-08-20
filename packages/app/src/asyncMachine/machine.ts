@@ -16,6 +16,7 @@ import {
   reduceFnMapFilterObject,
 } from '#utils';
 import { _any, _unknown } from '@bemedev/app-utils-bemedev';
+import asyncRecursive from '@bemedev/boolean-recursive/async';
 import { getByKey, recompose } from '@bemedev/decompose';
 
 import {
@@ -169,6 +170,47 @@ export class AsyncMachine<
         isNotValue,
         isDefined,
         isNotDefined,
+        guardBatch: (...guards) => {
+          const reduceGuardItem = (guard: any): any => {
+            if (!guard && guard !== false) return undefined;
+            if (typeof guard === 'boolean') {
+              return () => guard;
+            }
+            if (typeof guard === 'function') {
+              return guard;
+            }
+            if (typeof guard === 'object' && guard !== null) {
+              if ('or' in guard) {
+                const or = guard.or
+                  .map(reduceGuardItem)
+                  .filter((g: any) => g !== undefined && g !== null);
+                return { or };
+              }
+              if ('and' in guard) {
+                const and = guard.and
+                  .map(reduceGuardItem)
+                  .filter((g: any) => g !== undefined && g !== null);
+                return { and };
+              }
+              return reduceFnMap(guard, ...this.__eventsList);
+            }
+            return guard;
+          };
+
+          const prepared = guards
+            .map(reduceGuardItem)
+            .filter((g: any) => g !== undefined && g !== null);
+          const fn = asyncRecursive(...prepared);
+
+          return async ({ context, pContext, ...rest }) => {
+            const state = this.__cloneStateExtended({
+              context,
+              pContext,
+              ...rest,
+            });
+            return await fn(state);
+          };
+        },
         swap: this.swap,
 
         assign: (keys, fn, options?) => {
