@@ -7,9 +7,16 @@ import _machine5 from './asyncActions.5.machine';
 import _machine6 from './asyncActions.6.machine';
 import _machine7 from './asyncActions.7.machine';
 
-vi.useFakeTimers();
+beforeAll(() => vi.useRealTimers());
 
 describe('Machine createOptions - error handlers', () => {
+  beforeAll(() => {
+    vi.useFakeTimers();
+  });
+
+  afterAll(() => {
+    vi.useRealTimers();
+  });
   describe('#01 => assign', () => {
     const theError = 'assign error';
 
@@ -33,24 +40,26 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 42 });
 
-      test('#01 => service is ready', () => {
-        expect(service).toBeDefined();
+      test('#00 => is not ready', () => {
         expect(service.isReady).toBe(false);
       });
 
-      test('#02 => send event without throwing', async () => {
+      test('#01 => start', service.start);
+      test('#02 => is ready', () => expect(service.isReady).toBe(true));
+
+      test('#03 => send event without throwing', async () => {
         await service.send('TEST');
       });
 
-      test('#03 => errorFn is called once', () => {
+      test('#04 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
 
-      test('#04 => errorFn receives the thrown error as first arg', () => {
+      test('#05 => errorFn receives the thrown error as first arg', () => {
         expect(errorFn).toHaveBeenCalledWith('assign error');
       });
 
-      test('#05 => errorAction receives the extended state', () => {
+      test('#06 => errorAction receives the extended state', () => {
         expect(errorAction).toHaveBeenCalledWith({
           context: 42,
           pContext: undefined,
@@ -80,12 +89,17 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 42 });
 
-      test('#01 => error handler modifies context', async () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
         await service.send('TEST');
+      });
+
+      test('#03 => error handler modifies context', () => {
         expect(service.context).toEqual(-1);
       });
 
-      test('#02 => errorFn is called once', () => {
+      test('#04 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
     });
@@ -108,11 +122,13 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 7 });
 
-      test('#01 => send event without throwing', async () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
         await service.send('TEST');
       });
 
-      test('#02 => errorFn is called once', () => {
+      test('#03 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
     });
@@ -138,24 +154,26 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 10 });
 
-      test('#01 => service is ready', () => {
-        expect(service).toBeDefined();
+      test('#00 => is not ready', () => {
         expect(service.isReady).toBe(false);
       });
 
-      test('#02 => send event without throwing', async () => {
+      test('#01 => start', service.start);
+      test('#02 => is ready', () => expect(service.isReady).toBe(true));
+
+      test('#03 => send event without throwing', async () => {
         await service.send('TEST');
       });
 
-      test('#03 => errorFn is called once', () => {
+      test('#04 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
 
-      test('#04 => errorFn receives the thrown error as first arg', () => {
+      test('#05 => errorFn receives the thrown error as first arg', () => {
         expect(errorFn).toHaveBeenCalledWith('void error');
       });
 
-      test('#05 => errorAction receives extended state and returns empty object', () => {
+      test('#06 => errorAction receives extended state', () => {
         expect(errorAction).toHaveBeenCalledWith({
           context: 10,
           pContext: undefined,
@@ -164,6 +182,9 @@ describe('Machine createOptions - error handlers', () => {
           value: 'idle',
           event: { type: 'TEST', payload: {} },
         });
+      });
+
+      test('#07 => errorAction returns empty object', () => {
         expect(errorAction).toHaveReturnedWith({});
       });
     });
@@ -186,12 +207,17 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 10 });
 
-      test("#01 => error handler doesn't modify context", async () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
         await service.send('TEST');
+      });
+
+      test("#03 => error handler doesn't modify context", () => {
         expect(service.context).toEqual(10);
       });
 
-      test('#02 => errorFn is called once', () => {
+      test('#04 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
     });
@@ -215,16 +241,18 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 3 });
 
-      test('#01 => send event without throwing', async () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
         await service.send('TEST');
       });
 
-      test('#02 => errorFn is called once', () => {
+      test('#03 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
     });
 
-    describe('#03 => NO error', () => {
+    describe('#04 => NO error', () => {
       const theData = { message: 'Success' };
       const passFn = vi.fn(async data => console.log(data));
 
@@ -239,15 +267,17 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 3 });
 
-      test('#01 => send event without throwing', () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', () => {
         return service.send('TEST');
       });
 
-      test('#02 => errorFn is called once', () => {
+      test('#03 => errorFn is called once', () => {
         expect(passFn).toHaveBeenCalledOnce();
       });
 
-      test('#03 => errorFn receives the thrown error', () => {
+      test('#04 => errorFn receives the thrown error', () => {
         expect(passFn).toHaveBeenCalledWith(theData);
       });
     });
@@ -284,24 +314,26 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: state.context });
 
-      test('#01 => service is ready', () => {
-        expect(service).toBeDefined();
+      test('#00 => is not ready', () => {
         expect(service.isReady).toBe(false);
       });
 
-      test('#02 => send event without throwing', async () => {
+      test('#01 => start', service.start);
+      test('#02 => is ready', () => expect(service.isReady).toBe(true));
+
+      test('#03 => send event without throwing', async () => {
         await service.send('TEST');
       });
 
-      test('#03 => errorFn is called once', () => {
+      test('#04 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
 
-      test('#04 => errorFn receives the thrown error as first arg', () => {
+      test('#05 => errorFn receives the thrown error as first arg', () => {
         expect(errorFn).toHaveBeenCalledWith('sendTo error');
       });
 
-      test('#05 => errorAction receives extended state', () => {
+      test('#06 => errorAction receives extended state', () => {
         expect(errorAction).toHaveBeenCalledWith({
           context: 5,
           pContext: undefined,
@@ -330,12 +362,17 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: state.context });
 
-      test("#01 => error handler doesn't modify context", async () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
         await service.send('TEST');
+      });
+
+      test("#03 => error handler doesn't modify context", () => {
         expect(service.context).toEqual(state.context);
       });
 
-      test('#02 => errorFn is called once', () => {
+      test('#04 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
     });
@@ -357,15 +394,17 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 1 });
 
-      test('#01 => send event without throwing', async () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
         await service.send('TEST');
       });
 
-      test('#02 => errorFn is called once', () => {
+      test('#03 => errorFn is called once', () => {
         expect(errorFn).toHaveBeenCalledOnce();
       });
 
-      test('#03 => errorAction returns empty object', () => {
+      test('#04 => errorAction returns empty object', () => {
         expect(errorAction).toHaveNthReturnedWith(1, {});
       });
     });
@@ -391,12 +430,17 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 5 });
 
-      test('#01 => service context is updated by both main action and then handler', async () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
         await service.send('TEST');
+      });
+
+      test('#03 => service context is updated by both main action and then handler', () => {
         expect(service.context).toBe(110);
       });
 
-      test('#02 => catchFn is not called', () => {
+      test('#04 => catchFn is not called', () => {
         expect(catchFn).not.toHaveBeenCalled();
       });
     });
@@ -422,17 +466,23 @@ describe('Machine createOptions - error handlers', () => {
 
       const service = interpret(machine, { context: 5 });
 
-      test('#01 => voidAction executes effect and triggers then handler', async () => {
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
         await service.send('TEST');
+      });
+
+      test('#03 => voidAction executes effect', () => {
         expect(effectCalled).toBe(true);
+      });
+
+      test('#04 => then handler updates context', () => {
         expect(service.context).toBe(55);
       });
 
-      test('#02 => catchFn is not called', () => {
+      test('#05 => catchFn is not called', () => {
         expect(catchFn).not.toHaveBeenCalled();
       });
     });
   });
 });
-
-afterAll(() => vi.useRealTimers());

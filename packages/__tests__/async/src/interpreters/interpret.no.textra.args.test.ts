@@ -18,6 +18,9 @@ describe('TESTS', () => {
     ({ sender }) => ({ next: sender('NEXT') }),
   );
 
+  test(...useStateValue('prev'));
+  test(...next());
+  test(...useStateValue('prev'));
   test(...start());
   test(...useStateValue('prev'));
   test(...next());

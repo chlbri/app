@@ -1680,7 +1680,7 @@ export abstract class CommonInterpreter<
    * @returns Dispatch operation result.
    */
   send = (_event: EventArgObject<Eo>) => {
-    const check = this.__cannotPerformEvents(_event);
+    const check = !this.isReady || this.__cannotPerformEvents(_event);
     if (check) return;
     return this.__send(_event);
   };
