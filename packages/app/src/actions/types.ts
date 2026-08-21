@@ -8,7 +8,7 @@ import type { Describer, FnMap, FnR, FromDescriber } from '~types';
 /**
  * JSON configuration for an action.
  *
- * @see {@linkcode Describer}
+ * @see -- type {@linkcode Describer}
  */
 export type WithDescriber = string | Describer;
 
@@ -54,7 +54,7 @@ export type NoExtraKeysWithDescriberSoa<T> =
  * @template `T` - ActionConfig to reduce
  * @returns The name of the action if it is a describer, otherwise the action itself.
  *
- * @see {@linkcode FromDescriber}
+ * @see -- type {@linkcode FromDescriber}
  */
 export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
 
@@ -64,7 +64,7 @@ export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
  * @template `Pc` - The type of the private context.
  * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
  * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @returns an type {@linkcode ActionResult} object.
+ * @returns An type {@linkcode ActionResult} object.
  */
 export type ActionResult<
   Pc = any,

@@ -351,7 +351,7 @@ export class SyncMachine<
  *
  * @param config - Machine configuration object.
  *
- * @returns Instance of type {@linkcode SyncMachine}.
+ * @returns Instance of class {@linkcode SyncMachine}.
  */
 export const createSyncMachine: CommonCreateMachine_F = config => {
   return new SyncMachine(config);

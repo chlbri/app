@@ -73,9 +73,7 @@ export abstract class CommonMachine<
   const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
 > implements AnyMachine<E, A, Pc, Tc> {
   /**
-   * The configuration of the machine for this {@linkcode Machine}.
-   *
-   * @see -- type {@linkcode Config}, {@linkcode C}
+   * The configuration of the machine for this {@linkcode CommonMachine}.
    */
   private _config: C;
 
@@ -104,15 +102,10 @@ export abstract class CommonMachine<
   protected __flat: any;
 
   /**
-   * The public accessor of the flat map of the configuration for this {@linkcode Machine}.
-   *
-   * @see -- type {@linkcode FlatMapN}, -- type {@linkcode Config}, {@linkcode C}
+   * The public accessor for the flat map representation of the configuration.
    */
   abstract get flat(): any;
 
-  /**
-   * Decomposed path mapping representation of the configuration.
-   */
   /**
    * Decomposed path mapping representation of the configuration.
    */
@@ -123,11 +116,9 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides the decomposed state for this {@linkcode Machine} as a type.
+   * This property provides the decomposed state for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see -- type {@linkcode State}, -- type {@linkcode Decompose}, {@linkcode Eo}, {@linkcode Tc}, {@linkcode Ta}
    */
   get __decomposedState() {
     return _unknown<
@@ -136,18 +127,14 @@ export abstract class CommonMachine<
   }
 
   /**
-   * Public accessor for the events map for this {@linkcode Machine}.
-   *
-   * @see -- type {@linkcode EventsMap}, {@linkcode E}
+   * Public accessor for the events map for this {@linkcode CommonMachine}.
    */
   get eventsMap() {
     return _unknown<E>();
   }
 
   /**
-   * Public accessor for the promisees map for this {@linkcode Machine}.
-   *
-   * @see -- type {@linkcode PromiseeMap}, {@linkcode A}
+   * Public accessor for the actors map for this {@linkcode CommonMachine}.
    */
   get actorsMap() {
     return _unknown<A>();
@@ -156,12 +143,9 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides the events map for this {@linkcode Machine} as a type.
-   *
+   * This property provides the events map for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see -- type {@linkcode ToEvents}, {@linkcode E}, {@linkcode A}
    */
   get __events() {
     return _unknown<Eo>();
@@ -175,7 +159,7 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides any action key for this {@linkcode Machine} as a type.
+   * This property provides any action key for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
    */
@@ -186,11 +170,9 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides the action parameters of action function for this {@linkcode Machine} as a type.
+   * This property provides the action parameters of action function for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode E}, {@linkcode Pc}, -- type {@linkcode PrimitiveObject}, {@linkcode Tc}
    */
   get __actionParams() {
     return _unknown<{ pContext: Pc; context: Tc; map: E }>();
@@ -199,11 +181,9 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides the state for this {@linkcode Machine} as a type.
+   * This property provides the state for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see -- type {@linkcode State}, -- type {@linkcode ToEventsR2}, -- type {@linkcode PrimitiveObject}, -- type {@linkcode ActorsConfigMap}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __state() {
     return _unknown<State<Eo, Tc, Ta>>();
@@ -212,11 +192,9 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides the state extended for this {@linkcode Machine} as a type.
+   * This property provides the state extended for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see -- type {@linkcode StateExtended}, -- type {@linkcode ToEvents}, -- type {@linkcode PrimitiveObject}, -- type {@linkcode ActorsConfigMap}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __stateExtended() {
     return _unknown<StateExtended<Eo, Pc, Tc, Ta>>();
@@ -225,11 +203,9 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides the state payload for this {@linkcode Machine} as a type.
+   * This property provides the state payload for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see -- type {@linkcode StateP}, -- type {@linkcode ToEventsR2}, -- type {@linkcode PrimitiveObject}, -- type {@linkcode ActorsConfigMap}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __stateP() {
     return _unknown<StateP<Eo, Tc, Ta>>();
@@ -238,11 +214,9 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides the extended state payload for this {@linkcode Machine} as a type.
+   * This property provides the extended state payload for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see -- type {@linkcode StatePextended}, -- type {@linkcode ToEventsR2}, -- type {@linkcode PrimitiveObject}, -- type {@linkcode ActorsConfigMap}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __statePextended() {
     return _unknown<StatePextended<Eo, Pc, Tc, Ta>>();
@@ -283,7 +257,7 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides any delay key for this {@linkcode Machine} as a type.
+   * This property provides any delay key for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
    */
@@ -297,19 +271,15 @@ export abstract class CommonMachine<
    * This property provides the delay function for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   
    */
   abstract __delay: any;
 
   /**
    * @deprecated
    *
-   * This property provides any {@linkcode DefinedValue} for this {@linkcode Machine} as a type.
+   * This property provides any {@linkcode DefinedValue} for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see -- type {@linkcode PrimitiveObject}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __definedValue() {
     return _unknown<DefinedValue<Pc, Tc>>();
@@ -318,7 +288,7 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides any child key for this {@linkcode Machine} as a type.
+   * This property provides any child key for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
    */
@@ -329,7 +299,7 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * Return this {@linkcode Machine} as a type.
+   * Return this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
    */
@@ -365,16 +335,12 @@ export abstract class CommonMachine<
   private _actors?: Mo['actors'];
 
   /**
-   * Context for this {@linkcode Machine}.
-   *
-   * @see -- type {@linkcode PrimitiveObject}, {@linkcode Tc}
+   * Context for this {@linkcode CommonMachine}.
    */
   protected __context!: Tc;
 
   /**
-   * Private context for this {@linkcode Machine}.
-   *
-   * @see {@linkcode Pc}
+   * Private context for this {@linkcode CommonMachine}.
    */
   protected __pContext!: Pc;
 
@@ -415,9 +381,9 @@ export abstract class CommonMachine<
   };
 
   /**
-   * Creates an instance of Machine.
+   * Creates an instance of class {@linkcode CommonMachine}.
    *
-   * @param config : of type {@linkcode Config} [C] - The configuration for the machine.
+   * @param config - The configuration for the machine.
    *
    * @remarks
    * This constructor initializes the machine with the provided configuration.
@@ -447,9 +413,7 @@ export abstract class CommonMachine<
   };
 
   /**
-   * The accessor of context for this {@linkcode Machine}.
-   *
-   * @see -- type {@linkcode PrimitiveObject}, {@linkcode Tc}
+   * The accessor of context for this {@linkcode CommonMachine}.
    */
   get context() {
     const out = this.__elements.context;
@@ -457,18 +421,13 @@ export abstract class CommonMachine<
   }
 
   /**
-   * The accessor of private context for this {@linkcode Machine}.
-   *
-   * @see {@linkcode Pc}
+   * The accessor of private context for this {@linkcode CommonMachine}.
    */
   get pContext() {
     const out = this.__elements.pContext;
     return out;
   }
 
-  /**
-   * Registered actions map getter.
-   */
   /**
    * Registered actions map getter.
    */
@@ -507,7 +466,7 @@ export abstract class CommonMachine<
   /**
    * @deprecated
    *
-   * This property provides all possible paths for this {@linkcode Machine} as a type.
+   * This property provides all possible paths for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
    */
@@ -597,7 +556,7 @@ export abstract class CommonMachine<
   /**
    * Provides options for the machine.
    *
-   * @param option a function that provides options for the machine.
+   * @param helper - A function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    */
   addOptions(helper: Fn) {
@@ -613,22 +572,14 @@ export abstract class CommonMachine<
   }
 
   /**
-   * Renews the machine with the provided key and value.
-   * @param key the key of the element to provide.
-   * @param value the value of the element to provide.
-   * If not provided, the current elements will be returned.
-   * @returns a new instance of this {@linkcode Machine} with the provided key and value.
+   * Renews the machine with current configuration.
    *
-   *
-   *
-   *  {@linkcode Config} , {@linkcode C} , {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode types} , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} ,  , {@linkcode Mo}
-   *
-   * @see -- type {@linkcode Elements}
+   * @returns A new instance of this class {@linkcode CommonMachine}.
    */
   protected abstract __renew: () => this;
 
   /**
-   * Returns a new instance from this {@linkcode Machine} with all its {@linkcode Elements}.
+   * Returns a new instance from this {@linkcode CommonMachine} with all its elements.
    */
   get renew() {
     const out = this.__renew();
@@ -638,9 +589,10 @@ export abstract class CommonMachine<
   /**
    * Provides options for the machine.
    *
-   * @param helper a function that provides options for the machine.
+   * @param helper - A function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
-   * @returns a new instance of the machine with the provided options applied.
+   *
+   * @returns A new instance of the machine with the provided options applied.
    */
   provideOptions(helper: Fn) {
     const out = this.renew;
@@ -650,10 +602,6 @@ export abstract class CommonMachine<
 
   /**
    * Get all meaningful elements of the machine.
-   *
-   *
-   *
-   * @see -- type {@linkcode Elements}, -- type {@linkcode Config}, {@linkcode C}, -- type {@linkcode GetEventsFromConfig}, {@linkcode E}, -- type {@linkcode PromiseeMap}, -- type {@linkcode GetPromiseesSrcFromConfig}, {@linkcode A}, {@linkcode Pc}, -- type {@linkcode PrimitiveObject}, {@linkcode Tc}, -- type {@linkcode SimpleMachineOptions2}, {@linkcode Mo}
    */
   protected get __elements(): CommonElements<C, Pc, Tc, Mo> {
     const config = structuredClone(this._config);
@@ -686,10 +634,11 @@ export abstract class CommonMachine<
   };
 
   /**
-   * Converts a {@linkcode StateValue} to a {@linkcode NodeConfigWithInitials} with the {@linkcode NodeConfigWithInitials} postConfig of this {@linkcode Machine}.
+   * Converts a {@linkcode StateValue} to a node configuration.
    *
-   * @param from the {@linkcode StateValue} to convert.
-   * @returns the converted {@linkcode NodeConfigWithInitials}.
+   * @param from - The {@linkcode StateValue} to convert.
+   *
+   * @returns The converted node configuration.
    *
    * @see {@linkcode valueToNodeConfig}
    */
@@ -698,14 +647,14 @@ export abstract class CommonMachine<
   };
 
   /**
-   * The accessor of the initial node config of this {@linkcode Machine}.
+   * The accessor of the initial node config of this {@linkcode CommonMachine}.
    */
   get initialConfig() {
     return this._initialConfig;
   }
 
   /**
-   * The accessor of the initial {@linkcode StateValue} of this {@linkcode Machine}.
+   * The accessor of the initial {@linkcode StateValue} of this {@linkcode CommonMachine}.
    *
    * @see {@linkcode nodeToValue}
    */
@@ -727,22 +676,13 @@ export abstract class CommonMachine<
     const delays = this._delays;
     const actors = this._actors;
 
-    const out = _unknown<Mo>({
-      guards,
-      actions,
-      delays,
-
-      actors,
-    });
+    const out = _unknown<Mo>({ guards, actions, delays, actors });
 
     return out;
   }
 
   /**
-   * Function helper to check if a value matches the provided values
-   *
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
+   * Function helper to check if a value matches the provided values.
    *
    * @see {@linkcode isValue}
    */
@@ -753,9 +693,6 @@ export abstract class CommonMachine<
   /**
    * Function helper to check if a value is not one of the provided values.
    *
-   *
-   *  {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
    * @see {@linkcode isNotValue}
    */
   protected get __isNotValue() {
@@ -763,10 +700,7 @@ export abstract class CommonMachine<
   }
 
   /**
-   * Function helper to check if a value is defined
-   *
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
+   * Function helper to check if a value is defined.
    *
    * @see {@linkcode isDefinedS}
    */
@@ -775,26 +709,14 @@ export abstract class CommonMachine<
   }
 
   /**
-   * Function helper to check if a value is undefined or null
+   * Function helper to check if a value is undefined or null.
    *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode isDefinedS}
+   * @see {@linkcode isNotDefinedS}
    */
   protected get __isNotDefined() {
     return isNotDefinedS<Eo, Pc, Tc, Ta>;
   }
 
-  /**
-   * Function helper to send an event to a child service.
-   *
-   * @param _ an optional parameter of type {@linkcode AnyMachine} [{@linkcode T}] to specify the machine context. Only used for type inference.
-   *
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode reduceFnMap}
-   */
   /**
    * Abstract helper function to send an event to a target child service.
    */
@@ -834,7 +756,7 @@ export abstract class CommonMachine<
 /**
  * Helper to retrieve entry or exit actions from a node.
  *
- * @see -- type {@linkcode GetIO_F}, {@linkcode toArray.typed}, {@linkcode isAtomic}, {@linkcode isCompound}
+ * @see -- type {@linkcode GetIO_F}, {@linkcode isAtomic}, {@linkcode isCompound}
  */
 const getIO: GetIO_F = (key, node) => {
   if (!node) return [];

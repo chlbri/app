@@ -1120,7 +1120,7 @@ export class AsyncInterpreter<
  *
  * @template | {@linkcode AnyMachine} `M` - The machine type from which to infer the interpreter type.
  *
- * @see {@linkcode ConfigFrom}, {@linkcode PrivateContextFrom}, {@linkcode ContextFrom}, {@linkcode EventsMapFrom}, {@linkcode ActorsMapFrom}, {@linkcode TagFrom}, {@linkcode EventsFrom}, {@linkcode AllPathsFrom}, {@linkcode MachineOptionsFrom}
+ * @see -- type {@linkcode ConfigFrom}, -- type {@linkcode PrivateContextFrom}, -- type {@linkcode ContextFrom}, -- type {@linkcode EventsMapFrom}, -- type {@linkcode ActorsMapFrom}, -- type {@linkcode TagFrom}, -- type {@linkcode EventsFrom}, -- type {@linkcode AllPathsFrom}, -- type {@linkcode MachineOptionsFrom}
  */
 export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
   ConfigFrom<M>,

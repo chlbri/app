@@ -36,17 +36,19 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import type { EmptyObject } from '~types';
 
 /**
- * A class representing a state machine.
+ * A class representing an asynchronous state machine.
  * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
- * @template : {@linkcode AsyncConfig} [C] - The configuration type of the machine.
- * @template `Pc` : The private context type of the machine.
- * @template : {@linkcode PrimitiveObject} [Pc] - The context type of the machine.
- * @template : {@linkcode GetEventsFromConfig}<{@linkcode C}> [E] - The events map type derived from the configuration.
- * @template : {@linkcode PromiseeMap} [P] - The promisees map type derived from the configuration.
- * @template : {@linkcode SimpleMachineOptions2} [Mo] - The options type for the machine, which includes actions, guards, delays, promises, and machines. Defaults to {@linkcode SimpleMachineOptions2}<[{@linkcode C} , {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} ]>.
- *
- * @implements {@linkcode AnyMachine}<{@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode Tc} >
+ * @template | {@linkcode CommonConfig3} `C` - Configuration type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template | {@linkcode EventsMap} `E` - Events map type.
+ * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map type.
+ * @template `Ta` - Tag string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template `AllPaths` - All state paths type.
+ * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Additional options type.
  */
 
 export class AsyncMachine<
@@ -71,8 +73,6 @@ export class AsyncMachine<
    * This property provides the action function for this {@linkcode AsyncMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode E}, {@linkcode A}, {@linkcode Pc}, -- type {@linkcode PrimitiveObject}, {@linkcode Tc}
    */
   get __actionFn() {
     return _unknown<AsyncAction<Eo, Pc, Tc, Ta>>();
@@ -80,12 +80,9 @@ export class AsyncMachine<
 
   /**
    * @deprecated
-   *
    * This property provides the predicate function for this {@linkcode AsyncMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see -- type {@linkcode AsyncPredicateS}, -- type {@linkcode ActorsConfigMap}, -- type {@linkcode PrimitiveObject}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __predicate() {
     return _unknown<AsyncPredicateS<Eo, Pc, Tc, Ta>>();
@@ -93,12 +90,9 @@ export class AsyncMachine<
 
   /**
    * @deprecated
-   *
    * This property provides the delay function for this {@linkcode AsyncMachine} as a type.
    *
    * @remarks Used for typing purposes only.
-   *
-   * @see {@linkcode AsyncDelayFunction}, -- type {@linkcode ActorsConfigMap}, -- type {@linkcode PrimitiveObject}, {@linkcode E}, {@linkcode A}, {@linkcode Pc}, {@linkcode Tc}
    */
   get __delay() {
     return _unknown<AsyncDelayFunction<Eo, Pc, Tc, Ta>>();
@@ -107,9 +101,7 @@ export class AsyncMachine<
   // #endregion
 
   /**
-   * The public accessor of the flat map of the configuration for this {@linkcode AsyncMachine}.
-   *
-   * @see -- type {@linkcode FlatMapN}, {@linkcode AsyncConfig}, {@linkcode C}
+   * The public accessor for the flat map representation of the configuration.
    */
   get flat() {
     return this.__flat as FlatMapN<C, true>;
@@ -120,10 +112,10 @@ export class AsyncMachine<
   /**
    * Create options for the machine.
    *
-   * @param option a function that provides options for the machine.
+   * @param helper - A function that provides options for the machine.
    * Options can include actions, guards, delays, promises, and child machines.
    *
-   * Remark: Used for typings, when you're outside the Machine class.
+   * @returns Option object for machine customization.
    */
   createOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     const isValue = this.__isValue;
@@ -366,10 +358,11 @@ export class AsyncMachine<
   };
 
   /**
-   * Provides options for the machine.
+   * Provides elements of the machine.
    *
-   * @param option a function that provides options for the machine.
-   * Options can include actions, guards, delays, promises, and child machines.
+   * @param helper - Option helper callback.
+   *
+   * @returns Machine options structure.
    */
   addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
@@ -378,9 +371,9 @@ export class AsyncMachine<
   /**
    * Provides options for the machine.
    *
-   * @param helper a function that provides options for the machine.
-   * Options can include actions, guards, delays, promises, and child machines.
-   * @returns a new instance of the machine with the provided options applied.
+   * @param helper - A function that provides options for the machine.
+   *
+   * @returns A new instance of the machine with the provided options applied.
    */
   provideOptions: AsyncProvideOptions_F<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L> =
     helper => super.provideOptions(helper);
@@ -388,23 +381,9 @@ export class AsyncMachine<
   // #endregion
 
   /**
-   * Provides elements of the machine.
-   * @param key the key of the element to provide.
-   * @param value the value of the element to provide.
-   * If not provided, the current elements will be returned.
-   * @returns the elements of the machine with the provided key and value.
+   * Renews the machine with current configuration.
    *
-   * {@linkcode C}, {@linkcode E}  , {@linkcode A} , {@linkcode Pc}  , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
-   */
-
-  /**
-   * Renews the machine with the provided key and value.
-   * @param key the key of the element to provide.
-   * @param value the value of the element to provide.
-   * If not provided, the current elements will be returned.
-   * @returns a new instance of this {@linkcode AsyncMachine} with the provided key and value.
-   *
-   * {@linkcode C}, {@linkcode E}  , {@linkcode A} , {@linkcode Pc}  , {@linkcode Tc} , {@linkcode SimpleMachineOptions2} , {@linkcode Mo}
+   * @returns A new instance of this class {@linkcode AsyncMachine}.
    */
   protected __renew = (): this => {
     const { config, pContext, context, guards, actions, delays, actors } =
@@ -426,13 +405,9 @@ export class AsyncMachine<
   readonly longRuns: boolean;
 
   /**
-   * Creates an instance of Machine.
+   * Creates an instance of class {@linkcode AsyncMachine}.
    *
-   * @param config : of type {@linkcode AsyncConfig} [C] - The configuration for the machine.
-   *
-   * @remarks
-   * This constructor initializes the machine with the provided configuration.
-   * It flattens the configuration and prepares it for further operations ({@linkcode flat}).
+   * @param config - The configuration for the machine.
    */
   constructor(config: C) {
     super(config);
@@ -443,10 +418,6 @@ export class AsyncMachine<
 
   /**
    * Function helper to send an event to a child service.
-   *
-   * @param _ an optional parameter of type {@linkcode AnyMachine} [{@linkcode T}] to specify the machine context. Only used for type inference.
-   *
-   * {@linkcode E} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
    *
    * @see {@linkcode reduceFnMap}
    */
@@ -498,12 +469,10 @@ export class AsyncMachine<
   /**
    * Function helper to perform a void action.
    *
-   * @param fn the action function to perform.
+   * @param fn - The action function to perform.
+   * @param options - Optional configuration including timeout and error handling.
    *
-   *
-   * {@linkcode GetEventsFromConfig} , {@linkcode E} , {@linkcode PromiseeMap} , {@linkcode GetPromiseesSrcFromConfig} , {@linkcode A} , {@linkcode Pc} , {@linkcode PrimitiveObject} , {@linkcode Tc}
-   *
-   * @see {@linkcode AsyncVoidAction_F}
+   * @see -- type {@linkcode AsyncVoidAction_F}
    */
   protected __voidAction: AsyncVoidAction_F<Eo, Pc, Tc, Ta> = (fn, options?) => {
     if (!options) {

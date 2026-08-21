@@ -41,8 +41,9 @@ export type MergeProps2<T, K extends string> = {
  *
  * @returns The `target` object with the specified `key` merged from `source`.
  *
+ * @remarks Does not handle the case `key === '.'`, as it is not needed.
+ *
  * @see -- type {@linkcode Decompose}
- * Not handle case : key === '.', not needed
  */
 export const merge2 = expandFn(
   <
