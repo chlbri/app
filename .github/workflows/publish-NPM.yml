@@ -34,11 +34,11 @@ jobs:
     secrets: inherit
     with:
       type:
-        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
-        'canary' && 'canary' || 'latest' }}
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
 
       package: './packages/app'
-      build: false
+      artifact: built-workspace
 
   vitest:
     needs: [build]
@@ -46,11 +46,11 @@ jobs:
     secrets: inherit
     with:
       type:
-        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
-        'canary' && 'canary' || 'latest' }}
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
 
       package: './packages/vitest'
-      build: false
+      artifact: built-workspace
 
   solidjs:
     needs: [build]
@@ -58,11 +58,11 @@ jobs:
     secrets: inherit
     with:
       type:
-        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
-        'canary' && 'canary' || 'latest' }}
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
 
       package: './packages/solidjs'
-      build: false
+      artifact: built-workspace
 
   reactjs:
     needs: [build]
@@ -70,11 +70,11 @@ jobs:
     secrets: inherit
     with:
       type:
-        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
-        'canary' && 'canary' || 'latest' }}
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
 
       package: './packages/reactjs'
-      build: false
+      artifact: built-workspace
 
   cli:
     needs: [build]
@@ -82,11 +82,11 @@ jobs:
     secrets: inherit
     with:
       type:
-        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
-        'canary' && 'canary' || 'latest' }}
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
 
       package: './packages/cli'
-      build: false
+      artifact: built-workspace
 
   valibot:
     needs: [build]
@@ -94,11 +94,11 @@ jobs:
     secrets: inherit
     with:
       type:
-        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name ==
-        'canary' && 'canary' || 'latest' }}
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
 
       package: './packages/valibot'
-      build: false
+      artifact: built-workspace
 
   cleanup:
     name: Cleanup Artifacts
