@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "pnpm --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-reactjs run -r --sort build",
+    "prebuild": "pnpm --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-reactjs run build",
     "dev": "vite dev",
     "generate-routes": "tsr generate",
     "_build": "vite build",
