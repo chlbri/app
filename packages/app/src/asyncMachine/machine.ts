@@ -4,14 +4,12 @@ import type { AsyncDelayFunction } from '#delays';
 import { ActorsConfigMap, type EventObject, type EventsMap } from '#events';
 import { type FlatMapN } from '#states';
 import {
-  _merge,
-  isMergeUndefined,
-  MERGE_UNDEFINED,
+  merge2,
   reduceFnMap,
   reduceFnMapFilterArray,
   reduceFnMapFilterObject,
 } from '#utils';
-import { _any, _unknown } from '@bemedev/app-utils-bemedev';
+import { _any, _unknown, toArray } from '@bemedev/app-utils-bemedev';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
 import { getByKey, recompose } from '@bemedev/decompose';
 
@@ -182,13 +180,20 @@ export class AsyncMachine<
             return async state => {
               const result = await _fn(state);
               if (!isArray) {
-                return recompose({ [keysArray[0]]: result });
+                return {
+                  mergers: [
+                    {
+                      key: keysArray[0] as any,
+                      source: recompose({ [keysArray[0]]: result }) as any,
+                    },
+                  ],
+                };
               }
-              const obj: Record<string, any> = {};
-              keysArray.forEach((k, idx) => {
-                obj[k] = result?.[idx];
-              });
-              return recompose(obj);
+              const mergers = keysArray.map((k, idx) => ({
+                key: k as any,
+                source: recompose({ [k]: result?.[idx] }) as any,
+              }));
+              return { mergers };
             };
           }
 
@@ -201,20 +206,26 @@ export class AsyncMachine<
 
             const execute = async () => {
               const rawResult = await _fn(state);
-              console.warn('result', '=>', 'rawResult');
 
               if (!isArray) {
-                return recompose({ [keysArray[0]]: rawResult });
+                return {
+                  mergers: [
+                    {
+                      key: keysArray[0] as any,
+                      source: recompose({ [keysArray[0]]: rawResult }) as any,
+                    },
+                  ],
+                };
               }
-              const obj: Record<string, any> = {};
-              keysArray.forEach((k, idx) => {
-                obj[k] = rawResult?.[idx];
-              });
-              return recompose(obj);
+              const mergers = keysArray.map((k, idx) => ({
+                key: k as any,
+                source: recompose({ [k]: rawResult?.[idx] }) as any,
+              }));
+              return { mergers };
             };
 
             try {
-              let res: any;
+              let res: any = {};
               if (max !== undefined) {
                 const keysStr = keysArray.join('-');
                 const tp = withTimeout(execute, `assign-${keysStr}`, max);
@@ -225,15 +236,25 @@ export class AsyncMachine<
               }
 
               if (thenFn) {
-                const nextContext = _merge(context, res?.context);
-                const nextPContext = _merge(pContext, res?.pContext);
+                const nextState = merge2.multiple(
+                  { context, pContext },
+                  ...toArray.typed(res?.mergers),
+                );
+                const nextContext = nextState?.context;
+                const nextPContext = nextState?.pContext;
                 const thenRes = await thenFn({
                   ...rest,
                   event,
                   context: nextContext,
                   pContext: nextPContext,
                 } as any);
-                return _merge(res, thenRes);
+                const mergers = [
+                  ...toArray.typed(res?.mergers),
+                  ...toArray.typed(thenRes?.mergers),
+                ];
+                const { mergers: _m1, ...ext1 } = res;
+                const { mergers: _m2, ...ext2 } = thenRes;
+                return { mergers, ...ext1, ...ext2 };
               }
 
               return res;
@@ -248,16 +269,20 @@ export class AsyncMachine<
           return async ({ context, pContext, ...rest }) => {
             const state = this.__cloneStateExtended({ context, pContext, ...rest });
 
-            let out: any;
+            const mergers: any[] = [];
+            const extendeds: any = {};
+
             for (const fn of fns.filter(f => !!f)) {
-              if (!out) out = await fn(state);
-              else {
-                const _state = _merge(state, Object.assign(out, rest));
-                const temp = await fn(_state);
-                out = _merge(out, temp);
-              }
+              const res = await fn(state);
+
+              const { mergers: m, ...ext } = res;
+              if (m) mergers.push(...m);
+              Object.assign(extendeds, ext);
+
+              /* v8 ignore else -- @preserve */
+              if (m && m.length > 0) merge2.multiple(state, ...(m as any));
             }
-            return out;
+            return { mergers, ...extendeds };
           };
         },
 
@@ -278,9 +303,6 @@ export class AsyncMachine<
                 predicate(item, index, state),
               );
             } else if (currentValue !== null && typeof currentValue === 'object') {
-              if (isMergeUndefined(currentValue)) {
-                return MERGE_UNDEFINED as any;
-              }
               const predicate = reduceFnMapFilterObject(
                 fn as any,
                 ...this.__eventsList,
@@ -289,18 +311,28 @@ export class AsyncMachine<
                 (acc, [objKey, value]) => {
                   const check = predicate(value, state);
                   if (check) acc[objKey] = value;
-                  else acc[objKey] = MERGE_UNDEFINED;
                   return acc;
                 },
                 {} as any,
               );
             }
 
-            return recompose({ [key]: filteredValue });
+            return {
+              mergers: [
+                {
+                  key: key as any,
+                  source: recompose({ [key]: filteredValue }) as any,
+                },
+              ],
+            };
           };
         },
 
-        erase: key => () => recompose({ [key]: MERGE_UNDEFINED }),
+        erase: key => () => ({
+          mergers: [
+            { key: key as any, source: recompose.low({ [key]: undefined }) as any },
+          ],
+        }),
         voidAction,
         sendTo,
 
@@ -308,24 +340,17 @@ export class AsyncMachine<
           return async ({ context, pContext, ...rest }) => {
             const state = this.__cloneStateExtended({ context, pContext, ...rest });
 
-            const data = await fn(state);
-            const scheduled: ScheduledData<Pc, Tc> = { data, ms, id };
+            const res = await fn(state);
+            const { mergers = [] } = res;
+            const scheduled: ScheduledData<Pc, Tc> = { data: mergers, ms, id };
 
-            return _any({ context, pContext, scheduled });
+            return { scheduled };
           };
         },
 
-        resend: resend => {
-          return ({ context, pContext }) => {
-            return _any({ context, pContext, resend });
-          };
-        },
+        resend: resend => () => ({ resend }),
 
-        forceSend: forceSend => {
-          return ({ context, pContext }) => {
-            return _any({ context, pContext, forceSend });
-          };
-        },
+        forceSend: forceSend => () => ({ forceSend }),
 
         pauseActivity: this.__timeAction('pauseActivity'),
         resumeActivity: this.__timeAction('resumeActivity'),
@@ -435,14 +460,13 @@ export class AsyncMachine<
 
           const sentEvent = { to, event };
 
-          return _any({ context, pContext, sentEvent });
+          return { sentEvent };
         };
       }
 
       const { catch: errorFn, max } = options;
 
       return async ({ context, pContext, event, ...rest }) => {
-        const out = _any({ context, pContext });
         const state = this.__cloneStateExtended({
           context,
           pContext,
@@ -454,7 +478,7 @@ export class AsyncMachine<
           const fn2 = reduceFnMap(fn, ...this.__eventsList);
           const { event, to } = (await fn2(state)) as any;
           const sentEvent = { to, event };
-          return _any({ ...out, sentEvent });
+          return { sentEvent };
         };
 
         try {
@@ -488,24 +512,23 @@ export class AsyncMachine<
         const state = this.__cloneStateExtended({ context, pContext, ...rest });
         _fn(state);
 
-        return _any({ context, pContext });
+        return {};
       };
     }
 
     const { catch: errorFn, then: thenFn, max } = options;
 
     return async ({ context, pContext, event, ...rest }) => {
-      const out = _any({ context, pContext });
       const state = this.__cloneStateExtended({ context, pContext, event, ...rest });
 
       const execute = async () => {
         const _fn = reduceFnMap(fn, ...this.__eventsList);
         await _fn(state);
-        return out;
+        return {};
       };
 
       try {
-        let res: any;
+        let res: any = {};
         if (max !== undefined) {
           const tp = withTimeout(execute, 'voidAction', max);
           res = await tp();
@@ -515,7 +538,13 @@ export class AsyncMachine<
 
         if (thenFn) {
           const thenRes = await thenFn({ ...rest, event, context, pContext } as any);
-          return _merge(res, thenRes);
+          const mergers = [
+            ...toArray.typed(res?.mergers),
+            ...toArray.typed(thenRes?.mergers),
+          ];
+          const { mergers: _m1, ...ext1 } = res;
+          const { mergers: _m2, ...ext2 } = thenRes;
+          return { mergers, ...ext1, ...ext2 };
         }
 
         return res;

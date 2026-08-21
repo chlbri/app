@@ -1,5 +1,5 @@
 import { DEFAULT_DELIMITER } from '#constants';
-import { merge } from '#utils';
+import { deepmerge as merge } from 'deepmerge-ts';
 import type { NodeConfig2 } from '../types';
 
 /**

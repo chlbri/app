@@ -72,20 +72,23 @@ describe('Machine createOptions - error handlers', () => {
     });
 
     describe('#02 => errorFn return value affects the state', () => {
-      const errorAction = vi.fn((_state: any) => ({ context: -1 }));
-      const errorFn = vi.fn((_err: any) => errorAction);
+      let errorAction: any;
+      const errorFn: any = vi.fn((_err: any) => errorAction);
 
-      const machine = _machine2.provideOptions(({ assign }) => ({
-        actions: {
-          myAction: assign(
-            'context',
-            async () => {
-              throw theError;
-            },
-            { catch: errorFn },
-          ),
-        },
-      }));
+      const machine = _machine2.provideOptions(({ assign }) => {
+        errorAction = vi.fn(assign('context', () => -1));
+        return {
+          actions: {
+            myAction: assign(
+              'context',
+              async () => {
+                throw theError;
+              },
+              { catch: errorFn },
+            ),
+          },
+        };
+      });
 
       const service = interpret(machine, { context: 42 });
 
@@ -448,21 +451,19 @@ describe('Machine createOptions - error handlers', () => {
     describe('#02 => voidAction with then handler', () => {
       const catchFn = vi.fn();
       let effectCalled = false;
-      const machine = _machine1.provideOptions(
-        ({ voidAction, assign }) => ({
-          actions: {
-            myAction: voidAction(
-              async () => {
-                effectCalled = true;
-              },
-              {
-                catch: catchFn,
-                then: assign('context', ({ context }) => context + 50),
-              },
-            ),
-          },
-        }),
-      );
+      const machine = _machine1.provideOptions(({ voidAction, assign }) => ({
+        actions: {
+          myAction: voidAction(
+            async () => {
+              effectCalled = true;
+            },
+            {
+              catch: catchFn,
+              then: assign('context', ({ context }) => context + 50),
+            },
+          ),
+        },
+      }));
 
       const service = interpret(machine, { context: 5 });
 

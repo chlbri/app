@@ -38,7 +38,7 @@ export type ValueToNodeConfig_F = <T extends StateValue>(
  */
 export const valueToNodeConfig: ValueToNodeConfig_F = (body, from) => {
   const flatBody = flatMap(body, false);
-  const keysFlatBody = Object.keys(flatBody);
+  const keysFlatBody = Object.keys(flatBody).sort();
   const fromIsString = isString(from);
   if (fromIsString) {
     const check2 = keysFlatBody.includes(from);

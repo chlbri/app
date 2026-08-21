@@ -220,10 +220,12 @@ export class SyncInterpreter<
   protected __executeAction: SyncPerformAction_F<Eo, Pc, Tc, Ta> = action => {
     this.__setStatus('busy');
     this._iterate();
-    const { pContext, context, ...extendeds } = action(this.__cloneState);
+    const { mergers, ...extendeds } = action(this.__cloneState);
 
-    this.__mergeContexts({ pContext, context });
-    this.__performsExtendedActions(extendeds);
+    if (mergers && mergers.length > 0) {
+      this.__mergeContexts({ mergers });
+    }
+    this.__performsExtendedActions(extendeds as any);
   };
 
   /**
@@ -942,10 +944,21 @@ export class SyncInterpreter<
                       ? structuredClone(context)
                       : getByKey.low(context, key);
 
-                  if (path === '.') return this.__mergeContexts({ pContext });
-                  return this.__mergeContexts(
-                    recompose({ [`pContext.${path}`]: pContext }),
-                  );
+                  if (path === '.') {
+                    return this.__mergeContexts({
+                      mergers: [
+                        { key: 'pContext' as any, source: { pContext } as any },
+                      ],
+                    });
+                  }
+                  return this.__mergeContexts({
+                    mergers: [
+                      {
+                        key: `pContext.${path}` as any,
+                        source: recompose({ [`pContext.${path}`]: pContext }) as any,
+                      },
+                    ],
+                  });
                 });
               },
               {

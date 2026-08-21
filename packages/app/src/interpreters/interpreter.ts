@@ -291,11 +291,13 @@ export class AsyncInterpreter<
   ) => {
     this.__setStatus('busy');
 
-    const { pContext, context, ...extendeds } = await this.__performAction(action);
+    const { mergers, ...extendeds } = (await this.__performAction(action)) ;
 
     if (from !== false && this.__cannotPerform(from)) return;
-    this.__mergeContexts({ pContext, context });
-    await this.__performsExtendedActions(from, extendeds);
+    if (mergers && mergers.length > 0) {
+      this.__mergeContexts({ mergers });
+    }
+    await this.__performsExtendedActions(from, extendeds as any);
   };
 
   /**
@@ -1033,10 +1035,21 @@ export class AsyncInterpreter<
                       ? structuredClone(context)
                       : getByKey.low(context, key);
 
-                  if (path === '.') return this.__mergeContexts({ pContext });
-                  return this.__mergeContexts(
-                    recompose({ [`pContext.${path}`]: pContext }),
-                  );
+                  if (path === '.') {
+                    return this.__mergeContexts({
+                      mergers: [
+                        { key: 'pContext' as any, source: { pContext } as any },
+                      ],
+                    });
+                  }
+                  return this.__mergeContexts({
+                    mergers: [
+                      {
+                        key: `pContext.${path}` as any,
+                        source: recompose({ [`pContext.${path}`]: pContext }) as any,
+                      },
+                    ],
+                  });
                 });
               },
               {

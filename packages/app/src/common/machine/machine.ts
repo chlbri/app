@@ -30,7 +30,7 @@ import {
   type StatePextended,
   type StateValue,
 } from '#states';
-import { constructEvents, merge, reduceFnMap } from '#utils';
+import { constructEvents, reduceFnMap } from '#utils';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-utils-bemedev';
 import { _unknown } from '@bemedev/app-utils-bemedev';
 import { decompose, type Decompose } from '@bemedev/decompose';
@@ -550,31 +550,37 @@ export abstract class CommonMachine<
    * Internal helper method to merge actions into machine options.
    */
   private _addActions = (actions?: Mo['actions']) =>
-    (this._actions = merge(this._actions, actions));
+    (this._actions = { ...this._actions, ...actions });
 
   /**
    * Internal helper method to merge guards into machine options.
    */
   private _addGuards = (guards?: Mo['guards']) =>
-    (this._guards = merge(this._guards, guards));
+    (this._guards = { ...this._guards, ...guards });
 
   /**
    * Internal helper method to merge delays into machine options.
    */
   private _addDelays = (delays?: Mo['delays']) =>
-    (this._delays = merge(this._delays, delays));
+    (this._delays = { ...this._delays, ...delays });
 
   /**
    * Internal helper method to merge child actors into machine options.
    */
   private _addChildren = (children?: NotUndefined<Mo['actors']>['children']) =>
-    (this._actors = merge(this._actors, _any({ children })));
+    (this._actors = {
+      ...this._actors,
+      children: { ...this._actors?.children, ...children },
+    });
 
   /**
    * Internal helper method to merge emitters into machine options.
    */
   private _addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
-    (this._actors = merge(this._actors, _any({ emitters })));
+    (this._actors = {
+      ...this._actors,
+      emitters: { ...this._actors?.emitters, ...emitters },
+    } as any);
 
   /**
    * Abstract factory function for creating machine options.

@@ -106,11 +106,7 @@ describe('Composition', () => {
     });
 
     test('#02 => Events List', () => {
-      expect(service.eventsList).toStrictEqual([
-        'EVENT',
-        'EVENT2',
-        'EVENT3',
-      ]);
+      expect(service.eventsList).toStrictEqual(['EVENT', 'EVENT2', 'EVENT3']);
     });
 
     describe('#04 => nodes', () => {
@@ -189,9 +185,7 @@ describe('Composition', () => {
         initial: 'state1',
         states: {
           state1: {
-            states: {
-              state11: { states: { state111: {} }, initial: 'state111' },
-            },
+            states: { state11: { states: { state111: {} }, initial: 'state111' } },
             initial: 'state11',
           },
         },
@@ -210,10 +204,7 @@ describe('Composition', () => {
   describe('#03 => Exceed selfTransitionsCounter', () => {
     const machine = _machine1.provideOptions(({ isValue, assign }) => ({
       actions: {
-        addCondition: ({ pContext, context }) => ({
-          pContext,
-          context: { ...context, condition: true },
-        }),
+        addCondition: assign('context.condition', () => true),
         removeCondition: assign('context.condition', () => false),
         inc: assign('context.iterator', ({ context }) => {
           return context.iterator + 1;
@@ -244,9 +235,7 @@ describe('Composition', () => {
 
       const { start, useWaiter, useErrors } = constructTests(
         service,
-        ({ waiter }) => ({
-          useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
-        }),
+        ({ waiter }) => ({ useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER) }),
       );
 
       test(...start());
@@ -286,9 +275,11 @@ describe('Composition', () => {
   });
 
   describe('#04 => Send without changed value', () => {
-    const inc = vi.fn().mockReturnValue({ pContext: {}, context: {} });
+    const inc = vi.fn();
 
-    const machine = _machine2.provideOptions(() => ({ actions: { inc } }));
+    const machine = _machine2.provideOptions(({ voidAction }) => ({
+      actions: { inc: voidAction(inc) },
+    }));
 
     const service = interpret(machine);
 
@@ -316,7 +307,7 @@ describe('Composition', () => {
       const expected = {
         status: 'working',
         value: 'idle',
-        context: {},
+        context: undefined,
         tags: [],
         event: { type: 'NEXT', payload: {} },
       };
@@ -339,10 +330,10 @@ describe('Composition', () => {
   });
 
   describe('#05 => After without changed value', () => {
-    const inc = vi.fn().mockReturnValue({ pContext: {}, context: {} });
+    const inc = vi.fn();
 
-    const machine = _machine3.provideOptions(() => ({
-      actions: { inc },
+    const machine = _machine3.provideOptions(({ voidAction }) => ({
+      actions: { inc: voidAction(inc) },
       delays: { NEXT: 1000 },
     }));
 
@@ -366,11 +357,11 @@ describe('Composition', () => {
   });
 
   describe('#06 => Coverage getCollected0', () => {
-    const inc = vi.fn().mockReturnValue({ pContext: {}, context: {} });
-    const inc2 = vi.fn().mockReturnValue({ pContext: {}, context: {} });
+    const inc = vi.fn();
+    const inc2 = vi.fn();
 
-    const machine = _machine4.provideOptions(() => ({
-      actions: { inc, inc2 },
+    const machine = _machine4.provideOptions(({ voidAction }) => ({
+      actions: { inc: voidAction(inc), inc2: voidAction(inc2) },
       delays: { DELAY: 1000 },
     }));
 
@@ -515,10 +506,7 @@ describe('Composition', () => {
         return tupleOf(invite, func);
       };
 
-      const useConsole = (
-        index: number,
-        ..._strings: (string | string[])[]
-      ) => {
+      const useConsole = (index: number, ..._strings: (string | string[])[]) => {
         const inviteStrict = `#02 => Check strict string`;
 
         const strict = () => {
@@ -661,10 +649,7 @@ describe('Composition', () => {
         describe(...useConsole(5, ...Array(12).fill('sendPanelToUser')));
       });
 
-      test(
-        '#22 => Close the subscriber',
-        subscriber.close.bind(subscriber),
-      );
+      test('#22 => Close the subscriber', subscriber.close.bind(subscriber));
 
       test(...useWrite(INPUT, 23));
 

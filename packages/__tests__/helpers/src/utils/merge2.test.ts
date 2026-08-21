@@ -10,14 +10,14 @@ describe('TESTS', () => {
       '#01 => Success',
       success(
         {
-          invite: 'source is undefined, returns target',
+          invite: 'source is undefined, returns undefined',
           parameters: { target: { a: 1, b: 'test' }, source: undefined, key: 'a' },
-          expected: { a: 1, b: 'test' },
+          expected: undefined,
         },
         {
-          invite: 'source is null, returns target',
+          invite: 'source is null, returns null',
           parameters: { target: { a: 1, b: 'test' }, source: null as any, key: 'a' },
-          expected: { a: 1, b: 'test' },
+          expected: null,
         },
         {
           invite: 'empty key returns target',
@@ -99,7 +99,25 @@ describe('TESTS', () => {
             source: { a: undefined as any },
             key: 'a.b',
           },
-          expected: { a: { b: 1, c: 2 } },
+          expected: { a: undefined },
+        },
+        {
+          invite: 'deep path auto-creation on empty target',
+          parameters: {
+            target: {},
+            source: { a: { b: { c: 42 } } },
+            key: 'a.b.c',
+          },
+          expected: { a: { b: { c: 42 } } },
+        },
+        {
+          invite: 'erases leaf property by setting undefined',
+          parameters: {
+            target: { a: { b: 1, c: 2 } },
+            source: { a: { b: undefined, c: 2 } },
+            key: 'a.b',
+          },
+          expected: { a: { b: undefined, c: 2 } },
         },
       ),
     );
@@ -186,7 +204,7 @@ describe('TESTS', () => {
             { source: { a: 10, b: 20 }, key: 'b' },
           ],
 
-          expected: { a: 1, b: 20 },
+          expected: { b: 20 },
         },
 
         {

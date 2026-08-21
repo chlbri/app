@@ -35,7 +35,7 @@ import {
   decomposeSV,
   IS_TEST,
   isStringEmpty,
-  merge,
+  merge2,
   reduceDescriber,
   replaceAll,
 } from '#utils';
@@ -1691,11 +1691,21 @@ export abstract class CommonInterpreter<
    */
   protected __mergeContexts: DirectMerge_F<Pc, Tc> = result => {
     const cb = () => {
-      this.__pContext = merge(this.__pContext, _any(result?.pContext));
-      const context = merge(this.__context, _any(result?.context));
+      /* v8 ignore else -- @preserve */
+      if (result?.mergers && result.mergers.length > 0) {
+        const state = {
+          pContext: cloneDeep(this.__pContext),
+          context: cloneDeep(this.__context),
+        };
+        const nextState = merge2.multiple(state, ...(result.mergers as any));
+        /* v8 ignore else -- @preserve */
+        if (nextState) {
+          this.__pContext = nextState.pContext;
+          this.__context = nextState.context;
+        }
+      }
 
-      this.__context = context;
-      return this.__performStates({ context });
+      return this.__performStates({ context: this.__context });
     };
 
     return this.__schedulerContexts.schedule(cb, this.__sent);
@@ -1709,7 +1719,7 @@ export abstract class CommonInterpreter<
   protected __performScheduledAction = (scheduled?: ScheduledData<Pc, Tc>) => {
     if (!scheduled) return;
     const { data, ms: timeout, id } = scheduled;
-    const callback = () => this.__mergeContexts(data);
+    const callback = () => this.__mergeContexts({ mergers: data });
     this.__timeoutActions.filter(f => f.id === id).forEach(this.__dispose);
     this.__timeoutActions = this.__timeoutActions.filter(f => f.id !== id);
     const timer = createTimeout({ callback, timeout, id });

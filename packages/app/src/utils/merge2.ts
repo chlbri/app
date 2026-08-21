@@ -56,6 +56,10 @@ export const merge2 = expandFn(
     const checkDefined = source === undefined || source === null;
     if (checkDefined) return ((target as any) = source);
 
+    if (target === undefined || target === null) {
+      (target as any) = {};
+    }
+
     const keys = key.split('.');
     const _key = keys.shift();
     const checkEmpty = _key === null || _key === undefined || _key === '';
@@ -66,6 +70,14 @@ export const merge2 = expandFn(
     if (keys.length === 0) {
       (target as any)[_key] = next;
       return target;
+    }
+
+    if (
+      (target as any)[_key] === undefined ||
+      (target as any)[_key] === null ||
+      typeof (target as any)[_key] !== 'object'
+    ) {
+      (target as any)[_key] = {};
     }
 
     (target as any)[_key] = merge2({
