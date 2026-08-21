@@ -4,13 +4,7 @@ import { deepmergeCustom } from 'deepmerge-ts';
 /**
  * Custom deep merge instance configured with `deepmerge-ts` ({@linkcode deepmergeCustom}).
  */
-export const _merge = deepmergeCustom({
-  mergeArrays: false,
-  mergeMaps: false,
-  mergeRecords: (values, all, options) => {
-    return all.defaultMergeFunctions.mergeRecords(values, all as any, options);
-  },
-});
+export const _merge = deepmergeCustom({ mergeArrays: false, mergeMaps: false });
 
 /** Sentinel key for filtering undefined values during object merging. */
 const UNEFINED_KEY = '##__FilterUndefined__';

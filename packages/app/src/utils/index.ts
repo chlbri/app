@@ -6,6 +6,7 @@ export type { Decompose, DecomposeKeys, DecomposeOptions } from '@bemedev/decomp
 
 export * from './environment';
 export * from './merge';
+export * from './merge2';
 export * from './nothing';
 export * from './objects';
 export * from './reduceFnMap';
