@@ -5,6 +5,29 @@
 <details>
 <summary>
 
+## **[2.0.0] - 21/08/2026** => _17:25_
+
+</summary>
+
+### Refactor
+
+- **`JSDoc`**: Comprehensive JSDoc type-linking standardisation across Valibot
+  schemas, validators, and helpers.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.0.0 to align with `@bemedev/app`
+  2.0.0 release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.11.0] - 18/08/2026** => _11:15_
 
 </summary>

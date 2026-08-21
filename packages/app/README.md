@@ -149,6 +149,7 @@ await service[Symbol.asyncDispose]();
 - [6. Guards](#6-guards)
   - [6.1 Built-in Guard Helpers](#61-built-in-guard-helpers)
   - [6.2 Custom & Async Predicates](#62-custom--async-predicates)
+  - [6.3 Guard Batching (`guardBatch`)](#63-guard-batching-guardbatch)
   - [Using guards in config](#using-guards-in-config)
   - [AND/OR guard composition](#andor-guard-composition)
 - [7. Transitions: on, after, always](#7-transitions-on-after-always)
@@ -872,6 +873,35 @@ machine.provideOptions(({ isValue, swap }) => ({
 > evaluated sequentially and short-circuit on the first `false` (fail-fast). A
 > predicate that throws or rejects is treated as `false`. Sync machines do **not**
 > support async guards.
+
+### 6.3 Guard Batching (`guardBatch`)
+
+`guardBatch` allows you to combine multiple guards and predicates into a single
+composed guard using logical `and` / `or` tree structures, custom predicates, and
+registered guard names:
+
+```typescript
+import { guardBatch } from '@bemedev/app';
+
+machine.provideOptions(({ isValue, isDefined }) => ({
+  guards: {
+    canAccessAdmin: guardBatch({
+      and: [
+        'isAuthenticated',
+        isValue('context.role', 'admin'),
+        ({ context }) => !context.isSuspended,
+      ],
+    }),
+
+    canProceed: guardBatch({
+      or: ['isAdmin', { and: ['isEditor', 'hasValidToken'] }],
+    }),
+  },
+}));
+```
+
+`guardBatch` seamlessly evaluates synchronous predicates for `SyncMachine` and
+resolves `Promise`-based predicates for `AsyncMachine`.
 
 ### Using guards in config
 

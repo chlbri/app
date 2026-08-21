@@ -22,7 +22,7 @@ npm install @bemedev/app-reactjs
 pnpm add @bemedev/app-reactjs
 ```
 
-> **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 1.2.0 · React ≥ 18.0.0
+> **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 2.0.0 · React ≥ 18.0.0
 
 <br/>
 

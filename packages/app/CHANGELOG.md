@@ -10,6 +10,50 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.0.0] - 21/08/2026** => _17:25_
+
+</summary>
+
+### Breaking Changes
+
+- **State Merging (`merge2`)**: Replaced direct and external object merging
+  (`deepmerge-ts`) with `@bemedev/decompose`-backed `merge2` across `assign`,
+  `filter`, `erase`, `batch`, and interpreter state reconcilers.
+- **Interpreter Lifecycle Enforcement**: Enforced strict ready-state verification
+  (`isReady`) preventing event emission and dispatch before `service.start()` has
+  completed.
+
+### Features
+
+- **`guardBatch`**: Add `guardBatch` combiner supporting recursive boolean evaluation
+  (`and`, `or`, nested closures, negation) across synchronous and asynchronous
+  machines.
+- **`merge2.multiple`**: Introduce multi-path sequential deep merge utility.
+- **`ActionResult`**: Upgrade action return contracts to structured `ActionResult`
+  with granular `mergers` and `ExtendedActionsParams`.
+
+### Refactor
+
+- **`CommonMachine`**: Standardize `CommonMachine` typing hierarchy, getters, and
+  option bindings.
+- **`JSDoc`**: Comprehensive JSDoc type-linking standardisation across actions,
+  machines, and interpreters.
+- **Dependencies**: Remove `deepmerge-ts` dependency in favor of
+  `@bemedev/decompose`.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.0.0 across all workspace packages.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[1.11.0] - 18/08/2026** => _11:15_
 
 </summary>
