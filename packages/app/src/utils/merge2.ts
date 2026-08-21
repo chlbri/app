@@ -1,15 +1,7 @@
+import { expandFn } from '@bemedev/app-utils-bemedev';
 import { type Decompose } from '@bemedev/decompose';
-import type { TrueObject } from '~types';
 
-/**
- * Properties for the {@linkcode merge2} function.
- *
- * @template | {@linkcode TrueObject} `T` - Target object type.
- * @template `K` - Key path string type.
- */
-export type MergeProps2<T extends TrueObject, K extends string> = {
-  /** Target object to merge into. */
-  target: T;
+export type Merger<T, K extends string> = {
   /** Optional source object containing values to merge. */
   source?: T;
   /** Dot-separated key path indicating which property to merge. */
@@ -17,9 +9,20 @@ export type MergeProps2<T extends TrueObject, K extends string> = {
 };
 
 /**
+ * Properties for the {@linkcode merge2} function.
+ *
+ * @template  `T` - Target object type.
+ * @template `K` - Key path string type.
+ */
+export type MergeProps2<T, K extends string> = {
+  /** Target object to merge into. */
+  target: T;
+} & Merger<T, K>;
+
+/**
  * Merges a specific property designated by a dot-separated `key` path from `source` into a clone of `target`.
  *
- * @template | {@linkcode TrueObject} `T` - Target object type.
+ * @template  `T` - Target object type.
  * @template `D` - Decomposed representation of `T`.
  * @template `K` - Valid dot-separated key path in `D`.
  *
@@ -30,36 +33,48 @@ export type MergeProps2<T extends TrueObject, K extends string> = {
  *
  * @returns Cloned `target` with the specified `key` merged from `source`.
  */
-export const merge2 = <
-  T extends TrueObject,
-  D = Decompose<T, { object: 'both'; start: false; sep: '.' }>,
-  K extends keyof D & string = keyof D & string,
->({
-  target,
-  source,
-  key,
-}: MergeProps2<T, K>): T => {
-  const checkDefined = source === undefined || source === null;
-  if (checkDefined) return target;
+export const merge2 = expandFn(
+  <
+    T,
+    D = Decompose<T, { object: 'both'; start: false; sep: '.' }>,
+    const K extends keyof D & string = keyof D & string,
+  >({
+    target,
+    source,
+    key,
+  }: MergeProps2<T, K>): T => {
+    const checkDefined = source === undefined || source === null;
+    if (checkDefined) return target;
 
-  const keys = key.split('.');
-  const _key = keys.shift();
-  if (!_key) return target;
+    const keys = key.split('.');
+    const _key = keys.shift();
+    if (!_key) return target;
 
-  const next = source[_key];
-  if (next == undefined || next === null) return target;
+    const next = (source as any)[_key];
+    if (next == undefined || next === null) return target;
 
-  const _target: any = structuredClone(target);
-  if (keys.length === 0) {
-    _target[_key] = next;
-    return _target;
-  }
+    if (keys.length === 0) {
+      (target as any)[_key] = next;
+      return target;
+    }
 
-  _target[_key] = merge2({
-    target: _target[_key],
-    source: next,
-    key: keys.join('.'),
-  } as any);
+    (target as any)[_key] = merge2({
+      target: (target as any)[_key],
+      source: next,
+      key: keys.join('.'),
+    } as any);
 
-  return _target;
-};
+    return target;
+  },
+  {
+    multiple: <T, D = Decompose<T, { object: 'both'; start: false; sep: '.' }>>(
+      target: T,
+      ...sources: Merger<T, keyof D & string>[]
+    ) => {
+      return sources.reduce(
+        (target, source) => merge2({ target, ...source } as any),
+        target,
+      );
+    },
+  },
+);
