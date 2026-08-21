@@ -52,16 +52,16 @@ export const merge2 = expandFn(
     target,
     source,
     key,
-  }: MergeProps2<T, K>): T => {
+  }: MergeProps2<T, K>): T | undefined => {
     const checkDefined = source === undefined || source === null;
-    if (checkDefined) return target;
+    if (checkDefined) return ((target as any) = source);
 
     const keys = key.split('.');
     const _key = keys.shift();
-    if (!_key) return target;
+    const checkEmpty = _key === null || _key === undefined || _key === '';
+    if (checkEmpty) return target;
 
     const next = (source as any)[_key];
-    if (next == undefined || next === null) return target;
 
     if (keys.length === 0) {
       (target as any)[_key] = next;
@@ -93,10 +93,10 @@ export const merge2 = expandFn(
     multiple: <T, D = Decompose<T, { object: 'both'; start: false; sep: '.' }>>(
       target: T,
       ...sources: Merger<T, keyof D & string>[]
-    ) => {
+    ): T | undefined => {
       return sources.reduce(
         (target, source) => merge2({ target, ...source } as any),
-        target,
+        target as T | undefined,
       );
     },
   },
