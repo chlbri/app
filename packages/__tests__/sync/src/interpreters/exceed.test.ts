@@ -44,10 +44,7 @@ describe('TESTS', () => {
       },
     ).provideOptions(({ isValue, assign }) => ({
       actions: {
-        addCondition: ({ pContext, context }) => ({
-          pContext,
-          context: { ...context, condition: true },
-        }),
+        addCondition: assign('context.condition', () => true),
         removeCondition: assign('context.condition', () => false),
         inc: assign('context.iterator', ({ context }) => {
           return context.iterator + 1;

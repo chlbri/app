@@ -11,9 +11,7 @@ import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
 import {
-  _merge,
-  isMergeUndefined,
-  MERGE_UNDEFINED,
+  merge2,
   reduceFnMap,
   reduceFnMapFilterArray,
   reduceFnMapFilterObject,
@@ -156,13 +154,20 @@ export class SyncMachine<
           return state => {
             const result = _fn(state);
             if (!isArray) {
-              return recompose({ [keysArray[0]]: result });
+              return {
+                mergers: [
+                  {
+                    key: keysArray[0] as any,
+                    source: recompose({ [keysArray[0]]: result }) as any,
+                  },
+                ],
+              };
             }
-            const obj: Record<string, any> = {};
-            keysArray.forEach((k, idx) => {
-              obj[k] = result?.[idx];
-            });
-            return recompose(obj);
+            const mergers = keysArray.map((k, idx) => ({
+              key: k as any,
+              source: recompose({ [k]: result?.[idx] }) as any,
+            }));
+            return { mergers };
           };
         },
 
@@ -170,15 +175,22 @@ export class SyncMachine<
           return ({ context, pContext, ...rest }) => {
             const state = this.__cloneStateExtended({ context, pContext, ...rest });
 
-            let out: any;
+            const mergers: any[] = [];
+            const extendeds: any = {};
+
             for (const fn of fns.filter(f => !!f)) {
-              if (!out) out = fn(state);
-              else {
-                const _state = _merge(state, Object.assign(out, rest));
-                out = _merge(out, fn(_state));
+              const res = fn(state);
+              /* v8 ignore else -- @preserve */
+              if (res) {
+                const { mergers: m, ...ext } = res;
+                if (m) mergers.push(...m);
+                Object.assign(extendeds, ext);
+                if (m && m.length > 0) {
+                  merge2.multiple(state, ...(m as any));
+                }
               }
             }
-            return out;
+            return { mergers, ...extendeds };
           };
         },
 
@@ -199,9 +211,6 @@ export class SyncMachine<
                 predicate(item, index, state),
               );
             } else if (currentValue !== null && typeof currentValue === 'object') {
-              if (isMergeUndefined(currentValue)) {
-                return MERGE_UNDEFINED as any;
-              }
               const predicate = reduceFnMapFilterObject(
                 fn as any,
                 ...this.__eventsList,
@@ -210,18 +219,28 @@ export class SyncMachine<
                 (acc, [objKey, value]) => {
                   const check = predicate(value, state);
                   if (check) acc[objKey] = value;
-                  else acc[objKey] = MERGE_UNDEFINED;
                   return acc;
                 },
                 {} as any,
               );
             }
 
-            return recompose({ [key]: filteredValue });
+            return {
+              mergers: [
+                {
+                  key: key as any,
+                  source: recompose({ [key]: filteredValue }) as any,
+                },
+              ],
+            };
           };
         },
 
-        erase: key => () => recompose.low({ [key]: MERGE_UNDEFINED }),
+        erase: key => () => ({
+          mergers: [
+            { key: key as any, source: recompose.low({ [key]: undefined }) as any },
+          ],
+        }),
         voidAction,
         sendTo,
 
@@ -229,24 +248,16 @@ export class SyncMachine<
           return ({ context, pContext, ...rest }) => {
             const state = this.__cloneStateExtended({ context, pContext, ...rest });
 
-            const data = fn(state);
-            const scheduled: ScheduledData<Pc, Tc> = { data, ms, id };
+            const res = fn(state);
+            const { mergers = [] } = res;
+            const scheduled: ScheduledData<Pc, Tc> = { data: mergers, ms, id };
 
-            return _any({ context, pContext, scheduled });
+            return { scheduled };
           };
         },
 
-        resend: resend => {
-          return ({ context, pContext }) => {
-            return _any({ context, pContext, resend });
-          };
-        },
-
-        forceSend: forceSend => {
-          return ({ context, pContext }) => {
-            return _any({ context, pContext, forceSend });
-          };
-        },
+        resend: resend => () => ({ resend }),
+        forceSend: forceSend => () => ({ forceSend }),
 
         pauseActivity: this.__timeAction('pauseActivity') as any,
         resumeActivity: this.__timeAction('resumeActivity') as any,
@@ -314,7 +325,7 @@ export class SyncMachine<
 
         const sentEvent = { to, event };
 
-        return _any({ context, pContext, sentEvent });
+        return { sentEvent };
       };
     };
   };
@@ -330,7 +341,7 @@ export class SyncMachine<
       const state = this.__cloneStateExtended({ context, pContext, ...rest });
       _fn(state);
 
-      return _any({ context, pContext });
+      return {};
     };
   };
 }

@@ -1,5 +1,4 @@
 import { DEFAULT_DELIMITER } from '#constants';
-import { merge } from '#utils';
 import type { NodeConfig2 } from '../types';
 
 /**
@@ -45,6 +44,34 @@ const recomposeObjectUrl: Url_F = (shape, value) => {
 };
 
 /**
+ * Recursively merges two node configuration objects.
+ *
+ * @param target - The base configuration object.
+ * @param source - The incoming configuration object to merge.
+ *
+ * @returns The merged configuration object.
+ */
+const mergeNodeConfig = (target: any, source: any): any => {
+  const out: any = { ...target };
+  for (const [key, val] of Object.entries(source)) {
+    if (
+      key in out &&
+      typeof out[key] === 'object' &&
+      out[key] !== null &&
+      !Array.isArray(out[key]) &&
+      typeof val === 'object' &&
+      val !== null &&
+      !Array.isArray(val)
+    ) {
+      out[key] = mergeNodeConfig(out[key], val);
+    } else {
+      out[key] = val;
+    }
+  }
+  return out;
+};
+
+/**
  * Function signature for configuration object recomposition.
  *
  * @template | {@linkcode NodeConfig2} `T` - Configuration type.
@@ -59,16 +86,13 @@ export type RecomposeConfig_F = <T extends NodeConfig2>(shape: T) => NodeConfig2
  *
  * @param shape - The shape of the configuration to recompose.
  * @returns A recomposed configuration object.
- *
- * @see {@linkcode merge}
  */
 export const recomposeConfig: RecomposeConfig_F = shape => {
   const entries = Object.entries(shape);
-  const arr: any[] = [];
+  let output: any = {};
   entries.forEach(([key, value]) => {
-    arr.push(recomposeObjectUrl(key, value));
+    output = mergeNodeConfig(output, recomposeObjectUrl(key, value));
   });
 
-  const output = merge(...(arr as [any, ...any[]]));
   return output as any;
 };

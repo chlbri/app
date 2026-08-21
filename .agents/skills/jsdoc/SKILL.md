@@ -11,6 +11,10 @@ description:
 Enforce complete, rich, and clean JSDoc documentation across TypeScript
 source files.
 
+## Main Rule
+
+- **Run Lint Verification**: After adding or modifying JSDoc comments on any file, check the closest `package.json` (relative to the target file or workspace directory). If a `lint` script exists in that `package.json`, run it (e.g. `pnpm run lint`) to validate code quality, formatting, and linting standards.
+
 ## Rules
 
 ### 1. Complete Coverage
@@ -188,7 +192,7 @@ export function useSubscriber<T, R = T>(
 }
 ````
 
-## 8. Others
+### 9. Others
 
 Add also jsdoc to type definitions, even if they are alias
 

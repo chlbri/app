@@ -1,5 +1,4 @@
 import { interpret } from '@bemedev/app';
-import { MERGE_UNDEFINED } from '@bemedev/app/utils';
 import { constructTests } from '@bemedev/app-vitest';
 import _machine1 from './filter-erase.1.machine';
 import _machine2 from './filter-erase.2.machine';
@@ -608,7 +607,18 @@ describe('Filter and Erase actions', () => {
         test('#01 => is an object', () => expect(typeof result).toBe('object'));
 
         test('#02 => filters numbers matching key condition (> 5)', () => {
-          expect(result).toEqual({ context: { numbers: [6, 7, 8, 9, 10] } });
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'context.numbers',
+                source: {
+                  context: {
+                    numbers: [6, 7, 8, 9, 10],
+                  },
+                },
+              },
+            ],
+          });
         });
       });
 
@@ -632,7 +642,18 @@ describe('Filter and Erase actions', () => {
         test('#01 => is an object', () => expect(typeof result).toBe('object'));
 
         test('#02 => filters numbers via else fallback (even numbers)', () => {
-          expect(result).toEqual({ context: { numbers: [2, 4, 6] } });
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'context.numbers',
+                source: {
+                  context: {
+                    numbers: [2, 4, 6],
+                  },
+                },
+              },
+            ],
+          });
         });
       });
 
@@ -656,7 +677,18 @@ describe('Filter and Erase actions', () => {
         test('#01 => is an object', () => expect(typeof result).toBe('object'));
 
         test('#02 => filters numbers via else condition (<= 3)', () => {
-          expect(result).toEqual({ context: { numbers: [1, 2, 3] } });
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'context.numbers',
+                source: {
+                  context: {
+                    numbers: [1, 2, 3],
+                  },
+                },
+              },
+            ],
+          });
         });
       });
 
@@ -677,7 +709,18 @@ describe('Filter and Erase actions', () => {
         test('#01 => is an object', () => expect(typeof result).toBe('object'));
 
         test('#02 => keeps numbers when falling back to nothing', () => {
-          expect(result).toEqual({ context: { numbers: [1, 2, 3, 4, 5] } });
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'context.numbers',
+                source: {
+                  context: {
+                    numbers: [1, 2, 3, 4, 5],
+                  },
+                },
+              },
+            ],
+          });
         });
       });
     });
@@ -706,14 +749,19 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters scores matching key condition (>= 80)', () => {
           expect(result).toEqual({
-            context: {
-              scores: {
-                math: 90,
-                physics: MERGE_UNDEFINED,
-                history: 85,
-                english: MERGE_UNDEFINED,
+            mergers: [
+              {
+                key: 'context.scores',
+                source: {
+                  context: {
+                    scores: {
+                      math: 90,
+                      history: 85,
+                    },
+                  },
+                },
               },
-            },
+            ],
           });
         });
       });
@@ -739,7 +787,19 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters scores via else fallback (>= 70)', () => {
           expect(result).toEqual({
-            context: { scores: { math: 90, physics: 75, history: MERGE_UNDEFINED } },
+            mergers: [
+              {
+                key: 'context.scores',
+                source: {
+                  context: {
+                    scores: {
+                      math: 90,
+                      physics: 75,
+                    },
+                  },
+                },
+              },
+            ],
           });
         });
       });
@@ -765,14 +825,18 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters scores via else condition (< 50)', () => {
           expect(result).toEqual({
-            context: {
-              scores: {
-                math: MERGE_UNDEFINED,
-                physics: MERGE_UNDEFINED,
-                history: MERGE_UNDEFINED,
-                english: 45,
+            mergers: [
+              {
+                key: 'context.scores',
+                source: {
+                  context: {
+                    scores: {
+                      english: 45,
+                    },
+                  },
+                },
               },
-            },
+            ],
           });
         });
       });
@@ -796,7 +860,21 @@ describe('Filter and Erase actions', () => {
         test('#01 => is an object', () => expect(typeof result).toBe('object'));
 
         test('#02 => keeps all scores when falling back to nothing', () => {
-          expect(result).toEqual({ context: { scores: { math: 90, physics: 75 } } });
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'context.scores',
+                source: {
+                  context: {
+                    scores: {
+                      math: 90,
+                      physics: 75,
+                    },
+                  },
+                },
+              },
+            ],
+          });
         });
       });
     });

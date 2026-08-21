@@ -596,7 +596,14 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#01 => is an object', () => expect(typeof result).toBe('object'));
 
       test('#02 => sets value via else with string event', () => {
-        expect(result).toEqual({ context: { value: 'fallback_SOME_STRING_EVENT' } });
+        expect(result).toEqual({
+          mergers: [
+            {
+              key: 'context.value',
+              source: { context: { value: 'fallback_SOME_STRING_EVENT' } },
+            },
+          ],
+        });
       });
     });
 
@@ -619,7 +626,11 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#01 => is an object', () => expect(typeof result).toBe('object'));
 
       test('#02 => sets value to "nothing"', () => {
-        expect(result).toEqual({ context: { value: 'nothing' } });
+        expect(result).toEqual({
+          mergers: [
+            { key: 'context.value', source: { context: { value: 'nothing' } } },
+          ],
+        });
       });
     });
   });

@@ -1,29 +1,29 @@
-import type { ActionResult, AsyncAction2, WithDescriber } from '#actions';
+import type { AsyncAction2, WithDescriber } from '#actions';
 import type { NoExtraKeysActorConfig } from '#actors';
 import type { ActorsConfigMap, EventObject, EventsMap, EventStrings } from '#events';
 
 import type {
   FlatMapN,
-  NodeConfig2,
   NodeConfig,
+  NodeConfig2,
+  NodeConfig3,
   NodeConfigCompound2,
   NodeConfigParallel2,
-  StateValue,
-  TargetDef,
-  NodeConfig3,
   StateExtended,
   StatePextended,
+  StateValue,
+  TargetDef,
 } from '#states';
 import type {
   AsyncTransition,
   NoExtraKeysTransitionConfigSoA,
   TransitionsConfig,
 } from '#transitions';
-import type { Fn } from '#utils';
+import type { Fn, Merger } from '#utils';
 import type { Identitfy, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type {
-  DecomposeString,
   Decompose as _Decompose,
+  DecomposeString,
 } from '@bemedev/function-swap';
 import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
 import type { EmptyObject, FnMap, FnR, MaybePromise, RecordS } from '~types';
@@ -396,10 +396,9 @@ export type CommonCreateMachine_F<T = any> = (config: any) => T;
  * @template `Pc` - Type of private context.
  * @template | {@linkcode PrimitiveObject} `Tc` - Type of context.
  *
- * @see {@linkcode ActionResult}
  */
 export type ScheduledData<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> = {
-  data: ActionResult<Pc, Tc>;
+  data: Merger<{ pContext: Pc; context: Tc }, string>[];
   ms: number;
   id: string;
 };

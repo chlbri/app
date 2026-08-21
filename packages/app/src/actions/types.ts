@@ -1,13 +1,10 @@
+import type { ExtendedActionsParams } from '#common/interpreter';
 import type { EventObject } from '#events';
-import type { DeepPartial, NoExtraKeys } from '@bemedev/app-utils-bemedev';
+import type { Merger } from '#utils';
+import type { NoExtraKeys } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { Describer, FnMap, FnR, FromDescriber } from '~types';
 
-/**
- * JSON configuration for an action.
- *
- * @see {@linkcode Describer}
- */
 /**
  * JSON configuration for an action.
  *
@@ -62,16 +59,20 @@ export type NoExtraKeysWithDescriberSoa<T> =
 export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
 
 /**
- * Represents the result of executing an action, which includes the private context and the context.
+ * Represents the result of executing an action, which includes optional property mergers and extended actions.
  *
  * @template `Pc` - The type of the private context.
  * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
- * @returns an type {@linkcode ActionResult} object containing the private context and the type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @returns an type {@linkcode ActionResult} object.
  */
 export type ActionResult<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
-> = DeepPartial<{ pContext: Pc; context: Tc }>;
+  Eo extends EventObject = EventObject,
+> = {
+  mergers?: Merger<{ pContext: Pc; context: Tc }, string>[];
+} & ExtendedActionsParams<Eo, Pc, Tc>;
 
 /**
  * An action may return synchronously or asynchronously.
