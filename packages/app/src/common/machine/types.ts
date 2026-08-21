@@ -14,17 +14,21 @@ import type {
   StateValue,
   TargetDef,
 } from '#states';
+
 import type {
   AsyncTransition,
   NoExtraKeysTransitionConfigSoA,
   TransitionsConfig,
 } from '#transitions';
+
 import type { Fn, Merger } from '#utils';
 import type { Identitfy, NotUndefined } from '@bemedev/app-utils-bemedev';
+
 import type {
   Decompose as _Decompose,
   DecomposeString,
 } from '@bemedev/function-swap';
+
 import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
 import type { EmptyObject, FnMap, FnR, MaybePromise, RecordS } from '~types';
 
