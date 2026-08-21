@@ -42,6 +42,7 @@ export type MergeProps2<T, K extends string> = {
  * @returns The `target` object with the specified `key` merged from `source`.
  *
  * @see -- type {@linkcode Decompose}
+ * Not handle case : key === '.', not needed
  */
 export const merge2 = expandFn(
   <
@@ -53,17 +54,21 @@ export const merge2 = expandFn(
     source,
     key,
   }: MergeProps2<T, K>): T | undefined => {
-    const checkDefined = source === undefined || source === null;
-    if (checkDefined) return ((target as any) = source);
+    // #region Maybe used later!
+    // const checkisObject = typeof source === 'object' && !Array.isArray(source);
 
-    if (target === undefined || target === null) {
-      (target as any) = {};
-    }
+    // if (target === undefined && checkisObject) {
+    //   (target as any) = {};
+    // }
+    // #endregion
 
     const keys = key.split('.');
-    const _key = keys.shift();
-    const checkEmpty = _key === null || _key === undefined || _key === '';
-    if (checkEmpty) return target;
+    const _key = keys.shift()!;
+
+    // #region Maybe use later
+    // const checkEmpty = _key === null || _key === undefined || _key === '';
+    // if (checkEmpty) return target;
+    // #endregion
 
     const next = (source as any)[_key];
 
