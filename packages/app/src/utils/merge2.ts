@@ -1,6 +1,12 @@
 import { expandFn } from '@bemedev/app-utils-bemedev';
 import { type Decompose } from '@bemedev/decompose';
 
+/**
+ * Configuration object defining a source object and a key path to merge.
+ *
+ * @template `T` - Source object type.
+ * @template `K` - Key path string type.
+ */
 export type Merger<T, K extends string> = {
   /** Optional source object containing values to merge. */
   source?: T;
@@ -11,7 +17,7 @@ export type Merger<T, K extends string> = {
 /**
  * Properties for the {@linkcode merge2} function.
  *
- * @template  `T` - Target object type.
+ * @template `T` - Target object type.
  * @template `K` - Key path string type.
  */
 export type MergeProps2<T, K extends string> = {
@@ -20,9 +26,11 @@ export type MergeProps2<T, K extends string> = {
 } & Merger<T, K>;
 
 /**
- * Merges a specific property designated by a dot-separated `key` path from `source` into a clone of `target`.
+ * Merges a specific property designated by a dot-separated `key` path from `source` into `target`.
  *
- * @template  `T` - Target object type.
+ * Includes property {@linkcode merge2.multiple}.
+ *
+ * @template `T` - Target object type.
  * @template `D` - Decomposed representation of `T`.
  * @template `K` - Valid dot-separated key path in `D`.
  *
@@ -31,7 +39,9 @@ export type MergeProps2<T, K extends string> = {
  * @param props.source - Optional source object to merge values from.
  * @param props.key - Dot-separated key path.
  *
- * @returns Cloned `target` with the specified `key` merged from `source`.
+ * @returns The `target` object with the specified `key` merged from `source`.
+ *
+ * @see -- type {@linkcode Decompose}
  */
 export const merge2 = expandFn(
   <
@@ -67,6 +77,19 @@ export const merge2 = expandFn(
     return target;
   },
   {
+    /**
+     * Sequentially merges multiple properties designated by key paths from multiple source objects into `target`.
+     *
+     * @template `T` - Target object type.
+     * @template `D` - Decomposed representation of `T`.
+     *
+     * @param target - Target object to merge into.
+     * @param sources - Variadic list of source objects with key paths of type {@linkcode Merger}.
+     *
+     * @returns The `target` object with all specified properties merged.
+     *
+     * @see -- type {@linkcode Decompose}
+     */
     multiple: <T, D = Decompose<T, { object: 'both'; start: false; sep: '.' }>>(
       target: T,
       ...sources: Merger<T, keyof D & string>[]
