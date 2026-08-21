@@ -291,7 +291,7 @@ export class AsyncInterpreter<
   ) => {
     this.__setStatus('busy');
 
-    const { mergers, ...extendeds } = (await this.__performAction(action)) ;
+    const { mergers, ...extendeds } = await this.__performAction(action);
 
     if (from !== false && this.__cannotPerform(from)) return;
     if (mergers && mergers.length > 0) {

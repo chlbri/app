@@ -17,8 +17,6 @@ export type InitialConfig_F = Fn<[body: NodeConfig2], NodeConfig2>;
  * @see {@linkcode isAtomic}, {@linkcode isParallel}
  */
 export const initialConfig: InitialConfig_F = body => {
-  const check0 = body === undefined || body === null;
-  if (check0) return {};
   const check1 = isAtomic(body);
   if (check1) return body;
 
@@ -26,6 +24,7 @@ export const initialConfig: InitialConfig_F = body => {
 
   if (check2) {
     const { states: _states, ...config } = body;
+
     const entries1 = Object.entries(_states).map(([key, state]) => {
       const reduced = initialConfig(state);
       return tupleOf(key, reduced);
@@ -41,8 +40,8 @@ export const initialConfig: InitialConfig_F = body => {
   }
 
   const __id = body.initial!;
-
   const initial = body.states[__id];
+
   if (!initial) {
     const { states: _states, ...config } = body;
     const entries1 = Object.entries(_states).map(([key, state]) => {
