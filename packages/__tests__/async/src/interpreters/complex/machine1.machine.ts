@@ -1,8 +1,9 @@
-import { emptyActionFn } from '@bemedev/app';
 import { createMachine } from '@bemedev/app';
 import { type, type inferO } from '@bemedev/typings';
 import isOnline from 'is-online';
 import { asset, intermediary } from './machine1.machine.typings';
+
+const emptyActionFn = () => () => ({});
 
 export const BLOCK_IMMO_INTERMEDIARY: inferO<typeof intermediary> = {
   id: 'block-immo-001',

@@ -124,6 +124,7 @@ export class AsyncMachine<
     const isNotDefined = this.__isNotDefined;
     const voidAction = this.__voidAction;
     const sendTo = this.__sendTo;
+    const erase = this.__erase;
 
     const _legacy = Object.freeze({
       actions: cloneDeep(this.__elements.actions),
@@ -320,11 +321,7 @@ export class AsyncMachine<
           };
         },
 
-        erase: key => () => ({
-          mergers: [
-            { key: key as any, source: recompose.low({ [key]: undefined }) as any },
-          ],
-        }),
+        erase,
         voidAction,
         sendTo,
 
