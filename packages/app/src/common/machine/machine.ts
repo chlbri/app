@@ -33,7 +33,7 @@ import {
 import { constructEvents, reduceFnMap } from '#utils';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-utils-bemedev';
 import { _unknown } from '@bemedev/app-utils-bemedev';
-import { decompose, type Decompose } from '@bemedev/decompose';
+import { decompose, recompose, type Decompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
@@ -751,6 +751,22 @@ export abstract class CommonMachine<
         return _any({ context, pContext, [name]: id });
       };
   };
+
+  /**
+   * Protected helper function for creating an erase property action helper.
+   *
+   * @param keys - Key paths to erase.
+   *
+   * @returns Action function returning mergers for all specified keys.
+   */
+  protected __erase =
+    (...keys: string[]) =>
+    () => ({
+      mergers: keys.map(key => ({
+        key: key as any,
+        source: recompose.low({ [key]: undefined }) as any,
+      })),
+    });
 }
 
 /**

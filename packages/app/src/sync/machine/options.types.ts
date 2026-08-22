@@ -10,11 +10,12 @@ import type {
   EventsMap,
 } from '#events';
 import type { DefinedValue, SyncPredicateS, SyncPredicateS2 } from '#guards';
-import type { Ru, SubTypeLow } from '@bemedev/app-utils-bemedev';
+import type { Ru } from '@bemedev/app-utils-bemedev';
 
 import type {
   AnyMachine,
   CommonConfig3,
+  EraseAction,
   SimpleMachineOptions2,
   SwapFunction_F,
 } from '#common/machine';
@@ -75,16 +76,7 @@ export type SyncEraseAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <
-  D extends object = Decompose<
-    { pContext: Pc; context: Tc },
-    { object: 'both'; start: false; sep: '.' }
-  >,
-  DD = 0 extends 1 & Tc ? Record<string, any> : SubTypeLow<D, undefined>,
-  K extends keyof DD & string = keyof DD & string,
->(
-  key: K,
-) => SyncAction2<E, Pc, Tc, T>;
+> = EraseAction<Pc, Tc, SyncAction2<E, Pc, Tc, T>>;
 
 /**
  * Function type signature for creating a synchronous property definition guard helper.

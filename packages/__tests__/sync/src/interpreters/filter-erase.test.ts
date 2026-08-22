@@ -1040,5 +1040,111 @@ describe('Filter and Erase actions', () => {
         expect(service.select('age')).toBeUndefined();
       });
     });
+
+    describe('#04 => Erase multiple properties (action result)', () => {
+      const machine = _machine6;
+
+      const { actions } = machine.createOptions(({ erase }) => ({
+        actions: {
+          clearAll: erase(
+            'context.name',
+            'context.email',
+            'context.age',
+          ),
+        },
+      }));
+
+      const state = {
+        context: { name: 'Alice', email: 'alice@example.com', age: 30 },
+      } as any;
+
+      const result = actions?.clearAll?.(state);
+
+      test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+      test('#02 => returns mergers for all specified keys', () => {
+        expect(result).toEqual({
+          mergers: [
+            {
+              key: 'context.name',
+              source: { context: { name: undefined } },
+            },
+            {
+              key: 'context.email',
+              source: { context: { email: undefined } },
+            },
+            {
+              key: 'context.age',
+              source: { context: { age: undefined } },
+            },
+          ],
+        });
+      });
+    });
+
+    describe('#05 => Erase multiple properties directly with erase', () => {
+      const machine = _machine6;
+
+      const service = interpret(machine, { context: {} });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test(...start(1));
+      test(...useValue('idle', 2));
+
+      test('#03 => Add actions', () => {
+        service.addOptions(({ assign, erase }) => ({
+          actions: {
+            setData: assign('context', { SET_DATA: ({ payload }) => payload }),
+            clearAll: erase(
+              'context.name',
+              'context.email',
+              'context.age',
+            ),
+          },
+        }));
+      });
+
+      test(
+        ...useSend(
+          {
+            type: 'SET_DATA',
+            payload: { name: 'Alice', email: 'alice@example.com', age: 30 },
+          },
+          4,
+        ),
+      );
+
+      test('#05 => Check name', () => {
+        expect(service.select('name')).toBe('Alice');
+      });
+
+      test('#06 => Check email', () => {
+        expect(service.select('email')).toBe('alice@example.com');
+      });
+
+      test('#07 => Check age', () => {
+        expect(service.select('age')).toBe(30);
+      });
+
+      test(...useSend('CLEAR_ALL', 8));
+      test(...useValue('cleared', 9));
+
+      test('#10 => Check name is undefined', () => {
+        expect(service.select('name')).toBeUndefined();
+      });
+
+      test('#11 => Check email is undefined', () => {
+        expect(service.select('email')).toBeUndefined();
+      });
+
+      test('#12 => Check age is undefined', () => {
+        expect(service.select('age')).toBeUndefined();
+      });
+    });
   });
 });

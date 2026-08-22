@@ -20,9 +20,15 @@ import type {
   NoExtraKeysTransitionConfigSoA,
   TransitionsConfig,
 } from '#transitions';
+import type { Merger } from '#utils';
 
-import type { Fn, Merger } from '#utils';
-import type { Identitfy, NotUndefined } from '@bemedev/app-utils-bemedev';
+import type {
+  Fn,
+  Identitfy,
+  NotUndefined,
+  SubTypeLow,
+} from '@bemedev/app-utils-bemedev';
+import type { Decompose } from '@bemedev/decompose';
 
 import type {
   Decompose as _Decompose,
@@ -386,6 +392,56 @@ export type CommonTimeAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = (name: string) => (id: string) => AsyncAction2<E, Pc, Tc, T>;
+
+/**
+ * Function type signature for creating an erase property action helper.
+ *
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `A` - Action return type.
+ *
+ * @returns Action of type `A`.
+ */
+export type CommonEraseAction_F<
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  A = any,
+> = <
+  D extends object = Decompose<
+    { pContext: Pc; context: Tc },
+    { object: 'both'; start: false; sep: '.' }
+  >,
+  DD = 0 extends 1 & Tc ? Record<string, any> : SubTypeLow<D, undefined>,
+  K extends keyof DD & string = keyof DD & string,
+>(
+  ...keys: K[]
+) => A;
+
+/**
+ * Type alias for {@linkcode CommonEraseAction_F}.
+ *
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `A` - Action return type.
+ */
+export type EraseAction<
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  A = any,
+> = CommonEraseAction_F<Pc, Tc, A>;
+
+/**
+ * Type alias for {@linkcode CommonEraseAction_F}.
+ *
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `A` - Action return type.
+ */
+export type EraseAction_F<
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  A = any,
+> = CommonEraseAction_F<Pc, Tc, A>;
 
 /**
  * Generic machine creator function signature.
