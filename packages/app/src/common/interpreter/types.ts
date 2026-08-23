@@ -454,7 +454,10 @@ export type Selector_F<T = any> = 0 extends 1 & T
   : T extends Primitive
     ? undefined
     : <
-        D extends Decompose<T, { start: false; object: 'both' }>,
+        D extends Omit<
+          Decompose<T, { start: false; object: 'both' }>,
+          `${string}.[${number}]${string}`
+        >,
         K extends Extract<keyof D, string>,
         R = D[K],
       >(

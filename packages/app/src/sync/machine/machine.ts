@@ -10,17 +10,11 @@ import type { SyncDelayFunction } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
-import {
-  merge2,
-  reduceFnMap,
-  reduceFnMapFilterArray,
-  reduceFnMapFilterObject,
-} from '#utils';
-import { _any, _unknown } from '@bemedev/app-utils-bemedev';
+import { merge2, reduceFnMap } from '#utils';
+import { _unknown } from '@bemedev/app-utils-bemedev';
 import recursive from '@bemedev/boolean-recursive';
-import { getByKey, recompose } from '@bemedev/decompose';
+import { recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
-import cloneDeep from 'clone-deep';
 import { CommonMachine } from '../../common/machine';
 import type {
   SyncAddOptions_F,
@@ -107,12 +101,13 @@ export class SyncMachine<
     const voidAction = this.__voidAction;
     const sendTo = this.__sendTo;
     const erase = this.__erase;
+    const filter = this.__filter;
 
     const _legacy = Object.freeze({
-      actions: cloneDeep(this.__elements.actions),
-      guards: cloneDeep(this.__elements.guards),
-      delays: cloneDeep(this.__elements.delays),
-      actors: cloneDeep(this.__elements.actors),
+      actions: this.__elements.actions,
+      guards: this.__elements.guards,
+      delays: this.__elements.delays,
+      actors: this.__elements.actors,
     }) as any;
 
     const out = helper(
@@ -173,9 +168,7 @@ export class SyncMachine<
         },
 
         batch: (...fns) => {
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-
+          return state => {
             const mergers: any[] = [];
             const extendeds: any = {};
 
@@ -195,60 +188,16 @@ export class SyncMachine<
           };
         },
 
-        filter: (key, fn) => {
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-            const currentValue = getByKey.low(state, key);
-
-            let filteredValue: any;
-
-            /* v8 ignore else -- @preserve */
-            if (Array.isArray(currentValue)) {
-              const predicate = reduceFnMapFilterArray(
-                fn as any,
-                ...this.__eventsList,
-              );
-              filteredValue = currentValue.filter((item, index) =>
-                predicate(item, index, state),
-              );
-            } else if (currentValue !== null && typeof currentValue === 'object') {
-              const predicate = reduceFnMapFilterObject(
-                fn as any,
-                ...this.__eventsList,
-              );
-              filteredValue = Object.entries(currentValue).reduce(
-                (acc, [objKey, value]) => {
-                  const check = predicate(value, state);
-                  if (check) acc[objKey] = value;
-                  return acc;
-                },
-                {} as any,
-              );
-            }
-
-            return {
-              mergers: [
-                {
-                  key: key as any,
-                  source: recompose({ [key]: filteredValue }) as any,
-                },
-              ],
-            };
-          };
-        },
-
+        filter,
         erase,
         voidAction,
         sendTo,
 
         debounce: (fn, { id, ms = 100 }) => {
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-
+          return state => {
             const res = fn(state);
             const { mergers = [] } = res;
             const scheduled: ScheduledData<Pc, Tc> = { data: mergers, ms, id };
-
             return { scheduled };
           };
         },
@@ -316,12 +265,9 @@ export class SyncMachine<
   protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = () => {
     return fn => {
       const fn2 = reduceFnMap(fn, ...this.__eventsList);
-      return ({ context, pContext, ...rest }) => {
-        const state = this.__cloneStateExtended({ context, pContext, ...rest });
+      return state => {
         const { event, to } = fn2(state) as any;
-
         const sentEvent = { to, event };
-
         return { sentEvent };
       };
     };
@@ -333,11 +279,9 @@ export class SyncMachine<
    * @param fn - The action function to perform.
    */
   protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
-    return ({ context, pContext, ...rest }) => {
+    return state => {
       const _fn = reduceFnMap(fn, ...this.__eventsList);
-      const state = this.__cloneStateExtended({ context, pContext, ...rest });
       _fn(state);
-
       return {};
     };
   };

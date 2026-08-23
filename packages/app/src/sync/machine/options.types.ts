@@ -10,28 +10,25 @@ import type {
   EventsMap,
 } from '#events';
 import type { DefinedValue, SyncPredicateS, SyncPredicateS2 } from '#guards';
-import type { Ru } from '@bemedev/app-utils-bemedev';
 
 import type {
   AnyMachine,
   CommonConfig3,
-  EraseAction,
+  CommonEraseAction_F,
+  CommonFilterAction_F,
+  DecomposeC,
   SimpleMachineOptions2,
   SwapFunction_F,
 } from '#common/machine';
 import type { RegisterOptions } from '#registry';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
-  Decompose,
   EmptyObject,
   FnMap,
-  FnMapFilterArray,
-  FnMapFilterObject,
   FnR,
   RecordS,
   SingleOrArrayL2,
   TraversableTuple,
-  ValuesOf,
 } from '~types';
 import type { SyncMachine } from './machine';
 
@@ -48,20 +45,7 @@ export type SyncFilterAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <
-  D = Decompose<
-    { pContext: Pc; context: Tc },
-    { object: 'both'; start: false; sep: '.' }
-  >,
-  K extends keyof D & string = keyof D & string,
->(
-  key: K,
-  fn: D[K] extends Array<infer Item>
-    ? FnMapFilterArray<E, Pc, Tc, T, Item>
-    : D[K] extends Ru
-      ? FnMapFilterObject<E, Pc, Tc, T, ValuesOf<D[K]>>
-      : never,
-) => SyncAction2<E, Pc, Tc, T>;
+> = CommonFilterAction_F<E, Pc, Tc, T, SyncAction2<E, Pc, Tc, T>>;
 
 /**
  * Function type signature for creating a synchronous erase action helper.
@@ -76,7 +60,7 @@ export type SyncEraseAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = EraseAction<Pc, Tc, SyncAction2<E, Pc, Tc, T>>;
+> = CommonEraseAction_F<Pc, Tc, SyncAction2<E, Pc, Tc, T>>;
 
 /**
  * Function type signature for creating a synchronous property definition guard helper.
@@ -133,10 +117,7 @@ export type SyncAssignAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  D = Decompose<
-    { pContext: Pc; context: Tc },
-    { object: 'both'; start: false; sep: '.' }
-  >,
+  D = DecomposeC<Pc, Tc>,
 > = <
   const K extends SingleOrArrayL2<keyof D>,
   const F extends TraversableTupleSync<D, K> = TraversableTupleSync<D, K>,
@@ -175,7 +156,7 @@ export type SyncVoidAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (fn: FnMap<E, Pc, Tc, T, void>) => SyncAction2<E, Pc, Tc, T>;
+> = (fn: FnMap<E, Pc, Tc, T, any>) => SyncAction2<E, Pc, Tc, T>;
 
 /**
  * Function type signature for sending an event to an actor machine synchronously.

@@ -43,9 +43,7 @@ describe('Filter and Erase actions', () => {
       });
 
       test('#05 => Check numbers', () => {
-        expect(service.select('numbers')).toEqual([
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        ]);
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       });
 
       test(...useSend('FILTER', 6));
@@ -107,11 +105,7 @@ describe('Filter and Erase actions', () => {
         const people = service.select('people');
         expect(people).toHaveLength(3);
         expect(people?.every(p => p.active)).toBe(true);
-        expect(people?.map(p => p.name)).toEqual([
-          'Alice',
-          'Charlie',
-          'Eve',
-        ]);
+        expect(people?.map(p => p.name)).toEqual(['Alice', 'Charlie', 'Eve']);
       });
     });
 
@@ -137,10 +131,7 @@ describe('Filter and Erase actions', () => {
                 return payload.scores;
               },
             }),
-            filterHighScores: filter(
-              'context.scores',
-              score => score >= 80,
-            ),
+            filterHighScores: filter('context.scores', score => score >= 80),
           },
         }));
       });
@@ -149,13 +140,7 @@ describe('Filter and Erase actions', () => {
         ...useSend({
           type: 'SET_SCORES',
           payload: {
-            scores: {
-              user1: 95,
-              user2: 60,
-              user3: 85,
-              user4: 45,
-              user5: 90,
-            },
+            scores: { user1: 95, user2: 60, user3: 85, user4: 45, user5: 90 },
           },
         }),
       );
@@ -210,9 +195,7 @@ describe('Filter and Erase actions', () => {
       });
 
       test('#05 => Check numbers', () => {
-        expect(service.select('numbers')).toEqual([
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        ]);
+        expect(service.select('numbers')).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       });
 
       test(...useSend('FILTER', 6));
@@ -257,13 +240,7 @@ describe('Filter and Erase actions', () => {
         ...useSend({
           type: 'SET_SCORES',
           payload: {
-            scores: {
-              user1: 95,
-              user2: 60,
-              user3: 85,
-              user4: 45,
-              user5: 90,
-            },
+            scores: { user1: 95, user2: 60, user3: 85, user4: 45, user5: 90 },
           },
         }),
       );
@@ -308,9 +285,7 @@ describe('Filter and Erase actions', () => {
         }));
       });
 
-      test(
-        ...useSend({ type: 'SET_NAME', payload: { name: 'John Doe' } }, 3),
-      );
+      test(...useSend({ type: 'SET_NAME', payload: { name: 'John Doe' } }, 3));
 
       test('#04 => Check name', () => {
         expect(service.select('name')).toBe('John Doe');
@@ -326,9 +301,7 @@ describe('Filter and Erase actions', () => {
     describe('#02 => Erase nested property', () => {
       const machine = _machine5;
 
-      const service = interpret(machine, {
-        context: { user: { name: '' } },
-      });
+      const service = interpret(machine, { context: { user: { name: '' } } });
 
       const {
         useStateValue: useValue,
@@ -395,9 +368,7 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, erase, batch }) => ({
           actions: {
-            setData: assign('context', {
-              SET_DATA: ({ payload }) => payload,
-            }),
+            setData: assign('context', { SET_DATA: ({ payload }) => payload }),
             clearAll: batch(
               erase('context.name'),
               erase('context.email'),
@@ -411,11 +382,7 @@ describe('Filter and Erase actions', () => {
         ...useSend(
           {
             type: 'SET_DATA',
-            payload: {
-              name: 'Alice',
-              email: 'alice@example.com',
-              age: 30,
-            },
+            payload: { name: 'Alice', email: 'alice@example.com', age: 30 },
           },
           3,
         ),
@@ -441,9 +408,7 @@ describe('Filter and Erase actions', () => {
       const machine = _machine7.provideOptions(({ assign, erase }) => ({
         actions: {
           clearAll: erase('context'),
-          setData: assign('context', {
-            SET_DATA: ({ payload }) => payload,
-          }),
+          setData: assign('context', { SET_DATA: ({ payload }) => payload }),
         },
       }));
 
@@ -479,13 +444,7 @@ describe('Filter and Erase actions', () => {
       const machine = _machine6;
 
       const { actions } = machine.createOptions(({ erase }) => ({
-        actions: {
-          clearAll: erase(
-            'context.name',
-            'context.email',
-            'context.age',
-          ),
-        },
+        actions: { clearAll: erase('context.name', 'context.email', 'context.age') },
       }));
 
       const state = {
@@ -499,18 +458,9 @@ describe('Filter and Erase actions', () => {
       test('#02 => returns mergers for all specified keys', () => {
         expect(result).toEqual({
           mergers: [
-            {
-              key: 'context.name',
-              source: { context: { name: undefined } },
-            },
-            {
-              key: 'context.email',
-              source: { context: { email: undefined } },
-            },
-            {
-              key: 'context.age',
-              source: { context: { age: undefined } },
-            },
+            { key: 'context.name', source: { context: { name: undefined } } },
+            { key: 'context.email', source: { context: { email: undefined } } },
+            { key: 'context.age', source: { context: { age: undefined } } },
           ],
         });
       });
@@ -518,7 +468,6 @@ describe('Filter and Erase actions', () => {
 
     describe('#06 => Erase multiple properties directly with erase', () => {
       const machine = _machine6;
-
       const service = interpret(machine, { context: {} });
 
       const {
@@ -533,14 +482,8 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, erase }) => ({
           actions: {
-            setData: assign('context', {
-              SET_DATA: ({ payload }) => payload,
-            }),
-            clearAll: erase(
-              'context.name',
-              'context.email',
-              'context.age',
-            ),
+            setData: assign('context', { SET_DATA: ({ payload }) => payload }),
+            clearAll: erase('context.name', 'context.email', 'context.age'),
           },
         }));
       });
@@ -549,11 +492,7 @@ describe('Filter and Erase actions', () => {
         ...useSend(
           {
             type: 'SET_DATA',
-            payload: {
-              name: 'Alice',
-              email: 'alice@example.com',
-              age: 30,
-            },
+            payload: { name: 'Alice', email: 'alice@example.com', age: 30 },
           },
           3,
         ),

@@ -3,15 +3,10 @@ import type { AsyncAction } from '#actions';
 import type { AsyncDelayFunction } from '#delays';
 import { ActorsConfigMap, type EventObject, type EventsMap } from '#events';
 import { type FlatMapN } from '#states';
-import {
-  merge2,
-  reduceFnMap,
-  reduceFnMapFilterArray,
-  reduceFnMapFilterObject,
-} from '#utils';
-import { _any, _unknown, toArray } from '@bemedev/app-utils-bemedev';
+import { merge2, reduceFnMap } from '#utils';
+import { _unknown, toArray } from '@bemedev/app-utils-bemedev';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
-import { getByKey, recompose } from '@bemedev/decompose';
+import { recompose } from '@bemedev/decompose';
 
 import {
   CommonMachine,
@@ -23,7 +18,6 @@ import {
 
 import type { AsyncPredicateS } from '#guards';
 import { withTimeout } from '@bemedev/better-promise';
-import cloneDeep from 'clone-deep';
 
 import type {
   AsyncAddOptions_F,
@@ -125,12 +119,13 @@ export class AsyncMachine<
     const voidAction = this.__voidAction;
     const sendTo = this.__sendTo;
     const erase = this.__erase;
+    const filter = this.__filter;
 
     const _legacy = Object.freeze({
-      actions: cloneDeep(this.__elements.actions),
-      guards: cloneDeep(this.__elements.guards),
-      delays: cloneDeep(this.__elements.delays),
-      actors: cloneDeep(this.__elements.actions),
+      actions: this.__elements.actions,
+      guards: this.__elements.guards,
+      delays: this.__elements.delays,
+      actors: this.__elements.actions,
     }) as any;
 
     const out = helper(
@@ -194,8 +189,8 @@ export class AsyncMachine<
           const _fn = reduceFnMap(fn as any, ...this.__eventsList);
 
           return async state => {
-            const { pContext, context, event, ...rest } = state;
-            const _state = cloneDeep({ pContext, context });
+            const { pContext, context, ...rest } = state;
+            const _state = { pContext, context };
 
             const execute = async () => {
               const rawResult = await _fn(state);
@@ -237,7 +232,6 @@ export class AsyncMachine<
                 const nextPContext = nextState?.pContext;
                 const thenRes = await thenFn({
                   ...rest,
-                  event,
                   context: nextContext,
                   pContext: nextPContext,
                 } as any);
@@ -253,15 +247,13 @@ export class AsyncMachine<
               return res;
             } catch (e: any) {
               const errorAction = errorFn(e);
-              return await errorAction({ ..._state, event, ...rest } as any);
+              return await errorAction({ ..._state, ...rest } as any);
             }
           };
         },
 
         batch: (...fns) => {
-          return async ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-
+          return async state => {
             const mergers: any[] = [];
             const extendeds: any = {};
 
@@ -279,56 +271,13 @@ export class AsyncMachine<
           };
         },
 
-        filter: (key, fn) => {
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-            const currentValue = getByKey.low(state, key);
-
-            let filteredValue: any;
-
-            /* v8 ignore else -- @preserve */
-            if (Array.isArray(currentValue)) {
-              const predicate = reduceFnMapFilterArray(
-                fn as any,
-                ...this.__eventsList,
-              );
-              filteredValue = currentValue.filter((item, index) =>
-                predicate(item, index, state),
-              );
-            } else if (currentValue !== null && typeof currentValue === 'object') {
-              const predicate = reduceFnMapFilterObject(
-                fn as any,
-                ...this.__eventsList,
-              );
-              filteredValue = Object.entries(currentValue).reduce(
-                (acc, [objKey, value]) => {
-                  const check = predicate(value, state);
-                  if (check) acc[objKey] = value;
-                  return acc;
-                },
-                {} as any,
-              );
-            }
-
-            return {
-              mergers: [
-                {
-                  key: key as any,
-                  source: recompose({ [key]: filteredValue }) as any,
-                },
-              ],
-            };
-          };
-        },
-
+        filter,
         erase,
         voidAction,
         sendTo,
 
         debounce: (fn, { id, ms = 100 }) => {
-          return async ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-
+          return async state => {
             const res = await fn(state);
             const { mergers = [] } = res;
             const scheduled: ScheduledData<Pc, Tc> = { data: mergers, ms, id };
@@ -422,26 +371,16 @@ export class AsyncMachine<
     return (fn, options?) => {
       if (!options) {
         const fn2 = reduceFnMap(fn, ...this.__eventsList);
-        return ({ context, pContext, ...rest }) => {
-          const state = this.__cloneStateExtended({ context, pContext, ...rest });
+        return state => {
           const { event, to } = fn2(state) as any;
-
           const sentEvent = { to, event };
-
           return { sentEvent };
         };
       }
 
       const { catch: errorFn, max } = options;
 
-      return async ({ context, pContext, event, ...rest }) => {
-        const state = this.__cloneStateExtended({
-          context,
-          pContext,
-          event,
-          ...rest,
-        });
-
+      return async state => {
         const execute = async () => {
           const fn2 = reduceFnMap(fn, ...this.__eventsList);
           const { event, to } = (await fn2(state)) as any;
@@ -457,7 +396,7 @@ export class AsyncMachine<
           return await execute();
         } catch (e: any) {
           const errorAction = errorFn(e);
-          return await errorAction({ context, pContext, event, ...rest } as any);
+          return await errorAction(state as any);
         }
       };
     };
@@ -473,20 +412,17 @@ export class AsyncMachine<
    */
   protected __voidAction: AsyncVoidAction_F<Eo, Pc, Tc, Ta> = (fn, options?) => {
     if (!options) {
-      return ({ context, pContext, ...rest }) => {
+      return state => {
         const _fn = reduceFnMap(fn, ...this.__eventsList);
-        const state = this.__cloneStateExtended({ context, pContext, ...rest });
-        _fn(state);
-
+        const out = _fn(state);
+        console.warn({ out });
         return {};
       };
     }
 
     const { catch: errorFn, then: thenFn, max } = options;
 
-    return async ({ context, pContext, event, ...rest }) => {
-      const state = this.__cloneStateExtended({ context, pContext, event, ...rest });
-
+    return async state => {
       const execute = async () => {
         const _fn = reduceFnMap(fn, ...this.__eventsList);
         await _fn(state);
@@ -502,21 +438,12 @@ export class AsyncMachine<
           res = await execute();
         }
 
-        if (thenFn) {
-          const thenRes = await thenFn({ ...rest, event, context, pContext } as any);
-          const mergers = [
-            ...toArray.typed(res?.mergers),
-            ...toArray.typed(thenRes?.mergers),
-          ];
-          const { mergers: _m1, ...ext1 } = res;
-          const { mergers: _m2, ...ext2 } = thenRes;
-          return { mergers, ...ext1, ...ext2 };
-        }
+        if (thenFn) return thenFn(state);
 
         return res;
       } catch (e: any) {
         const errorAction = errorFn(e);
-        return await errorAction({ context, pContext, event, ...rest } as any);
+        return await errorAction(state as any);
       }
     };
   };

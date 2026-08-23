@@ -26,6 +26,8 @@ import type {
   Fn,
   Identitfy,
   NotUndefined,
+  Ru,
+  SubType,
   SubTypeLow,
 } from '@bemedev/app-utils-bemedev';
 import type { Decompose } from '@bemedev/decompose';
@@ -36,7 +38,17 @@ import type {
 } from '@bemedev/function-swap';
 
 import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
-import type { EmptyObject, FnMap, FnR, MaybePromise, RecordS } from '~types';
+import type {
+  EmptyObject,
+  FnMap,
+  FnMapFilterArray,
+  FnMapFilterObject,
+  FnR,
+  MaybePromise,
+  RecordS,
+  TrueObject,
+  ValuesOf,
+} from '~types';
 
 /**
  * Type guard for enforcing no extra keys on target definitions.
@@ -393,6 +405,17 @@ export type CommonTimeAction_F<
   T extends string = string,
 > = (name: string) => (id: string) => AsyncAction2<E, Pc, Tc, T>;
 
+export type DecomposeC<
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+> = Omit<
+  Decompose<
+    { pContext: Pc; context: Tc },
+    { object: 'both'; start: false; sep: '.' }
+  >,
+  `${string}.[${number}]${string}`
+>;
+
 /**
  * Function type signature for creating an erase property action helper.
  *
@@ -407,41 +430,44 @@ export type CommonEraseAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   A = any,
 > = <
-  D extends object = Decompose<
-    { pContext: Pc; context: Tc },
-    { object: 'both'; start: false; sep: '.' }
-  >,
-  DD = 0 extends 1 & Tc ? Record<string, any> : SubTypeLow<D, undefined>,
-  K extends keyof DD & string = keyof DD & string,
+  D = 0 extends 1 & Tc
+    ? Record<string, any>
+    : SubTypeLow<DecomposeC<Pc, Tc>, undefined>,
+  K extends keyof D & string = keyof D & string,
 >(
   ...keys: K[]
 ) => A;
 
 /**
- * Type alias for {@linkcode CommonEraseAction_F}.
+ * Function type signature for creating a filter property action helper.
  *
+ * @template | {@linkcode EventObject} `E` - Event object type.
  * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - State tag string type.
  * @template `A` - Action return type.
- */
-export type EraseAction<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  A = any,
-> = CommonEraseAction_F<Pc, Tc, A>;
-
-/**
- * Type alias for {@linkcode CommonEraseAction_F}.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `A` - Action return type.
+ * @returns Action of type `A`.
  */
-export type EraseAction_F<
+export type CommonFilterAction_F<
+  E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
   A = any,
-> = CommonEraseAction_F<Pc, Tc, A>;
+> = <
+  D = 0 extends 1 & Tc
+    ? Record<string, any>
+    : SubType<DecomposeC<Pc, Tc>, TrueObject | any[] | undefined>,
+  K extends keyof D & string = keyof D & string,
+>(
+  key: K,
+  fn: NotUndefined<D[K]> extends Array<infer Item>
+    ? FnMapFilterArray<E, Pc, Tc, T, Item>
+    : NotUndefined<D[K]> extends Ru
+      ? FnMapFilterObject<E, Pc, Tc, T, ValuesOf<NotUndefined<D[K]>>>
+      : never,
+) => A;
 
 /**
  * Generic machine creator function signature.

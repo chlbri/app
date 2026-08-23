@@ -30,13 +30,18 @@ import {
   type StatePextended,
   type StateValue,
 } from '#states';
-import { constructEvents, reduceFnMap } from '#utils';
+import {
+  byKey2,
+  constructEvents,
+  reduceFnMap,
+  reduceFnMapFilterArray,
+  reduceFnMapFilterObject,
+} from '#utils';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-utils-bemedev';
 import { _unknown } from '@bemedev/app-utils-bemedev';
 import { decompose, recompose, type Decompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
 import type { PrimitiveObject } from '@bemedev/typings';
-import cloneDeep from 'clone-deep';
 import type {
   AnyMachine,
   CommonConfig3,
@@ -605,12 +610,12 @@ export abstract class CommonMachine<
    */
   protected get __elements(): CommonElements<C, Pc, Tc, Mo> {
     const config = structuredClone(this._config);
-    const pContext = cloneDeep(this.__pContext);
+    const pContext = this.__pContext;
     const context = structuredClone(this.__context);
-    const actions = cloneDeep(this._actions);
-    const guards = cloneDeep(this._guards);
-    const delays = cloneDeep(this._delays);
-    const actors = cloneDeep(this._actors);
+    const actions = this._actions;
+    const guards = this._guards;
+    const delays = this._delays;
+    const actors = this._actors;
 
     return { config, pContext, context, actions, guards, delays, actors };
   }
@@ -728,17 +733,6 @@ export abstract class CommonMachine<
   protected abstract __voidAction: Fn;
 
   /**
-   * Clones extended state object.
-   *
-   * @param state - Extended state object.
-   *
-   * @returns Cloned extended state object.
-   */
-  protected __cloneStateExtended = (state: StateExtended<Eo, Pc, Tc, Ta>) => {
-    return structuredClone(state);
-  };
-
-  /**
    * Helper function for creating timer or activity actions.
    *
    * @param name - Timer action name string.
@@ -767,6 +761,45 @@ export abstract class CommonMachine<
         source: recompose.low({ [key]: undefined }) as any,
       })),
     });
+
+  /**
+   * Protected helper function for creating a filter action helper.
+   *
+   * @param key - Key path to filter.
+   * @param fn - Filter predicate or predicate map.
+   *
+   * @returns Action function returning mergers for the filtered key.
+   */
+  protected __filter = (key: string, fn: any) => {
+    return (state: any) => {
+      const currentValue = byKey2.low(state, key);
+      let filteredValue: any;
+
+      /* v8 ignore else -- @preserve */
+      if (Array.isArray(currentValue)) {
+        const predicate = reduceFnMapFilterArray(fn as any, ...this.__eventsList);
+        filteredValue = currentValue.filter((item, index) =>
+          predicate(item, index, state),
+        );
+      } else if (currentValue !== null && typeof currentValue === 'object') {
+        const predicate = reduceFnMapFilterObject(fn as any, ...this.__eventsList);
+        filteredValue = Object.entries(currentValue).reduce(
+          (acc, [objKey, value]) => {
+            const check = predicate(value, state);
+            if (check) acc[objKey] = value;
+            return acc;
+          },
+          {} as any,
+        );
+      }
+
+      return {
+        mergers: [
+          { key: key as any, source: recompose({ [key]: filteredValue }) as any },
+        ],
+      };
+    };
+  };
 }
 
 /**

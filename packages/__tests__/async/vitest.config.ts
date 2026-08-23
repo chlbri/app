@@ -12,5 +12,6 @@ export default defineProject({
     logHeapUsage: false,
     testTimeout: 30000,
     setupFiles: ['./vitest.setup.ts'],
+    globalSetup: [],
   },
 });

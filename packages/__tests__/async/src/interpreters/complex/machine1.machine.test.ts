@@ -53,9 +53,7 @@ describe('Complex machine 1', () => {
       test(...useIntermediariesLength(1, 1));
 
       test('#02 => The Block_Immo intermediary is present', () => {
-        expect(service.select('intermediaries.[0]')).toEqual(
-          BLOCK_IMMO_INTERMEDIARY,
-        );
+        expect(service.select('intermediaries')).toEqual([BLOCK_IMMO_INTERMEDIARY]);
       });
     });
   });
@@ -98,15 +96,13 @@ describe('Complex machine 1', () => {
       });
 
       test('#02 => The Block_Immo intermediary is present', () => {
-        expect(service.select('intermediaries.[0]')).toEqual(
+        expect(service.select('intermediaries')?.[0]).toEqual(
           BLOCK_IMMO_INTERMEDIARY,
         );
       });
 
       test('#03 => The new intermediary is present', () => {
-        expect(service.select('intermediaries.[1]')).toEqual(
-          INTERMEDIARY_1,
-        );
+        expect(service.select('intermediaries')?.[1]).toEqual(INTERMEDIARY_1);
       });
     });
   });
@@ -148,15 +144,13 @@ describe('Complex machine 1', () => {
       });
 
       test('#02 => The Block_Immo intermediary is present', () => {
-        expect(service.select('intermediaries.[1]')).toEqual(
+        expect(service.select('intermediaries')?.[1]).toEqual(
           BLOCK_IMMO_INTERMEDIARY,
         );
       });
 
       test('#03 => The mandatory intermediary is present', () => {
-        expect(service.select('intermediaries.[0]')).toEqual(
-          INTERMEDIARY_2,
-        );
+        expect(service.select('intermediaries')?.[0]).toEqual(INTERMEDIARY_2);
       });
     });
   });
@@ -190,15 +184,13 @@ describe('Complex machine 1', () => {
       });
 
       test('#02 => The Block_Immo intermediary is present', () => {
-        expect(service.select('intermediaries.[1]')).toEqual(
+        expect(service.select('intermediaries')?.[1]).toEqual(
           BLOCK_IMMO_INTERMEDIARY,
         );
       });
 
       test('#03 => The mandatory intermediary is present', () => {
-        expect(service.select('intermediaries.[0]')).toEqual(
-          INTERMEDIARY_2,
-        );
+        expect(service.select('intermediaries')?.[0]).toEqual(INTERMEDIARY_2);
       });
     });
   });
@@ -232,21 +224,17 @@ describe('Complex machine 1', () => {
       });
 
       test('#02 => The Block_Immo intermediary is present', () => {
-        expect(service.select('intermediaries.[1]')).toEqual(
+        expect(service.select('intermediaries')?.[1]).toEqual(
           BLOCK_IMMO_INTERMEDIARY,
         );
       });
 
       test('#03 => The mandatory intermediary is present', () => {
-        expect(service.select('intermediaries.[0]')).toEqual(
-          INTERMEDIARY_2,
-        );
+        expect(service.select('intermediaries')?.[0]).toEqual(INTERMEDIARY_2);
       });
 
       test('#04 => The new intermediary is present', () => {
-        expect(service.select('intermediaries.[2]')).toEqual(
-          INTERMEDIARY_1,
-        );
+        expect(service.select('intermediaries')?.[2]).toEqual(INTERMEDIARY_1);
       });
     });
   });

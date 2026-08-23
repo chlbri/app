@@ -1,13 +1,14 @@
 import type { AsyncAction2 } from '#actions';
 
 import type { AsyncPredicateS, DefinedValue } from '#guards';
-import type { Decompose } from '@bemedev/decompose';
 
 import type { EventsMapFrom } from '#common/interpreter';
 import type {
   AnyMachine,
   CommonConfig3,
-  EraseAction,
+  CommonEraseAction_F,
+  CommonFilterAction_F,
+  DecomposeC,
   SimpleMachineOptions2,
   SwapFunction_F,
 } from '#common/machine';
@@ -18,17 +19,13 @@ import type {
   EventObject,
   EventsMap,
 } from '#events';
-import type { Ru } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,
   FnMap,
-  FnMapFilterArray,
-  FnMapFilterObject,
   FnR,
   SingleOrArrayL2,
   TraversableTuple,
-  ValuesOf,
 } from '~types';
 import type { AsyncMachine } from './machine';
 /**
@@ -100,7 +97,7 @@ export type TraversableTupleAsync<
  * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `T` - State tag string type.
- * @template | {@linkcode Decompose} `D` - Decomposed context paths object type.
+ * @template | {@linkcode DecomposeC} `D` - Decomposed context paths object type.
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
@@ -109,10 +106,7 @@ export type AsyncAssignAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  D = Decompose<
-    { pContext: Pc; context: Tc },
-    { object: 'both'; start: false; sep: '.' }
-  >,
+  D = DecomposeC<Pc, Tc>,
 > = <
   const K extends SingleOrArrayL2<keyof D>,
   const F extends TraversableTupleAsync<D, K> = TraversableTupleAsync<D, K>,
@@ -173,9 +167,9 @@ export type AsyncVoidAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <F extends void | Promise<void> = void | Promise<void>>(
+> = <F>(
   fn: FnMap<E, Pc, Tc, T, F>,
-  ...args: F extends Promise<void> ? [AsyncOptions<E, Pc, Tc, T>] : []
+  ...args: F extends Promise<any> ? [AsyncOptions<E, Pc, Tc, T>] : []
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 /**
@@ -193,20 +187,7 @@ export type AsyncFilterAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <
-  D = Decompose<
-    { pContext: Pc; context: Tc },
-    { object: 'both'; start: false; sep: '.' }
-  >,
-  K extends keyof D & string = keyof D & string,
->(
-  key: K,
-  fn: D[K] extends Array<infer Item>
-    ? FnMapFilterArray<E, Pc, Tc, T, Item>
-    : D[K] extends Ru
-      ? FnMapFilterObject<E, Pc, Tc, T, ValuesOf<D[K]>>
-      : never,
-) => AsyncAction2<E, Pc, Tc, T>;
+> = CommonFilterAction_F<E, Pc, Tc, T, AsyncAction2<E, Pc, Tc, T>>;
 
 /**
  * Function type signature for creating an erase property action helper.
@@ -223,7 +204,7 @@ export type AsyncEraseAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = EraseAction<Pc, Tc, AsyncAction2<E, Pc, Tc, T>>;
+> = CommonEraseAction_F<Pc, Tc, AsyncAction2<E, Pc, Tc, T>>;
 
 /**
  * Function type signature for sending an event to an actor machine asynchronously.

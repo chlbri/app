@@ -1,8 +1,8 @@
 import type { EventObject } from '#events';
-import { getByKey } from '@bemedev/decompose';
+import { byKey2 } from '#utils';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { FnR } from '~types';
 import type { DefinedValue } from '../../types';
-import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Function signature for path value matcher guard helper.
@@ -48,7 +48,7 @@ export type IsValueS_F = <
  * console.log(result); // true
  * ```
  *
- * @see {@linkcode isNotValue}, {@linkcode getByKey}
+ * @see {@linkcode isNotValue}, {@linkcode byKey2}
  */
 export const isValue: IsValueS_F = (path, ...values) => {
   const start = path.startsWith.bind(path);
@@ -66,16 +66,16 @@ export const isValue: IsValueS_F = (path, ...values) => {
 
     if (start('context.')) {
       const key = path.replace('context.', '');
-      return values.some(value => getByKey(context, key) === value);
+      return values.some(value => byKey2.low(context, key) === value);
     }
 
     if (start('pContext.')) {
       const key = path.replace('pContext.', '');
-      return values.some(value => getByKey(pContext, key) === value);
+      return values.some(value => byKey2.low(pContext, key) === value);
     }
 
     const key = path.replace('events.', '');
-    const toValidate = getByKey(event, key);
+    const toValidate = byKey2.low(event, key);
     return values.some(value => toValidate === value);
   };
 };
@@ -101,7 +101,7 @@ export const isValue: IsValueS_F = (path, ...values) => {
  * console.log(result); // false
  * ```
  *
- * @see {@linkcode isValue}, {@linkcode getByKey}
+ * @see {@linkcode isValue}, {@linkcode byKey2}
  */
 export const isNotValue: IsValueS_F = (path, ...values) => {
   const func = isValue(path, ...values);
