@@ -430,9 +430,10 @@ export type CommonEraseAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   A = any,
 > = <
-  D extends object = DecomposeC<Pc, Tc>,
-  DD = 0 extends 1 & Tc ? Record<string, any> : SubTypeLow<D, undefined>,
-  K extends keyof DD & string = keyof DD & string,
+  D = 0 extends 1 & Tc
+    ? Record<string, any>
+    : SubTypeLow<DecomposeC<Pc, Tc>, undefined>,
+  K extends keyof D & string = keyof D & string,
 >(
   ...keys: K[]
 ) => A;
