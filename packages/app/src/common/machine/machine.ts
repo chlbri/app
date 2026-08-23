@@ -611,7 +611,7 @@ export abstract class CommonMachine<
    */
   protected get __elements(): CommonElements<C, Pc, Tc, Mo> {
     const config = structuredClone(this._config);
-    const pContext = cloneDeep(this.__pContext);
+    const pContext = this.__pContext;
     const context = structuredClone(this.__context);
     const actions = cloneDeep(this._actions);
     const guards = cloneDeep(this._guards);
@@ -734,17 +734,6 @@ export abstract class CommonMachine<
   protected abstract __voidAction: Fn;
 
   /**
-   * Clones extended state object.
-   *
-   * @param state - Extended state object.
-   *
-   * @returns Cloned extended state object.
-   */
-  protected __cloneStateExtended = (state: StateExtended<Eo, Pc, Tc, Ta>) => {
-    return structuredClone(state);
-  };
-
-  /**
    * Helper function for creating timer or activity actions.
    *
    * @param name - Timer action name string.
@@ -783,10 +772,8 @@ export abstract class CommonMachine<
    * @returns Action function returning mergers for the filtered key.
    */
   protected __filter = (key: string, fn: any) => {
-    return ({ context, pContext, ...rest }: any) => {
-      const state = this.__cloneStateExtended({ context, pContext, ...rest } as any);
+    return (state: any) => {
       const currentValue = byKey2.low(state, key);
-
       let filteredValue: any;
 
       /* v8 ignore else -- @preserve */

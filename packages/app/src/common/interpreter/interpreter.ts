@@ -50,7 +50,6 @@ import {
   type Timeout2,
 } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
-import cloneDeep from 'clone-deep';
 import type { Fn, MachineType, Pausable } from '~types';
 import {
   getEntries,
@@ -1680,7 +1679,7 @@ export abstract class CommonInterpreter<
    * @returns Cloned extended state snapshot of type {@linkcode StateExtended}.
    */
   protected get __cloneState(): StateExtended<Eo, Pc, Tc, Ta> {
-    const pContext = cloneDeep(this.__pContext);
+    const pContext = this.__pContext;
     return { pContext, ...structuredClone(this.__state) };
   }
 
@@ -1693,13 +1692,15 @@ export abstract class CommonInterpreter<
    */
   protected __mergeContexts: DirectMerge_F<Pc, Tc> = result => {
     const cb = () => {
+      const mergers = result?.mergers;
       /* v8 ignore else -- @preserve */
-      if (result?.mergers && result.mergers.length > 0) {
+      if (mergers && mergers.length > 0) {
         const state = {
-          pContext: cloneDeep(this.__pContext),
-          context: cloneDeep(this.__context),
+          pContext: this.__pContext,
+          context: structuredClone(this.__context),
         };
-        const nextState = merge2.multiple(state, ...(result.mergers as any));
+
+        const nextState = merge2.multiple(state, ...(mergers as any));
         /* v8 ignore else -- @preserve */
         if (nextState) {
           this.__pContext = nextState.pContext;

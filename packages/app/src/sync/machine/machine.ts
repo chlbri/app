@@ -169,9 +169,7 @@ export class SyncMachine<
         },
 
         batch: (...fns) => {
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-
+          return state => {
             const mergers: any[] = [];
             const extendeds: any = {};
 
@@ -197,13 +195,10 @@ export class SyncMachine<
         sendTo,
 
         debounce: (fn, { id, ms = 100 }) => {
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-
+          return state => {
             const res = fn(state);
             const { mergers = [] } = res;
             const scheduled: ScheduledData<Pc, Tc> = { data: mergers, ms, id };
-
             return { scheduled };
           };
         },
@@ -271,12 +266,9 @@ export class SyncMachine<
   protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = () => {
     return fn => {
       const fn2 = reduceFnMap(fn, ...this.__eventsList);
-      return ({ context, pContext, ...rest }) => {
-        const state = this.__cloneStateExtended({ context, pContext, ...rest });
+      return state => {
         const { event, to } = fn2(state) as any;
-
         const sentEvent = { to, event };
-
         return { sentEvent };
       };
     };
@@ -288,11 +280,9 @@ export class SyncMachine<
    * @param fn - The action function to perform.
    */
   protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
-    return ({ context, pContext, ...rest }) => {
+    return state => {
       const _fn = reduceFnMap(fn, ...this.__eventsList);
-      const state = this.__cloneStateExtended({ context, pContext, ...rest });
       _fn(state);
-
       return {};
     };
   };

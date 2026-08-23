@@ -23,5 +23,5 @@ export default createMachine(
       final: {},
     },
   },
-  { context, pContext: context },
+  { context, pContext: type(({ use }) => ({ iterator: use(context) })) },
 );

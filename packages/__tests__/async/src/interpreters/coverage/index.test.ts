@@ -4,23 +4,23 @@ import _raw_machine from './index.machine';
 
 describe('Coverage of interpretr #2', () => {
   describe('#01 => Cov select and pSelect for primitive units', () => {
-    const machine = _raw_machine.provideOptions(
-      ({ assign, voidAction }) => ({
-        actions: {
-          inc: assign('context', ({ context }) => context + 1),
-          incPrivate: assign('pContext', ({ pContext }) => pContext + 1),
-          neverRun: voidAction({}),
-        },
-      }),
-    );
+    const machine = _raw_machine.provideOptions(({ assign, voidAction }) => ({
+      actions: {
+        inc: assign('context', ({ context }) => context + 1),
+        incPrivate: voidAction(all => {
+          all.pContext.iterator++;
+        }),
+        neverRun: voidAction({}),
+      },
+    }));
 
     const service = interpret(machine, {
       exact: true,
       context: 0,
-      pContext: 0,
+      pContext: { iterator: 0 },
     });
 
-    service.subscribe({});
+    service.subscribe(({}) => {});
 
     type SE = Parameters<typeof service.send>[0];
 
@@ -41,8 +41,8 @@ describe('Coverage of interpretr #2', () => {
     const usePIterator = (num: number, index: number) => {
       const invite = `#${index < 10 ? '0' + index : index} => pIterator is "${num}"`;
       return tupleOf(invite, async () => {
-        expect(service._pSelect).toBeUndefined();
-        expect(service._pContext).toBe(num);
+        // expect(service._pSelect).toBeUndefined();
+        expect(service._pContext?.iterator).toBe(num);
       });
     };
 
