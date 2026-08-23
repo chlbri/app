@@ -42,7 +42,6 @@ import { _unknown } from '@bemedev/app-utils-bemedev';
 import { decompose, recompose, type Decompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
 import type { PrimitiveObject } from '@bemedev/typings';
-import cloneDeep from 'clone-deep';
 import type {
   AnyMachine,
   CommonConfig3,
@@ -613,10 +612,10 @@ export abstract class CommonMachine<
     const config = structuredClone(this._config);
     const pContext = this.__pContext;
     const context = structuredClone(this.__context);
-    const actions = cloneDeep(this._actions);
-    const guards = cloneDeep(this._guards);
-    const delays = cloneDeep(this._delays);
-    const actors = cloneDeep(this._actors);
+    const actions = this._actions;
+    const guards = this._guards;
+    const delays = this._delays;
+    const actors = this._actors;
 
     return { config, pContext, context, actions, guards, delays, actors };
   }

@@ -11,11 +11,10 @@ import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
 import { merge2, reduceFnMap } from '#utils';
-import { _any, _unknown } from '@bemedev/app-utils-bemedev';
+import { _unknown } from '@bemedev/app-utils-bemedev';
 import recursive from '@bemedev/boolean-recursive';
 import { recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
-import cloneDeep from 'clone-deep';
 import { CommonMachine } from '../../common/machine';
 import type {
   SyncAddOptions_F,
@@ -105,10 +104,10 @@ export class SyncMachine<
     const filter = this.__filter;
 
     const _legacy = Object.freeze({
-      actions: cloneDeep(this.__elements.actions),
-      guards: cloneDeep(this.__elements.guards),
-      delays: cloneDeep(this.__elements.delays),
-      actors: cloneDeep(this.__elements.actors),
+      actions: this.__elements.actions,
+      guards: this.__elements.guards,
+      delays: this.__elements.delays,
+      actors: this.__elements.actors,
     }) as any;
 
     const out = helper(
