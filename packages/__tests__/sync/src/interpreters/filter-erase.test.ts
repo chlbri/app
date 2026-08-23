@@ -611,11 +611,7 @@ describe('Filter and Erase actions', () => {
             mergers: [
               {
                 key: 'context.numbers',
-                source: {
-                  context: {
-                    numbers: [6, 7, 8, 9, 10],
-                  },
-                },
+                source: { context: { numbers: [6, 7, 8, 9, 10] } },
               },
             ],
           });
@@ -646,11 +642,7 @@ describe('Filter and Erase actions', () => {
             mergers: [
               {
                 key: 'context.numbers',
-                source: {
-                  context: {
-                    numbers: [2, 4, 6],
-                  },
-                },
+                source: { context: { numbers: [2, 4, 6] } },
               },
             ],
           });
@@ -681,11 +673,7 @@ describe('Filter and Erase actions', () => {
             mergers: [
               {
                 key: 'context.numbers',
-                source: {
-                  context: {
-                    numbers: [1, 2, 3],
-                  },
-                },
+                source: { context: { numbers: [1, 2, 3] } },
               },
             ],
           });
@@ -713,11 +701,7 @@ describe('Filter and Erase actions', () => {
             mergers: [
               {
                 key: 'context.numbers',
-                source: {
-                  context: {
-                    numbers: [1, 2, 3, 4, 5],
-                  },
-                },
+                source: { context: { numbers: [1, 2, 3, 4, 5] } },
               },
             ],
           });
@@ -752,14 +736,7 @@ describe('Filter and Erase actions', () => {
             mergers: [
               {
                 key: 'context.scores',
-                source: {
-                  context: {
-                    scores: {
-                      math: 90,
-                      history: 85,
-                    },
-                  },
-                },
+                source: { context: { scores: { math: 90, history: 85 } } },
               },
             ],
           });
@@ -790,14 +767,7 @@ describe('Filter and Erase actions', () => {
             mergers: [
               {
                 key: 'context.scores',
-                source: {
-                  context: {
-                    scores: {
-                      math: 90,
-                      physics: 75,
-                    },
-                  },
-                },
+                source: { context: { scores: { math: 90, physics: 75 } } },
               },
             ],
           });
@@ -828,13 +798,7 @@ describe('Filter and Erase actions', () => {
             mergers: [
               {
                 key: 'context.scores',
-                source: {
-                  context: {
-                    scores: {
-                      english: 45,
-                    },
-                  },
-                },
+                source: { context: { scores: { english: 45 } } },
               },
             ],
           });
@@ -864,14 +828,7 @@ describe('Filter and Erase actions', () => {
             mergers: [
               {
                 key: 'context.scores',
-                source: {
-                  context: {
-                    scores: {
-                      math: 90,
-                      physics: 75,
-                    },
-                  },
-                },
+                source: { context: { scores: { math: 90, physics: 75 } } },
               },
             ],
           });
@@ -1045,13 +1002,7 @@ describe('Filter and Erase actions', () => {
       const machine = _machine6;
 
       const { actions } = machine.createOptions(({ erase }) => ({
-        actions: {
-          clearAll: erase(
-            'context.name',
-            'context.email',
-            'context.age',
-          ),
-        },
+        actions: { clearAll: erase('context.name', 'context.email', 'context.age') },
       }));
 
       const state = {
@@ -1065,18 +1016,9 @@ describe('Filter and Erase actions', () => {
       test('#02 => returns mergers for all specified keys', () => {
         expect(result).toEqual({
           mergers: [
-            {
-              key: 'context.name',
-              source: { context: { name: undefined } },
-            },
-            {
-              key: 'context.email',
-              source: { context: { email: undefined } },
-            },
-            {
-              key: 'context.age',
-              source: { context: { age: undefined } },
-            },
+            { key: 'context.name', source: { context: { name: undefined } } },
+            { key: 'context.email', source: { context: { email: undefined } } },
+            { key: 'context.age', source: { context: { age: undefined } } },
           ],
         });
       });
@@ -1100,11 +1042,7 @@ describe('Filter and Erase actions', () => {
         service.addOptions(({ assign, erase }) => ({
           actions: {
             setData: assign('context', { SET_DATA: ({ payload }) => payload }),
-            clearAll: erase(
-              'context.name',
-              'context.email',
-              'context.age',
-            ),
+            clearAll: erase('context.name', 'context.email', 'context.age'),
           },
         }));
       });

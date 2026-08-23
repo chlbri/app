@@ -18,8 +18,8 @@ import {
 } from '#constants';
 import { type AsyncEmitterFunction } from '#emitters';
 import {
-  ALWAYS_EVENT,
   AFTER_EVENT,
+  ALWAYS_EVENT,
   eventToType,
   transformEventArg,
   type ActorsConfigMap,
@@ -62,7 +62,8 @@ import type {
   CommonConfig3,
   SimpleMachineOptions2,
 } from '#common/machine';
-import { getByKey, recompose } from '@bemedev/decompose';
+import { byKey2 } from '#utils';
+import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
 import type {
@@ -942,7 +943,7 @@ export class SyncInterpreter<
                   const pContext =
                     key === '.'
                       ? structuredClone(context)
-                      : getByKey.low(context, key);
+                      : byKey2.low(context, key);
 
                   if (path === '.') {
                     return this.__mergeContexts({
@@ -970,8 +971,8 @@ export class SyncInterpreter<
 
                   for (const key of keys) {
                     if (key === '.') return equal(ac, bc);
-                    const _a = getByKey.low(ac, key);
-                    const _b = getByKey.low(bc, key);
+                    const _a = byKey2.low(ac, key);
+                    const _b = byKey2.low(bc, key);
                     if (!equal(_a, _b)) return false;
                   }
 

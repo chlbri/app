@@ -86,7 +86,7 @@ export const merge2 = expandFn(
       (target as any)[_key] = {};
     }
 
-    (target as any)[_key] = merge2({
+    merge2({
       target: (target as any)[_key],
       source: next,
       key: keys.join('.'),

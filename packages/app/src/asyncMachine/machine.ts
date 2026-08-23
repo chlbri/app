@@ -3,15 +3,10 @@ import type { AsyncAction } from '#actions';
 import type { AsyncDelayFunction } from '#delays';
 import { ActorsConfigMap, type EventObject, type EventsMap } from '#events';
 import { type FlatMapN } from '#states';
-import {
-  merge2,
-  reduceFnMap,
-  reduceFnMapFilterArray,
-  reduceFnMapFilterObject,
-} from '#utils';
+import { merge2, reduceFnMap } from '#utils';
 import { _any, _unknown, toArray } from '@bemedev/app-utils-bemedev';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
-import { getByKey, recompose } from '@bemedev/decompose';
+import { recompose } from '@bemedev/decompose';
 
 import {
   CommonMachine,
@@ -125,6 +120,7 @@ export class AsyncMachine<
     const voidAction = this.__voidAction;
     const sendTo = this.__sendTo;
     const erase = this.__erase;
+    const filter = this.__filter;
 
     const _legacy = Object.freeze({
       actions: cloneDeep(this.__elements.actions),
@@ -279,48 +275,7 @@ export class AsyncMachine<
           };
         },
 
-        filter: (key, fn) => {
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-            const currentValue = getByKey.low(state, key);
-
-            let filteredValue: any;
-
-            /* v8 ignore else -- @preserve */
-            if (Array.isArray(currentValue)) {
-              const predicate = reduceFnMapFilterArray(
-                fn as any,
-                ...this.__eventsList,
-              );
-              filteredValue = currentValue.filter((item, index) =>
-                predicate(item, index, state),
-              );
-            } else if (currentValue !== null && typeof currentValue === 'object') {
-              const predicate = reduceFnMapFilterObject(
-                fn as any,
-                ...this.__eventsList,
-              );
-              filteredValue = Object.entries(currentValue).reduce(
-                (acc, [objKey, value]) => {
-                  const check = predicate(value, state);
-                  if (check) acc[objKey] = value;
-                  return acc;
-                },
-                {} as any,
-              );
-            }
-
-            return {
-              mergers: [
-                {
-                  key: key as any,
-                  source: recompose({ [key]: filteredValue }) as any,
-                },
-              ],
-            };
-          };
-        },
-
+        filter,
         erase,
         voidAction,
         sendTo,

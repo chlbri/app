@@ -32,6 +32,7 @@ import {
 } from '#states';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
 import {
+  byKey2,
   decomposeSV,
   IS_TEST,
   isStringEmpty,
@@ -42,7 +43,6 @@ import {
 import type { AllowedNames } from '@bemedev/app-utils-bemedev';
 import { isDefined, isPrimitive, toArray } from '@bemedev/app-utils-bemedev';
 import { asyncfy } from '@bemedev/better-promise';
-import { getByKey } from '@bemedev/decompose';
 import {
   createInterval,
   createTimeout,
@@ -424,12 +424,14 @@ export abstract class CommonInterpreter<
    *
    * @returns A selector function of type {@linkcode Selector_F}.
    *
-   * @see {@linkcode getByKey}
+   * Remarks : only th
+   *
+   * @see {@linkcode byKey2}
    */
   get select(): Selector_F<Tc> {
     const check = isPrimitive(this.__context);
     if (check) return undefined as any;
-    const out = (path: string) => getByKey(this.__state.context, path);
+    const out = (path: string) => byKey2.low(this.__state.context, path);
     return out as any;
   }
 
@@ -440,7 +442,7 @@ export abstract class CommonInterpreter<
    *
    * @returns A selector function of type {@linkcode Selector_F}.
    *
-   * @see {@linkcode getByKey}
+   * @see {@linkcode byKey2}
    */
   get _pSelect(): Selector_F<Pc> {
     /* v8 ignore else -- @preserve */
@@ -451,7 +453,7 @@ export abstract class CommonInterpreter<
 
       /* v8 ignore else -- @preserve */
       if (pContext) {
-        const out: any = (path: string) => getByKey(pContext, path);
+        const out: any = (path: string) => byKey2.low(pContext, path);
         return out as any;
       }
     }

@@ -182,6 +182,16 @@ export type AllowedNamesLow<Base, Condition> = FilterFlagsLow<
   Condition
 >[keyof Base];
 /**
+ * SubType type - Maps properties of `Base` whose values extend `Condition`.
+ *
+ * @template `Base` - Base object type.
+ * @template `Condition` - Condition type to match.
+ */
+export type SubType<Base extends object, Condition> = Pick<
+  Base,
+  AllowedNames<Base, Condition>
+>;
+/**
  * SubTypeLow type - Auto-generated expression
  *
  * ⚠️ WARNING: This expression is auto-generated and should not be modified.

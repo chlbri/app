@@ -10,15 +10,10 @@ import type { SyncDelayFunction } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
-import {
-  merge2,
-  reduceFnMap,
-  reduceFnMapFilterArray,
-  reduceFnMapFilterObject,
-} from '#utils';
+import { merge2, reduceFnMap } from '#utils';
 import { _any, _unknown } from '@bemedev/app-utils-bemedev';
 import recursive from '@bemedev/boolean-recursive';
-import { getByKey, recompose } from '@bemedev/decompose';
+import { recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import cloneDeep from 'clone-deep';
 import { CommonMachine } from '../../common/machine';
@@ -107,6 +102,7 @@ export class SyncMachine<
     const voidAction = this.__voidAction;
     const sendTo = this.__sendTo;
     const erase = this.__erase;
+    const filter = this.__filter;
 
     const _legacy = Object.freeze({
       actions: cloneDeep(this.__elements.actions),
@@ -195,48 +191,7 @@ export class SyncMachine<
           };
         },
 
-        filter: (key, fn) => {
-          return ({ context, pContext, ...rest }) => {
-            const state = this.__cloneStateExtended({ context, pContext, ...rest });
-            const currentValue = getByKey.low(state, key);
-
-            let filteredValue: any;
-
-            /* v8 ignore else -- @preserve */
-            if (Array.isArray(currentValue)) {
-              const predicate = reduceFnMapFilterArray(
-                fn as any,
-                ...this.__eventsList,
-              );
-              filteredValue = currentValue.filter((item, index) =>
-                predicate(item, index, state),
-              );
-            } else if (currentValue !== null && typeof currentValue === 'object') {
-              const predicate = reduceFnMapFilterObject(
-                fn as any,
-                ...this.__eventsList,
-              );
-              filteredValue = Object.entries(currentValue).reduce(
-                (acc, [objKey, value]) => {
-                  const check = predicate(value, state);
-                  if (check) acc[objKey] = value;
-                  return acc;
-                },
-                {} as any,
-              );
-            }
-
-            return {
-              mergers: [
-                {
-                  key: key as any,
-                  source: recompose({ [key]: filteredValue }) as any,
-                },
-              ],
-            };
-          };
-        },
-
+        filter,
         erase,
         voidAction,
         sendTo,

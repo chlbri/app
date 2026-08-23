@@ -8,8 +8,8 @@ import {
 import { _any } from '@bemedev/app-utils-bemedev';
 
 import {
-  ALWAYS_EVENT,
   AFTER_EVENT,
+  ALWAYS_EVENT,
   eventToType,
   transformEventArg,
   type ActorsConfigMap,
@@ -17,7 +17,6 @@ import {
   type EventObject,
   type EventsMap,
 } from '#events';
-import { toPredicate } from '../guards/functions/toPredicate';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
@@ -27,6 +26,7 @@ import {
   withTimeout,
   type TimeoutPromise,
 } from '@bemedev/better-promise';
+import { toPredicate } from '../guards/functions/toPredicate';
 
 import { sleep } from '@bemedev/sleep';
 import equal from 'fast-deep-equal';
@@ -71,12 +71,13 @@ import {
   type SimpleMachineOptions2,
 } from '#common/machine';
 import { type AsyncEmitterFunction } from '#emitters';
-import type { AsyncMachine } from '../asyncMachine/machine';
-import type { AsyncAddOptions_F } from '../asyncMachine';
-import { getByKey, recompose } from '@bemedev/decompose';
+import { byKey2 } from '#utils';
+import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types';
+import type { AsyncAddOptions_F } from '../asyncMachine';
+import type { AsyncMachine } from '../asyncMachine/machine';
 
 /**
  * The class {@linkcode AsyncInterpreter} is responsible for interpreting and managing the state of an asynchronous machine.
@@ -1033,7 +1034,7 @@ export class AsyncInterpreter<
                   const pContext =
                     key === '.'
                       ? structuredClone(context)
-                      : getByKey.low(context, key);
+                      : byKey2.low(context, key);
 
                   if (path === '.') {
                     return this.__mergeContexts({
@@ -1061,8 +1062,8 @@ export class AsyncInterpreter<
 
                   for (const key of keys) {
                     if (key === '.') return equal(ac, bc);
-                    const _a = getByKey.low(ac, key);
-                    const _b = getByKey.low(bc, key);
+                    const _a = byKey2.low(ac, key);
+                    const _b = byKey2.low(bc, key);
                     if (!equal(_a, _b)) return false;
                   }
 

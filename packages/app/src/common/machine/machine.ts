@@ -30,7 +30,13 @@ import {
   type StatePextended,
   type StateValue,
 } from '#states';
-import { constructEvents, reduceFnMap } from '#utils';
+import {
+  byKey2,
+  constructEvents,
+  reduceFnMap,
+  reduceFnMapFilterArray,
+  reduceFnMapFilterObject,
+} from '#utils';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-utils-bemedev';
 import { _unknown } from '@bemedev/app-utils-bemedev';
 import { decompose, recompose, type Decompose } from '@bemedev/decompose';
@@ -767,6 +773,47 @@ export abstract class CommonMachine<
         source: recompose.low({ [key]: undefined }) as any,
       })),
     });
+
+  /**
+   * Protected helper function for creating a filter action helper.
+   *
+   * @param key - Key path to filter.
+   * @param fn - Filter predicate or predicate map.
+   *
+   * @returns Action function returning mergers for the filtered key.
+   */
+  protected __filter = (key: string, fn: any) => {
+    return ({ context, pContext, ...rest }: any) => {
+      const state = this.__cloneStateExtended({ context, pContext, ...rest } as any);
+      const currentValue = byKey2.low(state, key);
+
+      let filteredValue: any;
+
+      /* v8 ignore else -- @preserve */
+      if (Array.isArray(currentValue)) {
+        const predicate = reduceFnMapFilterArray(fn as any, ...this.__eventsList);
+        filteredValue = currentValue.filter((item, index) =>
+          predicate(item, index, state),
+        );
+      } else if (currentValue !== null && typeof currentValue === 'object') {
+        const predicate = reduceFnMapFilterObject(fn as any, ...this.__eventsList);
+        filteredValue = Object.entries(currentValue).reduce(
+          (acc, [objKey, value]) => {
+            const check = predicate(value, state);
+            if (check) acc[objKey] = value;
+            return acc;
+          },
+          {} as any,
+        );
+      }
+
+      return {
+        mergers: [
+          { key: key as any, source: recompose({ [key]: filteredValue }) as any },
+        ],
+      };
+    };
+  };
 }
 
 /**

@@ -17,6 +17,7 @@ export type {
   Ru,
   SoA,
   SoRa,
+  SubType,
   SubTypeLow,
   UnionToIntersection,
   UnionToTuple,
