@@ -70,6 +70,7 @@ import type {
   CommonCollectedService,
   ConfigFrom,
   ContextFrom,
+  Contexts,
   CreateInterval2_F,
   DiffNext,
   DirectMerge_F,
@@ -245,25 +246,8 @@ export abstract class CommonInterpreter<
     return this.__machine.initialValue;
   }
 
-  /**
-   * The initial private context snapshot of type `Pc`.
-   */
-  protected __initialPpc!: Pc;
-
-  /**
-   * The initial public context snapshot of type `Tc`.
-   */
-  protected __initialContext!: Tc;
-
-  /**
-   * The active private context state of type `Pc`.
-   */
-  protected __pContext!: Pc;
-
-  /**
-   * The active public context state of type `Tc`.
-   */
-  protected __context!: Tc;
+  protected __contexts: Required<Contexts<Pc, Tc>> = {} as any;
+  protected __initialContexts: Required<Contexts<Pc, Tc>> = {} as any;
 
   /**
    * Public accessor for the current public context of type `Tc`.
@@ -271,7 +255,7 @@ export abstract class CommonInterpreter<
    * @returns The active context object of type `Tc`.
    */
   get context() {
-    return this.__context;
+    return this.__contexts.context;
   }
 
   /**
@@ -396,7 +380,7 @@ export abstract class CommonInterpreter<
   get _pContext() {
     /* v8 ignore else -- @preserve */
     if (IS_TEST()) {
-      return this.__pContext;
+      return this.__contexts.pContext;
     }
 
     /* v8 ignore start -- @preserve */
@@ -428,7 +412,7 @@ export abstract class CommonInterpreter<
    * @see {@linkcode byKey2}
    */
   get select(): Selector_F<Tc> {
-    const check = isPrimitive(this.__context);
+    const check = isPrimitive(this.__contexts.context);
     if (check) return undefined as any;
     const out = (path: string) => byKey2.low(this.__state.context, path);
     return out as any;
@@ -446,8 +430,8 @@ export abstract class CommonInterpreter<
   get _pSelect(): Selector_F<Pc> {
     /* v8 ignore else -- @preserve */
     if (IS_TEST()) {
-      const check = this.isReady && isPrimitive(this.__pContext);
-      const pContext = this.__pContext;
+      const pContext = this.__contexts.pContext;
+      const check = this.isReady && isPrimitive(pContext);
       if (check) return undefined as any;
 
       /* v8 ignore else -- @preserve */
@@ -537,7 +521,7 @@ export abstract class CommonInterpreter<
 
     this.__state = {
       status: this.__status,
-      context: this.__context,
+      context: this.__contexts.context,
       event: { type: INIT_EVENT, payload: {} } as any,
       value: this.__value,
       tags: toArray.typed(this.tags),
@@ -553,8 +537,7 @@ export abstract class CommonInterpreter<
    */
   softReset = () => {
     this.__value = nodeToValue(this.__initialConfig);
-    this.__context = this.__initialContext;
-    this.__pContext = this.__initialPpc;
+    this.__contexts = this.__initialContexts;
     this.__init(this.__machine, this.__mode, this.__exact);
     this.__flush();
   };
@@ -1112,9 +1095,9 @@ export abstract class CommonInterpreter<
    * @returns The updated inner machine instance.
    */
   _provideContext = (context: Tc) => {
-    this.__initialContext = this.__context = context;
+    this.__initialContexts.context = this.__contexts.context = context;
     this.__performStates({ context });
-    this.__machine.addContext(this.__initialContext);
+    this.__machine.addContext(context);
     return this.__machine;
   };
 
@@ -1679,8 +1662,19 @@ export abstract class CommonInterpreter<
    * @returns Cloned extended state snapshot of type {@linkcode StateExtended}.
    */
   protected get __cloneState(): StateExtended<Eo, Pc, Tc, Ta> {
-    const pContext = this.__pContext;
-    return { pContext, ...structuredClone(this.__state) };
+    const contexts = this.__contexts;
+
+    return {
+      get pContext(): Pc {
+        return contexts.pContext;
+      },
+
+      set pContext(val: Pc) {
+        contexts.pContext = val;
+      },
+
+      ...structuredClone(this.__state),
+    };
   }
 
   /**
@@ -1696,19 +1690,16 @@ export abstract class CommonInterpreter<
       /* v8 ignore else -- @preserve */
       if (mergers && mergers.length > 0) {
         const state = {
-          pContext: this.__pContext,
-          context: structuredClone(this.__context),
+          pContext: this.__contexts.pContext,
+          context: structuredClone(this.__contexts.context),
         };
 
-        const nextState = merge2.multiple(state, ...(mergers as any));
+        const contexts = merge2.multiple(state, ...(mergers as any));
         /* v8 ignore else -- @preserve */
-        if (nextState) {
-          this.__pContext = nextState.pContext;
-          this.__context = nextState.context;
-        }
+        if (contexts) this.__contexts = contexts;
       }
 
-      return this.__performStates({ context: this.__context });
+      return this.__performStates({ context: this.__contexts.context });
     };
 
     return this.__schedulerContexts.schedule(cb, this.__sent);
@@ -1803,13 +1794,14 @@ export abstract class CommonInterpreter<
    * @returns Updated machine instance.
    */
   _providePrivateContext = (pContext: Pc) => {
-    this.__initialPpc = this.__pContext = pContext;
-    this.__machine.addPrivateContext(this.__initialPpc);
+    // this.__initialPpc = this.__pContext = pContext;
+    this.__initialContexts.pContext = this.__contexts.pContext = pContext;
+    this.__machine.addPrivateContext(pContext);
     return this.__machine;
   };
 
   /**
-   * Alias for method {@linkcode CommonInterpreter._providePrivateContext}.
+   * Alias for method {@linkcode CommonInterpreter}.
    *
    * @deprecated Internal method.
    */

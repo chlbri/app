@@ -156,7 +156,7 @@ export type SyncVoidAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (fn: FnMap<E, Pc, Tc, T, void>) => SyncAction2<E, Pc, Tc, T>;
+> = (fn: FnMap<E, Pc, Tc, T, any>) => SyncAction2<E, Pc, Tc, T>;
 
 /**
  * Function type signature for sending an event to an actor machine synchronously.

@@ -127,8 +127,8 @@ export class SyncInterpreter<
       this.__mode,
       this.__exact,
     );
-    out._ppC(this.__initialPpc);
-    out._provideContext(this.__initialContext);
+    out._ppC(this.__initialContexts.pContext);
+    out._provideContext(this.__initialContexts.context);
 
     return out;
   }

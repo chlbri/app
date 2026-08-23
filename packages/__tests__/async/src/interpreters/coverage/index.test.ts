@@ -7,18 +7,12 @@ describe('Coverage of interpretr #2', () => {
     const machine = _raw_machine.provideOptions(({ assign, voidAction }) => ({
       actions: {
         inc: assign('context', ({ context }) => context + 1),
-        incPrivate: voidAction(all => {
-          all.pContext.iterator++;
-        }),
+        incPrivate: voidAction(all => all.pContext++),
         neverRun: voidAction({}),
       },
     }));
 
-    const service = interpret(machine, {
-      exact: true,
-      context: 0,
-      pContext: { iterator: 0 },
-    });
+    const service = interpret(machine, { exact: true, context: 0, pContext: 0 });
 
     service.subscribe(({}) => {});
 
@@ -42,7 +36,7 @@ describe('Coverage of interpretr #2', () => {
       const invite = `#${index < 10 ? '0' + index : index} => pIterator is "${num}"`;
       return tupleOf(invite, async () => {
         // expect(service._pSelect).toBeUndefined();
-        expect(service._pContext?.iterator).toBe(num);
+        expect(service._pContext).toBe(num);
       });
     };
 

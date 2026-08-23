@@ -167,9 +167,9 @@ export type AsyncVoidAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = <F extends void | Promise<void> = void | Promise<void>>(
+> = <F>(
   fn: FnMap<E, Pc, Tc, T, F>,
-  ...args: F extends Promise<void> ? [AsyncOptions<E, Pc, Tc, T>] : []
+  ...args: F extends Promise<any> ? [AsyncOptions<E, Pc, Tc, T>] : []
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 /**

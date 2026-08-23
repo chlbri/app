@@ -649,7 +649,7 @@ declare module '@bemedev/app' {
         delays:   never;
         guards:   never;
       };
-      pContext: {  };
+      pContext: any;
     };
 
     'src/__tests__/interpreters/eras.machine.7': {

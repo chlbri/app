@@ -133,8 +133,8 @@ export class AsyncInterpreter<
       this.__exact,
     );
 
-    out._ppC(this.__initialPpc);
-    out._provideContext(this.__initialContext);
+    out._ppC(this.__initialContexts.pContext);
+    out._provideContext(this.__initialContexts.context);
 
     return out;
   }
@@ -1145,8 +1145,8 @@ export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
 export const interpretAsync: AsyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
   const { mode, exact, pContext, context } = _any(args);
-  const out: any = new AsyncInterpreter(machine, mode, exact);
+  const out = new AsyncInterpreter(machine, mode, exact);
   out._providePrivateContext(pContext);
   out._provideContext(context);
-  return out;
+  return out as any;
 };
