@@ -954,12 +954,11 @@ export class SyncInterpreter<
                   if (path === '.') {
                     this.__contexts.pContext = pContext as any;
                   } else {
-                     merge2({
+                    merge2({
                       target: this.__contexts.pContext,
                       source: recompose({ [path]: pContext }),
                       key: path,
                     } as any);
-                    
                   }
                 });
               },
