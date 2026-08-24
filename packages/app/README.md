@@ -138,7 +138,7 @@ await service[Symbol.asyncDispose]();
 - [5. Actions](#5-actions)
   - [5.1 assign](#51-assign)
   - [5.2 swap](#52-swap)
-  - [5.3 voidAction](#53-voidaction)
+  - [5.3 action](#53-action)
   - [5.4 batch](#54-batch)
   - [5.5 filter & erase](#55-filter--erase)
   - [5.6 debounce](#56-debounce)
@@ -460,8 +460,8 @@ service.addOptions(({ assign }) => ({
 `provideOptions` returns a **new** service (immutable):
 
 ```typescript
-const enrichedService = service.provideOptions(({ voidAction }) => ({
-  actions: { log: voidAction(() => console.log('state changed')) },
+const enrichedService = service.provideOptions(({ action }) => ({
+  actions: { log: action(() => console.log('state changed')) },
 }));
 ```
 
@@ -521,7 +521,7 @@ All helpers are injected as parameters of the options helper callback:
 ```typescript
 // Create strongly-typed options for Sync or Async machines
 const options = machine.createOptions(({
-  assign, swap, voidAction, batch, filter, erase, debounce,
+  assign, swap, action, batch, filter, erase, debounce,
   sendTo, resend, forceSend,
   pauseActivity, resumeActivity, stopActivity,
   pauseTimer, resumeTimer, stopTimer,
@@ -611,18 +611,18 @@ delays: {
 }
 ```
 
-### 5.3 voidAction
+### 5.3 action
 
 Side-effect only — returns nothing, never modifies context.
 
 ```typescript
 actions: {
-  logTransition: voidAction(({ event }) => {
+  logTransition: action(({ event }) => {
     console.log('Event received:', event.type);
   }),
 
   // Scoped to an actor event
-  handleStreamError: voidAction({
+  handleStreamError: action({
     'dataStream::error': ({ payload }) => {
       Sentry.captureException(payload);
     },
@@ -755,7 +755,7 @@ actions: {
 ### 5.10 Async actions & AsyncOptions (AsyncMachine vs SyncMachine)
 
 In **`AsyncMachine`** (created via `createAsyncMachine` or `createMachine`), action
-helpers (`assign`, `voidAction`, `sendTo`) accept `async` functions and support an
+helpers (`assign`, `action`, `sendTo`) accept `async` functions and support an
 optional `AsyncOptions` configuration object as their final parameter:
 
 - `max`: Optional timeout in milliseconds. If execution exceeds `max` ms, it is
@@ -787,7 +787,7 @@ actions: {
       catch: (err) => assign('context.error', () => err.message),
 
       // Chain another action after successful user loading
-      then: voidAction(({ context }) => {
+      then: action(({ context }) => {
         console.log(`User ${context.user.name} loaded successfully!`);
       }),
     },
@@ -801,7 +801,7 @@ actions: {
     }),
     {
       max: 3000,
-      catch: (err) => voidAction(() => console.error('Dispatch failed:', err)),
+      catch: (err) => action(() => console.error('Dispatch failed:', err)),
     }
   ),
 }
@@ -1167,12 +1167,12 @@ const machine = createMachine(
     context: 'number',
     actorsMap: { emitters: { ticker: { next: 'number', error: 'never' } } },
   }),
-).provideOptions(({ assign, voidAction }) => ({
+).provideOptions(({ assign, action }) => ({
   actions: {
     accumulate: assign('context', {
       'ticker::next': ({ payload, context }) => context + payload,
     }),
-    onDone: voidAction(() => console.log('Stream complete')),
+    onDone: action(() => console.log('Stream complete')),
   },
   actors: {
     emitters: {
@@ -1207,7 +1207,7 @@ actors: {
 }
 // ...
 actions: {
-  logError: voidAction({
+  logError: action({
     'live::error': ({ payload }) => console.error('Stream error:', payload),
   }),
 }
@@ -1283,9 +1283,9 @@ const parent = createMachine(
     eventsMap: { PING: 'primitive' },
     actorsMap: { children: { worker: { PING: 'primitive' } } },
   }),
-).provideOptions(({ sendTo, voidAction }) => ({
+).provideOptions(({ sendTo, action }) => ({
   actions: {
-    notify: voidAction(() => console.log('child reached pong')),
+    notify: action(() => console.log('child reached pong')),
     forwardPing: sendTo(child)(() => ({ to: 'worker', event: 'PING' })),
   },
   actors: { children: { worker: () => interpret(child) } },
@@ -1342,9 +1342,9 @@ Tag literals are propagated into `provideOptions` callbacks as a **typed union**
 enabling narrowing inside actions:
 
 ```typescript
-.provideOptions(({ voidAction }) => ({
+.provideOptions(({ action }) => ({
   actions: {
-    renderUI: voidAction(({ tags }) => {
+    renderUI: action(({ tags }) => {
       // tags: 'idle' | 'ready' | 'busy' | 'failed' | 'done' | undefined
       if (tags === 'busy')   showSpinner();
       if (tags === 'failed') showErrorBanner();
@@ -1697,7 +1697,6 @@ Returns a typed config object (no `Machine` instance created).
 | --------------------- | ------- | -------------- | ---------------------------------- |
 | `.provideOptions(cb)` | No      | New `Machine`  | Wire implementations (immutable)   |
 | `.addOptions(cb)`     | **Yes** | Options object | Add / overwrite options at runtime |
-| `.clone()`            | No      | New `Machine`  | Deep clone the machine             |
 
 ### Utility helper exports
 

@@ -13,18 +13,14 @@ describe('Integration testing for interpret, Children', () => {
 
   const child = _child1.provideOptions(({ assign, swap }) => ({
     actions: {
-      inc: assign(
-        swap((data: number) => data + 1)({ '[0]': '[0].context' }),
-      ),
+      inc: assign(swap((data: number) => data + 1)({ '[0]': '[0].context' })),
     },
     delays: { DELAY: 100 },
   }));
 
   describe('#01 => context are same', () => {
     const parent = _parent2.provideOptions(() => ({
-      actors: {
-        children: { child: () => interpret(child, { context: 0 }) },
-      },
+      actors: { children: { child: () => interpret(child, { context: 0 }) } },
     }));
 
     const service = interpret(parent, { pContext: 0 });
@@ -48,22 +44,15 @@ describe('Integration testing for interpret, Children', () => {
 
   describe('#02 => context of child, and the type correspond to a subtype of privateContext of parent', () => {
     const parent = _parent3.provideOptions(() => ({
-      actors: {
-        children: { child: () => interpret(child, { context: 0 }) },
-      },
+      actors: { children: { child: () => interpret(child, { context: 0 }) } },
     }));
 
-    const service = interpret(parent, {
-      pContext: { iterator: 0 } as any,
-    });
+    const service = interpret(parent, { pContext: { iterator: 0 } as any });
 
     const { start, waiter, useIterator, send, dispose } = constructTests(
       service,
       ({ contexts, waiter, sender }) => ({
-        useIterator: contexts(
-          ({ pContext }) => (pContext as any)?.iterator,
-          'iterator',
-        ),
+        useIterator: contexts(({ pContext }) => pContext.iterator, 'iterator'),
         waiter: waiter(100),
         useNext: sender('NEXT'),
       }),

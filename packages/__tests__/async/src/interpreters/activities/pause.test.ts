@@ -9,10 +9,7 @@ describe('Pause activities on events', () => {
     ({ assign, pauseTimer, resumeTimer, stopTimer, debounce }) => ({
       actions: {
         inc: debounce(
-          assign(
-            'iterator',
-            ({ context }) => context?.iterator + 1000,
-          ),
+          assign('iterator', ({ context }) => context?.iterator + 1000),
           { ms: DELAY * 10, id: 'inc' },
         ),
 
@@ -24,18 +21,12 @@ describe('Pause activities on events', () => {
     }),
   );
 
-  const service = interpret(machine, {
-    exact: true,
-    context: { iterator: 0 },
-  });
+  const service = interpret(machine, { exact: true, context: { iterator: 0 } });
 
   const { send, waiter, useIterator, start, dispose } = constructTests(
     service,
     ({ contexts, waiter }) => ({
-      useIterator: contexts(
-        ({ context }) => context?.iterator,
-        'iterator',
-      ),
+      useIterator: contexts(({ context }) => context.iterator, 'iterator'),
       waiter: waiter(DELAY),
     }),
   );

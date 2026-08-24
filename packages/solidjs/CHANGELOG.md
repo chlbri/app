@@ -5,6 +5,47 @@
 <details>
 <summary>
 
+## **[2.5.0] - 24/08/2026** => _12:35_
+
+</summary>
+
+### Breaking Changes
+
+- **Rename Hooks to Primitives**: Renamed SolidJS hooks to idiomatic SolidJS
+  primitives:
+  - `useService` → `createService`
+  - `useState` → `createState`
+  - `useCan` → `createCan`
+  - `useIsInside` → `createIsInside`
+  - `UseServiceOptions` → `CreateStateOptions` / `CreateServiceOptions`
+
+### Features
+
+- **`stateEquals` Option**: Add `stateEquals` option with `Dequal_F` typing to
+  configure pre-selector deep state equality comparison.
+- **`createHooks` Alias**: Maintain `createHooks` alias pointing to `createService`.
+
+### Refactor
+
+- **State Subscriptions**: Use `service.subscribe({ equals: stateEquals })` with
+  direct listener delegation and `onCleanup(sub.unsubscribe)`.
+- **`identity` & `deepEqual`**: Utilize centralized utilities from
+  `@bemedev/app/utils`.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.5.0 to align with `@bemedev/app`
+  2.5.0 release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.0.0] - 21/08/2026** => _17:25_
 
 </summary>

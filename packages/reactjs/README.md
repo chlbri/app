@@ -81,10 +81,10 @@ state location checks.
 Creates a React state hook that updates whenever the interpreter transitions, using
 deep comparison to prevent unnecessary renders.
 
-| Parameter | Type                | Description                                                                         |
-| --------- | ------------------- | ----------------------------------------------------------------------------------- |
-| `service` | `Interpreter`       | The `@bemedev/app` interpreter service instance.                                    |
-| `options` | `UseServiceOptions` | Optional object containing `selector` and/or custom `equality` comparison function. |
+| Parameter | Type              | Description                                                                                                                |
+| --------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `service` | `Interpreter`     | The `@bemedev/app` interpreter service instance.                                                                           |
+| `options` | `UseStateOptions` | Optional object containing `selector`, `equals`, and/or `stateEquals` custom `equality` comparator functions (`Dequal_F`). |
 
 Returns the selected state or slice.
 

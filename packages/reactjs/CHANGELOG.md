@@ -5,6 +5,39 @@
 <details>
 <summary>
 
+## **[2.5.0] - 24/08/2026** => _12:35_
+
+</summary>
+
+### Features
+
+- **`stateEquals` Option**: Add `stateEquals` option to `UseStateOptions` with
+  `Dequal_F` typing for granular pre-selector state equality checks.
+
+### Refactor
+
+- **`UseStateOptions`**: Rename `UseServiceOptions` to `UseStateOptions` and align
+  equality comparator typing with `Dequal_F`.
+- **Subscription Optimization**: Simplify `useState` subscription listener by
+  delegating equality comparisons directly to
+  `service.subscribe({ equals: stateEquals })`.
+
+### Dependencies
+
+- **Dependencies**: Update `@testing-library/user-event` to 14.6.6 and
+  `@types/react-dom` to 19.2.5.
+- **Workspace Dependencies**: Bump version to 2.5.0 to align with `@bemedev/app`
+  2.5.0 release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.0.0] - 21/08/2026** => _17:25_
 
 </summary>

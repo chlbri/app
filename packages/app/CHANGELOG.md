@@ -10,6 +10,56 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.5.0] - 24/08/2026** => _12:32_
+
+</summary>
+
+### Breaking Changes
+
+- **`voidAction` to `action`**: Renamed `voidAction` option helper to `action` across
+  synchronous and asynchronous machine configurations.
+- **Unified Contexts**: Consolidated public and private context management into a
+  unified `Contexts` interface across machines and interpreters.
+- **Direct References**: Replaced `clone-deep` with direct object references and
+  removed redundant state cloning routines.
+
+### Features
+
+- **Event Builders**: Introduce `always` and `after` event builder utilities to
+  construct delimited event strings.
+- **Event-Keyed `reduceFnMap`**: Support string event matching and standardized
+  payload transformations across `reduceFnMap`, `reduceFnMapFilterArray`, and
+  `reduceFnMapFilterObject`.
+- **`byKey2` Utility**: Introduce `byKey2` helper for deep object key extraction and
+  transformation.
+- **`Dequal_F`**: Add `Dequal_F` type definition for customizable deep equality
+  comparator functions.
+- **`erase` Helper**: Extend `erase` helper support in machine action definitions.
+
+### Docs
+
+- **`JSDoc`**: Add comprehensive JSDoc annotations and `{@linkcode}` references
+  across builder functions and primitive types.
+
+### Refactor
+
+- **Transition Keys Generics**: Streamlined generic parameter resolution for machine
+  transition keys and state targets.
+- **Remove Dependencies**: Removed `clone-deep` and `@types/clone-deep` dependencies.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.5.0 across all workspace packages.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.0.0] - 21/08/2026** => _17:25_
 
 </summary>
