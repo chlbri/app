@@ -36,9 +36,9 @@ describe('longRuns - no timeout limit for async actions and after', () => {
   });
 
   describe('#02 => without __longRuns: async action times out at DEFAULT_MAX_TIME_PROMISE', () => {
-    const machine = _machine3.provideOptions(({ voidAction }) => ({
+    const machine = _machine3.provideOptions(({ action }) => ({
       actions: {
-        slowAction: voidAction(
+        slowAction: action(
           () =>
             new Promise<void>(resolve => setTimeout(resolve, BEYOND_MAX)),
           { catch: () => () => ({}) },
@@ -64,9 +64,9 @@ describe('longRuns - no timeout limit for async actions and after', () => {
   describe('#03 => with __longRuns: true: async action completes beyond DEFAULT_MAX_TIME_PROMISE', () => {
     const done = vi.fn();
 
-    const machine = _machine4.provideOptions(({ voidAction }) => ({
+    const machine = _machine4.provideOptions(({ action }) => ({
       actions: {
-        slowAction: voidAction(
+        slowAction: action(
           () =>
             new Promise<void>(resolve =>
               setTimeout(() => {
@@ -78,6 +78,7 @@ describe('longRuns - no timeout limit for async actions and after', () => {
         ),
       },
     }));
+
 
     const service = interpret(machine, { context: 0 });
 

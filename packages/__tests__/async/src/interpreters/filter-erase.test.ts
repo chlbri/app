@@ -27,10 +27,8 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, filter }) => ({
           actions: {
-            addNumbers: assign('context.numbers', {
-              ADD: ({ payload }) => payload.values,
-            }),
-            filterEven: filter('context.numbers', num => num % 2 === 0),
+            addNumbers: assign('numbers', { ADD: ({ payload }) => payload.values }),
+            filterEven: filter('numbers', num => num % 2 === 0),
           },
         }));
       });
@@ -71,10 +69,10 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, filter }) => ({
           actions: {
-            addPeople: assign('context.people', {
+            addPeople: assign('people', {
               ADD_PEOPLE: ({ payload }) => payload.people,
             }),
-            filterActive: filter('context.people', ({ active }) => active),
+            filterActive: filter('people', ({ active }) => active),
           },
         }));
       });
@@ -126,12 +124,12 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, filter }) => ({
           actions: {
-            setScores: assign('context.scores', {
+            setScores: assign('scores', {
               SET_SCORES: ({ payload }) => {
                 return payload.scores;
               },
             }),
-            filterHighScores: filter('context.scores', score => score >= 80),
+            filterHighScores: filter('scores', score => score >= 80),
           },
         }));
       });
@@ -174,10 +172,8 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, filter }) => ({
           actions: {
-            addNumbers: assign('context.numbers', {
-              ADD: ({ payload }) => payload.values,
-            }),
-            filterEven: filter('context.numbers', {
+            addNumbers: assign('numbers', { ADD: ({ payload }) => payload.values }),
+            filterEven: filter('numbers', {
               FILTER: (num, index, state) => {
                 expect(state).toHaveProperty('context');
                 return num % 2 === 0;
@@ -223,10 +219,10 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, filter }) => ({
           actions: {
-            setScores: assign('context.scores', {
+            setScores: assign('scores', {
               SET_SCORES: ({ payload }) => payload.scores,
             }),
-            filterHighScores: filter('context.scores', {
+            filterHighScores: filter('scores', {
               FILTER_HIGH_SCORES: (score, state) => {
                 expect(state).toHaveProperty('context');
                 return score >= 80;
@@ -277,10 +273,8 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, erase }) => ({
           actions: {
-            setName: assign('context.name', {
-              SET_NAME: ({ payload }) => payload.name,
-            }),
-            clearName: erase('context.name'),
+            setName: assign('name', { SET_NAME: ({ payload }) => payload.name }),
+            clearName: erase('name'),
           },
         }));
       });
@@ -315,13 +309,13 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, erase }) => ({
           actions: {
-            setUser: assign('context.user', {
+            setUser: assign('user', {
               SET_USER: ({ payload }) => ({
                 name: payload.name,
                 email: payload.email,
               }),
             }),
-            clearEmail: erase('context.user.email'),
+            clearEmail: erase('user.email'),
           },
         }));
       });
@@ -368,12 +362,8 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, erase, batch }) => ({
           actions: {
-            setData: assign('context', { SET_DATA: ({ payload }) => payload }),
-            clearAll: batch(
-              erase('context.name'),
-              erase('context.email'),
-              erase('context.age'),
-            ),
+            setData: assign({ SET_DATA: ({ payload }) => payload }),
+            clearAll: batch(erase('name'), erase('email'), erase('age')),
           },
         }));
       });
@@ -407,8 +397,8 @@ describe('Filter and Erase actions', () => {
     describe('#04 => Erase whole context', () => {
       const machine = _machine7.provideOptions(({ assign, erase }) => ({
         actions: {
-          clearAll: erase('context'),
-          setData: assign('context', { SET_DATA: ({ payload }) => payload }),
+          clearAll: erase(),
+          setData: assign({ SET_DATA: ({ payload }) => payload }),
         },
       }));
 
@@ -444,7 +434,7 @@ describe('Filter and Erase actions', () => {
       const machine = _machine6;
 
       const { actions } = machine.createOptions(({ erase }) => ({
-        actions: { clearAll: erase('context.name', 'context.email', 'context.age') },
+        actions: { clearAll: erase('name', 'email', 'age') },
       }));
 
       const state = {
@@ -458,9 +448,9 @@ describe('Filter and Erase actions', () => {
       test('#02 => returns mergers for all specified keys', () => {
         expect(result).toEqual({
           mergers: [
-            { key: 'context.name', source: { context: { name: undefined } } },
-            { key: 'context.email', source: { context: { email: undefined } } },
-            { key: 'context.age', source: { context: { age: undefined } } },
+            { key: 'name', source: { name: undefined } },
+            { key: 'email', source: { email: undefined } },
+            { key: 'age', source: { age: undefined } },
           ],
         });
       });
@@ -482,8 +472,8 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, erase }) => ({
           actions: {
-            setData: assign('context', { SET_DATA: ({ payload }) => payload }),
-            clearAll: erase('context.name', 'context.email', 'context.age'),
+            setData: assign({ SET_DATA: ({ payload }) => payload }),
+            clearAll: erase('name', 'email', 'age'),
           },
         }));
       });

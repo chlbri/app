@@ -247,11 +247,11 @@ export type {
   AsyncSendAction_F,
   AsyncSimpleMachineOptions,
   AsyncTimeAction_F,
-  AsyncValueCheckerGuard_F,
-  AsyncVoidAction_F,
+  AsyncAction_F,
 } from '../asyncMachine';
 
 export type {
+  SyncAction_F,
   SyncAddOption,
   SyncAddOptionsParam_F,
   SyncAddOptions_F,
@@ -270,7 +270,6 @@ export type {
   SyncSendAction_F,
   SyncTimeAction_F,
   SyncValueCheckerGuard_F,
-  SyncVoidAction_F,
 } from '#sync/machine';
 
 export type {

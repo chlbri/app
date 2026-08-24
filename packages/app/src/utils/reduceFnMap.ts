@@ -51,15 +51,24 @@ export const reduceFnMap: ReduceFnMap_F = (fn, ...events) => {
   if (check1) return fn;
 
   return ({ event, ...rest }) => {
+    const _else = (fn as any)?.else ?? nothing;
+
     const check5 = typeof event === 'string';
-    const _else = fn.else ?? nothing;
-    if (check5) return _any(_else({ ...rest, event }));
+    if (check5) {
+      for (const key of events) {
+        if (event === key) {
+          const func = _any(fn)?.[key];
+          if (func) return func({ ...rest, payload: {} });
+        }
+      }
+      return _any(_else({ ...rest, event }));
+    }
 
     const { payload, type } = event;
 
     for (const key of events) {
       const check2 = type === key;
-      const func = _any(fn)[key];
+      const func = _any(fn)?.[key];
       const check3 = !!func;
 
       const check4 = check2 && check3;
@@ -134,13 +143,15 @@ export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (fn, ...events) 
 
   return (item, index, state) => {
     const { event, ...rest } = state;
+    const _else = (fn as any)?.else ?? nothing;
+    if (!event) return _any(_else(item, index, state));
+
     const check5 = typeof event === 'string';
-    const _else = (fn as any).else ?? nothing;
 
     if (check5) {
       for (const key of events) {
         if (event === key) {
-          const func = _any(fn)[key];
+          const func = _any(fn)?.[key];
           if (func) return func(item, index, { ...rest, payload: {} });
         }
       }
@@ -151,7 +162,7 @@ export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (fn, ...events) 
 
     for (const key of events) {
       const check2 = type === key;
-      const func = _any(fn)[key];
+      const func = _any(fn)?.[key];
       const check3 = !!func;
 
       const check4 = check2 && check3;
@@ -206,13 +217,15 @@ export const reduceFnMapFilterObject: ReduceFnMapFilterObject_F = (
 
   return (item, state) => {
     const { event, ...rest } = state;
+    const _else = (fn as any)?.else ?? nothing;
+    if (!event) return _any(_else(item, state));
+
     const check5 = typeof event === 'string';
-    const _else = (fn as any).else ?? nothing;
 
     if (check5) {
       for (const key of events) {
         if (event === key) {
-          const func = _any(fn)[key];
+          const func = _any(fn)?.[key];
           if (func) return func(item, { ...rest, payload: {} });
         }
       }
@@ -223,7 +236,7 @@ export const reduceFnMapFilterObject: ReduceFnMapFilterObject_F = (
 
     for (const key of events) {
       const check2 = type === key;
-      const func = _any(fn)[key];
+      const func = _any(fn)?.[key];
       const check3 = !!func;
 
       const check4 = check2 && check3;

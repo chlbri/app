@@ -13,7 +13,6 @@ describe('Machine batch action', () => {
     .provideOptions(({ assign }) => ({
       actions: {
         inc1: assign(
-          'context',
           swap(fnBis).constraint<[TT]>()({ '[0]': '[0].context' }),
         ),
       },
@@ -21,27 +20,28 @@ describe('Machine batch action', () => {
     .provideOptions(({ batch }, { _legacy }) => ({
       actions: { inc2: batch(_legacy.actions.inc1, _legacy.actions.inc1) },
     }))
-    .provideOptions(({ batch, assign, voidAction }, { _legacy }) => ({
+    .provideOptions(({ batch, assign, action }, { _legacy }) => ({
       actions: {
         inc2: batch(
           _legacy.actions.inc2,
-          voidAction(() => console.warn('Increment by 2')),
+          action(() => console.warn('Increment by 2')),
         ),
 
         inc5: batch(
           _legacy.actions.inc2,
           _legacy.actions.inc2,
 
-          assign('context', async ({ context }) => context + 3, {
-            catch: () => assign('context', () => 4),
+          assign(async ({ context }) => context + 3, {
+            catch: () => assign(() => 4),
           }),
 
-          voidAction(() =>
+          action(() =>
             console.warn('Tricky, last action increment by 3'),
           ),
         ),
       },
     }));
+
 
   const service = interpret(machine, { context: 0 });
 

@@ -319,9 +319,10 @@ export abstract class CommonInterpreter<
    * @returns `true` if the value is active within the state value; otherwise, `false`.
    */
   protected __isInsideValue2 = (sv: StateValue, value: string) => {
-    if (value === DEFAULT_DELIMITER) {
+    if (value === '' || value === DEFAULT_DELIMITER) {
       return true;
     }
+
     const values = decomposeSV(sv);
     const entry = value.substring(1);
     const state = replaceAll({ entry, match: DEFAULT_DELIMITER, replacement: '.' });
@@ -516,6 +517,7 @@ export abstract class CommonInterpreter<
   ) => {
     this.__machine = machine.renew;
     this.__config = this.__machine.initialConfig;
+    this.__value = nodeToValue(this.__machine.initialConfig);
     this.__mode = mode;
     this.__exact = exact;
 
@@ -991,9 +993,8 @@ export abstract class CommonInterpreter<
     this.__startPausables();
     this.__flush();
     this.__startInitialEntries();
-    this.__startChildren();
-    this.__throwing();
     this._next();
+    this.__startChildren();
   };
 
   /**
@@ -1545,11 +1546,11 @@ export abstract class CommonInterpreter<
     this.__pauseAllActivities();
     this.__performActivities();
     this.__stopPausables(filter);
-    this.__pausePausables(({ from }) => this.__isInsideValue(from));
-    this.__pauseChildren(({ from }) => this.__isInsideValue(from));
+    this.__pausePausables(({ from }) => !this.__isInsideValue(from));
+    this.__pauseChildren(({ from }) => !this.__isInsideValue(from));
     this.__stopChildren(filter);
     this.__startChildren();
-    this.__resumeChildren(({ from }) => !this.__isInsideValue(from));
+    this.__resumeChildren(({ from }) => this.__isInsideValue(from));
     this.__startPausables();
     this.__resumePausables(({ from }) => this.__isInsideValue(from));
 
@@ -1684,19 +1685,16 @@ export abstract class CommonInterpreter<
    *
    * @returns Scheduled context merge result.
    */
-  protected __mergeContexts: DirectMerge_F<Pc, Tc> = result => {
+  protected __mergeContexts: DirectMerge_F<Tc> = result => {
     const cb = () => {
       const mergers = result?.mergers;
       /* v8 ignore else -- @preserve */
       if (mergers && mergers.length > 0) {
-        const state = {
-          pContext: this.__contexts.pContext,
-          context: structuredClone(this.__contexts.context),
-        };
-
-        const contexts = merge2.multiple(state, ...(mergers as any));
-        /* v8 ignore else -- @preserve */
-        if (contexts) this.__contexts = contexts;
+        const updated = merge2.multiple(
+          structuredClone(this.__contexts.context),
+          ...(mergers as any),
+        );
+        this.__contexts.context = updated as any;
       }
 
       return this.__performStates({ context: this.__contexts.context });
@@ -1710,10 +1708,13 @@ export abstract class CommonInterpreter<
    *
    * @param scheduled - Optional scheduled action configuration of type {@linkcode ScheduledData}.
    */
-  protected __performScheduledAction = (scheduled?: ScheduledData<Pc, Tc>) => {
+  protected __performScheduledAction = (scheduled?: ScheduledData<Tc>) => {
     if (!scheduled) return;
     const { data, ms: timeout, id } = scheduled;
-    const callback = () => this.__mergeContexts({ mergers: data });
+    const callback = () => {
+      this.__mergeContexts({ mergers: data });
+      this.__flush();
+    };
     this.__timeoutActions.filter(f => f.id === id).forEach(this.__dispose);
     this.__timeoutActions = this.__timeoutActions.filter(f => f.id !== id);
     const timer = createTimeout({ callback, timeout, id });

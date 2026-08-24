@@ -5,14 +5,17 @@ import _raw_machine from './index.machine';
 describe('Coverage of interpretr #2', () => {
   describe('#01 => Cov select and pSelect for primitive units', () => {
     const machine = _raw_machine.provideOptions(
-      ({ assign, voidAction }) => ({
+      ({ assign, action }) => ({
         actions: {
-          inc: assign('context', ({ context }) => context + 1),
-          incPrivate: assign('pContext', ({ pContext }) => pContext + 1),
-          neverRun: voidAction({}),
+          inc: assign(({ context }) => context + 1),
+          incPrivate: action(state => {
+            state.pContext = (state.pContext ?? 0) + 1;
+          }),
+          neverRun: action({}),
         },
       }),
     );
+
 
     const service = interpret(machine, {
       exact: true,

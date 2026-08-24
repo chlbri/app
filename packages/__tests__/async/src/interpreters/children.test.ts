@@ -11,8 +11,12 @@ describe('Integration testing for interpret, Children', () => {
     vi.useFakeTimers();
   });
 
-  const child = _child1.provideOptions(({ assign }) => ({
-    actions: { inc: assign('context', ({ context }) => context + 1) },
+  const child = _child1.provideOptions(({ assign, swap }) => ({
+    actions: {
+      inc: assign(
+        swap((data: number) => data + 1)({ '[0]': '[0].context' }),
+      ),
+    },
     delays: { DELAY: 100 },
   }));
 
@@ -23,7 +27,7 @@ describe('Integration testing for interpret, Children', () => {
       },
     }));
 
-    const service = interpret(parent, { pContext: 0 as any });
+    const service = interpret(parent, { pContext: 0 });
 
     const { start, waiter, useIterator, dispose } = constructTests(
       service,
@@ -79,28 +83,27 @@ describe('Integration testing for interpret, Children', () => {
   describe('#03 => Cover child->on', () => {
     const notify = vi.fn();
     const child = _child4;
-    const childService = interpret(child);
 
-    const parent = _parent5.provideOptions(({ sendTo, voidAction }) => ({
+    const parent = _parent5.provideOptions(({ sendTo, action }) => ({
       actions: {
-        notify: voidAction(() => {
+        notify: action(() => {
           notify();
         }),
         sendChildNext: sendTo(child)(() => {
           return { to: 'child', event: 'NEXT' };
         }),
       },
-      actors: { children: { child: () => childService } },
+      actors: { children: { child: () => interpret(child) } },
     }));
 
     const service = interpret(parent);
 
     let calls = 0;
-    const { send, useFailNotify, start, waiter } = constructTests(
+    const { useNext, useNotify, start } = constructTests(
       service,
-      ({ getIndex, tupleOf, waiter }) => {
+      ({ getIndex, tupleOf, sender }) => {
         return {
-          useFailNotify: (fails = false) => {
+          useNotify: (fails = false) => {
             const invite = `#${getIndex()} => Notify is used => ${fails ? '(fails)' : ''}`;
 
             return tupleOf(invite, () => {
@@ -108,16 +111,15 @@ describe('Integration testing for interpret, Children', () => {
               expect(notify).toBeCalledTimes(calls);
             });
           },
-          waiter: waiter(10),
+          useNext: sender('NEXT'),
         };
       },
     );
 
     test(...start());
-    test(...useFailNotify(true));
-    test(...send('NEXT'));
-    test(...waiter(1000));
-    test(...useFailNotify());
+    test(...useNotify(true));
+    test(...useNext());
+    test(...useNotify());
   });
 });
 

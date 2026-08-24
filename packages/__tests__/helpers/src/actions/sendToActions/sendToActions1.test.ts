@@ -10,20 +10,21 @@ describe('Performs send to itself actions', () => {
     ({ assign, forceSend, resend }) => ({
       actions: {
         inc: assign(
-          'context.iterator',
+          'iterator',
           ({ context }) => notU(context?.iterator) + 1,
         ),
 
-        init: assign('context', () => ({ iterator: 0 })),
+        init: assign(() => ({ iterator: 0 })),
 
         dec: assign(
-          'context.iterator',
+          'iterator',
           ({ context }) => notU(context?.iterator) - 1,
         ),
 
         forceSendInc: forceSend('INCREMENT'),
         sendDec: resend('DECREMENT'),
       },
+
     }),
   );
 

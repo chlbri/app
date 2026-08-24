@@ -60,7 +60,7 @@ export type SyncEraseAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = CommonEraseAction_F<Pc, Tc, SyncAction2<E, Pc, Tc, T>>;
+> = CommonEraseAction_F<Tc, SyncAction2<E, Pc, Tc, T>>;
 
 /**
  * Function type signature for creating a synchronous property definition guard helper.
@@ -117,14 +117,18 @@ export type SyncAssignAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  D = DecomposeC<Pc, Tc>,
-> = <
-  const K extends SingleOrArrayL2<keyof D>,
-  const F extends TraversableTupleSync<D, K> = TraversableTupleSync<D, K>,
->(
-  keys: K,
-  fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
-) => SyncAction2<E, Pc, Tc, T>;
+  D = DecomposeC<Tc>,
+> = {
+  <
+    const K extends SingleOrArrayL2<keyof D>,
+    const F extends TraversableTupleSync<D, K> = TraversableTupleSync<D, K>,
+  >(
+    keys: K,
+    fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
+  ): SyncAction2<E, Pc, Tc, T>;
+
+  (fn: FnMap<E, Pc, Tc, T, Tc>): SyncAction2<E, Pc, Tc, T>;
+};
 
 /**
  * Function type signature for batching multiple synchronous actions into a single action.
@@ -144,14 +148,14 @@ export type SyncBatchAction_F<
 ) => SyncAction2<E, Pc, Tc, T>;
 
 /**
- * Function type signature for creating a void synchronous action helper.
+ * Function type signature for creating a synchronous action helper.
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
  * @template `Tc` - Type {@linkcode PrimitiveObject} context.
  * @template `T` - State tag string type.
  */
-export type SyncVoidAction_F<
+export type SyncAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -251,7 +255,7 @@ export type SyncAllActions_F<
   T extends string = string,
 > =
   | SyncAssignAction_F<E, Pc, Tc, T>
-  | SyncVoidAction_F<E, Pc, Tc, T>
+  | SyncAction_F<E, Pc, Tc, T>
   | SyncSendAction_F<E, Pc, Tc, T>
   | SyncResendAction_F<E, Pc, Tc, T>
   | SyncDebounceAction_F<E, Pc, Tc, T>
@@ -351,8 +355,9 @@ export type SyncAddOption<
   batch: SyncBatchAction_F<E, Pc, Tc, T>;
   filter: SyncFilterAction_F<E, Pc, Tc, T>;
   erase: SyncEraseAction_F<E, Pc, Tc, T>;
-  voidAction: SyncVoidAction_F<E, Pc, Tc, T>;
+  action: SyncAction_F<E, Pc, Tc, T>;
   sendTo: SyncSendAction_F<E, Pc, Tc, T>;
+
   debounce: SyncDebounceAction_F<E, Pc, Tc, T>;
   resend: SyncResendAction_F<E, Pc, Tc, T>;
   /**

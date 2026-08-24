@@ -21,7 +21,7 @@ describe.concurrent('Legacy Options Access', () => {
     // First call to addOptions - define increment
     machine.addOptions(({ assign }) => ({
       actions: {
-        increment: assign('context', ({ context }) => context + 1),
+        increment: assign(({ context }) => context + 1),
       },
     }));
 
@@ -51,7 +51,7 @@ describe.concurrent('Legacy Options Access', () => {
     // First call to addOptions - define increment
     machine.addOptions(({ assign }) => ({
       actions: {
-        increment: assign('context', ({ context }) => context + 1),
+        increment: assign(({ context }) => context + 1),
       },
     }));
 
@@ -102,7 +102,7 @@ describe.concurrent('Legacy Options Access', () => {
 
   test('#04 => should work with provideOptions', async () => {
     const machine = _machine4.provideOptions(({ assign }) => ({
-      actions: { add: assign('context', ({ context }) => context + 2) },
+      actions: { add: assign(({ context }) => context + 2) },
     }));
 
     // provideOptions on the result should also have access to _legacy
@@ -112,7 +112,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       return {
         actions: {
-          multiply: assign('context', ({ context }) => context * 2),
+          multiply: assign(({ context }) => context * 2),
         },
       };
     });
@@ -133,7 +133,7 @@ describe.concurrent('Legacy Options Access', () => {
     const machine = _machine5;
 
     machine.addOptions(({ assign }) => ({
-      actions: { test: assign('context', ({ context }) => context + 1) },
+      actions: { test: assign(({ context }) => context + 1) },
     }));
 
     machine.addOptions((_, { _legacy }) => {
@@ -151,7 +151,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // First call
     machine.addOptions(({ assign }) => ({
-      actions: { first: assign('context', ({ context }) => context + 1) },
+      actions: { first: assign(({ context }) => context + 1) },
     }));
 
     // Second call - should see first
@@ -162,7 +162,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       return {
         actions: {
-          second: assign('context', ({ context }) => context + 10),
+          second: assign(({ context }) => context + 10),
         },
       };
     });
@@ -176,7 +176,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       return {
         actions: {
-          third: assign('context', ({ context }) => context + 100),
+          third: assign(({ context }) => context + 100),
         },
       };
     });
@@ -203,7 +203,7 @@ describe.concurrent('Legacy Options Access', () => {
       // First call to service.addOptions - define increment
       service.addOptions(({ assign }) => ({
         actions: {
-          increment: assign('context', ({ context }) => context + 1),
+          increment: assign(({ context }) => context + 1),
         },
       }));
 
@@ -234,7 +234,7 @@ describe.concurrent('Legacy Options Access', () => {
       // First call to service.addOptions - define increment
       service.addOptions(({ assign }) => ({
         actions: {
-          increment: assign('context', ({ context }) => context + 1),
+          increment: assign(({ context }) => context + 1),
         },
       }));
 
@@ -301,7 +301,7 @@ describe.concurrent('Legacy Options Access', () => {
       // First call
       service.addOptions(({ assign }) => ({
         actions: {
-          first: assign('context', ({ context }) => context + 5),
+          first: assign(({ context }) => context + 5),
         },
       }));
 
@@ -313,7 +313,7 @@ describe.concurrent('Legacy Options Access', () => {
 
         return {
           actions: {
-            second: assign('context', ({ context }) => context + 20),
+            second: assign(({ context }) => context + 20),
           },
         };
       });
@@ -336,7 +336,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // First provideOptions - define add
       const service2 = service1.provideOptions(({ assign }) => ({
-        actions: { add: assign('context', ({ context }) => context + 3) },
+        actions: { add: assign(({ context }) => context + 3) },
       }));
 
       // Second provideOptions - access previous action via _legacy
@@ -347,7 +347,7 @@ describe.concurrent('Legacy Options Access', () => {
 
           return {
             actions: {
-              multiply: assign('context', ({ context }) => context * 2),
+              multiply: assign(({ context }) => context * 2),
             },
           };
         },
@@ -369,7 +369,7 @@ describe.concurrent('Legacy Options Access', () => {
       const service1 = interpret(machine, { context: 0 });
       const service2 = service1.provideOptions(({ assign }) => ({
         actions: {
-          increment: assign('context', ({ context }) => context + 1),
+          increment: assign(({ context }) => context + 1),
         },
       }));
 
@@ -393,7 +393,7 @@ describe.concurrent('Legacy Options Access', () => {
       const service1 = interpret(machine, { context: 0 });
 
       const service2 = service1.provideOptions(({ assign }) => ({
-        actions: { op1: assign('context', ({ context }) => context + 1) },
+        actions: { op1: assign(({ context }) => context + 1) },
       }));
 
       const service3 = service2.provideOptions(
@@ -404,7 +404,7 @@ describe.concurrent('Legacy Options Access', () => {
 
           return {
             actions: {
-              op2: assign('context', ({ context }) => context + 10),
+              op2: assign(({ context }) => context + 10),
             },
           };
         },
@@ -419,7 +419,7 @@ describe.concurrent('Legacy Options Access', () => {
 
           return {
             actions: {
-              op3: assign('context', ({ context }) => context + 100),
+              op3: assign(({ context }) => context + 100),
             },
           };
         },
@@ -444,7 +444,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       const service2 = service1.provideOptions(({ assign }) => ({
         actions: {
-          increment: assign('context', ({ context }) => context + 5),
+          increment: assign(({ context }) => context + 5),
         },
       }));
 

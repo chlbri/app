@@ -21,7 +21,7 @@ describe('TESTS', () => {
   ).provideOptions(({ assign }) => ({
     actions: {
       inc: assign(
-        'context.count',
+        'count',
         ({ context }) => (context?.count ?? 0) + 1,
       ),
     },
@@ -102,7 +102,9 @@ describe('TESTS', () => {
     test('#11 => context count is unchanged when paused', () =>
       expect(service.state.context.count).toBe(1));
 
+
     test('#12 => spy call count is unchanged when paused', () =>
       expect(spy).toHaveBeenCalledTimes(callsLength));
   });
+
 });

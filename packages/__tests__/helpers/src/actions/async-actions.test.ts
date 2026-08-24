@@ -30,7 +30,7 @@ describe('Async action helpers', () => {
     const machine = _machine1.provideOptions(({ assign, swap }) => ({
       actions: {
         loadUser: assign(
-          'context.name',
+          'name',
           swap(async () => {
             await sleep(TINY_DELAY);
             console.warn('ddd');
@@ -38,14 +38,6 @@ describe('Async action helpers', () => {
           })({}),
           { catch: emptyActionFn },
         ),
-        // loadUser: assign(
-        //   'context.name',
-        //   async () => {
-        //     await sleep(TINY_DELAY);
-        //     return 'Alice';
-        //   },
-        //   { catch: emptyActionFn },
-        // ),
       },
     }));
 
@@ -77,7 +69,7 @@ describe('Async action helpers', () => {
     const machine = _machine2.provideOptions(({ assign }) => ({
       actions: {
         loadUser: assign(
-          'context.name',
+          'name',
           async () => {
             await sleep(TINY_DELAY);
             return 'Bob';
@@ -109,7 +101,7 @@ describe('Async action helpers', () => {
     const machine = _machine3.provideOptions(({ assign }) => ({
       actions: {
         loadUser: assign(
-          'context.name',
+          'name',
           async () => {
             await sleep(TINY_DELAY);
             throw new Error('network failure');
@@ -135,12 +127,12 @@ describe('Async action helpers', () => {
     test(...useName(''));
   });
 
-  describe('#04 => voidAction — async fn, no options', () => {
+  describe('#04 => action — async fn, no options', () => {
     const sideEffect = vi.fn();
 
-    const machine = _machine4.provideOptions(({ voidAction }) => ({
+    const machine = _machine4.provideOptions(({ action }) => ({
       actions: {
-        ping: voidAction(
+        ping: action(
           async () => {
             await sleep(TINY_DELAY);
             sideEffect('done');
@@ -169,43 +161,39 @@ describe('Async action helpers', () => {
     test(...checkEffect('done'));
   });
 
-  describe('#05 => voidAction — async fn + { error } handler', () => {
+  describe('#05 => action — async fn + { error } handler', () => {
     const errorHandler = vi.fn();
 
-    const machine = _machine5.provideOptions(({ voidAction }) => ({
+    const machine = _machine5.provideOptions(({ action }) => ({
       actions: {
-        ping: voidAction(
+        ping: action(
           async () => {
             await sleep(TINY_DELAY);
             throw new Error('boom');
           },
-          { catch: _err => voidAction(() => errorHandler(_err)) },
+          { catch: _err => action(() => errorHandler(_err)) },
         ),
       },
     }));
 
     const service = interpret(machine, { context: { errored: false } });
 
-    const { start, send, waiter, checkErrorTimes, checkEffect } =
-      constructTests(service, ({ waiter, getIndex, tupleOf }) => ({
+    const { start, send, waiter, checkErrorTimes, checkEffect } = constructTests(
+      service,
+      ({ waiter, getIndex, tupleOf }) => ({
         waiter: waiter(TINY_DELAY + 50),
         checkErrorTimes: (times: number) =>
-          tupleOf(
-            `#${getIndex()} => error handler called ${times} times`,
-            () => {
-              expect(errorHandler).toHaveBeenCalledTimes(times);
-            },
-          ),
+          tupleOf(`#${getIndex()} => error handler called ${times} times`, () => {
+            expect(errorHandler).toHaveBeenCalledTimes(times);
+          }),
         checkEffect: (message: string) =>
-          tupleOf(
-            `#${getIndex()} => error handled called with "${message}"`,
-            () => {
-              expect(errorHandler).toHaveBeenCalledWith(
-                expect.objectContaining({ message }),
-              );
-            },
-          ),
-      }));
+          tupleOf(`#${getIndex()} => error handled called with "${message}"`, () => {
+            expect(errorHandler).toHaveBeenCalledWith(
+              expect.objectContaining({ message }),
+            );
+          }),
+      }),
+    );
 
     test(...start());
     test(...send('PING'));
@@ -218,22 +206,20 @@ describe('Async action helpers', () => {
     // sendTo is a curried helper — sendTo(machine?)(fn)
     // We test only that the async fn resolves without error and the
     // sentEvent reaches the interpreter (checked via warnings or lack thereof).
-    const machine = _machine7.provideOptions(({ voidAction }) => ({
+    const machine = _machine7.provideOptions(({ action }) => ({
       actions: {
-        // sendTo without a target machine — we use voidAction to prove async runs
-        dispatchEvent: voidAction(
+        // sendTo without a target machine — we use action to prove async runs
+        dispatchEvent: action(
           async () => {
             await sleep(TINY_DELAY);
-            // side-effect only: proves async voidAction still works here
+            // side-effect only: proves async action still works here
           },
           { catch: emptyActionFn },
         ),
       },
     }));
 
-    const service = interpret(machine, {
-      context: { dispatched: false },
-    } as any);
+    const service = interpret(machine, { context: { dispatched: false } } as any);
 
     const { start, send, waiter, checkWarnings } = constructTests(
       service,
@@ -257,7 +243,7 @@ describe('Async action helpers', () => {
     const machine = _machine1.provideOptions(({ assign }) => ({
       actions: {
         loadUser: assign(
-          'context.name',
+          'name',
           async () => {
             await sleep(TINY_DELAY);
             throw new Error('Load failed');
@@ -269,24 +255,17 @@ describe('Async action helpers', () => {
 
     const service = interpret(machine, { context: { name: '' } });
 
-    const { start, send, useName, waiter, stop, callError } =
-      constructTests(
-        service,
-        ({ contexts: constructContexts, waiter, tupleOf, getIndex }) => ({
-          useName: constructContexts(
-            ({ context }) => context.name,
-            'name',
-          ),
-          waiter: waiter(TINY_DELAY / 4),
-          callError: (times = 0) =>
-            tupleOf(
-              `#${getIndex()} => call error fn ${times} times`,
-              () => {
-                expect(error).toHaveBeenCalledTimes(times);
-              },
-            ),
-        }),
-      );
+    const { start, send, useName, waiter, stop, callError } = constructTests(
+      service,
+      ({ contexts: constructContexts, waiter, tupleOf, getIndex }) => ({
+        useName: constructContexts(({ context }) => context.name, 'name'),
+        waiter: waiter(TINY_DELAY / 4),
+        callError: (times = 0) =>
+          tupleOf(`#${getIndex()} => call error fn ${times} times`, () => {
+            expect(error).toHaveBeenCalledTimes(times);
+          }),
+      }),
+    );
 
     test(...start());
     test(...useName(''));
@@ -301,15 +280,11 @@ describe('Async action helpers', () => {
     const machine = _machine8.provideOptions(({ assign }) => ({
       actions: {
         inc: assign(
-          'context',
           async ({ context }) => {
             await sleep(TINY_DELAY);
             return context + 1;
           },
-          {
-            catch: emptyActionFn,
-            then: assign('context', ({ context }) => context + 10),
-          },
+          { catch: emptyActionFn, then: assign(({ context }) => context + 10) },
         ),
       },
     }));
@@ -331,19 +306,16 @@ describe('Async action helpers', () => {
     test(...useValue(11));
   });
 
-  describe('#09 => voidAction — async fn + then handler', () => {
+  describe('#09 => action — async fn + then handler', () => {
     let sideEffect = 0;
-    const machine = _machine8.provideOptions(({ voidAction, assign }) => ({
+    const machine = _machine8.provideOptions(({ action, assign }) => ({
       actions: {
-        inc: voidAction(
+        inc: action(
           async () => {
             await sleep(TINY_DELAY);
             sideEffect = 1;
           },
-          {
-            catch: emptyActionFn,
-            then: assign('context', ({ context }) => context + 5),
-          },
+          { catch: emptyActionFn, then: assign(({ context }) => context + 5) },
         ),
       },
     }));

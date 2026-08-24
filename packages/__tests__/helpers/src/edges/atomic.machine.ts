@@ -14,5 +14,6 @@ export default createMachine(
     eventsMap: typings.eventsMap({ SET_LANG: litts }),
   },
 ).provideOptions(({ assign }) => ({
-  actions: { setLang: assign('context', { SET_LANG: c => c.payload }) },
+  actions: { setLang: assign({ SET_LANG: c => c.payload }) },
+
 }));

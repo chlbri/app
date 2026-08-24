@@ -62,7 +62,7 @@ import type {
   CommonConfig3,
   SimpleMachineOptions2,
 } from '#common/machine';
-import { byKey2 } from '#utils';
+import { byKey2, merge2 } from '#utils';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
@@ -195,7 +195,7 @@ export class SyncInterpreter<
     resumeTimer,
     stopTimer,
     sentEvent,
-  }: ExtendedActionsParams<Eo, Pc, Tc>) => {
+  }: ExtendedActionsParams<Eo, Tc>) => {
     this.__performSendToAction(sentEvent);
 
     this.__performScheduledAction(scheduled);
@@ -555,6 +555,7 @@ export class SyncInterpreter<
               this.__performActions(...actions);
             }
           }
+          this.__flush();
         };
 
         const promise = this.createInterval({ callback, interval, id });
@@ -835,6 +836,7 @@ export class SyncInterpreter<
    * @throws type {@linkcode Error} Throw if the number of self transitions exceeds {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
    */
   protected _next = () => {
+    this.__flush();
     let check = false;
     do {
       const previousValue = this.__value;
@@ -850,6 +852,7 @@ export class SyncInterpreter<
       if (check) this.__flush();
     } while (check);
 
+    this.__flush();
     this.__selfTransitionsCounter = 0;
   };
 
@@ -867,7 +870,10 @@ export class SyncInterpreter<
       this.__performConfig(true);
       this.__setStatus('working');
       return this._next();
-    } else return this.__setStatus('working');
+    } else {
+      this.__flush();
+      return this.__setStatus('working');
+    }
   };
 
   /**
@@ -946,22 +952,18 @@ export class SyncInterpreter<
                       : byKey2.low(context, key);
 
                   if (path === '.') {
-                    return this.__mergeContexts({
-                      mergers: [
-                        { key: 'pContext' as any, source: { pContext } as any },
-                      ],
-                    });
+                    this.__contexts.pContext = pContext as any;
+                  } else {
+                     merge2({
+                      target: this.__contexts.pContext,
+                      source: recompose({ [path]: pContext }),
+                      key: path,
+                    } as any);
+                    
                   }
-                  return this.__mergeContexts({
-                    mergers: [
-                      {
-                        key: `pContext.${path}` as any,
-                        source: recompose({ [`pContext.${path}`]: pContext }) as any,
-                      },
-                    ],
-                  });
                 });
               },
+
               {
                 equals: (a, b) => {
                   const ac = a.context;

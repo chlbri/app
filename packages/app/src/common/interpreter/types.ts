@@ -14,7 +14,7 @@ import type { ActivityConfig, StateValue, WorkingStatus } from '#states';
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval2 } from '@bemedev/interval2';
 import type { Equals, PrimitiveObject } from '@bemedev/typings';
-import type { Fn, FnMapR, KeyU, OptionalDefinition } from '~types';
+import type { Fn, FnMap, FnMapR, KeyU, OptionalDefinition } from '~types';
 import type { ScheduledData, SimpleMachineOptions2 } from '../machine';
 import type { AnyMachine, MachineType } from '../machine/types';
 import type { Subscriber, SubscriberOptions } from '../subscriber';
@@ -134,10 +134,10 @@ export type SendToEvent<T = any> = { to: string; event: T };
  * @template `Pc` - Private context.
  * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
  */
-export type DirectMerge_F<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = Fn<[result?: ActionResult<Pc, Tc>], void>;
+export type DirectMerge_F<Tc extends PrimitiveObject = PrimitiveObject> = Fn<
+  [result?: ActionResult<Tc>],
+  void
+>;
 
 /**
  * Function signature for creating timer instance.
@@ -226,8 +226,9 @@ export type FnMapFrom<
   T extends KeyU<'__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'>,
   R = any,
   Ex extends string = never,
-> = FnMapR<
+> = FnMap<
   Extract<T['__events'], EventObject>,
+  PrivateContextFrom<T>,
   ContextFrom<T>,
   Extract<T['__tag'], string>,
   R,
@@ -473,10 +474,9 @@ export type Selector_F<T = any> = 0 extends 1 & T
  */
 export type ExtendedActionsParams<
   Eo extends EventObject = EventObject,
-  Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
 > = Partial<{
-  scheduled: ScheduledData<Pc, Tc>;
+  scheduled: ScheduledData<Tc>;
   resend: EventArgObject<Eo>;
   forceSend: EventArgObject<Eo>;
   pauseActivity: string;

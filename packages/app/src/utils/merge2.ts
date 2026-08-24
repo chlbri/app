@@ -7,11 +7,11 @@ import { type Decompose } from '@bemedev/decompose';
  * @template `T` - Source object type.
  * @template `K` - Key path string type.
  */
-export type Merger<T, K extends string> = {
+export type Merger<T, K extends string = string> = {
   /** Optional source object containing values to merge. */
   source?: T;
   /** Dot-separated key path indicating which property to merge. */
-  key: K;
+  key?: K;
 };
 
 /**
@@ -20,7 +20,7 @@ export type Merger<T, K extends string> = {
  * @template `T` - Target object type.
  * @template `K` - Key path string type.
  */
-export type MergeProps2<T, K extends string> = {
+export type MergeProps2<T, K extends string = string> = {
   /** Target object to merge into. */
   target: T;
 } & Merger<T, K>;
@@ -55,13 +55,9 @@ export const merge2 = expandFn(
     source,
     key,
   }: MergeProps2<T, K>): T | undefined => {
-    // #region Maybe used later!
-    // const checkisObject = typeof source === 'object' && !Array.isArray(source);
-
-    // if (target === undefined && checkisObject) {
-    //   (target as any) = {};
-    // }
-    // #endregion
+    if (!key) {
+      return source as any;
+    }
 
     const keys = key.split('.');
     const _key = keys.shift()!;

@@ -17,10 +17,10 @@ import { recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { CommonMachine } from '../../common/machine';
 import type {
+  SyncAction_F,
   SyncAddOptions_F,
   SyncProvideOptions_F,
   SyncSendAction_F,
-  SyncVoidAction_F,
 } from './options.types';
 
 /**
@@ -98,7 +98,7 @@ export class SyncMachine<
     const isNotValue = this.__isNotValue;
     const isDefined = this.__isDefined;
     const isNotDefined = this.__isNotDefined;
-    const voidAction = this.__voidAction;
+    const action = this.__action;
     const sendTo = this.__sendTo;
     const erase = this.__erase;
     const filter = this.__filter;
@@ -116,6 +116,7 @@ export class SyncMachine<
         isNotValue,
         isDefined,
         isNotDefined,
+
         guardBatch: (...guards) => {
           const reduceGuardItem = (guard: any): any => {
             if (typeof guard === 'boolean') return () => guard;
@@ -140,8 +141,21 @@ export class SyncMachine<
         },
 
         swap: this.swap,
+        //@ts-expect-error ok for
+        assign: (keysOrFn, maybeFn) => {
+          if (
+            maybeFn === undefined &&
+            (typeof keysOrFn === 'function' || typeof keysOrFn === 'object')
+          ) {
+            const _fn = reduceFnMap(keysOrFn as any, ...this.__eventsList);
+            return state => {
+              const result = _fn(state);
+              return { mergers: [{ source: result }] };
+            };
+          }
 
-        assign: (keys, fn) => {
+          const keys = keysOrFn as any;
+          const fn = maybeFn as any;
           const keysArray = Array.isArray(keys) ? keys : [keys];
           const isArray = Array.isArray(keys);
 
@@ -180,7 +194,10 @@ export class SyncMachine<
                 if (m) mergers.push(...m);
                 Object.assign(extendeds, ext);
                 if (m && m.length > 0) {
-                  merge2.multiple(state, ...(m as any));
+                  state.context = merge2.multiple(
+                    state.context,
+                    ...(m as any),
+                  ) as any;
                 }
               }
             }
@@ -190,14 +207,14 @@ export class SyncMachine<
 
         filter,
         erase,
-        voidAction,
+        action,
         sendTo,
 
         debounce: (fn, { id, ms = 100 }) => {
           return state => {
             const res = fn(state);
             const { mergers = [] } = res;
-            const scheduled: ScheduledData<Pc, Tc> = { data: mergers, ms, id };
+            const scheduled: ScheduledData<Tc> = { data: mergers, ms, id };
             return { scheduled };
           };
         },
@@ -274,11 +291,11 @@ export class SyncMachine<
   };
 
   /**
-   * Function helper to perform a void action.
+   * Function helper to perform an action.
    *
    * @param fn - The action function to perform.
    */
-  protected __voidAction: SyncVoidAction_F<Eo, Pc, Tc, Ta> = fn => {
+  protected __action: SyncAction_F<Eo, Pc, Tc, Ta> = fn => {
     return state => {
       const _fn = reduceFnMap(fn, ...this.__eventsList);
       _fn(state);

@@ -75,11 +75,12 @@ export const machine23 = createMachine(
   .provideOptions(({ debounce: _debounce, assign }) => ({
     actions: {
       debounce: _debounce(
-        assign('context.iterator', () => {
+        assign('iterator', () => {
           console.log('Debounced action executed');
           return 1000;
         }),
         { ms: 10_000, id: 'debounce-action' },
       ),
+
     },
   }));

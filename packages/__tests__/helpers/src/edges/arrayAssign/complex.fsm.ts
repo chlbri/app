@@ -15,7 +15,7 @@ export default createMachine(
 ).provideOptions(({ assign }) => ({
   actions: {
     incDeep: assign(
-      ['context.number1', 'context.number2', 'context.deep.deep2.number4'],
+      ['number1', 'number2', 'deep.deep2.number4'],
       ({ context }) => [
         context.number1 + 1,
         context.number2 + 2,
@@ -23,4 +23,5 @@ export default createMachine(
       ],
     ),
   },
+
 }));

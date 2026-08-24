@@ -9,24 +9,25 @@ describe('cov => Performs send to itself actions', () => {
   const machine = _raw_machine.provideOptions(
     ({ assign, forceSend, resend }) => ({
       actions: {
-        inc: assign('context.iterator', ({ context }) => {
+        inc: assign('iterator', ({ context }) => {
           const iterator = notU(context?.iterator);
           if (iterator === undefined) return;
 
           return iterator + 1;
         }),
 
-        dec: assign('context.iterator', ({ context }) => {
+        dec: assign('iterator', ({ context }) => {
           const iterator = notU(context?.iterator);
           if (iterator === undefined) return;
           return iterator - 1;
         }),
 
-        init: assign('context', () => ({ iterator: 0 })),
+        init: assign(() => ({ iterator: 0 })),
 
         forceSendInc: forceSend('INCREMENT'),
         sendDec: resend('DECREMENT'),
       },
+
     }),
   );
 

@@ -67,12 +67,9 @@ export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
  * @returns An type {@linkcode ActionResult} object.
  */
 export type ActionResult<
-  Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   Eo extends EventObject = EventObject,
-> = {
-  mergers?: Merger<{ pContext: Pc; context: Tc }, string>[];
-} & ExtendedActionsParams<Eo, Pc, Tc>;
+> = { mergers?: Merger<Tc, string>[] } & ExtendedActionsParams<Eo, Tc>;
 
 /**
  * An action may return synchronously or asynchronously.
@@ -83,10 +80,9 @@ export type ActionResult<
  * @template `Pc` - The type of the private context.
  * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
  */
-export type MaybeAsyncActionResult<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = ActionResult<Pc, Tc> | Promise<ActionResult<Pc, Tc>>;
+export type MaybeAsyncActionResult<Tc extends PrimitiveObject = PrimitiveObject> =
+  | ActionResult<Tc>
+  | Promise<ActionResult<Tc>>;
 
 /**
  * Async action function map.
@@ -101,7 +97,7 @@ export type AsyncAction<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = FnMap<E, Pc, Tc, T, MaybeAsyncActionResult<Pc, Tc>>;
+> = FnMap<E, Pc, Tc, T, MaybeAsyncActionResult<Tc>>;
 
 /**
  * Synchronous action function map.
@@ -116,7 +112,7 @@ export type SyncAction<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = FnMap<E, Pc, Tc, T, ActionResult<Pc, Tc>>;
+> = FnMap<E, Pc, Tc, T, ActionResult<Tc>>;
 
 /**
  * Represents a collection of actions, where each action is identified by a string key.
@@ -161,7 +157,7 @@ export type AsyncAction2<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = FnR<E, Pc, Tc, T, MaybeAsyncActionResult<Pc, Tc>>;
+> = FnR<E, Pc, Tc, T, MaybeAsyncActionResult<Tc>>;
 
 /**
  * Sync action function executor.
@@ -176,4 +172,4 @@ export type SyncAction2<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = FnR<E, Pc, Tc, T, ActionResult<Pc, Tc>>;
+> = FnR<E, Pc, Tc, T, ActionResult<Tc>>;

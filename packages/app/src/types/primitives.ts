@@ -1,3 +1,7 @@
+import type { DEFAULT_DELIMITER } from '#constants';
+import type { EventObject, EventStrings } from '#events';
+import type { State, StateExtended, StateP, StatePextended } from '#states';
+import { checkKeys } from '#utils';
 import type {
   _UnionToIntersection2,
   DeepPartial,
@@ -7,10 +11,6 @@ import type {
   Ru,
   UnionToIntersection,
 } from '@bemedev/app-utils-bemedev';
-import type { DEFAULT_DELIMITER } from '#constants';
-import type { EventObject } from '#events';
-import type { State, StateExtended, StateP, StatePextended } from '#states';
-import { checkKeys } from '#utils';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
@@ -389,7 +389,7 @@ type _FnMap<
   [key in EventToType<TT>]?: (
     state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
   ) => R;
-} & { else?: FnR<E, Pc, Tc, T, R> };
+} & Partial<Record<EventStrings | 'else', FnR<E, Pc, Tc, T, R>>>;
 
 /**
  * Internal helper function map type keyed by event types.
@@ -416,9 +416,12 @@ type _FnMapFilterArray<
     index: number,
     state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
   ) => boolean;
-} & {
-  else?: (item: Item, index: number, state: StateExtended<E, Pc, Tc, T>) => boolean;
-};
+} & Partial<
+  Record<
+    EventStrings | 'else',
+    (item: Item, index: number, state: StateExtended<E, Pc, Tc, T>) => boolean
+  >
+>;
 
 /**
  * Function map filter array type.
@@ -467,7 +470,12 @@ type _FnMapFilterObject<
     item: Item,
     state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
   ) => boolean;
-} & { else?: (item: Item, state: StateExtended<E, Pc, Tc, T>) => boolean };
+} & Partial<
+  Record<
+    EventStrings | 'else',
+    (item: Item, state: StateExtended<E, Pc, Tc, T>) => boolean
+  >
+>;
 
 /**
  * Function map filter object type.
@@ -516,7 +524,7 @@ type _FnMapReduced<
   [key in TT['type']]?: (
     state: StateP<Extract<TT, { type: key }>['payload'], Tc, T>,
   ) => R;
-} & { else?: FnReduced<E, Tc, T, R> };
+} & Partial<Record<EventStrings | 'else', FnReduced<E, Tc, T, R>>>;
 
 /**
  * Maps event types to their corresponding handler function signatures or fallback handler.

@@ -23,15 +23,15 @@ describe('Error transitions testing)', () => {
     });
 
     const machine = _raw_machine.provideOptions(
-      ({ assign, voidAction }) => ({
+      ({ assign, action }) => ({
         actors: { emitters: { interval: () => createPausable(sub) } },
 
         actions: {
-          assigN: assign('context', {
+          assigN: assign({
             'interval::next': ({ payload, context }) => context + payload,
           }),
 
-          signals: voidAction({
+          signals: action({
             'interval::error': ({ payload }) => {
               mock('Error received:', payload);
             },
@@ -42,6 +42,7 @@ describe('Error transitions testing)', () => {
         },
       }),
     );
+
 
     const service = interpret(machine, { context: 0 });
 

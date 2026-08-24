@@ -93,22 +93,22 @@ export const machine2 = createMachine(
     ...config2,
   },
   { ...typings2, sync: true },
-).provideOptions(({ isNotValue, isValue, assign, voidAction }) => ({
+).provideOptions(({ isNotValue, isValue, assign, action }) => ({
   actions: {
     inc: assign(
-      'context.iterator',
+      'iterator',
       ({ context }) => notU(context?.iterator) + 1,
     ),
     inc2: assign(
-      'context.iterator',
+      'iterator',
       ({ context }) => notU(context?.iterator) + 4,
     ),
-    sendPanelToUser: voidAction(() => console.log('sendPanelToUser')),
-    askUsertoInput: voidAction(() => console.log('Input, please !!')),
-    write: assign('context.input', {
+    sendPanelToUser: action(() => console.log('sendPanelToUser')),
+    askUsertoInput: action(() => console.log('Input, please !!')),
+    write: assign('input', {
       WRITE: ({ payload: { value } }) => value,
     }),
-    insertData: assign('context.data', ({ context }) =>
+    insertData: assign('data', ({ context }) =>
       fakeDB
         .filter(item => item.name.includes(context?.input ?? ''))
         .map(item => item.name),
@@ -144,46 +144,47 @@ export const _machine2 = createMachine(_config2, {
     isNotValue,
     isValue,
     assign,
-    voidAction,
+    action,
     debounce: _debounce,
     batch,
     swap,
   }) => ({
     actions: {
       inc: assign(
-        'context.iterator',
+        'iterator',
         ({ context }) => notU(context?.iterator) + 1,
       ),
 
       inc2: assign(
-        'context.iterator',
+        'iterator',
         ({ context }) => notU(context?.iterator) + 4,
       ),
-      sendPanelToUser: voidAction(() => console.log('sendPanelToUser')),
-      askUsertoInput: voidAction(() => console.log('Input, please !!')),
-      // write: assign('context.input', {
+      sendPanelToUser: action(() => console.log('sendPanelToUser')),
+      askUsertoInput: action(() => console.log('Input, please !!')),
+      // write: assign('input', {
       //   WRITE: ({ payload: { value } }) => value,
       // }),
       write: assign(
-        'context.input',
+        'input',
         swap(
           (value: string) => value,
           'WRITE',
         )({ '[0]': '[0].payload.value' }),
       ),
-      insertData: assign('context.data', ({ context }) =>
+      insertData: assign('data', ({ context }) =>
         fakeDB
           .filter(item => item.name.includes(context?.input ?? ''))
           .map(item => item.name),
       ),
       debounce: batch(
-        voidAction(() => console.log('Debounced action executed')),
+        action(() => console.log('Debounced action executed')),
         _debounce(
-          assign('context.iterator', () => 1000),
+          assign('iterator', () => 1000),
           { ms: 10_000, id: 'debounce-action' },
         ),
       ),
     },
+
     guards: {
       isInputEmpty: isValue('context.input', ''),
       isInputNotEmpty: isNotValue('context.input', ''),

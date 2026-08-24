@@ -10,11 +10,12 @@ describe('Pause activities on events', () => {
       actions: {
         inc: debounce(
           assign(
-            'context.iterator',
+            'iterator',
             ({ context }) => context?.iterator + 1000,
           ),
           { ms: DELAY * 10, id: 'inc' },
         ),
+
         pause: pauseTimer('inc'),
         resume: resumeTimer('inc'),
         stop: stopTimer('inc'),

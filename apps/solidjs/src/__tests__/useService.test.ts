@@ -8,10 +8,11 @@ describe('#01 => useService', () => {
   const machine = _machine.provideOptions(({ assign }) => ({
     actions: {
       increment: assign(
-        'context.count',
+        'count',
         ({ context }) => context.count + 1,
       ),
     },
+
   }));
 
   const service = interpret(machine, { context: { count: 0 } });

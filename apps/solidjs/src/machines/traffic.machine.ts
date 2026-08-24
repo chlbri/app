@@ -67,12 +67,17 @@ export const trafficMachine = createMachine(
     }),
     sync: true,
   },
-).provideOptions(({ assign }) => ({
+).provideOptions(({ assign, action }) => ({
   actions: {
-    accelerate: assign('pContext.speed', () => 2),
-    decelerate: assign('pContext.speed', () => 1),
-    count: assign('context.cycles', ({ context }) => context.cycles + 1),
+    accelerate: action(state => {
+      state.pContext.speed = 2;
+    }),
+    decelerate: action(state => {
+      state.pContext.speed = 1;
+    }),
+    count: assign('cycles', ({ context }) => context.cycles + 1),
   },
+
   delays: {
     WAITER_GREEN: ({ pContext: { speed, timers } }) => {
       return timers.green / speed;

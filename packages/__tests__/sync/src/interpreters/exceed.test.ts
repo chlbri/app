@@ -33,10 +33,7 @@ describe('TESTS', () => {
         },
       },
       {
-        eventsMap: type({
-          ADD_CONDITION: 'never',
-          REMOVE_CONDITION: 'never',
-        }),
+        eventsMap: type({ ADD_CONDITION: 'never', REMOVE_CONDITION: 'never' }),
 
         context: type({ iterator: 'number', condition: 'boolean' }),
 
@@ -44,9 +41,9 @@ describe('TESTS', () => {
       },
     ).provideOptions(({ isValue, assign }) => ({
       actions: {
-        addCondition: assign('context.condition', () => true),
-        removeCondition: assign('context.condition', () => false),
-        inc: assign('context.iterator', ({ context }) => {
+        addCondition: assign('condition', () => true),
+        removeCondition: assign('condition', () => false),
+        inc: assign('iterator', ({ context }) => {
           return context.iterator + 1;
         }),
       },
@@ -75,9 +72,7 @@ describe('TESTS', () => {
 
       const { start, useWaiter, useErrors } = constructTests(
         service,
-        ({ waiter }) => ({
-          useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER),
-        }),
+        ({ waiter }) => ({ useWaiter: waiter(TIME_TO_RINIT_SELF_COUNTER) }),
       );
 
       test(...start());
@@ -112,16 +107,15 @@ describe('TESTS', () => {
   });
 
   describe('#00 => Start throws an express error', () => {
-    const machine = createMachine(
-      { entry: 'throw' },
-      { sync: true },
-    ).provideOptions(({ voidAction }) => ({
-      actions: {
-        throw: voidAction(() => {
-          throw 'error';
-        }),
-      },
-    }));
+    const machine = createMachine({ entry: 'throw' }, { sync: true }).provideOptions(
+      ({ action }) => ({
+        actions: {
+          throw: action(() => {
+            throw 'error';
+          }),
+        },
+      }),
+    );
 
     const service = interpret(machine, { mode: 'strict' });
     const { unhandledRejection } = constructTests(service);

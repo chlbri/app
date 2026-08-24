@@ -108,24 +108,24 @@ export default createMachine(
   },
 ).provideOptions(({ assign, erase, batch }) => ({
   actions: {
-    provideAsset: assign('context.asset', {
+    provideAsset: assign('asset', {
       START: ({ payload }) => {
         return payload.asset;
       },
     }),
 
     reset: batch(
-      erase('context.asset'),
-      erase('context.intermediaries'),
-      erase('context.internetStatus'),
-      erase('context.errors'),
+      erase('asset'),
+      erase('intermediaries'),
+      erase('internetStatus'),
+      erase('errors'),
     ),
 
-    addMandatoryIntermediary: assign('context.intermediaries', {
+    addMandatoryIntermediary: assign('intermediaries', {
       START: ({ payload }) => [payload.mandatory!],
     }),
 
-    addBlockImmoIntermediary: assign('context.intermediaries', {
+    addBlockImmoIntermediary: assign('intermediaries', {
       START: ({ context: { intermediaries = [] } }) => [
         ...intermediaries,
         BLOCK_IMMO_INTERMEDIARY,
@@ -133,18 +133,18 @@ export default createMachine(
     }),
 
     'error.noAsset': assign(
-      'context.errors.noAsset',
+      'errors.noAsset',
       () => 'Asset is required to start the machine',
     ),
 
     setOnlineStatus: assign(
-      'context.internetStatus',
+      'internetStatus',
       () => isOnline({ timeout: CHECK_DELAY / 2 }),
       { catch: emptyActionFn },
     ),
 
     addIntermediary: assign(
-      'context.intermediaries',
+      'intermediaries',
       {
         ADD_INTERMEDIARY: async ({
           payload,
@@ -155,10 +155,11 @@ export default createMachine(
     ),
 
     'error.addIntermediary': assign(
-      'context.errors.intermediary.offline',
+      'errors.intermediary.offline',
       () => 'Cannot add this intermediary',
     ),
   },
+
 
   guards: {
     assetIsDefined: { START: ({ payload }) => !!payload.asset },

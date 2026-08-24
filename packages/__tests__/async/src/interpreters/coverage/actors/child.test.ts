@@ -2,6 +2,7 @@ import { constructTests } from '@bemedev/app-vitest';
 import { interpret } from '@bemedev/app';
 import _childMachine1 from './child.1.machine';
 import _machine2 from './child.2.machine';
+import { returnTrue } from '@bemedev/app/guards';
 
 vi.useFakeTimers();
 
@@ -10,11 +11,14 @@ describe('Coverage actors', () => {
     const DELAY = 350;
     const childMachine = _childMachine1.provideOptions(({ assign }) => ({
       actions: {
-        inc: assign('context.iter1', ({ context }) => context.iter1 + 1),
-        inc2: assign('context.iter2', ({ context }) => context.iter2 + 1),
+        inc: assign('iter1', ({ context }) => context.iter1 + 1),
+        inc2: assign('iter2', ({ context }) => context.iter2 + 1),
       },
+      guards: { returnTrue },
       delays: { DELAY, DELAY2: DELAY * 2 },
     }));
+
+
 
     const machine = _machine2;
 

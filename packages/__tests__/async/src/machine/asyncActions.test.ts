@@ -27,7 +27,6 @@ describe('Machine createOptions - error handlers', () => {
       const machine = _machine1.provideOptions(({ assign }) => ({
         actions: {
           myAction: assign(
-            'context',
             {
               TEST: async () => {
                 throw theError;
@@ -69,6 +68,17 @@ describe('Machine createOptions - error handlers', () => {
           event: { type: 'TEST', payload: {} },
         });
       });
+
+      test('#07 => errorAction returns the state', () => {
+        expect(errorAction).toHaveReturnedWith({
+          context: 42,
+          pContext: undefined,
+          status: 'busy',
+          tags: [],
+          value: 'idle',
+          event: { type: 'TEST', payload: {} },
+        });
+      });
     });
 
     describe('#02 => errorFn return value affects the state', () => {
@@ -76,11 +86,10 @@ describe('Machine createOptions - error handlers', () => {
       const errorFn: any = vi.fn((_err: any) => errorAction);
 
       const machine = _machine2.provideOptions(({ assign }) => {
-        errorAction = vi.fn(assign('context', () => -1));
+        errorAction = vi.fn(assign(() => -1));
         return {
           actions: {
             myAction: assign(
-              'context',
               async () => {
                 throw theError;
               },
@@ -114,7 +123,6 @@ describe('Machine createOptions - error handlers', () => {
       const machine = _machine3.provideOptions(({ assign }) => ({
         actions: {
           myAction: assign(
-            'context',
             async () => {
               throw theError;
             },
@@ -137,16 +145,16 @@ describe('Machine createOptions - error handlers', () => {
     });
   });
 
-  describe('#02 => voidAction', () => {
+  describe('#02 => action', () => {
     const theError = 'void error';
 
     describe('#01 => calls errorFn when fn throws', () => {
       const errorAction = vi.fn(() => ({}));
       const errorFn = vi.fn(() => errorAction);
 
-      const machine = _machine4.provideOptions(({ voidAction }) => ({
+      const machine = _machine4.provideOptions(({ action }) => ({
         actions: {
-          myAction: voidAction(
+          myAction: action(
             async () => {
               throw theError;
             },
@@ -196,9 +204,9 @@ describe('Machine createOptions - error handlers', () => {
       const errorAction = vi.fn((_state: any) => ({}));
       const errorFn = vi.fn((_err: any) => errorAction);
 
-      const machine = _machine5.provideOptions(({ voidAction }) => ({
+      const machine = _machine5.provideOptions(({ action }) => ({
         actions: {
-          myAction: voidAction(
+          myAction: action(
             async ({ event }) => {
               console.log('Event that caused the error:', event);
               throw theError;
@@ -229,9 +237,9 @@ describe('Machine createOptions - error handlers', () => {
       const errorAction = vi.fn((state: any) => state);
       const errorFn = vi.fn((_err: any) => errorAction);
 
-      const machine = _machine6.provideOptions(({ voidAction }) => ({
+      const machine = _machine6.provideOptions(({ action }) => ({
         actions: {
-          myAction: voidAction(
+          myAction: action(
             {
               TEST: async () => {
                 throw theError;
@@ -259,14 +267,15 @@ describe('Machine createOptions - error handlers', () => {
       const theData = { message: 'Success' };
       const passFn = vi.fn(async data => console.log(data));
 
-      const machine = _machine7.provideOptions(({ voidAction }) => ({
+      const machine = _machine7.provideOptions(({ action }) => ({
         actions: {
-          myAction: voidAction(
+          myAction: action(
             { TEST: () => passFn(theData) },
             { catch: () => () => ({}), max: 5000 },
           ),
         },
       }));
+
 
       const service = interpret(machine, { context: 3 });
 
@@ -419,14 +428,10 @@ describe('Machine createOptions - error handlers', () => {
       const machine = _machine1.provideOptions(({ assign }) => ({
         actions: {
           myAction: assign(
-            'context',
             async () => {
               return 10;
             },
-            {
-              catch: catchFn,
-              then: assign('context', ({ context }) => context + 100),
-            },
+            { catch: catchFn, then: assign(({ context }) => context + 100) },
           ),
         },
       }));
@@ -448,19 +453,16 @@ describe('Machine createOptions - error handlers', () => {
       });
     });
 
-    describe('#02 => voidAction with then handler', () => {
+    describe('#02 => action with then handler', () => {
       const catchFn = vi.fn();
       let effectCalled = false;
-      const machine = _machine1.provideOptions(({ voidAction, assign }) => ({
+      const machine = _machine1.provideOptions(({ action, assign }) => ({
         actions: {
-          myAction: voidAction(
+          myAction: action(
             async () => {
               effectCalled = true;
             },
-            {
-              catch: catchFn,
-              then: assign('context', ({ context }) => context + 50),
-            },
+            { catch: catchFn, then: assign(({ context }) => context + 50) },
           ),
         },
       }));
@@ -473,7 +475,7 @@ describe('Machine createOptions - error handlers', () => {
         await service.send('TEST');
       });
 
-      test('#03 => voidAction executes effect', () => {
+      test('#03 => action executes effect', () => {
         expect(effectCalled).toBe(true);
       });
 

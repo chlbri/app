@@ -406,13 +406,10 @@ export type CommonTimeAction_F<
 > = (name: string) => (id: string) => AsyncAction2<E, Pc, Tc, T>;
 
 export type DecomposeC<
-  Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
+  _Pc = any,
 > = Omit<
-  Decompose<
-    { pContext: Pc; context: Tc },
-    { object: 'both'; start: false; sep: '.' }
-  >,
+  Decompose<NonNullable<Tc>, { object: 'both'; start: false; sep: '.' }>,
   `${string}.[${number}]${string}`
 >;
 
@@ -426,13 +423,10 @@ export type DecomposeC<
  * @returns Action of type `A`.
  */
 export type CommonEraseAction_F<
-  Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   A = any,
 > = <
-  D = 0 extends 1 & Tc
-    ? Record<string, any>
-    : SubTypeLow<DecomposeC<Pc, Tc>, undefined>,
+  D = 0 extends 1 & Tc ? Record<string, any> : SubTypeLow<DecomposeC<Tc>, undefined>,
   K extends keyof D & string = keyof D & string,
 >(
   ...keys: K[]
@@ -458,7 +452,7 @@ export type CommonFilterAction_F<
 > = <
   D = 0 extends 1 & Tc
     ? Record<string, any>
-    : SubType<DecomposeC<Pc, Tc>, TrueObject | any[] | undefined>,
+    : SubType<DecomposeC<Tc>, TrueObject | any[] | undefined>,
   K extends keyof D & string = keyof D & string,
 >(
   key: K,
@@ -483,8 +477,8 @@ export type CommonCreateMachine_F<T = any> = (config: any) => T;
  * @template | {@linkcode PrimitiveObject} `Tc` - Type of context.
  *
  */
-export type ScheduledData<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> = {
-  data: Merger<{ pContext: Pc; context: Tc }, string>[];
+export type ScheduledData<Tc extends PrimitiveObject = PrimitiveObject> = {
+  data: Merger<Tc, string>[];
   ms: number;
   id: string;
 };

@@ -9,9 +9,10 @@ describe('Performs activities on events', () => {
     ({ assign, pauseActivity, resumeActivity, stopActivity }) => ({
       actions: {
         inc: assign(
-          'context.iterator',
+          'iterator',
           ({ context }) => context?.iterator + 1,
         ),
+
         pause: pauseActivity('/idle::DELAY'),
         resume: resumeActivity('/idle::DELAY'),
         stop: stopActivity('/idle::DELAY'),

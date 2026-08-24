@@ -30,14 +30,15 @@ export const counterMachine = createMachine(
 ).provideOptions(({ assign }) => ({
   actions: {
     increment: assign(
-      'context.count',
+      'count',
       ({ context: { count, step } }) => count + step,
     ),
 
-    decrement: assign('context.count', ({ context: { count, step } }) =>
+    decrement: assign('count', ({ context: { count, step } }) =>
       Math.max(count - step, 0),
     ),
 
-    reset: assign('context.count', () => 0),
+    reset: assign('count', () => 0),
   },
+
 }));

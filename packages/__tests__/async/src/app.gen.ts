@@ -455,7 +455,7 @@ declare module '@bemedev/app' {
         tags:     never;
         actions:  'inc' | 'inc2';
         delays:   'DELAY' | 'DELAY2';
-        guards:   never;
+        guards:   'returnTrue';
       };
       pContext: any;
     };

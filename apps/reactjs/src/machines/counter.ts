@@ -65,24 +65,24 @@ export const counterMachine = createMachine(
 ).provideOptions(({ assign }) => ({
   actions: {
     increment: assign(
-      'context.count',
+      'count',
       ({ context: { count, speed } }) => count + speed,
     ),
 
-    decrement: assign('context.count', ({ context: { count, speed } }) =>
+    decrement: assign('count', ({ context: { count, speed } }) =>
       Math.max(count - speed, 0),
     ),
 
     accelerate: assign(
-      'context.speed',
+      'speed',
       ({ context }) => context.speed + 1,
     ),
 
-    decelerate: assign('context.speed', ({ context }) =>
+    decelerate: assign('speed', ({ context }) =>
       Math.max(context.speed - 1, 1),
     ),
 
-    log: assign('context.logs', ({ context, value, event }) => {
+    log: assign('logs', ({ context, value, event }) => {
       const eventType = eventToType(event);
 
       return [
@@ -97,7 +97,7 @@ export const counterMachine = createMachine(
       ];
     }),
 
-    toggleLogExpand: assign('context.logs', {
+    toggleLogExpand: assign('logs', {
       TOGGLE_LOG_EXPAND: ({ context, payload }) => {
         return context.logs.map(log => {
           const check = log.id === payload;
@@ -106,6 +106,7 @@ export const counterMachine = createMachine(
       },
     }),
   },
+
 }));
 
 export type Service = SyncInterpreterFrom<typeof counterMachine>;

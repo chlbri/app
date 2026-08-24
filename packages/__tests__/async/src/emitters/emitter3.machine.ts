@@ -39,12 +39,13 @@ export default createMachine(
   },
 ).provideOptions(({ assign }) => ({
   actions: {
-    assigN: assign('context', {
+    assigN: assign({
       'interval1::next': ({ payload, context }) => {
         return notU(context) + payload;
       },
     }),
   },
+
   actors: {
     emitters: {
       interval1: () =>

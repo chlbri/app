@@ -10,8 +10,8 @@ describe('Coverage actors', () => {
     const DELAY = 350;
     const childMachine = _childMachine1.provideOptions(({ assign }) => ({
       actions: {
-        inc: assign('context.iter1', ({ context }) => context.iter1 + 1),
-        inc2: assign('context.iter2', ({ context }) => context.iter2 + 1),
+        inc: assign('iter1', ({ context }) => context.iter1 + 1),
+        inc2: assign('iter2', ({ context }) => context.iter2 + 1),
       },
       delays: { DELAY, DELAY2: DELAY * 2 },
     }));
@@ -21,10 +21,8 @@ describe('Coverage actors', () => {
     machine.addOptions(() => ({
       actors: {
         children: {
-          child1: () =>
-            interpret(childMachine, { context: { iter1: 0, iter2: 0 } }),
-          child2: () =>
-            interpret(childMachine, { context: { iter1: 0, iter2: 0 } }),
+          child1: () => interpret(childMachine, { context: { iter1: 0, iter2: 0 } }),
+          child2: () => interpret(childMachine, { context: { iter1: 0, iter2: 0 } }),
         },
       },
     }));
@@ -33,21 +31,13 @@ describe('Coverage actors', () => {
       pContext: { iter1: 0, iter2: 0, all: { iter1: 0, iter2: 0 } },
     });
 
-    const {
-      start,
-      stop,
-      send,
-      useStateValue,
-      waiter,
-      useIter1,
-      useIter2,
-      useAll,
-    } = constructTests(service, ({ waiter, contexts }) => ({
-      waiter: waiter(DELAY),
-      useIter1: contexts(({ pContext }) => pContext.iter1, 'iter1'),
-      useIter2: contexts(({ pContext }) => pContext.iter2, 'iter2'),
-      useAll: contexts(({ pContext }) => pContext.all, 'all'),
-    }));
+    const { start, stop, send, useStateValue, waiter, useIter1, useIter2, useAll } =
+      constructTests(service, ({ waiter, contexts }) => ({
+        waiter: waiter(DELAY),
+        useIter1: contexts(({ pContext }) => pContext.iter1, 'iter1'),
+        useIter2: contexts(({ pContext }) => pContext.iter2, 'iter2'),
+        useAll: contexts(({ pContext }) => pContext.all, 'all'),
+      }));
 
     test(...start());
     test(...useStateValue('idle'));

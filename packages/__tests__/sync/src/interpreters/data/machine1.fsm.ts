@@ -26,8 +26,9 @@ export const machine1 = createMachine(
 
 machine1.addOptions(({ assign }) => ({
   actions: {
-    inc: assign('context.iterator', ({ context }) => context.iterator + 1),
+    inc: assign('iterator', ({ context }) => context.iterator + 1),
   },
+
 
   delays: { DELAY },
 }));

@@ -10,7 +10,7 @@ describe('Machine addOptions return', () => {
 
     const result = machine.addOptions(({ assign }) => ({
       actions: {
-        increment: assign('context', ({ context }) => context + 1),
+        increment: assign(({ context }) => context + 1),
       },
     }));
 
@@ -37,7 +37,7 @@ describe('Machine addOptions return', () => {
     const machine = _machine3;
 
     const result = machine.addOptions(({ assign }) => ({
-      actions: { setZero: assign('context', () => 0) } as any,
+      actions: { setZero: assign(() => 0) } as any,
       guards: { isPositive: ({ context }) => context > 0 },
       delays: { shortDelay: () => 100 } as any,
     }));
@@ -55,9 +55,10 @@ describe('Machine addOptions return', () => {
     const machine = _machine4.renew;
     const result = machine.addOptions(({ assign }) => ({
       actions: {
-        increment: assign('context', ({ context }) => context + 1),
+        increment: assign(({ context }) => context + 1),
       },
     }));
+
 
     test('#01 => result is defined', () => expect(result).toBeDefined());
 

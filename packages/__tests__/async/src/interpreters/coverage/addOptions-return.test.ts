@@ -12,7 +12,7 @@ describe.concurrent('Interpreter addOptions return', () => {
     const service = interpret(machine, { context: 0 });
     const result = service.addOptions(({ assign }) => ({
       actions: {
-        increment: assign('context', ({ context }) => context + 1),
+        increment: assign( ({ context }) => context + 1),
       },
     }));
 
@@ -28,7 +28,7 @@ describe.concurrent('Interpreter addOptions return', () => {
     const service = interpret(machine, { context: 0 });
 
     const result = service.addOptions(({ assign }) => ({
-      actions: { setZero: assign('context', () => 0) } as any,
+      actions: { setZero: assign( () => 0) } as any,
       guards: { isPositive: ({ context }) => context > 0 },
       delays: { shortDelay: () => 100 } as any,
     }));
@@ -45,7 +45,7 @@ describe.concurrent('Interpreter addOptions return', () => {
     const service = interpret(machine, { context: 0 });
     const result = service.addOptions(({ assign }) => ({
       actions: {
-        increment: assign('context', ({ context }) => context + 1),
+        increment: assign( ({ context }) => context + 1),
       },
     }));
 
@@ -66,13 +66,13 @@ describe.concurrent('Interpreter addOptions return', () => {
 
     // First call
     const result1 = service.addOptions(({ assign }) => ({
-      actions: { first: assign('context', ({ context }) => context + 1) },
+      actions: { first: assign( ({ context }) => context + 1) },
     }));
 
     // Second call
     const result2 = service.addOptions(({ assign }) => ({
       actions: {
-        second: assign('context', ({ context }) => context + 10),
+        second: assign( ({ context }) => context + 10),
       },
     }));
 

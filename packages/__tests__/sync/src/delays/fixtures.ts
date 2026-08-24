@@ -18,8 +18,9 @@ export const machine1 = createMachine(
   { context: type({ iterator: 'number' }), sync: true },
 ).provideOptions(({ assign }) => ({
   actions: {
-    inc: assign('context.iterator', ({ context }) => context.iterator + 1),
+    inc: assign('iterator', ({ context }) => context.iterator + 1),
   },
+
   delays: { DELAY },
 }));
 

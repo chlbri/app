@@ -728,14 +728,14 @@ export abstract class CommonMachine<
   protected abstract __sendTo: <M extends AnyMachine>(_?: M) => Fn;
 
   /**
-   * Abstract helper function to execute a void action.
+   * Protected abstract action function getter.
    */
-  protected abstract __voidAction: Fn;
+  protected abstract __action: Fn;
 
   /**
-   * Helper function for creating timer or activity actions.
+   * Protected time action handler factory.
    *
-   * @param name - Timer action name string.
+   * @param name - Activity or timer action type name.
    *
    * @returns Action function builder.
    */
@@ -756,10 +756,13 @@ export abstract class CommonMachine<
   protected __erase =
     (...keys: string[]) =>
     () => ({
-      mergers: keys.map(key => ({
-        key: key as any,
-        source: recompose.low({ [key]: undefined }) as any,
-      })),
+      mergers:
+        keys.length === 0
+          ? [{ source: undefined }]
+          : keys.map(key => ({
+              key: key as any,
+              source: recompose.low({ [key]: undefined }) as any,
+            })),
     });
 
   /**
@@ -772,7 +775,7 @@ export abstract class CommonMachine<
    */
   protected __filter = (key: string, fn: any) => {
     return (state: any) => {
-      const currentValue = byKey2.low(state, key);
+      const currentValue = byKey2.low(state.context, key);
       let filteredValue: any;
 
       /* v8 ignore else -- @preserve */

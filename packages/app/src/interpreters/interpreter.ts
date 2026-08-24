@@ -71,7 +71,7 @@ import {
   type SimpleMachineOptions2,
 } from '#common/machine';
 import { type AsyncEmitterFunction } from '#emitters';
-import { byKey2 } from '#utils';
+import { byKey2, merge2 } from '#utils';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import type { PrimitiveObject } from '@bemedev/typings';
@@ -172,6 +172,7 @@ export class AsyncInterpreter<
    * @throws Throws an error if the number of self transitions exceeds the constant {@linkcode DEFAULT_MAX_SELF_TRANSITIONS}.
    */
   protected _next = async () => {
+    this.__flush();
     // eslint-disable-next-line no-useless-assignment
     let check = false;
     do {
@@ -192,6 +193,7 @@ export class AsyncInterpreter<
       if (check2) this.__selfTransitionsCounter = 0;
     } while (check);
 
+    this.__flush();
     this.__selfTransitionsCounter = 0;
   };
 
@@ -259,7 +261,7 @@ export class AsyncInterpreter<
       resumeTimer,
       stopTimer,
       sentEvent,
-    }: ExtendedActionsParams<Eo, Pc, Tc>,
+    }: ExtendedActionsParams<Eo, Tc>,
   ) => {
     this.__performSendToAction(sentEvent);
     this.__performScheduledAction(scheduled);
@@ -475,6 +477,7 @@ export class AsyncInterpreter<
               await this.__performActions(from, ...actions);
             }
           }
+          this.__flush();
         };
 
         const promise = this.createInterval({ callback, interval, id });
@@ -958,7 +961,10 @@ export class AsyncInterpreter<
       this.__performConfig(true);
       this.__setStatus('working');
       return this._next();
-    } else return this.__setStatus('working');
+    } else {
+      this.__flush();
+      return this.__setStatus('working');
+    }
   };
 
   /**
@@ -995,6 +1001,7 @@ export class AsyncInterpreter<
 
         return [from, ...services] as const;
       })
+
       .map(([from, ..._services]) => {
         const services = _services.map(({ service, on, contexts, id }) => {
           const si = service as AnyInterpreter & { __subscribe: AddSubscriber_F };
@@ -1037,22 +1044,17 @@ export class AsyncInterpreter<
                       : byKey2.low(context, key);
 
                   if (path === '.') {
-                    return this.__mergeContexts({
-                      mergers: [
-                        { key: 'pContext' as any, source: { pContext } as any },
-                      ],
-                    });
+                    this.__contexts.pContext = pContext as any;
+                  } else {
+                    merge2({
+                      target: this.__contexts.pContext,
+                      source: recompose({ [path]: pContext }),
+                      key: path,
+                    } as any);
                   }
-                  return this.__mergeContexts({
-                    mergers: [
-                      {
-                        key: `pContext.${path}` as any,
-                        source: recompose({ [`pContext.${path}`]: pContext }) as any,
-                      },
-                    ],
-                  });
                 });
               },
+
               {
                 equals: (a, b) => {
                   const ac = a.context;

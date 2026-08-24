@@ -47,7 +47,7 @@ export type AsyncPerformActionLater_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = (action: AsyncAction2<E, Pc, Tc, T>) => MaybeAsyncActionResult<Pc, Tc>;
+> = (action: AsyncAction2<E, Pc, Tc, T>) => MaybeAsyncActionResult<Tc>;
 
 /**
  * Function type signature for performing an async action immediately.

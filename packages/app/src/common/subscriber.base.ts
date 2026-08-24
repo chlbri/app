@@ -118,7 +118,8 @@ export class SubscriberBase<T, R = T> implements Disposable, AsyncDisposable {
    * @param currenValue - Next state value.
    */
   fn: Fn<[T], void> = currenValue => {
-    this.__previousValue = this.__currenValue ?? currenValue;
+    const previous = this.__currenValue;
+    this.__previousValue = previous;
     this.__currenValue = currenValue;
     if (this.__firstTime) {
       this.__firstTime = false;
@@ -126,8 +127,12 @@ export class SubscriberBase<T, R = T> implements Disposable, AsyncDisposable {
     }
     if (this.__cannotPerform) return;
 
+    if (previous === undefined) {
+      return;
+    }
+
     const _equals = this.__equals(
-      this._selector(this.__previousValue),
+      this._selector(previous),
       this._selector(this.__currenValue),
     );
 

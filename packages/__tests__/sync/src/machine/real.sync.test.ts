@@ -13,8 +13,9 @@ beforeAll(() => {
 describe('REAL LIFE TESTS', () => {
   describe('#01 => Real life testing', () => {
     const machine = _machine1.provideOptions(({ assign }) => ({
-      actions: { inc: assign('context', ({ context }) => context + 1) },
+      actions: { inc: assign(({ context }) => context + 1) },
     }));
+
 
     const service = interpret(machine, { context: 0 });
 
@@ -96,8 +97,9 @@ describe('REAL LIFE TESTS', () => {
 
   describe('#02 => Cover', () => {
     const machine = _machine2.provideOptions(({ assign }) => ({
-      actions: { inc: assign('context', ({ context }) => context + 1) },
+      actions: { inc: assign(({ context }) => context + 1) },
     }));
+
 
     const service = interpret(machine, { context: 0 });
 
@@ -596,7 +598,7 @@ describe('REAL LIFE TESTS', () => {
       ({ assign, debounce }) => ({
         actions: {
           changeLang: debounce(
-            assign('context.lang', {
+            assign('lang', {
               CHANGE_LANG: ({ payload: { lang } }) => {
                 return lang;
               },
@@ -604,12 +606,12 @@ describe('REAL LIFE TESTS', () => {
             { ms: 500, id: 'change-lang' },
           ),
 
-          add: assign('context.fields', ({ context: { fields } }) => {
+          add: assign('fields', ({ context: { fields } }) => {
             fields?.push({ label: '', type: 'text' });
             return fields;
           }),
 
-          remove: assign('context.fields', {
+          remove: assign('fields', {
             REMOVE: ({ context: { fields }, payload: { index } }) => {
               fields?.splice(index, 1);
               return fields;
@@ -617,7 +619,7 @@ describe('REAL LIFE TESTS', () => {
           }),
 
           update: debounce(
-            assign('context.fields', {
+            assign('fields', {
               UPDATE: ({
                 context: { fields },
                 payload: { index, value },
@@ -630,7 +632,7 @@ describe('REAL LIFE TESTS', () => {
             { ms: 500, id: 'update-field' },
           ),
 
-          'update:now': assign('context.fields', {
+          'update:now': assign('fields', {
             'UPDATE:NOW': ({
               context: { fields },
               payload: { index, value },
@@ -643,38 +645,38 @@ describe('REAL LIFE TESTS', () => {
 
           // #region Fields
           'fields.register': assign(
-            'context.states.fields',
+            'states.fields',
             () => 'registration' as const,
           ),
 
           'fields.register.finish': debounce(
-            assign('context.states.fields', () => 'registered' as const),
+            assign('states.fields', () => 'registered' as const),
             { ms: 500, id: 'register-fields-finish' },
           ),
 
           'fields.modify': assign(
-            'context.states.fields',
+            'states.fields',
             () => 'idle' as const,
           ),
           // #endregion
 
           // #region Values
           'values.start.register': assign(
-            'context.states.values',
+            'states.values',
             () => 'registration' as const,
           ),
 
-          'values.register': assign('context.values', {
+          'values.register': assign('values', {
             'VALUES:REGISTER': ({ payload }) => payload,
           }),
 
           'values.register.finish': debounce(
-            assign('context.states.values', () => 'registered' as const),
+            assign('states.values', () => 'registered' as const),
             { ms: 500, id: 'register-values-finish' },
           ),
 
           'values.modify': assign(
-            'context.states.values',
+            'states.values',
             () => 'idle' as const,
           ),
           // #endregion
@@ -683,7 +685,7 @@ describe('REAL LIFE TESTS', () => {
            * Prepare at starting point
            * @returns
            */
-          prepare: assign('context', () => {
+          prepare: assign(() => {
             const current = { label: '', type: 'text' } as any;
             return {
               fields: [structuredClone(current)],
@@ -694,6 +696,7 @@ describe('REAL LIFE TESTS', () => {
         },
       }),
     );
+
 
     const service = interpret(mainMachine, { context: {} });
 

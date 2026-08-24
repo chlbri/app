@@ -8,14 +8,15 @@ export default createMachine(
     context: typings.context({ number1: 'number', number2: 'number' }),
     eventsMap: typings.eventsMap({ INC: 'undefined' }),
   },
-).provideOptions(({ assign, voidAction }) => {
+).provideOptions(({ assign, action }) => {
   return {
     actions: {
       incthearray: assign(
-        ['context.number1', 'context.number2'],
+        ['number1', 'number2'],
         async ({ context }) => [context.number1 + 1, context.number2 + 1],
-        { catch: () => voidAction(() => console.log('toto')) },
+        { catch: () => action(() => console.log('toto')) },
       ),
     },
   };
 });
+

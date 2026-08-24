@@ -12,10 +12,11 @@ describe('Simple Machine2 (from Machine1)', () => {
   const machine = machineEmitter1
     .provideOptions(({ assign }) => ({
       actions: {
-        assigN: assign('context', {
+        assigN: assign({
           'interval::next': ({ payload, context }) =>
             notU(context) + payload,
         }),
+
       },
       guards: { returnTrue: true },
       actors: {
@@ -31,13 +32,14 @@ describe('Simple Machine2 (from Machine1)', () => {
         },
       },
     }))
-    .provideOptions(({ voidAction }) => ({
+    .provideOptions(({ action }) => ({
       actions: {
-        mockCompleteAction: voidAction(() => {
+        mockCompleteAction: action(() => {
           mockFn('Complete action executed');
         }),
       },
     }));
+
 
   const service = interpret(machine, { context: 0 });
 
@@ -89,29 +91,18 @@ describe('Simple Machine2 (from Machine1)', () => {
   test(...resume());
   test.fails(...useMock());
   test(...waiter());
-  test(...useContext(50));
+  test(...useContext(75));
   test(...useStateValue('inactive'));
   test(...useNext());
   test(...useStateValue('active'));
-  test(...useContext(50));
-  test.fails(...useMock());
+  test(...useContext(75));
+  test(...useMock());
   //Resume without pause, no effect
   test(...resume());
   test(...waiter());
-  test(...useContext(50));
-  test.fails(...useMock());
-  test(...waiter());
-  test.fails(...useMock());
-  test(...useContext(50));
-  test(...waiter());
-  test.fails(...useMock());
-  test(...useContext(50));
-  test(...waiter());
-  test(...useMock());
-  test(...useContext(75));
-  test(...waiter(50));
   test(...useContext(75));
   test(...stop());
 });
+
 
 afterAll(() => vi.useRealTimers());

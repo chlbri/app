@@ -106,15 +106,22 @@ export type AsyncAssignAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-  D = DecomposeC<Pc, Tc>,
-> = <
-  const K extends SingleOrArrayL2<keyof D>,
-  const F extends TraversableTupleAsync<D, K> = TraversableTupleAsync<D, K>,
->(
-  keys: K,
-  fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
-  ...args: F extends Promise<any> ? [AsyncOptions<E, Pc, Tc, T>] : []
-) => AsyncAction2<E, Pc, Tc, T>;
+  D = DecomposeC<Tc>,
+> = {
+  <
+    const K extends SingleOrArrayL2<keyof D>,
+    const F extends TraversableTupleAsync<D, K> = TraversableTupleAsync<D, K>,
+  >(
+    keys: K,
+    fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
+    options?: AsyncOptions<E, Pc, Tc, T>,
+  ): AsyncAction2<E, Pc, Tc, T>;
+
+  <F extends Tc | Promise<Tc>>(
+    fn: FnMap<E, Pc, Tc, T, F>,
+    options?: AsyncOptions<E, Pc, Tc, T>,
+  ): AsyncAction2<E, Pc, Tc, T>;
+};
 
 /**
  * Function type signature for resending an event as an async action.
@@ -135,7 +142,25 @@ export type AsyncResendAction_F<
 > = (event: EventArgAll<E>) => AsyncAction2<E, Pc, Tc, T>;
 
 /**
- * Function type signature for creating an activity or timer control action.
+ * Function type signature for forcibly sending an event as an async action.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - State tag string type.
+ * @param event - Event argument of type {@linkcode EventArg}.
+ *
+ * @returns Async action of type {@linkcode AsyncAction2}.
+ */
+export type AsyncForceSendAction_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (event: EventArg<E>) => AsyncAction2<E, Pc, Tc, T>;
+
+/**
+ * Function type signature for time-related async actions (activities, timers).
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
  * @template `Pc` - Private context type.
@@ -153,7 +178,7 @@ export type AsyncTimeAction_F<
 > = (id: string) => AsyncAction2<E, Pc, Tc, T>;
 
 /**
- * Function type signature for creating a void async action helper.
+ * Function type signature for creating an async action helper.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
  * @template `Pc` - Private context type.
@@ -162,15 +187,25 @@ export type AsyncTimeAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncVoidAction_F<
+export type AsyncAction_F<
   E extends EventObject = EventObject,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = <F>(
   fn: FnMap<E, Pc, Tc, T, F>,
-  ...args: F extends Promise<any> ? [AsyncOptions<E, Pc, Tc, T>] : []
+  options?: AsyncOptions<E, Pc, Tc, T>,
 ) => AsyncAction2<E, Pc, Tc, T>;
+
+/**
+ * @deprecated Use {@linkcode AsyncAction_F} instead.
+ */
+export type AsyncVoidAction_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = AsyncAction_F<E, Pc, Tc, T>;
 
 /**
  * Function type signature for creating an array/object filter action helper.
@@ -204,7 +239,7 @@ export type AsyncEraseAction_F<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = CommonEraseAction_F<Pc, Tc, AsyncAction2<E, Pc, Tc, T>>;
+> = CommonEraseAction_F<Tc, AsyncAction2<E, Pc, Tc, T>>;
 
 /**
  * Function type signature for sending an event to an actor machine asynchronously.
@@ -441,9 +476,10 @@ export type AsyncAddOption<
    */
   erase: AsyncEraseAction_F<E, Pc, Tc, T>;
   /**
-   * Helper function for void actions.
+   * Helper function for actions.
    */
-  voidAction: AsyncVoidAction_F<E, Pc, Tc, T>;
+  action: AsyncAction_F<E, Pc, Tc, T>;
+
   /**
    * Helper function to send events to actor machines asynchronously.
    */

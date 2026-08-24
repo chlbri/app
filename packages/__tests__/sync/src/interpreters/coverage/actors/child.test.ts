@@ -11,8 +11,11 @@ describe('Coverage actors', () => {
     const DELAY = 350;
     const childMachine = _childMachine1.provideOptions(({ assign }) => ({
       actions: {
-        inc: assign('context.iter1', ({ context }) => context.iter1 + 1),
-        inc2: assign('context.iter2', ({ context }) => context.iter2 + 1),
+        inc: assign('iter1', ({ context }) => context.iter1 + 1),
+        inc2: assign('iter2', ({ context }) => context.iter2 + 1),
+
+
+
       },
       guards: { returnTrue },
       delays: { DELAY, DELAY2: DELAY * 2 },

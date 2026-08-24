@@ -204,9 +204,9 @@ describe('Composition', () => {
   describe('#03 => Exceed selfTransitionsCounter', () => {
     const machine = _machine1.provideOptions(({ isValue, assign }) => ({
       actions: {
-        addCondition: assign('context.condition', () => true),
-        removeCondition: assign('context.condition', () => false),
-        inc: assign('context.iterator', ({ context }) => {
+        addCondition: assign('condition', () => true),
+        removeCondition: assign('condition', () => false),
+        inc: assign('iterator', ({ context }) => {
           return context.iterator + 1;
         }),
       },
@@ -277,8 +277,8 @@ describe('Composition', () => {
   describe('#04 => Send without changed value', () => {
     const inc = vi.fn();
 
-    const machine = _machine2.provideOptions(({ voidAction }) => ({
-      actions: { inc: voidAction(inc) },
+    const machine = _machine2.provideOptions(({ action }) => ({
+      actions: { inc: action(inc) },
     }));
 
     const service = interpret(machine);
@@ -332,8 +332,8 @@ describe('Composition', () => {
   describe('#05 => After without changed value', () => {
     const inc = vi.fn();
 
-    const machine = _machine3.provideOptions(({ voidAction }) => ({
-      actions: { inc: voidAction(inc) },
+    const machine = _machine3.provideOptions(({ action }) => ({
+      actions: { inc: action(inc) },
       delays: { NEXT: 1000 },
     }));
 
@@ -360,10 +360,11 @@ describe('Composition', () => {
     const inc = vi.fn();
     const inc2 = vi.fn();
 
-    const machine = _machine4.provideOptions(({ voidAction }) => ({
-      actions: { inc: voidAction(inc), inc2: voidAction(inc2) },
+    const machine = _machine4.provideOptions(({ action }) => ({
+      actions: { inc: action(inc), inc2: action(inc2) },
       delays: { DELAY: 1000 },
     }));
+
 
     const service = interpret(machine, { context: { iterator: 0 } });
 

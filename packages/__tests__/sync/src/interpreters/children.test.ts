@@ -14,12 +14,12 @@ describe('Integration testing for interpret, Children', () => {
   const child = _child1.provideOptions(({ assign, swap }) => ({
     actions: {
       inc: assign(
-        'context',
         swap((data: number) => data + 1)({ '[0]': '[0].context' }),
       ),
     },
     delays: { DELAY: 100 },
   }));
+
 
   describe('#01 => context are same', () => {
     const parent = _parent2.provideOptions(() => ({
@@ -85,9 +85,9 @@ describe('Integration testing for interpret, Children', () => {
     const notify = vi.fn();
     const child = _child4;
 
-    const parent = _parent5.provideOptions(({ sendTo, voidAction }) => ({
+    const parent = _parent5.provideOptions(({ sendTo, action }) => ({
       actions: {
-        notify: voidAction(() => {
+        notify: action(() => {
           notify();
         }),
         sendChildNext: sendTo(child)(() => {
@@ -96,6 +96,7 @@ describe('Integration testing for interpret, Children', () => {
       },
       actors: { children: { child: () => interpret(child) } },
     }));
+
 
     const service = interpret(parent);
 

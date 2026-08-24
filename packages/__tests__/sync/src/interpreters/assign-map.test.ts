@@ -27,7 +27,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            setValue: assign('context.value', ({ event }) => {
+            setValue: assign('value', ({ event }) => {
               expect(event).toHaveProperty('payload');
               return (event as any).payload.val;
             }),
@@ -61,13 +61,13 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            setValue: assign('context.value', {
+            setValue: assign('value', {
               SET_VALUE: ({ payload, context }) => {
                 expect(context).toHaveProperty('value');
                 return payload.val;
               },
             }),
-            setCount: assign('context.count', {
+            setCount: assign('count', {
               SET_COUNT: ({ payload }) => payload.num,
             }),
           },
@@ -106,7 +106,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            handleUnknown: assign('context.value', {
+            handleUnknown: assign('value', {
               SET_VALUE: ({ payload }) => payload.val,
               else: ({ event }) => `fallback_${(event as any).type}`,
             }),
@@ -140,7 +140,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            reset: assign('context.value', {
+            reset: assign('value', {
               SET_VALUE: ({ payload }) => payload.val,
               else: () => 'reset_via_else',
             }),
@@ -174,12 +174,13 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            handleUnknown: assign('context.value', {
+            handleUnknown: assign('value', {
               SET_VALUE: ({ payload }) => payload.val,
             }),
           },
         }));
       });
+
 
       test(...useSend('UNKNOWN_EVENT', 4));
 
@@ -210,7 +211,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
         service.addOptions(({ assign }) => ({
           actions: {
             updateAll: assign(
-              ['context.name', 'context.age', 'context.role'],
+              ['name', 'age', 'role'],
               ({ event }) => [
                 (event as any).payload.name,
                 (event as any).payload.age,
@@ -260,18 +261,19 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            updateAll: assign(['context.name', 'context.age', 'context.role'], {
+            updateAll: assign(['name', 'age', 'role'], {
               UPDATE_ALL: ({ payload, context }) => {
                 expect(context).toHaveProperty('name');
                 return [payload.name, payload.age, payload.role];
               },
             }),
-            partialUpdate: assign('context.name', {
+            partialUpdate: assign('name', {
               PARTIAL_UPDATE: ({ payload }) => payload.name,
             }),
           },
         }));
       });
+
 
       test(
         ...useSend(
@@ -317,7 +319,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            resetAll: assign(['context.name', 'context.age', 'context.role'], {
+            resetAll: assign(['name', 'age', 'role'], {
               UPDATE_ALL: ({ payload }) => [payload.name, payload.age, payload.role],
               else: ({ event }) => ['reset_name', 0, (event as any).type],
             }),
@@ -359,7 +361,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            resetAll: assign('context.name', {
+            resetAll: assign('name', {
               UPDATE_ALL: ({ payload }) => payload.name,
               else: () => 'reset_default',
             }),
@@ -393,7 +395,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            updateAll: assign(['context.name', 'context.age'], {
+            updateAll: assign(['name', 'age'], {
               UPDATE_ALL: ({ payload }) => [payload.name, payload.age],
             }),
           },
@@ -435,11 +437,11 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#00 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            initProp: assign('context.propValue', {
+            initProp: assign('propValue', {
               TRIGGER_ALWAYS: () => 'trigger',
               else: ({ event }) => `init_${(event as any).type}`,
             }),
-            alwaysProp: assign('context.propValue', {
+            alwaysProp: assign('propValue', {
               TRIGGER_ALWAYS: () => 'trigger',
               else: ({ event }) => `always_${(event as any).type}`,
             }),
@@ -474,7 +476,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#00 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            initProp: assign('context.propValue', {
+            initProp: assign('propValue', {
               TRIGGER_ALWAYS: () => 'trigger',
             }),
           },
@@ -503,11 +505,11 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#00 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            initRoot: assign(['context.name', 'context.age'], {
+            initRoot: assign(['name', 'age'], {
               TRIGGER_ALWAYS: () => ['trigger', 1],
               else: ({ event }) => [`root_init_${(event as any).type}`, 10],
             }),
-            alwaysRoot: assign(['context.name', 'context.age'], {
+            alwaysRoot: assign(['name', 'age'], {
               TRIGGER_ALWAYS: () => ['trigger', 1],
               else: ({ event }) => [`root_always_${(event as any).type}`, 20],
             }),
@@ -545,12 +547,12 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       } = constructTests(service);
 
       test('#00 => Add actions', () => {
-        service.addOptions(({ voidAction }) => ({
+        service.addOptions(({ action }) => ({
           actions: {
-            initAction: voidAction(({ event }) => {
+            initAction: action(({ event }) => {
               actionSpy((event as any).type);
             }),
-            alwaysAction: voidAction(({ event }) => {
+            alwaysAction: action(({ event }) => {
               actionSpy((event as any).type);
             }),
           },
@@ -579,7 +581,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
     describe('#01 => String event with else fallback', () => {
       const { actions } = machine.createOptions(({ assign }) => ({
         actions: {
-          setValue: assign('context.value', {
+          setValue: assign('value', {
             SET_VALUE: ({ payload }) => payload.val,
             else: ({ event }) => `fallback_${event}`,
           }),
@@ -599,8 +601,8 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
         expect(result).toEqual({
           mergers: [
             {
-              key: 'context.value',
-              source: { context: { value: 'fallback_SOME_STRING_EVENT' } },
+              key: 'value',
+              source: { value: 'fallback_SOME_STRING_EVENT' },
             },
           ],
         });
@@ -610,7 +612,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
     describe('#02 => String event without else (fallback to nothing)', () => {
       const { actions } = machine.createOptions(({ assign }) => ({
         actions: {
-          setValue: assign('context.value', {
+          setValue: assign('value', {
             SET_VALUE: ({ payload }) => payload.val,
           }),
         },
@@ -628,10 +630,11 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#02 => sets value to "nothing"', () => {
         expect(result).toEqual({
           mergers: [
-            { key: 'context.value', source: { context: { value: 'nothing' } } },
+            { key: 'value', source: { value: 'nothing' } },
           ],
         });
       });
     });
   });
 });
+

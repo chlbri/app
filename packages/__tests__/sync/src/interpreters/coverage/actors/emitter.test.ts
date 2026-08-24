@@ -15,10 +15,11 @@ describe('Coverage actors', () => {
   describe('#01 => same emitter actor id in two states', () => {
     machine.addOptions(({ assign }) => ({
       actions: {
-        assignN: assign('context', {
+        assignN: assign({
           'interval::next': ({ payload, context }) =>
             notU(context) + payload,
         }),
+
       },
       actors: {
         emitters: {

@@ -20,14 +20,14 @@ import type { AsyncPredicateS } from '#guards';
 import { withTimeout } from '@bemedev/better-promise';
 
 import type {
+  AsyncAction_F,
   AsyncAddOptions_F,
   AsyncProvideOptions_F,
   AsyncSendAction_F,
-  AsyncVoidAction_F,
 } from './machine.types';
 
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { EmptyObject } from '~types';
+import type { EmptyObject, StateExtended } from '~types';
 
 /**
  * A class representing an asynchronous state machine.
@@ -116,7 +116,7 @@ export class AsyncMachine<
     const isNotValue = this.__isNotValue;
     const isDefined = this.__isDefined;
     const isNotDefined = this.__isNotDefined;
-    const voidAction = this.__voidAction;
+    const action = this.__action;
     const sendTo = this.__sendTo;
     const erase = this.__erase;
     const filter = this.__filter;
@@ -159,13 +159,85 @@ export class AsyncMachine<
 
         swap: this.swap,
 
-        assign: (keys, fn, options?) => {
+        //@ts-expect-error for inteneded
+        assign: (keysOrFn, fnOrOptions?, maybeOptions?) => {
+          const isKeyless =
+            typeof keysOrFn === 'function' ||
+            (typeof keysOrFn === 'object' &&
+              !Array.isArray(keysOrFn) &&
+              (fnOrOptions === undefined ||
+                'catch' in (fnOrOptions as any) ||
+                'then' in (fnOrOptions as any) ||
+                'max' in (fnOrOptions as any)));
+
+          if (isKeyless) {
+            const fn = keysOrFn as any;
+            const options = fnOrOptions as any;
+            if (!options) {
+              const _fn = reduceFnMap(fn as any, ...this.__eventsList);
+              return async (state: any) => {
+                const result = await _fn(state);
+                return { mergers: [{ source: result }] };
+              };
+            }
+            const { catch: errorFn, then: thenFn, max } = options;
+            const _fn = reduceFnMap(fn as any, ...this.__eventsList);
+
+            return async (state: any) => {
+              const { pContext, context, ...rest } = state;
+              const _state = { pContext, context };
+
+              const execute = async () => {
+                const rawResult = await _fn(state);
+                return { mergers: [{ source: rawResult }] };
+              };
+
+              try {
+                let res: any = {};
+                if (max !== undefined) {
+                  const tp = withTimeout(execute, `assign-root`, max);
+                  res = await tp();
+                } else {
+                  res = await execute();
+                }
+
+                if (thenFn) {
+                  const nextContext = merge2.multiple(
+                    context,
+                    ...toArray.typed(res?.mergers),
+                  );
+                  const thenRes = await thenFn({
+                    ...rest,
+                    context: nextContext,
+                    pContext,
+                  } as any);
+
+                  const mergers = [
+                    ...toArray.typed(res?.mergers),
+                    ...toArray.typed(thenRes?.mergers),
+                  ];
+                  const { mergers: _m1, ...ext1 } = res;
+                  const { mergers: _m2, ...ext2 } = thenRes;
+                  return { mergers, ...ext1, ...ext2 };
+                }
+
+                return res;
+              } catch (e: any) {
+                const errorAction = errorFn(e);
+                return await errorAction({ ..._state, ...rest } as any);
+              }
+            };
+          }
+
+          const keys = keysOrFn as any;
+          const fn = fnOrOptions as any;
+          const options = maybeOptions as any;
           const keysArray = Array.isArray(keys) ? keys : [keys];
           const isArray = Array.isArray(keys);
 
           if (!options) {
             const _fn = reduceFnMap(fn as any, ...this.__eventsList);
-            return async state => {
+            return async (state: StateExtended) => {
               const result = await _fn(state);
               if (!isArray) {
                 return {
@@ -188,7 +260,7 @@ export class AsyncMachine<
           const { catch: errorFn, then: thenFn, max } = options;
           const _fn = reduceFnMap(fn as any, ...this.__eventsList);
 
-          return async state => {
+          return async (state: StateExtended) => {
             const { pContext, context, ...rest } = state;
             const _state = { pContext, context };
 
@@ -224,17 +296,16 @@ export class AsyncMachine<
               }
 
               if (thenFn) {
-                const nextState = merge2.multiple(
-                  { context, pContext },
+                const nextContext = merge2.multiple(
+                  structuredClone(context),
                   ...toArray.typed(res?.mergers),
                 );
-                const nextContext = nextState?.context;
-                const nextPContext = nextState?.pContext;
                 const thenRes = await thenFn({
                   ...rest,
                   context: nextContext,
-                  pContext: nextPContext,
+                  pContext,
                 } as any);
+
                 const mergers = [
                   ...toArray.typed(res?.mergers),
                   ...toArray.typed(thenRes?.mergers),
@@ -264,8 +335,9 @@ export class AsyncMachine<
               if (m) mergers.push(...m);
               Object.assign(extendeds, ext);
 
-              /* v8 ignore else -- @preserve */
-              if (m && m.length > 0) merge2.multiple(state, ...(m as any));
+              if (m && m.length > 0) {
+                state.context = merge2.multiple(state.context, ...(m as any)) as any;
+              }
             }
             return { mergers, ...extendeds };
           };
@@ -273,14 +345,14 @@ export class AsyncMachine<
 
         filter,
         erase,
-        voidAction,
+        action,
         sendTo,
 
         debounce: (fn, { id, ms = 100 }) => {
           return async state => {
             const res = await fn(state);
             const { mergers = [] } = res;
-            const scheduled: ScheduledData<Pc, Tc> = { data: mergers, ms, id };
+            const scheduled: ScheduledData<Tc> = { data: mergers, ms, id };
 
             return { scheduled };
           };
@@ -403,19 +475,18 @@ export class AsyncMachine<
   };
 
   /**
-   * Function helper to perform a void action.
+   * Function helper to perform an action.
    *
    * @param fn - The action function to perform.
    * @param options - Optional configuration including timeout and error handling.
    *
-   * @see -- type {@linkcode AsyncVoidAction_F}
+   * @see -- type {@linkcode AsyncAction_F}
    */
-  protected __voidAction: AsyncVoidAction_F<Eo, Pc, Tc, Ta> = (fn, options?) => {
+  protected __action: AsyncAction_F<Eo, Pc, Tc, Ta> = (fn, options?) => {
     if (!options) {
       return state => {
         const _fn = reduceFnMap(fn, ...this.__eventsList);
-        const out = _fn(state);
-        console.warn({ out });
+        _fn(state);
         return {};
       };
     }
@@ -432,7 +503,7 @@ export class AsyncMachine<
       try {
         let res: any = {};
         if (max !== undefined) {
-          const tp = withTimeout(execute, 'voidAction', max);
+          const tp = withTimeout(execute, 'action', max);
           res = await tp();
         } else {
           res = await execute();

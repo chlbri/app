@@ -12,8 +12,9 @@ export default createMachine(
 ).provideOptions(({ assign }) => ({
   actions: {
     incthearray: assign(
-      ['context.number1', 'context.number2'],
+      ['number1', 'number2'],
       ({ context }) => [context.number1 + 1, context.number2 + 1],
     ),
   },
+
 }));

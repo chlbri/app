@@ -89,26 +89,26 @@ export const machine21 = createMachine(
     actorsMap: type({ children: { machine1: { NEXT: 'never' } } }),
   },
 ).provideOptions(
-  ({ isNotValue, isValue, assign, voidAction, sendTo }) => ({
+  ({ isNotValue, isValue, assign, action, sendTo }) => ({
     actions: {
       inc: assign(
-        'context.iterator',
+        'iterator',
         ({ context }) => notU(context?.iterator) + 1,
       ),
       inc2: assign(
-        'context.iterator',
+        'iterator',
         ({ context }) => notU(context?.iterator) + 4,
       ),
-      sendPanelToUser: voidAction(() => console.log('sendPanelToUser')),
-      askUsertoInput: voidAction(() => console.log('Input, please !!')),
-      write: assign('context.input', {
+      sendPanelToUser: action(() => console.log('sendPanelToUser')),
+      askUsertoInput: action(() => console.log('Input, please !!')),
+      write: assign('input', {
         WRITE: ({ payload: { value } }) => value,
       }),
       send: sendTo(machine1)(
         async () => ({ to: 'machine1', event: 'NEXT' }),
         { catch: emptyActionFn },
       ),
-      insertData: assign('context.data', ({ context }) =>
+      insertData: assign('data', ({ context }) =>
         fakeDB
           .filter(item => item.name.includes(context?.input ?? ''))
           .map(item => item.name),
@@ -126,4 +126,5 @@ export const machine21 = createMachine(
     delays: { DELAY, DELAY2: 2 * DELAY },
   }),
 );
+
 // #endregion
