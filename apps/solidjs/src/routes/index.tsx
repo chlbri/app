@@ -1,4 +1,4 @@
-import { createHooks, useService } from '@bemedev/app-solidjs';
+import { createHooks, createService } from '@bemedev/app-solidjs';
 import { createFileRoute, Link } from '@tanstack/solid-router';
 
 export const Route = createFileRoute('/')({
@@ -12,7 +12,7 @@ export const Route = createFileRoute('/')({
     })();
 
     // SolidJS <accessors via @bemedev/app-solidjs
-    const hooksCounter = useService(counterService);
+    const hooksCounter = createService(counterService);
     const hooksTraffic = createHooks(trafficService);
     const counterState = hooksCounter.state();
     const counterValue = hooksCounter.state({ selector: s => s.value });
@@ -46,7 +46,7 @@ export const Route = createFileRoute('/')({
               }
               <code class='font-mono text-pink-300'>@bemedev/app</code>
               {' state machines with SolidJS fine-grained signals using '}
-              <code class='font-mono text-cyan-300'>useService</code>.
+              <code class='font-mono text-cyan-300'>createService</code>.
             </p>
           </div>
         </section>

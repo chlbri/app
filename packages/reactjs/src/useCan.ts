@@ -4,6 +4,7 @@ import {
   type PrimitiveObject,
   type State,
 } from '@bemedev/app';
+
 import { expandFn } from '@bemedev/app/bemedev';
 import { deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';

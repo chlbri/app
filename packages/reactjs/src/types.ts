@@ -1,4 +1,5 @@
 import type { EventObject, State, PrimitiveObject } from '@bemedev/app';
+import type { Dequal_F } from '@bemedev/app/types';
 
 /**
  * Options for configuring the `useService` hook.
@@ -11,12 +12,13 @@ import type { EventObject, State, PrimitiveObject } from '@bemedev/app';
  * @property selector - Optional selector function to project the state into a sub-state.
  * @property equals - Optional equality comparator function to compare previous and next selected state.
  */
-export type UseServiceOptions<
+export type UseStateOptions<
   Tc extends PrimitiveObject,
   Ta extends string,
   Eo extends EventObject,
   T = State<Eo, Tc, Ta>,
 > = {
   selector?: (state: State<Eo, Tc, Ta>) => T;
-  equals?: (first: T, next: T) => boolean;
+  equals?: Dequal_F<T>;
+  stateEquals?: Dequal_F<State<Eo, Tc, Ta>>;
 };

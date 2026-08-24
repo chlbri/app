@@ -1,4 +1,4 @@
-import { useService } from '@bemedev/app-solidjs';
+import { createService } from '@bemedev/app-solidjs';
 import { createFileRoute } from '@tanstack/solid-router';
 import { counterMachine } from '../machines/counter.machine';
 import { MachineConfig } from '../ui/components/MachineConfig';
@@ -10,7 +10,7 @@ export const Route = createFileRoute('/counter')({
     })();
 
     // Subscriptions with options
-    const hooks = useService(service);
+    const hooks = createService(service);
     const fullState = hooks.state();
     const countOnly = () => fullState().context.count;
     const stateValue = () => fullState().value;

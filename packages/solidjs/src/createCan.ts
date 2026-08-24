@@ -5,10 +5,11 @@ import type {
   State,
 } from '@bemedev/app';
 import { expandFn } from '@bemedev/app/bemedev';
+import { deepEqual } from '@bemedev/app/utils';
 import { createSignal, onCleanup } from 'solid-js';
 
 /**
- * SolidJS hook that creates reactive signal helpers for querying event capabilities from a service.
+ * SolidJS primitive that creates reactive signal helpers for querying event capabilities from a service.
  *
  * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
  * @template `Ta` - Tag type extending `string`.
@@ -18,12 +19,13 @@ import { createSignal, onCleanup } from 'solid-js';
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
  * @param service.state - Current state of type {@linkcode State}.
  * @param service.canEvents - Function checking if event types can be accepted.
+ * @param equals - Optional equality comparator function for state comparison.
  *
  * @returns Object helper with `or` and `and` methods returning signals.
  *
- * @see {@linkcode expandFn}, {@linkcode createSignal}, {@linkcode onCleanup}
+ * @see {@linkcode expandFn}, {@linkcode createSignal}, {@linkcode onCleanup}, {@linkcode deepEqual}
  */
-export function useCan<
+export function createCan<
   Tc extends PrimitiveObject,
   Ta extends string,
   Eo extends EventObject,
@@ -34,15 +36,18 @@ export function useCan<
 }) {
   const dispatch = (matcher: 'some' | 'every') => {
     return (...events: Eo['type'][]) => {
-      const selector = (_state: State<Eo, Tc, Ta>) => {
+      const selector = () => {
         return events[matcher](event => service.canEvents(event));
       };
 
-      const [_state, setState] = createSignal(selector(service.state));
+      const [_state, setState] = createSignal(selector());
 
-      const sub = service.subscribe(() => {
-        setState(() => selector(service.state));
-      });
+      const sub = service.subscribe(
+        () => {
+          setState(() => selector());
+        },
+        { equals: (first, next) => deepEqual(first.value, next.value) },
+      );
 
       onCleanup(sub.unsubscribe);
       return _state;

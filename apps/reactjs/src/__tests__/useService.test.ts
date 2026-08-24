@@ -1,5 +1,11 @@
 import { interpret } from '@bemedev/app';
-import { createHooks, useService } from '@bemedev/app-reactjs';
+import {
+  createHooks,
+  useCan,
+  useIsInside,
+  useService,
+  useState,
+} from '@bemedev/app-reactjs';
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import _machine from './common.machine';
@@ -7,12 +13,8 @@ import _machine from './common.machine';
 describe('#01 => useService', () => {
   const machine = _machine.provideOptions(({ assign }) => ({
     actions: {
-      increment: assign(
-        'count',
-        ({ context }) => context.count + 1,
-      ),
+      increment: assign('count', ({ context }) => context.count + 1),
     },
-
   }));
 
   const service = interpret(machine, { context: { count: 0 } });
@@ -35,10 +37,7 @@ describe('#01 => useService', () => {
     const isOr = _service.isInside.or('idle', 'active');
     const isAnd = _service.isInside('active', 'active.speed_low');
     const isSpeedLow = _service.isInside('active.speed_low');
-    const isSpeedHigh = _service.isInside.and(
-      'active',
-      'active.speed_high',
-    );
+    const isSpeedHigh = _service.isInside.and('active', 'active.speed_high');
 
     return {
       all,
@@ -188,4 +187,201 @@ describe('#01 => useService', () => {
   });
 
   test('#33 => stops the service', () => act(() => service.stop()));
+});
+
+describe('#02 => standalone useState', () => {
+  const machine = _machine.provideOptions(({ assign }) => ({
+    actions: {
+      increment: assign('count', ({ context }) => context.count + 1),
+    },
+  }));
+
+  const service = interpret(machine, { context: { count: 10 } });
+
+  const { result } = renderHook(() =>
+    useState(service, {
+      selector: s => s.context.count,
+      equals: (a, b) => a === b,
+    }),
+  );
+
+  test('#00 => initial count is 10', () => {
+    expect(result.current).toBe(10);
+  });
+
+  test('#01 => starts the service', () => act(() => service.start()));
+  test('#02 => sends START event', () => act(() => service.send('START')));
+  test('#03 => sends INC event', () => act(() => service.send('INC')));
+
+  test('#04 => count should be 11', () => {
+    expect(result.current).toBe(11);
+  });
+
+  test('#05 => stops the service', () => act(() => service.stop()));
+});
+
+describe('#03 => standalone useCan addons', () => {
+  const machine = _machine.provideOptions(({ assign }) => ({
+    actions: {
+      increment: assign('count', ({ context }) => context.count + 1),
+    },
+  }));
+
+  const service = interpret(machine, { context: { count: 0 } });
+
+  const { result } = renderHook(() => {
+    const can = useCan(service);
+    const canStart = can('START');
+    const canAnd = can.and('START', 'STOP');
+    const canOr = can.or('START', 'STOP');
+    return { canStart, canAnd, canOr };
+  });
+
+  test('#00 => can START initially is true', () => {
+    expect(result.current.canStart).toBe(true);
+  });
+
+  test('#01 => canAnd is false', () => {
+    expect(result.current.canAnd).toBe(false);
+  });
+
+  test('#02 => canOr is true', () => {
+    expect(result.current.canOr).toBe(true);
+  });
+
+  test('#03 => starts the service', () => act(() => service.start()));
+  test('#04 => sends START event', () => act(() => service.send('START')));
+
+  test('#05 => can START is false after start', () => {
+    expect(result.current.canStart).toBe(false);
+  });
+
+  test('#06 => canOr is true after start', () => {
+    expect(result.current.canOr).toBe(true);
+  });
+
+  test('#07 => stops the service', () => act(() => service.stop()));
+});
+
+describe('#04 => standalone useIsInside addons', () => {
+  const machine = _machine.provideOptions(({ assign }) => ({
+    actions: {
+      increment: assign('count', ({ context }) => context.count + 1),
+    },
+  }));
+
+  const service = interpret(machine, { context: { count: 0 } });
+
+  const { result } = renderHook(() => {
+    const isInside = useIsInside(service);
+    const isIdle = isInside('idle');
+    const isOr = isInside.or('idle', 'active');
+    const isAnd = isInside.and('active', 'active.speed_low');
+    return { isIdle, isOr, isAnd };
+  });
+
+  test('#00 => is idle initially true', () => {
+    expect(result.current.isIdle).toBe(true);
+  });
+
+  test('#01 => isOr is true', () => {
+    expect(result.current.isOr).toBe(true);
+  });
+
+  test('#02 => isAnd is false', () => {
+    expect(result.current.isAnd).toBe(false);
+  });
+
+  test('#03 => starts the service', () => act(() => service.start()));
+  test('#04 => sends START event', () => act(() => service.send('START')));
+
+  test('#05 => is idle is false', () => {
+    expect(result.current.isIdle).toBe(false);
+  });
+
+  test('#06 => isAnd is true', () => {
+    expect(result.current.isAnd).toBe(true);
+  });
+
+  test('#07 => stops the service', () => act(() => service.stop()));
+});
+
+describe('#05 => stateEquals vs equals difference in useState', () => {
+  const machine = _machine.provideOptions(({ assign }) => ({
+    actions: {
+      increment: assign('count', ({ context }) => context.count + 1),
+    },
+  }));
+
+  const service = interpret(machine, { context: { count: 0 } });
+
+  // 1. Ignores context changes because stateEquals checks only value
+  const valueOnly = renderHook(() =>
+    useState(service, {
+      selector: s => s.context.count,
+      stateEquals: (prev, next) =>
+        JSON.stringify(prev.value) === JSON.stringify(next.value),
+      equals: (a, b) => a === b,
+    }),
+  );
+
+  // 2. Normal state tracking
+  const defaultState = renderHook(() =>
+    useState(service, {
+      selector: s => s.context.count,
+      equals: (a, b) => a === b,
+    }),
+  );
+
+  // 3. Notifies via stateEquals but equals ignores changes
+  const equalsAlwaysTrue = renderHook(() =>
+    useState(service, {
+      selector: s => s.context.count,
+      stateEquals: () => false,
+      equals: () => true,
+    }),
+  );
+
+  test('#00 => initial counts are all 0', () => {
+    expect(valueOnly.result.current).toBe(0);
+    expect(defaultState.result.current).toBe(0);
+    expect(equalsAlwaysTrue.result.current).toBe(0);
+  });
+
+  test('#01 => starts the service', () => act(() => service.start()));
+  test('#02 => sends START event', () => act(() => service.send('START')));
+
+  test('#03 => counts remain 0 after START transition', () => {
+    expect(valueOnly.result.current).toBe(0);
+    expect(defaultState.result.current).toBe(0);
+    expect(equalsAlwaysTrue.result.current).toBe(0);
+  });
+
+  test('#04 => sends INC event', () => act(() => service.send('INC')));
+
+  test('#05 => defaultState is 1, valueOnly is still 0 because value did not change', () => {
+    expect(defaultState.result.current).toBe(1);
+    expect(valueOnly.result.current).toBe(0);
+    expect(equalsAlwaysTrue.result.current).toBe(0);
+  });
+
+  test('#06 => sends INC event again', () => act(() => service.send('INC')));
+
+  test('#07 => defaultState is 2, valueOnly is still 0', () => {
+    expect(defaultState.result.current).toBe(2);
+    expect(valueOnly.result.current).toBe(0);
+    expect(equalsAlwaysTrue.result.current).toBe(0);
+  });
+
+  test('#08 => sends ACCELERATE event changing state.value', () => {
+    act(() => service.send('ACCELERATE'));
+  });
+
+  test('#09 => valueOnly now updates to 2 because value changed', () => {
+    expect(valueOnly.result.current).toBe(2);
+    expect(defaultState.result.current).toBe(2);
+    expect(equalsAlwaysTrue.result.current).toBe(0);
+  });
+
+  test('#10 => stops the service', () => act(() => service.stop()));
 });

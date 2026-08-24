@@ -1,16 +1,16 @@
-import {
-  type AddSubscriber_F,
-  type EventObject,
-  type PrimitiveObject,
-  type State,
+import type {
+  AddSubscriber_F,
+  EventObject,
+  PrimitiveObject,
+  State,
 } from '@bemedev/app';
-import type { UseServiceOptions } from './types';
-import { useCan } from './useCan';
-import { useIsInside } from './useIsInside';
-import { useState } from './useState';
+import { createCan } from './createCan';
+import { createIsInside } from './createIsInside';
+import { createState } from './createState';
+import type { CreateStateOptions } from './types';
 
 /**
- * SolidJS hook that binds state signals, event checking, and hierarchy querying for a service.
+ * SolidJS primitive that binds state signals, event checking, and hierarchy querying for a service.
  *
  * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
  * @template `Ta` - Tag type extending `string`.
@@ -23,9 +23,9 @@ import { useState } from './useState';
  *
  * @returns Service hooks object containing `state`, `can`, and `isInside`.
  *
- * @see {@linkcode useState}, {@linkcode useCan}, {@linkcode useIsInside}, -- type {@linkcode UseServiceOptions}
+ * @see {@linkcode createState}, {@linkcode createCan}, {@linkcode createIsInside}, -- type {@linkcode CreateStateOptions}
  */
-export function useService<
+export function createService<
   Tc extends PrimitiveObject,
   Ta extends string,
   Eo extends EventObject,
@@ -35,15 +35,16 @@ export function useService<
   canEvents: (...events: Eo['type'][]) => boolean;
 }) {
   return {
-    state: <T = State<Eo, Tc, Ta>>(options?: UseServiceOptions<Tc, Ta, Eo, T>) =>
-      useState<Tc, Ta, Eo, T>(service, options),
+    state: <T = State<Eo, Tc, Ta>>(options?: CreateStateOptions<Tc, Ta, Eo, T>) => {
+      return createState<Tc, Ta, Eo, T>(service, options);
+    },
 
-    can: useCan(service),
-    isInside: useIsInside(service),
+    can: createCan(service),
+    isInside: createIsInside(service),
   };
 }
 
 /**
- * Alias for function {@linkcode useService}.
+ * Alias for function {@linkcode createService}.
  */
-export const createHooks = useService;
+export const createHooks = createService;

@@ -6,7 +6,7 @@ import {
 } from '@bemedev/app';
 import { deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';
-import type { UseServiceOptions } from './types';
+import type { UseStateOptions } from './types';
 
 /**
  * A hook that creates a React state from a service with a subscribe function.
@@ -19,7 +19,7 @@ import type { UseServiceOptions } from './types';
  * @param service - The service containing state and subscribe method.
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
  * @param service.state - Current state of type {@linkcode State}.
- * @param options - Optional configuration options of type {@linkcode UseServiceOptions}.
+ * @param options - Optional configuration options of type {@linkcode UseStateOptions}.
  *
  * @returns The selected state of type `T`.
  *
@@ -32,21 +32,22 @@ export function useState<
   T = State<Eo, Tc, Ta>,
 >(
   service: { subscribe: AddSubscriber_F<Tc, Ta, Eo>; state: State<Eo, Tc, Ta> },
-  options?: UseServiceOptions<Tc, Ta, Eo, T>,
+  options?: UseStateOptions<Tc, Ta, Eo, T>,
 ): T {
-  const { selector = identity, equals = deepEqual<T> } = options ?? {};
+  const {
+    selector = identity,
+    equals = deepEqual,
+    stateEquals = deepEqual,
+  } = options ?? {};
   const _selector = () => selector(service.state);
 
   return useSync(
     listener => {
       const { unsubscribe } = service.subscribe(listener, {
-        equals: (prev, next) => {
-          const _prev = selector(prev);
-          const _next = selector(next);
-          return equals(_prev, _next);
-        },
+        equals: stateEquals,
         firstTime: true,
       });
+
       return unsubscribe;
     },
     _selector,

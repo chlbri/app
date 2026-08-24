@@ -40,9 +40,7 @@ export function useIsInside<
       return useSync(
         listener => {
           const { unsubscribe } = service.subscribe(listener, {
-            equals: (first, next) => {
-              return deepEqual(first.value, next.value);
-            },
+            equals: (first, next) => deepEqual(first.value, next.value),
             firstTime: true,
           });
 

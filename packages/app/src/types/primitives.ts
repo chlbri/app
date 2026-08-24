@@ -835,3 +835,15 @@ export type OptionalDefinition<
  * @template `T` - The resolved value type.
  */
 export type MaybePromise<T> = T | Promise<T>;
+
+/**
+ * Type guard function signature for checking deep equality of two values.
+ *
+ * @template `T` - The type of values to compare.
+ *
+ * @param first - The first value to compare.
+ * @param next - The second value to compare.
+ *
+ * @returns `true` if the values are deeply equal, `false` otherwise.
+ */
+export type Dequal_F<T> = (first: T, next: T) => boolean;

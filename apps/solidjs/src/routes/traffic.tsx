@@ -1,5 +1,5 @@
 import { cn } from '#cn';
-import { useService } from '@bemedev/app-solidjs';
+import { createService } from '@bemedev/app-solidjs';
 import { createFileRoute } from '@tanstack/solid-router';
 import { For } from 'solid-js';
 import { trafficMachine } from '../machines/traffic.machine';
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/traffic')({
       select: s => s.trafficService,
     })();
 
-    const hooks = useService(service);
+    const hooks = createService(service);
     const fullState = hooks.state();
     const tags = () => fullState().tags;
     const isRed = hooks.isInside('flow.red');
