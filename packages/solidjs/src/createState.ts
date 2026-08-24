@@ -36,20 +36,15 @@ export function createState<
 ) {
   const {
     selector = identity,
-    equals: equality = deepEqual,
+    equals = deepEqual,
     stateEquals = deepEqual,
   } = options ?? {};
 
-  const [state, setState] = createSignal<T>(selector(service.state), {
-    equals: equality,
-  });
+  const [state, setState] = createSignal<T>(selector(service.state), { equals });
 
-  const sub = service.subscribe(
-    nextState => {
-      setState(() => selector(nextState));
-    },
-    { equals: stateEquals },
-  );
+  const sub = service.subscribe(nextState => setState(() => selector(nextState)), {
+    equals: stateEquals,
+  });
 
   onCleanup(sub.unsubscribe);
   return state;

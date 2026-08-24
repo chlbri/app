@@ -46,7 +46,7 @@ export function createIsInside<
 
       const sub = service.subscribe(
         () => {
-          setState(() => selector());
+          setState(selector);
         },
         { equals: (first, next) => deepEqual(first.value, next.value) },
       );

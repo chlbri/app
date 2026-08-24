@@ -5,6 +5,26 @@
 <details>
 <summary>
 
+## **[2.5.1] - 24/08/2026** => _13:57_
+
+</summary>
+
+### Refactor
+
+- **Signal Setter Callbacks**: Pass `selector` directly to `setState` in `createCan`
+  and `createIsInside`.
+- **Signal Options & Subscriptions**: Simplify `equals` option destructuring and
+  inline subscription callback in `createState`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.5.0] - 24/08/2026** => _12:35_
 
 </summary>

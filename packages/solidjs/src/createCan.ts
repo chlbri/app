@@ -44,7 +44,7 @@ export function createCan<
 
       const sub = service.subscribe(
         () => {
-          setState(() => selector());
+          setState(selector);
         },
         { equals: (first, next) => deepEqual(first.value, next.value) },
       );
