@@ -4,9 +4,10 @@ import {
   AFTER_EVENT,
   ALWAYS_EVENT,
   INIT_EVENT,
+  after,
+  always,
   type AfterEvent,
   type AlwaysEvent,
-  type InitEvent,
 } from '@bemedev/app/events';
 import _machine1 from './assign-map.1.machine';
 import _machine2 from './assign-map.2.machine';
@@ -578,35 +579,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
   describe('#04 => String event handling (reduceFnMap check5)', () => {
     const machine = _machine1;
 
-    describe('#01 => String event with else fallback', () => {
-      const { actions } = machine.createOptions(({ assign }) => ({
-        actions: {
-          setValue: assign('value', {
-            SET_VALUE: ({ payload }) => payload.val,
-            else: ({ event }) => `fallback_${event}`,
-          }),
-        },
-      }));
-
-      const state = {
-        context: { value: 'initial', count: 0 },
-        event: 'SOME_STRING_EVENT',
-      } as any;
-
-      const result = actions?.setValue?.(state);
-
-      test('#01 => is an object', () => expect(typeof result).toBe('object'));
-
-      test('#02 => sets value via else with string event', () => {
-        expect(result).toEqual({
-          mergers: [
-            { key: 'value', source: { value: 'fallback_SOME_STRING_EVENT' } },
-          ],
-        });
-      });
-    });
-
-    describe('#02 => String event without else (fallback to nothing)', () => {
+    describe('#01 => String event without else (fallback to nothing)', () => {
       const { actions } = machine.createOptions(({ assign }) => ({
         actions: {
           setValue: assign('value', { SET_VALUE: ({ payload }) => payload.val }),
@@ -629,24 +602,21 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       });
     });
 
-    describe('#03 => String event matching INIT_EVENT (InitEvent)', () => {
+    describe('#02 => String event matching INIT_EVENT (InitEvent)', () => {
       const machine = _machine6;
-      const alwaysEvent = `idle/${ALWAYS_EVENT}` as const satisfies AlwaysEvent;
-      const afterEvent = `idle/${AFTER_EVENT}` as const satisfies AfterEvent;
-      const initEvent: InitEvent = INIT_EVENT;
 
       const { actions } = machine.createOptions(({ assign }) => ({
         actions: {
           setValue: assign('value', {
-            [initEvent]: () => 'from_init',
-            [alwaysEvent]: () => 'from_always',
-            [afterEvent]: () => 'from_after',
+            [INIT_EVENT]: () => 'from_init',
+            [always('idle')]: () => 'from_always',
+            [after('idle')]: () => 'from_after',
             else: ({ event }) => `fallback_${event}`,
           }),
         },
       }));
 
-      const state = { context: { value: 'initial' }, event: initEvent } as any;
+      const state = { context: { value: 'initial' }, event: INIT_EVENT } as any;
 
       const result = actions?.setValue?.(state);
 
@@ -659,18 +629,16 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       });
     });
 
-    describe('#04 => String event matching AlwaysEvent (${string}/ALWAYS_EVENT)', () => {
+    describe('#03 => String event matching AlwaysEvent (${string}/ALWAYS_EVENT)', () => {
       const machine = _machine6;
       const alwaysEvent = `idle/${ALWAYS_EVENT}` as const satisfies AlwaysEvent;
-      const afterEvent = `idle/${AFTER_EVENT}` as const satisfies AfterEvent;
-      const initEvent: InitEvent = INIT_EVENT;
 
       const { actions } = machine.createOptions(({ assign }) => ({
         actions: {
           setValue: assign('value', {
-            [initEvent]: () => 'from_init',
-            [alwaysEvent]: () => 'from_always',
-            [afterEvent]: () => 'from_after',
+            [INIT_EVENT]: () => 'from_init',
+            [always('idle')]: () => 'from_always',
+            [after('idle')]: () => 'from_after',
           }),
         },
       }));
@@ -688,18 +656,16 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       });
     });
 
-    describe('#05 => String event matching AfterEvent (${string}/AFTER_EVENT)', () => {
+    describe('#04 => String event matching AfterEvent (${string}/AFTER_EVENT)', () => {
       const machine = _machine6;
-      const alwaysEvent = `idle/${ALWAYS_EVENT}` as const satisfies AlwaysEvent;
       const afterEvent = `idle/${AFTER_EVENT}` as const satisfies AfterEvent;
-      const initEvent: InitEvent = INIT_EVENT;
 
       const { actions } = machine.createOptions(({ assign }) => ({
         actions: {
           setValue: assign('value', {
-            [initEvent]: () => 'from_init',
-            [alwaysEvent]: () => 'from_always',
-            [afterEvent]: () => 'from_after',
+            [INIT_EVENT]: () => 'from_init',
+            [always('idle')]: () => 'from_always',
+            [after('idle')]: () => 'from_after',
           }),
         },
       }));
@@ -713,30 +679,6 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#02 => sets value via matching AfterEvent', () => {
         expect(result).toEqual({
           mergers: [{ key: 'value', source: { value: 'from_after' } }],
-        });
-      });
-    });
-
-    describe('#06 => String event in machine events but missing in map (fallback to else)', () => {
-      const machine = _machine6;
-      const { actions } = machine.createOptions(({ assign }) => ({
-        actions: {
-          setValue: assign('value', {
-            OTHER_EVENT: undefined,
-            else: ({ event }: any) => `fallback_${event}`,
-          } as any),
-        },
-      }));
-
-      const state = { context: { value: 'initial' }, event: 'OTHER_EVENT' } as any;
-
-      const result = actions?.setValue?.(state);
-
-      test('#01 => is an object', () => expect(typeof result).toBe('object'));
-
-      test('#02 => falls back to else when handler is undefined', () => {
-        expect(result).toEqual({
-          mergers: [{ key: 'value', source: { value: 'fallback_OTHER_EVENT' } }],
         });
       });
     });

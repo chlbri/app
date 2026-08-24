@@ -165,10 +165,7 @@ export class AsyncMachine<
             typeof keysOrFn === 'function' ||
             (typeof keysOrFn === 'object' &&
               !Array.isArray(keysOrFn) &&
-              (fnOrOptions === undefined ||
-                'catch' in (fnOrOptions as any) ||
-                'then' in (fnOrOptions as any) ||
-                'max' in (fnOrOptions as any)));
+              (fnOrOptions === undefined || 'catch' in (fnOrOptions as any)));
 
           if (isKeyless) {
             const fn = keysOrFn as any;

@@ -1,4 +1,4 @@
-import { interpret } from '@bemedev/app';
+import {  interpret } from '@bemedev/app';
 import _machine1 from './asyncActions.1.machine';
 import _machine2 from './asyncActions.2.machine';
 import _machine3 from './asyncActions.3.machine';
@@ -277,7 +277,6 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-
       const service = interpret(machine, { context: 3 });
 
       test('#01 => start', service.start);
@@ -506,9 +505,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: { count: 0, name: 'initial' },
-      });
+      const service = interpret(machine, { context: { count: 0, name: 'initial' } });
 
       test('#01 => start', service.start);
 
@@ -517,10 +514,7 @@ describe('Machine createOptions - error handlers', () => {
       });
 
       test('#03 => service context is updated by both keyed action and then handler', () => {
-        expect(service.context).toEqual({
-          count: 10,
-          name: 'count_is_10',
-        });
+        expect(service.context).toEqual({ count: 10, name: 'count_is_10' });
       });
 
       test('#04 => catchFn is not called', () => {
@@ -545,9 +539,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: { count: 0, name: '' },
-      });
+      const service = interpret(machine, { context: { count: 0, name: '' } });
 
       test('#01 => start', service.start);
 
@@ -556,10 +548,7 @@ describe('Machine createOptions - error handlers', () => {
       });
 
       test('#03 => service context is updated for array keys and then handler', () => {
-        expect(service.context).toEqual({
-          count: 42,
-          name: 'Alice_verified',
-        });
+        expect(service.context).toEqual({ count: 42, name: 'Alice_verified' });
       });
 
       test('#04 => catchFn is not called', () => {
@@ -585,9 +574,7 @@ describe('Machine createOptions - error handlers', () => {
         },
       }));
 
-      const service = interpret(machine, {
-        context: { count: 0, name: 'initial' },
-      });
+      const service = interpret(machine, { context: { count: 0, name: 'initial' } });
 
       test('#01 => start', service.start);
 
@@ -596,10 +583,7 @@ describe('Machine createOptions - error handlers', () => {
       });
 
       test('#03 => service context is updated within timeout with then handler', () => {
-        expect(service.context).toEqual({
-          count: 99,
-          name: 'max_then_success',
-        });
+        expect(service.context).toEqual({ count: 99, name: 'max_then_success' });
       });
 
       test('#04 => catchFn is not called', () => {
@@ -610,6 +594,7 @@ describe('Machine createOptions - error handlers', () => {
 
   describe('#05 => root/keyless async map assign with options (then / max)', () => {
     describe('#01 => map assign with then option only (line 170)', () => {
+      const catchFn = vi.fn();
       const machine = _machine1.provideOptions(({ assign }) => ({
         actions: {
           myAction: assign(
@@ -618,7 +603,7 @@ describe('Machine createOptions - error handlers', () => {
                 return context + 10;
               },
             },
-            { then: assign(({ context }) => context * 2) },
+            { then: assign(({ context }) => context * 2), catch: catchFn },
           ),
         },
       }));
@@ -637,6 +622,7 @@ describe('Machine createOptions - error handlers', () => {
     });
 
     describe('#02 => map assign with max option only (line 171)', () => {
+      const catchFn = vi.fn();
       const machine = _machine1.provideOptions(({ assign }) => ({
         actions: {
           myAction: assign(
@@ -645,7 +631,7 @@ describe('Machine createOptions - error handlers', () => {
                 return context + 20;
               },
             },
-            { max: 5000 },
+            { max: 5000, catch: catchFn },
           ),
         },
       }));
@@ -664,6 +650,8 @@ describe('Machine createOptions - error handlers', () => {
     });
 
     describe('#03 => map assign with both then and max options (lines 170-171)', () => {
+      const catchFn = vi.fn();
+      // after
       const machine = _machine1.provideOptions(({ assign }) => ({
         actions: {
           myAction: assign(
@@ -673,6 +661,7 @@ describe('Machine createOptions - error handlers', () => {
               },
             },
             {
+              catch: catchFn,
               max: 5000,
               then: assign(({ context }) => context * 2),
             },
