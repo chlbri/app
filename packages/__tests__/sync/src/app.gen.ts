@@ -279,6 +279,29 @@ declare module '@bemedev/app' {
       pContext: any;
     };
 
+    'src/__tests__/interpreters/assign-map.6.machine': {
+      paths: {
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
+        };
+      };
+        all: '/' | '/idle';
+      };
+      events: 'SET_VALUE';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'setValue';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
     'src/__tests__/interpreters/children.1.machine': {
       paths: {
         map: { targets: ('/idle'); 

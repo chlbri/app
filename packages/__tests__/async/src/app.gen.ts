@@ -1605,6 +1605,29 @@ declare module '@bemedev/app' {
       pContext: any;
     };
 
+    'src/__tests__/machine/asyncActions.8.machine': {
+      paths: {
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
+        };
+      };
+        all: '/' | '/idle';
+      };
+      events: 'TEST' | 'TEST2';
+      options: {
+        children: never;
+        emitters: never;
+        tags:     never;
+        actions:  'myAction';
+        delays:   never;
+        guards:   never;
+      };
+      pContext: any;
+    };
+
     'src/__tests__/machine/real.1.machine': {
       paths: {
         map: { targets: ('/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 

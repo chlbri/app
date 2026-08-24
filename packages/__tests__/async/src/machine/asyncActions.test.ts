@@ -6,6 +6,7 @@ import _machine4 from './asyncActions.4.machine';
 import _machine5 from './asyncActions.5.machine';
 import _machine6 from './asyncActions.6.machine';
 import _machine7 from './asyncActions.7.machine';
+import _machine8 from './asyncActions.8.machine';
 
 beforeAll(() => vi.useRealTimers());
 
@@ -485,6 +486,273 @@ describe('Machine createOptions - error handlers', () => {
 
       test('#05 => catchFn is not called', () => {
         expect(catchFn).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('#03 => keyed assign with single key and then handler', () => {
+      const catchFn = vi.fn();
+      const machine = _machine8.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign(
+            'count',
+            async () => {
+              return 10;
+            },
+            {
+              catch: catchFn,
+              then: assign('name', ({ context }) => `count_is_${context.count}`),
+            },
+          ),
+        },
+      }));
+
+      const service = interpret(machine, {
+        context: { count: 0, name: 'initial' },
+      });
+
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
+        await service.send('TEST');
+      });
+
+      test('#03 => service context is updated by both keyed action and then handler', () => {
+        expect(service.context).toEqual({
+          count: 10,
+          name: 'count_is_10',
+        });
+      });
+
+      test('#04 => catchFn is not called', () => {
+        expect(catchFn).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('#04 => keyed assign with array of keys and then handler', () => {
+      const catchFn = vi.fn();
+      const machine = _machine8.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign(
+            ['count', 'name'],
+            async () => {
+              return [42, 'Alice'];
+            },
+            {
+              catch: catchFn,
+              then: assign('name', ({ context }) => `${context.name}_verified`),
+            },
+          ),
+        },
+      }));
+
+      const service = interpret(machine, {
+        context: { count: 0, name: '' },
+      });
+
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
+        await service.send('TEST');
+      });
+
+      test('#03 => service context is updated for array keys and then handler', () => {
+        expect(service.context).toEqual({
+          count: 42,
+          name: 'Alice_verified',
+        });
+      });
+
+      test('#04 => catchFn is not called', () => {
+        expect(catchFn).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('#05 => keyed assign with max and then handler', () => {
+      const catchFn = vi.fn();
+      const machine = _machine8.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign(
+            'count',
+            async () => {
+              return 99;
+            },
+            {
+              max: 5000,
+              catch: catchFn,
+              then: assign('name', () => 'max_then_success'),
+            },
+          ),
+        },
+      }));
+
+      const service = interpret(machine, {
+        context: { count: 0, name: 'initial' },
+      });
+
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
+        await service.send('TEST');
+      });
+
+      test('#03 => service context is updated within timeout with then handler', () => {
+        expect(service.context).toEqual({
+          count: 99,
+          name: 'max_then_success',
+        });
+      });
+
+      test('#04 => catchFn is not called', () => {
+        expect(catchFn).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('#05 => root/keyless async map assign with options (then / max)', () => {
+    describe('#01 => map assign with then option only (line 170)', () => {
+      const machine = _machine1.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign(
+            {
+              TEST: async ({ context }) => {
+                return context + 10;
+              },
+            },
+            { then: assign(({ context }) => context * 2) },
+          ),
+        },
+      }));
+
+      const service = interpret(machine, { context: 5 });
+
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
+        await service.send('TEST');
+      });
+
+      test('#03 => updates context via map and then handler', () => {
+        expect(service.context).toBe(30);
+      });
+    });
+
+    describe('#02 => map assign with max option only (line 171)', () => {
+      const machine = _machine1.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign(
+            {
+              TEST: async ({ context }) => {
+                return context + 20;
+              },
+            },
+            { max: 5000 },
+          ),
+        },
+      }));
+
+      const service = interpret(machine, { context: 5 });
+
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
+        await service.send('TEST');
+      });
+
+      test('#03 => updates context within timeout', () => {
+        expect(service.context).toBe(25);
+      });
+    });
+
+    describe('#03 => map assign with both then and max options (lines 170-171)', () => {
+      const machine = _machine1.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign(
+            {
+              TEST: async ({ context }) => {
+                return context + 15;
+              },
+            },
+            {
+              max: 5000,
+              then: assign(({ context }) => context * 2),
+            },
+          ),
+        },
+      }));
+
+      const service = interpret(machine, { context: 5 });
+
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
+        await service.send('TEST');
+      });
+
+      test('#03 => updates context via map, timeout, and then handler', () => {
+        expect(service.context).toBe(40);
+      });
+    });
+
+    describe('#04 => map assign with catch, then, and max when fn throws', () => {
+      const theError = 'map async error';
+      const errorAction = vi.fn((state: any) => state);
+      const errorFn = vi.fn((_err: any) => errorAction);
+
+      const machine = _machine1.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign(
+            {
+              TEST: async () => {
+                throw theError;
+              },
+            },
+            {
+              catch: errorFn,
+              max: 5000,
+              then: assign(({ context }) => context * 2),
+            },
+          ),
+        },
+      }));
+
+      const service = interpret(machine, { context: 7 });
+
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
+        await service.send('TEST');
+      });
+
+      test('#03 => errorFn is called once', () => {
+        expect(errorFn).toHaveBeenCalledOnce();
+      });
+
+      test('#04 => errorFn receives the thrown error', () => {
+        expect(errorFn).toHaveBeenCalledWith('map async error');
+      });
+    });
+
+    describe('#05 => map assign with no options', () => {
+      const machine = _machine1.provideOptions(({ assign }) => ({
+        actions: {
+          myAction: assign({
+            TEST: async ({ context }) => {
+              return context + 100;
+            },
+          }),
+        },
+      }));
+
+      const service = interpret(machine, { context: 5 });
+
+      test('#01 => start', service.start);
+
+      test('#02 => send event without throwing', async () => {
+        await service.send('TEST');
+      });
+
+      test('#03 => updates context directly from map', () => {
+        expect(service.context).toBe(105);
       });
     });
   });

@@ -1,5 +1,5 @@
 import { _any } from '@bemedev/app-utils-bemedev';
-import type { EventObject } from '#events';
+import { isStringEvent, type EventObject } from '#events';
 import { isFunction } from '../types/primitives';
 import type {
   FnMap,
@@ -50,12 +50,19 @@ export const reduceFnMap: ReduceFnMap_F = (fn, ...events) => {
   const check1 = isFunction(fn);
   if (check1) return fn;
 
+  const _events = [
+    ...events,
+    ...(typeof fn === 'object' && fn !== null
+      ? Object.keys(fn).filter(isStringEvent)
+      : []),
+  ];
+
   return ({ event, ...rest }) => {
     const _else = (fn as any)?.else ?? nothing;
 
     const check5 = typeof event === 'string';
     if (check5) {
-      for (const key of events) {
+      for (const key of _events) {
         if (event === key) {
           const func = _any(fn)?.[key];
           if (func) return func({ ...rest, payload: {} });
@@ -66,7 +73,7 @@ export const reduceFnMap: ReduceFnMap_F = (fn, ...events) => {
 
     const { payload, type } = event;
 
-    for (const key of events) {
+    for (const key of _events) {
       const check2 = type === key;
       const func = _any(fn)?.[key];
       const check3 = !!func;
@@ -141,6 +148,13 @@ export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (fn, ...events) 
   const check1 = isFunction(fn);
   if (check1) return fn;
 
+  const _events = [
+    ...events,
+    ...(typeof fn === 'object' && fn !== null
+      ? Object.keys(fn).filter(isStringEvent)
+      : []),
+  ];
+
   return (item, index, state) => {
     const { event, ...rest } = state;
     const _else = (fn as any)?.else ?? nothing;
@@ -149,7 +163,7 @@ export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (fn, ...events) 
     const check5 = typeof event === 'string';
 
     if (check5) {
-      for (const key of events) {
+      for (const key of _events) {
         if (event === key) {
           const func = _any(fn)?.[key];
           if (func) return func(item, index, { ...rest, payload: {} });
@@ -160,7 +174,7 @@ export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (fn, ...events) 
 
     const { payload, type } = event;
 
-    for (const key of events) {
+    for (const key of _events) {
       const check2 = type === key;
       const func = _any(fn)?.[key];
       const check3 = !!func;
@@ -215,6 +229,13 @@ export const reduceFnMapFilterObject: ReduceFnMapFilterObject_F = (
   const check1 = isFunction(fn);
   if (check1) return fn;
 
+  const _events = [
+    ...events,
+    ...(typeof fn === 'object' && fn !== null
+      ? Object.keys(fn).filter(isStringEvent)
+      : []),
+  ];
+
   return (item, state) => {
     const { event, ...rest } = state;
     const _else = (fn as any)?.else ?? nothing;
@@ -223,7 +244,7 @@ export const reduceFnMapFilterObject: ReduceFnMapFilterObject_F = (
     const check5 = typeof event === 'string';
 
     if (check5) {
-      for (const key of events) {
+      for (const key of _events) {
         if (event === key) {
           const func = _any(fn)?.[key];
           if (func) return func(item, { ...rest, payload: {} });
@@ -234,7 +255,7 @@ export const reduceFnMapFilterObject: ReduceFnMapFilterObject_F = (
 
     const { payload, type } = event;
 
-    for (const key of events) {
+    for (const key of _events) {
       const check2 = type === key;
       const func = _any(fn)?.[key];
       const check3 = !!func;

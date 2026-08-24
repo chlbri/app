@@ -1,10 +1,19 @@
 import { interpret } from '@bemedev/app';
 import { constructTests } from '@bemedev/app-vitest';
+import {
+  AFTER_EVENT,
+  ALWAYS_EVENT,
+  INIT_EVENT,
+  type AfterEvent,
+  type AlwaysEvent,
+  type InitEvent,
+} from '@bemedev/app/events';
 import _machine1 from './assign-map.1.machine';
 import _machine2 from './assign-map.2.machine';
 import _machine3 from './assign-map.3.machine';
 import _machine4 from './assign-map.4.machine';
 import _machine5 from './assign-map.5.machine';
+import _machine6 from './assign-map.6.machine';
 
 describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
   describe('#01 => Property assign (reduceFnMap)', () => {
@@ -67,9 +76,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
                 return payload.val;
               },
             }),
-            setCount: assign('count', {
-              SET_COUNT: ({ payload }) => payload.num,
-            }),
+            setCount: assign('count', { SET_COUNT: ({ payload }) => payload.num }),
           },
         }));
       });
@@ -181,7 +188,6 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
         }));
       });
 
-
       test(...useSend('UNKNOWN_EVENT', 4));
 
       test('#05 => Check value unchanged when nothing returned', () => {
@@ -210,14 +216,11 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            updateAll: assign(
-              ['name', 'age', 'role'],
-              ({ event }) => [
-                (event as any).payload.name,
-                (event as any).payload.age,
-                (event as any).payload.role,
-              ],
-            ),
+            updateAll: assign(['name', 'age', 'role'], ({ event }) => [
+              (event as any).payload.name,
+              (event as any).payload.age,
+              (event as any).payload.role,
+            ]),
           },
         }));
       });
@@ -273,7 +276,6 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
           },
         }));
       });
-
 
       test(
         ...useSend(
@@ -476,9 +478,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#00 => Add actions', () => {
         service.addOptions(({ assign }) => ({
           actions: {
-            initProp: assign('propValue', {
-              TRIGGER_ALWAYS: () => 'trigger',
-            }),
+            initProp: assign('propValue', { TRIGGER_ALWAYS: () => 'trigger' }),
           },
         }));
       });
@@ -600,10 +600,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
       test('#02 => sets value via else with string event', () => {
         expect(result).toEqual({
           mergers: [
-            {
-              key: 'value',
-              source: { value: 'fallback_SOME_STRING_EVENT' },
-            },
+            { key: 'value', source: { value: 'fallback_SOME_STRING_EVENT' } },
           ],
         });
       });
@@ -612,9 +609,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
     describe('#02 => String event without else (fallback to nothing)', () => {
       const { actions } = machine.createOptions(({ assign }) => ({
         actions: {
-          setValue: assign('value', {
-            SET_VALUE: ({ payload }) => payload.val,
-          }),
+          setValue: assign('value', { SET_VALUE: ({ payload }) => payload.val }),
         },
       }));
 
@@ -629,12 +624,121 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
 
       test('#02 => sets value to "nothing"', () => {
         expect(result).toEqual({
-          mergers: [
-            { key: 'value', source: { value: 'nothing' } },
-          ],
+          mergers: [{ key: 'value', source: { value: 'nothing' } }],
+        });
+      });
+    });
+
+    describe('#03 => String event matching INIT_EVENT (InitEvent)', () => {
+      const machine = _machine6;
+      const alwaysEvent = `idle/${ALWAYS_EVENT}` as const satisfies AlwaysEvent;
+      const afterEvent = `idle/${AFTER_EVENT}` as const satisfies AfterEvent;
+      const initEvent: InitEvent = INIT_EVENT;
+
+      const { actions } = machine.createOptions(({ assign }) => ({
+        actions: {
+          setValue: assign('value', {
+            [initEvent]: () => 'from_init',
+            [alwaysEvent]: () => 'from_always',
+            [afterEvent]: () => 'from_after',
+            else: ({ event }) => `fallback_${event}`,
+          }),
+        },
+      }));
+
+      const state = { context: { value: 'initial' }, event: initEvent } as any;
+
+      const result = actions?.setValue?.(state);
+
+      test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+      test('#02 => sets value via matching INIT_EVENT', () => {
+        expect(result).toEqual({
+          mergers: [{ key: 'value', source: { value: 'from_init' } }],
+        });
+      });
+    });
+
+    describe('#04 => String event matching AlwaysEvent (${string}/ALWAYS_EVENT)', () => {
+      const machine = _machine6;
+      const alwaysEvent = `idle/${ALWAYS_EVENT}` as const satisfies AlwaysEvent;
+      const afterEvent = `idle/${AFTER_EVENT}` as const satisfies AfterEvent;
+      const initEvent: InitEvent = INIT_EVENT;
+
+      const { actions } = machine.createOptions(({ assign }) => ({
+        actions: {
+          setValue: assign('value', {
+            [initEvent]: () => 'from_init',
+            [alwaysEvent]: () => 'from_always',
+            [afterEvent]: () => 'from_after',
+          }),
+        },
+      }));
+
+      const state = { context: { value: 'initial' }, event: alwaysEvent } as any;
+
+      const result = actions?.setValue?.(state);
+
+      test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+      test('#02 => sets value via matching AlwaysEvent', () => {
+        expect(result).toEqual({
+          mergers: [{ key: 'value', source: { value: 'from_always' } }],
+        });
+      });
+    });
+
+    describe('#05 => String event matching AfterEvent (${string}/AFTER_EVENT)', () => {
+      const machine = _machine6;
+      const alwaysEvent = `idle/${ALWAYS_EVENT}` as const satisfies AlwaysEvent;
+      const afterEvent = `idle/${AFTER_EVENT}` as const satisfies AfterEvent;
+      const initEvent: InitEvent = INIT_EVENT;
+
+      const { actions } = machine.createOptions(({ assign }) => ({
+        actions: {
+          setValue: assign('value', {
+            [initEvent]: () => 'from_init',
+            [alwaysEvent]: () => 'from_always',
+            [afterEvent]: () => 'from_after',
+          }),
+        },
+      }));
+
+      const state = { context: { value: 'initial' }, event: afterEvent } as any;
+
+      const result = actions?.setValue?.(state);
+
+      test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+      test('#02 => sets value via matching AfterEvent', () => {
+        expect(result).toEqual({
+          mergers: [{ key: 'value', source: { value: 'from_after' } }],
+        });
+      });
+    });
+
+    describe('#06 => String event in machine events but missing in map (fallback to else)', () => {
+      const machine = _machine6;
+      const { actions } = machine.createOptions(({ assign }) => ({
+        actions: {
+          setValue: assign('value', {
+            OTHER_EVENT: undefined,
+            else: ({ event }: any) => `fallback_${event}`,
+          } as any),
+        },
+      }));
+
+      const state = { context: { value: 'initial' }, event: 'OTHER_EVENT' } as any;
+
+      const result = actions?.setValue?.(state);
+
+      test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+      test('#02 => falls back to else when handler is undefined', () => {
+        expect(result).toEqual({
+          mergers: [{ key: 'value', source: { value: 'fallback_OTHER_EVENT' } }],
         });
       });
     });
   });
 });
-
