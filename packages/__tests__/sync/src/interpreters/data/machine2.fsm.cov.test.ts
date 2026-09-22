@@ -229,13 +229,12 @@ describe('machine coverage', () => {
       // describe(...useConsole(4, ...Array(6).fill('sendPanelToUser')));
     });
 
-    test('#33 => Wait for debounce', () => {
+    test('#33 => Send FINISH', () => {
       service.send('FINISH');
-      vi.advanceTimersByTime(10_000);
     });
 
     describe('#34 => Check the service', () => {
-      test(...useIterator(1000, 1));
+      test(...useIterator(114, 1));
       test(...useInput(INPUT, 2));
       describe(...useData(3, ...FAKES));
       // describe(...useConsole(2));

@@ -74,10 +74,9 @@ export type ActionResult<
 /**
  * An action may return synchronously or asynchronously.
  *
- * Any action (user-provided or produced by an `addOptions` helper except
- * `debounce`) may return type {@linkcode ActionResult} or a promise that resolves to one.
+ * Any action (user-provided or produced by an `addOptions` helper)
+ * may return type {@linkcode ActionResult} or a promise that resolves to one.
  *
- * @template `Pc` - The type of the private context.
  * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
  */
 export type MaybeAsyncActionResult<Tc extends PrimitiveObject = PrimitiveObject> =

@@ -6,12 +6,20 @@ import _raw_machine from './pause.machine';
 vi.useFakeTimers();
 describe('Pause activities on events', () => {
   const machine = _raw_machine.provideOptions(
-    ({ assign, pauseTimer, resumeTimer, stopTimer, debounce }) => ({
+    ({ pauseTimer, resumeTimer, stopTimer }) => ({
       actions: {
-        inc: debounce(
-          assign('iterator', ({ context }) => context?.iterator + 1000),
-          { ms: DELAY * 10, id: 'inc' },
-        ),
+        inc: ({ context }) => ({
+          scheduled: {
+            data: [
+              {
+                key: 'iterator',
+                source: { iterator: (context?.iterator ?? 0) + 1000 },
+              },
+            ],
+            ms: DELAY * 10,
+            id: 'inc',
+          },
+        }),
 
         pause: pauseTimer('inc'),
         resume: resumeTimer('inc'),
