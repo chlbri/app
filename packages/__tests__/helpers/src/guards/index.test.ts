@@ -1,6 +1,5 @@
-import { interpret } from '@bemedev/app';
+import { always, interpret } from '@bemedev/app';
 import { constructTests } from '@bemedev/app-vitest';
-import { transformEventArg, ALWAYS_EVENT } from '@bemedev/app/events';
 import _machine1 from './index.1.machine';
 import _machine2 from './index.2.machine';
 import _machine3 from './index.3.machine';
@@ -56,7 +55,7 @@ describe('Interpret for guards', () => {
       test('#02 => Called with the correct arguments', () =>
         expect(guard1).toHaveBeenCalledWith({
           ...defaultC,
-          event: transformEventArg(`/state1/${ALWAYS_EVENT}`),
+          event: { __internal: always('/state1'), payload: {}, type: 'NEXT' },
           status: 'busy',
           tags: [],
           value: 'state1',
@@ -98,7 +97,7 @@ describe('Interpret for guards', () => {
       test('#02 => Called with the correct arguments', () =>
         expect(guard1).toHaveBeenCalledWith({
           ...defaultC,
-          event: transformEventArg(`/state1/${ALWAYS_EVENT}`),
+          event: { __internal: always('/state1'), payload: {}, type: 'NEXT' },
           status: 'busy',
           tags: [],
           value: 'state1',

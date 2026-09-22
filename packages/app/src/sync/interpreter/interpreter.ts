@@ -418,7 +418,7 @@ export class SyncInterpreter<
         const transitions = toArray.typed(transition);
         setTimeout(() => {
           if (this.__cannotPerform(from)) return;
-          this.__changeEvent(transformEventArg(`${from}/${AFTER_EVENT}`));
+          this.__changeEventInternal(`${from}/${AFTER_EVENT}`);
 
           const target = this.__performTransitions(...(transitions as any));
 
@@ -593,7 +593,7 @@ export class SyncInterpreter<
    * @returns The target state path string if successful, or `false` otherwise.
    */
   private __performAlways = (from: string, alway: AlwaysConfig) => {
-    this.__changeEvent(transformEventArg(`${from}/${ALWAYS_EVENT}`));
+    this.__changeEventInternal(`${from}/${ALWAYS_EVENT}`);
     const always = toArray<TransitionConfig>(alway);
     return this.__performTransitions(...always);
   };

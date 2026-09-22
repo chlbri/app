@@ -1,6 +1,5 @@
-import { ALWAYS_EVENT, transformEventArg } from '@bemedev/app/events';
+import { always, interpret } from '@bemedev/app';
 import { constructTests } from '@bemedev/app-vitest';
-import { interpret } from '@bemedev/app';
 
 import _machine1 from './actions.1.machine';
 import _machine2 from './actions.2.machine';
@@ -42,7 +41,7 @@ describe('Interpret for actions', () => {
       test('#02 => Called with the correct arguments', () => {
         expect(action1).toHaveBeenCalledWith({
           ...defaultC,
-          event: transformEventArg(`/state1/${ALWAYS_EVENT}`),
+          event: { __internal: always('/state1'), payload: {}, type: 'NEXT' },
           status: 'busy',
           tags: [],
           value: 'state1',
@@ -88,7 +87,7 @@ describe('Interpret for actions', () => {
       test('#02 => Called with the correct arguments', () => {
         expect(action1).toHaveBeenCalledWith({
           ...defaultC,
-          event: transformEventArg(`/state1/${ALWAYS_EVENT}`),
+          event: { __internal: always('/state1'), payload: {}, type: 'NEXT' },
           status: 'busy',
           tags: [],
           value: 'state1',

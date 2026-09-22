@@ -2,6 +2,7 @@ import { defineProject } from '@bemedev/dev-utils/vitest-extended';
 
 export default defineProject({
   resolve: { tsconfigPaths: true },
+
   test: {
     bail: 100,
     maxConcurrency: 10,
@@ -12,5 +13,6 @@ export default defineProject({
     logHeapUsage: false,
     testTimeout: 30000,
     setupFiles: ['./vitest.setup.ts'],
+    clearMocks: false,
   },
 });

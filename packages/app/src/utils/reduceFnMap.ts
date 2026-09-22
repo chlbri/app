@@ -1,17 +1,15 @@
-import { _any } from '@bemedev/app-utils-bemedev';
 import { isStringEvent, transformEventArg, type EventObject } from '#events';
-import { isFunction } from '../types/primitives';
+import { _any } from '@bemedev/app-utils-bemedev';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   FnMap,
   FnMapFilterArray,
   FnMapFilterObject,
-  FnMapR,
   FnR,
-  FnReduced,
   StateExtended,
 } from '~types';
+import { isFunction } from '../types/primitives';
 import { nothing } from './nothing';
-import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Signature for function that reduces a function map to a unified event handler function.
@@ -52,45 +50,21 @@ export const reduceFnMap: ReduceFnMap_F = (fn, ...events) => {
 
   events.push(...Object.keys(fn).filter(isStringEvent));
 
-  return ({ event, ...rest }) => {
+  return state => {
+    const { event, ...rest } = state;
     const _else = (fn as any)?.else ?? nothing;
-    const { payload, type } = transformEventArg(event);
+    const { payload, type, __internal } = transformEventArg(event);
 
-    for (const key of events) {
-      const check2 = type === key;
+    for (const key of events.toReversed()) {
       const func = _any(fn)?.[key];
-      const check3 = !!func;
-
-      const check4 = check2 && check3;
-      if (check4) return func({ ...rest, payload });
+      if (!func) continue;
+      if (__internal === key) return func(state);
+      if (type === key) return func({ ...rest, payload });
     }
 
-    return _any(_else({ ...rest, event }));
+    return _any(_else(state));
   };
 };
-
-/**
- * Signature for function that reduces a context-free function map to a unified event handler function.
- *
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type. Defaults to type {@linkcode PrimitiveObject}.
- * @template `T` - Event string type. Defaults to `string`.
- * @template R - Return type. Defaults to `any`.
- * @template | {@linkcode EventObject} `Eo` - Event object type. Defaults to type {@linkcode EventObject}.
- *
- * @param fn - Function map of type {@linkcode FnMapR}.
- * @param events - Expected event keys.
- *
- * @returns Unified event handler function of type {@linkcode FnReduced}.
- */
-export type ReduceFnMap2_F = <
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-  Eo extends EventObject = EventObject,
->(
-  fn: FnMapR<Eo, Tc, T, R>,
-  ...events: string[]
-) => FnReduced<Eo, Tc, T, R>;
 
 /**
  * Signature for function that reduces an array filter function map to a unified filter predicate.
@@ -135,15 +109,13 @@ export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (fn, ...events) 
   return (item, index, state) => {
     const { event, ...rest } = state;
     const _else = (fn as any)?.else ?? nothing;
-    const { payload, type } = transformEventArg(event);
+    const { payload, type, __internal } = transformEventArg(event);
 
-    for (const key of events) {
-      const check2 = type === key;
+    for (const key of events.toReversed()) {
       const func = _any(fn)?.[key];
-      const check3 = !!func;
-
-      const check4 = check2 && check3;
-      if (check4) return func(item, index, { ...rest, payload });
+      if (!func) continue;
+      if (__internal === key) return func(item, index, state);
+      if (type === key) return func(item, index, { ...rest, payload });
     }
 
     return _any(_else(item, index, state));
@@ -196,15 +168,13 @@ export const reduceFnMapFilterObject: ReduceFnMapFilterObject_F = (
   return (item, state) => {
     const { event, ...rest } = state;
     const _else = (fn as any)?.else ?? nothing;
-    const { type, payload } = transformEventArg(event);
+    const { payload, type, __internal } = transformEventArg(event);
 
-    for (const key of events) {
-      const check2 = type === key;
+    for (const key of events.toReversed()) {
       const func = _any(fn)?.[key];
-      const check3 = !!func;
-
-      const check4 = check2 && check3;
-      if (check4) return func(item, { ...rest, payload });
+      if (!func) continue;
+      if (__internal === key) return func(item, state);
+      if (type === key) return func(item, { ...rest, payload });
     }
 
     return _any(_else(item, state));

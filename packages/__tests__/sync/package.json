@@ -16,10 +16,10 @@
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
-    "@bemedev/dev-utils": "^1.2.0",
-    "@types/node": "^26.2.0",
-    "tsx": "^4.23.12",
+    "@bemedev/dev-utils": "^1.5.0",
+    "@types/node": "^26.6.2",
+    "tsx": "^4.23.15",
     "typescript": "6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.1"
   }
 }

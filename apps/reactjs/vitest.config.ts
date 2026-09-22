@@ -7,5 +7,6 @@ export default defineProject({
     environment: 'jsdom',
     env: { NODE_ENV: 'test', RTL_SKIP_AUTO_CLEANUP: 'true' },
     testTimeout: 30000,
+    clearMocks: false,
   },
 });

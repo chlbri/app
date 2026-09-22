@@ -9,5 +9,6 @@ export default defineProject({
     maxConcurrency: 10,
     environment: 'jsdom',
     testTimeout: 30000,
+    clearMocks: false,
   },
 });

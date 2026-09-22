@@ -10,6 +10,7 @@ export default defineProject({
     env: { NODE_ENV: 'test' },
     globals: true,
     logHeapUsage: false,
+    clearMocks: false,
     name: 'valibot',
   },
 });

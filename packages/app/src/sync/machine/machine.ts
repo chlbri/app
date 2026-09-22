@@ -191,9 +191,9 @@ export class SyncMachine<
               /* v8 ignore else -- @preserve */
               if (res) {
                 const { mergers: m, ...ext } = res;
-                if (m) mergers.push(...m);
                 Object.assign(extendeds, ext);
                 if (m && m.length > 0) {
+                  mergers.push(...m);
                   state.context = merge2.multiple(
                     state.context,
                     ...(m as any),

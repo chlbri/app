@@ -11,6 +11,7 @@ export default defineConfig({
     globals: true,
     typecheck: { enabled: true, ignoreSourceErrors: false },
     env: { NODE_ENV: 'test' },
+    clearMocks: false,
 
     coverage: {
       enabled: true,
@@ -33,6 +34,7 @@ export default defineConfig({
         '**/*.fixture.ts',
         '**/test.ts',
         '**/src/core/helpers/**',
+        '**/vitest.setup.ts',
       ],
     },
 

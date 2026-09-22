@@ -7,5 +7,6 @@ export default defineProject({
     environment: 'node',
     testTimeout: 30000,
     env: { NODE_ENV: 'test' },
+    clearMocks: false,
   },
 });

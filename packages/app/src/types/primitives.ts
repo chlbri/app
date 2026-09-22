@@ -386,7 +386,7 @@ type _FnMap<
   Ex extends string = never,
   TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > = {
-  [key in EventToType<TT>]?: (
+  [key in Exclude<EventToType<TT>, EventStrings>]?: (
     state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
   ) => R;
 } & Partial<Record<EventStrings | 'else', FnR<E, Pc, Tc, T, R>>>;
@@ -411,7 +411,7 @@ type _FnMapFilterArray<
   Ex extends string = never,
   TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > = {
-  [key in EventToType<TT>]?: (
+  [key in Exclude<EventToType<TT>, EventStrings>]?: (
     item: Item,
     index: number,
     state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
@@ -466,7 +466,7 @@ type _FnMapFilterObject<
   Ex extends string = never,
   TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > = {
-  [key in EventToType<TT>]?: (
+  [key in Exclude<EventToType<TT>, EventStrings>]?: (
     item: Item,
     state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
   ) => boolean;

@@ -37,7 +37,11 @@ export type EventStrings = InitEvent | AlwaysEvent | AfterEvent;
  * @template `T` - The type of the payload.
  * @returns An object with a type and payload.
  */
-export type EventObject<T = any> = { type: string; payload: T };
+export type EventObject<T = any> = {
+  type: string;
+  payload: T;
+  __internal?: EventStrings;
+};
 
 /**
  * Union type representing an event object or event string.
@@ -169,7 +173,7 @@ export type EventArgT<E extends EventsMap> =
  * @template `Ex` - Event types to exclude.
  */
 export type ToEventObject<T extends AllEvent, Ex extends string = never> = Exclude<
-  T extends string ? { type: T; payload: EmptyObject } : T,
+  EventObject & (T extends string ? { type: T; payload: EmptyObject } : T),
   { type: Ex }
 >;
 

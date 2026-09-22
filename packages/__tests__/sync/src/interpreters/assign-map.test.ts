@@ -446,7 +446,7 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
             }),
             alwaysProp: assign('propValue', {
               TRIGGER_ALWAYS: () => 'trigger',
-              else: ({ event }) => `always_${(event as any).type}`,
+              [always('/always_state')]: ({ event }) => `always_${event.__internal}`,
             }),
           },
         }));
@@ -512,7 +512,10 @@ describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
             }),
             alwaysRoot: assign(['name', 'age'], {
               TRIGGER_ALWAYS: () => ['trigger', 1],
-              else: ({ event }) => [`root_always_${(event as any).type}`, 20],
+              [always('/always_state')]: ({ event }) => [
+                `root_always_${event.__internal}`,
+                20,
+              ],
             }),
           },
         }));

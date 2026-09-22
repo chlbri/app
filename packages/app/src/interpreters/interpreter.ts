@@ -667,7 +667,7 @@ export class AsyncInterpreter<
         if (this.__cannotPerform(from)) return false;
 
         const func = () => this.__performTransitions(from, ...(transitions as any));
-        this.__changeEvent(transformEventArg(`${from}/${AFTER_EVENT}`));
+        this.__changeEventInternal(`${from}/${AFTER_EVENT}`);
         const out = await func();
 
         if (out === false) {
@@ -712,7 +712,7 @@ export class AsyncInterpreter<
    * @returns A promise resolving to the matched state path string or `false`.
    */
   #performAlways: AsyncPerformAlway_F = (from, alway) => {
-    this.__changeEvent(transformEventArg(`${from}/${ALWAYS_EVENT}`));
+    this.__changeEventInternal(`${from}/${ALWAYS_EVENT}`);
     const always = toArray<TransitionConfig>(alway);
     return this.__performTransitions(from, ...always);
   };

@@ -14,7 +14,11 @@ import { _any } from '@bemedev/app-utils-bemedev';
 import { toAction, type WithDescriber } from '#actions';
 import type { ChildConfig, EmitterConfig } from '#actor';
 import { getTags, toChildSrc } from '#common/functions';
-import { DEFAULT_DELIMITER, DEFAULT_MAX_SELF_TRANSITIONS } from '#constants';
+import {
+  DEFAULT_DELIMITER,
+  DEFAULT_MAX_SELF_TRANSITIONS,
+  type EventStrings,
+} from '#constants';
 import { toDelay } from '#delays';
 import { toEmitterSrc } from '#emitters';
 import { toPredicate, type GuardConfig } from '#guards';
@@ -566,6 +570,19 @@ export abstract class CommonInterpreter<
     };
 
     return this.__schedulerEvent.schedule(cb, this.__sent);
+  };
+  /**
+   * Schedules a change to the current active event.
+   *
+   * @param event - The new event object of type `Eo`.
+   *
+   * @returns The scheduled task result.
+   */
+  protected __changeEventInternal = (__internal: EventStrings) => {
+    const __event = this.__event;
+    const event: Eo = { ...__event, __internal };
+
+    return this.__changeEvent(event);
   };
 
   /**
