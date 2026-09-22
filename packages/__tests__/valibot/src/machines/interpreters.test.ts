@@ -1,5 +1,4 @@
 import { validate } from '@bemedev/app-valibot';
-import syncInterp_1 from '#machines/sync/interpreters/activities/pause.machine';
 import syncInterp_2 from '#machines/sync/interpreters/activities/perform.bis.machine';
 import syncInterp_3 from '#machines/sync/interpreters/activities/perform.machine';
 import syncInterp_4 from '#machines/sync/interpreters/children.1.machine';
@@ -38,7 +37,6 @@ import syncInterp_37 from '#machines/sync/interpreters/legacy-options.9.machine'
 import syncInterp_38 from '#machines/sync/interpreters/selftransitions/always.3.machine';
 import syncInterp_39 from '#machines/sync/interpreters/selftransitions/index.2.machine';
 import syncInterp_40 from '#machines/sync/interpreters/tags/tags.machine';
-import asyncInterp_1 from '#machines/async/interpreters/activities/pause.machine';
 import asyncInterp_2 from '#machines/async/interpreters/activities/perform.bis.machine';
 import asyncInterp_3 from '#machines/async/interpreters/activities/perform.machine';
 import asyncInterp_4 from '#machines/async/interpreters/children.1.machine';
@@ -94,9 +92,6 @@ import asyncInterp_54 from '#machines/async/interpreters/selftransitions/index.2
 import asyncInterp_55 from '#machines/async/interpreters/tags/tags.machine';
 
 describe('Interpreters machines validation', () => {
-  test('#01 => interpreters/activities/pause.machine.ts', () =>
-    expect(validate.safe(syncInterp_1.config).success).toBe(true));
-
   test('#02 => interpreters/activities/perform.bis.machine.ts', () =>
     expect(validate.safe(syncInterp_2.config).success).toBe(true));
 
@@ -210,9 +205,6 @@ describe('Interpreters machines validation', () => {
 
   test('#40 => interpreters/tags/tags.machine.ts', () =>
     expect(validate.safe(syncInterp_40.config).success).toBe(true));
-
-  test('#41 => interpreters/activities/pause.machine.ts', () =>
-    expect(validate.safe(asyncInterp_1.config).success).toBe(true));
 
   test('#42 => interpreters/activities/perform.bis.machine.ts', () =>
     expect(validate.safe(asyncInterp_2.config).success).toBe(true));

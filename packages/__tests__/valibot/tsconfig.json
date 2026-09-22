@@ -12,7 +12,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "./dist",
+    // "outDir": "./dist",
     "types": ["node", "vitest/globals"],
     "paths": {
       "#machines/helpers/*": ["../helpers/src/*"],

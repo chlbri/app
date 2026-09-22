@@ -157,7 +157,6 @@ export type {
   GetIO_F,
   MachineType,
   NoExtraKeysTargetDef,
-  ScheduledData,
   SimpleMachineOptions2,
   StdO2,
   TransformTargetDef,
@@ -307,7 +306,6 @@ export type {
   ReduceFnMapFilterObject_F,
   ReduceFnMap_F,
   ReplaceAll_F,
-  ToFunction_F,
 } from '#utils';
 
 export type {

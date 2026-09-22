@@ -1,7 +1,4 @@
 import type { ActionResult, WithDescriber } from '#actions';
-import type { Primitive } from '@bemedev/app-utils-bemedev';
-import type { NOmit } from '@bemedev/app-utils-bemedev';
-import type { NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { Pausable } from '#emitters';
 import type {
   ActorsConfigMap,
@@ -11,14 +8,15 @@ import type {
 } from '#events';
 import type { GuardConfig } from '#guards';
 import type { ActivityConfig, StateValue, WorkingStatus } from '#states';
+import type { NOmit, NotUndefined, Primitive } from '@bemedev/app-utils-bemedev';
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval2 } from '@bemedev/interval2';
+import type { IntervalParams } from '@bemedev/interval2/types';
 import type { Equals, PrimitiveObject } from '@bemedev/typings';
 import type { Fn, FnMap, FnMapR, KeyU, OptionalDefinition } from '~types';
-import type { ScheduledData, SimpleMachineOptions2 } from '../machine';
+import type { SimpleMachineOptions2 } from '../machine';
 import type { AnyMachine, MachineType } from '../machine/types';
 import type { Subscriber, SubscriberOptions } from '../subscriber';
-import type { IntervalParams } from '@bemedev/interval2/types';
 
 /**
  * Execution mode of state machine interpreter.
@@ -469,22 +467,14 @@ export type Selector_F<T = any> = 0 extends 1 & T
  * Map of built-in action payloads passed to action functions.
  *
  * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
  */
-export type ExtendedActionsParams<
-  Eo extends EventObject = EventObject,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = Partial<{
-  scheduled: ScheduledData<Tc>;
+export type ExtendedActionsParams<Eo extends EventObject = EventObject> = Partial<{
   resend: EventArgObject<Eo>;
   forceSend: EventArgObject<Eo>;
   pauseActivity: string;
   resumeActivity: string;
   stopActivity: string;
-  pauseTimer: string;
-  resumeTimer: string;
-  stopTimer: string;
+
   sentEvent: SendToEvent;
 }>;
 

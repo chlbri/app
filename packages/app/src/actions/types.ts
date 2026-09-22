@@ -69,7 +69,7 @@ export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
 export type ActionResult<
   Tc extends PrimitiveObject = PrimitiveObject,
   Eo extends EventObject = EventObject,
-> = { mergers?: Merger<Tc, string>[] } & ExtendedActionsParams<Eo, Tc>;
+> = { mergers?: Merger<Tc, string>[] } & ExtendedActionsParams<Eo>;
 
 /**
  * An action may return synchronously or asynchronously.

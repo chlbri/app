@@ -8,6 +8,32 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.6.2] - 22/09/2026** => _19:58_
+
+</summary>
+
+### Breaking Changes
+
+- **Remove Timer Actions**: Removed `pauseTimer`, `resumeTimer`, and `stopTimer`
+  actions from `ExtendedActionsParams`, `CommonInterpreter`, `SyncInterpreter`, and
+  `AsyncInterpreter`.
+- **Remove `ScheduledData`**: Removed `ScheduledData` type from machine types and
+  package exports.
+
+### Docs
+
+- **Interpreter JSDoc**: Standardized and updated JSDoc annotations across
+  `CommonInterpreter`, `SyncInterpreter`, and `AsyncInterpreter`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.6.1] - 22/09/2026** => _18:59_
 
 </summary>
