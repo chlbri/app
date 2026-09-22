@@ -572,9 +572,9 @@ export abstract class CommonInterpreter<
     return this.__schedulerEvent.schedule(cb, this.__sent);
   };
   /**
-   * Schedules a change to the current active event.
+   * Schedules a change to the current active internal event.
    *
-   * @param event - The new event object of type `Eo`.
+   * @param __internal - The internal event string identifier of type {@linkcode EventStrings}.
    *
    * @returns The scheduled task result.
    */

@@ -10,6 +10,45 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.6.0] - 22/09/2026** => _16:03_
+
+</summary>
+
+### Features
+
+- **Internal Event Routing**: Support `__internal` event identifiers in `EventObject`
+  and route internal transitions through `reduceFnMap`, `reduceFnMapFilterArray`, and
+  `reduceFnMapFilterObject` for delayed and always transitions.
+- **Interpreter Event Dispatch**: Add `__changeEventInternal` to `CommonInterpreter`
+  to schedule and propagate internal event changes.
+
+### Fixes
+
+- **Context Mergers**: Fix `SyncMachine` merger accumulation when processing extended
+  machine configurations.
+- **Delayed Transitions**: Fix `SyncInterpreter` transition scheduling and event
+  payload propagation for delayed actions.
+- **Event Types Constraint**: Exclude internal `EventStrings` from generic key
+  mappings in `_FnMap`, `_FnMapFilterArray`, and `_FnMapFilterObject`.
+
+### Docs
+
+- **`JSDoc`**: Enhance JSDoc typing, tags, and parameter annotations across
+  `CommonInterpreter` and `reduceFnMap`.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.6.0 across workspace packages.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.5.0] - 24/08/2026** => _12:32_
 
 </summary>

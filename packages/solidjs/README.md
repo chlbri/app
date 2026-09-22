@@ -23,7 +23,7 @@ npm install @bemedev/app-solidjs
 pnpm add @bemedev/app-solidjs
 ```
 
-> **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 2.5.0 · SolidJS ≥ 1.9.0
+> **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 2.6.0 · SolidJS ≥ 1.9.0
 
 <br/>
 
