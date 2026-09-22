@@ -157,7 +157,6 @@ export type {
   GetIO_F,
   MachineType,
   NoExtraKeysTargetDef,
-  ScheduledData,
   SimpleMachineOptions2,
   StdO2,
   TransformTargetDef,
@@ -235,7 +234,6 @@ export type {
   AsyncChild,
   AsyncChildFunction2,
   AsyncConfig,
-  AsyncDebounceAction_F,
   AsyncDefineGuard_F,
   AsyncEraseAction_F,
   AsyncFilterAction_F,
@@ -259,7 +257,6 @@ export type {
   SyncAssignAction_F,
   SyncBatchAction_F,
   SyncChildFunction2,
-  SyncDebounceAction_F,
   SyncDefineGuard_F,
   SyncEraseAction_F,
   SyncFilterAction_F,
@@ -309,7 +306,6 @@ export type {
   ReduceFnMapFilterObject_F,
   ReduceFnMap_F,
   ReplaceAll_F,
-  ToFunction_F,
 } from '#utils';
 
 export type {

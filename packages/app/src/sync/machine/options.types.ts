@@ -187,24 +187,6 @@ export type SyncSendAction_F<
 ) => SyncAction2<E, Pc, Tc, T>;
 
 /**
- * Function type signature for creating a debounced synchronous action helper.
- *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
- * @template `T` - State tag string type.
- */
-export type SyncDebounceAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <A extends SyncAction2<E, Pc, Tc, T>>(
-  fn: A,
-  options: { ms?: number; id: string },
-) => SyncAction2<E, Pc, Tc, T>;
-
-/**
  * Function type signature for resending an event as a synchronous action.
  *
  * @template `E` - Event object type.
@@ -258,7 +240,6 @@ export type SyncAllActions_F<
   | SyncAction_F<E, Pc, Tc, T>
   | SyncSendAction_F<E, Pc, Tc, T>
   | SyncResendAction_F<E, Pc, Tc, T>
-  | SyncDebounceAction_F<E, Pc, Tc, T>
   | SyncTimeAction_F<E, Pc, Tc, T>
   | SyncBatchAction_F<E, Pc, Tc, T>
   | SyncEraseAction_F<E, Pc, Tc, T>
@@ -358,7 +339,6 @@ export type SyncAddOption<
   action: SyncAction_F<E, Pc, Tc, T>;
   sendTo: SyncSendAction_F<E, Pc, Tc, T>;
 
-  debounce: SyncDebounceAction_F<E, Pc, Tc, T>;
   resend: SyncResendAction_F<E, Pc, Tc, T>;
   /**
    * Force send action, performs the action regardless of the current state.

@@ -3,7 +3,6 @@ import type { SyncAction2 } from '#actions';
 import type {
   CommonConfig3,
   CommonCreateMachine_F,
-  ScheduledData,
   SimpleMachineOptions2,
 } from '#common/machine';
 import type { SyncDelayFunction } from '#delays';
@@ -192,6 +191,7 @@ export class SyncMachine<
               if (res) {
                 const { mergers: m, ...ext } = res;
                 Object.assign(extendeds, ext);
+                /* v8 ignore else -- @preserve */
                 if (m && m.length > 0) {
                   mergers.push(...m);
                   state.context = merge2.multiple(
@@ -209,15 +209,6 @@ export class SyncMachine<
         erase,
         action,
         sendTo,
-
-        debounce: (fn, { id, ms = 100 }) => {
-          return state => {
-            const res = fn(state);
-            const { mergers = [] } = res;
-            const scheduled: ScheduledData<Tc> = { data: mergers, ms, id };
-            return { scheduled };
-          };
-        },
 
         resend: resend => () => ({ resend }),
         forceSend: forceSend => () => ({ forceSend }),

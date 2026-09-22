@@ -241,7 +241,7 @@ export class AsyncInterpreter<
   };
 
   /**
-   * Executes extended actions such as sending events, scheduling, pausing/resuming activities or timers, and handling forced or resent events.
+   * Executes extended actions such as sending events, pausing/resuming activities, and handling forced or resent events.
    *
    * @param from - The origin state path or `false`.
    * @param params - The type {@linkcode ExtendedActionsParams} containing extended action definitions.
@@ -253,24 +253,17 @@ export class AsyncInterpreter<
     {
       forceSend,
       resend,
-      scheduled,
       pauseActivity,
       resumeActivity,
       stopActivity,
-      pauseTimer,
-      resumeTimer,
-      stopTimer,
+
       sentEvent,
-    }: ExtendedActionsParams<Eo, Tc>,
+    }: ExtendedActionsParams<Eo>,
   ) => {
     this.__performSendToAction(sentEvent);
-    this.__performScheduledAction(scheduled);
     this.__performPauseActivityAction(pauseActivity);
     this.__performResumeActivityAction(resumeActivity);
     this.__performStopActivityAction(stopActivity);
-    this.__performPauseTimerAction(pauseTimer);
-    this.__performResumeTimerAction(resumeTimer);
-    this.__performStopTimerAction(stopTimer);
 
     // ForceSendAction returns the result to make further actions
     const result =

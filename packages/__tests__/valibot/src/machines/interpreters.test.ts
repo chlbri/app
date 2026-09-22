@@ -1,5 +1,4 @@
 import { validate } from '@bemedev/app-valibot';
-import syncInterp_1 from '#machines/sync/interpreters/activities/pause.machine';
 import syncInterp_2 from '#machines/sync/interpreters/activities/perform.bis.machine';
 import syncInterp_3 from '#machines/sync/interpreters/activities/perform.machine';
 import syncInterp_4 from '#machines/sync/interpreters/children.1.machine';
@@ -15,7 +14,6 @@ import syncInterp_13 from '#machines/sync/interpreters/coverage/addOptions-retur
 import syncInterp_14 from '#machines/sync/interpreters/coverage/index.machine';
 import { machine1 as syncInterp_15 } from '#machines/sync/interpreters/data/machine1.fsm';
 import { config2 as syncInterp_16 } from '#machines/sync/interpreters/data/machine2.fsm';
-import { machine23 as syncInterp_17 } from '#machines/sync/interpreters/data/machine23.fsm';
 import syncInterp_18 from '#machines/sync/interpreters/filter-erase.1.machine';
 import syncInterp_19 from '#machines/sync/interpreters/filter-erase.2.machine';
 import syncInterp_20 from '#machines/sync/interpreters/filter-erase.3.machine';
@@ -39,7 +37,6 @@ import syncInterp_37 from '#machines/sync/interpreters/legacy-options.9.machine'
 import syncInterp_38 from '#machines/sync/interpreters/selftransitions/always.3.machine';
 import syncInterp_39 from '#machines/sync/interpreters/selftransitions/index.2.machine';
 import syncInterp_40 from '#machines/sync/interpreters/tags/tags.machine';
-import asyncInterp_1 from '#machines/async/interpreters/activities/pause.machine';
 import asyncInterp_2 from '#machines/async/interpreters/activities/perform.bis.machine';
 import asyncInterp_3 from '#machines/async/interpreters/activities/perform.machine';
 import asyncInterp_4 from '#machines/async/interpreters/children.1.machine';
@@ -60,7 +57,6 @@ import asyncInterp_18 from '#machines/async/interpreters/coverage/index.machine'
 import { machine1 as asyncInterp_19 } from '#machines/async/interpreters/data/machine1.fsm';
 import { config2 as asyncInterp_20 } from '#machines/async/interpreters/data/machine2.fsm';
 import { config21 as asyncInterp_21 } from '#machines/async/interpreters/data/machine21.fsm';
-import { machine23 as asyncInterp_22 } from '#machines/async/interpreters/data/machine23.fsm';
 import { config3 as asyncInterp_23 } from '#machines/async/interpreters/data/machine3.fsm';
 import asyncInterp_24 from '#machines/async/interpreters/erase.7.machine';
 import asyncInterp_25 from '#machines/async/interpreters/filter-erase.1.machine';
@@ -96,9 +92,6 @@ import asyncInterp_54 from '#machines/async/interpreters/selftransitions/index.2
 import asyncInterp_55 from '#machines/async/interpreters/tags/tags.machine';
 
 describe('Interpreters machines validation', () => {
-  test('#01 => interpreters/activities/pause.machine.ts', () =>
-    expect(validate.safe(syncInterp_1.config).success).toBe(true));
-
   test('#02 => interpreters/activities/perform.bis.machine.ts', () =>
     expect(validate.safe(syncInterp_2.config).success).toBe(true));
 
@@ -143,9 +136,6 @@ describe('Interpreters machines validation', () => {
 
   test('#16 => interpreters/data/machine2.fsm.ts', () =>
     expect(validate.safe(syncInterp_16).success).toBe(true));
-
-  test('#17 => interpreters/data/machine23.fsm.ts', () =>
-    expect(validate.safe(syncInterp_17.config).success).toBe(true));
 
   test('#18 => interpreters/filter-erase.1.machine.ts', () =>
     expect(validate.safe(syncInterp_18.config).success).toBe(true));
@@ -216,9 +206,6 @@ describe('Interpreters machines validation', () => {
   test('#40 => interpreters/tags/tags.machine.ts', () =>
     expect(validate.safe(syncInterp_40.config).success).toBe(true));
 
-  test('#41 => interpreters/activities/pause.machine.ts', () =>
-    expect(validate.safe(asyncInterp_1.config).success).toBe(true));
-
   test('#42 => interpreters/activities/perform.bis.machine.ts', () =>
     expect(validate.safe(asyncInterp_2.config).success).toBe(true));
 
@@ -278,9 +265,6 @@ describe('Interpreters machines validation', () => {
 
   test('#61 => interpreters/data/machine21.fsm.ts', () =>
     expect(validate.safe(asyncInterp_21).success).toBe(true));
-
-  test('#62 => interpreters/data/machine23.fsm.ts', () =>
-    expect(validate.safe(asyncInterp_22.config).success).toBe(true));
 
   test('#63 => interpreters/data/machine3.fsm.ts', () =>
     expect(validate.safe(asyncInterp_23).success).toBe(true));

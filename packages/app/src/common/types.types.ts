@@ -18,7 +18,6 @@ type _ActionTypes =
   | 'sendTo'
   | 'resend'
   | 'forceSend'
-  | 'debounce'
   | TimeActionsTypes;
 
 /**

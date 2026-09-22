@@ -79,31 +79,6 @@ declare module '@bemedev/app' {
       pContext: any;
     };
 
-    'src/__tests__/interpreters/activities/pause.machine': {
-      paths: {
-        map: { targets: ('/idle' | '/next'); 
-        initial: 'idle';
-        states: {
-          'idle': { targets: ('/' | '/next'); 
-          };
-          'next': { targets: ('/' | '/idle'); 
-          };
-        };
-      };
-        all: '/' | '/idle' | '/next';
-      };
-      events: 'PAUSE' | 'RESUME' | 'STOP' | 'NEXT';
-      options: {
-        children: never;
-        emitters: never;
-        tags:     never;
-        actions:  'inc' | 'pause' | 'resume' | 'stop';
-        delays:   never;
-        guards:   never;
-      };
-      pContext: any;
-    };
-
     'src/__tests__/interpreters/activities/perform.bis.machine': {
       paths: {
         map: { targets: ('/idle' | '/next'); 

@@ -595,16 +595,13 @@ describe('REAL LIFE TESTS', () => {
     // #endregion
 
     const mainMachine = _mainMachine3.provideOptions(
-      ({ assign, debounce }) => ({
+      ({ assign }) => ({
         actions: {
-          changeLang: debounce(
-            assign('lang', {
-              CHANGE_LANG: ({ payload: { lang } }) => {
-                return lang;
-              },
-            }),
-            { ms: 500, id: 'change-lang' },
-          ),
+          changeLang: assign('lang', {
+            CHANGE_LANG: ({ payload: { lang } }) => {
+              return lang;
+            },
+          }),
 
           add: assign('fields', ({ context: { fields } }) => {
             fields?.push({ label: '', type: 'text' });
@@ -618,19 +615,16 @@ describe('REAL LIFE TESTS', () => {
             },
           }),
 
-          update: debounce(
-            assign('fields', {
-              UPDATE: ({
-                context: { fields },
-                payload: { index, value },
-              }) => {
-                if (!fields) return fields;
-                fields[index] = { ...fields[index], ...value };
-                return fields;
-              },
-            }),
-            { ms: 500, id: 'update-field' },
-          ),
+          update: assign('fields', {
+            UPDATE: ({
+              context: { fields },
+              payload: { index, value },
+            }) => {
+              if (!fields) return fields;
+              fields[index] = { ...fields[index], ...value };
+              return fields;
+            },
+          }),
 
           'update:now': assign('fields', {
             'UPDATE:NOW': ({
@@ -649,9 +643,9 @@ describe('REAL LIFE TESTS', () => {
             () => 'registration' as const,
           ),
 
-          'fields.register.finish': debounce(
-            assign('states.fields', () => 'registered' as const),
-            { ms: 500, id: 'register-fields-finish' },
+          'fields.register.finish': assign(
+            'states.fields',
+            () => 'registered' as const,
           ),
 
           'fields.modify': assign(
@@ -670,9 +664,9 @@ describe('REAL LIFE TESTS', () => {
             'VALUES:REGISTER': ({ payload }) => payload,
           }),
 
-          'values.register.finish': debounce(
-            assign('states.values', () => 'registered' as const),
-            { ms: 500, id: 'register-values-finish' },
+          'values.register.finish': assign(
+            'states.values',
+            () => 'registered' as const,
           ),
 
           'values.modify': assign(
@@ -702,10 +696,9 @@ describe('REAL LIFE TESTS', () => {
 
     // #region Hooks
 
-    const { start, waiter, send, useLang, useStateValue } = constructTests(
+    const { start, send, useLang, useStateValue } = constructTests(
       service,
-      ({ waiter, contexts }) => ({
-        waiter: waiter(500),
+      ({ contexts }) => ({
         useLang: contexts(({ context: { lang } }) => lang),
       }),
     );
@@ -725,12 +718,10 @@ describe('REAL LIFE TESTS', () => {
       });
 
       test(...send({ type: 'CHANGE_LANG', payload: { lang: 'fr' } }, 3));
-      test(...useLang('en', 4));
-      test(...waiter(1, 5));
-      test(...useLang('fr', 6));
-      test(...send('ADD', 7));
+      test(...useLang('fr', 4));
+      test(...send('ADD', 5));
 
-      describe('#08 => Should add a new field', () => {
+      describe('#06 => Should add a new field', () => {
         test('#01 => Should have two fields', () => {
           expect(service.state.context.fields).toHaveLength(2);
         });
@@ -762,39 +753,11 @@ describe('REAL LIFE TESTS', () => {
             type: 'UPDATE',
             payload: { index: 0, value: { label: 'Name', type: 'text' } },
           },
-          9,
+          7,
         ),
       );
 
-      describe('#10 => Fields are not changed', () => {
-        test('#01 => Should have two fields', () => {
-          expect(service.state.context.fields).toHaveLength(2);
-        });
-
-        test('#02 => First field is default text', () => {
-          expect(service.state.context.fields?.[0]).toEqual({
-            label: '',
-            type: 'text',
-          });
-        });
-
-        test('#03 => Second field is default text', () => {
-          expect(service.state.context.fields?.[1]).toEqual({
-            label: '',
-            type: 'text',
-          });
-        });
-
-        test('#04 => First and second fields are equal', () => {
-          expect(service.state.context.fields?.[0]).toEqual(
-            service.state.context.fields?.[1],
-          );
-        });
-      });
-
-      test(...waiter(1, 11));
-
-      test('#12 => Should update first field', () => {
+      test('#08 => Should update first field', () => {
         expect(service.state.context.fields?.[0]).toEqual({
           label: 'Name',
           type: 'text',
@@ -824,8 +787,8 @@ describe('REAL LIFE TESTS', () => {
       test(...send('FIELDS:REGISTER', 11));
       test(...useStateValue({ working: 'register' }, 12));
 
-      test('#13 => Fields state should be registration', () => {
-        expect(service.state.context.states?.fields).toBe('registration');
+      test('#13 => Fields state should be registered', () => {
+        expect(service.state.context.states?.fields).toBe('registered');
       });
 
       test(
@@ -845,8 +808,8 @@ describe('REAL LIFE TESTS', () => {
         });
       });
 
-      test('#16 => Values state should be registration', () => {
-        expect(service.state.context.states?.values).toBe('registration');
+      test('#16 => Values state should be registered', () => {
+        expect(service.state.context.states?.values).toBe('registered');
       });
 
       test(...send('VALUES:MODIFY', 16));
@@ -882,7 +845,7 @@ describe('REAL LIFE TESTS', () => {
         expect(service.state.context).toEqual({
           fields: [{ label: 'Name', type: 'text' }],
           lang: 'fr',
-          states: { fields: 'registration', values: 'idle' },
+          states: { fields: 'registered', values: 'idle' },
           values: { name: 'John Doe', email: 'john@example.com' },
         });
       });

@@ -69,15 +69,14 @@ export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
 export type ActionResult<
   Tc extends PrimitiveObject = PrimitiveObject,
   Eo extends EventObject = EventObject,
-> = { mergers?: Merger<Tc, string>[] } & ExtendedActionsParams<Eo, Tc>;
+> = { mergers?: Merger<Tc, string>[] } & ExtendedActionsParams<Eo>;
 
 /**
  * An action may return synchronously or asynchronously.
  *
- * Any action (user-provided or produced by an `addOptions` helper except
- * `debounce`) may return type {@linkcode ActionResult} or a promise that resolves to one.
+ * Any action (user-provided or produced by an `addOptions` helper)
+ * may return type {@linkcode ActionResult} or a promise that resolves to one.
  *
- * @template `Pc` - The type of the private context.
  * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
  */
 export type MaybeAsyncActionResult<Tc extends PrimitiveObject = PrimitiveObject> =

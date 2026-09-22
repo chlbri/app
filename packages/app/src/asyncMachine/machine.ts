@@ -12,7 +12,6 @@ import {
   CommonMachine,
   type CommonConfig3,
   type CommonCreateMachine_F,
-  type ScheduledData,
   type SimpleMachineOptions2,
 } from '#common/machine';
 
@@ -329,10 +328,10 @@ export class AsyncMachine<
               const res = await fn(state);
 
               const { mergers: m, ...ext } = res;
-              if (m) mergers.push(...m);
               Object.assign(extendeds, ext);
 
               if (m && m.length > 0) {
+                mergers.push(...m);
                 state.context = merge2.multiple(state.context, ...(m as any)) as any;
               }
             }
@@ -344,16 +343,6 @@ export class AsyncMachine<
         erase,
         action,
         sendTo,
-
-        debounce: (fn, { id, ms = 100 }) => {
-          return async state => {
-            const res = await fn(state);
-            const { mergers = [] } = res;
-            const scheduled: ScheduledData<Tc> = { data: mergers, ms, id };
-
-            return { scheduled };
-          };
-        },
 
         resend: resend => () => ({ resend }),
 

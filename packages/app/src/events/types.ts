@@ -173,7 +173,9 @@ export type EventArgT<E extends EventsMap> =
  * @template `Ex` - Event types to exclude.
  */
 export type ToEventObject<T extends AllEvent, Ex extends string = never> = Exclude<
-  EventObject & (T extends string ? { type: T; payload: EmptyObject } : T),
+  T extends string
+    ? { type: T; payload: EmptyObject; __internal?: EventStrings }
+    : T,
   { type: Ex }
 >;
 

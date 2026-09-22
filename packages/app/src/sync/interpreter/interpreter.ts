@@ -178,7 +178,7 @@ export class SyncInterpreter<
   };
 
   /**
-   * Executes extended actions such as sending events, scheduling, activity management, timer management, and forced sending.
+   * Executes extended actions such as sending events, activity management, and handling forced or resent events.
    *
    * @param params - The parameters of type {@linkcode ExtendedActionsParams}.
    *
@@ -187,24 +187,15 @@ export class SyncInterpreter<
   protected __performsExtendedActions = ({
     forceSend,
     resend,
-    scheduled,
     pauseActivity,
     resumeActivity,
     stopActivity,
-    pauseTimer,
-    resumeTimer,
-    stopTimer,
     sentEvent,
-  }: ExtendedActionsParams<Eo, Tc>) => {
+  }: ExtendedActionsParams<Eo>) => {
     this.__performSendToAction(sentEvent);
-
-    this.__performScheduledAction(scheduled);
     this.__performPauseActivityAction(pauseActivity);
     this.__performResumeActivityAction(resumeActivity);
     this.__performStopActivityAction(stopActivity);
-    this.__performPauseTimerAction(pauseTimer);
-    this.__performResumeTimerAction(resumeTimer);
-    this.__performStopTimerAction(stopTimer);
 
     // ForceSendAction returns the result to make further actions
     const result =

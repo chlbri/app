@@ -23,10 +23,7 @@ export const config2 = createConfig({
             idle: {
               activities: { DELAY: 'sendPanelToUser' },
               on: {
-                FETCH: {
-                  guards: 'isInputNotEmpty',
-                  target: '/working/fetch/fetch',
-                },
+                FETCH: { guards: 'isInputNotEmpty', target: '/working/fetch/fetch' },
               },
             },
             fetch: { entry: 'insertData', always: '/working/fetch/idle' },
@@ -36,16 +33,11 @@ export const config2 = createConfig({
           initial: 'idle',
           states: {
             idle: {
-              on: {
-                WRITE: { actions: 'write', target: '/working/ui/input' },
-              },
+              on: { WRITE: { actions: 'write', target: '/working/ui/input' } },
             },
             input: {
               activities: {
-                DELAY: {
-                  guards: 'isInputEmpty',
-                  actions: 'askUsertoInput',
-                },
+                DELAY: { guards: 'isInputEmpty', actions: 'askUsertoInput' },
               },
               on: {
                 WRITE: [
@@ -91,19 +83,11 @@ export const machine2 = createMachine(
   typings2,
 ).provideOptions(({ isNotValue, isValue, assign, action }) => ({
   actions: {
-    inc: assign(
-      'iterator',
-      ({ context }) => notU(context?.iterator) + 1,
-    ),
-    inc2: assign(
-      'iterator',
-      ({ context }) => notU(context?.iterator) + 4,
-    ),
+    inc: assign('iterator', ({ context }) => notU(context?.iterator) + 1),
+    inc2: assign('iterator', ({ context }) => notU(context?.iterator) + 4),
     sendPanelToUser: action(() => console.log('sendPanelToUser')),
     askUsertoInput: action(() => console.log('Input, please !!')),
-    write: assign('input', {
-      WRITE: ({ payload: { value } }) => value,
-    }),
+    write: assign('input', { WRITE: ({ payload: { value } }) => value }),
     insertData: assign('data', ({ context }) =>
       fakeDB
         .filter(item => item.name.includes(context?.input ?? ''))
@@ -115,9 +99,7 @@ export const machine2 = createMachine(
     isInputNotEmpty: isNotValue('context.input', ''),
   },
   actors: {
-    children: {
-      machine1: () => interpret(machine1, { context: { iterator: 0 } }),
-    },
+    children: { machine1: () => interpret(machine1, { context: { iterator: 0 } }) },
   },
   delays: { DELAY, DELAY2: 2 * DELAY },
 }));
@@ -125,48 +107,24 @@ export const machine2 = createMachine(
 const _config2 = createConfig({
   ...config2,
   actors: { machine1: { contexts: { iterator: 'iterator' }, on: {} } },
-  states: {
-    ...config2.states,
-    idle: { entry: 'debounce', ...config2.states.idle },
-  },
+  states: { ...config2.states, idle: { entry: 'debounce', ...config2.states.idle } },
 });
 
 export const _machine2 = createMachine(_config2, typings2).provideOptions(
-  ({
-    isNotValue,
-    isValue,
-    assign,
-    action,
-    debounce: _debounce,
-    batch,
-  }) => ({
+  ({ isNotValue, isValue, assign, action }) => ({
     actions: {
-      inc: assign(
-        'iterator',
-        ({ context }) => notU(context?.iterator) + 1,
-      ),
+      inc: assign('iterator', ({ context }) => notU(context?.iterator) + 1),
 
-      inc2: assign(
-        'iterator',
-        ({ context }) => notU(context?.iterator) + 4,
-      ),
+      inc2: assign('iterator', ({ context }) => notU(context?.iterator) + 4),
       sendPanelToUser: action(() => console.log('sendPanelToUser')),
       askUsertoInput: action(() => console.log('Input, please !!')),
-      write: assign('input', {
-        WRITE: ({ payload: { value } }) => value,
-      }),
+      write: assign('input', { WRITE: ({ payload: { value } }) => value }),
       insertData: assign('data', ({ context }) =>
         fakeDB
           .filter(item => item.name.includes(context?.input ?? ''))
           .map(item => item.name),
       ),
-      debounce: batch(
-        action(() => console.log('Debounced action executed')),
-        _debounce(
-          assign('iterator', () => 1000),
-          { ms: 10_000, id: 'debounce-action' },
-        ),
-      ),
+      debounce: action(() => console.log('Debounced action executed')),
     },
     guards: {
       isInputEmpty: isValue('context.input', ''),
@@ -178,7 +136,6 @@ export const _machine2 = createMachine(_config2, typings2).provideOptions(
       },
     },
     delays: { DELAY, DELAY2: 2 * DELAY },
-
   }),
 );
 

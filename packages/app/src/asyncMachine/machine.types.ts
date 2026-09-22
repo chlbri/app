@@ -309,30 +309,6 @@ export type AsyncDefineGuard_F<
 > = (path: DefinedValue<Pc, Tc>) => FnR<E, Pc, Tc, T, boolean>;
 
 /**
- * Function type signature for creating a debounced action helper.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
- * @param fn - Async action of type {@linkcode AsyncAction2}.
- * @param options - Configuration options object.
- * @param options.ms - Optional debounce delay in milliseconds.
- * @param options.id - String identifier for the debounced action.
- *
- * @returns Async action of type {@linkcode AsyncAction2}.
- */
-export type AsyncDebounceAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <A extends AsyncAction2<E, Pc, Tc, T>>(
-  fn: A,
-  options: { ms?: number; id: string },
-) => AsyncAction2<E, Pc, Tc, T>;
-
-/**
  * Function type signature for batching multiple actions into a single async action.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
@@ -484,10 +460,6 @@ export type AsyncAddOption<
    * Helper function to send events to actor machines asynchronously.
    */
   sendTo: AsyncSendAction_F<E, Pc, Tc, T>;
-  /**
-   * Helper function to debounce an async action.
-   */
-  debounce: AsyncDebounceAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to resend an event as an async action.
    */

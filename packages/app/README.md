@@ -141,11 +141,10 @@ await service[Symbol.asyncDispose]();
   - [5.3 action](#53-action)
   - [5.4 batch](#54-batch)
   - [5.5 filter & erase](#55-filter--erase)
-  - [5.6 debounce](#56-debounce)
-  - [5.7 sendTo](#57-sendto)
-  - [5.8 resend & forceSend](#58-resend--forcesend)
-  - [5.9 Activity & Timer Lifecycle Actions](#59-activity--timer-lifecycle-actions)
-  - [5.10 Async actions & AsyncOptions (AsyncMachine vs SyncMachine)](#510-async-actions--asyncoptions-asyncmachine-vs-syncmachine)
+  - [5.6 sendTo](#56-sendto)
+  - [5.7 resend & forceSend](#57-resend--forcesend)
+  - [5.8 Activity Lifecycle Actions](#58-activity-lifecycle-actions)
+  - [5.9 Async actions & AsyncOptions (AsyncMachine vs SyncMachine)](#59-async-actions--asyncoptions-asyncmachine-vs-syncmachine)
 - [6. Guards](#6-guards)
   - [6.1 Built-in Guard Helpers](#61-built-in-guard-helpers)
   - [6.2 Custom & Async Predicates](#62-custom--async-predicates)
@@ -521,10 +520,9 @@ All helpers are injected as parameters of the options helper callback:
 ```typescript
 // Create strongly-typed options for Sync or Async machines
 const options = machine.createOptions(({
-  assign, swap, action, batch, filter, erase, debounce,
+  assign, swap, action, batch, filter, erase,
   sendTo, resend, forceSend,
   pauseActivity, resumeActivity, stopActivity,
-  pauseTimer, resumeTimer, stopTimer,
   isValue, isNotValue, isDefined, isNotDefined,
 }) => ({
   actions:  { ... },
@@ -690,21 +688,7 @@ actions: {
 }
 ```
 
-### 5.6 debounce
-
-Schedules a debounced context update after a specified time delay `ms` under a unique
-identifier `id`.
-
-```typescript
-actions: {
-  searchDebounced: debounce(
-    assign('context.results', async ({ context }) => fetchResults(context.query)),
-    { id: 'search-query', ms: 300 }
-  ),
-}
-```
-
-### 5.7 sendTo
+### 5.6 sendTo
 
 Sends an event to a child service or actor from within an action.
 
@@ -718,7 +702,7 @@ actions: {
 }
 ```
 
-### 5.8 resend & forceSend
+### 5.7 resend & forceSend
 
 Re-dispatch events from within an action back to the current machine.
 
@@ -733,26 +717,21 @@ actions: {
 }
 ```
 
-### 5.9 Activity & Timer Lifecycle Actions
+### 5.8 Activity Lifecycle Actions
 
-Action helpers to manage active activity actors and timers directly:
+Action helpers to manage active activity actors directly:
 
 - **`pauseActivity(name)`**, **`resumeActivity(name)`**, **`stopActivity(name)`**
-- **`pauseTimer(name)`**, **`resumeTimer(name)`**, **`stopTimer(name)`**
 
 ```typescript
 actions: {
   pauseUpload:   pauseActivity('uploadWorker'),
   resumeUpload:  resumeActivity('uploadWorker'),
   stopUpload:    stopActivity('uploadWorker'),
-
-  pauseTimeout:  pauseTimer('sessionTimer'),
-  resumeTimeout: resumeTimer('sessionTimer'),
-  cancelTimeout: stopTimer('sessionTimer'),
 }
 ```
 
-### 5.10 Async actions & AsyncOptions (AsyncMachine vs SyncMachine)
+### 5.9 Async actions & AsyncOptions (AsyncMachine vs SyncMachine)
 
 In **`AsyncMachine`** (created via `createAsyncMachine` or `createMachine`), action
 helpers (`assign`, `action`, `sendTo`) accept `async` functions and support an

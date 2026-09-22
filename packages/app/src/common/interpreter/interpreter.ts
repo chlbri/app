@@ -47,12 +47,7 @@ import {
 import type { AllowedNames } from '@bemedev/app-utils-bemedev';
 import { isDefined, isPrimitive, toArray } from '@bemedev/app-utils-bemedev';
 import { asyncfy } from '@bemedev/better-promise';
-import {
-  createInterval,
-  createTimeout,
-  type Interval2,
-  type Timeout2,
-} from '@bemedev/interval2';
+import { createInterval, type Interval2 } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { Fn, MachineType, Pausable } from '~types';
 import {
@@ -61,7 +56,6 @@ import {
   type AnyMachine,
   type CommonConfig3,
   type CommonMachine,
-  type ScheduledData,
   type SimpleMachineOptions2,
 } from '../machine';
 import { createSubscriber, type Subscriber } from '../subscriber';
@@ -571,6 +565,7 @@ export abstract class CommonInterpreter<
 
     return this.__schedulerEvent.schedule(cb, this.__sent);
   };
+
   /**
    * Schedules a change to the current active internal event.
    *
@@ -891,11 +886,6 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Array of active timer instances of type {@linkcode Timeout2} scheduled for action execution.
-   */
-  protected __timeoutActions: Timeout2[] = [];
-
-  /**
    * Starts execution of all spawned child services.
    */
   private __startChildren = () => {
@@ -1067,7 +1057,6 @@ export abstract class CommonInterpreter<
     this.__pauseAllActivities();
     this.__pauseChildren();
     this.__pausePausables();
-    this.__timeoutActions.forEach(this.__pause);
     this.__setStatus('paused');
     this.__subscribers.forEach(this.__close);
   };
@@ -1080,7 +1069,6 @@ export abstract class CommonInterpreter<
       this.__performActivities();
       this.__setStatus('busy');
       this.__subscribers.forEach(this.__open);
-      this.__timeoutActions.forEach(this.__resume);
       this.__resumeChildren();
       this.__resumePausables();
       this.__setStatus('working');
@@ -1094,7 +1082,6 @@ export abstract class CommonInterpreter<
     this.__setStatus('busy');
     this.__pauseAllActivities();
     this.__cachedIntervals.forEach(this.__dispose);
-    this.__timeoutActions.forEach(this.__dispose);
     this.__stopPausables();
     this.__stopChildren();
     this.__setStatus('stopped');
@@ -1453,36 +1440,6 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Pauses a scheduled action timer by its identifier.
-   *
-   * @param id - Optional timer identifier.
-   */
-  protected __performPauseTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.__pause);
-  };
-
-  /**
-   * Resumes a paused action timer by its identifier.
-   *
-   * @param id - Optional timer identifier.
-   */
-  protected __performResumeTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.__resume);
-  };
-
-  /**
-   * Stops and disposes a scheduled action timer by its identifier.
-   *
-   * @param id - Optional timer identifier.
-   */
-  protected __performStopTimerAction = (id?: string) => {
-    if (!id) return;
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.__dispose);
-  };
-
-  /**
    * Computes entry and exit action diffs for transitioning to a target state path.
    *
    * @param target - Optional target state path string.
@@ -1721,25 +1678,6 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Schedules a delayed context update action.
-   *
-   * @param scheduled - Optional scheduled action configuration of type {@linkcode ScheduledData}.
-   */
-  protected __performScheduledAction = (scheduled?: ScheduledData<Tc>) => {
-    if (!scheduled) return;
-    const { data, ms: timeout, id } = scheduled;
-    const callback = () => {
-      this.__mergeContexts({ mergers: data });
-      this.__flush();
-    };
-    this.__timeoutActions.filter(f => f.id === id).forEach(this.__dispose);
-    this.__timeoutActions = this.__timeoutActions.filter(f => f.id !== id);
-    const timer = createTimeout({ callback, timeout, id });
-    this.__timeoutActions.push(timer);
-    timer.start();
-  };
-
-  /**
    * Abstract method executing activities configured for active states.
    */
   protected abstract __executeActivities: ExecuteActivities_F;
@@ -1930,7 +1868,6 @@ export abstract class CommonInterpreter<
    */
   dispose = () => {
     this.stop();
-    this.__timeoutActions.forEach(this.__dispose);
     this.__subscribers.forEach(this.__dispose);
     this.__innerSubscribers.forEach(this.__dispose);
   };

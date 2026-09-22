@@ -20,7 +20,6 @@ import type {
   NoExtraKeysTransitionConfigSoA,
   TransitionsConfig,
 } from '#transitions';
-import type { Merger } from '#utils';
 
 import type {
   Fn,
@@ -469,19 +468,6 @@ export type CommonFilterAction_F<
  * @template `T` - Target machine type.
  */
 export type CommonCreateMachine_F<T = any> = (config: any) => T;
-
-/**
- * Represents a scheduled action with its data and execution time.
- *
- * @template `Pc` - Type of private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Type of context.
- *
- */
-export type ScheduledData<Tc extends PrimitiveObject = PrimitiveObject> = {
-  data: Merger<Tc, string>[];
-  ms: number;
-  id: string;
-};
 
 /**
  * Map of child names to child actor machine functions.

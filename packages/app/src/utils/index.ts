@@ -14,7 +14,6 @@ export * from './constructEventMap';
 export * from './reduceDescriber';
 export * from './resolve';
 export * from './strings';
-export * from './toFunction';
 export * from './undefined';
 export * from './identity';
 export * from './typings';

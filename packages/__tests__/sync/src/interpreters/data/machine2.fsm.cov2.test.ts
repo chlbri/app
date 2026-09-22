@@ -218,7 +218,7 @@ describe('machine coverage', () => {
       test(...dispose(3));
     });
 
-    test('#36 => Wait for debounce', () => {
+    test('#36 => Wait for timer', () => {
       vi.advanceTimersByTime(10_000);
     });
 
