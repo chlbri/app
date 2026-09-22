@@ -824,26 +824,28 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.7.machine': {
       paths: {
-        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        map: { targets: ('/init_state' | '/always_state' | '/after_state' | '/final_state'); 
         initial: 'init_state';
         states: {
-          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          'after_state': { targets: ('/' | '/init_state' | '/always_state' | '/final_state'); 
           };
-          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          'always_state': { targets: ('/' | '/init_state' | '/after_state' | '/final_state'); 
           };
-          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          'final_state': { targets: ('/' | '/init_state' | '/always_state' | '/after_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/after_state' | '/final_state'); 
           };
         };
       };
-        all: '/' | '/init_state' | '/always_state' | '/final_state';
+        all: '/' | '/init_state' | '/always_state' | '/after_state' | '/final_state';
       };
-      events: 'TRIGGER_ALWAYS';
+      events: 'TRIGGER_ALWAYS' | 'TRIGGER_AFTER';
       options: {
         children: never;
         emitters: never;
         tags:     never;
-        actions:  'filterInit' | 'filterAlways';
-        delays:   never;
+        actions:  'filterInit' | 'filterAlways' | 'filterAfter';
+        delays:   'DELAY';
         guards:   never;
       };
       pContext: any;
@@ -851,26 +853,28 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.8.machine': {
       paths: {
-        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        map: { targets: ('/init_state' | '/always_state' | '/after_state' | '/final_state'); 
         initial: 'init_state';
         states: {
-          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          'after_state': { targets: ('/' | '/init_state' | '/always_state' | '/final_state'); 
           };
-          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          'always_state': { targets: ('/' | '/init_state' | '/after_state' | '/final_state'); 
           };
-          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          'final_state': { targets: ('/' | '/init_state' | '/always_state' | '/after_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/after_state' | '/final_state'); 
           };
         };
       };
-        all: '/' | '/init_state' | '/always_state' | '/final_state';
+        all: '/' | '/init_state' | '/always_state' | '/after_state' | '/final_state';
       };
-      events: 'TRIGGER_ALWAYS';
+      events: 'TRIGGER_ALWAYS' | 'TRIGGER_AFTER';
       options: {
         children: never;
         emitters: never;
         tags:     never;
-        actions:  'filterInit' | 'filterAlways';
-        delays:   never;
+        actions:  'filterInit' | 'filterAlways' | 'filterAfter';
+        delays:   'DELAY';
         guards:   never;
       };
       pContext: any;

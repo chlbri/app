@@ -19,9 +19,6 @@ export default createMachine(
   },
   {
     context: type(({ array }) => ({ numbers: array('number') })),
-
     eventsMap: type({ TRIGGER_ALWAYS: 'undefined', TRIGGER_AFTER: 'undefined' }),
-
-    sync: true,
   },
 );

@@ -1,4 +1,13 @@
 import { interpret } from '@bemedev/app';
+import {
+  AFTER_EVENT,
+  ALWAYS_EVENT,
+  INIT_EVENT,
+  after,
+  always,
+  type AfterEvent,
+  type AlwaysEvent,
+} from '@bemedev/app/events';
 import { constructTests } from '@bemedev/app-vitest';
 import _machine1 from './filter-erase.1.machine';
 import _machine2 from './filter-erase.2.machine';
@@ -10,6 +19,13 @@ import _machine7 from './filter-erase.7.machine';
 import _machine8 from './filter-erase.8.machine';
 
 describe('Filter and Erase actions', () => {
+  beforeAll(() => {
+    vi.useFakeTimers();
+  });
+
+  afterAll(() => {
+    vi.useRealTimers();
+  });
   describe('#01 => Filter action', () => {
     describe('#01 => Filter array of numbers', () => {
       const machine = _machine1;
@@ -454,7 +470,7 @@ describe('Filter and Erase actions', () => {
       });
     });
 
-    describe('#10 => Filter array on lifecycle events with map and else', () => {
+    describe('#10 => Filter array on lifecycle events with map (always and else)', () => {
       const machine = _machine7;
 
       const service = interpret(machine, {
@@ -471,7 +487,9 @@ describe('Filter and Erase actions', () => {
         service.addOptions(({ filter }) => ({
           actions: {
             filterInit: filter('numbers', { else: num => num <= 8 }),
-            filterAlways: filter('numbers', { else: num => num <= 6 }),
+            filterAlways: filter('numbers', {
+              [always('/always_state')]: num => num <= 6,
+            }),
           },
         }));
       });
@@ -516,7 +534,7 @@ describe('Filter and Erase actions', () => {
       });
     });
 
-    describe('#12 => Filter object on lifecycle events with map and else', () => {
+    describe('#12 => Filter object on lifecycle events with map (always and else)', () => {
       const machine = _machine8;
 
       const service = interpret(machine, {
@@ -533,7 +551,9 @@ describe('Filter and Erase actions', () => {
         service.addOptions(({ filter }) => ({
           actions: {
             filterInit: filter('scores', { else: score => score >= 70 }),
-            filterAlways: filter('scores', { else: score => score >= 90 }),
+            filterAlways: filter('scores', {
+              [always('/always_state')]: score => score >= 90,
+            }),
           },
         }));
       });
@@ -708,6 +728,136 @@ describe('Filter and Erase actions', () => {
           });
         });
       });
+
+      describe('#05 => String event matching AlwaysEvent (${string}/ALWAYS_EVENT)', () => {
+        const alwaysEvent = `idle/${ALWAYS_EVENT}` as const satisfies AlwaysEvent;
+
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterEven: filter('numbers', {
+              [INIT_EVENT]: num => num === 1,
+              [always('idle')]: num => num > 5,
+              [after('idle')]: num => num <= 3,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+          event: alwaysEvent,
+        } as any;
+
+        const result = actions?.filterEven?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters numbers via matching AlwaysEvent (> 5)', () => {
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'numbers',
+                source: { numbers: [6, 7, 8, 9, 10] },
+              },
+            ],
+          });
+        });
+      });
+
+      describe('#06 => String event matching AfterEvent (${string}/AFTER_EVENT)', () => {
+        const afterEvent = `idle/${AFTER_EVENT}` as const satisfies AfterEvent;
+
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterEven: filter('numbers', {
+              [INIT_EVENT]: num => num === 1,
+              [always('idle')]: num => num > 5,
+              [after('idle')]: num => num <= 3,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+          event: afterEvent,
+        } as any;
+
+        const result = actions?.filterEven?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters numbers via matching AfterEvent (<= 3)', () => {
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'numbers',
+                source: { numbers: [1, 2, 3] },
+              },
+            ],
+          });
+        });
+      });
+
+      describe('#07 => Event object with __internal matching always', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterEven: filter('numbers', {
+              [always('idle')]: num => num > 5,
+              [after('idle')]: num => num <= 3,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+          event: { __internal: always('idle'), type: 'NEXT', payload: {} },
+        } as any;
+
+        const result = actions?.filterEven?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters numbers via matching __internal always (> 5)', () => {
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'numbers',
+                source: { numbers: [6, 7, 8, 9, 10] },
+              },
+            ],
+          });
+        });
+      });
+
+      describe('#08 => Event object with __internal matching after', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterEven: filter('numbers', {
+              [always('idle')]: num => num > 5,
+              [after('idle')]: num => num <= 3,
+            }),
+          },
+        }));
+
+        const state = {
+          context: { numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+          event: { __internal: after('idle'), type: 'NEXT', payload: {} },
+        } as any;
+
+        const result = actions?.filterEven?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters numbers via matching __internal after (<= 3)', () => {
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'numbers',
+                source: { numbers: [1, 2, 3] },
+              },
+            ],
+          });
+        });
+      });
     });
 
     describe('#15 => Filter object with string event (reduceFnMapFilterObject check5)', () => {
@@ -835,6 +985,224 @@ describe('Filter and Erase actions', () => {
           });
         });
       });
+
+      describe('#05 => String event matching AlwaysEvent (${string}/ALWAYS_EVENT)', () => {
+        const alwaysEvent = `idle/${ALWAYS_EVENT}` as const satisfies AlwaysEvent;
+
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('scores', {
+              [INIT_EVENT]: score => score === 100,
+              [always('idle')]: score => score >= 80,
+              [after('idle')]: score => score < 50,
+            }),
+          },
+        }));
+
+        const state = {
+          context: {
+            scores: { math: 90, physics: 75, history: 85, english: 45 },
+          },
+          event: alwaysEvent,
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters scores via matching AlwaysEvent (>= 80)', () => {
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'scores',
+                source: { scores: { math: 90, history: 85 } },
+              },
+            ],
+          });
+        });
+      });
+
+      describe('#06 => String event matching AfterEvent (${string}/AFTER_EVENT)', () => {
+        const afterEvent = `idle/${AFTER_EVENT}` as const satisfies AfterEvent;
+
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('scores', {
+              [INIT_EVENT]: score => score === 100,
+              [always('idle')]: score => score >= 80,
+              [after('idle')]: score => score < 50,
+            }),
+          },
+        }));
+
+        const state = {
+          context: {
+            scores: { math: 90, physics: 75, history: 85, english: 45 },
+          },
+          event: afterEvent,
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters scores via matching AfterEvent (< 50)', () => {
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'scores',
+                source: { scores: { english: 45 } },
+              },
+            ],
+          });
+        });
+      });
+
+      describe('#07 => Event object with __internal matching always', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('scores', {
+              [always('idle')]: score => score >= 80,
+              [after('idle')]: score => score < 50,
+            }),
+          },
+        }));
+
+        const state = {
+          context: {
+            scores: { math: 90, physics: 75, history: 85, english: 45 },
+          },
+          event: { __internal: always('idle'), type: 'NEXT', payload: {} },
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters scores via matching __internal always (>= 80)', () => {
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'scores',
+                source: { scores: { math: 90, history: 85 } },
+              },
+            ],
+          });
+        });
+      });
+
+      describe('#08 => Event object with __internal matching after', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('scores', {
+              [always('idle')]: score => score >= 80,
+              [after('idle')]: score => score < 50,
+            }),
+          },
+        }));
+
+        const state = {
+          context: {
+            scores: { math: 90, physics: 75, history: 85, english: 45 },
+          },
+          event: { __internal: after('idle'), type: 'NEXT', payload: {} },
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => expect(typeof result).toBe('object'));
+
+        test('#02 => filters scores via matching __internal after (< 50)', () => {
+          expect(result).toEqual({
+            mergers: [
+              {
+                key: 'scores',
+                source: { scores: { english: 45 } },
+              },
+            ],
+          });
+        });
+      });
+    });
+
+    describe('#16 => Filter array on delayed (after) transition with map', () => {
+      const machine = _machine7;
+
+      const service = interpret(machine, {
+        context: { numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+      });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test('#00 => Add actions', () => {
+        service.addOptions(({ filter }) => ({
+          delays: { DELAY: 100 },
+          actions: {
+            filterAfter: filter('numbers', {
+              [after('/after_state')]: num => num % 2 === 0,
+            }),
+          },
+        }));
+      });
+
+      test(...start(1));
+      test(...useValue('init_state', 2));
+      test(...useSend('TRIGGER_AFTER', 3));
+      test(...useValue('after_state', 4));
+
+      test('#05 => Advance timers and trigger after transition', async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+
+      test(...useValue('final_state', 6));
+
+      test('#07 => Check filtered numbers after delayed transition (even numbers)', () => {
+        expect(service.select('numbers')).toEqual([2, 4, 6, 8, 10]);
+      });
+    });
+
+    describe('#17 => Filter object on delayed (after) transition with map', () => {
+      const machine = _machine8;
+
+      const service = interpret(machine, {
+        context: { scores: { user1: 95, user2: 60, user3: 85 } },
+      });
+
+      const {
+        useStateValue: useValue,
+        send: useSend,
+        start,
+      } = constructTests(service);
+
+      test('#00 => Add actions', () => {
+        service.addOptions(({ filter }) => ({
+          delays: { DELAY: 100 },
+          actions: {
+            filterAfter: filter('scores', {
+              [after('/after_state')]: score => score >= 80,
+            }),
+          },
+        }));
+      });
+
+      test(...start(1));
+      test(...useValue('init_state', 2));
+      test(...useSend('TRIGGER_AFTER', 3));
+      test(...useValue('after_state', 4));
+
+      test('#05 => Advance timers and trigger after transition', async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+
+      test(...useValue('final_state', 6));
+
+      test('#07 => Check filtered scores after delayed transition (>= 80)', () => {
+        expect(service.select('scores')).toEqual({ user1: 95, user3: 85 });
+      });
     });
   });
 
@@ -869,9 +1237,6 @@ describe('Filter and Erase actions', () => {
       test('#04 => Check name', () => {
         expect(service.select('name')).toBe('John Doe');
       });
-
-
-
 
       test(...useSend('CLEAR_NAME', 5));
 

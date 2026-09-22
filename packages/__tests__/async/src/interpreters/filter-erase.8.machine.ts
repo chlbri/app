@@ -2,7 +2,7 @@ import { createMachine } from '@bemedev/app';
 import { type } from '@bemedev/typings';
 
 export default createMachine(
-  'src/__tests__/interpreters/filter-erase.7.machine',
+  'src/__tests__/interpreters/filter-erase.8.machine',
   {
     initial: 'init_state',
     states: {
@@ -18,10 +18,7 @@ export default createMachine(
     },
   },
   {
-    context: type(({ array }) => ({ numbers: array('number') })),
-
+    context: type({ scores: { user1: 'number', user2: 'number', user3: 'number' } }),
     eventsMap: type({ TRIGGER_ALWAYS: 'undefined', TRIGGER_AFTER: 'undefined' }),
-
-    sync: true,
   },
 );
