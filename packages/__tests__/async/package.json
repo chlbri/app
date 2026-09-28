@@ -17,9 +17,14 @@
     "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
     "@bemedev/dev-utils": "^1.5.0",
-    "@types/node": "^26.6.2",
+    "@bemedev/rx-pausable": "^1.2.0",
+    "@bemedev/typings": "^1.4.1",
+    "@types/node": "^26.6.3",
+    "fast-deep-equal": "^3.1.3",
+    "is-online": "^12.0.2",
+    "rxjs": "^7.8.2",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
-    "vitest": "^5.0.1"
+    "vitest": "^5.0.2"
   }
 }

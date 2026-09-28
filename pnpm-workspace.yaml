@@ -13,7 +13,10 @@ allowBuilds:
   '@parcel/watcher': true
   esbuild: true
 
+# bundleDependencies needs a real, in-package copy of the injected workspace dep.
 nodeLinker: hoisted
+dedupeInjectedDeps: false
+hoistingLimits: workspaces
 
 minimumReleaseAge: 300
 

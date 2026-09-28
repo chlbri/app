@@ -1,9 +1,8 @@
 import { tupleOf } from '@bemedev/app-utils-bemedev';
 import {} from '.';
 import { constructTests } from '@bemedev/app-vitest';
-import { interpret } from '@bemedev/app';
+import { deepEqual, interpret } from '@bemedev/app';
 import { nothing } from '@bemedev/app/utils';
-import equal from 'fast-deep-equal';
 import { _machine2 } from './machine2.fsm';
 import { fakeDB } from './fakeDB';
 import { DELAY } from './constants';
@@ -32,7 +31,7 @@ describe('machine coverage', () => {
       },
       {
         equals: (s1, s2) => {
-          return equal(s1.event, s2.event);
+          return deepEqual(s1.event, s2.event);
         },
       },
     );
@@ -84,10 +83,7 @@ describe('machine coverage', () => {
       return {
         waiter: w(DELAY),
         useWrite: sender('WRITE'),
-        useIterator: contexts(
-          ({ context }) => context?.iterator,
-          'iterator',
-        ),
+        useIterator: contexts(({ context }) => context?.iterator, 'iterator'),
         useInput: contexts(({ context }) => context?.input, 'input'),
         useData,
       };

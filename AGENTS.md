@@ -261,15 +261,15 @@ feat: add 15 new features and fix 10 bugs
 
 ## Context: Enhanced Dependency State Management
 
-**Current Feature**: 002-spec-validate-bullet - Enhanced dependency state
-management and rollback mechanism
+**Current Feature**: 002-spec-validate-bullet - Enhanced dependency state management
+and rollback mechanism
 
 **Tech Stack**:
 
 - Language: TypeScript 5.x with Node.js >= 22
 - Framework: cmd-ts, execa, semver parsing utilities
-- Storage: In-memory state management during the upgrade process (no
-  persistent storage)
+- Storage: In-memory state management during the upgrade process (no persistent
+  storage)
 - Project Type: Single library - CLI tool with service-layer architecture
 
 **Key Components**:

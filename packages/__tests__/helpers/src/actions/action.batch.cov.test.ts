@@ -1,20 +1,18 @@
 import { interpret } from '@bemedev/app';
-import { swap } from '@bemedev/function-swap';
-import type { StateExtendedFrom } from '@bemedev/app/types';
 import _raw_machine from './action.batch.cov.machine';
 
 vi.useFakeTimers();
 
 describe('Machine batch action', () => {
   const fnBis = (data: number) => data + 1;
-  type TT = StateExtendedFrom<typeof _raw_machine>;
 
   const machine = _raw_machine
-    .provideOptions(({ assign }) => ({
+    .provideOptions(({ assign, swap }) => ({
       actions: {
-        inc1: assign(
-          swap(fnBis).constraint<[TT]>()({ '[0]': '[0].context' }),
-        ),
+        // inc1: assign(
+        //   swap(fnBis).constraint<[TT]>()({ '[0]': '[0].context' }),
+        // ),
+        inc1: assign(swap(fnBis)({ '[0]': '[0].context' })),
       },
     }))
     .provideOptions(({ batch }, { _legacy }) => ({
@@ -35,19 +33,15 @@ describe('Machine batch action', () => {
             catch: () => assign(() => 4),
           }),
 
-          action(() =>
-            console.warn('Tricky, last action increment by 3'),
-          ),
+          action(() => console.warn('Tricky, last action increment by 3')),
         ),
       },
     }));
 
-
   const service = interpret(machine, { context: 0 });
 
   test('#01 => start the machine', service.start);
-  test('#02 => context is at 0', () =>
-    expect(service.state.context).toBe(0));
+  test('#02 => context is at 0', () => expect(service.state.context).toBe(0));
 
   describe('#02 => send INC1 event', () => {
     test('#01 => send INC1', async () => {
@@ -71,8 +65,7 @@ describe('Machine batch action', () => {
       await service.send('INC5');
     });
 
-    test('#02 => context should be at 10', () =>
-      expect(service.context).toBe(10));
+    test('#02 => context should be at 10', () => expect(service.context).toBe(10));
   });
 });
 

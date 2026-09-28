@@ -11,8 +11,7 @@ import { _any, _unknown, tupleOf } from '@bemedev/app-utils-bemedev';
 
 import type { AnyInterpreter } from '@bemedev/app/types';
 import { defaultCheck } from '@bemedev/app/guards';
-import { interpret } from '@bemedev/app';
-import equal from 'fast-deep-equal';
+import { deepEqual, interpret } from '@bemedev/app';
 import _machine1 from './composition.1.machine';
 import _machine2 from './composition.2.machine';
 import _machine3 from './composition.3.machine';
@@ -414,14 +413,14 @@ describe('Composition', () => {
           NEXT: () => console.log('NEXT time, you will see!!'),
           else: nothing,
         },
-        { id: 'idSub', equals: (a, b) => equal(a.value, b.value) },
+        { id: 'idSub', equals: (a, b) => deepEqual(a.value, b.value) },
       );
 
       const dumbFn = vi.fn();
       service.subscribe(dumbFn, {
         id: 'id',
         equals: (s1, s2) => {
-          return equal(s1.event, s2.event);
+          return deepEqual(s1.event, s2.event);
         },
       });
       service.subscribe(dumbFn, { id: 'id', equals: defaultCheck });

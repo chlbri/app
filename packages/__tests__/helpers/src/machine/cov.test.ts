@@ -5,13 +5,12 @@ import {
   fakeDB,
   machine2,
 } from '../../../async/src/interpreters/data';
-import { interpret } from '@bemedev/app';
+import { deepEqual, interpret } from '@bemedev/app';
 import { AsyncMachine } from '@bemedev/app';
 
 import { constructTests } from '@bemedev/app-vitest';
 import { nothing, reduceDescriber } from '@bemedev/app/utils';
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
-import equal from 'fast-deep-equal';
 import path from 'path';
 import _machine1 from './cov.1.machine';
 import _machineT2 from './cov.2.machine';
@@ -44,7 +43,7 @@ describe('machine coverage', () => {
     },
     {
       equals: (s1, s2) => {
-        return equal(s1.event, s2.event);
+        return deepEqual(s1.event, s2.event);
       },
     },
   );
@@ -142,20 +141,14 @@ describe('machine coverage', () => {
       test(...useIterator(6, 2));
       test(...useIteratorC(6, 3));
       describe(
-        ...useConsole(
-          4,
-          ['nothing call nothing'],
-          ['Debounced action executed'],
-        ),
+        ...useConsole(4, ['nothing call nothing'], ['Debounced action executed']),
       );
     });
 
     test(...send('NEXT', 3));
 
     describe('#05 => Check the service', () => {
-      test(
-        ...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1),
-      );
+      test(...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
       test(...useIterator(6, 2));
       test(...useIteratorC(6, 3));
@@ -175,9 +168,7 @@ describe('machine coverage', () => {
     test(...pause(7));
 
     describe('#08 => Check the service', () => {
-      test(
-        ...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1),
-      );
+      test(...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
       test(...useIterator(18, 2));
       test(...useIteratorC(12, 3));
@@ -188,9 +179,7 @@ describe('machine coverage', () => {
     test(...useWaiter(6, 9));
 
     describe('#10 => Check the service', () => {
-      test(
-        ...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1),
-      );
+      test(...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
       test(...useIterator(18, 2));
       test(...useIteratorC(12, 3));
@@ -203,9 +192,7 @@ describe('machine coverage', () => {
     test(...useWaiter(12, 12));
 
     describe('#13 => Check the service', () => {
-      test(
-        ...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1),
-      );
+      test(...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
       test(...useIterator(42, 2));
       test(...useIteratorC(24, 3));
@@ -219,9 +206,7 @@ describe('machine coverage', () => {
     test(...useWrite({ value: '' }));
 
     describe('#15 => Check the service', () => {
-      test(
-        ...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1),
-      );
+      test(...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
       test(...useIterator(42, 2));
       test(...useIteratorC(24, 3));
@@ -232,9 +217,7 @@ describe('machine coverage', () => {
     test(...useWaiter(12, 16));
 
     describe('#17 => Check the service', () => {
-      test(
-        ...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1),
-      );
+      test(...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
       test(...useIterator(66, 2));
       test(...useIteratorC(36, 3));
@@ -251,9 +234,7 @@ describe('machine coverage', () => {
     test(...useWrite({ value: INPUT }));
 
     describe('#19 => Check the service', () => {
-      test(
-        ...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1),
-      );
+      test(...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
       test(...useIterator(66, 2));
       test(...useIteratorC(36, 3));
@@ -265,9 +246,7 @@ describe('machine coverage', () => {
       test(...useWaiter(12, 20));
 
       describe('#21 => Check the service', () => {
-        test(
-          ...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1),
-        );
+        test(...useStateValue({ working: { fetch: 'idle', ui: 'idle' } }, 1));
 
         test(...useIterator(90, 2));
         test(...useIteratorC(48, 3));
@@ -275,17 +254,12 @@ describe('machine coverage', () => {
         describe(...useConsole(5, ...Array(12).fill('sendPanelToUser')));
       });
 
-      test(
-        '#22 => Close the subscriber',
-        subscriber.close.bind(subscriber),
-      );
+      test('#22 => Close the subscriber', subscriber.close.bind(subscriber));
 
       test(...useWrite({ value: INPUT }));
 
       describe('#24 => Check the service', () => {
-        test(
-          ...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1),
-        );
+        test(...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(90, 2));
         test(...useIteratorC(48, 3));
@@ -296,9 +270,7 @@ describe('machine coverage', () => {
       test(...useWaiter(6, 25));
 
       describe('#26 => Check the service', () => {
-        test(
-          ...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1),
-        );
+        test(...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
@@ -310,9 +282,7 @@ describe('machine coverage', () => {
       test(...send('FETCH', 27));
 
       describe('#28 => Check the service', () => {
-        test(
-          ...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1),
-        );
+        test(...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
@@ -324,9 +294,7 @@ describe('machine coverage', () => {
       test(...useWaiter(0, 29));
 
       describe('#30 => Check the service', () => {
-        test(
-          ...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1),
-        );
+        test(...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(102, 2));
         test(...useIteratorC(54, 3));
@@ -338,9 +306,7 @@ describe('machine coverage', () => {
       test(...useWaiter(6, 31));
 
       describe('#32 => Check the service', () => {
-        test(
-          ...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1),
-        );
+        test(...useStateValue({ working: { fetch: 'idle', ui: 'input' } }, 1));
 
         test(...useIterator(114, 2));
         test(...useIteratorC(60, 3));
@@ -416,10 +382,7 @@ describe('#03 => Getters', () => {
             fetch: {
               initial: 'idle',
               states: {
-                fetch: {
-                  entry: 'insertData',
-                  always: '/working/fetch/idle',
-                },
+                fetch: { entry: 'insertData', always: '/working/fetch/idle' },
                 idle: {
                   activities: { DELAY: 'sendPanelToUser' },
                   on: {
@@ -436,19 +399,11 @@ describe('#03 => Getters', () => {
               states: {
                 final: {},
                 idle: {
-                  on: {
-                    WRITE: {
-                      actions: 'write',
-                      target: '/working/ui/input',
-                    },
-                  },
+                  on: { WRITE: { actions: 'write', target: '/working/ui/input' } },
                 },
                 input: {
                   activities: {
-                    DELAY: {
-                      actions: 'askUsertoInput',
-                      guards: 'isInputEmpty',
-                    },
+                    DELAY: { actions: 'askUsertoInput', guards: 'isInputEmpty' },
                   },
                   on: {
                     WRITE: [
@@ -475,9 +430,7 @@ describe('#03 => Getters', () => {
   test('#02 => flat', () => {
     const expected = {
       '/': {
-        actors: {
-          machine1: { contexts: { iterator: 'iterator' }, on: {} },
-        },
+        actors: { machine1: { contexts: { iterator: 'iterator' }, on: {} } },
         initial: 'idle',
         states: {
           final: {},
@@ -489,10 +442,7 @@ describe('#03 => Getters', () => {
               fetch: {
                 initial: 'idle',
                 states: {
-                  fetch: {
-                    entry: 'insertData',
-                    always: '/working/fetch/idle',
-                  },
+                  fetch: { entry: 'insertData', always: '/working/fetch/idle' },
                   idle: {
                     activities: { DELAY: 'sendPanelToUser' },
                     on: {
@@ -509,19 +459,11 @@ describe('#03 => Getters', () => {
                 states: {
                   final: {},
                   idle: {
-                    on: {
-                      WRITE: {
-                        actions: 'write',
-                        target: '/working/ui/input',
-                      },
-                    },
+                    on: { WRITE: { actions: 'write', target: '/working/ui/input' } },
                   },
                   input: {
                     activities: {
-                      DELAY: {
-                        actions: 'askUsertoInput',
-                        guards: 'isInputEmpty',
-                      },
+                      DELAY: { actions: 'askUsertoInput', guards: 'isInputEmpty' },
                     },
                     on: {
                       WRITE: [
@@ -552,10 +494,7 @@ describe('#03 => Getters', () => {
           fetch: {
             initial: 'idle',
             states: {
-              fetch: {
-                entry: 'insertData',
-                always: '/working/fetch/idle',
-              },
+              fetch: { entry: 'insertData', always: '/working/fetch/idle' },
               idle: {
                 activities: { DELAY: 'sendPanelToUser' },
                 on: {
@@ -572,16 +511,11 @@ describe('#03 => Getters', () => {
             states: {
               final: {},
               idle: {
-                on: {
-                  WRITE: { actions: 'write', target: '/working/ui/input' },
-                },
+                on: { WRITE: { actions: 'write', target: '/working/ui/input' } },
               },
               input: {
                 activities: {
-                  DELAY: {
-                    actions: 'askUsertoInput',
-                    guards: 'isInputEmpty',
-                  },
+                  DELAY: { actions: 'askUsertoInput', guards: 'isInputEmpty' },
                 },
                 on: {
                   WRITE: [
@@ -607,39 +541,24 @@ describe('#03 => Getters', () => {
           idle: {
             activities: { DELAY: 'sendPanelToUser' },
             on: {
-              FETCH: {
-                guards: 'isInputNotEmpty',
-                target: '/working/fetch/fetch',
-              },
+              FETCH: { guards: 'isInputNotEmpty', target: '/working/fetch/fetch' },
             },
           },
         },
       },
 
-      '/working/fetch/fetch': {
-        entry: 'insertData',
-        always: '/working/fetch/idle',
-      },
+      '/working/fetch/fetch': { entry: 'insertData', always: '/working/fetch/idle' },
 
       '/working/fetch/idle': {
         activities: { DELAY: 'sendPanelToUser' },
-        on: {
-          FETCH: {
-            guards: 'isInputNotEmpty',
-            target: '/working/fetch/fetch',
-          },
-        },
+        on: { FETCH: { guards: 'isInputNotEmpty', target: '/working/fetch/fetch' } },
       },
 
       '/working/ui': {
         initial: 'idle',
         states: {
           final: {},
-          idle: {
-            on: {
-              WRITE: { actions: 'write', target: '/working/ui/input' },
-            },
-          },
+          idle: { on: { WRITE: { actions: 'write', target: '/working/ui/input' } } },
           input: {
             activities: {
               DELAY: { actions: 'askUsertoInput', guards: 'isInputEmpty' },
@@ -665,9 +584,7 @@ describe('#03 => Getters', () => {
       },
 
       '/working/ui/input': {
-        activities: {
-          DELAY: { actions: 'askUsertoInput', guards: 'isInputEmpty' },
-        },
+        activities: { DELAY: { actions: 'askUsertoInput', guards: 'isInputEmpty' } },
         on: {
           WRITE: [
             {
@@ -698,17 +615,10 @@ describe('#04 = > coverage retrieve initial', () => {
   test(...useStateValue('idle'));
   test(...send('NEXT'));
 
-  test(
-    ...useStateValue(
-      { state1: { state11: { state111: 'state1111' } } },
-      3,
-    ),
-  );
+  test(...useStateValue({ state1: { state11: { state111: 'state1111' } } }, 3));
 
   describe('#04 => Cover machine.retrieveParentFromInitial', () => {
-    const { acceptation, success } = createTests(
-      machine.retrieveParentFromInitial,
-    );
+    const { acceptation, success } = createTests(machine.retrieveParentFromInitial);
 
     describe('#00 => Acceptation', acceptation);
 
@@ -835,9 +745,6 @@ describe('#06 => machine id is not defined', () => {
 
 test('#01 => my', () => {
   console.warn(
-    path.resolve(
-      '/parent/child/grandchild/grantchild',
-      '../../grandchild',
-    ),
+    path.resolve('/parent/child/grandchild/grantchild', '../../grandchild'),
   );
 });
