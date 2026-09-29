@@ -18,6 +18,11 @@ nodeLinker: hoisted
 dedupeInjectedDeps: false
 hoistingLimits: workspaces
 
+# Injected deps are hardlink snapshots: refresh them after a build so that
+# dependent packages resolve freshly generated lib/ outputs in CI.
+syncInjectedDepsAfterScripts:
+  - build
+
 minimumReleaseAge: 300
 
 minimumReleaseAgeExclude:
