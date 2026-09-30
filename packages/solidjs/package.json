@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-solidjs",
-  "version": "2.6.2",
+  "version": "2.7.0",
   "description": "Middleware between @bemedev/app-ts and solidjs",
   "keywords": [
     "app",
@@ -71,8 +71,8 @@
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/user-event": "^14.6.7",
     "@types/node": "^26.6.3",
-    "@vitest/coverage-v8": "^5.0.2",
-    "@vitest/ui": "5.0.2",
+    "@vitest/coverage-v8": "^5.0.3",
+    "@vitest/ui": "5.0.3",
     "glob": "^13.0.6",
     "globals": "^17.12.0",
     "husky": "^9.1.7",
@@ -90,7 +90,7 @@
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
     "vite-plugin-solid": "^2.11.14",
-    "vitest": "^5.0.2"
+    "vitest": "^5.0.3"
   },
   "peerDependencies": {
     "@bemedev/app": "workspace:^",

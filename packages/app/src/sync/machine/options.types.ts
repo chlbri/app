@@ -380,45 +380,173 @@ export type SyncAddOption<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = {
+  /**
+   * Guard helper that checks whether a context property is defined.
+   *
+   * @see -- type {@linkcode SyncDefineGuard_F}
+   */
   isDefined: SyncDefineGuard_F<E, Pc, Tc, T>;
+  /**
+   * Guard helper that checks whether a context property is not defined.
+   *
+   * @see -- type {@linkcode SyncDefineGuard_F}
+   */
   isNotDefined: SyncDefineGuard_F<E, Pc, Tc, T>;
+  /**
+   * Guard helper that checks whether a context property equals one of the
+   * provided values.
+   *
+   * @see -- type {@linkcode SyncValueCheckerGuard_F}
+   */
   isValue: SyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  /**
+   * Guard helper that checks whether a context property differs from all
+   * provided values.
+   *
+   * @see -- type {@linkcode SyncValueCheckerGuard_F}
+   */
   isNotValue: SyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to batch multiple guards into a single synchronous guard.
+   *
+   * Boolean guards become constant predicates, logical objects (`and` and `or`)
+   * are reduced recursively, and the resulting predicates are combined through
+   * a recursive evaluation.
+   *
+   * @see -- type {@linkcode SyncBatchGuard_F}
+   */
   guardBatch: SyncBatchGuard_F<E, Pc, Tc, T>;
+  /**
+   * Swap helper function that swaps the state arguments in functional
+   * transitions.
+   *
+   * @see -- type {@linkcode SwapFunction_F}
+   */
   swap: SwapFunction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to assign context variables synchronously.
+   *
+   * Supports the keyless form (a function map returning the next context), the
+   * keyed form with a single key, and the keyed form with an array of keys
+   * returning a traversable tuple.
+   *
+   * @see -- type {@linkcode SyncAssignAction_F}
+   */
   assign: SyncAssignAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to batch multiple synchronous actions into a single action.
+   *
+   * Sub-actions run in order, sharing the same state object. After each of
+   * them, the committed mergers are merged in place into the state context, so
+   * the following sub-actions observe the updated context.
+   *
+   * @see -- type {@linkcode SyncBatchAction_F}
+   */
   batch: SyncBatchAction_F<E, Pc, Tc, T>;
   /**
-   * Helper function to repeat a single action, which may be a batch action.
+   * Helper function to repeat a single action a fixed number of times.
+   *
+   * The action may itself be a batch action, and `undefined` produces a no-op
+   * action. The iteration count is resolved once, before the first iteration;
+   * non-finite or non-positive counts produce a no-op action. Each iteration
+   * reads the context committed by the previous one.
+   *
+   * @see -- type {@linkcode SyncForAction_F}
    */
   _for: SyncForAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to repeat a single action while a predicate holds.
+   *
+   * The predicate is evaluated before each iteration, so the action may never
+   * run. Each iteration reads the context committed by the previous one.
+   *
+   * @see -- type {@linkcode SyncWhileAction_F}
    */
   _while: SyncWhileAction_F<E, Pc, Tc, T>;
   /**
-   * Helper function to repeat a single action while a predicate holds, running it
-   * at least once.
+   * Helper function to repeat a single action while a predicate holds, running
+   * it at least once.
+   *
+   * The predicate is evaluated after each iteration, so the action always runs
+   * once. Each iteration reads the context committed by the previous one.
+   *
+   * @see -- type {@linkcode SyncWhileAction_F}
    */
   _doWhile: SyncWhileAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to filter array or object properties synchronously.
+   *
+   * @see -- type {@linkcode SyncFilterAction_F}
+   */
   filter: SyncFilterAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to erase object properties synchronously.
+   *
+   * @see -- type {@linkcode SyncEraseAction_F}
+   */
   erase: SyncEraseAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to create synchronous actions.
+   *
+   * @see -- type {@linkcode SyncAction_F}
+   */
   action: SyncAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to send events to actor machines synchronously.
+   *
+   * @see -- type {@linkcode SyncSendAction_F}
+   */
   sendTo: SyncSendAction_F<E, Pc, Tc, T>;
 
+  /**
+   * Helper function to resend an event as a synchronous action.
+   *
+   * @see -- type {@linkcode SyncResendAction_F}
+   */
   resend: SyncResendAction_F<E, Pc, Tc, T>;
   /**
-   * Force send action, performs the action regardless of the current state.
+   * Helper function to force sending an event as a synchronous action, whatever
+   * the current state is.
+   *
+   * @see -- type {@linkcode SyncResendAction_F}
    */
   forceSend: SyncResendAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to pause an activity.
+   *
+   * @see -- type {@linkcode SyncTimeAction_F}
+   */
   pauseActivity: SyncTimeAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to resume an activity.
+   *
+   * @see -- type {@linkcode SyncTimeAction_F}
+   */
   resumeActivity: SyncTimeAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to stop an activity.
+   *
+   * @see -- type {@linkcode SyncTimeAction_F}
+   */
   stopActivity: SyncTimeAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to pause a timer.
+   *
+   * @see -- type {@linkcode SyncTimeAction_F}
+   */
   pauseTimer: SyncTimeAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to resume a timer.
+   *
+   * @see -- type {@linkcode SyncTimeAction_F}
+   */
   resumeTimer: SyncTimeAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to stop a timer.
+   *
+   * @see -- type {@linkcode SyncTimeAction_F}
+   */
   stopTimer: SyncTimeAction_F<E, Pc, Tc, T>;
-  // merge: DirectMerge_F<Pc, Tc>;
-  // emitter: Emitter<E, P, Pc, Tc>;
 };
 
 /**

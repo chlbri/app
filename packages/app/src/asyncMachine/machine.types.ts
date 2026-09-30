@@ -47,6 +47,8 @@ export type AsyncOptions<
    * Called with the thrown error and current context snapshot when
    * the async function rejects. Return value is merged as ActionResult.
    * When omitted, rejection propagates to interpreter's `_addError` channel.
+   *
+   * @see -- type {@linkcode ErrorFn}
    */
   catch: ErrorFn<Eo, Pc, Tc, T>;
   /**
@@ -486,97 +488,171 @@ export type AsyncAddOption<
   T extends string = string,
 > = {
   /**
-   * Guard helper to check if a property is defined.
+   * Guard helper that checks whether a context property is defined.
+   *
+   * @see -- type {@linkcode AsyncDefineGuard_F}
    */
   isDefined: AsyncDefineGuard_F<E, Pc, Tc, T>;
   /**
-   * Guard helper to check if a property is not defined.
+   * Guard helper that checks whether a context property is not defined.
+   *
+   * @see -- type {@linkcode AsyncDefineGuard_F}
    */
   isNotDefined: AsyncDefineGuard_F<E, Pc, Tc, T>;
   /**
-   * Guard helper to check if a property equals specific value(s).
+   * Guard helper that checks whether a context property equals one of the
+   * provided values.
+   *
+   * @see -- type {@linkcode AsyncValueCheckerGuard_F}
    */
   isValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
   /**
-   * Guard helper to check if a property does not equal specific value(s).
+   * Guard helper that checks whether a context property differs from all
+   * provided values.
+   *
+   * @see -- type {@linkcode AsyncValueCheckerGuard_F}
    */
   isNotValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
   /**
    * Helper function to batch multiple guards into a single async guard.
+   *
+   * Boolean guards become constant predicates, logical objects (`and` and `or`)
+   * are reduced recursively, and the resulting predicates are combined through
+   * an async recursive evaluation.
+   *
+   * @see -- type {@linkcode AsyncBatchGuard_F}
    */
   guardBatch: AsyncBatchGuard_F<E, Pc, Tc, T>;
   /**
-   * Swap helper function of type {@linkcode SwapFunction_F}.
+   * Swap helper function that swaps the state arguments in functional
+   * transitions.
+   *
+   * @see -- type {@linkcode SwapFunction_F}
    */
   swap: SwapFunction_F<E, Pc, Tc, T>;
   /**
    * Helper function to assign context variables asynchronously.
+   *
+   * Supports the keyless form (a function map returning the next context), the
+   * keyed form with a single key, and the keyed form with an array of keys
+   * returning a traversable tuple. Options of type {@linkcode AsyncOptions}
+   * bound the execution with `max`, chain a follow-up action with `then`, and
+   * handle rejections with `catch`.
+   *
+   * @see -- type {@linkcode AsyncAssignAction_F}
    */
   assign: AsyncAssignAction_F<E, Pc, Tc, T>;
   /**
-   * Helper function to batch multiple actions.
+   * Helper function to batch multiple async actions into a single action.
+   *
+   * Sub-actions run in order, sharing the same state object. After each of
+   * them, the committed mergers are merged in place into the state context, so
+   * the following sub-actions observe the updated context.
+   *
+   * @see -- type {@linkcode AsyncBatchAction_F}
    */
   batch: AsyncBatchAction_F<E, Pc, Tc, T>;
   /**
-   * Helper function to repeat a single action, which may be a batch action.
+   * Helper function to repeat a single action a fixed number of times.
+   *
+   * The action may itself be a batch action, and `undefined` produces a no-op
+   * action. The iteration count is resolved once, before the first iteration;
+   * non-finite or non-positive counts produce a no-op action. Each iteration
+   * reads the context committed by the previous one.
+   *
+   * @see -- type {@linkcode AsyncForAction_F}
    */
   _for: AsyncForAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to repeat a single action while a predicate holds.
+   *
+   * The predicate is evaluated before each iteration, so the action may never
+   * run. Each iteration reads the context committed by the previous one.
+   *
+   * @see -- type {@linkcode AsyncWhileAction_F}
    */
   _while: AsyncWhileAction_F<E, Pc, Tc, T>;
   /**
-   * Helper function to repeat a single action while a predicate holds, running it
-   * at least once.
+   * Helper function to repeat a single action while a predicate holds, running
+   * it at least once.
+   *
+   * The predicate is evaluated after each iteration, so the action always runs
+   * once. Each iteration reads the context committed by the previous one.
+   *
+   * @see -- type {@linkcode AsyncWhileAction_F}
    */
   _doWhile: AsyncWhileAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to filter array or object properties asynchronously.
+   *
+   * @see -- type {@linkcode AsyncFilterAction_F}
    */
   filter: AsyncFilterAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to erase object properties asynchronously.
+   *
+   * @see -- type {@linkcode AsyncEraseAction_F}
    */
   erase: AsyncEraseAction_F<E, Pc, Tc, T>;
   /**
-   * Helper function for actions.
+   * Helper function to create async actions.
+   *
+   * @see -- type {@linkcode AsyncAction_F}
    */
   action: AsyncAction_F<E, Pc, Tc, T>;
-
   /**
    * Helper function to send events to actor machines asynchronously.
+   *
+   * @see -- type {@linkcode AsyncSendAction_F}
    */
   sendTo: AsyncSendAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to resend an event as an async action.
+   *
+   * @see -- type {@linkcode AsyncResendAction_F}
    */
   resend: AsyncResendAction_F<E, Pc, Tc, T>;
   /**
-   * Force send action, performs the action regardless of the current state.
+   * Helper function to force sending an event as an async action, whatever the
+   * current state is.
+   *
+   * @see -- type {@linkcode AsyncForceSendAction_F}
    */
   forceSend: AsyncResendAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to pause an activity.
+   *
+   * @see -- type {@linkcode AsyncTimeAction_F}
    */
   pauseActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to resume an activity.
+   *
+   * @see -- type {@linkcode AsyncTimeAction_F}
    */
   resumeActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to stop an activity.
+   *
+   * @see -- type {@linkcode AsyncTimeAction_F}
    */
   stopActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to pause a timer.
+   *
+   * @see -- type {@linkcode AsyncTimeAction_F}
    */
   pauseTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to resume a timer.
+   *
+   * @see -- type {@linkcode AsyncTimeAction_F}
    */
   resumeTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to stop a timer.
+   *
+   * @see -- type {@linkcode AsyncTimeAction_F}
    */
   stopTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
 };

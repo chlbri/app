@@ -8,6 +8,47 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.7.0] - 30/09/2026** => _18:36_
+
+</summary>
+
+### Breaking Changes
+
+- **Remove `AsyncVoidAction_F`**: Removed the deprecated `AsyncVoidAction_F` type.
+  Use `AsyncAction_F` instead.
+
+### Features
+
+- **Loop Action Helpers**: Added `_for`, `_while`, and `_doWhile` action helpers to
+  both `SyncMachine` and `AsyncMachine`. `_for` repeats a single action a fixed
+  number of times, `_while` repeats it while a predicate holds, and `_doWhile` runs
+  it at least once. The repeated action may itself be a `batch` action, and each
+  iteration reads the context committed by the previous one.
+- **New Exported Types**: Exported `SyncForAction_F`, `SyncWhileAction_F`,
+  `AsyncForAction_F`, and `AsyncWhileAction_F` types.
+- **Conditional Async Options**: `AsyncOptions` arguments are now required when the
+  handler returns a `Promise` and rejected for synchronous handlers.
+
+### Docs
+
+- **Machine Options JSDoc**: Enhanced JSDoc annotations across synchronous and
+  asynchronous machine option types.
+
+### Refactor
+
+- **In-Place Context Merging**: Batch and loop sub-actions now merge the committed
+  context in place after each execution, so following sub-actions observe the updated
+  context.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.6.2] - 22/09/2026** => _19:58_
 
 </summary>

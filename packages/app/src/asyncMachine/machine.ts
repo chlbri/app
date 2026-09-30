@@ -158,7 +158,7 @@ export class AsyncMachine<
 
         swap: this.swap,
 
-        //@ts-expect-error for inteneded
+        //@ts-expect-error intended
         assign: (keysOrFn, fnOrOptions?, maybeOptions?) => {
           const isKeyless =
             typeof keysOrFn === 'function' ||
