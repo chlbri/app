@@ -10,5 +10,7 @@ export default defineProject({
     environment: 'jsdom',
     testTimeout: 30000,
     clearMocks: false,
+    // Inline dev-utils: it nests its own vitest copy, breaking test collection
+    server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },
 });

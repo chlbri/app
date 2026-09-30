@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app",
-  "version": "2.6.3-patch",
+  "version": "2.7.0",
   "description": "A reprogramming method to code better",
   "author": {
     "email": "bri_lvi@icloud.com",
@@ -140,8 +140,8 @@
     "@size-limit/file": "^14.1.0",
     "@types/clone-deep": "^4.0.4",
     "@types/node": "^26.6.3",
-    "@vitest/coverage-v8": "^5.0.2",
-    "@vitest/ui": "^5.0.2",
+    "@vitest/coverage-v8": "^5.0.3",
+    "@vitest/ui": "^5.0.3",
     "add": "^2.0.9",
     "glob": "^13.0.6",
     "globals": "^17.12.0",
@@ -155,11 +155,11 @@
     "rolldown": "1.2.11",
     "rxjs": "^7.8.2",
     "size-limit": "^14.1.0",
-    "tsc-alias": "^1.9.5",
+    "tsc-alias": "^1.9.6",
     "tslib": "^2.8.1",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
-    "vitest": "^5.0.2",
+    "vitest": "^5.0.3",
     "zx": "^8.8.5"
   },
   "size-limit": [

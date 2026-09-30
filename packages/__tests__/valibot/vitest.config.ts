@@ -12,5 +12,7 @@ export default defineProject({
     logHeapUsage: false,
     clearMocks: false,
     name: 'valibot',
+    // Inline dev-utils: it nests its own vitest copy, breaking test collection
+    server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },
 });

@@ -5,6 +5,32 @@
 <details>
 <summary>
 
+## **[2.7.0] - 30/09/2026** => _18:36_
+
+</summary>
+
+### Build
+
+- **Pretest Script**: Add a `pretest` script that builds the package before running
+  tests.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.7.0 to align with `@bemedev/app`
+  2.7.0 release.
+- **Dev Dependencies**: Update `vitest` to 5.0.2, `rolldown` to 1.2.11, `size-limit`
+  to 14.1.0, `oxfmt` to 0.71.0, `oxlint` to 1.86.0, `@types/node` to 26.6.3, and
+  `prettier` to 3.9.9.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.6.2] - 22/09/2026** => _19:58_
 
 </summary>

@@ -186,14 +186,40 @@ export class SyncMachine<
             const extendeds: any = {};
 
             for (const fn of fns.filter(f => !!f)) {
-              const res = fn(state);
-              /* v8 ignore else -- @preserve */
-              if (res) {
-                const { mergers: m, ...ext } = res;
+              const { mergers: m, ...ext } = fn(state);
+              Object.assign(extendeds, ext);
+
+              if (m && m.length > 0) {
+                mergers.push(...m);
+                state.context = merge2.multiple(state.context, ...(m as any)) as any;
+              }
+            }
+            return { mergers, ...extendeds };
+          };
+        },
+
+        _for: (count, fn) => {
+          return state => {
+            const mergers: any[] = [];
+            const extendeds: any = {};
+
+            if (fn) {
+              const raw =
+                typeof count === 'number'
+                  ? count
+                  : reduceFnMap(count, ...this.__eventsList)(state);
+
+              if (!Number.isFinite(raw) || raw <= 0)
+                return { mergers, ...extendeds };
+              const iterations = Math.trunc(raw);
+
+              for (let index = 0; index < iterations; index++) {
+                const { mergers: m, ...ext } = fn(state);
                 Object.assign(extendeds, ext);
-                /* v8 ignore else -- @preserve */
+
                 if (m && m.length > 0) {
                   mergers.push(...m);
+                  // In-place merge: each iteration reads the previous committed context
                   state.context = merge2.multiple(
                     state.context,
                     ...(m as any),
@@ -201,6 +227,62 @@ export class SyncMachine<
                 }
               }
             }
+
+            return { mergers, ...extendeds };
+          };
+        },
+
+        _while: (predicate, fn) => {
+          return state => {
+            const mergers: any[] = [];
+            const extendeds: any = {};
+
+            if (fn) {
+              const predicateFn = reduceFnMap(predicate, ...this.__eventsList);
+
+              while (predicateFn(state)) {
+                const { mergers: m, ...ext } = fn(state);
+                Object.assign(extendeds, ext);
+
+                /* v8 ignore else -- @preserve */
+                if (m && m.length > 0) {
+                  mergers.push(...m);
+                  // In-place merge: each iteration reads the previous committed context
+                  state.context = merge2.multiple(
+                    state.context,
+                    ...(m as any),
+                  ) as any;
+                }
+              }
+            }
+
+            return { mergers, ...extendeds };
+          };
+        },
+
+        _doWhile: (predicate, fn) => {
+          return state => {
+            const mergers: any[] = [];
+            const extendeds: any = {};
+
+            if (fn) {
+              const predicateFn = reduceFnMap(predicate, ...this.__eventsList);
+
+              do {
+                const { mergers: m, ...ext } = fn(state);
+                Object.assign(extendeds, ext);
+
+                if (m && m.length > 0) {
+                  mergers.push(...m);
+                  // In-place merge: each iteration reads the previous committed context
+                  state.context = merge2.multiple(
+                    state.context,
+                    ...(m as any),
+                  ) as any;
+                }
+              } while (predicateFn(state));
+            }
+
             return { mergers, ...extendeds };
           };
         },

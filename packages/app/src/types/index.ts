@@ -237,6 +237,7 @@ export type {
   AsyncDefineGuard_F,
   AsyncEraseAction_F,
   AsyncFilterAction_F,
+  AsyncForAction_F,
   AsyncMachine,
   AsyncMachineOptions2,
   AsyncOptions,
@@ -245,6 +246,7 @@ export type {
   AsyncSendAction_F,
   AsyncSimpleMachineOptions,
   AsyncTimeAction_F,
+  AsyncWhileAction_F,
   AsyncAction_F,
 } from '../asyncMachine';
 
@@ -260,6 +262,7 @@ export type {
   SyncDefineGuard_F,
   SyncEraseAction_F,
   SyncFilterAction_F,
+  SyncForAction_F,
   SyncMachine,
   SyncMachineOptions2,
   SyncProvideOptions_F,
@@ -267,6 +270,7 @@ export type {
   SyncSendAction_F,
   SyncTimeAction_F,
   SyncValueCheckerGuard_F,
+  SyncWhileAction_F,
 } from '#sync/machine';
 
 export type {

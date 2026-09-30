@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-cli",
-  "version": "2.6.2",
+  "version": "2.7.0",
   "description": "CLI tool and AST parseTree parser for @bemedev/app",
   "private": false,
   "author": {
@@ -72,7 +72,7 @@
     "@bemedev/rolldown-config": "^0.5.0",
     "@size-limit/file": "^14.1.0",
     "@types/node": "^26.6.3",
-    "@vitest/coverage-v8": "^5.0.2",
+    "@vitest/coverage-v8": "^5.0.3",
     "oxfmt": "^0.71.0",
     "oxlint": "^1.86.0",
     "pretty-quick": "^4.2.2",
@@ -82,7 +82,7 @@
     "tslib": "^2.8.1",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
-    "vitest": "^5.0.2"
+    "vitest": "^5.0.3"
   },
   "size-limit": [
     {

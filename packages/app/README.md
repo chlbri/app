@@ -139,7 +139,7 @@ await service[Symbol.asyncDispose]();
   - [5.1 assign](#51-assign)
   - [5.2 swap](#52-swap)
   - [5.3 action](#53-action)
-  - [5.4 batch](#54-batch)
+  - [5.4 batch & loop helpers](#54-batch--loop-helpers)
   - [5.5 filter & erase](#55-filter--erase)
   - [5.6 sendTo](#56-sendto)
   - [5.7 resend & forceSend](#57-resend--forcesend)
@@ -628,10 +628,10 @@ actions: {
 }
 ```
 
-### 5.4 batch
+### 5.4 batch & loop helpers
 
-Groups multiple actions into a single named action. Useful when a transition needs to
-perform several operations atomically.
+**`batch`** groups multiple actions into a single named action. Useful when a
+transition needs to perform several operations atomically.
 
 ```typescript
 actions: {
@@ -648,6 +648,87 @@ actions: {
   ),
 }
 ```
+
+**`_for`** repeats a **single** action (which may itself be a `batch`) a given number
+of times, with the same merge semantics as `batch`: each iteration sees the context
+committed by the previous one.
+
+```typescript
+actions: {
+  // Static count — increments three times
+  thriceIncrement: _for(3, _legacy.actions.increment),
+
+  // Count derived from the extended state (context, pContext, event)
+  retryFromContext: _for(({ context }) => context.retries, retryOnce),
+
+  // Event-aware count, with a fallback branch
+  logFromEvent: _for({ LOGIN: () => 2, else: () => 1 }, logAttempt),
+
+  // A whole block repeated twice
+  loopBlock: _for(
+    2,
+    batch(erase('context.name'), erase('context.email')),
+  ),
+
+  // `undefined` action is a no-op (no `!` needed with _legacy)
+  maybeIncrement: _for(1, _legacy.actions.increment),
+}
+```
+
+Notes:
+
+- The key is `_for` (not `for`) because `for` is a reserved word in JavaScript.
+- The count is resolved **once**, before the first iteration: it is a number, a
+  function of the extended state, or a function map keyed by event type (with an
+  optional `else`).
+- Non-finite, zero, or negative counts produce a no-op; fractional counts are
+  truncated.
+- On `AsyncMachine`, the count function may return a `Promise<number>`.
+
+**`_while`** repeats a **single** action (which may itself be a `batch`) while a
+predicate holds. The predicate is evaluated **before** each iteration, so the action
+may never run. Same merge semantics as `batch`: each iteration sees the context
+committed by the previous one.
+
+```typescript
+actions: {
+  // Drain a queue stored in context
+  drainQueue: _while(
+    ({ context }) => context.queue.length > 0,
+    processNext,
+  ),
+
+  // Event-aware predicate, with a fallback branch
+  pollUntilDone: _while(
+    { POLL: ({ event }) => !event.payload.done, else: () => false },
+    pollOnce,
+  ),
+
+  // `undefined` action is a no-op (no `!` needed with _legacy)
+  maybeLoop: _while(({ context }) => context.active, _legacy.actions.tick),
+}
+```
+
+**`_doWhile`** works like `_while`, except the predicate is evaluated **after** each
+iteration — the action always runs **at least once**.
+
+```typescript
+actions: {
+  // Always attempt at least one retry
+  retryAtLeastOnce: _doWhile(
+    ({ context }) => context.attempts < context.maxAttempts,
+    attemptOnce,
+  ),
+}
+```
+
+Notes:
+
+- The keys are `_while` and `_doWhile` because `while` is a reserved word in
+  JavaScript.
+- The predicate is a function of the extended state, or a function map keyed by event
+  type (with an optional `else`).
+- On `AsyncMachine`, the predicate may return a `Promise<boolean>`.
 
 ### 5.5 filter & erase
 
