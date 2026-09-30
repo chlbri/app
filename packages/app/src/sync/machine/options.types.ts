@@ -171,6 +171,35 @@ export type SyncForAction_F<
 ) => SyncAction2<E, Pc, Tc, T>;
 
 /**
+ * Function type signature for repeating a single synchronous action while a
+ * predicate holds.
+ *
+ * Used by both the `_while` helper (predicate evaluated before each iteration)
+ * and the `_doWhile` helper (predicate evaluated after each iteration, running
+ * the action at least once). The action may itself be a batch action, and an
+ * `undefined` action produces a no-op action.
+ *
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
+ * @param predicate - Function map of type {@linkcode FnMap} receiving the extended
+ * state and returning a boolean.
+ * @param fn - Single synchronous action of type {@linkcode SyncAction2}, or `undefined`.
+ *
+ * @returns Synchronous action of type {@linkcode SyncAction2}.
+ */
+export type SyncWhileAction_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (
+  predicate: FnMap<E, Pc, Tc, T, boolean>,
+  fn: SyncAction2<E, Pc, Tc, T> | undefined,
+) => SyncAction2<E, Pc, Tc, T>;
+
+/**
  * Function type signature for creating a synchronous action helper.
  *
  * @template `E` - Event object type.
@@ -266,6 +295,7 @@ export type SyncAllActions_F<
   | SyncTimeAction_F<E, Pc, Tc, T>
   | SyncBatchAction_F<E, Pc, Tc, T>
   | SyncForAction_F<E, Pc, Tc, T>
+  | SyncWhileAction_F<E, Pc, Tc, T>
   | SyncEraseAction_F<E, Pc, Tc, T>
   | SyncFilterAction_F<E, Pc, Tc, T>;
 
@@ -362,6 +392,15 @@ export type SyncAddOption<
    * Helper function to repeat a single action, which may be a batch action.
    */
   _for: SyncForAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to repeat a single action while a predicate holds.
+   */
+  _while: SyncWhileAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to repeat a single action while a predicate holds, running it
+   * at least once.
+   */
+  _doWhile: SyncWhileAction_F<E, Pc, Tc, T>;
   filter: SyncFilterAction_F<E, Pc, Tc, T>;
   erase: SyncEraseAction_F<E, Pc, Tc, T>;
   action: SyncAction_F<E, Pc, Tc, T>;

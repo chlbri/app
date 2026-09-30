@@ -21,7 +21,6 @@ import { withTimeout } from '@bemedev/better-promise';
 import type {
   AsyncAction_F,
   AsyncAddOptions_F,
-  AsyncForAction_F,
   AsyncProvideOptions_F,
   AsyncSendAction_F,
 } from './machine.types';
@@ -326,9 +325,7 @@ export class AsyncMachine<
             const extendeds: any = {};
 
             for (const fn of fns.filter(f => !!f)) {
-              const res = await fn(state);
-
-              const { mergers: m, ...ext } = res;
+              const { mergers: m, ...ext } = await fn(state);
               Object.assign(extendeds, ext);
 
               if (m && m.length > 0) {
@@ -340,7 +337,94 @@ export class AsyncMachine<
           };
         },
 
-        _for: this.__for,
+        _for: (count, fn) => {
+          return async state => {
+            const mergers: any[] = [];
+            const extendeds: any = {};
+
+            if (fn) {
+              const raw =
+                typeof count === 'number'
+                  ? count
+                  : await reduceFnMap(count, ...this.__eventsList)(state);
+
+              if (!Number.isFinite(raw) || raw <= 0)
+                return { mergers, ...extendeds };
+              const iterations = Math.trunc(raw);
+
+              for (let index = 0; index < iterations; index++) {
+                const { mergers: m, ...ext } = await fn(state);
+                Object.assign(extendeds, ext);
+
+                if (m && m.length > 0) {
+                  mergers.push(...m);
+                  // In-place merge: each iteration reads the previous committed context
+                  state.context = merge2.multiple(
+                    state.context,
+                    ...(m as any),
+                  ) as any;
+                }
+              }
+            }
+
+            return { mergers, ...extendeds };
+          };
+        },
+
+        _while: (predicate, fn) => {
+          return async state => {
+            const mergers: any[] = [];
+            const extendeds: any = {};
+
+            if (fn) {
+              const predicateFn = reduceFnMap(predicate, ...this.__eventsList);
+
+              while (await predicateFn(state)) {
+                const { mergers: m, ...ext } = await fn(state);
+                Object.assign(extendeds, ext);
+
+                /* v8 ignore else -- @preserve */
+                if (m && m.length > 0) {
+                  mergers.push(...m);
+                  // In-place merge: each iteration reads the previous committed context
+                  state.context = merge2.multiple(
+                    state.context,
+                    ...(m as any),
+                  ) as any;
+                }
+              }
+            }
+
+            return { mergers, ...extendeds };
+          };
+        },
+
+        _doWhile: (predicate, fn) => {
+          return async state => {
+            const mergers: any[] = [];
+            const extendeds: any = {};
+
+            if (fn) {
+              const predicateFn = reduceFnMap(predicate, ...this.__eventsList);
+
+              do {
+                const { mergers: m, ...ext } = await fn(state);
+                Object.assign(extendeds, ext);
+
+                if (m && m.length > 0) {
+                  mergers.push(...m);
+                  // In-place merge: each iteration reads the previous committed context
+                  state.context = merge2.multiple(
+                    state.context,
+                    ...(m as any),
+                  ) as any;
+                }
+              } while (await predicateFn(state));
+            }
+
+            return { mergers, ...extendeds };
+          };
+        },
 
         filter,
         erase,
@@ -505,50 +589,6 @@ export class AsyncMachine<
         const errorAction = errorFn(e);
         return await errorAction(state as any);
       }
-    };
-  };
-
-  /**
-   * Function helper to repeat a single action, which may itself be a batch action.
-   * The count is resolved once, before the first iteration; `undefined` yields a
-   * no-op action.
-   *
-   * @param count - Number of iterations, or function map of type
-   * {@linkcode AsyncForAction_F} receiving the extended state and returning a
-   * number or a promise of a number.
-   * @param fn - Single action of type {@linkcode AsyncAction}, or `undefined`.
-   */
-  protected __for: AsyncForAction_F<Eo, Pc, Tc, Ta> = (count, fn) => {
-    return async state => {
-      const mergers: any[] = [];
-      const extendeds: any = {};
-
-      if (fn) {
-        const raw =
-          typeof count === 'number'
-            ? count
-            : await reduceFnMap(count, ...this.__eventsList)(state);
-
-        if (!Number.isFinite(raw) || raw <= 0) return { mergers, ...extendeds };
-        const iterations = Math.trunc(raw);
-
-        for (let index = 0; index < iterations; index++) {
-          const res = await fn(state);
-
-          if (res) {
-            const { mergers: m, ...ext } = res;
-            Object.assign(extendeds, ext);
-
-            if (m && m.length > 0) {
-              mergers.push(...m);
-              // In-place merge: each iteration reads the previous committed context
-              state.context = merge2.multiple(state.context, ...(m as any)) as any;
-            }
-          }
-        }
-      }
-
-      return { mergers, ...extendeds };
     };
   };
 }

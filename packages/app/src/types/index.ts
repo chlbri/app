@@ -246,6 +246,7 @@ export type {
   AsyncSendAction_F,
   AsyncSimpleMachineOptions,
   AsyncTimeAction_F,
+  AsyncWhileAction_F,
   AsyncAction_F,
 } from '../asyncMachine';
 
@@ -269,6 +270,7 @@ export type {
   SyncSendAction_F,
   SyncTimeAction_F,
   SyncValueCheckerGuard_F,
+  SyncWhileAction_F,
 } from '#sync/machine';
 
 export type {

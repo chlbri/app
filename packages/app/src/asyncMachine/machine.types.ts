@@ -61,6 +61,32 @@ export type AsyncOptions<
 };
 
 /**
+ * Conditional rest arguments for async action helpers.
+ *
+ * Options are required when the handler returns a `Promise` and rejected for
+ * synchronous handlers. When the return type cannot be resolved (for example
+ * with an unannotated handler parameter), options stay optional instead of
+ * being rejected.
+ *
+ * @template `F` - Handler return type.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - State tag string type.
+ */
+type AsyncOptionsArgs<
+  F,
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = unknown extends F
+  ? [AsyncOptions<E, Pc, Tc, T>?]
+  : F extends Promise<any>
+    ? [AsyncOptions<E, Pc, Tc, T>]
+    : [];
+
+/**
  * Error handler function signature for async options.
  *
  * @template | {@linkcode EventObject} `Eo` - Event object type.
@@ -115,12 +141,12 @@ export type AsyncAssignAction_F<
   >(
     keys: K,
     fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
-    options?: AsyncOptions<E, Pc, Tc, T>,
+    ...args: AsyncOptionsArgs<F, E, Pc, Tc, T>
   ): AsyncAction2<E, Pc, Tc, T>;
 
   <F extends Tc | Promise<Tc>>(
     fn: FnMap<E, Pc, Tc, T, F>,
-    options?: AsyncOptions<E, Pc, Tc, T>,
+    ...args: AsyncOptionsArgs<F, E, Pc, Tc, T>
   ): AsyncAction2<E, Pc, Tc, T>;
 };
 
@@ -195,18 +221,8 @@ export type AsyncAction_F<
   T extends string = string,
 > = <F>(
   fn: FnMap<E, Pc, Tc, T, F>,
-  options?: AsyncOptions<E, Pc, Tc, T>,
+  ...args: AsyncOptionsArgs<F, E, Pc, Tc, T>
 ) => AsyncAction2<E, Pc, Tc, T>;
-
-/**
- * @deprecated Use {@linkcode AsyncAction_F} instead.
- */
-export type AsyncVoidAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = AsyncAction_F<E, Pc, Tc, T>;
 
 /**
  * Function type signature for creating an array/object filter action helper.
@@ -359,6 +375,34 @@ export type AsyncForAction_F<
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 /**
+ * Function type signature for repeating a single action while a predicate holds.
+ *
+ * Used by both the `_while` helper (predicate evaluated before each iteration)
+ * and the `_doWhile` helper (predicate evaluated after each iteration, running
+ * the action at least once). The action may itself be a batch action, and an
+ * `undefined` action produces a no-op action.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - State tag string type.
+ * @param predicate - Function map of type {@linkcode FnMap} receiving the extended
+ * state and returning a boolean or a promise of a boolean.
+ * @param fn - Single action of type {@linkcode AsyncAction2}, or `undefined`.
+ *
+ * @returns Async action of type {@linkcode AsyncAction2}.
+ */
+export type AsyncWhileAction_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (
+  predicate: FnMap<E, Pc, Tc, T, MaybePromise<boolean>>,
+  fn: AsyncAction2<E, Pc, Tc, T> | undefined,
+) => AsyncAction2<E, Pc, Tc, T>;
+
+/**
  * Logical AND guard structure for async guard batching options.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
@@ -477,6 +521,15 @@ export type AsyncAddOption<
    * Helper function to repeat a single action, which may be a batch action.
    */
   _for: AsyncForAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to repeat a single action while a predicate holds.
+   */
+  _while: AsyncWhileAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to repeat a single action while a predicate holds, running it
+   * at least once.
+   */
+  _doWhile: AsyncWhileAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to filter array or object properties asynchronously.
    */

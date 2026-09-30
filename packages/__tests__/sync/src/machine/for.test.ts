@@ -279,7 +279,10 @@ describe('SyncMachine - for', () => {
     const machine = createTestMachine().provideOptions(({ _for, action }) => ({
       actions: {
         plain: _for(3, action(nothing)),
-        void: _for(2, (() => undefined) as any),
+        void: _for(
+          2,
+          action(() => undefined),
+        ),
       },
     }));
 

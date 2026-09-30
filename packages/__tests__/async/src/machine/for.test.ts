@@ -332,7 +332,10 @@ describe('AsyncMachine - for', () => {
           3,
           action(() => {}),
         ),
-        void: _for(2, (() => undefined) as any),
+        void: _for(
+          2,
+          action(() => undefined),
+        ),
       },
     }));
 

@@ -1,4 +1,4 @@
-import {  interpret } from '@bemedev/app';
+import { interpret } from '@bemedev/app';
 import _machine1 from './asyncActions.1.machine';
 import _machine2 from './asyncActions.2.machine';
 import _machine3 from './asyncActions.3.machine';
@@ -718,30 +718,6 @@ describe('Machine createOptions - error handlers', () => {
 
       test('#04 => errorFn receives the thrown error', () => {
         expect(errorFn).toHaveBeenCalledWith('map async error');
-      });
-    });
-
-    describe('#05 => map assign with no options', () => {
-      const machine = _machine1.provideOptions(({ assign }) => ({
-        actions: {
-          myAction: assign({
-            TEST: async ({ context }) => {
-              return context + 100;
-            },
-          }),
-        },
-      }));
-
-      const service = interpret(machine, { context: 5 });
-
-      test('#01 => start', service.start);
-
-      test('#02 => send event without throwing', async () => {
-        await service.send('TEST');
-      });
-
-      test('#03 => updates context directly from map', () => {
-        expect(service.context).toBe(105);
       });
     });
   });

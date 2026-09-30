@@ -37,7 +37,7 @@
     "_ci:admin": "CI_ADMIN=$(date +%s) && pnpm run rm && pnpm run up && pnpm install && pnpm run _ci && pnpm install && echo \"\n✅ Admin CI takes $(($(date +%s) - CI_ADMIN))s\n\"",
     "ci:admin": "FULL_CI=$(date +%s) && pnpm run ci && pnpm run _ci:admin && echo \"\n✅ Full CI takes $(($(date +%s) - FULL_CI))s\n\"",
     "pnpm:devPreinstall": "node -e \"const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); const version=require('child_process').execSync('pnpm -v').toString().trim(); pkg.packageManager='pnpm@' + version; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\\n');\"",
-    "build": "pnpm -r --sort --sequential run build",
+    "build": "pnpm -r --sort run build",
     "config": "pnpm i",
     "rimraf": "pnpx rimraf -rf",
     "rinit": "pnpm run rm && pnpm run config",
