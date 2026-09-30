@@ -1,4 +1,9 @@
-import type { AsyncFilterAction_F, SyncFilterAction_F } from '@bemedev/app';
+import type {
+  AsyncFilterAction_F,
+  AsyncForAction_F,
+  SyncFilterAction_F,
+  SyncForAction_F,
+} from '@bemedev/app';
 
 type TestContext = {
   numbers: number[];
@@ -48,5 +53,43 @@ asyncFilter('age', () => true);
 
 // @ts-expect-error - 'active' is a boolean, not Array or TrueObject
 asyncFilter('active', () => true);
+// #endregion
+
+// #region For action helper
+type SyncFor = SyncForAction_F<any, any, TestContext>;
+type AsyncFor = AsyncForAction_F<any, any, TestContext>;
+
+declare const syncFor: SyncFor;
+declare const asyncFor: AsyncFor;
+
+// #region Valid count and action
+syncFor(3, () => ({ mergers: [] }));
+syncFor(({ context }) => (context?.age ?? 0), () => ({ mergers: [] }));
+asyncFor(3, () => ({ mergers: [] }));
+asyncFor(3, async () => ({ mergers: [] }));
+asyncFor(async ({ context }) => context?.age ?? 0, async () => ({ mergers: [] }));
+// #endregion
+
+// #region Valid function map count
+syncFor({ FALLBACK: () => 2, else: () => 1 }, () => ({ mergers: [] }));
+asyncFor({ FALLBACK: async () => 2, else: () => 1 }, () => ({ mergers: [] }));
+// #endregion
+
+// #region Invalid count or action
+// @ts-expect-error - count must be a number or a function map returning a number
+syncFor('3', () => ({ mergers: [] }));
+
+// @ts-expect-error - count function must return a number
+syncFor(() => '3', () => ({ mergers: [] }));
+
+// @ts-expect-error - count function must return a number
+asyncFor(async () => '3', () => ({ mergers: [] }));
+
+// @ts-expect-error - sync action cannot return a promise
+syncFor(3, async () => ({ mergers: [] }));
+
+// @ts-expect-error - action is required
+syncFor(3);
+// #endregion
 // #endregion
 

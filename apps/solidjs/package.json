@@ -26,7 +26,7 @@
     "@tanstack/solid-router": "1.170.37",
     "@tanstack/solid-start": "1.168.56",
     "clsx": "^2.1.1",
-    "lucide-solid": "^1.48.0",
+    "lucide-solid": "^1.49.0",
     "nitro": "3.0.260903-beta",
     "solid-js": "^1.9.15",
     "tailwind-merge": "^3.7.0",

@@ -14,5 +14,7 @@ export default defineProject({
     setupFiles: ['./vitest.setup.ts'],
     clearMocks: false,
     globalSetup: [],
+    // Inline dev-utils: it nests its own vitest copy, breaking test collection
+    server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },
 });

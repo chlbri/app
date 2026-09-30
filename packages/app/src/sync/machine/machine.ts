@@ -18,6 +18,7 @@ import { CommonMachine } from '../../common/machine';
 import type {
   SyncAction_F,
   SyncAddOptions_F,
+  SyncForAction_F,
   SyncProvideOptions_F,
   SyncSendAction_F,
 } from './options.types';
@@ -205,6 +206,8 @@ export class SyncMachine<
           };
         },
 
+        _for: this.__for,
+
         filter,
         erase,
         action,
@@ -291,6 +294,49 @@ export class SyncMachine<
       const _fn = reduceFnMap(fn, ...this.__eventsList);
       _fn(state);
       return {};
+    };
+  };
+
+  /**
+   * Function helper to repeat a single action, which may itself be a batch action.
+   * The count is resolved once, before the first iteration; `undefined` yields a
+   * no-op action.
+   *
+   * @param count - Number of iterations, or function map of type
+   * {@linkcode SyncForAction_F} receiving the extended state and returning a number.
+   * @param fn - Single action of type {@linkcode SyncAction2}, or `undefined`.
+   */
+  protected __for: SyncForAction_F<Eo, Pc, Tc, Ta> = (count, fn) => {
+    return state => {
+      const mergers: any[] = [];
+      const extendeds: any = {};
+
+      if (fn) {
+        const raw =
+          typeof count === 'number'
+            ? count
+            : reduceFnMap(count, ...this.__eventsList)(state);
+
+        if (!Number.isFinite(raw) || raw <= 0) return { mergers, ...extendeds };
+        const iterations = Math.trunc(raw);
+
+        for (let index = 0; index < iterations; index++) {
+          const res = fn(state);
+
+          if (res) {
+            const { mergers: m, ...ext } = res;
+            Object.assign(extendeds, ext);
+
+            if (m && m.length > 0) {
+              mergers.push(...m);
+              // In-place merge: each iteration reads the previous committed context
+              state.context = merge2.multiple(state.context, ...(m as any)) as any;
+            }
+          }
+        }
+      }
+
+      return { mergers, ...extendeds };
     };
   };
 }

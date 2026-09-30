@@ -24,6 +24,7 @@ import type {
   EmptyObject,
   FnMap,
   FnR,
+  MaybePromise,
   SingleOrArrayL2,
   TraversableTuple,
 } from '~types';
@@ -329,6 +330,35 @@ export type AsyncBatchAction_F<
 ) => AsyncAction2<E, Pc, Tc, T>;
 
 /**
+ * Function type signature for repeating a single action.
+ *
+ * The action may itself be a batch action, and `undefined` produces a no-op action.
+ * The iteration count is either a number or a function map of type
+ * {@linkcode FnMap} receiving the extended state (per event or `else`) and
+ * returning a number or a promise of a number. It is resolved once, before the
+ * first iteration.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `T` - State tag string type.
+ * @param count - Number of iterations, or function map of type {@linkcode FnMap}
+ * receiving the extended state and returning a number.
+ * @param fn - Single async action of type {@linkcode AsyncAction2}, or `undefined`.
+ *
+ * @returns Async action of type {@linkcode AsyncAction2}.
+ */
+export type AsyncForAction_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (
+  count: number | FnMap<E, Pc, Tc, T, MaybePromise<number>>,
+  fn: AsyncAction2<E, Pc, Tc, T> | undefined,
+) => AsyncAction2<E, Pc, Tc, T>;
+
+/**
  * Logical AND guard structure for async guard batching options.
  *
  * @template | {@linkcode EventObject} `E` - Event object type.
@@ -443,6 +473,10 @@ export type AsyncAddOption<
    * Helper function to batch multiple actions.
    */
   batch: AsyncBatchAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to repeat a single action, which may be a batch action.
+   */
+  _for: AsyncForAction_F<E, Pc, Tc, T>;
   /**
    * Helper function to filter array or object properties asynchronously.
    */

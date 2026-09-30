@@ -148,6 +148,29 @@ export type SyncBatchAction_F<
 ) => SyncAction2<E, Pc, Tc, T>;
 
 /**
+ * Function type signature for repeating a single synchronous action.
+ *
+ * The action may itself be a batch action, and `undefined` produces a no-op action.
+ * The iteration count is either a number or a function map of type
+ * {@linkcode FnMap} receiving the extended state (per event or `else`) and
+ * returning a number. It is resolved once, before the first iteration.
+ *
+ * @template `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template `T` - State tag string type.
+ */
+export type SyncForAction_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (
+  count: number | FnMap<E, Pc, Tc, T, number>,
+  fn: SyncAction2<E, Pc, Tc, T> | undefined,
+) => SyncAction2<E, Pc, Tc, T>;
+
+/**
  * Function type signature for creating a synchronous action helper.
  *
  * @template `E` - Event object type.
@@ -242,6 +265,7 @@ export type SyncAllActions_F<
   | SyncResendAction_F<E, Pc, Tc, T>
   | SyncTimeAction_F<E, Pc, Tc, T>
   | SyncBatchAction_F<E, Pc, Tc, T>
+  | SyncForAction_F<E, Pc, Tc, T>
   | SyncEraseAction_F<E, Pc, Tc, T>
   | SyncFilterAction_F<E, Pc, Tc, T>;
 
@@ -334,6 +358,10 @@ export type SyncAddOption<
   swap: SwapFunction_F<E, Pc, Tc, T>;
   assign: SyncAssignAction_F<E, Pc, Tc, T>;
   batch: SyncBatchAction_F<E, Pc, Tc, T>;
+  /**
+   * Helper function to repeat a single action, which may be a batch action.
+   */
+  _for: SyncForAction_F<E, Pc, Tc, T>;
   filter: SyncFilterAction_F<E, Pc, Tc, T>;
   erase: SyncEraseAction_F<E, Pc, Tc, T>;
   action: SyncAction_F<E, Pc, Tc, T>;
