@@ -23,10 +23,12 @@ jobs:
         with:
           name: built-workspace
           path: |
-            .
-            !node_modules
+            **/dist/**
+            **/lib/**
+            !**/node_modules/**
             !.git
           retention-days: 1
+          compression-level: 0
 
   app:
     needs: [build]
