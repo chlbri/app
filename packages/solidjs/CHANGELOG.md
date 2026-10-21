@@ -5,6 +5,31 @@
 <details>
 <summary>
 
+## **[2.7.1] - 21/10/2026** => _16:19_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.7.1 to align with the workspace
+  release.
+- **Peer Dependencies**: Update `solid-js` to 1.9.17.
+- **Dev Dependencies**: Update `vitest` to 5.0.5, `rolldown` to 1.2.14, `size-limit`
+  to 14.2.0, `oxfmt` to 0.74.0, `oxlint` to 1.89.0, `@types/node` to 26.6.5,
+  `@vitest/coverage-v8` to 5.0.5, `@vitest/ui` to 5.0.5,
+  `@testing-library/user-event` to 14.6.8, `jsdom` to 30.1.3, `globals` to 17.13.0,
+  `prettier` to 3.9.10, `rolldown-plugin-dts` to 0.28.8, and `@size-limit/file` to
+  14.2.0.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.7.0] - 30/09/2026** => _18:36_
 
 </summary>

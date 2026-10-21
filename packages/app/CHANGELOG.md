@@ -8,6 +8,28 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.7.1] - 21/10/2026** => _16:19_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.7.1 to align with the workspace
+  release.
+- **Dev Dependencies**: Update `vitest` to 5.0.5, `rolldown` to 1.2.14, `size-limit`
+  to 14.2.0, `oxfmt` to 0.74.0, `oxlint` to 1.89.0, `@types/node` to 26.6.5,
+  `@vitest/coverage-v8` to 5.0.5, `@vitest/ui` to 5.0.5, `globals` to 17.13.0, and
+  `tsc-alias` to 1.9.8.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.7.0] - 30/09/2026** => _18:36_
 
 </summary>
