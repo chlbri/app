@@ -22,10 +22,10 @@
     "@bemedev/sequence": "^1.0.0",
     "@bemedev/sleep": "^0.2.2",
     "@bemedev/typings": "^1.4.1",
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.5",
     "rxjs": "^7.8.2",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.5"
   }
 }
