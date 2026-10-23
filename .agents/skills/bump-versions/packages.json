@@ -1,0 +1,10 @@
+{
+  "packages": [
+    "packages/app",
+    "packages/cli",
+    "packages/reactjs",
+    "packages/solidjs",
+    "packages/valibot",
+    "packages/vitest"
+  ]
+}

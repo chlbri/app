@@ -8,6 +8,30 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.7.2] - 23/10/2026** => _10:39_
+
+</summary>
+
+### Fixes
+
+- **Publish Workflow**: Fixed the release artifact upload, which shipped the whole
+  workspace including stale `dist` folders instead of only the compiled `lib`
+  output. Published packages now contain the expected build files.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.7.2 to align with the workspace
+  release.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.7.1] - 21/10/2026** => _16:19_
 
 </summary>
