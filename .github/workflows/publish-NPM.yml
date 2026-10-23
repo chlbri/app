@@ -27,7 +27,6 @@ jobs:
             !node_modules
             !.git
           retention-days: 1
-          compression-level: 0
 
   app:
     needs: [build]
