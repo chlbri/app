@@ -12,8 +12,8 @@
 ### Fixes
 
 - **Publish Workflow**: Fixed the release artifact upload, which shipped the whole
-  workspace including stale `dist` folders instead of only the compiled `lib`
-  output. Published packages now contain the expected build files.
+  workspace including stale `dist` folders instead of only the compiled `lib` output.
+  Published packages now contain the expected build files.
 
 ### Dependencies
 
