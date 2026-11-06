@@ -14,7 +14,7 @@ pnpm run ci
 git add .
 echo "✅ CI passed 😎"
 
-# Background process to stage, amend, and rerun CI until there are no further modifications
+# Background process to stage, and rerun CI until there are no further modifications
 (
   # Wait for the current git commit to release the lock
   while [ -f .git/index.lock ] || ls .git/refs/heads/*.lock >/dev/null 2>&1; do
