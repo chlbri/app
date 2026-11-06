@@ -20,15 +20,13 @@ describe('Self Transitions', () => {
       service.start();
     });
 
-    test('#02 => value is idle', () =>
-      expect(service.value).toEqual('idle'));
+    test('#02 => value is idle', () => expect(service.value).toEqual('idle'));
 
     test('#03 => advance timer', async () => {
       await vi.advanceTimersByTimeAsync(DELAY);
     });
 
-    test('#04 => value is active', () =>
-      expect(service.value).toEqual('active'));
+    test('#04 => value is active', () => expect(service.value).toEqual('active'));
   });
 
   describe('#02 => should handle always self transitions', () => {
@@ -44,8 +42,7 @@ describe('Self Transitions', () => {
       await vi.advanceTimersByTimeAsync(0);
     });
 
-    test('#03 => value is active', () =>
-      expect(service.value).toEqual('active'));
+    test('#03 => value is active', () => expect(service.value).toEqual('active'));
   });
 });
 

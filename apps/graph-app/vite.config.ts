@@ -8,9 +8,7 @@ import { defineConfig, lazyPlugins } from 'vite-plus';
 const config = defineConfig({
   server: { port: 3012 },
   resolve: { tsconfigPaths: true, dedupe: ['react', 'react-dom'] },
-  ssr: {
-    noExternal: ['lucide-react', 'reactflow'],
-  },
+  ssr: { noExternal: ['lucide-react', 'reactflow'] },
   plugins: lazyPlugins(() => [
     devtools(),
     tailwindcss(),

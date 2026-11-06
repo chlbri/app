@@ -41,9 +41,7 @@ export const Route = createFileRoute('/')({
               </span>
             </h2>
             <p class='text-sm leading-relaxed text-slate-300 md:text-base'>
-              {
-                'This application tests the reactivity middleware connecting '
-              }
+              {'This application tests the reactivity middleware connecting '}
               <code class='font-mono text-pink-300'>@bemedev/app</code>
               {' state machines with SolidJS fine-grained signals using '}
               <code class='font-mono text-cyan-300'>createService</code>.
@@ -65,16 +63,14 @@ export const Route = createFileRoute('/')({
                   {counterState().status}
                 </span>
               </div>
-              <h3 class='text-xl font-bold text-white'>
-                Counter State Machine
-              </h3>
+              <h3 class='text-xl font-bold text-white'>Counter State Machine</h3>
               <p class='text-xs text-slate-400'>
                 Tests basic transitions (
                 <code class='font-mono text-indigo-300'>START</code>,{' '}
                 <code class='font-mono text-indigo-300'>INC</code>,{' '}
                 <code class='font-mono text-indigo-300'>DEC</code>,{' '}
-                <code class='font-mono text-indigo-300'>STOP</code>) and
-                reactive context accessors.
+                <code class='font-mono text-indigo-300'>STOP</code>) and reactive
+                context accessors.
               </p>
             </div>
 
@@ -87,9 +83,7 @@ export const Route = createFileRoute('/')({
               </div>
               <div class='flex items-center justify-between'>
                 <span class='text-slate-500'>Count (via selector):</span>
-                <span class='text-2xl font-black text-white'>
-                  {counterCount()}
-                </span>
+                <span class='text-2xl font-black text-white'>{counterCount()}</span>
               </div>
             </div>
 
@@ -140,14 +134,12 @@ export const Route = createFileRoute('/')({
                   </span>
                 </div>
               </div>
-              <h3 class='text-xl font-bold text-white'>
-                Traffic & Speed Machine
-              </h3>
+              <h3 class='text-xl font-bold text-white'>Traffic & Speed Machine</h3>
               <p class='text-xs text-slate-400'>
                 Tests nested states (
-                <code class='font-mono text-purple-300'>green.normal</code>
-                , <code class='font-mono text-purple-300'>green.fast</code>
-                ) and state tags.
+                <code class='font-mono text-purple-300'>green.normal</code>,{' '}
+                <code class='font-mono text-purple-300'>green.fast</code>) and state
+                tags.
               </p>
             </div>
 

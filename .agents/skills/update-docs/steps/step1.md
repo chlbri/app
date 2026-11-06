@@ -1,7 +1,7 @@
 # Step 1 — Version Check
 
-Compare the version in `package.json` against the last version documented
-in `CHANGELOG.md`.
+Compare the version in `package.json` against the last version documented in
+`CHANGELOG.md`.
 
 Target scope is mandatory:
 

@@ -5,11 +5,11 @@
   "scripts": {
     "test": "vp test run",
     "test:only": "vp test run",
-    "_ci": "pnpm run test",
+    "_ci": "vp run test",
     "generate:lib": "app-cli generate -c ./src",
     "generate": "app-cli generate -c ./src",
     "generate:watch": "app-cli watch -c ./src",
-    "pretest": "pnpm run generate:lib"
+    "pretest": "vp run generate:lib"
   },
   "devDependencies": {
     "@bemedev/app": "workspace:^",

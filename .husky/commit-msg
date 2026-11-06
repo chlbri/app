@@ -10,7 +10,7 @@ if echo "$commit_msg" | grep -q "_NO_CI"; then
   exit 0
 fi
 
-pnpm run _ci
+pnpm run ci
 git add .
 echo "✅ CI passed 😎"
 

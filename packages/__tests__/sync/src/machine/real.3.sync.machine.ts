@@ -76,10 +76,7 @@ export default createMachine(
             actions: ['fields.register', 'fields.register.finish'],
             target: '/working/register',
           },
-          'FIELDS:MODIFY': {
-            actions: ['fields.modify'],
-            target: '/working/idle',
-          },
+          'FIELDS:MODIFY': { actions: ['fields.modify'], target: '/working/idle' },
         },
 
         initial: 'idle',

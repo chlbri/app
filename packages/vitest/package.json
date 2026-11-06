@@ -1,23 +1,31 @@
 {
   "name": "@bemedev/app-vitest",
   "version": "2.7.2",
-  "description": "Test helpers for @bemedev/app",
   "private": false,
+  "description": "Test helpers for @bemedev/app",
+  "keywords": [
+    "state machines",
+    "testing",
+    "typescript"
+  ],
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/vitest/README.md",
+  "license": "MIT",
   "author": {
-    "email": "bri_lvi@icloud.com",
     "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
     "url": "https://bemedev.vercel.app"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/chlbri/app"
   },
-  "homepage": "https://github.com/chlbri/app/blob/main/packages/vitest/README.md",
-  "license": "MIT",
+  "files": [
+    "lib"
+  ],
   "type": "module",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "import": "./lib/index.js",
@@ -25,31 +33,20 @@
       "types": "./lib/index.d.ts"
     }
   },
-  "keywords": [
-    "typescript",
-    "state machines",
-    "testing"
-  ],
-  "files": [
-    "lib"
-  ],
-  "engines": {
-    "node": ">=24"
-  },
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown",
-    "_ci": "pnpm run lint && pnpm run test",
-    "pretest": "pnpm run build",
-    "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
+    "build": "vp run rm:lib && vp run rolldown",
+    "_ci": "vp run lint && vp run test",
+    "pretest": "vp run build",
+    "ci": "CI_START=$(date +%s) && vp run _ci && vp run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "fmt": "vp fmt",
     "fmt:check": "vp fmt --check",
     "_lint": "vp lint",
-    "test": "pnpm run size && pnpm run fmt",
+    "test": "vp run size && vp run fmt",
     "lint:fix": "vp lint --fix",
-    "lint": "pnpm run fmt && pnpm run lint:fix",
+    "lint": "vp run fmt && vp run lint:fix",
     "p-q": "pretty-quick",
-    "rm": "pnpx rimraf ./node_modules ./pnpm-lock.yaml",
-    "rm:lib": "pnpx rimraf ./lib",
+    "rm": "vp dlx rimraf ./node_modules ./pnpm-lock.yaml",
+    "rm:lib": "vp dlx rimraf ./lib",
     "size": "size-limit",
     "rolldown": "rolldown -c"
   },
@@ -71,8 +68,12 @@
     "tslib": "^2.8.1",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
-    "vitest": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@bemedev/app": "workspace:^",
+    "vitest": "^5.1.0"
   },
   "size-limit": [
     {
@@ -88,8 +89,7 @@
       "limit": "10 KB"
     }
   ],
-  "peerDependencies": {
-    "@bemedev/app": "workspace:^",
-    "vitest": "^5.0.5"
+  "engines": {
+    "node": ">=24"
   }
 }

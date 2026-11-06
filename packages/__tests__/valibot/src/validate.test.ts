@@ -11,14 +11,8 @@ describe('Coverage', () => {
           tags: ['go_light'],
           initial: 'normal',
           states: {
-            normal: {
-              tags: ['normal_speed'],
-              on: { ACCELERATE: '/green/fast' },
-            },
-            fast: {
-              tags: ['fast_speed'],
-              on: { SLOW_DOWN: '/green/normal' },
-            },
+            normal: { tags: ['normal_speed'], on: { ACCELERATE: '/green/fast' } },
+            fast: { tags: ['fast_speed'], on: { SLOW_DOWN: '/green/normal' } },
           },
           on: { NEXT: '/yellow' },
         },
@@ -41,9 +35,9 @@ describe('Coverage', () => {
   });
 
   test('#03 => Error => wrong activity array', () => {
-    expect(() =>
-      validate({ activities: { DELAY: ['dd', 'ee'] } }),
-    ).toThrow('Wrong activity Array');
+    expect(() => validate({ activities: { DELAY: ['dd', 'ee'] } })).toThrow(
+      'Wrong activity Array',
+    );
   });
 
   test('#04 => Error => empty activity array', () => {

@@ -17,10 +17,7 @@ export default createMachine(
     },
   },
   {
-    context: type({
-      value: 'string',
-      count: 'number',
-    }),
+    context: type({ value: 'string', count: 'number' }),
     eventsMap: type({
       SET_VALUE: { val: 'string' },
       SET_COUNT: { num: 'number' },

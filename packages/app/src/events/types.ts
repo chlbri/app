@@ -58,7 +58,7 @@ export type AllEvent = EventObject | EventStrings;
  * @see {@linkcode Unionize}
  */
 export type EventsR<T extends EventsMap> = {
-  [K in keyof T & string]: { type: K; payload: T[K] };
+  [K in keyof T & string]: { type: K; payload: T[K]; __internal?: EventStrings };
 }[keyof T & string];
 
 /**
@@ -69,9 +69,10 @@ export type EventsR<T extends EventsMap> = {
 type _EmitterConfigR<T extends EmitterConfigMap> =
   Unionize<T> extends infer U extends EmitterConfigMap
     ? U extends any
-      ?
+      ? (
           | { type: `${keyof U & string}::next`; payload: U[keyof U]['next'] }
           | { type: `${keyof U & string}::error`; payload: U[keyof U]['error'] }
+        ) & { __internal?: EventStrings }
       : never
     : never;
 
@@ -83,7 +84,11 @@ type _EmitterConfigR<T extends EmitterConfigMap> =
 type _ChildConfigR<T extends ChildConfigMap> = {
   [key in keyof T & string]: Unionize<T[key]> extends infer U
     ? U extends any
-      ? { type: `${key}::on::${keyof U & string}`; payload: U[keyof U] }
+      ? {
+          type: `${key}::on::${keyof U & string}`;
+          payload: U[keyof U];
+          __internal?: EventStrings;
+        }
       : never
     : never;
 }[keyof T & string];

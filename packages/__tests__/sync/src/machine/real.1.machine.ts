@@ -17,11 +17,7 @@ export default createMachine(
     initial: 'idle',
     ...actions,
     states: {
-      idle: {
-        ...actions,
-        on: { NEXT: '/parallel' },
-        description: 'First state',
-      },
+      idle: { ...actions, on: { NEXT: '/parallel' }, description: 'First state' },
       compound: {
         ...actions,
         on: { NEXT: '/idle' },
@@ -45,14 +41,8 @@ export default createMachine(
             on: { NEXT: '/idle' },
 
             states: {
-              idle: {
-                entry: 'inc',
-                on: { NEXT: '/parallel/atomic/next' },
-              },
-              next: {
-                ...actions,
-                on: { PREVIOUS: '/parallel/atomic/idle' },
-              },
+              idle: { entry: 'inc', on: { NEXT: '/parallel/atomic/next' } },
+              next: { ...actions, on: { PREVIOUS: '/parallel/atomic/idle' } },
             },
           },
           compound: {
@@ -60,10 +50,7 @@ export default createMachine(
             on: { NEXT: '/compound/next' },
             initial: 'idle',
             states: {
-              idle: {
-                ...actions,
-                on: { NEXT: '/parallel/compound/next' },
-              },
+              idle: { ...actions, on: { NEXT: '/parallel/compound/next' } },
               next: { ...actions, on: { NEXT: '/compound/idle' } },
             },
           },

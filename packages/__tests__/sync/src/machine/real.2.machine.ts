@@ -18,10 +18,7 @@ export default createMachine(
             initial: 'idle',
 
             states: {
-              idle: {
-                ...io,
-                on: { NEXT: { target: '/parallel/atomic/next' } },
-              },
+              idle: { ...io, on: { NEXT: { target: '/parallel/atomic/next' } } },
               next: {
                 ...io,
                 on: {
@@ -44,10 +41,7 @@ export default createMachine(
                 ...io,
                 initial: 'idle',
                 states: {
-                  idle: {
-                    ...io,
-                    on: { NEXT: '/parallel/compound/compound/next' },
-                  },
+                  idle: { ...io, on: { NEXT: '/parallel/compound/compound/next' } },
                   next: {
                     ...io,
                     on: {

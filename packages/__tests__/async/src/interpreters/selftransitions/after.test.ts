@@ -36,9 +36,7 @@ describe('after', () => {
   describe('#02 => complex, two delays', () => {
     const machine = _machine2;
 
-    machine.addOptions(() => ({
-      delays: { DELAY1: DELAY * 3, DELAY2: DELAY * 2 },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY1: DELAY * 3, DELAY2: DELAY * 2 } }));
 
     const service = interpret(machine);
 
@@ -133,8 +131,7 @@ describe('after', () => {
     const machine = _machine5;
 
     const unhandledTest = (error: any) => {
-      const message =
-        error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? error.message : String(error);
       expect(message).toBe('Timed out after 1000000 ms.');
     };
 
@@ -162,9 +159,7 @@ describe('after', () => {
       });
 
       test('#02 => Check the warning', () => {
-        expect(service._warningsCollector).toContain(
-          'Delay DELAY is too long',
-        );
+        expect(service._warningsCollector).toContain('Delay DELAY is too long');
       });
     });
 

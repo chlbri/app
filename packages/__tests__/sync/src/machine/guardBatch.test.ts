@@ -10,10 +10,7 @@ describe('SyncMachine - guardBatch', () => {
         on: {
           TEST_AND: { target: '/andSuccess', guards: 'checkAnd' },
           TEST_OR: { target: '/orSuccess', guards: 'checkOr' },
-          TEST_COMPLEX: {
-            target: '/complexSuccess',
-            guards: 'checkComplex',
-          },
+          TEST_COMPLEX: { target: '/complexSuccess', guards: 'checkComplex' },
         },
       },
       andSuccess: {},
@@ -24,33 +21,22 @@ describe('SyncMachine - guardBatch', () => {
 
   const typings = {
     context: type({ age: 'number', role: 'string', active: 'boolean' }),
-    eventsMap: type({
-      TEST_AND: 'never',
-      TEST_OR: 'never',
-      TEST_COMPLEX: 'never',
-    }),
+    eventsMap: type({ TEST_AND: 'never', TEST_OR: 'never', TEST_COMPLEX: 'never' }),
   } as const;
 
-  const machine = createMachine(config, {
-    ...typings,
-    sync: true,
-  }).provideOptions(({ guardBatch, isValue }) => ({
-    guards: {
-      checkAnd: guardBatch(
-        true,
-        isValue('context.role', 'admin'),
-        isValue('context.active', true),
-        undefined,
-      ),
-      checkOr: guardBatch(isValue('context.active', true), {
-        or: [
+  const machine = createMachine(config, { ...typings, sync: true }).provideOptions(
+    ({ guardBatch, isValue }) => ({
+      guards: {
+        checkAnd: guardBatch(
+          true,
           isValue('context.role', 'admin'),
-          isValue('context.role', 'editor'),
-        ],
-      }),
-      checkComplex: guardBatch(
-        ({ context }) => (context?.age ?? 0) >= 18,
-        {
+          isValue('context.active', true),
+          undefined,
+        ),
+        checkOr: guardBatch(isValue('context.active', true), {
+          or: [isValue('context.role', 'admin'), isValue('context.role', 'editor')],
+        }),
+        checkComplex: guardBatch(({ context }) => (context?.age ?? 0) >= 18, {
           or: [
             isValue('context.role', 'admin'),
             guardBatch({
@@ -60,10 +46,10 @@ describe('SyncMachine - guardBatch', () => {
               ],
             }),
           ],
-        },
-      ),
-    },
-  }));
+        }),
+      },
+    }),
+  );
 
   describe('#01 => checkAnd (AND logical gate)', () => {
     test('#01 => fails when one guard is false', () => {

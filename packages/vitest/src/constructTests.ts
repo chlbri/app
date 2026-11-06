@@ -1,6 +1,6 @@
 import { _any, tupleOf } from '@bemedev/app/bemedev';
 import { identity, sleep } from '@bemedev/app/utils';
-import { vi, expect, test } from 'vitest';
+import { vi, expect, test } from 'vite-plus/test';
 import type { ConstructTests_F } from './constructTests.types';
 import { fakeWaiter } from './helpers';
 import { buildIndex, buildInvite } from './invite';

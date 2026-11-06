@@ -8,10 +8,7 @@ describe('Performs activities on events', () => {
   const machine = _raw_machine.provideOptions(
     ({ assign, pauseActivity, resumeActivity, stopActivity }) => ({
       actions: {
-        inc: assign(
-          'iterator',
-          ({ context }) => context?.iterator + 1,
-        ),
+        inc: assign('iterator', ({ context }) => context?.iterator + 1),
 
         pause: pauseActivity('/idle::DELAY'),
         resume: resumeActivity('/idle::DELAY'),
@@ -21,18 +18,12 @@ describe('Performs activities on events', () => {
     }),
   );
 
-  const service = interpret(machine, {
-    exact: true,
-    context: { iterator: 0 },
-  });
+  const service = interpret(machine, { exact: true, context: { iterator: 0 } });
 
   const { send, waiter, useIterator, start, dispose } = constructTests(
     service,
     ({ contexts, waiter }) => ({
-      useIterator: contexts(
-        ({ context }) => context?.iterator,
-        'iterator',
-      ),
+      useIterator: contexts(({ context }) => context?.iterator, 'iterator'),
       waiter: waiter(DELAY),
     }),
   );

@@ -44,9 +44,7 @@ describe('after', () => {
       { sync: true },
     );
 
-    machine.addOptions(() => ({
-      delays: { DELAY1: DELAY * 3, DELAY2: DELAY * 2 },
-    }));
+    machine.addOptions(() => ({ delays: { DELAY1: DELAY * 3, DELAY2: DELAY * 2 } }));
 
     const service = interpret(machine);
     service.start();
@@ -151,9 +149,7 @@ describe('after', () => {
     expect(service.state.value).toEqual('idle');
 
     expect(service._warningsCollector?.size).toBe(1);
-    expect(service._warningsCollector).toContain(
-      'Delay DELAY is too long',
-    );
+    expect(service._warningsCollector).toContain('Delay DELAY is too long');
     vi.advanceTimersByTime(DEFAULT_MAX_TIME_PROMISE * 1.2);
     vi.advanceTimersToNextTimer();
     console.warn(service._warningsCollector);
@@ -205,9 +201,7 @@ describe('after', () => {
     }));
 
     describe('#01 => Always target', () => {
-      const service1 = interpret(machine, {
-        context: { count: 5, limit: 5 },
-      });
+      const service1 = interpret(machine, { context: { count: 5, limit: 5 } });
 
       const { start, waiter, useStateValue, changeIndex } = constructTests(
         service1,
@@ -220,8 +214,7 @@ describe('after', () => {
       test(...waiter(10));
       test(...useStateValue('alwaysTarget'));
 
-      test('#06 => count is "5"', () =>
-        expect(service1.context.count).toBe(5));
+      test('#06 => count is "5"', () => expect(service1.context.count).toBe(5));
 
       test(...changeIndex(prev => prev + 2));
       test(...waiter());
@@ -231,9 +224,7 @@ describe('after', () => {
     });
 
     describe('#02 => After target', () => {
-      const service1 = interpret(machine, {
-        context: { count: 2, limit: 5 },
-      });
+      const service1 = interpret(machine, { context: { count: 2, limit: 5 } });
 
       const { start, waiter, useStateValue } = constructTests(
         service1,

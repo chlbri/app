@@ -16,7 +16,6 @@ import { generate } from './commands/generate';
 import { watch } from './commands/watch';
 import { LIB } from './core/constants';
 import { produceStarterContent } from './core/helpers';
-const IS_EXTENSION = process.env.VITEST_VSCODE === 'true';
 
 describe('CLI', () => {
   // #region Config
@@ -89,9 +88,9 @@ export default createMachine(
   const WAITER = 500;
 
   beforeAll(() => {
-    if (IS_EXTENSION) {
-      spy.mockReturnValue(resolve(process.cwd(), 'packages/cli'));
-    }
+    // if (IS_EXTENSION) {
+    spy.mockReturnValue(resolve(process.cwd(), 'packages/cli'));
+    // }
   });
 
   afterAll(() => spy.mockRestore());

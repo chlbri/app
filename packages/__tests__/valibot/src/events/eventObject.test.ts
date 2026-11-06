@@ -35,11 +35,7 @@ describe('TESTS', () => {
           parameters: [{ payload: 'bar' }],
           expected: false,
         },
-        {
-          invite: 'non-object value',
-          parameters: ['foo'],
-          expected: false,
-        },
+        { invite: 'non-object value', parameters: ['foo'], expected: false },
       ),
     );
   });

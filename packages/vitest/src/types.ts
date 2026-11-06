@@ -37,7 +37,7 @@ type CommonTestsResult = Record<
 > & {
   changeIndex: (fn: Fn<[number], number>) => TestArr;
   unhandledRejection: (
-    testFn: () => any | Promise<any>,
+    testFn: () => any,
     error: string,
     timeout?: number,
   ) => TestArr;

@@ -10,10 +10,7 @@ describe('AsyncMachine - guardBatch', () => {
         on: {
           TEST_AND: { target: '/andSuccess', guards: 'checkAnd' },
           TEST_OR: { target: '/orSuccess', guards: 'checkOr' },
-          TEST_COMPLEX: {
-            target: '/complexSuccess',
-            guards: 'checkComplex',
-          },
+          TEST_COMPLEX: { target: '/complexSuccess', guards: 'checkComplex' },
         },
       },
       andSuccess: {},
@@ -24,11 +21,7 @@ describe('AsyncMachine - guardBatch', () => {
 
   const typings = {
     context: type({ age: 'number', role: 'string', active: 'boolean' }),
-    eventsMap: type({
-      TEST_AND: 'never',
-      TEST_OR: 'never',
-      TEST_COMPLEX: 'never',
-    }),
+    eventsMap: type({ TEST_AND: 'never', TEST_OR: 'never', TEST_COMPLEX: 'never' }),
   } as const;
 
   const machine = createMachine(config, { ...typings }).provideOptions(
@@ -46,20 +39,17 @@ describe('AsyncMachine - guardBatch', () => {
             async ({ context }) => context?.role === 'editor',
           ],
         }),
-        checkComplex: guardBatch(
-          async ({ context }) => (context?.age ?? 0) >= 18,
-          {
-            or: [
-              isValue('context.role', 'admin'),
-              guardBatch({
-                and: [
-                  isValue('context.role', 'editor'),
-                  async ({ context }) => context?.active === true,
-                ],
-              }),
-            ],
-          },
-        ),
+        checkComplex: guardBatch(async ({ context }) => (context?.age ?? 0) >= 18, {
+          or: [
+            isValue('context.role', 'admin'),
+            guardBatch({
+              and: [
+                isValue('context.role', 'editor'),
+                async ({ context }) => context?.active === true,
+              ],
+            }),
+          ],
+        }),
       },
     }),
   );

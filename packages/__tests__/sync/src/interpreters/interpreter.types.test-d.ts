@@ -14,21 +14,15 @@ expectTypeOf<O<{ name: string; age?: number }>>().toEqualTypeOf<{
   value: { name: string; age?: number };
 }>();
 
-expectTypeOf<
-  O<{ name: string; age?: number; sex: string }>
->().toEqualTypeOf<{
+expectTypeOf<O<{ name: string; age?: number; sex: string }>>().toEqualTypeOf<{
   value: { name: string; age?: number; sex: string };
 }>();
 
-expectTypeOf<
-  O<{ name?: string; age?: number; sex: string }>
->().toEqualTypeOf<{
+expectTypeOf<O<{ name?: string; age?: number; sex: string }>>().toEqualTypeOf<{
   value: { name?: string; age?: number; sex: string };
 }>();
 
-expectTypeOf<
-  O<{ name?: string; age?: number; sex?: string }>
->().toEqualTypeOf<{
+expectTypeOf<O<{ name?: string; age?: number; sex?: string }>>().toEqualTypeOf<{
   value: { name?: string; age?: number; sex?: string };
 }>();
 

@@ -2,12 +2,10 @@
 
 ### Règles générales
 
-- **Langue** : Utiliser strictement l'anglais pour tous les messages de
-  commit
+- **Langue** : Utiliser strictement l'anglais pour tous les messages de commit
 - **Clarté** : Messages concis et descriptifs
 - **Format** : Suivre la convention Conventional Commits
-- **Outils** : Utiliser l'extension VS Code
-  `adam-bender.commit-message-editor`
+- **Outils** : Utiliser l'extension VS Code `adam-bender.commit-message-editor`
 
 ### Format des commits
 
@@ -263,17 +261,17 @@ feat: add 15 new features and fix 10 bugs
 
 ## Contexte : Gestion améliorée de l'état des dépendances
 
-**Fonctionnalité actuelle** : 002-spec-validate-bullet - Gestion améliorée
-de l'état des dépendances et mécanisme de rollback
+**Fonctionnalité actuelle** : 002-spec-validate-bullet - Gestion améliorée de l'état
+des dépendances et mécanisme de rollback
 
 **Stack technique** :
 
 - Langage : TypeScript 5.x avec Node.js >= 22
 - Framework : cmd-ts, execa, utilitaires de parsing semver
-- Stockage : Gestion d'état en mémoire lors du processus d'upgrade (pas de
-  stockage persistant)
-- Type de projet : Bibliothèque unique - outil CLI avec architecture par
-  couche de services
+- Stockage : Gestion d'état en mémoire lors du processus d'upgrade (pas de stockage
+  persistant)
+- Type de projet : Bibliothèque unique - outil CLI avec architecture par couche de
+  services
 
 **Composants clés** :
 
@@ -284,9 +282,8 @@ de l'état des dépendances et mécanisme de rollback
 
 **Modifications récentes** :
 
-- Ajout du suivi d'état des dépendances avec préservation des opérateurs
-  semver
+- Ajout du suivi d'état des dépendances avec préservation des opérateurs semver
 - Implémentation d'un rollback automatique sur échec d'exécution de scripts
 - Amélioration du CLI avec support configurable des scripts test/build/lint
-- Ajout du pattern d'adaptateur de gestionnaire de packages pour
-  compatibilité multi-PM
+- Ajout du pattern d'adaptateur de gestionnaire de packages pour compatibilité
+  multi-PM

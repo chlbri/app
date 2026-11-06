@@ -5,10 +5,7 @@ import type {
   EventsMapFrom,
   PrivateContextFrom,
 } from '@bemedev/app/types';
-import type {
-  Config3,
-  Machine3,
-} from '../../../async/src/interpreters/data';
+import type { Config3, Machine3 } from '../../../async/src/interpreters/data';
 
 import type { EmptyObject } from '@bemedev/decompose';
 

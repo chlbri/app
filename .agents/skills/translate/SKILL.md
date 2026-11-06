@@ -1,31 +1,31 @@
 ---
 name: translate
 description:
-  Translate any text file content to a target language while preserving the
-  integrity of code elements and special formatting.
+  Translate any text file content to a target language while preserving the integrity
+  of code elements and special formatting.
 ---
 
 # Translate
 
-Translate any text file content to a target language while preserving the
-integrity of code elements and special formatting.
+Translate any text file content to a target language while preserving the integrity
+of code elements and special formatting.
 
 ## Usage
 
-1. Provide the **language** parameter with the target language name (e.g.,
-   `French`, `Spanish`, `German`, `Japanese`).
+1. Provide the **language** parameter with the target language name (e.g., `French`,
+   `Spanish`, `German`, `Japanese`).
 2. Attach the files or folders to be translated as assets.
 
 ## Rules
 
 ### General
 
-1. **Translate only human-readable text** — comments, strings,
-   documentation, and prose content.
-2. **Preserve the original file structure** — do not modify indentation,
-   line breaks, or file organization.
-3. **Maintain the same file format** — output must be in the same format as
-   the input.
+1. **Translate only human-readable text** — comments, strings, documentation, and
+   prose content.
+2. **Preserve the original file structure** — do not modify indentation, line breaks,
+   or file organization.
+3. **Maintain the same file format** — output must be in the same format as the
+   input.
 
 ### Programming Language Files (`.ts`, `.js`, `.py`, `.java`, `.go`, …)
 
@@ -58,18 +58,17 @@ integrity of code elements and special formatting.
 ## Quality Guidelines
 
 1. **Preserve tone and style** — match the formality level of the original.
-2. **Use appropriate technical terminology** — use established translations
-   for technical terms in the target language when they exist.
-3. **Maintain consistency** — use the same translation for repeated terms
-   throughout the file.
+2. **Use appropriate technical terminology** — use established translations for
+   technical terms in the target language when they exist.
+3. **Maintain consistency** — use the same translation for repeated terms throughout
+   the file.
 4. **Context awareness** — consider the surrounding context when choosing
    translations.
-5. **Natural language** — the translation should read naturally in the
-   target language.
+5. **Natural language** — the translation should read naturally in the target
+   language.
 
 ## When to use
 
-- When localizing documentation, changelogs, or README files for a new
-  audience
+- When localizing documentation, changelogs, or README files for a new audience
 - When translating user-facing string literals in source files
 - When preparing a multilingual release of a project

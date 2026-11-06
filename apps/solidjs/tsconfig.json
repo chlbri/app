@@ -9,6 +9,7 @@
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "types": ["vitest/globals", "node"],
     "skipLibCheck": true,
     "target": "ES2022",
     "allowJs": true,

@@ -123,10 +123,7 @@ expectTypeOf({
   ert3: { arg31: { arg311: 'string' } },
 }).toEqualTypeOf<TT13>();
 
-expectTypeOf<{
-  user: string;
-  password: string;
-}>().toExtend<PrimitiveObject>();
+expectTypeOf<{ user: string; password: string }>().toExtend<PrimitiveObject>();
 
 expectTypeOf<TT11>().toExtend<PrimitiveObject>();
 expectTypeOf<TT13>().toExtend<PrimitiveObject>();
@@ -139,10 +136,7 @@ type BasicSchema = { name: string; value: number; optional?: boolean };
 // Nested schema for testing
 type NestedSchema = {
   id: string;
-  config: {
-    enabled: boolean;
-    options?: { timeout: number; retries?: number };
-  };
+  config: { enabled: boolean; options?: { timeout: number; retries?: number } };
   tags?: string[];
 };
 
@@ -157,10 +151,7 @@ type DeepSchema = {
 
 // Valid: exact match
 type ValidBasic = NoExtraKeys<{ name: 'test'; value: 42 }, BasicSchema>;
-expectTypeOf<ValidBasic>().toMatchObjectType<{
-  name: 'test';
-  value: 42;
-}>();
+expectTypeOf<ValidBasic>().toMatchObjectType<{ name: 'test'; value: 42 }>();
 
 // Valid: with optional property
 type ValidWithOptional = NoExtraKeys<
@@ -175,10 +166,7 @@ expectTypeOf<ValidWithOptional>().toMatchObjectType<{
 
 // Valid: partial object (omitting optional)
 type ValidPartial = NoExtraKeys<{ name: 'test'; value: 42 }, BasicSchema>;
-expectTypeOf<ValidPartial>().toMatchObjectType<{
-  name: 'test';
-  value: 42;
-}>();
+expectTypeOf<ValidPartial>().toMatchObjectType<{ name: 'test'; value: 42 }>();
 
 // Invalid: extra key should be typed as never
 type InvalidExtraKey = NoExtraKeys<
@@ -211,10 +199,7 @@ expectTypeOf<InvalidNestedExtra['config']>().toHaveProperty('extra');
 
 // Valid with deep optional
 type ValidDeepOptional = NoExtraKeys<
-  {
-    id: 'xyz';
-    config: { enabled: false; options: { timeout: 500; retries: 3 } };
-  },
+  { id: 'xyz'; config: { enabled: false; options: { timeout: 500; retries: 3 } } },
   NestedSchema
 >;
 expectTypeOf<ValidDeepOptional['config']['options']>().toExtend<
@@ -248,10 +233,7 @@ type ValidDeepNested = NoExtraKeys<
       parent: {
         targets: 'child1 | child2';
         initial: 'child1';
-        states: {
-          child1: { targets: 'child2' };
-          child2: { targets: 'child1' };
-        };
+        states: { child1: { targets: 'child2' }; child2: { targets: 'child1' } };
       };
     };
   },
@@ -262,28 +244,19 @@ expectTypeOf<ValidDeepNested['states']>().toExtend<
       parent: {
         targets: 'child1 | child2';
         initial: 'child1';
-        states: {
-          child1: { targets: 'child2' };
-          child2: { targets: 'child1' };
-        };
+        states: { child1: { targets: 'child2' }; child2: { targets: 'child1' } };
       };
     }
   | undefined
 >();
 
 // Invalid: extra key at root level
-type InvalidDeepRoot = NoExtraKeys<
-  { targets: 'test'; extraRoot: true },
-  DeepSchema
->;
+type InvalidDeepRoot = NoExtraKeys<{ targets: 'test'; extraRoot: true }, DeepSchema>;
 expectTypeOf<InvalidDeepRoot['extraRoot']>().toEqualTypeOf<never>();
 
 // Invalid: extra key in nested state
 type InvalidDeepNested = NoExtraKeys<
-  {
-    targets: 'test';
-    states: { test: { targets: 'other'; notAllowed: 'value' } };
-  },
+  { targets: 'test'; states: { test: { targets: 'other'; notAllowed: 'value' } } },
   DeepSchema
 >;
 // The nested state should have 'notAllowed' as never
@@ -294,14 +267,8 @@ expectTypeOf<InvalidDeepNested['states']>().not.toBeNever();
 // #region NoExtraKeysStrict tests
 
 // Valid strict
-type ValidStrict = NoExtraKeysStrict<
-  { name: 'test'; value: 42 },
-  BasicSchema
->;
-expectTypeOf<ValidStrict>().branded.toEqualTypeOf<{
-  name: 'test';
-  value: 42;
-}>();
+type ValidStrict = NoExtraKeysStrict<{ name: 'test'; value: 42 }, BasicSchema>;
+expectTypeOf<ValidStrict>().branded.toEqualTypeOf<{ name: 'test'; value: 42 }>();
 
 // NoExtraKeysStrict requires T to extend Schema
 // This should fail at compile time if uncommented:
@@ -314,10 +281,7 @@ expectTypeOf<ValidStrict>().branded.toEqualTypeOf<{
 type StateSchema = { target: string; initial?: string };
 
 type ValidRecord = NoExtraKeysRecord<
-  {
-    idle: { target: 'active' };
-    active: { target: 'idle'; initial: 'sub' };
-  },
+  { idle: { target: 'active' }; active: { target: 'idle'; initial: 'sub' } },
   StateSchema
 >;
 expectTypeOf<ValidRecord>().branded.toEqualTypeOf<{
@@ -387,12 +351,8 @@ type ValidCollection = NoExtraKeys<
   { map: Map<string, number>; set: Set<string> },
   CollectionSchema
 >;
-expectTypeOf<ValidCollection['map']>().branded.toEqualTypeOf<
-  Map<string, number>
->();
-expectTypeOf<ValidCollection['set']>().branded.toEqualTypeOf<
-  Set<string>
->();
+expectTypeOf<ValidCollection['map']>().branded.toEqualTypeOf<Map<string, number>>();
+expectTypeOf<ValidCollection['set']>().branded.toEqualTypeOf<Set<string>>();
 
 // #endregion Edge cases
 
@@ -449,9 +409,7 @@ type FA11 = FilterArray<_FA, string | number>;
 expectTypeOf<FA11>().toEqualTypeOf<[1, 2, 3, 4, 5, 'string', 'my name']>();
 
 type FA12 = FilterArray<_FA, string | boolean>;
-expectTypeOf<FA12>().toEqualTypeOf<
-  ['string', 'my name', true, false, true]
->();
+expectTypeOf<FA12>().toEqualTypeOf<['string', 'my name', true, false, true]>();
 
 type FA13 = FilterArray<_FA, ''>;
 expectTypeOf<FA13>().toEqualTypeOf<[]>();
@@ -489,6 +447,4 @@ type ExS1 = Exclude<
   `${string}::on::${string}`
 >;
 
-expectTypeOf<ExS1>().toEqualTypeOf<
-  'START' | 'HELP' | 'getChildren::then'
->();
+expectTypeOf<ExS1>().toEqualTypeOf<'START' | 'HELP' | 'getChildren::then'>();

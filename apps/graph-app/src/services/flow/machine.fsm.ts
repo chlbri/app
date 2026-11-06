@@ -17,9 +17,6 @@ export default createMachine(
       edges: array(use(edge)),
       history: array({ nodes: array(use(node)), edges: array(use(edge)) }),
     })),
-    eventsMap: type(({ use }) => ({
-      START: 'never',
-      CONNECT: use(connection),
-    })),
+    eventsMap: type(({ use }) => ({ START: 'never', CONNECT: use(connection) })),
   },
 );

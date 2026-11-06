@@ -17,9 +17,6 @@ export default createMachine(
 
   {
     context: typings.context('number'),
-    eventsMap: typings.eventsMap({
-      NEXT: 'undefined',
-      TRIPLE: 'undefined',
-    }),
+    eventsMap: typings.eventsMap({ NEXT: 'undefined', TRIPLE: 'undefined' }),
   },
 );

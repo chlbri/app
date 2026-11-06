@@ -13,8 +13,7 @@ describe('Simple Machine2 (from Machine1)', () => {
     .provideOptions(({ assign }) => ({
       actions: {
         assigN: assign({
-          'interval::next': ({ payload, context }) =>
-            notU(context) + payload,
+          'interval::next': ({ payload, context }) => notU(context) + payload,
         }),
       },
       actors: {
@@ -50,23 +49,20 @@ describe('Simple Machine2 (from Machine1)', () => {
     stop,
     useStateValue,
     useMock,
-  } = constructTests(
-    service,
-    ({ contexts, sender, waiter, tupleOf, getIndex }) => ({
-      useContext: contexts(({ context }) => context),
-      useNext: sender('NEXT'),
-      waiter: waiter(WAITERS.short),
+  } = constructTests(service, ({ contexts, sender, waiter, tupleOf, getIndex }) => ({
+    useContext: contexts(({ context }) => context),
+    useNext: sender('NEXT'),
+    waiter: waiter(WAITERS.short),
 
-      useMock: (fails = false) => {
-        const invite = `#${getIndex()} => mockFn called${fails ? ' => (fails)' : ''}`;
+    useMock: (fails = false) => {
+      const invite = `#${getIndex()} => mockFn called${fails ? ' => (fails)' : ''}`;
 
-        return tupleOf(invite, () => {
-          expect(mockFn).toHaveBeenCalledWith('Complete action executed');
-          mockFn.mockClear();
-        });
-      },
-    }),
-  );
+      return tupleOf(invite, () => {
+        expect(mockFn).toHaveBeenCalledWith('Complete action executed');
+        mockFn.mockClear();
+      });
+    },
+  }));
 
   test(...start());
   test(...useContext(0));

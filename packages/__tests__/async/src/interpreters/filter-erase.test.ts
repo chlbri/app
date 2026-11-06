@@ -289,9 +289,7 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, filter }) => ({
           actions: {
-            addNumbers: assign('numbers', {
-              ADD: ({ payload }) => payload.values,
-            }),
+            addNumbers: assign('numbers', { ADD: ({ payload }) => payload.values }),
             filterEven: filter('numbers', {
               RESET: num => num % 2 !== 0,
               else: num => num % 2 === 0,
@@ -336,9 +334,7 @@ describe('Filter and Erase actions', () => {
       test('#03 => Add actions', () => {
         service.addOptions(({ assign, filter }) => ({
           actions: {
-            addNumbers: assign('numbers', {
-              ADD: ({ payload }) => payload.values,
-            }),
+            addNumbers: assign('numbers', { ADD: ({ payload }) => payload.values }),
             filterEven: filter('numbers', { RESET: num => num % 2 !== 0 }),
           },
         }));
@@ -432,9 +428,7 @@ describe('Filter and Erase actions', () => {
             setScores: assign('scores', {
               SET_SCORES: ({ payload }) => payload.scores,
             }),
-            filterHighScores: filter('scores', {
-              SET_SCORES: score => score < 50,
-            }),
+            filterHighScores: filter('scores', { SET_SCORES: score => score < 50 }),
           },
         }));
       });
@@ -515,9 +509,7 @@ describe('Filter and Erase actions', () => {
       test('#00 => Add actions', () => {
         service.addOptions(({ filter }) => ({
           actions: {
-            filterInit: filter('numbers', {
-              TRIGGER_ALWAYS: num => num > 0,
-            }),
+            filterInit: filter('numbers', { TRIGGER_ALWAYS: num => num > 0 }),
           },
         }));
       });
@@ -581,9 +573,7 @@ describe('Filter and Erase actions', () => {
       test('#00 => Add actions', () => {
         service.addOptions(({ filter }) => ({
           actions: {
-            filterInit: filter('scores', {
-              TRIGGER_ALWAYS: score => score > 0,
-            }),
+            filterInit: filter('scores', { TRIGGER_ALWAYS: score => score > 0 }),
           },
         }));
       });
@@ -624,12 +614,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters numbers matching key condition (> 5)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'numbers',
-                source: { numbers: [6, 7, 8, 9, 10] },
-              },
-            ],
+            mergers: [{ key: 'numbers', source: { numbers: [6, 7, 8, 9, 10] } }],
           });
         });
       });
@@ -655,12 +640,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters numbers via else fallback (even numbers)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'numbers',
-                source: { numbers: [2, 4, 6] },
-              },
-            ],
+            mergers: [{ key: 'numbers', source: { numbers: [2, 4, 6] } }],
           });
         });
       });
@@ -686,21 +666,14 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters numbers via else condition (<= 3)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'numbers',
-                source: { numbers: [1, 2, 3] },
-              },
-            ],
+            mergers: [{ key: 'numbers', source: { numbers: [1, 2, 3] } }],
           });
         });
       });
 
       describe('#04 => Unmapped string event without else (fallback to nothing)', () => {
         const { actions } = machine.createOptions(({ filter }) => ({
-          actions: {
-            filterEven: filter('numbers', { FILTER: num => num > 5 }),
-          },
+          actions: { filterEven: filter('numbers', { FILTER: num => num > 5 }) },
         }));
 
         const state = {
@@ -714,12 +687,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => keeps numbers when falling back to nothing', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'numbers',
-                source: { numbers: [1, 2, 3, 4, 5] },
-              },
-            ],
+            mergers: [{ key: 'numbers', source: { numbers: [1, 2, 3, 4, 5] } }],
           });
         });
       });
@@ -748,12 +716,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters numbers via matching AlwaysEvent (> 5)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'numbers',
-                source: { numbers: [6, 7, 8, 9, 10] },
-              },
-            ],
+            mergers: [{ key: 'numbers', source: { numbers: [6, 7, 8, 9, 10] } }],
           });
         });
       });
@@ -782,12 +745,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters numbers via matching AfterEvent (<= 3)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'numbers',
-                source: { numbers: [1, 2, 3] },
-              },
-            ],
+            mergers: [{ key: 'numbers', source: { numbers: [1, 2, 3] } }],
           });
         });
       });
@@ -813,12 +771,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters numbers via matching __internal always (> 5)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'numbers',
-                source: { numbers: [6, 7, 8, 9, 10] },
-              },
-            ],
+            mergers: [{ key: 'numbers', source: { numbers: [6, 7, 8, 9, 10] } }],
           });
         });
       });
@@ -844,12 +797,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters numbers via matching __internal after (<= 3)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'numbers',
-                source: { numbers: [1, 2, 3] },
-              },
-            ],
+            mergers: [{ key: 'numbers', source: { numbers: [1, 2, 3] } }],
           });
         });
       });
@@ -880,10 +828,7 @@ describe('Filter and Erase actions', () => {
         test('#02 => filters scores matching key condition (>= 80)', () => {
           expect(result).toEqual({
             mergers: [
-              {
-                key: 'scores',
-                source: { scores: { math: 90, history: 85 } },
-              },
+              { key: 'scores', source: { scores: { math: 90, history: 85 } } },
             ],
           });
         });
@@ -911,10 +856,7 @@ describe('Filter and Erase actions', () => {
         test('#02 => filters scores via else fallback (>= 70)', () => {
           expect(result).toEqual({
             mergers: [
-              {
-                key: 'scores',
-                source: { scores: { math: 90, physics: 75 } },
-              },
+              { key: 'scores', source: { scores: { math: 90, physics: 75 } } },
             ],
           });
         });
@@ -941,12 +883,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters scores via else condition (< 50)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'scores',
-                source: { scores: { english: 45 } },
-              },
-            ],
+            mergers: [{ key: 'scores', source: { scores: { english: 45 } } }],
           });
         });
       });
@@ -972,10 +909,7 @@ describe('Filter and Erase actions', () => {
         test('#02 => keeps all scores when falling back to nothing', () => {
           expect(result).toEqual({
             mergers: [
-              {
-                key: 'scores',
-                source: { scores: { math: 90, physics: 75 } },
-              },
+              { key: 'scores', source: { scores: { math: 90, physics: 75 } } },
             ],
           });
         });
@@ -995,9 +929,7 @@ describe('Filter and Erase actions', () => {
         }));
 
         const state = {
-          context: {
-            scores: { math: 90, physics: 75, history: 85, english: 45 },
-          },
+          context: { scores: { math: 90, physics: 75, history: 85, english: 45 } },
           event: alwaysEvent,
         } as any;
 
@@ -1008,10 +940,7 @@ describe('Filter and Erase actions', () => {
         test('#02 => filters scores via matching AlwaysEvent (>= 80)', () => {
           expect(result).toEqual({
             mergers: [
-              {
-                key: 'scores',
-                source: { scores: { math: 90, history: 85 } },
-              },
+              { key: 'scores', source: { scores: { math: 90, history: 85 } } },
             ],
           });
         });
@@ -1031,9 +960,7 @@ describe('Filter and Erase actions', () => {
         }));
 
         const state = {
-          context: {
-            scores: { math: 90, physics: 75, history: 85, english: 45 },
-          },
+          context: { scores: { math: 90, physics: 75, history: 85, english: 45 } },
           event: afterEvent,
         } as any;
 
@@ -1043,12 +970,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters scores via matching AfterEvent (< 50)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'scores',
-                source: { scores: { english: 45 } },
-              },
-            ],
+            mergers: [{ key: 'scores', source: { scores: { english: 45 } } }],
           });
         });
       });
@@ -1064,9 +986,7 @@ describe('Filter and Erase actions', () => {
         }));
 
         const state = {
-          context: {
-            scores: { math: 90, physics: 75, history: 85, english: 45 },
-          },
+          context: { scores: { math: 90, physics: 75, history: 85, english: 45 } },
           event: { __internal: always('idle'), type: 'NEXT', payload: {} },
         } as any;
 
@@ -1077,10 +997,7 @@ describe('Filter and Erase actions', () => {
         test('#02 => filters scores via matching __internal always (>= 80)', () => {
           expect(result).toEqual({
             mergers: [
-              {
-                key: 'scores',
-                source: { scores: { math: 90, history: 85 } },
-              },
+              { key: 'scores', source: { scores: { math: 90, history: 85 } } },
             ],
           });
         });
@@ -1097,9 +1014,7 @@ describe('Filter and Erase actions', () => {
         }));
 
         const state = {
-          context: {
-            scores: { math: 90, physics: 75, history: 85, english: 45 },
-          },
+          context: { scores: { math: 90, physics: 75, history: 85, english: 45 } },
           event: { __internal: after('idle'), type: 'NEXT', payload: {} },
         } as any;
 
@@ -1109,12 +1024,7 @@ describe('Filter and Erase actions', () => {
 
         test('#02 => filters scores via matching __internal after (< 50)', () => {
           expect(result).toEqual({
-            mergers: [
-              {
-                key: 'scores',
-                source: { scores: { english: 45 } },
-              },
-            ],
+            mergers: [{ key: 'scores', source: { scores: { english: 45 } } }],
           });
         });
       });

@@ -8,10 +8,7 @@ export const counterService = interpret(counterMachine, {
 
 export const trafficService = interpret(trafficMachine, {
   context: { cycles: 0 },
-  pContext: {
-    timers: { yellow: 1_000, green: 2_500, red: 4_000 },
-    speed: 1,
-  },
+  pContext: { timers: { yellow: 1_000, green: 2_500, red: 4_000 }, speed: 1 },
 });
 
 export type RootRouterContext = {

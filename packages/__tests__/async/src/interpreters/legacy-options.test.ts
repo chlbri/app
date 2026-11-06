@@ -20,9 +20,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // First call to addOptions - define increment
     machine.addOptions(({ assign }) => ({
-      actions: {
-        increment: assign( ({ context }) => context + 1),
-      },
+      actions: { increment: assign(({ context }) => context + 1) },
     }));
 
     // Second call to addOptions - access previous action via _legacy
@@ -50,9 +48,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // First call to addOptions - define increment
     machine.addOptions(({ assign }) => ({
-      actions: {
-        increment: assign( ({ context }) => context + 1),
-      },
+      actions: { increment: assign(({ context }) => context + 1) },
     }));
 
     // Second call to addOptions - access previous action via _legacy
@@ -102,7 +98,7 @@ describe.concurrent('Legacy Options Access', () => {
 
   test('#04 => should work with provideOptions', async () => {
     const machine = _machine4.provideOptions(({ assign }) => ({
-      actions: { add: assign( ({ context }) => context + 2) },
+      actions: { add: assign(({ context }) => context + 2) },
     }));
 
     // provideOptions on the result should also have access to _legacy
@@ -110,11 +106,7 @@ describe.concurrent('Legacy Options Access', () => {
       const previousAdd = _legacy.actions?.add;
       expect(previousAdd).toBeDefined();
 
-      return {
-        actions: {
-          multiply: assign( ({ context }) => context * 2),
-        },
-      };
+      return { actions: { multiply: assign(({ context }) => context * 2) } };
     });
 
     const service = interpret(machine2, { context: 1 });
@@ -133,7 +125,7 @@ describe.concurrent('Legacy Options Access', () => {
     const machine = _machine5;
 
     machine.addOptions(({ assign }) => ({
-      actions: { test: assign( ({ context }) => context + 1) },
+      actions: { test: assign(({ context }) => context + 1) },
     }));
 
     machine.addOptions((_, { _legacy }) => {
@@ -151,7 +143,7 @@ describe.concurrent('Legacy Options Access', () => {
 
     // First call
     machine.addOptions(({ assign }) => ({
-      actions: { first: assign( ({ context }) => context + 1) },
+      actions: { first: assign(({ context }) => context + 1) },
     }));
 
     // Second call - should see first
@@ -160,11 +152,7 @@ describe.concurrent('Legacy Options Access', () => {
       expect(_actions.first).toBeDefined();
       expect(_actions.second).toBeUndefined();
 
-      return {
-        actions: {
-          second: assign( ({ context }) => context + 10),
-        },
-      };
+      return { actions: { second: assign(({ context }) => context + 10) } };
     });
 
     // Third call - should see first and second
@@ -174,11 +162,7 @@ describe.concurrent('Legacy Options Access', () => {
       expect(_actions.second).toBeDefined();
       expect(_actions.third).toBeUndefined();
 
-      return {
-        actions: {
-          third: assign( ({ context }) => context + 100),
-        },
-      };
+      return { actions: { third: assign(({ context }) => context + 100) } };
     });
 
     const service = interpret(machine, { context: 0 });
@@ -202,9 +186,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // First call to service.addOptions - define increment
       service.addOptions(({ assign }) => ({
-        actions: {
-          increment: assign( ({ context }) => context + 1),
-        },
+        actions: { increment: assign(({ context }) => context + 1) },
       }));
 
       // Second call to service.addOptions - access previous action via _legacy
@@ -233,9 +215,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // First call to service.addOptions - define increment
       service.addOptions(({ assign }) => ({
-        actions: {
-          increment: assign( ({ context }) => context + 1),
-        },
+        actions: { increment: assign(({ context }) => context + 1) },
       }));
 
       service.start();
@@ -300,9 +280,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       // First call
       service.addOptions(({ assign }) => ({
-        actions: {
-          first: assign( ({ context }) => context + 5),
-        },
+        actions: { first: assign(({ context }) => context + 5) },
       }));
 
       // Second call - should see first
@@ -311,11 +289,7 @@ describe.concurrent('Legacy Options Access', () => {
         expect(_actions.first).toBeDefined();
         expect(_actions.second).toBeUndefined();
 
-        return {
-          actions: {
-            second: assign( ({ context }) => context + 20),
-          },
-        };
+        return { actions: { second: assign(({ context }) => context + 20) } };
       });
 
       service.start();
@@ -336,22 +310,16 @@ describe.concurrent('Legacy Options Access', () => {
 
       // First provideOptions - define add
       const service2 = service1.provideOptions(({ assign }) => ({
-        actions: { add: assign( ({ context }) => context + 3) },
+        actions: { add: assign(({ context }) => context + 3) },
       }));
 
       // Second provideOptions - access previous action via _legacy
-      const service3 = service2.provideOptions(
-        ({ assign }, { _legacy }) => {
-          const previousAdd = _legacy.actions?.add;
-          expect(previousAdd).toBeDefined();
+      const service3 = service2.provideOptions(({ assign }, { _legacy }) => {
+        const previousAdd = _legacy.actions?.add;
+        expect(previousAdd).toBeDefined();
 
-          return {
-            actions: {
-              multiply: assign( ({ context }) => context * 2),
-            },
-          };
-        },
-      );
+        return { actions: { multiply: assign(({ context }) => context * 2) } };
+      });
 
       service3.start();
       expect(service3.state.context).toBe(1);
@@ -368,9 +336,7 @@ describe.concurrent('Legacy Options Access', () => {
 
       const service1 = interpret(machine, { context: 0 });
       const service2 = service1.provideOptions(({ assign }) => ({
-        actions: {
-          increment: assign( ({ context }) => context + 1),
-        },
+        actions: { increment: assign(({ context }) => context + 1) },
       }));
 
       // Verify they are different instances
@@ -393,37 +359,25 @@ describe.concurrent('Legacy Options Access', () => {
       const service1 = interpret(machine, { context: 0 });
 
       const service2 = service1.provideOptions(({ assign }) => ({
-        actions: { op1: assign( ({ context }) => context + 1) },
+        actions: { op1: assign(({ context }) => context + 1) },
       }));
 
-      const service3 = service2.provideOptions(
-        ({ assign }, { _legacy }) => {
-          const _actions = (_legacy as any).actions;
-          expect(_actions.op1).toBeDefined();
-          expect(_actions.op2).toBeUndefined();
+      const service3 = service2.provideOptions(({ assign }, { _legacy }) => {
+        const _actions = (_legacy as any).actions;
+        expect(_actions.op1).toBeDefined();
+        expect(_actions.op2).toBeUndefined();
 
-          return {
-            actions: {
-              op2: assign( ({ context }) => context + 10),
-            },
-          };
-        },
-      );
+        return { actions: { op2: assign(({ context }) => context + 10) } };
+      });
 
-      const service4 = service3.provideOptions(
-        ({ assign }, { _legacy }) => {
-          const _actions = (_legacy as any).actions;
-          expect(_actions.op1).toBeDefined();
-          expect(_actions.op2).toBeDefined();
-          expect(_actions.op3).toBeUndefined();
+      const service4 = service3.provideOptions(({ assign }, { _legacy }) => {
+        const _actions = (_legacy as any).actions;
+        expect(_actions.op1).toBeDefined();
+        expect(_actions.op2).toBeDefined();
+        expect(_actions.op3).toBeUndefined();
 
-          return {
-            actions: {
-              op3: assign( ({ context }) => context + 100),
-            },
-          };
-        },
-      );
+        return { actions: { op3: assign(({ context }) => context + 100) } };
+      });
 
       service4.start();
 
@@ -443,9 +397,7 @@ describe.concurrent('Legacy Options Access', () => {
       const service1 = interpret(machine, { context: 10 });
 
       const service2 = service1.provideOptions(({ assign }) => ({
-        actions: {
-          increment: assign( ({ context }) => context + 5),
-        },
+        actions: { increment: assign(({ context }) => context + 5) },
       }));
 
       // Verify initial context is preserved

@@ -26,12 +26,7 @@ export const Expand: Component<ExpandProps> = props => {
   };
 
   return (
-    <div
-      class={cn(
-        'rounded-xl border overflow-hidden transition-all',
-        props.class,
-      )}
-    >
+    <div class={cn('rounded-xl border overflow-hidden transition-all', props.class)}>
       <button
         onClick={() => setIsOpen(prev => !prev)}
         class='w-full'

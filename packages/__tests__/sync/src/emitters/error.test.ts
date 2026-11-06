@@ -21,32 +21,30 @@ describe('Error transitions testing)', () => {
       complete: () => console.warn('Subject completed'),
     });
 
-    const machine = _raw_machine.provideOptions(
-      ({ assign, action }) => ({
-        actors: { emitters: { interval: () => createPausable(sub) } },
+    const machine = _raw_machine.provideOptions(({ assign, action }) => ({
+      actors: { emitters: { interval: () => createPausable(sub) } },
 
-        actions: {
-          assigN: assign({
-            'interval::next': ({ payload, context }) => context + payload,
-          }),
+      actions: {
+        assigN: assign({
+          'interval::next': ({ payload, context }) => context + payload,
+        }),
 
-          signals: action({
-            'interval::error': ({ payload }) => {
-              mock('Error received:', payload);
-            },
-            'interval::next': ({ payload }) => {
-              mock('NEXT received:', payload);
-            },
-          }),
-        },
-      }),
-    );
-
+        signals: action({
+          'interval::error': ({ payload }) => {
+            mock('Error received:', payload);
+          },
+          'interval::next': ({ payload }) => {
+            mock('NEXT received:', payload);
+          },
+        }),
+      },
+    }));
 
     const service = interpret(machine, { context: 0 });
 
-    const { useNext, useError, useContext, useMock, start, waiter } =
-      constructTests(service, ({ getIndex, contexts, waiter }) => ({
+    const { useNext, useError, useContext, useMock, start, waiter } = constructTests(
+      service,
+      ({ getIndex, contexts, waiter }) => ({
         useNext: (value: number) => {
           const invite = `#${getIndex()} => sub1.next(${value})`;
           return tupleOf(invite, () => {
@@ -73,7 +71,8 @@ describe('Error transitions testing)', () => {
 
         useContext: contexts(({ context }) => context),
         waiter: waiter(DELAY),
-      }));
+      }),
+    );
 
     test(...start());
     test(...useContext(0));

@@ -14,9 +14,7 @@ export const _type = type(({ litterals }) =>
   ),
 );
 
-export const style = type(({ record, union }) =>
-  record(union('string', 'number')),
-);
+export const style = type(({ record, union }) => record(union('string', 'number')));
 export const position = type(() => ({ x: 'number', y: 'number' }));
 
 export const node = type(({ use, optional }) => ({

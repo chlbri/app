@@ -32,17 +32,12 @@ export const useComponents = (service: Service) => {
       <Expand
         id='full-state-json'
         defaultOpen={defaultOpen}
-        className={cn(
-          'border-slate-800 bg-slate-900/60 shadow-lg',
-          className,
-        )}
+        className={cn('border-slate-800 bg-slate-900/60 shadow-lg', className)}
         title={({ isOpen }) => (
           <div className='flex w-full cursor-pointer items-center justify-between bg-slate-900 px-4 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/80'>
             <div className='flex items-center space-x-2.5'>
               <Code2 className='size-4 text-yellow-700' />
-              <h2 className='font-semibold text-slate-200'>
-                Full State JSON
-              </h2>
+              <h2 className='font-semibold text-slate-200'>Full State JSON</h2>
             </div>
 
             <div className='flex items-center space-x-2'>
@@ -86,9 +81,7 @@ export const useComponents = (service: Service) => {
   const Status = wrap.noParams(
     () => hooks.state({ selector: s => s.status }),
 
-    value => (
-      <span className='font-semibold text-white capitalize'>{value}</span>
-    ),
+    value => <span className='font-semibold text-white capitalize'>{value}</span>,
   );
 
   const Count = wrap.noParams(
@@ -106,9 +99,7 @@ export const useComponents = (service: Service) => {
   );
 
   const _isReady = () =>
-    hooks.state({
-      selector: s => s.status !== 'idle' && s.status !== 'stopped',
-    });
+    hooks.state({ selector: s => s.status !== 'idle' && s.status !== 'stopped' });
 
   const StateIdle = wrap.noParams(
     () => {
@@ -151,9 +142,7 @@ export const useComponents = (service: Service) => {
         <div className='text-lg font-bold text-teal-400'>active</div>
         <StateValue
           render={stateValue => (
-            <div className='mt-2 truncate text-xs text-slate-400'>
-              {stateValue}
-            </div>
+            <div className='mt-2 truncate text-xs text-slate-400'>{stateValue}</div>
           )}
         />
       </div>
@@ -349,17 +338,12 @@ useComponents.test = (service: Service) => {
       <Expand
         id='full-state-json'
         defaultOpen={defaultOpen}
-        className={cn(
-          'border-slate-800 bg-slate-900/60 shadow-lg',
-          className,
-        )}
+        className={cn('border-slate-800 bg-slate-900/60 shadow-lg', className)}
         title={({ isOpen }) => (
           <div className='flex w-full cursor-pointer items-center justify-between bg-slate-900 px-4 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/80'>
             <div className='flex items-center space-x-2.5'>
               <Code2 className='size-4 text-yellow-700' />
-              <h2 className='font-semibold text-slate-200'>
-                Full State JSON
-              </h2>
+              <h2 className='font-semibold text-slate-200'>Full State JSON</h2>
             </div>
 
             <div className='flex items-center space-x-2'>

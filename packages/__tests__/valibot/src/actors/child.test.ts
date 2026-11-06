@@ -3,9 +3,7 @@ import { createValibotTests } from '../fixtures';
 
 describe('TESTS', () => {
   describe('#01 => ChildConfig_Schema', () => {
-    const { acceptation, success } = createValibotTests(
-      ChildConfig_Schema(),
-    );
+    const { acceptation, success } = createValibotTests(ChildConfig_Schema());
 
     describe('#01 => Acceptation', acceptation);
 
@@ -24,9 +22,7 @@ describe('TESTS', () => {
         },
         {
           invite: 'both contexts and on => true',
-          parameters: [
-            { contexts: { key: 'value' }, on: { target1: ['target2'] } },
-          ],
+          parameters: [{ contexts: { key: 'value' }, on: { target1: ['target2'] } }],
           expected: true,
         },
         {

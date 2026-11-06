@@ -6,40 +6,27 @@ import _raw_machine from './sendToActions1.machine';
 vi.useFakeTimers();
 
 describe('Performs send to itself actions', () => {
-  const machine = _raw_machine.provideOptions(
-    ({ assign, forceSend, resend }) => ({
-      actions: {
-        inc: assign(
-          'iterator',
-          ({ context }) => notU(context?.iterator) + 1,
-        ),
+  const machine = _raw_machine.provideOptions(({ assign, forceSend, resend }) => ({
+    actions: {
+      inc: assign('iterator', ({ context }) => notU(context?.iterator) + 1),
 
-        init: assign(() => ({ iterator: 0 })),
+      init: assign(() => ({ iterator: 0 })),
 
-        dec: assign(
-          'iterator',
-          ({ context }) => notU(context?.iterator) - 1,
-        ),
+      dec: assign('iterator', ({ context }) => notU(context?.iterator) - 1),
 
-        forceSendInc: forceSend('INCREMENT'),
-        sendDec: resend('DECREMENT'),
-      },
-
-    }),
-  );
+      forceSendInc: forceSend('INCREMENT'),
+      sendDec: resend('DECREMENT'),
+    },
+  }));
 
   const service = interpret(machine, { context: {} });
-  const { useIterator, start, dispose, useStateValue, send } =
-    constructTests(
-      service,
-      ({ contexts: constructContexts }) => ({
-        useIterator: constructContexts(
-          ({ context }) => context?.iterator,
-          'iterator',
-        ),
-      }),
-      1,
-    );
+  const { useIterator, start, dispose, useStateValue, send } = constructTests(
+    service,
+    ({ contexts: constructContexts }) => ({
+      useIterator: constructContexts(({ context }) => context?.iterator, 'iterator'),
+    }),
+    1,
+  );
   // #endregion
 
   test(...start());

@@ -9,11 +9,7 @@ describe('TESTS', () => {
   describe(
     '#02 => CASES',
     success(
-      {
-        invite: 'single action => true',
-        parameters: ['action1'],
-        expected: true,
-      },
+      { invite: 'single action => true', parameters: ['action1'], expected: true },
       {
         invite: 'array of string action #1 => true',
         parameters: [['action1']],
@@ -34,19 +30,14 @@ describe('TESTS', () => {
         invite:
           'array with elements having guards, and last element without guard => true',
         parameters: [
-          [
-            { actions: 'action1', guards: 'guard1' },
-            { actions: 'action2' },
-          ],
+          [{ actions: 'action1', guards: 'guard1' }, { actions: 'action2' }],
         ],
         expected: true,
       },
       {
         invite:
           'array with elements having guards, and last element is simple action => true',
-        parameters: [
-          [{ actions: 'action1', guards: 'guard1' }, 'action2'],
-        ],
+        parameters: [[{ actions: 'action1', guards: 'guard1' }, 'action2']],
         expected: true,
       },
       {
@@ -54,11 +45,7 @@ describe('TESTS', () => {
         parameters: [[{ actions: 'action1' }, { actions: 'action2' }]],
         expected: false,
       },
-      {
-        invite: 'empty array => false',
-        parameters: [[]],
-        expected: false,
-      },
+      { invite: 'empty array => false', parameters: [[]], expected: false },
     ),
   );
 });

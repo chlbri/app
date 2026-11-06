@@ -12,11 +12,9 @@ const badgeVariants = cva(
         secondary: 'border border-slate-700 bg-slate-800 text-slate-300',
         active:
           'border border-teal-500/30 bg-teal-500/15 text-teal-300 animate-pulse',
-        warning:
-          'border border-amber-500/30 bg-amber-500/10 text-amber-300',
+        warning: 'border border-amber-500/30 bg-amber-500/10 text-amber-300',
         danger: 'border border-rose-500/30 bg-rose-500/10 text-rose-300',
-        purple:
-          'border border-purple-500/30 bg-purple-500/10 text-purple-300',
+        purple: 'border border-purple-500/30 bg-purple-500/10 text-purple-300',
         blue: 'border border-sky-500/30 bg-sky-500/10 text-sky-300',
       },
     },
@@ -25,15 +23,8 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends
-    React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}
 
 export function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <div
-      className={cn(badgeVariants({ variant }), className)}
-      {...props}
-    />
-  );
+  return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
 }

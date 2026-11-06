@@ -60,10 +60,7 @@ describe('machine coverage', () => {
         return tupleOf(invite, func);
       },
 
-      useIterator: contexts(
-        ({ context }) => context?.iterator,
-        'iterator',
-      ),
+      useIterator: contexts(({ context }) => context?.iterator, 'iterator'),
     }));
 
     const subscriber = service.subscribe(

@@ -10,7 +10,7 @@ import { extractPContextType } from './pContext';
  *
  * @returns Found call node or `null`.
  */
-const findCreateMachineCall = (callNode: any): any | null => {
+const findCreateMachineCall = (callNode: any): any => {
   const callee = callNode.getExpression?.();
   if (!callee) return null;
 

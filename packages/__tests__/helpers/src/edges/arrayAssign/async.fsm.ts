@@ -11,11 +11,10 @@ export default createMachine(
 ).provideOptions(({ assign }) => {
   return {
     actions: {
-      incthearray: assign(
-        ['number1', 'number2'],
-        ({ context }) => [context.number1 + 1, context.number2 + 1],
-      ),
+      incthearray: assign(['number1', 'number2'], ({ context }) => [
+        context.number1 + 1,
+        context.number2 + 1,
+      ]),
     },
-
   };
 });

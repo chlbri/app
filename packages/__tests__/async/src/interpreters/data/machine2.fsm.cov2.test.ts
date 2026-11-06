@@ -83,10 +83,7 @@ describe('machine coverage', () => {
       return {
         waiter: w(DELAY),
         useWrite: sender('WRITE'),
-        useIterator: contexts(
-          ({ context }) => context?.iterator,
-          'iterator',
-        ),
+        useIterator: contexts(({ context }) => context?.iterator, 'iterator'),
         useInput: contexts(({ context }) => context?.input, 'input'),
         useData,
       };

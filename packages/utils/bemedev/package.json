@@ -2,41 +2,38 @@
   "name": "@bemedev/app-utils-bemedev",
   "version": "0.2.0",
   "private": false,
+  "keywords": [],
+  "license": "MIT",
   "author": {
-    "email": "bri_lvi@icloud.com",
     "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
     "url": "https://bemedev.vercel.app"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/chlbri/app"
   },
-  "license": "MIT",
-  "type": "module",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "module": "lib/index.js",
-  "keywords": [],
   "files": [
     "lib"
   ],
-  "engines": {
-    "node": ">=24"
-  },
+  "type": "module",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown",
-    "pretest": "pnpm run build",
-    "_ci": "pnpm run lint && pnpm run test",
-    "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
+    "build": "vp run rm:lib && vp run rolldown",
+    "pretest": "vp run build",
+    "_ci": "vp run lint && vp run test",
+    "ci": "CI_START=$(date +%s) && vp run _ci && vp run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "fmt": "vp fmt",
     "fmt:check": "vp fmt --check",
     "_lint": "vp lint",
-    "test": "pnpm run size && pnpm run fmt",
+    "test": "vp run size && vp run fmt",
     "lint:fix": "vp lint --fix",
-    "lint": "pnpm run fmt && pnpm run lint:fix",
+    "lint": "vp run fmt && vp run lint:fix",
     "p-q": "pretty-quick",
-    "rm": "pnpx rimraf ./node_modules ./pnpm-lock.yaml",
-    "rm:lib": "pnpx rimraf ./lib",
+    "rm": "vp dlx rimraf ./node_modules ./pnpm-lock.yaml",
+    "rm:lib": "vp dlx rimraf ./lib",
     "size": "size-limit",
     "rolldown": "rolldown -c"
   },
@@ -69,5 +66,8 @@
       "path": "lib/*.d.ts",
       "limit": "10 KB"
     }
-  ]
+  ],
+  "engines": {
+    "node": ">=24"
+  }
 }

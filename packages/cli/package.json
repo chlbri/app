@@ -1,25 +1,28 @@
 {
   "name": "@bemedev/app-cli",
   "version": "2.7.2",
-  "description": "CLI tool and AST parseTree parser for @bemedev/app",
   "private": false,
+  "description": "CLI tool and AST parseTree parser for @bemedev/app",
+  "license": "MIT",
   "author": {
-    "email": "bri_lvi@icloud.com",
     "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
     "url": "https://bemedev.vercel.app"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/chlbri/app"
   },
-  "license": "MIT",
-  "type": "module",
   "bin": {
     "app-cli": "lib/bin.js"
   },
+  "files": [
+    "lib"
+  ],
+  "type": "module",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "import": "./lib/index.js",
@@ -27,30 +30,24 @@
       "types": "./lib/index.d.ts"
     }
   },
-  "files": [
-    "lib"
-  ],
-  "engines": {
-    "node": ">=24"
-  },
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown && chmod +x lib/bin.js",
-    "_ci": "pnpm run lint && pnpm run test",
-    "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
+    "build": "vp run rm:lib && vp run rolldown && chmod +x lib/bin.js",
+    "_ci": "vp run lint && vp run test",
+    "ci": "CI_START=$(date +%s) && vp run _ci && vp run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "_lint": "vp lint",
     "lint:fix": "vp lint --fix",
-    "lint": "pnpm run fmt && pnpm run lint:fix",
+    "lint": "vp run fmt && vp run lint:fix",
     "p-q": "pretty-quick",
-    "posttest": "pnpm run fmt",
-    "pretest": "pnpm run build && pnpm run size",
+    "posttest": "vp run fmt",
+    "pretest": "vp run build && vp run size",
     "fmt": "vp fmt",
     "fmt:check": "vp fmt --check",
-    "rm:lib": "pnpx rimraf ./lib",
+    "rm:lib": "vp dlx rimraf ./lib",
     "rolldown": "rolldown -c",
     "size": "size-limit",
     "test:coverage": "vp test run",
-    "test": "pnpm run test:coverage --no-coverage",
-    "test:only": "pnpm run test",
+    "test": "vp run test:coverage --no-coverage",
+    "test:only": "vp run test",
     "test:watch": "vp test"
   },
   "dependencies": {
@@ -62,9 +59,6 @@
     "fast-glob": "^3.3.3",
     "node-watch": "^0.7.4",
     "ts-morph": "^28.0.0"
-  },
-  "peerDependencies": {
-    "@bemedev/app": "workspace:^"
   },
   "devDependencies": {
     "@bemedev/app": "workspace:^",
@@ -80,8 +74,11 @@
     "tslib": "^2.8.1",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
-    "vitest": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@bemedev/app": "workspace:^"
   },
   "size-limit": [
     {
@@ -96,5 +93,8 @@
       "path": "lib/*.d.ts",
       "limit": "10 KB"
     }
-  ]
+  ],
+  "engines": {
+    "node": ">=24"
+  }
 }

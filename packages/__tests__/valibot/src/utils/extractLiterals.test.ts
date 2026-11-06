@@ -10,11 +10,7 @@ describe('#01 => extractLiterals', () => {
   const schemaBool = v.union([v.literal(true), v.literal(false)]);
   const resultBool = extractLiterals(schemaBool);
 
-  const schemaMixed = v.union([
-    v.literal('a'),
-    v.literal(1),
-    v.literal(true),
-  ]);
+  const schemaMixed = v.union([v.literal('a'), v.literal(1), v.literal(true)]);
   const resultMixed = extractLiterals(schemaMixed);
 
   test('#01 => str', () => expect(resultStr).toEqual(['a', 'b']));

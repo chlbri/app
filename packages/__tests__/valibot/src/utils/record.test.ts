@@ -8,8 +8,7 @@ describe('#01 => recordV schema', () => {
   describe('#01 => valid record', () => {
     const result = v.safeParse(schema, { a: 'hello', b: 'world' });
 
-    test('#01 => success is true', () =>
-      expect(result.success).toBe(true));
+    test('#01 => success is true', () => expect(result.success).toBe(true));
 
     test('#02 => output matches', () => {
       expect(result.output).toEqual({ a: 'hello', b: 'world' });

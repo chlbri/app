@@ -27,9 +27,7 @@ export const Expand: React.FC<ExpandProps> = ({
 
   const renderSlot = (slot: ExpandSlot) => {
     if (typeof slot === 'function') {
-      const SlotComponent = slot as (
-        props: ExpandSlotProps,
-      ) => React.ReactNode;
+      const SlotComponent = slot as (props: ExpandSlotProps) => React.ReactNode;
       return SlotComponent({ isOpen });
     }
     return slot;
@@ -39,10 +37,7 @@ export const Expand: React.FC<ExpandProps> = ({
 
   return (
     <div
-      className={cn(
-        'rounded-xl border overflow-hidden transition-all',
-        className,
-      )}
+      className={cn('rounded-xl border overflow-hidden transition-all', className)}
     >
       <div
         onClick={toggle}

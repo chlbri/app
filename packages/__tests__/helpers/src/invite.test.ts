@@ -10,16 +10,8 @@ describe('buildIndex', () => {
     success(
       { invite: 'default values', parameters: [], expected: '0' },
       { invite: 'index = 0, max = 0', parameters: [0, 0], expected: '0' },
-      {
-        invite: 'index = 1, max = 10',
-        parameters: [1, 10],
-        expected: '01',
-      },
-      {
-        invite: 'index = 5, max = 100',
-        parameters: [5, 100],
-        expected: '005',
-      },
+      { invite: 'index = 1, max = 10', parameters: [1, 10], expected: '01' },
+      { invite: 'index = 5, max = 100', parameters: [5, 100], expected: '005' },
     ),
   );
 

@@ -21,11 +21,7 @@ describe('TESTS', () => {
           parameters: [{ event1: null }],
           expected: false,
         },
-        {
-          invite: 'non-object value',
-          parameters: ['foo'],
-          expected: false,
-        },
+        { invite: 'non-object value', parameters: ['foo'], expected: false },
       ),
     );
   });

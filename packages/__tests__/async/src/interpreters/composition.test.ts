@@ -364,7 +364,6 @@ describe('Composition', () => {
       delays: { DELAY: 1000 },
     }));
 
-
     const service = interpret(machine, { context: { iterator: 0 } });
 
     test('#00 => Reset all mocks', () => {

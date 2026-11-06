@@ -37,8 +37,7 @@ export default createMachine(
                 'addMandatoryIntermediary',
                 {
                   name: 'addBlockImmoIntermediary',
-                  description:
-                    'BLOCK_IMMO is here the second intermediary',
+                  description: 'BLOCK_IMMO is here the second intermediary',
                 },
               ],
             },
@@ -99,10 +98,7 @@ export default createMachine(
         asset,
         intermediaries: array(intermediary),
         internetStatus: 'boolean',
-        errors: partial({
-          noAsset: 'string',
-          intermediary: { offline: 'string' },
-        }),
+        errors: partial({ noAsset: 'string', intermediary: { offline: 'string' } }),
       }),
     ),
   },
@@ -146,10 +142,10 @@ export default createMachine(
     addIntermediary: assign(
       'intermediaries',
       {
-        ADD_INTERMEDIARY: async ({
+        ADD_INTERMEDIARY: async ({ payload, context: { intermediaries = [] } }) => [
+          ...intermediaries,
           payload,
-          context: { intermediaries = [] },
-        }) => [...intermediaries, payload],
+        ],
       },
       { catch: emptyActionFn },
     ),
@@ -160,30 +156,22 @@ export default createMachine(
     ),
   },
 
-
   guards: {
     assetIsDefined: { START: ({ payload }) => !!payload.asset },
 
     mandatoryIsDefined: { START: ({ payload }) => !!payload.mandatory },
 
-    intermediariesAreNotFull: ({
-      context: { asset, intermediaries = [] },
-    }) => {
+    intermediariesAreNotFull: ({ context: { asset, intermediaries = [] } }) => {
       const value = asset!.value;
       const max = value > 30_000_000 ? 7 : value > 3_000_000 ? 5 : 3;
 
       return intermediaries.length < max;
     },
     intermediaryIsNotAdded: {
-      ADD_INTERMEDIARY: ({
-        context: { intermediaries = [] },
-        payload,
-      }) => {
+      ADD_INTERMEDIARY: ({ context: { intermediaries = [] }, payload }) => {
         const check =
           payload &&
-          !intermediaries.some(
-            intermediary => intermediary.id === payload.id,
-          );
+          !intermediaries.some(intermediary => intermediary.id === payload.id);
         return check;
       },
     },

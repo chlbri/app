@@ -12,9 +12,7 @@ import _machine from './common.machine';
 
 describe('#01 => useService', () => {
   const machine = _machine.provideOptions(({ assign }) => ({
-    actions: {
-      increment: assign('count', ({ context }) => context.count + 1),
-    },
+    actions: { increment: assign('count', ({ context }) => context.count + 1) },
   }));
 
   const service = interpret(machine, { context: { count: 0 } });
@@ -191,18 +189,13 @@ describe('#01 => useService', () => {
 
 describe('#02 => standalone useState', () => {
   const machine = _machine.provideOptions(({ assign }) => ({
-    actions: {
-      increment: assign('count', ({ context }) => context.count + 1),
-    },
+    actions: { increment: assign('count', ({ context }) => context.count + 1) },
   }));
 
   const service = interpret(machine, { context: { count: 10 } });
 
   const { result } = renderHook(() =>
-    useState(service, {
-      selector: s => s.context.count,
-      equals: (a, b) => a === b,
-    }),
+    useState(service, { selector: s => s.context.count, equals: (a, b) => a === b }),
   );
 
   test('#00 => initial count is 10', () => {
@@ -222,9 +215,7 @@ describe('#02 => standalone useState', () => {
 
 describe('#03 => standalone useCan addons', () => {
   const machine = _machine.provideOptions(({ assign }) => ({
-    actions: {
-      increment: assign('count', ({ context }) => context.count + 1),
-    },
+    actions: { increment: assign('count', ({ context }) => context.count + 1) },
   }));
 
   const service = interpret(machine, { context: { count: 0 } });
@@ -265,9 +256,7 @@ describe('#03 => standalone useCan addons', () => {
 
 describe('#04 => standalone useIsInside addons', () => {
   const machine = _machine.provideOptions(({ assign }) => ({
-    actions: {
-      increment: assign('count', ({ context }) => context.count + 1),
-    },
+    actions: { increment: assign('count', ({ context }) => context.count + 1) },
   }));
 
   const service = interpret(machine, { context: { count: 0 } });
@@ -308,9 +297,7 @@ describe('#04 => standalone useIsInside addons', () => {
 
 describe('#05 => stateEquals vs equals difference in useState', () => {
   const machine = _machine.provideOptions(({ assign }) => ({
-    actions: {
-      increment: assign('count', ({ context }) => context.count + 1),
-    },
+    actions: { increment: assign('count', ({ context }) => context.count + 1) },
   }));
 
   const service = interpret(machine, { context: { count: 0 } });
@@ -327,10 +314,7 @@ describe('#05 => stateEquals vs equals difference in useState', () => {
 
   // 2. Normal state tracking
   const defaultState = renderHook(() =>
-    useState(service, {
-      selector: s => s.context.count,
-      equals: (a, b) => a === b,
-    }),
+    useState(service, { selector: s => s.context.count, equals: (a, b) => a === b }),
   );
 
   // 3. Notifies via stateEquals but equals ignores changes

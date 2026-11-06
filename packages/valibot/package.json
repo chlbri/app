@@ -2,27 +2,18 @@
   "name": "@bemedev/app-valibot",
   "version": "2.7.2",
   "description": "Valibot schemas and validation helpers for @bemedev/app",
-  "author": {
-    "email": "bri_lvi@icloud.com",
-    "name": "chlbri",
-    "url": "https://bemedev.vercel.app"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/chlbri/app"
-  },
+  "keywords": [
+    "state machines",
+    "typescript",
+    "valibot",
+    "validation"
+  ],
   "homepage": "https://github.com/chlbri/app/blob/main/packages/valibot/README.md",
   "license": "MIT",
-  "type": "module",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "module": "lib/index.js",
-  "exports": {
-    ".": {
-      "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
-      "types": "./lib/index.d.ts"
-    }
+  "author": {
+    "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
+    "url": "https://bemedev.vercel.app"
   },
   "maintainers": [
     {
@@ -38,34 +29,44 @@
       "url": "https://bemedev.vercel.app"
     }
   ],
-  "keywords": [
-    "typescript",
-    "state machines",
-    "valibot",
-    "validation"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chlbri/app"
+  },
   "files": [
     "lib"
   ],
-  "engines": {
-    "node": ">=24"
+  "type": "module",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    }
   },
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown",
-    "_ci": "pnpm run lint && pnpm run test",
-    "pretest": "pnpm run build",
-    "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
+    "build": "vp run rm:lib && vp run rolldown",
+    "_ci": "vp run lint && vp run test",
+    "pretest": "vp run build",
+    "ci": "CI_START=$(date +%s) && vp run _ci && vp run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
     "fmt": "vp fmt",
     "fmt:check": "vp fmt --check",
     "_lint": "vp lint",
-    "test": "pnpm run size && pnpm run fmt",
+    "test": "vp run size && vp run fmt",
     "lint:fix": "vp lint --fix",
-    "lint": "pnpm run fmt && pnpm run lint:fix",
+    "lint": "vp run fmt && vp run lint:fix",
     "p-q": "pretty-quick",
-    "rm": "pnpx rimraf ./node_modules ./pnpm-lock.yaml",
-    "rm:lib": "pnpx rimraf ./lib",
+    "rm": "vp dlx rimraf ./node_modules ./pnpm-lock.yaml",
+    "rm:lib": "vp dlx rimraf ./lib",
     "size": "size-limit",
     "rolldown": "rolldown -c"
+  },
+  "dependencies": {
+    "@bemedev/better-set": "^0.2.1",
+    "@bemedev/typings": "^1.4.1"
   },
   "devDependencies": {
     "@bemedev/app": "workspace:^",
@@ -82,8 +83,12 @@
     "tslib": "^2.8.1",
     "typescript": "6.0.3",
     "valibot": "^1.5.0",
-    "vitest": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@bemedev/app": "workspace:^",
+    "valibot": "^1.4.2"
   },
   "size-limit": [
     {
@@ -99,12 +104,7 @@
       "limit": "10 KB"
     }
   ],
-  "dependencies": {
-    "@bemedev/better-set": "^0.2.1",
-    "@bemedev/typings": "^1.4.1"
-  },
-  "peerDependencies": {
-    "@bemedev/app": "workspace:^",
-    "valibot": "^1.4.2"
+  "engines": {
+    "node": ">=24"
   }
 }

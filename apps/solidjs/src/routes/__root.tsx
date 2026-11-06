@@ -8,11 +8,7 @@ import {
 } from '@tanstack/solid-router';
 import { HydrationScript } from 'solid-js/web';
 import appCss from '../app.css?url';
-import {
-  counterService,
-  trafficService,
-  type RootRouterContext,
-} from '../services';
+import { counterService, trafficService, type RootRouterContext } from '../services';
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
   head: () => ({
@@ -53,9 +49,7 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
                   <h1 class='bg-linear-to-r from-indigo-300 via-white to-purple-300 bg-clip-text text-base font-bold text-transparent'>
                     @bemedev/app-solidjs
                   </h1>
-                  <p class='text-xs text-slate-400'>
-                    TanStack Start Visual Tester
-                  </p>
+                  <p class='text-xs text-slate-400'>TanStack Start Visual Tester</p>
                 </div>
               </div>
 
@@ -63,8 +57,7 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
                 <Link
                   to='/'
                   activeProps={{
-                    class:
-                      'bg-indigo-600/30 text-indigo-300 border-indigo-500/50',
+                    class: 'bg-indigo-600/30 text-indigo-300 border-indigo-500/50',
                   }}
                   inactiveProps={{
                     class:
@@ -78,8 +71,7 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
                 <Link
                   to='/counter'
                   activeProps={{
-                    class:
-                      'bg-indigo-600/30 text-indigo-300 border-indigo-500/50',
+                    class: 'bg-indigo-600/30 text-indigo-300 border-indigo-500/50',
                   }}
                   inactiveProps={{
                     class:
@@ -92,8 +84,7 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
                 <Link
                   to='/traffic'
                   activeProps={{
-                    class:
-                      'bg-indigo-600/30 text-indigo-300 border-indigo-500/50',
+                    class: 'bg-indigo-600/30 text-indigo-300 border-indigo-500/50',
                   }}
                   inactiveProps={{
                     class:

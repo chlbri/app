@@ -47,11 +47,7 @@ export const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn('text-sm text-slate-400', className)}
-    {...props}
-  />
+  <p ref={ref} className={cn('text-sm text-slate-400', className)} {...props} />
 ));
 CardDescription.displayName = 'CardDescription';
 
@@ -69,10 +65,7 @@ export const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn(
-      'flex items-center pt-4 border-t border-slate-800/80',
-      className,
-    )}
+    className={cn('flex items-center pt-4 border-t border-slate-800/80', className)}
     {...props}
   />
 ));

@@ -11,9 +11,7 @@ describe('Edges machines validation', () => {
     expect(validate.safe(atomicMachine.config).success).toBe(true));
 
   test('#02 => arrayAssign async.async.fsm', () =>
-    expect(validate.safe(arrayAssignAsyncAsync.config).success).toBe(
-      true,
-    ));
+    expect(validate.safe(arrayAssignAsyncAsync.config).success).toBe(true));
 
   test('#03 => arrayAssign async.fsm', () =>
     expect(validate.safe(arrayAssignAsync.config).success).toBe(true));
@@ -22,9 +20,7 @@ describe('Edges machines validation', () => {
     expect(validate.safe(arrayAssignComplex.config).success).toBe(true));
 
   test('#05 => arrayAssign complex.sync.fsm', () =>
-    expect(validate.safe(arrayAssignComplexSync.config).success).toBe(
-      true,
-    ));
+    expect(validate.safe(arrayAssignComplexSync.config).success).toBe(true));
 
   test('#06 => arrayAssign sync.machine', () =>
     expect(validate.safe(arrayAssignSync.config).success).toBe(true));

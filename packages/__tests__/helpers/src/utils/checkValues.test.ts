@@ -40,47 +40,35 @@ describe('checkValues', () => {
     });
 
     test('#03 => non-matching value resolves to false', async () => {
-      await expect(checkValues.async('z', 'a', 'b', 'c')).resolves.toBe(
-        false,
-      );
+      await expect(checkValues.async('z', 'a', 'b', 'c')).resolves.toBe(false);
     });
 
     test('#04 => undefined value when listed resolves to true', async () => {
-      await expect(
-        checkValues.async(undefined, 'a', undefined),
-      ).resolves.toBe(true);
+      await expect(checkValues.async(undefined, 'a', undefined)).resolves.toBe(true);
     });
 
     test('#05 => undefined value when not listed resolves to false', async () => {
-      await expect(checkValues.async(undefined, 'a', 'b')).resolves.toBe(
-        false,
-      );
+      await expect(checkValues.async(undefined, 'a', 'b')).resolves.toBe(false);
     });
   });
 
   describe('#04 => checkValues.async.undefined', () => {
     test('#01 => undefined value resolves to true', async () => {
-      await expect(
-        checkValues.async.undefined(undefined, 'a', 'b'),
-      ).resolves.toBe(true);
-    });
-
-    test('#02 => undefined value with empty values resolves to true', async () => {
-      await expect(checkValues.async.undefined(undefined)).resolves.toBe(
+      await expect(checkValues.async.undefined(undefined, 'a', 'b')).resolves.toBe(
         true,
       );
     });
 
+    test('#02 => undefined value with empty values resolves to true', async () => {
+      await expect(checkValues.async.undefined(undefined)).resolves.toBe(true);
+    });
+
     test('#03 => matching defined value resolves to true', async () => {
-      await expect(
-        checkValues.async.undefined('a', 'a', 'b'),
-      ).resolves.toBe(true);
+      await expect(checkValues.async.undefined('a', 'a', 'b')).resolves.toBe(true);
     });
 
     test('#04 => non-matching defined value resolves to false', async () => {
-      await expect(
-        checkValues.async.undefined('c', 'a', 'b'),
-      ).resolves.toBe(false);
+      await expect(checkValues.async.undefined('c', 'a', 'b')).resolves.toBe(false);
     });
   });
 });
