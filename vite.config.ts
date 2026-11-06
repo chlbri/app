@@ -194,7 +194,7 @@ export default defineConfig({
       'packages/__tests__/async/vitest.config.ts',
       'packages/__tests__/helpers/vitest.config.ts',
       'packages/__tests__/valibot/vitest.config.ts',
-      'packages/cli/vitest.config.ts',
+      'packages/cli/vite.config.ts',
       'apps/reactjs/vite.config.ts',
       'apps/solidjs/vite.config.ts',
     ],

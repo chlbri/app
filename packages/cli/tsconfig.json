@@ -25,5 +25,5 @@
     "noEmit": true,
     "declarationMap": true
   },
-  "exclude": ["rolldown.config.ts", "vitest.config.ts"]
+  "exclude": ["./rolldown.config.ts", "./vitest.config.ts", "./vite.config.ts"]
 }

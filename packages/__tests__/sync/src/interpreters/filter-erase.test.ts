@@ -192,7 +192,7 @@ describe('Filter and Erase actions', () => {
           actions: {
             addNumbers: assign('numbers', { ADD: ({ payload }) => payload.values }),
             filterEven: filter('numbers', {
-              FILTER: (num, index, state) => {
+              FILTER: (num, _, state) => {
                 expect(state).toHaveProperty('context');
                 return num % 2 === 0;
               },

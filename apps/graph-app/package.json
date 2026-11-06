@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prebuild": "vp run --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-reactjs build",
     "dev": "vp dev",
     "generate-routes": "tsr generate",
     "app:types": "app-cli generate -c ./src/services",
@@ -35,11 +36,11 @@
     "@tailwindcss/typography": "^0.5.20",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.167.46",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "typescript": "6.0.3",
+    "@vitejs/plugin-react": "^6.2.1",
+    "typescript": "7.0.2",
     "vite": "catalog:",
     "vite-plus": "catalog:"
   },

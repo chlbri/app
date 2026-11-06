@@ -87,11 +87,11 @@ export default createMachine(
   const spy = vi.spyOn(process, 'cwd');
   const WAITER = 500;
 
-  beforeAll(() => {
-    // if (IS_EXTENSION) {
-    spy.mockReturnValue(resolve(process.cwd(), 'packages/cli'));
-    // }
-  });
+  // beforeAll(() => {
+  //   // if (IS_EXTENSION) {
+  //   spy.mockReturnValue(resolve(process.cwd(), 'packages/cli'));
+  //   // }
+  // });
 
   afterAll(() => spy.mockRestore());
 

@@ -17,15 +17,15 @@
     "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
     "@bemedev/decompose": "^2.3.0",
-    "@bemedev/dev-utils": "^1.5.0",
+    "@bemedev/dev-utils": "^1.5.2",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/sequence": "^1.0.0",
     "@bemedev/sleep": "^0.2.2",
     "@bemedev/typings": "^1.4.1",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "rxjs": "^7.8.2",
     "tsx": "^4.23.15",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vitest": "catalog:",
     "vite-plus": "catalog:"
   }
