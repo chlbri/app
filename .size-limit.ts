@@ -1,5 +1,5 @@
-import { globSync } from 'node:fs';
-import { join, relative, basename, dirname } from 'node:path';
+import { globSync } from 'fs';
+import { join, relative, basename, dirname } from 'path';
 import type { SizeLimitConfig } from 'size-limit';
 
 const root = import.meta.dirname;
