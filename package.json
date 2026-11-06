@@ -41,7 +41,7 @@
     "lint": "vp fmt && vp lint --fix",
     "size": "size-limit --config ./.size-limit.ts",
     "test": "vp test",
-    "pretest": "vp run -r --sort pretest",
+    "pretest": "vp run -r pretest",
     "posttest": "vp run -r posttest && vp run size",
     "test:only": "vp test run --silent",
     "rm": "vp run rimraf node_modules pnpm-lock.yaml && pnpm clean --lockfile",
