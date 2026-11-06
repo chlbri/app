@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { isNodeConfig } from '@bemedev/app/states';
 
 describe('isNodeConfig', () => {

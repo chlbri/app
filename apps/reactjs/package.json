@@ -5,15 +5,15 @@
   "type": "module",
   "scripts": {
     "prebuild": "pnpm --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-reactjs run build",
-    "dev": "vite dev",
+    "dev": "vp dev",
     "generate-routes": "tsr generate",
-    "_build": "vite build",
-    "build": "vite build",
+    "_build": "vp build",
+    "build": "vp build",
     "_ci": "pnpm run _build && pnpm run test",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:coverage": "vitest run",
-    "test:watch": "vitest"
+    "preview": "vp preview",
+    "test": "vp test run",
+    "test:coverage": "vp test run",
+    "test:watch": "vp test"
   },
   "dependencies": {
     "@bemedev/app": "workspace:^",
@@ -48,8 +48,9 @@
     "@vitejs/plugin-react": "^6.1.2",
     "jsdom": "^30.1.3",
     "typescript": "6.0.3",
-    "vite": "^8.3.5",
-    "vitest": "^5.0.5"
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "vite-plus": "catalog:"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

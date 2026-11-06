@@ -1,6 +1,6 @@
 import { createConfig, createMachine, interpret } from '@bemedev/app';
 import { type } from '@bemedev/typings';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 
 describe('AsyncMachine - guardBatch', () => {
   const config = createConfig({

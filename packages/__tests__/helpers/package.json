@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "test": "vitest run",
-    "test:only": "vitest run",
+    "test": "vp test run",
+    "test:only": "vp test run",
     "_ci": "pnpm run test",
     "generate:lib": "app-cli generate -c ./src",
     "generate": "app-cli generate -c ./src",
@@ -26,6 +26,7 @@
     "rxjs": "^7.8.2",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
-    "vitest": "^5.0.5"
+    "vitest": "catalog:",
+    "vite-plus": "catalog:"
   }
 }

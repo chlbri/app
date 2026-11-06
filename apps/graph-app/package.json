@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vp dev",
     "generate-routes": "tsr generate",
     "app:types": "app-cli generate -c ./src/services",
     "app:types:watch": "app-cli watch -c ./src/services",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vp build",
+    "preview": "vp preview"
   },
   "dependencies": {
     "@bemedev/app": "workspace:^",
@@ -40,7 +40,8 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "typescript": "6.0.3",
-    "vite": "^8.3.5"
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

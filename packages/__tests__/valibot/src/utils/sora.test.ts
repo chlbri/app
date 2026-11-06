@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { SoraSchema } from '@bemedev/app-valibot';
 
 describe('#01 => sora schema', () => {

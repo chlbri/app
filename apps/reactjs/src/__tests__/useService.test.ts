@@ -7,7 +7,7 @@ import {
   useState,
 } from '@bemedev/app-reactjs';
 import { act, renderHook } from '@testing-library/react';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import _machine from './common.machine';
 
 describe('#01 => useService', () => {

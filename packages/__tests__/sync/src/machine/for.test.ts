@@ -1,7 +1,7 @@
 import { createConfig, createMachine, interpret } from '@bemedev/app';
 import { nothing } from '@bemedev/app/utils';
 import { type } from '@bemedev/typings';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 
 const config = createConfig({
   initial: 'idle',

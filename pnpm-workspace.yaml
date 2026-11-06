@@ -27,6 +27,16 @@ minimumReleaseAge: 300
 
 minimumReleaseAgeExclude:
   - '@bemedev/*'
+  - vite-plus
+  - '@voidzero-dev/*'
+  - oxlint
+  - '@oxlint/*'
+  - oxlint-tsgolint
+  - '@oxlint-tsgolint/*'
+  - oxfmt
+  - '@oxfmt/*'
+  - vitest
+  - '@vitest/*'
 
 overrides:
   typescript: 6.0.3
@@ -36,6 +46,8 @@ overrides:
   'rollup-plugin-tsconfig-paths>typescript': 6.0.3
   'typescript-paths>typescript': 6.0.3
   'valibot>typescript': 6.0.3
+  vite@*: 'catalog:'
+  vitest@*: 'catalog:'
 
 packageExtensions:
   '@bemedev/rolldown-config':
@@ -56,3 +68,16 @@ packageExtensions:
   'valibot':
     peerDependencies:
       typescript: 6.0.3
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
+  vitest: 5.0.5
+  vite-plus: 1.4.0
+  '@vitest/coverage-v8': 5.0.5
+  '@vitest/ui': 5.0.5
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: '*'
+    vitest: '*'

@@ -7,7 +7,7 @@ import {
   createState,
 } from '@bemedev/app-solidjs';
 import { createRoot } from 'solid-js';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import _machine from './common.machine';
 
 describe('#01 => createService', () => {

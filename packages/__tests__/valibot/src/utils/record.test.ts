@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { recordV } from '@bemedev/app-valibot';
 
 describe('#01 => recordV schema', () => {

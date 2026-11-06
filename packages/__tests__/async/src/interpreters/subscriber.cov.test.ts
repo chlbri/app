@@ -1,5 +1,5 @@
 import { machine1, type Machine1 } from './data';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import { interpret } from '@bemedev/app';
 import type { State } from '@bemedev/app/states';
 import type { EventObject } from '@bemedev/app/events';

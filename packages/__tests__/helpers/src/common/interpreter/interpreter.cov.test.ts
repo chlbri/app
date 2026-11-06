@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { createMachine } from '@bemedev/app';
 import { interpret } from '@bemedev/app';
 import { type } from '@bemedev/typings';
