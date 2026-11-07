@@ -5,15 +5,20 @@ import type { SizeLimitConfig } from 'size-limit';
 const root = import.meta.dirname;
 const limit = '10 kB';
 
-const files = [
-  ...globSync(join(root, 'packages/*/lib/**/*.js')),
-  ...globSync(join(root, 'packages/*/lib/**/*.d.ts')),
-  ...globSync(join(root, 'packages/utils/*/lib/**/*.js')),
-  ...globSync(join(root, 'packages/utils/*/lib/**/*.d.ts')),
-].sort();
+const GLOBS = [
+  'packages/*/lib/**/*.js',
+  'packages/*/lib/**/*.d.ts',
+  'packages/utils/*/lib/**/*.js',
+  'packages/utils/*/lib/**/*.d.ts',
+];
 
-export default files.map(abs => {
-  const path = relative(root, abs);
-  const name = `${dirname(path)}/${basename(path)}`;
-  return { name, path, limit };
-}) satisfies SizeLimitConfig;
+const files = GLOBS.map(g => globSync(join(root, g)))
+  .flat()
+  .sort()
+  .map(abs => {
+    const path = relative(root, abs);
+    const name = `${dirname(path)}/${basename(path)}`;
+    return { name, path, limit };
+  }) satisfies SizeLimitConfig;
+
+export default files satisfies SizeLimitConfig;
