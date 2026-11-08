@@ -47,7 +47,7 @@
     "up": "vp update --latest && vp run check-updates",
     "check-updates": "vp dlx npm-check-updates -w -u --dep dev,peer,optional,prod",
     "rm:lib": "pnpm run -r rm:lib",
-    "generate:lib": "pnpm run -r generate:lib",
+    "generate:lib": "vp run -r generate:lib",
     "prepare": "husky"
   },
   "devDependencies": {

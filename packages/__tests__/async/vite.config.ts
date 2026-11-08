@@ -1,6 +1,6 @@
-import { defineProject } from 'vite-plus';
+import { defineConfig } from 'vite-plus';
 
-export default defineProject({
+export default defineConfig({
   resolve: { tsconfigPaths: true },
 
   test: {
@@ -14,7 +14,17 @@ export default defineProject({
     testTimeout: 30000,
     setupFiles: ['./vitest.setup.ts'],
     clearMocks: false,
+    globalSetup: [],
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
+  },
+
+  run: {
+    tasks: {
+      'generate:lib': {
+        command: 'app-cli generate -c ./src',
+        cache: { input: ['src/**', '!src/app.gen.ts'], output: ['src/app.gen.ts'] },
+      },
+    },
   },
 });

@@ -1,7 +1,8 @@
-import { defineProject } from 'vite-plus';
+import { defineConfig } from 'vite-plus';
 
-export default defineProject({
+export default defineConfig({
   resolve: { tsconfigPaths: true },
+
   test: {
     bail: 100,
 
@@ -10,11 +11,18 @@ export default defineProject({
     env: { NODE_ENV: 'test' },
     globals: true,
     logHeapUsage: false,
-    testTimeout: 30000,
-    setupFiles: ['./vitest.setup.ts'],
     clearMocks: false,
-    globalSetup: [],
+    name: 'valibot',
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
+  },
+
+  run: {
+    tasks: {
+      'generate:lib': {
+        command: 'app-cli generate -c ./src',
+        cache: { input: ['src/**', '!src/app.gen.ts'], output: ['src/app.gen.ts'] },
+      },
+    },
   },
 });

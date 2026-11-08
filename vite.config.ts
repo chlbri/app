@@ -170,7 +170,6 @@ export default defineConfig({
             'packages/**/package.json',
             'packages/**/tsconfig*.json',
             'packages/**/vite.config.ts',
-            'packages/**/vitest.config.ts',
             'packages/**/vitest.setup.ts',
             'apps/**/src/**',
             'apps/**/package.json',
@@ -237,10 +236,10 @@ export default defineConfig({
     },
 
     projects: [
-      'packages/__tests__/sync/vitest.config.ts',
-      'packages/__tests__/async/vitest.config.ts',
-      'packages/__tests__/helpers/vitest.config.ts',
-      'packages/__tests__/valibot/vitest.config.ts',
+      'packages/__tests__/sync/vite.config.ts',
+      'packages/__tests__/async/vite.config.ts',
+      'packages/__tests__/helpers/vite.config.ts',
+      'packages/__tests__/valibot/vite.config.ts',
       'packages/cli/vite.config.ts',
       'apps/reactjs/vite.config.ts',
       'apps/solidjs/vite.config.ts',

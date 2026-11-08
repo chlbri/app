@@ -6,7 +6,6 @@
     "test": "vp test run",
     "test:only": "vp test run",
     "_ci": "vp run test",
-    "generate:lib": "app-cli generate -c ./src",
     "generate": "app-cli generate -c ./src",
     "generate:watch": "app-cli watch -c ./src",
     "pretest": "vp run generate:lib"
