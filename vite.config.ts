@@ -156,7 +156,7 @@ export default defineConfig({
   run: {
     tasks: {
       'test:only': {
-        command: 'vp test run --silent',
+        command: 'VSCODE_NONCE= COPILOT_DEBUG_NONCE= vp test --silent',
         cache: {
           input: [
             'package.json',
@@ -176,7 +176,9 @@ export default defineConfig({
             'apps/**/package.json',
             'apps/**/tsconfig*.json',
             'apps/**/vite.config.ts',
+            '!**/*.gen.ts',
           ],
+
           output: ['.coverage/**'],
         },
       },

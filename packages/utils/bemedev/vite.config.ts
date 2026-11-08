@@ -7,6 +7,12 @@ export default defineConfig({
     tasks: {
       pack: {
         command: 'vp pack',
+        dependsOn: [
+          {
+            task: 'pack',
+            from: ['dependencies', 'devDependencies', 'peerDependencies'],
+          },
+        ],
         cache: {
           input: [
             'src/**',
