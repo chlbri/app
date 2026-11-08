@@ -7,4 +7,22 @@ export default defineConfig({
     ignoresJS: '**/*.example.ts',
     externals: ['@bemedev/app', 'vitest'],
   }),
+  run: {
+    tasks: {
+      pack: {
+        command: 'vp pack',
+        cache: {
+          input: [
+            'src/**',
+            'package.json',
+            'tsconfig.json',
+            'vite.config.ts',
+            { pattern: 'tsconfig.json', base: 'workspace' },
+            { pattern: 'pnpm-lock.yaml', base: 'workspace' },
+          ],
+          output: ['lib/**'],
+        },
+      },
+    },
+  },
 });

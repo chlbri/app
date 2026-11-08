@@ -152,6 +152,50 @@ export default defineConfig({
   },
 
   resolve: { tsconfigPaths: true },
+
+  run: {
+    tasks: {
+      'test:only': {
+        command: 'vp test run --silent',
+        cache: {
+          input: [
+            'package.json',
+            'vite.config.ts',
+            'tsconfig.json',
+            'pnpm-workspace.yaml',
+            'pnpm-lock.yaml',
+            'src/**',
+            'packages/**/src/**',
+            'packages/**/lib/**',
+            'packages/**/package.json',
+            'packages/**/tsconfig*.json',
+            'packages/**/vite.config.ts',
+            'packages/**/vitest.config.ts',
+            'packages/**/vitest.setup.ts',
+            'apps/**/src/**',
+            'apps/**/package.json',
+            'apps/**/tsconfig*.json',
+            'apps/**/vite.config.ts',
+          ],
+          output: ['.coverage/**'],
+        },
+      },
+      size: {
+        command: 'size-limit',
+        cache: {
+          input: [
+            '.size-limit.ts',
+            'package.json',
+            'pnpm-lock.yaml',
+            'packages/*/lib/**',
+            'packages/utils/*/lib/**',
+          ],
+          output: [],
+        },
+      },
+    },
+  },
+
   server: { host: '0.0.0.0' },
 
   test: {

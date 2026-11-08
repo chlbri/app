@@ -114,7 +114,7 @@
   "scripts": {
     "p-q": "pretty-quick",
     "posttest": "vp fmt",
-    "pretest": "vp pack",
+    "pretest": "vp run pack",
     "rm:lib": "vp dlx rimraf ./lib",
     "test:coverage": "vp test run",
     "test": "vp run test:coverage --no-coverage",

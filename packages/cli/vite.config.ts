@@ -29,4 +29,22 @@ export default defineConfig({
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },
+  run: {
+    tasks: {
+      pack: {
+        command: 'vp pack',
+        cache: {
+          input: [
+            'src/**',
+            'package.json',
+            'tsconfig.json',
+            'vite.config.ts',
+            { pattern: 'tsconfig.json', base: 'workspace' },
+            { pattern: 'pnpm-lock.yaml', base: 'workspace' },
+          ],
+          output: ['lib/**'],
+        },
+      },
+    },
+  },
 });

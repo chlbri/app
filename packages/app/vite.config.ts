@@ -3,4 +3,22 @@ import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
   pack: pack.bemedev({ clean: true, sourcemap: true, ignoresJS: '**/*.example.ts' }),
+  run: {
+    tasks: {
+      pack: {
+        command: 'vp pack',
+        cache: {
+          input: [
+            'src/**',
+            'package.json',
+            'tsconfig.json',
+            'vite.config.ts',
+            { pattern: 'tsconfig.json', base: 'workspace' },
+            { pattern: 'pnpm-lock.yaml', base: 'workspace' },
+          ],
+          output: ['lib/**'],
+        },
+      },
+    },
+  },
 });

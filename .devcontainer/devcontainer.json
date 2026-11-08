@@ -26,7 +26,7 @@
         "editor.defaultFormatter": "oxc.oxc-vscode",
         "coverage-gutters.coverageFileNames": [".coverage/lcov.info"],
         "vitest.enable": true,
-        "vitest.commandLine": "pnpm run test:only"
+        "vitest.commandLine": "vp run test:only"
       },
       "extensions": [
         "ms-vscode.vscode-typescript-next",
