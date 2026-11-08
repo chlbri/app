@@ -42,7 +42,7 @@
     "fmt": "vp fmt",
     "test": "vp test",
     "pretest": "vp run -r pretest",
-    "posttest": "vp fmt && vp run size",
+    "posttest": "vp run size",
     "rm": "vp run rimraf node_modules pnpm-lock.yaml && pnpm clean --lockfile",
     "up": "vp update --latest && vp run check-updates",
     "check-updates": "vp dlx npm-check-updates -w -u --dep dev,peer,optional,prod",

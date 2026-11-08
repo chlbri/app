@@ -1,8 +1,14 @@
 import { defineConfig as pack } from '@bemedev/dev-utils/pack';
 import { defineConfig } from 'vite-plus';
 
-export default defineConfig({
-  pack: pack.bemedev({
+/**
+ * Building the `pack` block reads the tsconfig of `process.cwd()` and walks
+ * every directory under it. Vitest loads this config from the workspace root
+ * for every run, which scans the whole monorepo (~20s) for nothing: tests
+ * never read `pack`. So it is only built outside the test mode.
+ */
+const buildPack = () =>
+  pack.bemedev({
     clean: true,
     ignoresJS: ['**/*.example.ts', '**/fixtures.ts'],
     externals: [
@@ -17,7 +23,10 @@ export default defineConfig({
       '@bemedev/pipe',
       '@bemedev/sleep',
     ],
-  }),
+  });
+
+export default defineConfig(({ mode }) => ({
+  ...(mode !== 'test' && { pack: buildPack() }),
   test: {
     bail: 100,
 
@@ -53,4 +62,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

@@ -208,6 +208,7 @@ export default defineConfig({
     typecheck: { enabled: true, ignoreSourceErrors: false },
     env: { NODE_ENV: 'test' },
     clearMocks: false,
+    globalSetup: ['./vitest.setup.ts'],
 
     coverage: {
       enabled: true,
