@@ -157,6 +157,7 @@ export default defineConfig({
     tasks: {
       'test:only': {
         command: 'VSCODE_NONCE= COPILOT_DEBUG_NONCE= vp test --silent',
+
         cache: {
           input: [
             'package.json',
@@ -174,8 +175,10 @@ export default defineConfig({
           output: ['.coverage/**'],
         },
       },
+
       size: {
         command: 'size-limit',
+
         cache: {
           input: [
             '.size-limit.ts',
@@ -184,6 +187,25 @@ export default defineConfig({
             'packages/*/lib/**',
             'packages/utils/*/lib/**',
           ],
+
+          output: [],
+        },
+      },
+
+      lint: {
+        command: 'vp fmt && vp lint --fix',
+
+        cache: {
+          input: [
+            'vite.config.ts',
+            'package.json',
+            'pnpm-workspace.yaml',
+            'packages/**/src/**',
+            'apps/*/src/**',
+            '!**/node_modules/**',
+            '!**/*.gen.ts',
+          ],
+
           output: [],
         },
       },

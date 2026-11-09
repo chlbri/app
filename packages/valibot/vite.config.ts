@@ -1,8 +1,8 @@
-import { defineConfig as pack } from '@bemedev/dev-utils/pack';
+import { defineConfig as definePack } from '@bemedev/dev-utils/pack';
 import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
-  pack: pack.bemedev({
+  pack: definePack.bemedev({
     clean: true,
     sourcemap: true,
     excludesTS: ['src/fixtures.ts'],

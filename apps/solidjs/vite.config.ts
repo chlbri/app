@@ -2,9 +2,9 @@ import tailwindcss from '@tailwindcss/vite';
 import { tanstackStart } from '@tanstack/solid-start/plugin/vite';
 import { nitro } from 'nitro/vite';
 import viteSolid from 'vite-plugin-solid';
-import { defineProject, lazyPlugins } from 'vite-plus';
+import { defineConfig, lazyPlugins } from 'vite-plus';
 
-export default defineProject({
+export default defineConfig({
   server: { port: 3012 },
   resolve: { tsconfigPaths: true },
 

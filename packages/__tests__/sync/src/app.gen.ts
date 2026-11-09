@@ -8,1641 +8,1402 @@ declare module '@bemedev/app' {
   interface Register {
     'src/__tests__/emitters/emitter1.machine': {
       paths: {
-        map: {
-          targets: '/inactive' | '/active';
-          initial: 'inactive';
-          states: {
-            active: { targets: '/' | '/inactive' };
-            inactive: { targets: '/' | '/active' };
+        map: { targets: ('/inactive' | '/active'); 
+        initial: 'inactive';
+        states: {
+          'active': { targets: ('/' | '/inactive'); 
+          };
+          'inactive': { targets: ('/' | '/active'); 
           };
         };
+      };
         all: '/' | '/inactive' | '/active';
       };
       events: 'NEXT';
       options: {
         children: never;
         emitters: 'interval';
-        tags: never;
-        actions: 'mockCompleteAction' | 'assigN';
-        delays: never;
-        guards: 'returnTrue';
+        tags:     never;
+        actions:  'mockCompleteAction' | 'assigN';
+        delays:   never;
+        guards:   'returnTrue';
       };
       pContext: any;
     };
 
     'src/__tests__/emitters/emitter3.machine': {
       paths: {
-        map: {
-          targets: '/inactive' | '/active';
-          initial: 'inactive';
-          states: {
-            active: { targets: '/' | '/inactive' };
-            inactive: { targets: '/' | '/active' };
+        map: { targets: ('/inactive' | '/active'); 
+        initial: 'inactive';
+        states: {
+          'active': { targets: ('/' | '/inactive'); 
+          };
+          'inactive': { targets: ('/' | '/active'); 
           };
         };
+      };
         all: '/' | '/inactive' | '/active';
       };
       events: 'NEXT';
       options: {
         children: never;
         emitters: 'interval1';
-        tags: never;
-        actions: 'assigN';
-        delays: never;
-        guards: 'returnTrue';
+        tags:     never;
+        actions:  'assigN';
+        delays:   never;
+        guards:   'returnTrue';
       };
       pContext: any;
     };
 
     'src/__tests__/emitters/error.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: never;
       options: {
         children: never;
         emitters: 'interval';
-        tags: never;
-        actions: 'assigN' | 'signals';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'assigN' | 'signals';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/activities/perform.bis.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/next';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/next' };
-            next: { targets: '/' | '/idle' };
+        map: { targets: ('/idle' | '/next'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/next'); 
+          };
+          'next': { targets: ('/' | '/idle'); 
           };
         };
+      };
         all: '/' | '/idle' | '/next';
       };
       events: 'DECREMENT' | 'INCREMENT' | 'REDECREMENT' | 'NEXT' | 'INCREMENT.FORCE';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'init' | 'dec' | 'inc' | 'sendDec' | 'forceSendInc';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'init' | 'dec' | 'inc' | 'sendDec' | 'forceSendInc';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/activities/perform.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'PAUSE' | 'RESUME' | 'STOP';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc' | 'pause' | 'resume' | 'stop';
-        delays: 'DELAY';
-        guards: never;
+        tags:     never;
+        actions:  'inc' | 'pause' | 'resume' | 'stop';
+        delays:   'DELAY';
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/assign-map.1.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'SET_VALUE' | 'SET_COUNT' | 'RESET' | 'UNKNOWN_EVENT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'setValue' | 'setCount' | 'reset' | 'handleUnknown';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'setValue' | 'setCount' | 'reset' | 'handleUnknown';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/assign-map.2.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'UPDATE_ALL' | 'PARTIAL_UPDATE' | 'RESET_ALL';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'updateAll' | 'partialUpdate' | 'resetAll';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'updateAll' | 'partialUpdate' | 'resetAll';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/assign-map.3.machine': {
       paths: {
-        map: {
-          targets: '/init_state' | '/always_state' | '/final_state';
-          initial: 'init_state';
-          states: {
-            always_state: { targets: '/' | '/init_state' | '/final_state' };
-            final_state: { targets: '/' | '/init_state' | '/always_state' };
-            init_state: { targets: '/' | '/always_state' | '/final_state' };
+        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
           };
         };
+      };
         all: '/' | '/init_state' | '/always_state' | '/final_state';
       };
       events: 'TRIGGER_ALWAYS';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'initProp' | 'alwaysProp';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'initProp' | 'alwaysProp';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/assign-map.4.machine': {
       paths: {
-        map: {
-          targets: '/init_state' | '/always_state' | '/final_state';
-          initial: 'init_state';
-          states: {
-            always_state: { targets: '/' | '/init_state' | '/final_state' };
-            final_state: { targets: '/' | '/init_state' | '/always_state' };
-            init_state: { targets: '/' | '/always_state' | '/final_state' };
+        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
           };
         };
+      };
         all: '/' | '/init_state' | '/always_state' | '/final_state';
       };
       events: 'TRIGGER_ALWAYS';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'initRoot' | 'alwaysRoot';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'initRoot' | 'alwaysRoot';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/assign-map.5.machine': {
       paths: {
-        map: {
-          targets: '/init_state' | '/always_state' | '/final_state';
-          initial: 'init_state';
-          states: {
-            always_state: { targets: '/' | '/init_state' | '/final_state' };
-            final_state: { targets: '/' | '/init_state' | '/always_state' };
-            init_state: { targets: '/' | '/always_state' | '/final_state' };
+        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
           };
         };
+      };
         all: '/' | '/init_state' | '/always_state' | '/final_state';
       };
       events: 'TRIGGER_ALWAYS';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'initAction' | 'alwaysAction';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'initAction' | 'alwaysAction';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/assign-map.6.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'SET_VALUE';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'setValue';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'setValue';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/children.1.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: never;
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc';
-        delays: 'DELAY';
-        guards: never;
+        tags:     never;
+        actions:  'inc';
+        delays:   'DELAY';
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/children.2.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: never;
       options: {
         children: 'child';
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/children.3.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/working';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/working' };
-            working: { targets: '/' | '/idle' };
+        map: { targets: ('/idle' | '/working'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/working'); 
+          };
+          'working': { targets: ('/' | '/idle'); 
           };
         };
+      };
         all: '/' | '/idle' | '/working';
       };
       events: 'NEXT';
       options: {
         children: 'child';
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/children.4.machine': {
       paths: {
-        map: {
-          targets: '/active' | '/inactive';
-          initial: 'active';
-          states: {
-            active: { targets: '/' | '/inactive' };
-            inactive: { targets: '/' | '/active' };
+        map: { targets: ('/active' | '/inactive'); 
+        initial: 'active';
+        states: {
+          'active': { targets: ('/' | '/inactive'); 
+          };
+          'inactive': { targets: ('/' | '/active'); 
           };
         };
+      };
         all: '/' | '/active' | '/inactive';
       };
       events: 'NEXT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/children.5.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'NEXT';
       options: {
         children: 'child';
         emitters: never;
-        tags: never;
-        actions: 'notify' | 'sendChildNext';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'notify' | 'sendChildNext';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/actors/2ids.1.machine': {
-      paths: { map: { targets: never }; all: '/' };
+      paths: {
+        map: { targets: (never); 
+      };
+        all: '/';
+      };
       events: never;
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc' | 'inc2';
-        delays: 'DELAY' | 'DELAY2';
-        guards: never;
+        tags:     never;
+        actions:  'inc' | 'inc2';
+        delays:   'DELAY' | 'DELAY2';
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/actors/2ids.2.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/working';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/working' };
-            working: { targets: '/' | '/idle' };
+        map: { targets: ('/idle' | '/working'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/working'); 
+          };
+          'working': { targets: ('/' | '/idle'); 
           };
         };
+      };
         all: '/' | '/idle' | '/working';
       };
       events: 'NEXT';
       options: {
         children: 'child1' | 'child2';
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
-      pContext: {
-        iter1: number;
-        iter2: number;
-        all: { iter1: number; iter2: number };
-      };
+      pContext: { iter1: number; iter2: number; all: { iter1: number; iter2: number } };
     };
 
     'src/__tests__/interpreters/coverage/actors/child.1.machine': {
-      paths: { map: { targets: never }; all: '/' };
+      paths: {
+        map: { targets: (never); 
+      };
+        all: '/';
+      };
       events: never;
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc' | 'inc2';
-        delays: 'DELAY' | 'DELAY2';
-        guards: 'returnTrue';
+        tags:     never;
+        actions:  'inc' | 'inc2';
+        delays:   'DELAY' | 'DELAY2';
+        guards:   'returnTrue';
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/actors/child.2.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/working';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/working' };
-            working: { targets: '/' | '/idle' };
+        map: { targets: ('/idle' | '/working'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/working'); 
+          };
+          'working': { targets: ('/' | '/idle'); 
           };
         };
+      };
         all: '/' | '/idle' | '/working';
       };
       events: 'NEXT';
       options: {
         children: 'child';
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
-      pContext: {
-        iter1: number;
-        iter2: number;
-        all: { iter1: number; iter2: number };
-      };
+      pContext: { iter1: number; iter2: number; all: { iter1: number; iter2: number } };
     };
 
     'src/__tests__/interpreters/coverage/actors/emitter.machine': {
       paths: {
-        map: {
-          targets: '/inactive' | '/active';
-          initial: 'inactive';
-          states: {
-            active: { targets: '/' | '/inactive' };
-            inactive: { targets: '/' | '/active' };
+        map: { targets: ('/inactive' | '/active'); 
+        initial: 'inactive';
+        states: {
+          'active': { targets: ('/' | '/inactive'); 
+          };
+          'inactive': { targets: ('/' | '/active'); 
           };
         };
+      };
         all: '/' | '/inactive' | '/active';
       };
       events: 'NEXT';
       options: {
         children: never;
         emitters: 'interval';
-        tags: never;
-        actions: 'assignN';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'assignN';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.1.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'INCREMENT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'increment';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'increment';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.2.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: never;
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.3.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/positive';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/positive' };
-            positive: { targets: '/' | '/idle' };
+        map: { targets: ('/idle' | '/positive'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/positive'); 
+          };
+          'positive': { targets: ('/' | '/idle'); 
           };
         };
+      };
         all: '/' | '/idle' | '/positive';
       };
       events: 'CHECK';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: 'isPositive';
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   'isPositive';
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.4.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'INCREMENT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'increment';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'increment';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/addOptions-return.5.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'FIRST' | 'SECOND';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'first' | 'second';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'first' | 'second';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/coverage/index.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/final';
-          initial: 'idle';
-          states: {
-            final: { targets: '/' | '/idle' };
-            idle: { targets: '/' | '/final' };
+        map: { targets: ('/idle' | '/final'); 
+        initial: 'idle';
+        states: {
+          'final': { targets: ('/' | '/idle'); 
+          };
+          'idle': { targets: ('/' | '/final'); 
           };
         };
+      };
         all: '/' | '/idle' | '/final';
       };
       events: 'INC' | 'INC.PRIVATE' | 'NEXT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc' | 'neverRun' | 'incPrivate';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'inc' | 'neverRun' | 'incPrivate';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.1.machine': {
       paths: {
-        map: {
-          targets: '/state1' | '/state2';
-          initial: 'state1';
-          states: {
-            state1: { targets: '/' | '/state2' };
-            state2: { targets: '/' | '/state1' };
+        map: { targets: ('/state1' | '/state2'); 
+        initial: 'state1';
+        states: {
+          'state1': { targets: ('/' | '/state2'); 
+          };
+          'state2': { targets: ('/' | '/state1'); 
           };
         };
+      };
         all: '/' | '/state1' | '/state2';
       };
       events: 'ADD' | 'FILTER' | 'RESET';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'addNumbers' | 'filterEven';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'addNumbers' | 'filterEven';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.2.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/filtered';
-          initial: 'idle';
-          states: {
-            filtered: { targets: '/' | '/idle' };
-            idle: { targets: '/' | '/filtered' };
+        map: { targets: ('/idle' | '/filtered'); 
+        initial: 'idle';
+        states: {
+          'filtered': { targets: ('/' | '/idle'); 
+          };
+          'idle': { targets: ('/' | '/filtered'); 
           };
         };
+      };
         all: '/' | '/idle' | '/filtered';
       };
       events: 'ADD_PEOPLE' | 'FILTER_ACTIVE';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'addPeople' | 'filterActive';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'addPeople' | 'filterActive';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.3.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/filtered';
-          initial: 'idle';
-          states: {
-            filtered: { targets: '/' | '/idle' };
-            idle: { targets: '/' | '/filtered' };
+        map: { targets: ('/idle' | '/filtered'); 
+        initial: 'idle';
+        states: {
+          'filtered': { targets: ('/' | '/idle'); 
+          };
+          'idle': { targets: ('/' | '/filtered'); 
           };
         };
+      };
         all: '/' | '/idle' | '/filtered';
       };
       events: 'SET_SCORES' | 'FILTER_HIGH_SCORES';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'setScores' | 'filterHighScores';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'setScores' | 'filterHighScores';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.4.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/cleared';
-          initial: 'idle';
-          states: {
-            cleared: { targets: '/' | '/idle' };
-            idle: { targets: '/' | '/cleared' };
+        map: { targets: ('/idle' | '/cleared'); 
+        initial: 'idle';
+        states: {
+          'cleared': { targets: ('/' | '/idle'); 
+          };
+          'idle': { targets: ('/' | '/cleared'); 
           };
         };
+      };
         all: '/' | '/idle' | '/cleared';
       };
       events: 'SET_NAME' | 'CLEAR_NAME';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'setName' | 'clearName';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'setName' | 'clearName';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.5.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'SET_USER' | 'CLEAR_EMAIL';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'setUser' | 'clearEmail';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'setUser' | 'clearEmail';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.6.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/cleared';
-          initial: 'idle';
-          states: {
-            cleared: { targets: '/' | '/idle' };
-            idle: { targets: '/' | '/cleared' };
+        map: { targets: ('/idle' | '/cleared'); 
+        initial: 'idle';
+        states: {
+          'cleared': { targets: ('/' | '/idle'); 
+          };
+          'idle': { targets: ('/' | '/cleared'); 
           };
         };
+      };
         all: '/' | '/idle' | '/cleared';
       };
       events: 'SET_DATA' | 'CLEAR_ALL';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'setData' | 'clearAll';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'setData' | 'clearAll';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.7.machine': {
       paths: {
-        map: {
-          targets: '/init_state' | '/always_state' | '/after_state' | '/final_state';
-          initial: 'init_state';
-          states: {
-            after_state: {
-              targets: '/' | '/init_state' | '/always_state' | '/final_state';
-            };
-            always_state: {
-              targets: '/' | '/init_state' | '/after_state' | '/final_state';
-            };
-            final_state: {
-              targets: '/' | '/init_state' | '/always_state' | '/after_state';
-            };
-            init_state: {
-              targets: '/' | '/always_state' | '/after_state' | '/final_state';
-            };
+        map: { targets: ('/init_state' | '/always_state' | '/after_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'after_state': { targets: ('/' | '/init_state' | '/always_state' | '/final_state'); 
+          };
+          'always_state': { targets: ('/' | '/init_state' | '/after_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state' | '/after_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/after_state' | '/final_state'); 
           };
         };
+      };
         all: '/' | '/init_state' | '/always_state' | '/after_state' | '/final_state';
       };
       events: 'TRIGGER_ALWAYS' | 'TRIGGER_AFTER';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'filterInit' | 'filterAlways' | 'filterAfter';
-        delays: 'DELAY';
-        guards: never;
+        tags:     never;
+        actions:  'filterInit' | 'filterAlways' | 'filterAfter';
+        delays:   'DELAY';
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/filter-erase.8.machine': {
       paths: {
-        map: {
-          targets: '/init_state' | '/always_state' | '/after_state' | '/final_state';
-          initial: 'init_state';
-          states: {
-            after_state: {
-              targets: '/' | '/init_state' | '/always_state' | '/final_state';
-            };
-            always_state: {
-              targets: '/' | '/init_state' | '/after_state' | '/final_state';
-            };
-            final_state: {
-              targets: '/' | '/init_state' | '/always_state' | '/after_state';
-            };
-            init_state: {
-              targets: '/' | '/always_state' | '/after_state' | '/final_state';
-            };
+        map: { targets: ('/init_state' | '/always_state' | '/after_state' | '/final_state'); 
+        initial: 'init_state';
+        states: {
+          'after_state': { targets: ('/' | '/init_state' | '/always_state' | '/final_state'); 
+          };
+          'always_state': { targets: ('/' | '/init_state' | '/after_state' | '/final_state'); 
+          };
+          'final_state': { targets: ('/' | '/init_state' | '/always_state' | '/after_state'); 
+          };
+          'init_state': { targets: ('/' | '/always_state' | '/after_state' | '/final_state'); 
           };
         };
+      };
         all: '/' | '/init_state' | '/always_state' | '/after_state' | '/final_state';
       };
       events: 'TRIGGER_ALWAYS' | 'TRIGGER_AFTER';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'filterInit' | 'filterAlways' | 'filterAfter';
-        delays: 'DELAY';
-        guards: never;
+        tags:     never;
+        actions:  'filterInit' | 'filterAlways' | 'filterAfter';
+        delays:   'DELAY';
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.1.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'NEXT' | 'DOUBLE';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'increment' | 'doubleIncrement';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'increment' | 'doubleIncrement';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.10.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'FIRST' | 'SECOND';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'first' | 'second';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'first' | 'second';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.11.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'ADD' | 'MULTIPLY';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'add' | 'multiply';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'add' | 'multiply';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.12.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'INCREMENT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'increment';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'increment';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.13.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'OP1' | 'OP2' | 'OP3';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'op1' | 'op2' | 'op3';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'op1' | 'op2' | 'op3';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.14.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'INCREMENT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'increment';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'increment';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.2.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'NEXT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'increment';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'increment';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.3.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/positive' | '/negative';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/positive' | '/negative' };
-            negative: { targets: '/' | '/idle' | '/positive' };
-            positive: { targets: '/' | '/idle' | '/negative' };
+        map: { targets: ('/idle' | '/positive' | '/negative'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/positive' | '/negative'); 
+          };
+          'negative': { targets: ('/' | '/idle' | '/positive'); 
+          };
+          'positive': { targets: ('/' | '/idle' | '/negative'); 
           };
         };
+      };
         all: '/' | '/idle' | '/positive' | '/negative';
       };
       events: 'CHECK';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: 'isPositive' | 'isNegative';
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   'isPositive' | 'isNegative';
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.4.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'ADD' | 'MULTIPLY';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'add' | 'multiply';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'add' | 'multiply';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.5.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: never;
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.6.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'FIRST' | 'SECOND' | 'THIRD';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'first' | 'second' | 'third';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'first' | 'second' | 'third';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.7.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'NEXT' | 'TRIPLE';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'increment' | 'tripleIncrement';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'increment' | 'tripleIncrement';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.8.machine': {
       paths: {
-        map: {
-          targets: '/idle';
-          initial: 'idle';
-          states: { idle: { targets: '/' } };
+        map: { targets: ('/idle'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/'); 
+          };
         };
+      };
         all: '/' | '/idle';
       };
       events: 'NEXT';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'increment';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'increment';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/legacy-options.9.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/positive' | '/negative';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/positive' | '/negative' };
-            negative: { targets: '/' | '/idle' | '/positive' };
-            positive: { targets: '/' | '/idle' | '/negative' };
+        map: { targets: ('/idle' | '/positive' | '/negative'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/positive' | '/negative'); 
+          };
+          'negative': { targets: ('/' | '/idle' | '/positive'); 
+          };
+          'positive': { targets: ('/' | '/idle' | '/negative'); 
           };
         };
+      };
         all: '/' | '/idle' | '/positive' | '/negative';
       };
       events: 'CHECK';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: 'isPositive' | 'isNegative';
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   'isPositive' | 'isNegative';
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/always.3.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/result1' | '/result2' | '/result3';
-          initial: 'idle';
-          states: {
-            idle: { targets: '/' | '/result1' | '/result2' | '/result3' };
-            result1: { targets: '/' | '/idle' | '/result2' | '/result3' };
-            result2: { targets: '/' | '/idle' | '/result1' | '/result3' };
-            result3: { targets: '/' | '/idle' | '/result1' | '/result2' };
+        map: { targets: ('/idle' | '/result1' | '/result2' | '/result3'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/result1' | '/result2' | '/result3'); 
+          };
+          'result1': { targets: ('/' | '/idle' | '/result2' | '/result3'); 
+          };
+          'result2': { targets: ('/' | '/idle' | '/result1' | '/result3'); 
+          };
+          'result3': { targets: ('/' | '/idle' | '/result1' | '/result2'); 
           };
         };
+      };
         all: '/' | '/idle' | '/result1' | '/result2' | '/result3';
       };
       events: never;
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: 'returnFalse';
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   'returnFalse';
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/selftransitions/index.2.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/active';
-          initial: 'idle';
-          states: {
-            active: { targets: '/' | '/idle' };
-            idle: { targets: '/' | '/active' };
+        map: { targets: ('/idle' | '/active'); 
+        initial: 'idle';
+        states: {
+          'active': { targets: ('/' | '/idle'); 
+          };
+          'idle': { targets: ('/' | '/active'); 
           };
         };
+      };
         all: '/' | '/idle' | '/active';
       };
       events: never;
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/interpreters/tags/tags.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/working' | '/final';
-          initial: 'idle';
-          states: {
-            final: { targets: '/' | '/idle' | '/working' };
-            idle: { targets: '/' | '/working' | '/final' };
-            working: { targets: '/' | '/idle' | '/final' };
+        map: { targets: ('/idle' | '/working' | '/final'); 
+        initial: 'idle';
+        states: {
+          'final': { targets: ('/' | '/idle' | '/working'); 
+          };
+          'idle': { targets: ('/' | '/working' | '/final'); 
+          };
+          'working': { targets: ('/' | '/idle' | '/final'); 
           };
         };
+      };
         all: '/' | '/idle' | '/working' | '/final';
       };
       events: 'NEXT' | 'PREV';
       options: {
         children: never;
         emitters: never;
-        tags: 'idle' | 'working' | 'busy';
-        actions: never;
-        delays: never;
-        guards: never;
+        tags:     'idle' | 'working' | 'busy';
+        actions:  never;
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/machine/real.1.machine': {
       paths: {
-        map: {
-          targets:
-            | '/idle'
-            | '/compound'
-            | '/compound/idle'
-            | '/compound/next'
-            | '/parallel'
-            | '/parallel/atomic'
-            | '/parallel/atomic/idle'
-            | '/parallel/atomic/next'
-            | '/parallel/compound'
-            | '/parallel/compound/idle'
-            | '/parallel/compound/next';
-          initial: 'idle';
-          states: {
-            compound: {
-              targets:
-                | '/'
-                | '/idle'
-                | '/compound/idle'
-                | '/compound/next'
-                | '/parallel'
-                | '/parallel/atomic'
-                | '/parallel/atomic/idle'
-                | '/parallel/atomic/next'
-                | '/parallel/compound'
-                | '/parallel/compound/idle'
-                | '/parallel/compound/next';
-              initial: 'idle';
-              states: {
-                idle: {
-                  targets:
-                    | '/'
-                    | '/idle'
-                    | '/compound'
-                    | '/compound/next'
-                    | '/parallel'
-                    | '/parallel/atomic'
-                    | '/parallel/atomic/idle'
-                    | '/parallel/atomic/next'
-                    | '/parallel/compound'
-                    | '/parallel/compound/idle'
-                    | '/parallel/compound/next';
-                };
-                next: {
-                  targets:
-                    | '/'
-                    | '/idle'
-                    | '/compound'
-                    | '/compound/idle'
-                    | '/parallel'
-                    | '/parallel/atomic'
-                    | '/parallel/atomic/idle'
-                    | '/parallel/atomic/next'
-                    | '/parallel/compound'
-                    | '/parallel/compound/idle'
-                    | '/parallel/compound/next';
-                };
+        map: { targets: ('/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+        initial: 'idle';
+        states: {
+          'compound': { targets: ('/' | '/idle' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+            initial: 'idle';
+            states: {
+              'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+              };
+              'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
               };
             };
-            idle: {
-              targets:
-                | '/'
-                | '/compound'
-                | '/compound/idle'
-                | '/compound/next'
-                | '/parallel'
-                | '/parallel/atomic'
-                | '/parallel/atomic/idle'
-                | '/parallel/atomic/next'
-                | '/parallel/compound'
-                | '/parallel/compound/idle'
-                | '/parallel/compound/next';
-            };
-            parallel: {
-              targets:
-                | '/'
-                | '/idle'
-                | '/compound'
-                | '/compound/idle'
-                | '/compound/next'
-                | '/parallel/atomic'
-                | '/parallel/atomic/idle'
-                | '/parallel/atomic/next'
-                | '/parallel/compound'
-                | '/parallel/compound/idle'
-                | '/parallel/compound/next';
-              states: {
-                atomic: {
-                  targets:
-                    | '/'
-                    | '/idle'
-                    | '/compound'
-                    | '/compound/idle'
-                    | '/compound/next'
-                    | '/parallel'
-                    | '/parallel/atomic/idle'
-                    | '/parallel/atomic/next'
-                    | '/parallel/compound'
-                    | '/parallel/compound/idle'
-                    | '/parallel/compound/next';
-                  initial: 'idle';
-                  states: {
-                    idle: {
-                      targets:
-                        | '/'
-                        | '/idle'
-                        | '/compound'
-                        | '/compound/idle'
-                        | '/compound/next'
-                        | '/parallel'
-                        | '/parallel/atomic'
-                        | '/parallel/atomic/next'
-                        | '/parallel/compound'
-                        | '/parallel/compound/idle'
-                        | '/parallel/compound/next';
-                    };
-                    next: {
-                      targets:
-                        | '/'
-                        | '/idle'
-                        | '/compound'
-                        | '/compound/idle'
-                        | '/compound/next'
-                        | '/parallel'
-                        | '/parallel/atomic'
-                        | '/parallel/atomic/idle'
-                        | '/parallel/compound'
-                        | '/parallel/compound/idle'
-                        | '/parallel/compound/next';
-                    };
+          };
+          'idle': { targets: ('/' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+          };
+          'parallel': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+            states: {
+              'atomic': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+                initial: 'idle';
+                states: {
+                  'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+                  };
+                  'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
                   };
                 };
-                compound: {
-                  targets:
-                    | '/'
-                    | '/idle'
-                    | '/compound'
-                    | '/compound/idle'
-                    | '/compound/next'
-                    | '/parallel'
-                    | '/parallel/atomic'
-                    | '/parallel/atomic/idle'
-                    | '/parallel/atomic/next'
-                    | '/parallel/compound/idle'
-                    | '/parallel/compound/next';
-                  initial: 'idle';
-                  states: {
-                    idle: {
-                      targets:
-                        | '/'
-                        | '/idle'
-                        | '/compound'
-                        | '/compound/idle'
-                        | '/compound/next'
-                        | '/parallel'
-                        | '/parallel/atomic'
-                        | '/parallel/atomic/idle'
-                        | '/parallel/atomic/next'
-                        | '/parallel/compound'
-                        | '/parallel/compound/next';
-                    };
-                    next: {
-                      targets:
-                        | '/'
-                        | '/idle'
-                        | '/compound'
-                        | '/compound/idle'
-                        | '/compound/next'
-                        | '/parallel'
-                        | '/parallel/atomic'
-                        | '/parallel/atomic/idle'
-                        | '/parallel/atomic/next'
-                        | '/parallel/compound'
-                        | '/parallel/compound/idle';
-                    };
+              };
+              'compound': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+                initial: 'idle';
+                states: {
+                  'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/next'); 
+                  };
+                  'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle'); 
                   };
                 };
               };
             };
           };
         };
-        all:
-          | '/'
-          | '/idle'
-          | '/compound'
-          | '/compound/idle'
-          | '/compound/next'
-          | '/parallel'
-          | '/parallel/atomic'
-          | '/parallel/atomic/idle'
-          | '/parallel/atomic/next'
-          | '/parallel/compound'
-          | '/parallel/compound/idle'
-          | '/parallel/compound/next';
+      };
+        all: '/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next';
       };
       events: 'NEXT' | 'PREVIOUS';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'inc';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/machine/real.2.machine': {
       paths: {
-        map: {
-          targets:
-            | '/idle'
-            | '/parallel'
-            | '/parallel/atomic'
-            | '/parallel/atomic/idle'
-            | '/parallel/atomic/next'
-            | '/parallel/compound'
-            | '/parallel/compound/idle'
-            | '/parallel/compound/compound'
-            | '/parallel/compound/compound/idle'
-            | '/parallel/compound/compound/next';
-          initial: 'idle';
-          states: {
-            idle: {
-              targets:
-                | '/'
-                | '/parallel'
-                | '/parallel/atomic'
-                | '/parallel/atomic/idle'
-                | '/parallel/atomic/next'
-                | '/parallel/compound'
-                | '/parallel/compound/idle'
-                | '/parallel/compound/compound'
-                | '/parallel/compound/compound/idle'
-                | '/parallel/compound/compound/next';
-            };
-            parallel: {
-              targets:
-                | '/'
-                | '/idle'
-                | '/parallel/atomic'
-                | '/parallel/atomic/idle'
-                | '/parallel/atomic/next'
-                | '/parallel/compound'
-                | '/parallel/compound/idle'
-                | '/parallel/compound/compound'
-                | '/parallel/compound/compound/idle'
-                | '/parallel/compound/compound/next';
-              states: {
-                atomic: {
-                  targets:
-                    | '/'
-                    | '/idle'
-                    | '/parallel'
-                    | '/parallel/atomic/idle'
-                    | '/parallel/atomic/next'
-                    | '/parallel/compound'
-                    | '/parallel/compound/idle'
-                    | '/parallel/compound/compound'
-                    | '/parallel/compound/compound/idle'
-                    | '/parallel/compound/compound/next';
-                  initial: 'idle';
-                  states: {
-                    idle: {
-                      targets:
-                        | '/'
-                        | '/idle'
-                        | '/parallel'
-                        | '/parallel/atomic'
-                        | '/parallel/atomic/next'
-                        | '/parallel/compound'
-                        | '/parallel/compound/idle'
-                        | '/parallel/compound/compound'
-                        | '/parallel/compound/compound/idle'
-                        | '/parallel/compound/compound/next';
-                    };
-                    next: {
-                      targets:
-                        | '/'
-                        | '/idle'
-                        | '/parallel'
-                        | '/parallel/atomic'
-                        | '/parallel/atomic/idle'
-                        | '/parallel/compound'
-                        | '/parallel/compound/idle'
-                        | '/parallel/compound/compound'
-                        | '/parallel/compound/compound/idle'
-                        | '/parallel/compound/compound/next';
-                    };
+        map: { targets: ('/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+          };
+          'parallel': { targets: ('/' | '/idle' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+            states: {
+              'atomic': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+                initial: 'idle';
+                states: {
+                  'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+                  };
+                  'next': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
                   };
                 };
-                compound: {
-                  targets:
-                    | '/'
-                    | '/idle'
-                    | '/parallel'
-                    | '/parallel/atomic'
-                    | '/parallel/atomic/idle'
-                    | '/parallel/atomic/next'
-                    | '/parallel/compound/idle'
-                    | '/parallel/compound/compound'
-                    | '/parallel/compound/compound/idle'
-                    | '/parallel/compound/compound/next';
-                  initial: 'idle';
-                  states: {
-                    compound: {
-                      targets:
-                        | '/'
-                        | '/idle'
-                        | '/parallel'
-                        | '/parallel/atomic'
-                        | '/parallel/atomic/idle'
-                        | '/parallel/atomic/next'
-                        | '/parallel/compound'
-                        | '/parallel/compound/idle'
-                        | '/parallel/compound/compound/idle'
-                        | '/parallel/compound/compound/next';
-                      initial: 'idle';
-                      states: {
-                        idle: {
-                          targets:
-                            | '/'
-                            | '/idle'
-                            | '/parallel'
-                            | '/parallel/atomic'
-                            | '/parallel/atomic/idle'
-                            | '/parallel/atomic/next'
-                            | '/parallel/compound'
-                            | '/parallel/compound/idle'
-                            | '/parallel/compound/compound'
-                            | '/parallel/compound/compound/next';
-                        };
-                        next: {
-                          targets:
-                            | '/'
-                            | '/idle'
-                            | '/parallel'
-                            | '/parallel/atomic'
-                            | '/parallel/atomic/idle'
-                            | '/parallel/atomic/next'
-                            | '/parallel/compound'
-                            | '/parallel/compound/idle'
-                            | '/parallel/compound/compound'
-                            | '/parallel/compound/compound/idle';
-                        };
+              };
+              'compound': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+                initial: 'idle';
+                states: {
+                  'compound': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+                    initial: 'idle';
+                    states: {
+                      'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/next'); 
+                      };
+                      'next': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle'); 
                       };
                     };
-                    idle: {
-                      targets:
-                        | '/'
-                        | '/idle'
-                        | '/parallel'
-                        | '/parallel/atomic'
-                        | '/parallel/atomic/idle'
-                        | '/parallel/atomic/next'
-                        | '/parallel/compound'
-                        | '/parallel/compound/compound'
-                        | '/parallel/compound/compound/idle'
-                        | '/parallel/compound/compound/next';
-                    };
+                  };
+                  'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
                   };
                 };
               };
             };
           };
         };
-        all:
-          | '/'
-          | '/idle'
-          | '/parallel'
-          | '/parallel/atomic'
-          | '/parallel/atomic/idle'
-          | '/parallel/atomic/next'
-          | '/parallel/compound'
-          | '/parallel/compound/idle'
-          | '/parallel/compound/compound'
-          | '/parallel/compound/compound/idle'
-          | '/parallel/compound/compound/next';
+      };
+        all: '/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next';
       };
       events: 'NEXT' | 'PREVIOUS';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions: 'inc';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'inc';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
 
     'src/__tests__/machine/real.3.machine': {
       paths: {
-        map: {
-          targets: '/idle' | '/working' | '/working/idle' | '/working/register';
-          initial: 'idle';
-          states: {
-            idle: {
-              targets: '/' | '/working' | '/working/idle' | '/working/register';
-            };
-            working: {
-              targets: '/' | '/idle' | '/working/idle' | '/working/register';
-              initial: 'idle';
-              states: {
-                idle: { targets: '/' | '/idle' | '/working' | '/working/register' };
-                register: { targets: '/' | '/idle' | '/working' | '/working/idle' };
+        map: { targets: ('/idle' | '/working' | '/working/idle' | '/working/register'); 
+        initial: 'idle';
+        states: {
+          'idle': { targets: ('/' | '/working' | '/working/idle' | '/working/register'); 
+          };
+          'working': { targets: ('/' | '/idle' | '/working/idle' | '/working/register'); 
+            initial: 'idle';
+            states: {
+              'idle': { targets: ('/' | '/idle' | '/working' | '/working/register'); 
+              };
+              'register': { targets: ('/' | '/idle' | '/working' | '/working/idle'); 
               };
             };
           };
         };
+      };
         all: '/' | '/idle' | '/working' | '/working/idle' | '/working/register';
       };
-      events:
-        | 'CHANGE_LANG'
-        | 'REMOVE'
-        | 'ADD'
-        | 'UPDATE'
-        | 'UPDATE:NOW'
-        | 'FIELDS:REGISTER'
-        | 'FIELDS:MODIFY'
-        | 'VALUES:REGISTER'
-        | 'VALUES:MODIFY';
+      events: 'CHANGE_LANG' | 'REMOVE' | 'ADD' | 'UPDATE' | 'UPDATE:NOW' | 'FIELDS:REGISTER' | 'FIELDS:MODIFY' | 'VALUES:REGISTER' | 'VALUES:MODIFY';
       options: {
         children: never;
         emitters: never;
-        tags: never;
-        actions:
-          | 'prepare'
-          | 'changeLang'
-          | 'remove'
-          | 'add'
-          | 'update'
-          | 'update:now'
-          | 'fields.register'
-          | 'fields.register.finish'
-          | 'fields.modify'
-          | 'values.start.register'
-          | 'values.register'
-          | 'values.register.finish'
-          | 'values.modify';
-        delays: never;
-        guards: never;
+        tags:     never;
+        actions:  'prepare' | 'changeLang' | 'remove' | 'add' | 'update' | 'update:now' | 'fields.register' | 'fields.register.finish' | 'fields.modify' | 'values.start.register' | 'values.register' | 'values.register.finish' | 'values.modify';
+        delays:   never;
+        guards:   never;
       };
       pContext: any;
     };
+
   }
 }
 
