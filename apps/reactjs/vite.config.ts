@@ -16,7 +16,7 @@ const config = defineConfig({
 
   test: {
     bail: 100,
-
+    maxConcurrency: 100,
     environment: 'jsdom',
     env: { NODE_ENV: 'test', RTL_SKIP_AUTO_CLEANUP: 'true' },
     testTimeout: 30000,

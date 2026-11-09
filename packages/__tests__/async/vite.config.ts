@@ -5,7 +5,7 @@ export default defineConfig({
 
   test: {
     bail: 100,
-
+    maxConcurrency: 100,
     allowOnly: true,
     environment: 'node',
     env: { NODE_ENV: 'test' },

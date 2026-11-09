@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => ({
   ...(mode !== 'test' && { pack: buildPack() }),
   test: {
     bail: 100,
-
+    maxConcurrency: 100,
     environment: 'node',
     testTimeout: 30000,
     env: { NODE_ENV: 'test' },
