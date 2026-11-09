@@ -20,14 +20,7 @@ export default defineConfig({
           },
         ],
         cache: {
-          input: [
-            'src/**',
-            'package.json',
-            'tsconfig.json',
-            'vite.config.ts',
-            { pattern: 'tsconfig.json', base: 'workspace' },
-            { pattern: 'pnpm-lock.yaml', base: 'workspace' },
-          ],
+          input: ['src/**', 'package.json', 'tsconfig.json', 'vite.config.ts'],
           output: ['lib/**'],
         },
       },
