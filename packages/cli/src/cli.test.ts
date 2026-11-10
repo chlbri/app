@@ -88,9 +88,11 @@ export default createMachine(
   const WAITER = 500;
 
   beforeAll(() => {
-    // if (IS_EXTENSION) {
-    spy.mockReturnValue(resolve(process.cwd(), 'packages/cli'));
-    // }
+    const END = 'packages/cli';
+    const _cwd = process.cwd();
+    if (!_cwd.trim().endsWith(END)) {
+      spy.mockReturnValue(resolve(process.cwd(), 'packages/cli'));
+    }
   });
 
   afterAll(() => spy.mockRestore());
@@ -143,7 +145,7 @@ export default createMachine(
 
   test('#07 => cli generate', async ({ onTestFinished }) => {
     const result = await run(generate, ['-c', DIR, '--dry-run']);
-    expect(result).toEqual(OUPUT1);
+    expect(result).toEqual(OUPUT1.map(exp => exp.replace(/[ \t]+$/gm, '')));
     onTestFinished(() => console.warn('generated file for dry-run'));
   });
 

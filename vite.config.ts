@@ -159,7 +159,28 @@ export default defineConfig({
         command: 'VSCODE_NONCE= COPILOT_DEBUG_NONCE= vp test --silent',
 
         cache: {
-          // No env var is fingerprinted: changing env never invalidates the cache
+          input: [
+            'vite.config.ts',
+            'vitest.setup.ts',
+            'tsconfig.json',
+            'pnpm-workspace.yaml',
+
+            '**/vitest.setup.ts',
+
+            'packages/__tests__/*/src/**/*.ts',
+            'packages/cli/src/**/*.ts',
+            'apps/reactjs/src/**/*.ts',
+            'apps/solidjs/src/**/*.ts',
+
+            'packages/__tests__/*/vite.config.ts',
+            'packages/cli/vite.config.ts',
+            'apps/reactjs/vite.config.ts',
+            'apps/solidjs/vite.config.ts',
+
+            '!**/*.gen.ts',
+          ],
+
+          output: ['.coverage/**'],
           env: [],
         },
       },
