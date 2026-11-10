@@ -22,7 +22,7 @@ export default defineConfig({
     tasks: {
       'generate:lib': {
         dependsOn: ['@bemedev/app-cli#pretest'],
-        command: 'app-cli generate -c ./src',
+        command: 'vpx app-cli generate -c ./src',
         cache: { input: ['src/**', '!src/app.gen.ts'], output: ['src/app.gen.ts'] },
       },
     },
