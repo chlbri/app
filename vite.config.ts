@@ -181,7 +181,8 @@ export default defineConfig({
           ],
 
           output: ['.coverage/**'],
-          env: ['ACTIONS_ORCHESTRATION_ID'],
+          env: [],
+          untrackedEnv: ['ACTIONS_ORCHESTRATION_ID'],
         },
       },
 
@@ -205,6 +206,8 @@ export default defineConfig({
             'pnpm-workspace.yaml',
             'packages/**/src/**',
             'apps/*/src/**',
+
+            '!**/*.gen.ts',
           ],
 
           output: [],

@@ -43,7 +43,13 @@ export default defineConfig(({ mode }) => ({
       pack: {
         command: 'vp pack',
         cache: {
-          input: ['src/**', 'package.json', 'tsconfig.json', 'vite.config.ts'],
+          input: [
+            'src/**',
+            'package.json',
+            'tsconfig.json',
+            'vite.config.ts',
+            '!**/*.gen.ts',
+          ],
           output: ['lib/**'],
         },
       },

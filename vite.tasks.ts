@@ -8,7 +8,13 @@ export const pack: Task = {
     { task: 'pack', from: ['dependencies', 'devDependencies', 'peerDependencies'] },
   ],
   cache: {
-    input: ['src/**', 'package.json', 'tsconfig.json', 'vite.config.ts'],
+    input: [
+      'src/**',
+      'package.json',
+      'tsconfig.json',
+      'vite.config.ts',
+      '!**/*.gen.ts',
+    ],
     output: ['lib/**'],
   },
 };
