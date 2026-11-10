@@ -21,7 +21,7 @@ export default defineConfig({
   run: {
     tasks: {
       'generate:lib': {
-        dependsOn: [{ from: 'devDependencies', task: 'pretest' }],
+        dependsOn: ['@bemedev/app-cli#pretest'],
         command: 'app-cli generate -c ./src',
         cache: { input: ['src/**', '!src/app.gen.ts'], output: ['src/app.gen.ts'] },
       },
