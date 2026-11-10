@@ -156,7 +156,7 @@ export default defineConfig({
   run: {
     tasks: {
       'test:only': {
-        command: 'VSCODE_NONCE= COPILOT_DEBUG_NONCE= env -u vp test --silent',
+        command: 'VSCODE_NONCE= COPILOT_DEBUG_NONCE= vp test --silent',
 
         cache: {
           input: [
@@ -181,8 +181,7 @@ export default defineConfig({
           ],
 
           output: ['.coverage/**'],
-          env: [],
-          untrackedEnv: ['ACTIONS_ORCHESTRATION_ID'],
+          env: ['ACTIONS_ORCHESTRATION_ID'],
         },
       },
 
