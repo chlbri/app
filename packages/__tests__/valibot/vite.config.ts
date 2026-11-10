@@ -21,6 +21,7 @@ export default defineConfig({
   run: {
     tasks: {
       'generate:lib': {
+        dependsOn: [{ from: 'devDependencies', task: 'pretest' }],
         command: 'app-cli generate -c ./src',
         cache: { input: ['src/**', '!src/app.gen.ts'], output: ['src/app.gen.ts'] },
       },
