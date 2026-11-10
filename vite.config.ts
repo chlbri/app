@@ -188,12 +188,7 @@ export default defineConfig({
         command: 'size-limit --silent',
 
         cache: {
-          input: [
-            '.size-limit.ts',
-            'package.json',
-            'packages/*/lib/**',
-            'packages/utils/*/lib/**',
-          ],
+          input: ['.size-limit.ts', 'packages/*/lib/**', 'packages/utils/*/lib/**'],
 
           output: [],
         },

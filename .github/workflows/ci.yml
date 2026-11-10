@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to test'
+        description: "Branch to test"
         required: false
         type: string
 
@@ -17,4 +17,4 @@ on:
 
 jobs:
   all:
-    uses: chlbri/node-github-actions/.github/workflows/ci.yml@main
+    uses: chlbri/node-github-actions/.github/workflows/ci-vp.yml@main
