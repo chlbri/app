@@ -160,15 +160,23 @@ export default defineConfig({
 
         cache: {
           input: [
-            'package.json',
             'vite.config.ts',
+            'vitest.setup.ts',
             'tsconfig.json',
             'pnpm-workspace.yaml',
-            'packages/**/src/**',
-            'packages/**/package.json',
-            'packages/**/tsconfig*.json',
-            'packages/**/vite.config.ts',
-            'packages/**/vitest.setup.ts',
+
+            '**/vitest.setup.ts',
+
+            'packages/__tests__/*/src/**/*.ts',
+            'packages/cli/src/**/*.ts',
+            'apps/reactjs/src/**/*.ts',
+            'apps/solidjs/src/**/*.ts',
+
+            'packages/__tests__/*/vite.config.ts',
+            'packages/cli/vite.config.ts',
+            'apps/reactjs/vite.config.ts',
+            'apps/solidjs/vite.config.ts',
+
             '!**/*.gen.ts',
           ],
 
@@ -177,13 +185,12 @@ export default defineConfig({
       },
 
       size: {
-        command: 'size-limit',
+        command: 'size-limit --silent',
 
         cache: {
           input: [
             '.size-limit.ts',
             'package.json',
-            'pnpm-lock.yaml',
             'packages/*/lib/**',
             'packages/utils/*/lib/**',
           ],
@@ -202,8 +209,6 @@ export default defineConfig({
             'pnpm-workspace.yaml',
             'packages/**/src/**',
             'apps/*/src/**',
-            '!**/node_modules/**',
-            '!**/*.gen.ts',
           ],
 
           output: [],
@@ -211,8 +216,6 @@ export default defineConfig({
       },
     },
   },
-
-  server: { host: '0.0.0.0' },
 
   test: {
     passWithNoTests: true,
