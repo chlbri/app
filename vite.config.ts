@@ -160,22 +160,11 @@ export default defineConfig({
 
         cache: {
           input: [
-            'vite.config.ts',
-            'vitest.setup.ts',
-            'tsconfig.json',
-            'pnpm-workspace.yaml',
-
             '**/vitest.setup.ts',
-
+            '**/vite.config.ts',
             'packages/__tests__/*/src/**/*.ts',
-            'packages/cli/src/**/*.ts',
-            'apps/reactjs/src/**/*.ts',
-            'apps/solidjs/src/**/*.ts',
-
-            'packages/__tests__/*/vite.config.ts',
-            'packages/cli/vite.config.ts',
-            'apps/reactjs/vite.config.ts',
-            'apps/solidjs/vite.config.ts',
+            'apps/*/src/**/*.ts',
+            'apps/*/vite.config.ts',
 
             '!**/*.gen.ts',
           ],
@@ -190,7 +179,6 @@ export default defineConfig({
 
         cache: {
           input: ['.size-limit.ts', 'packages/*/lib/**', 'packages/utils/*/lib/**'],
-
           output: [],
         },
       },
@@ -201,8 +189,6 @@ export default defineConfig({
         cache: {
           input: [
             'vite.config.ts',
-            'package.json',
-            'pnpm-workspace.yaml',
             'packages/**/src/**',
             'apps/*/src/**',
 
