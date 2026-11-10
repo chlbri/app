@@ -40,7 +40,7 @@
     "rinit": "vp run rm && vp run config",
     "fmt": "vp fmt",
     "test": "vp test",
-    "pretest": "pnpm run -r pretest",
+    "pretest": "vp run -r pretest",
     "posttest": "vp run size",
     "rm": "vp run rimraf node_modules pnpm-lock.yaml && pnpm clean --lockfile",
     "up": "vp update --latest && vp run check-updates",
