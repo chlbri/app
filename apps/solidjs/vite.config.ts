@@ -13,7 +13,9 @@ export default defineConfig({
 
     return [
       tailwindcss(),
-      tanstackStart({}),
+      // TanStack Start enumerates every env var during config resolution, so
+      // CI-only vars like ACTIONS_ORCHESTRATION_ID invalidate the task cache.
+      ...(isTest ? [] : [tanstackStart({})]),
       nitro(),
 
       viteSolid({

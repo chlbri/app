@@ -182,7 +182,6 @@ export default defineConfig({
 
           output: ['.coverage/**'],
           env: [],
-          untrackedEnv: ['ACTIONS_ORCHESTRATION_ID'],
         },
       },
 

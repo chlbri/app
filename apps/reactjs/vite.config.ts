@@ -11,7 +11,17 @@ const config = defineConfig({
   ssr: { noExternal: ['lucide-react', '@bemedev/app', '@bemedev/app-reactjs'] },
 
   plugins: lazyPlugins(() => {
-    return [devtools(), tailwindcss(), tanstackStart(), nitro(), viteReact()];
+    const isTest = process.env.NODE_ENV === 'test';
+
+    return [
+      devtools(),
+      tailwindcss(),
+      // TanStack Start enumerates every env var during config resolution, so
+      // CI-only vars like ACTIONS_ORCHESTRATION_ID invalidate the task cache.
+      ...(isTest ? [] : [tanstackStart()]),
+      nitro(),
+      viteReact(),
+    ];
   }),
 
   test: {
