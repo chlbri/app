@@ -5,6 +5,29 @@
 <details>
 <summary>
 
+## **[2.8.1] - 12/11/2026** => _16:48_
+
+</summary>
+
+### Fixes
+
+- **Publishing**: Prefix the build artifact glob with `**/` so archived files keep
+  their `packages/<name>/lib` path and the publish jobs can find the build output.
+
+### Build
+
+- **Release Workflow**: Delegate publishing to the reusable `publish-vp` workflow,
+  add the Vite+ setup step and run the `pretest` task before building.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.0] - 12/11/2026** => _16:06_
 
 </summary>

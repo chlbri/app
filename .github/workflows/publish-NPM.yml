@@ -30,7 +30,6 @@ jobs:
       # entry saved by CI in this run is reused when it already exists, and the
       # prefix falls back to the newest entry of the branch/default branch.
       - name: Restore Vite Task cache
-        if: ${{ !inputs.artifact }}
         id: vite-task-cache
         uses: actions/cache/restore@v6
         with:
@@ -53,12 +52,19 @@ jobs:
           # root folder, not the per-package ones created by
           # `hoistingLimits: workspaces`.
           #
+          # The leading `**/` is required: the artifact root directory is the
+          # least common ancestor of the search paths, i.e. the literal part
+          # before the first wildcard. With `packages/*/lib/**` that root is
+          # `packages`, so the archive stores `app/lib/index.js` instead of
+          # `packages/app/lib/index.js` and the publish jobs (which download
+          # into the repo root) would never find the build output.
+          #
           # packages/app/node_modules/@bemedev/app-utils-bemedev is the only
           # injected/bundled workspace dependency: on a fresh install it is
           # hardlink-snapshotted without its `lib`, so it must be restored from
           # the artifact before publishing.
           path: |
-            packages/*/lib/**
+            **/packages/*/lib/**
             packages/app/node_modules/@bemedev/app-utils-bemedev/lib/**
           if-no-files-found: error
           retention-days: 1
