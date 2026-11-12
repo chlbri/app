@@ -16,7 +16,7 @@ jobs:
         uses: chlbri/node-github-actions/.github/actions/pnpmi@main
 
       - name: Build
-        run: pnpm run build
+        run: pnpm run pretest
 
       - name: Upload workspace
         uses: actions/upload-artifact@v7
@@ -37,7 +37,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: './packages/app'
+      package: "./packages/app"
       artifact: built-workspace
 
   vitest:
@@ -49,7 +49,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: './packages/vitest'
+      package: "./packages/vitest"
       artifact: built-workspace
 
   solidjs:
@@ -61,7 +61,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: './packages/solidjs'
+      package: "./packages/solidjs"
       artifact: built-workspace
 
   reactjs:
@@ -73,7 +73,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: './packages/reactjs'
+      package: "./packages/reactjs"
       artifact: built-workspace
 
   cli:
@@ -85,7 +85,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: './packages/cli'
+      package: "./packages/cli"
       artifact: built-workspace
 
   valibot:
@@ -97,7 +97,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: './packages/valibot'
+      package: "./packages/valibot"
       artifact: built-workspace
 
   cleanup:
