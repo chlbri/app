@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-vitest",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "private": false,
   "description": "Test helpers for @bemedev/app",
   "keywords": [

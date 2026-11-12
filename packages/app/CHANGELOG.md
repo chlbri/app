@@ -8,6 +8,46 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.8.0] - 12/11/2026** => _16:06_
+
+</summary>
+
+### Features
+
+- **Internal Events**: Event type helpers (`EventsR`, emitter and children configs)
+  now carry the optional `__internal` marker, so internal `EventStrings` such as
+  `always` and `after` are valid on event objects and reducer maps.
+
+### Fixes
+
+- **Async Emitters**: `next` and `error` emitter handlers now return the result of
+  `__performTransitions`, keeping emitter callbacks consistent with the interpreter
+  flow.
+- **State Values**: `NextStateValue_F` no longer accepts an explicit `undefined`
+  target.
+
+### Build
+
+- **Vite+ Migration**: Replaced the pnpm/rolldown/oxfmt/oxlint pipeline with the
+  Vite+ toolchain (`vp`). Added `vite.config.ts`, removed `rolldown.config.ts`, and
+  turned build plus size checks into a single cached `pack` task.
+
+### Dependencies
+
+- **Runtime**: Bump `@bemedev/typings` to 1.5.0.
+- **Dev**: Bump `glob` to 14.0.5, `size-limit` to 14.3.0, `rimraf` to 6.1.4 and
+  `tslib` to 2.9.1; rely on the workspace catalog for `vitest` (5.1.0) and Vite+
+  (1.6.0).
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.7.2] - 23/10/2026** => _10:39_
 
 </summary>

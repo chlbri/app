@@ -5,6 +5,41 @@
 <details>
 <summary>
 
+## **[2.8.0] - 12/11/2026** => _16:06_
+
+</summary>
+
+### Features
+
+- **Vite+ Test Runtime**: Test helpers now import `vi`, `expect`, `test` and
+  `VitestUtils` from `vite-plus/test`, so the package runs on the Vite+ toolchain.
+- **Vitest Peer**: Raised the `vitest` peer requirement to `^5.1.0`.
+
+### Refactor
+
+- **Types**: Simplified the `unhandledRejection` test callback signature.
+
+### Build
+
+- **Vite+ Migration**: Replaced the pnpm/rolldown/oxfmt/oxlint pipeline with the
+  Vite+ toolchain (`vp`). Added `vite.config.ts`, removed `rolldown.config.ts`, and
+  turned build plus size checks into a single cached `pack` task.
+
+### Dependencies
+
+- **Dev**: Bump `typescript` to 7.0.2, `size-limit` to 14.3.0, `rimraf` to 6.1.4
+  and `tslib` to 2.9.1; rely on the workspace catalog for `vitest` (5.1.0) and
+  Vite+ (1.6.0).
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.7.2] - 23/10/2026** => _10:39_
 
 </summary>
