@@ -30,7 +30,7 @@ jobs:
 
   app:
     needs: [build]
-    uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
     secrets: inherit
     with:
       type:
@@ -42,7 +42,7 @@ jobs:
 
   vitest:
     needs: [build]
-    uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
     secrets: inherit
     with:
       type:
@@ -54,7 +54,7 @@ jobs:
 
   solidjs:
     needs: [build]
-    uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
     secrets: inherit
     with:
       type:
@@ -66,7 +66,7 @@ jobs:
 
   reactjs:
     needs: [build]
-    uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
     secrets: inherit
     with:
       type:
@@ -78,7 +78,7 @@ jobs:
 
   cli:
     needs: [build]
-    uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
     secrets: inherit
     with:
       type:
@@ -90,7 +90,7 @@ jobs:
 
   valibot:
     needs: [build]
-    uses: chlbri/node-github-actions/.github/workflows/publish.yml@main
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
     secrets: inherit
     with:
       type:
@@ -111,7 +111,7 @@ jobs:
 
     steps:
       - name: Delete artifacts
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

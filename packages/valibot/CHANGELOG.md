@@ -20,9 +20,9 @@
 ### Dependencies
 
 - **Runtime**: Bump `@bemedev/typings` to 1.5.0.
-- **Dev**: Bump `typescript` to 7.0.2, `size-limit` to 14.3.0, `rimraf` to 6.1.4
-  and `tslib` to 2.9.1; rely on the workspace catalog for `vitest` (5.1.0) and
-  Vite+ (1.6.0).
+- **Dev**: Bump `typescript` to 7.0.2, `size-limit` to 14.3.0, `rimraf` to 6.1.4 and
+  `tslib` to 2.9.1; rely on the workspace catalog for `vitest` (5.1.0) and Vite+
+  (1.6.0).
 
 - <u>Test coverage **_100%_**</u>
 
