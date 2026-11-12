@@ -48,7 +48,7 @@
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/dev-utils": "^1.5.2",
     "@bemedev/sleep": "^0.2.2",
-    "@bemedev/typings": "^1.4.1",
+    "@bemedev/typings": "^1.5.0",
     "@size-limit/file": "^14.3.0",
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "catalog:",

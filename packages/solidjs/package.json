@@ -62,29 +62,29 @@
     "@size-limit/file": "^14.3.0",
     "@solidjs/testing-library": "^0.8.10",
     "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/user-event": "^14.6.8",
+    "@testing-library/user-event": "^14.6.10",
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
-    "glob": "^14.0.4",
+    "glob": "^14.0.5",
     "globals": "^17.14.0",
     "husky": "^9.1.7",
     "jsdom": "^31.0.0",
     "onchange": "^7.1.0",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "pretty-quick": "^4.2.2",
     "size-limit": "^14.3.0",
-    "solid-js": "^1.9.18",
+    "solid-js": "^1.9.19",
     "tslib": "^2.9.1",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
-    "vite-plugin-solid": "^2.11.15",
+    "vite-plugin-solid": "^2.11.16",
     "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
   "peerDependencies": {
     "@bemedev/app": "workspace:^",
-    "solid-js": "^1.9.18"
+    "solid-js": "^1.9.19"
   },
   "engines": {
     "node": ">=24"
