@@ -35,7 +35,9 @@ jobs:
 
         with:
           path: node_modules/.vite/task-cache
-          key: vite-task-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key:
+            vite-task-${{ runner.os }}-${{ runner.arch }}-${{
+            hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             vite-task-${{ runner.os }}-${{ runner.arch }}-
 
