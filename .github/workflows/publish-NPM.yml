@@ -42,6 +42,12 @@ jobs:
       - name: Build
         run: vp run pretest
 
+      - name: Save Vite Task cache
+        uses: actions/cache/save@v6
+        with:
+          path: node_modules/.vite/task-cache
+          key: ${{ runner.os }}-${{ runner.arch }}-vite-tasks-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - name: Upload workspace
         uses: actions/upload-artifact@v7
 
