@@ -18,7 +18,7 @@ jobs:
       - name: Setup Void Zero
         uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "24"
+          node-version: '24'
           cache: true
           # Default is true, set explicitly: this installs the workspace with
           # the managed pnpm, which the publish action below relies on.
@@ -34,12 +34,14 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: node_modules/.vite/task-cache
-          key: vite-task-${{ runner.os }}-${{ runner.arch }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key:
+            vite-task-${{ runner.os }}-${{ runner.arch }}-${{ github.run_id }}-${{
+            github.run_attempt }}
           restore-keys: |
             vite-task-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Build
-        run: pnpm run pretest
+        run: vp run pretest
 
       - name: Upload workspace
         uses: actions/upload-artifact@v7
@@ -78,7 +80,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: "./packages/app"
+      package: './packages/app'
       artifact: built-workspace
 
   vitest:
@@ -90,7 +92,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: "./packages/vitest"
+      package: './packages/vitest'
       artifact: built-workspace
 
   solidjs:
@@ -102,7 +104,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: "./packages/solidjs"
+      package: './packages/solidjs'
       artifact: built-workspace
 
   reactjs:
@@ -114,7 +116,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: "./packages/reactjs"
+      package: './packages/reactjs'
       artifact: built-workspace
 
   cli:
@@ -126,7 +128,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: "./packages/cli"
+      package: './packages/cli'
       artifact: built-workspace
 
   valibot:
@@ -138,7 +140,7 @@ jobs:
         ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
         'canary' || 'latest' }}
 
-      package: "./packages/valibot"
+      package: './packages/valibot'
       artifact: built-workspace
 
   cleanup:

@@ -58,7 +58,7 @@
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
     "fast-glob": "^3.3.3",
-    "glob": "^14.0.5",
+    "glob": "^14.0.6",
     "globals": "^17.14.0",
     "husky": "^9.1.7",
     "onchange": "^7.1.0",

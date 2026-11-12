@@ -217,8 +217,8 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       glob:
-        specifier: ^14.0.5
-        version: 14.0.5
+        specifier: ^14.0.6
+        version: 14.0.6
       globals:
         specifier: ^17.14.0
         version: 17.14.0
@@ -386,8 +386,8 @@ importers:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
       react-virtuoso:
-        specifier: ^4.18.21
-        version: 4.18.21(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: ^4.18.22
+        version: 4.18.22(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-window:
         specifier: ^2.5.3
         version: 2.5.3(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -764,8 +764,8 @@ importers:
         specifier: ^2.0.9
         version: 2.0.9
       glob:
-        specifier: ^14.0.5
-        version: 14.0.5
+        specifier: ^14.0.6
+        version: 14.0.6
       globals:
         specifier: ^17.14.0
         version: 17.14.0
@@ -925,8 +925,8 @@ importers:
         specifier: 'catalog:'
         version: 5.1.0(vitest@5.1.0)
       glob:
-        specifier: ^14.0.5
-        version: 14.0.5
+        specifier: ^14.0.6
+        version: 14.0.6
       globals:
         specifier: ^17.14.0
         version: 17.14.0
@@ -1009,8 +1009,8 @@ importers:
         specifier: 'catalog:'
         version: 5.1.0(vitest@5.1.0)
       glob:
-        specifier: ^14.0.5
-        version: 14.0.5
+        specifier: ^14.0.6
+        version: 14.0.6
       globals:
         specifier: ^17.14.0
         version: 17.14.0
@@ -4373,8 +4373,8 @@ packages:
     resolution: {integrity: sha512-ddmxiyS6ETq/v5/+mdA4fykK7JgEmqcShrGmQFTaKf5o43tL8XLuMzNLLsspuIC3/qGupS7Ci2TF+feJRkYY0w==}
     engines: {node: '>= 0.8'}
 
-  enhanced-resolve@5.26.1:
-    resolution: {integrity: sha512-PPnnSJq3azKOIewXR/uppBV/6h98dprBJ/WaQ9Qgj10xX1lJLNfg+XShpbsrSqcDSy2yYYyhfXM1wWhftqgyzw==}
+  enhanced-resolve@5.26.2:
+    resolution: {integrity: sha512-sQeK9D5kN5T+O0Hh+Cn8t39FZ0VJVARcoacJ7x1I0N+3/WqlckcS8D4NUKjMyTh4P5ly1SMgJQstou2aL3rmZQ==}
     engines: {node: '>=10.13.0'}
 
   entities@6.0.1:
@@ -4578,8 +4578,8 @@ packages:
     resolution: {integrity: sha512-wfsFgXQ8A3SEI9XGf7Nl3Y9l7ffSrGh7SUCT7vU/2CzYPep9kjxAn1S40F9OPKxAMGCVl7HtNlJhrCJUeUq83g==}
     engines: {node: 18 || 20 || >=22}
 
-  glob@14.0.5:
-    resolution: {integrity: sha512-nbKW5Sl53DEM5PkmZ5Jwfeyss1ohuqcgOBjOarSjz1fp8W4ss4EOOvKADQRbApD6JmVBX+HkpZYfBez4wXbeQQ==}
+  glob@14.0.6:
+    resolution: {integrity: sha512-OwXjVP2svY5EyLY75Vek96C8qK43gqrt4xsZ+qSILdnaEiJPXkd62mcfUSNx/TQErQRdu5uM5kF67sfONragKw==}
     engines: {node: 18 || 20 || >=22}
 
   globals@17.14.0:
@@ -5481,8 +5481,8 @@ packages:
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
-  react-virtuoso@4.18.21:
-    resolution: {integrity: sha512-2F7utTLDpzc0MjIRfN1ObU1K7UgwDuNs420iPA9Jqg0QxpHi2AnTF1ir7YIhk44Xj4hgi+7iY8krCMOUbKhnXA==}
+  react-virtuoso@4.18.22:
+    resolution: {integrity: sha512-0Jga1NmJsAwhxZlEyE6xN1HtEHePgsWbuzYcJokanaIDVTbc59ocm3MocQ6yJIYTJICaWqYY3+Z4FQ3mnGuD+w==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -6596,7 +6596,7 @@ snapshots:
       '@typescript/typescript6': 6.0.2
       cmd-ts: 0.15.0(supports-color@10.2.2)
       edit-json-file: 1.8.1
-      glob: 14.0.5
+      glob: 14.0.6
       oxc-transform: 0.157.0
       rolldown: 1.3.2
       rollup-plugin-circular-dependencies: 2.0.1(rollup@4.68.2)
@@ -7692,7 +7692,7 @@ snapshots:
   '@tailwindcss/node@4.3.5':
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      enhanced-resolve: 5.26.1
+      enhanced-resolve: 5.26.2
       jiti: 2.7.0
       lightningcss: 1.33.0
       magic-string: 1.4.5
@@ -9206,7 +9206,7 @@ snapshots:
 
   encodeurl@2.0.2: {}
 
-  enhanced-resolve@5.26.1:
+  enhanced-resolve@5.26.2:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.3
@@ -9421,7 +9421,7 @@ snapshots:
       minipass: 7.1.3
       path-scurry: 2.0.2
 
-  glob@14.0.5:
+  glob@14.0.6:
     dependencies:
       minimatch: 11.0.8
       minipass: 7.1.3
@@ -10429,7 +10429,7 @@ snapshots:
 
   react-is@17.0.2: {}
 
-  react-virtuoso@4.18.21(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
+  react-virtuoso@4.18.22(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
@@ -10523,7 +10523,7 @@ snapshots:
 
   rimraf@6.1.4:
     dependencies:
-      glob: 14.0.5
+      glob: 14.0.6
       package-json-from-dist: 1.0.1
 
   rolldown@1.3.2:
