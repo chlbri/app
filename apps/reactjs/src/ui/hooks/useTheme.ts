@@ -12,19 +12,15 @@ export const getInitialMode = (): ThemeMode => {
   if (typeof window === 'undefined') return 'auto';
   const stored = window.localStorage.getItem('theme');
 
-  const check =
-    stored === 'light' || stored === 'dark' || stored === 'auto';
+  const check = stored === 'light' || stored === 'dark' || stored === 'auto';
 
   if (check) return stored;
   return 'auto';
 };
 
 export const applyThemeMode = (mode: ThemeMode): void => {
-  const prefersDark = window.matchMedia(
-    '(prefers-color-scheme: dark)',
-  ).matches;
-  const resolved =
-    mode === 'auto' ? (prefersDark ? 'dark' : 'light') : mode;
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const resolved = mode === 'auto' ? (prefersDark ? 'dark' : 'light') : mode;
 
   document.documentElement.classList.remove('light', 'dark');
   document.documentElement.classList.add(resolved);

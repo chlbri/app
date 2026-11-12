@@ -10,18 +10,11 @@ export const trafficMachine = createMachine(
         states: {
           normal: {
             tags: 'normal',
-            on: {
-              ACCELERATE: { actions: 'accelerate', target: '/speed/fast' },
-            },
+            on: { ACCELERATE: { actions: 'accelerate', target: '/speed/fast' } },
           },
           fast: {
             tags: 'fast',
-            on: {
-              SLOW_DOWN: {
-                actions: 'decelerate',
-                target: '/speed/normal',
-              },
-            },
+            on: { SLOW_DOWN: { actions: 'decelerate', target: '/speed/normal' } },
           },
         },
       },
@@ -53,18 +46,10 @@ export const trafficMachine = createMachine(
     context: type({ cycles: 'number' }),
     pContext: type(({ optional }) => ({
       timers: { yellow: 'number', green: 'number', red: 'number' },
-      defaults: optional({
-        yellow: 'number',
-        green: 'number',
-        red: 'number',
-      }),
+      defaults: optional({ yellow: 'number', green: 'number', red: 'number' }),
       speed: 'number',
     })),
-    eventsMap: type({
-      NEXT: 'never',
-      ACCELERATE: 'never',
-      SLOW_DOWN: 'never',
-    }),
+    eventsMap: type({ NEXT: 'never', ACCELERATE: 'never', SLOW_DOWN: 'never' }),
     sync: true,
   },
 ).provideOptions(({ assign, action }) => ({

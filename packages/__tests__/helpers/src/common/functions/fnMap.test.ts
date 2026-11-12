@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from 'vite-plus/test';
 import { isFnMap, isAsyncFnMap } from '@bemedev/app';
 
 describe('TESTS', () => {
@@ -11,8 +11,7 @@ describe('TESTS', () => {
       expect(isFnMap({ fn1: () => {}, fn2: () => {} })).toBe(true);
     });
 
-    test('#03 => with null: returns false', () =>
-      expect(isFnMap(null)).toBe(false));
+    test('#03 => with null: returns false', () => expect(isFnMap(null)).toBe(false));
 
     test('#04 => with undefined: returns false', () => {
       expect(isFnMap(undefined)).toBe(false);
@@ -23,9 +22,7 @@ describe('TESTS', () => {
     });
 
     test('#06 => with non-function values: returns false', () => {
-      expect(isFnMap({ fn1: () => {}, fn2: 'not a function' })).toBe(
-        false,
-      );
+      expect(isFnMap({ fn1: () => {}, fn2: 'not a function' })).toBe(false);
     });
 
     test('#07 => with number values: returns false', () => {
@@ -59,15 +56,11 @@ describe('TESTS', () => {
     });
 
     test('#02 => with only promise-returning functions: returns true', () => {
-      expect(
-        isAsyncFnMap({ fn1: async () => {}, fn2: async () => {} }),
-      ).toBe(true);
+      expect(isAsyncFnMap({ fn1: async () => {}, fn2: async () => {} })).toBe(true);
     });
 
     test('#03 => with some promise-returning functions: returns true', () => {
-      expect(isAsyncFnMap({ fn1: () => {}, fn2: async () => {} })).toBe(
-        true,
-      );
+      expect(isAsyncFnMap({ fn1: () => {}, fn2: async () => {} })).toBe(true);
     });
 
     test('#04 => with only non-promise functions: returns false', () => {
@@ -86,15 +79,13 @@ describe('TESTS', () => {
     });
 
     test('#08 => with non-function values: returns false', () => {
-      expect(
-        isAsyncFnMap({ fn1: async () => {}, fn2: 'not a function' }),
-      ).toBe(false);
+      expect(isAsyncFnMap({ fn1: async () => {}, fn2: 'not a function' })).toBe(
+        false,
+      );
     });
 
     test('#09 => with mixed non-function values: returns false', () => {
-      expect(isAsyncFnMap({ fn1: async () => {}, fn2: 42, fn3: {} })).toBe(
-        false,
-      );
+      expect(isAsyncFnMap({ fn1: async () => {}, fn2: 42, fn3: {} })).toBe(false);
     });
 
     test('#10 => with an empty object: returns false', () =>

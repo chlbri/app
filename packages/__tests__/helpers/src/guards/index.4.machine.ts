@@ -15,10 +15,7 @@ export default createMachine(
                 'returnFalse',
                 {
                   and: [
-                    {
-                      name: 'returnTrue',
-                      description: 'Just return TRUE',
-                    },
+                    { name: 'returnTrue', description: 'Just return TRUE' },
                     'returnTrue2',
                   ],
                 },
@@ -32,8 +29,5 @@ export default createMachine(
       state2: {},
     },
   },
-  {
-    pContext: type({ data: 'string' }),
-    context: type({ data: 'number' }),
-  },
+  { pContext: type({ data: 'string' }), context: type({ data: 'number' }) },
 );

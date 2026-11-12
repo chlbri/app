@@ -40,9 +40,7 @@ export const Route = createFileRoute('/test-index')({
   },
 
   component: () => {
-    const service = Route.useRouteContext({
-      select: s => s.counterServiceTest,
-    });
+    const service = Route.useRouteContext({ select: s => s.counterServiceTest });
 
     const {
       FullStateWrapper,
@@ -97,8 +95,7 @@ export const Route = createFileRoute('/test-index')({
               <div className='space-y-3'>
                 <div className='flex items-center gap-2'>
                   <Badge variant='active' className='text-xs'>
-                    <Sparkles className='h-3.5 w-3.5' /> React 19 +
-                    TanStack Start
+                    <Sparkles className='h-3.5 w-3.5' /> React 19 + TanStack Start
                   </Badge>
 
                   <Badge variant='purple' className='text-xs'>
@@ -115,10 +112,7 @@ export const Route = createFileRoute('/test-index')({
 
                 <p className='max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base'>
                   Test and inspect real-time state machine transitions with{' '}
-                  <code className='font-mono text-emerald-400'>
-                    useService
-                  </code>{' '}
-                  from{' '}
+                  <code className='font-mono text-emerald-400'>useService</code> from{' '}
                   <code className='font-mono text-teal-400'>
                     @bemedev/app-reactjs
                   </code>
@@ -185,8 +179,8 @@ export const Route = createFileRoute('/test-index')({
                 <CardHeader>
                   <CardTitle className='justify-between'>
                     <span className='flex items-center gap-2'>
-                      <Activity className='h-5 w-5 text-emerald-400' />{' '}
-                      State Inspector
+                      <Activity className='h-5 w-5 text-emerald-400' /> State
+                      Inspector
                     </span>
                     <StateValue
                       render={v => {
@@ -215,8 +209,7 @@ export const Route = createFileRoute('/test-index')({
                   {/* Active Tags */}
                   <div className='space-y-2'>
                     <div className='flex items-center gap-1.5 text-xs font-medium text-slate-400'>
-                      <Layers className='h-3.5 w-3.5 text-slate-400' />{' '}
-                      Active Tags:
+                      <Layers className='h-3.5 w-3.5 text-slate-400' /> Active Tags:
                     </div>
 
                     <Tags {...{ service }} />
@@ -268,8 +261,7 @@ export const Route = createFileRoute('/test-index')({
               <Card>
                 <CardHeader>
                   <CardTitle className='flex items-center gap-2'>
-                    <Zap className='h-5 w-5 text-amber-400' /> Dispatch
-                    Events
+                    <Zap className='h-5 w-5 text-amber-400' /> Dispatch Events
                   </CardTitle>
                   <CardDescription>
                     Send events to trigger machine state transitions
@@ -286,8 +278,7 @@ export const Route = createFileRoute('/test-index')({
                           disabled={disabled}
                           className='gap-2'
                         >
-                          <Flame className='h-4 w-4 text-amber-400' />{' '}
-                          ACCELERATE
+                          <Flame className='h-4 w-4 text-amber-400' /> ACCELERATE
                         </Button>
                       )}
                     />
@@ -299,8 +290,7 @@ export const Route = createFileRoute('/test-index')({
                           disabled={disabled}
                           className='gap-2'
                         >
-                          <Gauge className='h-4 w-4 text-sky-400' />{' '}
-                          DECELERATE
+                          <Gauge className='h-4 w-4 text-sky-400' /> DECELERATE
                         </Button>
                       )}
                     />
@@ -326,8 +316,8 @@ export const Route = createFileRoute('/test-index')({
               <Card>
                 <CardHeader>
                   <CardTitle className='flex items-center gap-2'>
-                    <Code2 className='h-5 w-5 text-sky-400' /> useService
-                    Hook Selectors
+                    <Code2 className='h-5 w-5 text-sky-400' /> useService Hook
+                    Selectors
                   </CardTitle>
                   <CardDescription>
                     Demonstrates selective reactive re-rendering with
@@ -337,32 +327,27 @@ export const Route = createFileRoute('/test-index')({
                 <CardContent className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                   <div className='space-y-2 rounded-xl border border-slate-800 bg-slate-950/60 p-4'>
                     <div className='font-mono text-xs text-sky-400'>
-                      useService(service, &#123; selector: s =&gt;
-                      s.context.count &#125;)
+                      useService(service, &#123; selector: s =&gt; s.context.count
+                      &#125;)
                     </div>
 
                     <div className='text-sm font-semibold text-slate-200'>
                       Extracted Count:{' '}
-                      <span className='font-bold text-white'>
-                        {<Count />}
-                      </span>
+                      <span className='font-bold text-white'>{<Count />}</span>
                     </div>
                     <div className='font-mono text-xs text-sky-400'>
-                      useService(service, &#123; selector: s =&gt;
-                      s.context.speed &#125;)
+                      useService(service, &#123; selector: s =&gt; s.context.speed
+                      &#125;)
                     </div>
                     <div className='text-sm font-semibold text-slate-200'>
                       Extracted Speed:{' '}
-                      <span className='font-bold text-white'>
-                        {<Speed />}
-                      </span>
+                      <span className='font-bold text-white'>{<Speed />}</span>
                     </div>
                   </div>
 
                   <div className='space-y-2 rounded-xl border border-slate-800 bg-slate-950/60 p-4'>
                     <div className='font-mono text-xs text-teal-400'>
-                      useService(service, &#123; selector: s =&gt; s.value
-                      &#125;)
+                      useService(service, &#123; selector: s =&gt; s.value &#125;)
                     </div>
                     <StateValue
                       render={v => (

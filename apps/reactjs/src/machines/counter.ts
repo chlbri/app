@@ -64,23 +64,15 @@ export const counterMachine = createMachine(
   },
 ).provideOptions(({ assign }) => ({
   actions: {
-    increment: assign(
-      'count',
-      ({ context: { count, speed } }) => count + speed,
-    ),
+    increment: assign('count', ({ context: { count, speed } }) => count + speed),
 
     decrement: assign('count', ({ context: { count, speed } }) =>
       Math.max(count - speed, 0),
     ),
 
-    accelerate: assign(
-      'speed',
-      ({ context }) => context.speed + 1,
-    ),
+    accelerate: assign('speed', ({ context }) => context.speed + 1),
 
-    decelerate: assign('speed', ({ context }) =>
-      Math.max(context.speed - 1, 1),
-    ),
+    decelerate: assign('speed', ({ context }) => Math.max(context.speed - 1, 1)),
 
     log: assign('logs', ({ context, value, event }) => {
       const eventType = eventToType(event);
@@ -106,7 +98,6 @@ export const counterMachine = createMachine(
       },
     }),
   },
-
 }));
 
 export type Service = SyncInterpreterFrom<typeof counterMachine>;

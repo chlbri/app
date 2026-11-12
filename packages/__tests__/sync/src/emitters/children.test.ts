@@ -102,27 +102,23 @@ describe('Children', () => {
       },
     }));
 
-
     const service = interpret(machine, { context: 0 });
-    const { useContext, waiter, useMock, useNext, start, stop } =
-      constructTests(
-        service,
-        ({ contexts, sender, waiter, tupleOf, getIndex }) => ({
-          useContext: contexts(({ context }) => context),
-          useNext: sender('NEXT'),
-          waiter: waiter(WAITERS.short),
+    const { useContext, waiter, useMock, useNext, start, stop } = constructTests(
+      service,
+      ({ contexts, sender, waiter, tupleOf, getIndex }) => ({
+        useContext: contexts(({ context }) => context),
+        useNext: sender('NEXT'),
+        waiter: waiter(WAITERS.short),
 
-          useMock: (fails = false) => {
-            const invite = `#${getIndex()} => mockFn called${fails ? ' => (fails)' : ''}`;
+        useMock: (fails = false) => {
+          const invite = `#${getIndex()} => mockFn called${fails ? ' => (fails)' : ''}`;
 
-            return tupleOf(invite, () => {
-              expect(mockFn).toHaveBeenCalledWith(
-                'Complete action executed',
-              );
-            });
-          },
-        }),
-      );
+          return tupleOf(invite, () => {
+            expect(mockFn).toHaveBeenCalledWith('Complete action executed');
+          });
+        },
+      }),
+    );
 
     test(...start());
     test(...waiter());

@@ -32,12 +32,14 @@ describe('EDGES CASES', () => {
       const service = interpret(arrayAssignAsyncMachine, {
         context: { number1: 0, number2: 0 },
       });
-      const { incTheArray, start, stop, number1, number2 } =
-        constructTests(service, ({ sender, contexts }) => ({
+      const { incTheArray, start, stop, number1, number2 } = constructTests(
+        service,
+        ({ sender, contexts }) => ({
           incTheArray: sender('INC'),
           number1: contexts(c => c.context.number1, 'number1'),
           number2: contexts(c => c.context.number2, 'number2'),
-        }));
+        }),
+      );
 
       test(...start());
       test(...number1(0));
@@ -52,12 +54,14 @@ describe('EDGES CASES', () => {
       const service = interpret(arrayAssignMachine, {
         context: { number1: 0, number2: 0 },
       });
-      const { incTheArray, start, stop, number1, number2 } =
-        constructTests(service, ({ sender, contexts }) => ({
+      const { incTheArray, start, stop, number1, number2 } = constructTests(
+        service,
+        ({ sender, contexts }) => ({
           incTheArray: sender('INC'),
           number1: contexts(c => c.context.number1, 'number1'),
           number2: contexts(c => c.context.number2, 'number2'),
-        }));
+        }),
+      );
 
       test(...start());
       test(...number1(0));
@@ -72,12 +76,14 @@ describe('EDGES CASES', () => {
       const service = interpret(arrayAssignSyncMachine, {
         context: { number1: 0, number2: 0 },
       });
-      const { incTheArray, start, stop, number1, number2 } =
-        constructTests(service, ({ sender, contexts }) => ({
+      const { incTheArray, start, stop, number1, number2 } = constructTests(
+        service,
+        ({ sender, contexts }) => ({
           incTheArray: sender('INC'),
           number1: contexts(c => c.context.number1, 'number1'),
           number2: contexts(c => c.context.number2, 'number2'),
-        }));
+        }),
+      );
 
       test(...start());
       test(...number1(0));
@@ -157,8 +163,7 @@ describe('EDGES CASES', () => {
       test(...number4(8));
       test(...stop());
 
-      test('#99 => machine is defined', () =>
-        expect(service.machine).toBeDefined());
+      test('#99 => machine is defined', () => expect(service.machine).toBeDefined());
     });
   });
 });

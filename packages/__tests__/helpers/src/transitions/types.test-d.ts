@@ -61,10 +61,7 @@ const ttest3 = {
     m1: {
       on: {
         EVENT1: { actions: 'action1' },
-        EVENT34: [
-          { guards: 'guard2', actions: 'build2' },
-          { actions: 'e' },
-        ],
+        EVENT34: [{ guards: 'guard2', actions: 'build2' }, { actions: 'e' }],
       },
     },
   },
@@ -91,14 +88,8 @@ expectTypeOf<TTest3>().toEqualTypeOf<
 
 const transition1 = {
   actors: {
-    machine111: {
-      contexts: {},
-      on: { NEXT: '/working', PREVIOUS: '/idle' },
-    },
-    machine122: {
-      contexts: {},
-      on: { NEXT2: '/working', PREVIOUS2: '/idle' },
-    },
+    machine111: { contexts: {}, on: { NEXT: '/working', PREVIOUS: '/idle' } },
+    machine122: { contexts: {}, on: { NEXT2: '/working', PREVIOUS2: '/idle' } },
   },
 } as const satisfies TransitionsConfig;
 
@@ -111,10 +102,7 @@ expectTypeOf<TTS1>().toEqualTypeOf<
 
 const transition2 = {
   actors: {
-    machine111: {
-      contexts: {},
-      on: { NEXT: '/working', PREVIOUS: '/idle' },
-    },
+    machine111: { contexts: {}, on: { NEXT: '/working', PREVIOUS: '/idle' } },
     emitter1: { next: '/' },
   },
 } as const satisfies TransitionsConfig;

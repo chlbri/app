@@ -16,7 +16,6 @@ describe('REAL LIFE TESTS', () => {
       actions: { inc: assign(({ context }) => context + 1) },
     }));
 
-
     const service = interpret(machine, { context: 0 });
 
     // #region Hooks
@@ -51,16 +50,12 @@ describe('REAL LIFE TESTS', () => {
       test(...useIterator(2, 2));
       test(...useSend('NEXT', 3));
 
-      test(
-        ...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 4),
-      );
+      test(...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 4));
 
       test(...useIterator(8, 5));
       test(...useSend('NEXT', 6));
 
-      test(
-        ...useValue({ parallel: { atomic: 'next', compound: 'next' } }, 7),
-      );
+      test(...useValue({ parallel: { atomic: 'next', compound: 'next' } }, 7));
 
       test(...useIterator(11, 8));
       test(...useSend('NEXT', 9));
@@ -71,12 +66,7 @@ describe('REAL LIFE TESTS', () => {
       test(...useIterator(24, 14));
       test(...useSend('NEXT', 15));
 
-      test(
-        ...useValue(
-          { parallel: { atomic: 'idle', compound: 'idle' } },
-          16,
-        ),
-      );
+      test(...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 16));
 
       test(...useIterator(30, 17));
       test(...useSend('PREVIOUS', 18));
@@ -84,12 +74,7 @@ describe('REAL LIFE TESTS', () => {
       test(...useIterator(37, 20));
       test(...useSend('NEXT', 21));
 
-      test(
-        ...useValue(
-          { parallel: { atomic: 'idle', compound: 'idle' } },
-          22,
-        ),
-      );
+      test(...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 22));
 
       test(...useIterator(44, 23));
     });
@@ -99,7 +84,6 @@ describe('REAL LIFE TESTS', () => {
     const machine = _machine2.provideOptions(({ assign }) => ({
       actions: { inc: assign(({ context }) => context + 1) },
     }));
-
 
     const service = interpret(machine, { context: 0 });
 
@@ -136,9 +120,7 @@ describe('REAL LIFE TESTS', () => {
       test(...useIterator(1, 2));
       test(...useSend('NEXT', 3));
 
-      test(
-        ...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 4),
-      );
+      test(...useValue({ parallel: { atomic: 'idle', compound: 'idle' } }, 4));
 
       test(...useIterator(7, 5));
       test(...useSend('NEXT', 6));
@@ -205,9 +187,7 @@ describe('REAL LIFE TESTS', () => {
                     idle: {
                       exit: 'inc',
                       entry: 'inc',
-                      on: {
-                        NEXT: { target: '/parallel/compound/compound' },
-                      },
+                      on: { NEXT: { target: '/parallel/compound/compound' } },
                     },
                     compound: {
                       exit: 'inc',
@@ -234,11 +214,7 @@ describe('REAL LIFE TESTS', () => {
               },
             },
           },
-          'states.idle': {
-            exit: 'inc',
-            entry: 'inc',
-            on: { NEXT: '/parallel' },
-          },
+          'states.idle': { exit: 'inc', entry: 'inc', on: { NEXT: '/parallel' } },
           'states.idle.exit': 'inc',
           'states.idle.entry': 'inc',
           'states.idle.on': { NEXT: '/parallel' },
@@ -276,9 +252,7 @@ describe('REAL LIFE TESTS', () => {
                   idle: {
                     exit: 'inc',
                     entry: 'inc',
-                    on: {
-                      NEXT: { target: '/parallel/compound/compound' },
-                    },
+                    on: { NEXT: { target: '/parallel/compound/compound' } },
                   },
                   compound: {
                     exit: 'inc',
@@ -417,10 +391,7 @@ describe('REAL LIFE TESTS', () => {
           'states.parallel.states.atomic.states.next': {
             exit: 'inc',
             entry: 'inc',
-            on: {
-              PREVIOUS: '/parallel/atomic/idle',
-              NEXT: '/parallel/atomic/idle',
-            },
+            on: { PREVIOUS: '/parallel/atomic/idle', NEXT: '/parallel/atomic/idle' },
           },
           'states.parallel.states.atomic.states.next.exit': 'inc',
           'states.parallel.states.atomic.states.next.entry': 'inc',
@@ -522,17 +493,13 @@ describe('REAL LIFE TESTS', () => {
               next: {
                 exit: 'inc',
                 entry: 'inc',
-                on: {
-                  PREVIOUS: '/parallel/compound/compound/idle',
-                  NEXT: '/idle',
-                },
+                on: { PREVIOUS: '/parallel/compound/compound/idle', NEXT: '/idle' },
               },
             },
           },
           'states.parallel.states.compound.states.compound.exit': 'inc',
           'states.parallel.states.compound.states.compound.entry': 'inc',
-          'states.parallel.states.compound.states.compound.initial':
-            'idle',
+          'states.parallel.states.compound.states.compound.initial': 'idle',
           'states.parallel.states.compound.states.compound.states': {
             idle: {
               exit: 'inc',
@@ -542,10 +509,7 @@ describe('REAL LIFE TESTS', () => {
             next: {
               exit: 'inc',
               entry: 'inc',
-              on: {
-                PREVIOUS: '/parallel/compound/compound/idle',
-                NEXT: '/idle',
-              },
+              on: { PREVIOUS: '/parallel/compound/compound/idle', NEXT: '/idle' },
             },
           },
           'states.parallel.states.compound.states.compound.states.idle': {
@@ -553,31 +517,24 @@ describe('REAL LIFE TESTS', () => {
             entry: 'inc',
             on: { NEXT: '/parallel/compound/compound/next' },
           },
-          'states.parallel.states.compound.states.compound.states.idle.exit':
-            'inc',
-          'states.parallel.states.compound.states.compound.states.idle.entry':
-            'inc',
-          'states.parallel.states.compound.states.compound.states.idle.on':
-            { NEXT: '/parallel/compound/compound/next' },
+          'states.parallel.states.compound.states.compound.states.idle.exit': 'inc',
+          'states.parallel.states.compound.states.compound.states.idle.entry': 'inc',
+          'states.parallel.states.compound.states.compound.states.idle.on': {
+            NEXT: '/parallel/compound/compound/next',
+          },
           'states.parallel.states.compound.states.compound.states.idle.on.NEXT':
             '/parallel/compound/compound/next',
           'states.parallel.states.compound.states.compound.states.next': {
             exit: 'inc',
             entry: 'inc',
-            on: {
-              PREVIOUS: '/parallel/compound/compound/idle',
-              NEXT: '/idle',
-            },
+            on: { PREVIOUS: '/parallel/compound/compound/idle', NEXT: '/idle' },
           },
-          'states.parallel.states.compound.states.compound.states.next.exit':
-            'inc',
-          'states.parallel.states.compound.states.compound.states.next.entry':
-            'inc',
-          'states.parallel.states.compound.states.compound.states.next.on':
-            {
-              PREVIOUS: '/parallel/compound/compound/idle',
-              NEXT: '/idle',
-            },
+          'states.parallel.states.compound.states.compound.states.next.exit': 'inc',
+          'states.parallel.states.compound.states.compound.states.next.entry': 'inc',
+          'states.parallel.states.compound.states.compound.states.next.on': {
+            PREVIOUS: '/parallel/compound/compound/idle',
+            NEXT: '/idle',
+          },
           'states.parallel.states.compound.states.compound.states.next.on.PREVIOUS':
             '/parallel/compound/compound/idle',
           'states.parallel.states.compound.states.compound.states.next.on.NEXT':
@@ -594,103 +551,85 @@ describe('REAL LIFE TESTS', () => {
 
     // #endregion
 
-    const mainMachine = _mainMachine3.provideOptions(
-      ({ assign }) => ({
-        actions: {
-          changeLang: assign('lang', {
-            CHANGE_LANG: ({ payload: { lang } }) => {
-              return lang;
-            },
-          }),
+    const mainMachine = _mainMachine3.provideOptions(({ assign }) => ({
+      actions: {
+        changeLang: assign('lang', {
+          CHANGE_LANG: ({ payload: { lang } }) => {
+            return lang;
+          },
+        }),
 
-          add: assign('fields', ({ context: { fields } }) => {
-            fields?.push({ label: '', type: 'text' });
+        add: assign('fields', ({ context: { fields } }) => {
+          fields?.push({ label: '', type: 'text' });
+          return fields;
+        }),
+
+        remove: assign('fields', {
+          REMOVE: ({ context: { fields }, payload: { index } }) => {
+            fields?.splice(index, 1);
             return fields;
-          }),
+          },
+        }),
 
-          remove: assign('fields', {
-            REMOVE: ({ context: { fields }, payload: { index } }) => {
-              fields?.splice(index, 1);
-              return fields;
-            },
-          }),
+        update: assign('fields', {
+          UPDATE: ({ context: { fields }, payload: { index, value } }) => {
+            if (!fields) return fields;
+            fields[index] = { ...fields[index], ...value };
+            return fields;
+          },
+        }),
 
-          update: assign('fields', {
-            UPDATE: ({
-              context: { fields },
-              payload: { index, value },
-            }) => {
-              if (!fields) return fields;
-              fields[index] = { ...fields[index], ...value };
-              return fields;
-            },
-          }),
+        'update:now': assign('fields', {
+          'UPDATE:NOW': ({ context: { fields }, payload: { index, value } }) => {
+            if (!fields) return fields;
+            fields[index] = value;
+            return fields;
+          },
+        }),
 
-          'update:now': assign('fields', {
-            'UPDATE:NOW': ({
-              context: { fields },
-              payload: { index, value },
-            }) => {
-              if (!fields) return fields;
-              fields[index] = value;
-              return fields;
-            },
-          }),
+        // #region Fields
+        'fields.register': assign('states.fields', () => 'registration' as const),
 
-          // #region Fields
-          'fields.register': assign(
-            'states.fields',
-            () => 'registration' as const,
-          ),
+        'fields.register.finish': assign(
+          'states.fields',
+          () => 'registered' as const,
+        ),
 
-          'fields.register.finish': assign(
-            'states.fields',
-            () => 'registered' as const,
-          ),
+        'fields.modify': assign('states.fields', () => 'idle' as const),
+        // #endregion
 
-          'fields.modify': assign(
-            'states.fields',
-            () => 'idle' as const,
-          ),
-          // #endregion
+        // #region Values
+        'values.start.register': assign(
+          'states.values',
+          () => 'registration' as const,
+        ),
 
-          // #region Values
-          'values.start.register': assign(
-            'states.values',
-            () => 'registration' as const,
-          ),
+        'values.register': assign('values', {
+          'VALUES:REGISTER': ({ payload }) => payload,
+        }),
 
-          'values.register': assign('values', {
-            'VALUES:REGISTER': ({ payload }) => payload,
-          }),
+        'values.register.finish': assign(
+          'states.values',
+          () => 'registered' as const,
+        ),
 
-          'values.register.finish': assign(
-            'states.values',
-            () => 'registered' as const,
-          ),
+        'values.modify': assign('states.values', () => 'idle' as const),
+        // #endregion
 
-          'values.modify': assign(
-            'states.values',
-            () => 'idle' as const,
-          ),
-          // #endregion
-
-          /**
-           * Prepare at starting point
-           * @returns
-           */
-          prepare: assign(() => {
-            const current = { label: '', type: 'text' } as any;
-            return {
-              fields: [structuredClone(current)],
-              lang: 'en' as const,
-              states: { fields: 'idle' as const, values: 'idle' as const },
-            };
-          }),
-        },
-      }),
-    );
-
+        /**
+         * Prepare at starting point
+         * @returns
+         */
+        prepare: assign(() => {
+          const current = { label: '', type: 'text' } as any;
+          return {
+            fields: [structuredClone(current)],
+            lang: 'en' as const,
+            states: { fields: 'idle' as const, values: 'idle' as const },
+          };
+        }),
+      },
+    }));
 
     const service = interpret(mainMachine, { context: {} });
 
@@ -698,9 +637,7 @@ describe('REAL LIFE TESTS', () => {
 
     const { start, send, useLang, useStateValue } = constructTests(
       service,
-      ({ contexts }) => ({
-        useLang: contexts(({ context: { lang } }) => lang),
-      }),
+      ({ contexts }) => ({ useLang: contexts(({ context: { lang } }) => lang) }),
     );
 
     // #endregion
@@ -768,10 +705,7 @@ describe('REAL LIFE TESTS', () => {
         ...send(
           {
             type: 'UPDATE:NOW',
-            payload: {
-              index: 1,
-              value: { label: 'Email', type: 'email' },
-            },
+            payload: { index: 1, value: { label: 'Email', type: 'email' } },
           },
           9,
         ),

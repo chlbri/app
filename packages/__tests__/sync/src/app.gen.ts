@@ -8,12 +8,12 @@ declare module '@bemedev/app' {
   interface Register {
     'src/__tests__/emitters/emitter1.machine': {
       paths: {
-        map: { targets: ('/inactive' | '/active'); 
+        map: { targets: ('/inactive' | '/active');
         initial: 'inactive';
         states: {
-          'active': { targets: ('/' | '/inactive'); 
+          'active': { targets: ('/' | '/inactive');
           };
-          'inactive': { targets: ('/' | '/active'); 
+          'inactive': { targets: ('/' | '/active');
           };
         };
       };
@@ -33,12 +33,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/emitters/emitter3.machine': {
       paths: {
-        map: { targets: ('/inactive' | '/active'); 
+        map: { targets: ('/inactive' | '/active');
         initial: 'inactive';
         states: {
-          'active': { targets: ('/' | '/inactive'); 
+          'active': { targets: ('/' | '/inactive');
           };
-          'inactive': { targets: ('/' | '/active'); 
+          'inactive': { targets: ('/' | '/active');
           };
         };
       };
@@ -58,10 +58,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/emitters/error.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -81,12 +81,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/activities/perform.bis.machine': {
       paths: {
-        map: { targets: ('/idle' | '/next'); 
+        map: { targets: ('/idle' | '/next');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/next'); 
+          'idle': { targets: ('/' | '/next');
           };
-          'next': { targets: ('/' | '/idle'); 
+          'next': { targets: ('/' | '/idle');
           };
         };
       };
@@ -106,10 +106,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/activities/perform.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -129,10 +129,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/assign-map.1.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -152,10 +152,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/assign-map.2.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -175,14 +175,14 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/assign-map.3.machine': {
       paths: {
-        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        map: { targets: ('/init_state' | '/always_state' | '/final_state');
         initial: 'init_state';
         states: {
-          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          'always_state': { targets: ('/' | '/init_state' | '/final_state');
           };
-          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          'final_state': { targets: ('/' | '/init_state' | '/always_state');
           };
-          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          'init_state': { targets: ('/' | '/always_state' | '/final_state');
           };
         };
       };
@@ -202,14 +202,14 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/assign-map.4.machine': {
       paths: {
-        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        map: { targets: ('/init_state' | '/always_state' | '/final_state');
         initial: 'init_state';
         states: {
-          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          'always_state': { targets: ('/' | '/init_state' | '/final_state');
           };
-          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          'final_state': { targets: ('/' | '/init_state' | '/always_state');
           };
-          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          'init_state': { targets: ('/' | '/always_state' | '/final_state');
           };
         };
       };
@@ -229,14 +229,14 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/assign-map.5.machine': {
       paths: {
-        map: { targets: ('/init_state' | '/always_state' | '/final_state'); 
+        map: { targets: ('/init_state' | '/always_state' | '/final_state');
         initial: 'init_state';
         states: {
-          'always_state': { targets: ('/' | '/init_state' | '/final_state'); 
+          'always_state': { targets: ('/' | '/init_state' | '/final_state');
           };
-          'final_state': { targets: ('/' | '/init_state' | '/always_state'); 
+          'final_state': { targets: ('/' | '/init_state' | '/always_state');
           };
-          'init_state': { targets: ('/' | '/always_state' | '/final_state'); 
+          'init_state': { targets: ('/' | '/always_state' | '/final_state');
           };
         };
       };
@@ -256,10 +256,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/assign-map.6.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -279,10 +279,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/children.1.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -302,10 +302,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/children.2.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -325,12 +325,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/children.3.machine': {
       paths: {
-        map: { targets: ('/idle' | '/working'); 
+        map: { targets: ('/idle' | '/working');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/working'); 
+          'idle': { targets: ('/' | '/working');
           };
-          'working': { targets: ('/' | '/idle'); 
+          'working': { targets: ('/' | '/idle');
           };
         };
       };
@@ -350,12 +350,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/children.4.machine': {
       paths: {
-        map: { targets: ('/active' | '/inactive'); 
+        map: { targets: ('/active' | '/inactive');
         initial: 'active';
         states: {
-          'active': { targets: ('/' | '/inactive'); 
+          'active': { targets: ('/' | '/inactive');
           };
-          'inactive': { targets: ('/' | '/active'); 
+          'inactive': { targets: ('/' | '/active');
           };
         };
       };
@@ -375,10 +375,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/children.5.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -398,7 +398,7 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/actors/2ids.1.machine': {
       paths: {
-        map: { targets: (never); 
+        map: { targets: (never);
       };
         all: '/';
       };
@@ -416,12 +416,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/actors/2ids.2.machine': {
       paths: {
-        map: { targets: ('/idle' | '/working'); 
+        map: { targets: ('/idle' | '/working');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/working'); 
+          'idle': { targets: ('/' | '/working');
           };
-          'working': { targets: ('/' | '/idle'); 
+          'working': { targets: ('/' | '/idle');
           };
         };
       };
@@ -441,7 +441,7 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/actors/child.1.machine': {
       paths: {
-        map: { targets: (never); 
+        map: { targets: (never);
       };
         all: '/';
       };
@@ -459,12 +459,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/actors/child.2.machine': {
       paths: {
-        map: { targets: ('/idle' | '/working'); 
+        map: { targets: ('/idle' | '/working');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/working'); 
+          'idle': { targets: ('/' | '/working');
           };
-          'working': { targets: ('/' | '/idle'); 
+          'working': { targets: ('/' | '/idle');
           };
         };
       };
@@ -484,12 +484,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/actors/emitter.machine': {
       paths: {
-        map: { targets: ('/inactive' | '/active'); 
+        map: { targets: ('/inactive' | '/active');
         initial: 'inactive';
         states: {
-          'active': { targets: ('/' | '/inactive'); 
+          'active': { targets: ('/' | '/inactive');
           };
-          'inactive': { targets: ('/' | '/active'); 
+          'inactive': { targets: ('/' | '/active');
           };
         };
       };
@@ -509,10 +509,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/addOptions-return.1.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -532,10 +532,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/addOptions-return.2.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -555,12 +555,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/addOptions-return.3.machine': {
       paths: {
-        map: { targets: ('/idle' | '/positive'); 
+        map: { targets: ('/idle' | '/positive');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/positive'); 
+          'idle': { targets: ('/' | '/positive');
           };
-          'positive': { targets: ('/' | '/idle'); 
+          'positive': { targets: ('/' | '/idle');
           };
         };
       };
@@ -580,10 +580,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/addOptions-return.4.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -603,10 +603,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/addOptions-return.5.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -626,12 +626,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/coverage/index.machine': {
       paths: {
-        map: { targets: ('/idle' | '/final'); 
+        map: { targets: ('/idle' | '/final');
         initial: 'idle';
         states: {
-          'final': { targets: ('/' | '/idle'); 
+          'final': { targets: ('/' | '/idle');
           };
-          'idle': { targets: ('/' | '/final'); 
+          'idle': { targets: ('/' | '/final');
           };
         };
       };
@@ -651,12 +651,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.1.machine': {
       paths: {
-        map: { targets: ('/state1' | '/state2'); 
+        map: { targets: ('/state1' | '/state2');
         initial: 'state1';
         states: {
-          'state1': { targets: ('/' | '/state2'); 
+          'state1': { targets: ('/' | '/state2');
           };
-          'state2': { targets: ('/' | '/state1'); 
+          'state2': { targets: ('/' | '/state1');
           };
         };
       };
@@ -676,12 +676,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.2.machine': {
       paths: {
-        map: { targets: ('/idle' | '/filtered'); 
+        map: { targets: ('/idle' | '/filtered');
         initial: 'idle';
         states: {
-          'filtered': { targets: ('/' | '/idle'); 
+          'filtered': { targets: ('/' | '/idle');
           };
-          'idle': { targets: ('/' | '/filtered'); 
+          'idle': { targets: ('/' | '/filtered');
           };
         };
       };
@@ -701,12 +701,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.3.machine': {
       paths: {
-        map: { targets: ('/idle' | '/filtered'); 
+        map: { targets: ('/idle' | '/filtered');
         initial: 'idle';
         states: {
-          'filtered': { targets: ('/' | '/idle'); 
+          'filtered': { targets: ('/' | '/idle');
           };
-          'idle': { targets: ('/' | '/filtered'); 
+          'idle': { targets: ('/' | '/filtered');
           };
         };
       };
@@ -726,12 +726,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.4.machine': {
       paths: {
-        map: { targets: ('/idle' | '/cleared'); 
+        map: { targets: ('/idle' | '/cleared');
         initial: 'idle';
         states: {
-          'cleared': { targets: ('/' | '/idle'); 
+          'cleared': { targets: ('/' | '/idle');
           };
-          'idle': { targets: ('/' | '/cleared'); 
+          'idle': { targets: ('/' | '/cleared');
           };
         };
       };
@@ -751,10 +751,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.5.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -774,12 +774,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.6.machine': {
       paths: {
-        map: { targets: ('/idle' | '/cleared'); 
+        map: { targets: ('/idle' | '/cleared');
         initial: 'idle';
         states: {
-          'cleared': { targets: ('/' | '/idle'); 
+          'cleared': { targets: ('/' | '/idle');
           };
-          'idle': { targets: ('/' | '/cleared'); 
+          'idle': { targets: ('/' | '/cleared');
           };
         };
       };
@@ -799,16 +799,16 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.7.machine': {
       paths: {
-        map: { targets: ('/init_state' | '/always_state' | '/after_state' | '/final_state'); 
+        map: { targets: ('/init_state' | '/always_state' | '/after_state' | '/final_state');
         initial: 'init_state';
         states: {
-          'after_state': { targets: ('/' | '/init_state' | '/always_state' | '/final_state'); 
+          'after_state': { targets: ('/' | '/init_state' | '/always_state' | '/final_state');
           };
-          'always_state': { targets: ('/' | '/init_state' | '/after_state' | '/final_state'); 
+          'always_state': { targets: ('/' | '/init_state' | '/after_state' | '/final_state');
           };
-          'final_state': { targets: ('/' | '/init_state' | '/always_state' | '/after_state'); 
+          'final_state': { targets: ('/' | '/init_state' | '/always_state' | '/after_state');
           };
-          'init_state': { targets: ('/' | '/always_state' | '/after_state' | '/final_state'); 
+          'init_state': { targets: ('/' | '/always_state' | '/after_state' | '/final_state');
           };
         };
       };
@@ -828,16 +828,16 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/filter-erase.8.machine': {
       paths: {
-        map: { targets: ('/init_state' | '/always_state' | '/after_state' | '/final_state'); 
+        map: { targets: ('/init_state' | '/always_state' | '/after_state' | '/final_state');
         initial: 'init_state';
         states: {
-          'after_state': { targets: ('/' | '/init_state' | '/always_state' | '/final_state'); 
+          'after_state': { targets: ('/' | '/init_state' | '/always_state' | '/final_state');
           };
-          'always_state': { targets: ('/' | '/init_state' | '/after_state' | '/final_state'); 
+          'always_state': { targets: ('/' | '/init_state' | '/after_state' | '/final_state');
           };
-          'final_state': { targets: ('/' | '/init_state' | '/always_state' | '/after_state'); 
+          'final_state': { targets: ('/' | '/init_state' | '/always_state' | '/after_state');
           };
-          'init_state': { targets: ('/' | '/always_state' | '/after_state' | '/final_state'); 
+          'init_state': { targets: ('/' | '/always_state' | '/after_state' | '/final_state');
           };
         };
       };
@@ -857,10 +857,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.1.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -880,10 +880,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.10.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -903,10 +903,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.11.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -926,10 +926,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.12.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -949,10 +949,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.13.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -972,10 +972,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.14.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -995,10 +995,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.2.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -1018,14 +1018,14 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.3.machine': {
       paths: {
-        map: { targets: ('/idle' | '/positive' | '/negative'); 
+        map: { targets: ('/idle' | '/positive' | '/negative');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/positive' | '/negative'); 
+          'idle': { targets: ('/' | '/positive' | '/negative');
           };
-          'negative': { targets: ('/' | '/idle' | '/positive'); 
+          'negative': { targets: ('/' | '/idle' | '/positive');
           };
-          'positive': { targets: ('/' | '/idle' | '/negative'); 
+          'positive': { targets: ('/' | '/idle' | '/negative');
           };
         };
       };
@@ -1045,10 +1045,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.4.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -1068,10 +1068,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.5.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -1091,10 +1091,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.6.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -1114,10 +1114,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.7.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -1137,10 +1137,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.8.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -1160,14 +1160,14 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/legacy-options.9.machine': {
       paths: {
-        map: { targets: ('/idle' | '/positive' | '/negative'); 
+        map: { targets: ('/idle' | '/positive' | '/negative');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/positive' | '/negative'); 
+          'idle': { targets: ('/' | '/positive' | '/negative');
           };
-          'negative': { targets: ('/' | '/idle' | '/positive'); 
+          'negative': { targets: ('/' | '/idle' | '/positive');
           };
-          'positive': { targets: ('/' | '/idle' | '/negative'); 
+          'positive': { targets: ('/' | '/idle' | '/negative');
           };
         };
       };
@@ -1187,16 +1187,16 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/selftransitions/always.3.machine': {
       paths: {
-        map: { targets: ('/idle' | '/result1' | '/result2' | '/result3'); 
+        map: { targets: ('/idle' | '/result1' | '/result2' | '/result3');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/result1' | '/result2' | '/result3'); 
+          'idle': { targets: ('/' | '/result1' | '/result2' | '/result3');
           };
-          'result1': { targets: ('/' | '/idle' | '/result2' | '/result3'); 
+          'result1': { targets: ('/' | '/idle' | '/result2' | '/result3');
           };
-          'result2': { targets: ('/' | '/idle' | '/result1' | '/result3'); 
+          'result2': { targets: ('/' | '/idle' | '/result1' | '/result3');
           };
-          'result3': { targets: ('/' | '/idle' | '/result1' | '/result2'); 
+          'result3': { targets: ('/' | '/idle' | '/result1' | '/result2');
           };
         };
       };
@@ -1216,12 +1216,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/selftransitions/index.2.machine': {
       paths: {
-        map: { targets: ('/idle' | '/active'); 
+        map: { targets: ('/idle' | '/active');
         initial: 'idle';
         states: {
-          'active': { targets: ('/' | '/idle'); 
+          'active': { targets: ('/' | '/idle');
           };
-          'idle': { targets: ('/' | '/active'); 
+          'idle': { targets: ('/' | '/active');
           };
         };
       };
@@ -1241,14 +1241,14 @@ declare module '@bemedev/app' {
 
     'src/__tests__/interpreters/tags/tags.machine': {
       paths: {
-        map: { targets: ('/idle' | '/working' | '/final'); 
+        map: { targets: ('/idle' | '/working' | '/final');
         initial: 'idle';
         states: {
-          'final': { targets: ('/' | '/idle' | '/working'); 
+          'final': { targets: ('/' | '/idle' | '/working');
           };
-          'idle': { targets: ('/' | '/working' | '/final'); 
+          'idle': { targets: ('/' | '/working' | '/final');
           };
-          'working': { targets: ('/' | '/idle' | '/final'); 
+          'working': { targets: ('/' | '/idle' | '/final');
           };
         };
       };
@@ -1268,37 +1268,37 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/real.1.machine': {
       paths: {
-        map: { targets: ('/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+        map: { targets: ('/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
         initial: 'idle';
         states: {
-          'compound': { targets: ('/' | '/idle' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+          'compound': { targets: ('/' | '/idle' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
             initial: 'idle';
             states: {
-              'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+              'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
               };
-              'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+              'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
               };
             };
           };
-          'idle': { targets: ('/' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+          'idle': { targets: ('/' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
           };
-          'parallel': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+          'parallel': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
             states: {
-              'atomic': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+              'atomic': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
                 initial: 'idle';
                 states: {
-                  'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+                  'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
                   };
-                  'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+                  'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/next');
                   };
                 };
               };
-              'compound': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound/idle' | '/parallel/compound/next'); 
+              'compound': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound/idle' | '/parallel/compound/next');
                 initial: 'idle';
                 states: {
-                  'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/next'); 
+                  'idle': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/next');
                   };
-                  'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle'); 
+                  'next': { targets: ('/' | '/idle' | '/compound' | '/compound/idle' | '/compound/next' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle');
                   };
                 };
               };
@@ -1322,35 +1322,35 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/real.2.machine': {
       paths: {
-        map: { targets: ('/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+        map: { targets: ('/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+          'idle': { targets: ('/' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
           };
-          'parallel': { targets: ('/' | '/idle' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+          'parallel': { targets: ('/' | '/idle' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
             states: {
-              'atomic': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+              'atomic': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
                 initial: 'idle';
                 states: {
-                  'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+                  'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
                   };
-                  'next': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+                  'next': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
                   };
                 };
               };
-              'compound': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+              'compound': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
                 initial: 'idle';
                 states: {
-                  'compound': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+                  'compound': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
                     initial: 'idle';
                     states: {
-                      'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/next'); 
+                      'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/next');
                       };
-                      'next': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle'); 
+                      'next': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/idle' | '/parallel/compound/compound' | '/parallel/compound/compound/idle');
                       };
                     };
                   };
-                  'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next'); 
+                  'idle': { targets: ('/' | '/idle' | '/parallel' | '/parallel/atomic' | '/parallel/atomic/idle' | '/parallel/atomic/next' | '/parallel/compound' | '/parallel/compound/compound' | '/parallel/compound/compound/idle' | '/parallel/compound/compound/next');
                   };
                 };
               };
@@ -1374,17 +1374,17 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/real.3.machine': {
       paths: {
-        map: { targets: ('/idle' | '/working' | '/working/idle' | '/working/register'); 
+        map: { targets: ('/idle' | '/working' | '/working/idle' | '/working/register');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/working' | '/working/idle' | '/working/register'); 
+          'idle': { targets: ('/' | '/working' | '/working/idle' | '/working/register');
           };
-          'working': { targets: ('/' | '/idle' | '/working/idle' | '/working/register'); 
+          'working': { targets: ('/' | '/idle' | '/working/idle' | '/working/register');
             initial: 'idle';
             states: {
-              'idle': { targets: ('/' | '/idle' | '/working' | '/working/register'); 
+              'idle': { targets: ('/' | '/idle' | '/working' | '/working/register');
               };
-              'register': { targets: ('/' | '/idle' | '/working' | '/working/idle'); 
+              'register': { targets: ('/' | '/idle' | '/working' | '/working/idle');
               };
             };
           };

@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import { interpret } from '@bemedev/app';
 import type { State } from '@bemedev/app/states';
 import type { EventObject } from '@bemedev/app/events';
@@ -22,9 +22,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(() => 'function-result');
 
-      const subscriber = service.subscribe(mockFn, {
-        equals: defaultCheck,
-      });
+      const subscriber = service.subscribe(mockFn, { equals: defaultCheck });
 
       await service.start();
       await service.send('NEXT');
@@ -154,10 +152,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         const nextFn = vi.fn();
         const elseFn = vi.fn(() => 'else-for-unknown');
 
-        const subscriber = service.subscribe({
-          NEXT: nextFn,
-          else: elseFn,
-        });
+        const subscriber = service.subscribe({ NEXT: nextFn, else: elseFn });
 
         service.start();
 
@@ -175,10 +170,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         const service = interpret(machine1, baseConfig);
         const elseFn = vi.fn(() => 'else-null-handler');
 
-        const subscriber = service.subscribe({
-          NEXT: undefined,
-          else: elseFn,
-        });
+        const subscriber = service.subscribe({ NEXT: undefined, else: elseFn });
 
         await service.start();
         await service.send('NEXT');
@@ -192,10 +184,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         const service = interpret(machine1, baseConfig);
         const elseFn = vi.fn(() => 'else-undefined-handler');
 
-        const subscriber = service.subscribe({
-          NEXT: undefined,
-          else: elseFn,
-        });
+        const subscriber = service.subscribe({ NEXT: undefined, else: elseFn });
 
         await service.start();
         await service.send('NEXT');
@@ -258,10 +247,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
         const nextFn = vi.fn(() => 'next-result');
         const elseFn = vi.fn(() => 'else-result');
 
-        const subscriber = service.subscribe({
-          NEXT: nextFn,
-          else: elseFn,
-        });
+        const subscriber = service.subscribe({ NEXT: nextFn, else: elseFn });
 
         await service.start();
         await service.send('NEXT');
@@ -280,9 +266,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const mockFn = vi.fn(() => 'custom-equality');
       const customEquals = vi.fn();
 
-      const subscriber = service.subscribe(mockFn, {
-        equals: customEquals,
-      });
+      const subscriber = service.subscribe(mockFn, { equals: customEquals });
 
       await service.start();
       await service.send('NEXT');
@@ -297,9 +281,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const mockFn = vi.fn();
       const customEquals = vi.fn(returnTrue); // Always equal
 
-      const subscriber = service.subscribe(mockFn, {
-        equals: customEquals,
-      });
+      const subscriber = service.subscribe(mockFn, { equals: customEquals });
 
       await service.start();
       await service.send('NEXT');
@@ -326,9 +308,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(() => 'custom-id-result');
 
-      const subscriber = service.subscribe(mockFn, {
-        id: 'custom-subscriber-id',
-      });
+      const subscriber = service.subscribe(mockFn, { id: 'custom-subscriber-id' });
 
       expect(subscriber.id).toBe('custom-subscriber-id');
 

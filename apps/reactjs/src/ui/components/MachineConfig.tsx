@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import { Expand, type ExpandSlotProps } from './Expand';
 import { cn } from '../cn';
 
-export type MachineConfigProps = {
-  config: any;
-  title: string;
-  className?: string;
-};
+export type MachineConfigProps = { config: any; title: string; className?: string };
 
 export const MachineConfig: React.FC<MachineConfigProps> = ({
   config,

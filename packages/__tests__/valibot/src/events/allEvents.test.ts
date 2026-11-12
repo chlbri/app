@@ -10,11 +10,7 @@ describe('TESTS', () => {
     describe(
       '#01 => CASES',
       success(
-        {
-          invite: '"machine$$init"',
-          parameters: ['machine$$init'],
-          expected: true,
-        },
+        { invite: '"machine$$init"', parameters: ['machine$$init'], expected: true },
         {
           invite: '"machine$$always"',
           parameters: ['machine$$always'],

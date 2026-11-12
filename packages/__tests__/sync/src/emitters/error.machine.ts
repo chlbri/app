@@ -6,10 +6,7 @@ export default createMachine(
   {
     initial: 'idle',
     actors: {
-      interval: {
-        next: { actions: ['assigN'] },
-        error: { actions: ['signals'] },
-      },
+      interval: { next: { actions: ['assigN'] }, error: { actions: ['signals'] } },
     },
     states: { idle: {} },
   },

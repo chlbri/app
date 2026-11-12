@@ -6,9 +6,7 @@ export default createMachine(
   {
     __longRuns: true,
     initial: 'idle',
-    states: {
-      idle: { on: { TEST: { target: '/', actions: 'slowAction' } } },
-    },
+    states: { idle: { on: { TEST: { target: '/', actions: 'slowAction' } } } },
   },
   { context: typings.context('number') },
 );

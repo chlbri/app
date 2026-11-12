@@ -17,9 +17,7 @@ describe('TESTS', () => {
   it(...useIterator(20));
 
   it('#11 => Change DELAY', () => {
-    service.addOptions(() => ({
-      delays: { DELAY: DEFAULT_MIN_ACTIVITY_TIME / 2 },
-    }));
+    service.addOptions(() => ({ delays: { DELAY: DEFAULT_MIN_ACTIVITY_TIME / 2 } }));
   });
 
   it(...useNext());

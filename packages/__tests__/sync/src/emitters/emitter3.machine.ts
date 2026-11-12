@@ -18,8 +18,7 @@ export default createMachine(
             target: '/active',
             guards: {
               name: 'returnTrue',
-              description:
-                'Always evaluate to true, used to bypass guard check',
+              description: 'Always evaluate to true, used to bypass guard check',
             },
           },
         },
@@ -31,10 +30,7 @@ export default createMachine(
             next: { actions: ['assigN'] },
             description: 'Interval emitter for active state',
             complete: [
-              {
-                name: 'mockCompleteAction',
-                description: 'Mock complete action',
-              },
+              { name: 'mockCompleteAction', description: 'Mock complete action' },
             ],
           },
         },

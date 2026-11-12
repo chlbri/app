@@ -3,8 +3,7 @@ import { GuardConfig_Schema } from '@bemedev/app-valibot';
 
 describe('TESTS', () => {
   describe('#01 => GuardSchema', () => {
-    const { acceptation, success } =
-      createValibotTests(GuardConfig_Schema);
+    const { acceptation, success } = createValibotTests(GuardConfig_Schema);
 
     describe('#00 => Accpetation', acceptation);
 
@@ -53,17 +52,13 @@ describe('TESTS', () => {
           expected: true,
         },
         {
-          invite:
-            '{ "or": { "and": ["guard1", { "or": ["guard2", "guard3"] }] } }',
+          invite: '{ "or": { "and": ["guard1", { "or": ["guard2", "guard3"] }] } }',
           parameters: [{ or: ['guard1', { or: ['guard2', 'guard3'] }] }],
           expected: true,
         },
         {
-          invite:
-            '{ "and": { "or": ["guard1", { "and": ["guard2", "guard3"] }] } }',
-          parameters: [
-            { and: { or: ['guard1', { and: ['guard2', 'guard3'] }] } },
-          ],
+          invite: '{ "and": { "or": ["guard1", { "and": ["guard2", "guard3"] }] } }',
+          parameters: [{ and: { or: ['guard1', { and: ['guard2', 'guard3'] }] } }],
           expected: false,
         },
       ),

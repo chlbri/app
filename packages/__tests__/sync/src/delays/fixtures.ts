@@ -17,9 +17,7 @@ export const machine1 = createMachine(
   },
   { context: type({ iterator: 'number' }), sync: true },
 ).provideOptions(({ assign }) => ({
-  actions: {
-    inc: assign('iterator', ({ context }) => context.iterator + 1),
-  },
+  actions: { inc: assign('iterator', ({ context }) => context.iterator + 1) },
 
   delays: { DELAY },
 }));
@@ -31,10 +29,7 @@ export const hook = () => {
     service,
     ({ contexts, sender, waiter }) => ({
       useNext: sender('NEXT'),
-      useIterator: contexts(
-        ({ context }) => context?.iterator,
-        'iterator',
-      ),
+      useIterator: contexts(({ context }) => context?.iterator, 'iterator'),
       waiter: waiter(DELAY),
     }),
   );

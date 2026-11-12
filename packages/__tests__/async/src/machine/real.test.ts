@@ -637,9 +637,7 @@ describe('REAL LIFE TESTS', () => {
 
     const { start, send, useLang, useStateValue } = constructTests(
       service,
-      ({ contexts }) => ({
-        useLang: contexts(({ context: { lang } }) => lang),
-      }),
+      ({ contexts }) => ({ useLang: contexts(({ context: { lang } }) => lang) }),
     );
 
     // #endregion

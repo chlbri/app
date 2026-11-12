@@ -6,21 +6,12 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        entry: 'setValue',
-        on: {
-          SET_VALUE: { actions: 'setValue' },
-        },
-      },
+      idle: { entry: 'setValue', on: { SET_VALUE: { actions: 'setValue' } } },
     },
   },
   {
-    context: type({
-      value: 'string',
-    }),
-    eventsMap: type({
-      SET_VALUE: { val: 'string' },
-    }),
+    context: type({ value: 'string' }),
+    eventsMap: type({ SET_VALUE: { val: 'string' } }),
     sync: true,
   },
 );

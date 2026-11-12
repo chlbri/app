@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { SoraSchema } from '@bemedev/app-valibot';
 
 describe('#01 => sora schema', () => {
@@ -8,17 +8,14 @@ describe('#01 => sora schema', () => {
   describe('#01 => single value', () => {
     const result = v.safeParse(schema, 'hello');
 
-    test('#01 => success is true', () =>
-      expect(result.success).toBe(true));
-    test('#02 => output is hello', () =>
-      expect(result.output).toBe('hello'));
+    test('#01 => success is true', () => expect(result.success).toBe(true));
+    test('#02 => output is hello', () => expect(result.output).toBe('hello'));
   });
 
   describe('#02 => flat array', () => {
     const result = v.safeParse(schema, ['hello', 'world']);
 
-    test('#01 => success is true', () =>
-      expect(result.success).toBe(true));
+    test('#01 => success is true', () => expect(result.success).toBe(true));
 
     test('#02 => output matches', () => {
       expect(result.output).toEqual(['hello', 'world']);
@@ -29,8 +26,7 @@ describe('#01 => sora schema', () => {
     const data = ['hello', ['world', ['nested']]];
     const result = v.safeParse(schema, data);
 
-    test('#01 => success is true', () =>
-      expect(result.success).toBe(true));
+    test('#01 => success is true', () => expect(result.success).toBe(true));
 
     test('#02 => output matches', () => {
       expect(result.output).toEqual(data);

@@ -1,23 +1,31 @@
 {
   "name": "@bemedev/app-vitest",
-  "version": "2.7.2",
-  "description": "Test helpers for @bemedev/app",
+  "version": "2.8.0",
   "private": false,
+  "description": "Test helpers for @bemedev/app",
+  "keywords": [
+    "state machines",
+    "testing",
+    "typescript"
+  ],
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/vitest/README.md",
+  "license": "MIT",
   "author": {
-    "email": "bri_lvi@icloud.com",
     "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
     "url": "https://bemedev.vercel.app"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/chlbri/app"
   },
-  "homepage": "https://github.com/chlbri/app/blob/main/packages/vitest/README.md",
-  "license": "MIT",
+  "files": [
+    "lib"
+  ],
   "type": "module",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "import": "./lib/index.js",
@@ -25,72 +33,40 @@
       "types": "./lib/index.d.ts"
     }
   },
-  "keywords": [
-    "typescript",
-    "state machines",
-    "testing"
-  ],
-  "files": [
-    "lib"
-  ],
-  "engines": {
-    "node": ">=24"
-  },
   "scripts": {
-    "build": "pnpm rm:lib && pnpm run rolldown",
-    "_ci": "pnpm run lint && pnpm run test",
-    "pretest": "pnpm run build",
-    "ci": "CI_START=$(date +%s) && pnpm run _ci && pnpm run p-q && echo \"\n✅ CI takes $(($(date +%s) - CI_START))s\n\"",
-    "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check",
-    "_lint": "oxlint",
-    "test": "pnpm run size && pnpm run fmt",
-    "lint:fix": "oxlint --fix",
-    "lint": "pnpm run fmt && pnpm run lint:fix",
     "p-q": "pretty-quick",
-    "rm": "pnpx rimraf ./node_modules ./pnpm-lock.yaml",
-    "rm:lib": "pnpx rimraf ./lib",
-    "size": "size-limit",
-    "rolldown": "rolldown -c"
+    "posttest": "vp fmt",
+    "pretest": "vp run pack",
+    "rm:lib": "vp dlx rimraf ./lib",
+    "test:coverage": "vp test run",
+    "test": "vp run test:coverage --no-coverage",
+    "test:only": "vp run test",
+    "test:watch": "vp test"
   },
   "devDependencies": {
     "@bemedev/app": "workspace:^",
     "@bemedev/app-cli": "workspace:^",
-    "@bemedev/dev-utils": "^1.5.0",
-    "@bemedev/rolldown-config": "^0.5.0",
+    "@bemedev/dev-utils": "^1.5.2",
     "@bemedev/sleep": "^0.2.2",
-    "@bemedev/typings": "^1.4.1",
+    "@bemedev/typings": "^1.5.0",
     "@size-limit/file": "^14.3.0",
-    "@types/node": "^26.6.5",
-    "@vitest/coverage-v8": "^5.0.5",
-    "@vitest/ui": "^5.0.5",
-    "oxfmt": "^0.75.0",
-    "oxlint": "^1.90.0",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
     "pretty-quick": "^4.2.2",
-    "rimraf": "^6.1.3",
-    "rolldown": "1.2.15",
+    "rimraf": "^6.1.4",
     "size-limit": "^14.3.0",
-    "tslib": "^2.8.1",
+    "tslib": "^2.9.1",
     "tsx": "^4.23.15",
-    "typescript": "6.0.3",
-    "vitest": "^5.0.5"
+    "typescript": "7.0.2",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
   },
-  "size-limit": [
-    {
-      "path": "lib/*.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "lib/*.cjs",
-      "limit": "10 KB"
-    },
-    {
-      "path": "lib/*.d.ts",
-      "limit": "10 KB"
-    }
-  ],
   "peerDependencies": {
     "@bemedev/app": "workspace:^",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

@@ -31,9 +31,7 @@ expectTypeOf<TT5>().toExtend<GuardConfig>();
 expectTypeOf<FromGuard<TT5>>().toEqualTypeOf<never>();
 
 expectTypeOf<TT6>().toExtend<GuardConfig>();
-expectTypeOf<FromGuard<TT6>>().toEqualTypeOf<
-  'check' | 'exists' | 'exists2'
->();
+expectTypeOf<FromGuard<TT6>>().toEqualTypeOf<'check' | 'exists' | 'exists2'>();
 
 expectTypeOf<TT7>().not.toExtend<GuardConfig>();
 expectTypeOf<TT8>().not.toExtend<GuardConfig>();

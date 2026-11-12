@@ -117,18 +117,29 @@ declare const syncDoWhile: SyncWhile;
 declare const asyncDoWhile: AsyncWhile;
 
 // #region Valid predicate and action
-syncWhile(({ context }) => (context?.age ?? 0) < 10, () => ({ mergers: [] }));
-asyncWhile(async ({ context }) => (context?.age ?? 0) < 10, () => ({ mergers: [] }));
-syncDoWhile(({ context }) => (context?.age ?? 0) < 10, () => ({ mergers: [] }));
-asyncDoWhile(async ({ context }) => (context?.age ?? 0) < 10, () => ({ mergers: [] }));
+syncWhile(
+  ({ context }) => (context?.age ?? 0) < 10,
+  () => ({ mergers: [] }),
+);
+asyncWhile(
+  async ({ context }) => (context?.age ?? 0) < 10,
+  () => ({ mergers: [] }),
+);
+syncDoWhile(
+  ({ context }) => (context?.age ?? 0) < 10,
+  () => ({ mergers: [] }),
+);
+asyncDoWhile(
+  async ({ context }) => (context?.age ?? 0) < 10,
+  () => ({ mergers: [] }),
+);
 // #endregion
 
 // #region Valid function map predicate
 syncWhile({ FALLBACK: () => true, else: () => false }, () => ({ mergers: [] }));
-asyncWhile(
-  { FALLBACK: async () => true, else: () => false },
-  () => ({ mergers: [] }),
-);
+asyncWhile({ FALLBACK: async () => true, else: () => false }, () => ({
+  mergers: [],
+}));
 // #endregion
 
 // #region Invalid predicate or action
@@ -151,10 +162,16 @@ asyncWhile(
 );
 
 // @ts-expect-error - sync predicate cannot return a promise
-syncWhile(async () => true, () => ({ mergers: [] }));
+syncWhile(
+  async () => true,
+  () => ({ mergers: [] }),
+);
 
 // @ts-expect-error - sync action cannot return a promise
-syncDoWhile(() => true, async () => ({ mergers: [] }));
+syncDoWhile(
+  () => true,
+  async () => ({ mergers: [] }),
+);
 
 // @ts-expect-error - predicate is required
 syncWhile(undefined, () => ({ mergers: [] }));

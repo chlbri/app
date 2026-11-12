@@ -17,7 +17,7 @@ import type { StateValue } from '../types';
  */
 export type NextStateValue_F = <T extends StateValue>(
   from: T,
-  target?: string | undefined,
+  target?: string,
 ) => StateValue;
 
 /**

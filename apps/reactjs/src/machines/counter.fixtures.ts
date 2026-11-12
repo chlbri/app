@@ -3,10 +3,7 @@ import { eventToType } from '@bemedev/app/events';
 import { faker } from '@faker-js/faker';
 import { counterMachine, type Service } from './counter';
 
-export const TEST_LOGS = (
-  { canEvents, send }: Service,
-  interval = 100,
-) => {
+export const TEST_LOGS = ({ canEvents, send }: Service, interval = 100) => {
   const ids = new Set<string>();
   let index = 0;
   const all = createInterval({
@@ -18,9 +15,7 @@ export const TEST_LOGS = (
         ];
 
       const events = [
-        ...counterMachine.eventsList.filter(
-          e => e !== 'TOGGLE_LOG_EXPAND',
-        ),
+        ...counterMachine.eventsList.filter(e => e !== 'TOGGLE_LOG_EXPAND'),
         { type: 'TOGGLE_LOG_EXPAND' as const, payload },
       ];
       const out = faker.helpers.arrayElement(

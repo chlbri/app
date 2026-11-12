@@ -17,4 +17,4 @@ on:
 
 jobs:
   all:
-    uses: chlbri/node-github-actions/.github/workflows/ci.yml@main
+    uses: chlbri/node-github-actions/.github/workflows/ci-vp.yml@main

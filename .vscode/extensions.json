@@ -1,1 +1,6 @@
-{ "recommendations": ["typescriptteam.native-preview"] }
+{
+  "recommendations": [
+    "typescriptteam.native-preview",
+    "VoidZero.vite-plus-extension-pack"
+  ]
+}

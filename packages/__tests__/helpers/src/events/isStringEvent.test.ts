@@ -30,31 +30,15 @@ describe('isStringEvent', () => {
         parameters: 'EVENT',
         expected: false,
       },
-      {
-        invite: 'should return false for numbers',
-        parameters: 42,
-        expected: false,
-      },
-      {
-        invite: 'should return false for null',
-        parameters: null,
-        expected: false,
-      },
+      { invite: 'should return false for numbers', parameters: 42, expected: false },
+      { invite: 'should return false for null', parameters: null, expected: false },
       {
         invite: 'should return false for undefined',
         parameters: undefined,
         expected: false,
       },
-      {
-        invite: 'should return false for objects',
-        parameters: {},
-        expected: false,
-      },
-      {
-        invite: 'should return false for arrays',
-        parameters: [],
-        expected: false,
-      },
+      { invite: 'should return false for objects', parameters: {}, expected: false },
+      { invite: 'should return false for arrays', parameters: [], expected: false },
       {
         invite: 'should return false for boolean values',
         parameters: true,

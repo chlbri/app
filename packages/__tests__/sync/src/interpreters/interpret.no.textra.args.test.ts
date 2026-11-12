@@ -6,10 +6,7 @@ describe('TESTS', () => {
   const machine = createMachine(
     {
       initial: 'prev',
-      states: {
-        prev: { on: { NEXT: '/next' } },
-        next: { on: { NEXT: '/prev' } },
-      },
+      states: { prev: { on: { NEXT: '/next' } }, next: { on: { NEXT: '/prev' } } },
     },
     { sync: true },
   );

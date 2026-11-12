@@ -28,11 +28,10 @@ describe('Machine Tag Interpreter', () => {
   describe('#01 => execution', () => {
     const service = interpret(machine);
 
-    const { start, useStateValue, useNext, usePrev, useTags } =
-      constructTests(service, ({ sender }) => ({
-        useNext: sender('NEXT'),
-        usePrev: sender('PREV'),
-      }));
+    const { start, useStateValue, useNext, usePrev, useTags } = constructTests(
+      service,
+      ({ sender }) => ({ useNext: sender('NEXT'), usePrev: sender('PREV') }),
+    );
 
     it(...start());
     it(...useStateValue('idle'));

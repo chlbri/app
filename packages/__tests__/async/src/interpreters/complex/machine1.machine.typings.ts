@@ -8,10 +8,7 @@ export const pphoneNumber = helpers.any({
 
 export const personality = helpers.litterals('individual', 'company');
 
-export const social = helpers.primitiveObject({
-  platform: 'string',
-  url: 'string',
-});
+export const social = helpers.primitiveObject({ platform: 'string', url: 'string' });
 
 export const intermediary = helpers.intersection(
   {

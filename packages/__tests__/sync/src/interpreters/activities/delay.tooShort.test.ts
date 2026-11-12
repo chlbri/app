@@ -28,9 +28,7 @@ describe('Delay is too long', () => {
     });
 
     test('#02 => Check the warning', () => {
-      expect(service._warningsCollector).toContain(
-        'Delay (DELAY) is too short',
-      );
+      expect(service._warningsCollector).toContain('Delay (DELAY) is too short');
     });
   });
 });

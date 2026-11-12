@@ -6,9 +6,7 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        on: { CHECK: [{ guards: 'isPositive', target: '/positive' }] },
-      },
+      idle: { on: { CHECK: [{ guards: 'isPositive', target: '/positive' }] } },
       positive: {},
     },
   },

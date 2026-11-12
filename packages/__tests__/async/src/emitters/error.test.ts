@@ -22,67 +22,57 @@ describe('Error transitions testing)', () => {
       complete: () => console.warn('Subject completed'),
     });
 
-    const machine = _raw_machine.provideOptions(
-      ({ assign, action }) => ({
-        actors: { emitters: { interval: () => createPausable(sub) } },
+    const machine = _raw_machine.provideOptions(({ assign, action }) => ({
+      actors: { emitters: { interval: () => createPausable(sub) } },
 
-        actions: {
-          assigN: assign({
-            'interval::next': ({ payload, context }) => context + payload,
-          }),
+      actions: {
+        assigN: assign({
+          'interval::next': ({ payload, context }) => context + payload,
+        }),
 
-          signals: action({
-            'interval::error': ({ payload }) => {
-              mock('Error received:', payload);
-            },
-            'interval::next': ({ payload }) => {
-              mock('NEXT received:', payload);
-            },
-          }),
-        },
-      }),
-    );
-
+        signals: action({
+          'interval::error': ({ payload }) => {
+            mock('Error received:', payload);
+          },
+          'interval::next': ({ payload }) => {
+            mock('NEXT received:', payload);
+          },
+        }),
+      },
+    }));
 
     const service = interpret(machine, { context: 0 });
 
-    const {
-      useNext,
-      useError,
-      useContext,
-      useMock,
-      start,
-      waiter,
-      useFull,
-    } = constructTests(service, ({ getIndex, contexts, waiter }) => ({
-      useNext: (value: number) => {
-        const invite = `#${getIndex()} => sub1.next(${value})`;
-        return tupleOf(invite, () => {
-          const [, fn] = waiter(DELAY)();
-          fn().then(() => sub.next(value));
-        });
-      },
+    const { useNext, useError, useContext, useMock, start, waiter, useFull } =
+      constructTests(service, ({ getIndex, contexts, waiter }) => ({
+        useNext: (value: number) => {
+          const invite = `#${getIndex()} => sub1.next(${value})`;
+          return tupleOf(invite, () => {
+            const [, fn] = waiter(DELAY)();
+            fn().then(() => sub.next(value));
+          });
+        },
 
-      useError: (value: number) => {
-        const invite = `#${getIndex()} => sub1.error(${value})`;
-        return tupleOf(invite, () => {
-          const [, fn] = waiter(DELAY)();
-          fn().then(() => sub.error(value));
-        });
-      },
+        useError: (value: number) => {
+          const invite = `#${getIndex()} => sub1.error(${value})`;
+          return tupleOf(invite, () => {
+            const [, fn] = waiter(DELAY)();
+            fn().then(() => sub.error(value));
+          });
+        },
 
-      useMock: (payload: number, fails = false) => {
-        const invite = `#${getIndex()} => mock('Error received:', ${payload})${fails ? ' => (fails)' : ''}`;
+        useMock: (payload: number, fails = false) => {
+          const invite = `#${getIndex()} => mock('Error received:', ${payload})${fails ? ' => (fails)' : ''}`;
 
-        return tupleOf(invite, () => {
-          expect(mock).toHaveBeenCalledWith('Error received:', payload);
-        });
-      },
+          return tupleOf(invite, () => {
+            expect(mock).toHaveBeenCalledWith('Error received:', payload);
+          });
+        },
 
-      useContext: contexts(({ context }) => context),
-      useFull: contexts(),
-      waiter: waiter(DELAY),
-    }));
+        useContext: contexts(({ context }) => context),
+        useFull: contexts(),
+        waiter: waiter(DELAY),
+      }));
 
     test(...start());
     test(...useContext(0));

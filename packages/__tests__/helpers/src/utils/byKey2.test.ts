@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { byKey2 } from '@bemedev/app/utils';
 
 describe('byKey2', () => {

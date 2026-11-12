@@ -24,9 +24,7 @@ describe('longRuns - no timeout limit for async actions and after', () => {
       expect(machineWithoutLong.longRuns).toBe(false));
 
     const serviceWithLong = interpret(machineWithLong, { context: 0 });
-    const serviceWithoutLong = interpret(machineWithoutLong, {
-      context: 0,
-    });
+    const serviceWithoutLong = interpret(machineWithoutLong, { context: 0 });
 
     test('#03 => service.longRuns is true when __longRuns: true', () =>
       expect(serviceWithLong.longRuns).toBe(true));
@@ -39,8 +37,7 @@ describe('longRuns - no timeout limit for async actions and after', () => {
     const machine = _machine3.provideOptions(({ action }) => ({
       actions: {
         slowAction: action(
-          () =>
-            new Promise<void>(resolve => setTimeout(resolve, BEYOND_MAX)),
+          () => new Promise<void>(resolve => setTimeout(resolve, BEYOND_MAX)),
           { catch: () => () => ({}) },
         ),
       },
@@ -78,7 +75,6 @@ describe('longRuns - no timeout limit for async actions and after', () => {
         ),
       },
     }));
-
 
     const service = interpret(machine, { context: 0 });
 

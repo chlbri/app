@@ -1,15 +1,14 @@
 ---
 name: check-spacing
 description:
-  Detect and report blank-line spacing violations between consecutive
-  test() calls in test files. Use when checking or enforcing spacing
-  conventions in *.test.ts files.
+  Detect and report blank-line spacing violations between consecutive test() calls in
+  test files. Use when checking or enforcing spacing conventions in *.test.ts files.
 ---
 
 # Check Spacing
 
-Detect blank-line spacing violations between consecutive `test()` calls in
-test files.
+Detect blank-line spacing violations between consecutive `test()` calls in test
+files.
 
 ## Usage
 
@@ -24,14 +23,14 @@ node .github/skills/check_spacing/check_spacing.mjs <path/to/file.test.ts>
 | single-line → single-line | 0 (no blank line)          |
 | any other combination     | 1 (exactly one blank line) |
 
-A test is **single-line** when the entire `test(…)` call ends with `);` on
-the same line. Everything else is **multi-line**.
+A test is **single-line** when the entire `test(…)` call ends with `);` on the same
+line. Everything else is **multi-line**.
 
 ## Output
 
 - **No violations:** `No spacing violations found.`
-- **Violations found:** one entry per violation showing the line range, the
-  actual vs expected gap, and the test types involved.
+- **Violations found:** one entry per violation showing the line range, the actual vs
+  expected gap, and the test types involved.
 
 ```
 VIOLATION L12→L15: gap=2 expected=1 (multi → single)
@@ -43,8 +42,8 @@ VIOLATION L12→L15: gap=2 expected=1 (multi → single)
 
 ## When to use
 
-Run this after editing or reorganising any `*.test.ts` file to ensure
-blank-line spacing between tests conforms to the project conventions (see
+Run this after editing or reorganising any `*.test.ts` file to ensure blank-line
+spacing between tests conforms to the project conventions (see
 `.github/instructions/organize-tests.instructions.md` § 3).
 
 Fix every reported violation, then re-run until the output is

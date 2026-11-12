@@ -9,9 +9,7 @@ describe('Machine addOptions return', () => {
     const machine = _machine1;
 
     const result = machine.addOptions(({ assign }) => ({
-      actions: {
-        increment: assign(({ context }) => context + 1),
-      },
+      actions: { increment: assign(({ context }) => context + 1) },
     }));
 
     test('#01 => result is defined', () => expect(result).toBeDefined());
@@ -54,11 +52,8 @@ describe('Machine addOptions return', () => {
   describe('#04 => should still add options to machine even when capturing return value', () => {
     const machine = _machine4.renew;
     const result = machine.addOptions(({ assign }) => ({
-      actions: {
-        increment: assign(({ context }) => context + 1),
-      },
+      actions: { increment: assign(({ context }) => context + 1) },
     }));
-
 
     test('#01 => result is defined', () => expect(result).toBeDefined());
 

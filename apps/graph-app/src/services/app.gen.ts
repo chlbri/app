@@ -6,31 +6,29 @@
 
 declare module '@bemedev/app' {
   interface Register {
-    'machine': {
+    machine: {
       paths: {
-        map: { targets: ('/idle' | '/working'); 
-        initial: 'idle';
-        states: {
-          'idle': { targets: ('/' | '/working'); 
-          };
-          'working': { targets: ('/' | '/idle'); 
+        map: {
+          targets: '/idle' | '/working';
+          initial: 'idle';
+          states: {
+            idle: { targets: '/' | '/working' };
+            working: { targets: '/' | '/idle' };
           };
         };
-      };
         all: '/' | '/idle' | '/working';
       };
       events: 'START' | 'CONNECT';
       options: {
         children: never;
         emitters: never;
-        tags:     never;
-        actions:  'connectEdge';
-        delays:   never;
-        guards:   never;
+        tags: never;
+        actions: 'connectEdge';
+        delays: never;
+        guards: never;
       };
       pContext: any;
     };
-
   }
 }
 

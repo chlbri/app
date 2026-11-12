@@ -827,7 +827,7 @@ export class AsyncInterpreter<
 
                 this.__changeEvent(_any(event));
                 const transitions = toArray<TransitionConfig>(next);
-                this.__performTransitions(from, ...transitions);
+                return this.__performTransitions(from, ...transitions);
               },
               error: payload => {
                 const event = {
@@ -837,7 +837,7 @@ export class AsyncInterpreter<
 
                 this.__changeEvent(_any(event));
                 const transitions = toArray<TransitionConfig>(error);
-                this.__performTransitions(from, ...transitions);
+                return this.__performTransitions(from, ...transitions);
               },
               complete: () => this.__performFinally(from, complete),
             });

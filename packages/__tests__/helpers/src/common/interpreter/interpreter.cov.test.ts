@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { createMachine } from '@bemedev/app';
 import { interpret } from '@bemedev/app';
 import { type } from '@bemedev/typings';
@@ -10,21 +10,13 @@ describe('TESTS', () => {
       states: {
         idle: { on: { INC: { target: '/active', actions: ['inc'] } } },
         active: {
-          on: {
-            INC: { target: '/active', actions: ['inc'] },
-            INC2: '/idle',
-          },
+          on: { INC: { target: '/active', actions: ['inc'] }, INC2: '/idle' },
         },
       },
     },
     { context: type({ count: 'number' }), sync: true },
   ).provideOptions(({ assign }) => ({
-    actions: {
-      inc: assign(
-        'count',
-        ({ context }) => (context?.count ?? 0) + 1,
-      ),
-    },
+    actions: { inc: assign('count', ({ context }) => (context?.count ?? 0) + 1) },
   }));
 
   describe('#01 => softReset', () => {
@@ -92,8 +84,7 @@ describe('TESTS', () => {
     test('#08 => context count is reset', () =>
       expect(service.state.context.count).toBe(0));
 
-    test('#09 => status is paused', () =>
-      expect(service.status).toBe('paused'));
+    test('#09 => status is paused', () => expect(service.status).toBe('paused'));
 
     test('#10 => send INC event when paused', () => {
       service.send('INC');
@@ -102,9 +93,7 @@ describe('TESTS', () => {
     test('#11 => context count is unchanged when paused', () =>
       expect(service.state.context.count).toBe(1));
 
-
     test('#12 => spy call count is unchanged when paused', () =>
       expect(spy).toHaveBeenCalledTimes(callsLength));
   });
-
 });

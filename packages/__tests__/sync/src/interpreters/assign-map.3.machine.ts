@@ -6,28 +6,14 @@ export default createMachine(
   {
     initial: 'init_state',
     states: {
-      init_state: {
-        entry: 'initProp',
-        on: {
-          TRIGGER_ALWAYS: '/always_state',
-        },
-      },
-      always_state: {
-        always: {
-          actions: 'alwaysProp',
-          target: '/final_state',
-        },
-      },
+      init_state: { entry: 'initProp', on: { TRIGGER_ALWAYS: '/always_state' } },
+      always_state: { always: { actions: 'alwaysProp', target: '/final_state' } },
       final_state: {},
     },
   },
   {
-    context: type({
-      propValue: 'string',
-    }),
-    eventsMap: type({
-      TRIGGER_ALWAYS: 'undefined',
-    }),
+    context: type({ propValue: 'string' }),
+    eventsMap: type({ TRIGGER_ALWAYS: 'undefined' }),
     sync: true,
   },
 );

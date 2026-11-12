@@ -1,5 +1,5 @@
 import { sleep } from '@bemedev/sleep';
-import type { VitestUtils } from 'vitest';
+import type { VitestUtils } from 'vite-plus/test';
 
 /**
  * Asynchronously waits for a specified duration using Vitest fake timers or real delay.

@@ -10,10 +10,7 @@ const config = createConfig({
       type: 'parallel',
       states: {
         atomic: { initial: 'state1', states: { state1: {}, state2: {} } },
-        compound: {
-          initial: 'state1',
-          states: { state1: {}, state2: {} },
-        },
+        compound: { initial: 'state1', states: { state1: {}, state2: {} } },
       },
     },
   },

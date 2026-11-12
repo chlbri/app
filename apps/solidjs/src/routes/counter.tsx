@@ -5,9 +5,7 @@ import { MachineConfig } from '../ui/components/MachineConfig';
 
 export const Route = createFileRoute('/counter')({
   component: () => {
-    const service = Route.useRouteContext({
-      select: s => s.counterService,
-    })();
+    const service = Route.useRouteContext({ select: s => s.counterService })();
 
     // Subscriptions with options
     const hooks = createService(service);
@@ -19,9 +17,7 @@ export const Route = createFileRoute('/counter')({
     return (
       <div class='mx-auto max-w-5xl space-y-8'>
         <div>
-          <h2 class='text-3xl font-extrabold text-white'>
-            Counter Machine Tester
-          </h2>
+          <h2 class='text-3xl font-extrabold text-white'>Counter Machine Tester</h2>
           <p class='mt-1 text-sm text-slate-400'>
             {'Testing '}
             <code class='font-mono text-indigo-400'>
@@ -76,10 +72,8 @@ export const Route = createFileRoute('/counter')({
               onClick={() => service.send(canStart() ? 'START' : 'STOP')}
               class='h-12 cursor-pointer rounded-xl px-5 text-sm font-semibold text-white shadow-lg transition-all duration-300 ease-in-out'
               classList={{
-                'bg-red-600 hover:bg-red-500 shadow-red-600/30':
-                  !canStart(),
-                'bg-purple-600 hover:bg-purple-500 shadow-purple-600/30':
-                  canStart(),
+                'bg-red-600 hover:bg-red-500 shadow-red-600/30': !canStart(),
+                'bg-purple-600 hover:bg-purple-500 shadow-purple-600/30': canStart(),
               }}
             >
               {canStart() ? 'Start' : 'Stop'}
@@ -89,14 +83,10 @@ export const Route = createFileRoute('/counter')({
 
         {/* Diagnostic Inspector */}
         <div class='space-y-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 font-mono text-xs'>
-          <h3 class='font-sans text-sm font-bold text-slate-200'>
-            State Inspector
-          </h3>
+          <h3 class='font-sans text-sm font-bold text-slate-200'>State Inspector</h3>
           <div class='grid grid-cols-1 gap-4 md:grid-cols-2'>
             <div class='flex flex-col space-y-1 rounded-xl border border-slate-800 bg-slate-950 p-4'>
-              <span class='font-bold text-slate-500'>
-                State Value Accessor:
-              </span>
+              <span class='font-bold text-slate-500'>State Value Accessor:</span>
               <pre class='font-bold text-indigo-300'>
                 {JSON.stringify(stateValue(), null, 2)}
               </pre>

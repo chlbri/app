@@ -6,29 +6,14 @@ export default createMachine(
   {
     initial: 'init_state',
     states: {
-      init_state: {
-        entry: 'initRoot',
-        on: {
-          TRIGGER_ALWAYS: '/always_state',
-        },
-      },
-      always_state: {
-        always: {
-          actions: 'alwaysRoot',
-          target: '/final_state',
-        },
-      },
+      init_state: { entry: 'initRoot', on: { TRIGGER_ALWAYS: '/always_state' } },
+      always_state: { always: { actions: 'alwaysRoot', target: '/final_state' } },
       final_state: {},
     },
   },
   {
-    context: type({
-      name: 'string',
-      age: 'number',
-    }),
-    eventsMap: type({
-      TRIGGER_ALWAYS: 'undefined',
-    }),
+    context: type({ name: 'string', age: 'number' }),
+    eventsMap: type({ TRIGGER_ALWAYS: 'undefined' }),
     sync: true,
   },
 );

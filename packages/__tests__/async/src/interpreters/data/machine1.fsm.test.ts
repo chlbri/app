@@ -14,10 +14,7 @@ describe('machine1', () => {
       useWaiter: constructWaiter(DELAY),
       useContext: constructContexts(({ context }) => context),
 
-      useIterator: constructContexts(
-        ({ context }) => context.iterator,
-        'iterator',
-      ),
+      useIterator: constructContexts(({ context }) => context.iterator, 'iterator'),
     }),
     1,
   );

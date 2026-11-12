@@ -3,10 +3,7 @@ import { type } from '@bemedev/typings';
 
 export const asyncActionsTypings8 = {
   eventsMap: type({ TEST: 'never', TEST2: 'never' }),
-  context: type({
-    count: 'number',
-    name: 'string',
-  }),
+  context: type({ count: 'number', name: 'string' }),
 } as const;
 
 export default createMachine(
@@ -15,10 +12,7 @@ export default createMachine(
     initial: 'idle',
     states: {
       idle: {
-        on: {
-          TEST: { actions: 'myAction' },
-          TEST2: { actions: 'myAction' },
-        },
+        on: { TEST: { actions: 'myAction' }, TEST2: { actions: 'myAction' } },
       },
     },
   },

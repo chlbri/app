@@ -46,7 +46,7 @@ const configPathsToType = (cp: ConfigPaths, indent = 0): string => {
   const targetUnion =
     cp.targets.length === 0 ? 'never' : cp.targets.map(t => `'${t}'`).join(' | ');
 
-  const lines: string[] = [`{ targets: (${targetUnion}); `];
+  const lines: string[] = [`{ targets: (${targetUnion});`];
 
   if (cp.initial) {
     lines.push(`${nextPad}initial: '${cp.initial}';`);

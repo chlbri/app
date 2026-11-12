@@ -127,9 +127,7 @@ describe('toPredicate - coverage', () => {
 
   describe('#04 => _toPredicate & _toPredicate.async', () => {
     describe('#01 => _toPredicate returns structured function tree', () => {
-      const { func, errors } = _toPredicate('isTrue', {
-        isTrue: () => true,
-      });
+      const { func, errors } = _toPredicate('isTrue', { isTrue: () => true });
 
       test('#01 => errors is empty', () => expect(errors).toHaveLength(0));
 

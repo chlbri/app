@@ -29,9 +29,7 @@ export const Handles: FC<Props> = ({
   const source = isHorizontal ? Position.Right : Position.Bottom;
 
   return childNodes.map((childID, index, { length }) => {
-    const _index = (index + 1)
-      .toString()
-      .padStart(Math.log10(length + 1), '0');
+    const _index = (index + 1).toString().padStart(Math.log10(length + 1), '0');
 
     const key = `${id}->${childID}->${_index}`;
     const positionning = calculateHandlePosition(index, length);
@@ -55,10 +53,7 @@ export const Handles: FC<Props> = ({
           id={`${key}->${source}`}
           position={source}
           type='source'
-          style={{
-            [isHorizontal ? 'right' : 'bottom']: padding,
-            ...common,
-          }}
+          style={{ [isHorizontal ? 'right' : 'bottom']: padding, ...common }}
         />
       </Fragment>
     );

@@ -7,9 +7,7 @@ import { MachineConfig } from '../ui/components/MachineConfig';
 
 export const Route = createFileRoute('/traffic')({
   component: () => {
-    const service = Route.useRouteContext({
-      select: s => s.trafficService,
-    })();
+    const service = Route.useRouteContext({ select: s => s.trafficService })();
 
     const hooks = createService(service);
     const fullState = hooks.state();
@@ -26,9 +24,7 @@ export const Route = createFileRoute('/traffic')({
             Nested Traffic Machine Tester
           </h2>
           <p class='mt-1 text-sm text-slate-400'>
-            {
-              'Testing nested state values, tags, and reactive transitions via '
-            }
+            {'Testing nested state values, tags, and reactive transitions via '}
             <code class='font-mono text-purple-400'>useService</code>
           </p>
         </div>
@@ -96,9 +92,7 @@ export const Route = createFileRoute('/traffic')({
 
               <button
                 onClick={() =>
-                  service.send(
-                    isAccelerated() ? 'SLOW_DOWN' : 'ACCELERATE',
-                  )
+                  service.send(isAccelerated() ? 'SLOW_DOWN' : 'ACCELERATE')
                 }
                 class='w-full cursor-pointer rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-600/30 transition-all hover:bg-emerald-500'
               >

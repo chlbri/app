@@ -1,6 +1,6 @@
 import { createMachine, interpret } from '@bemedev/app';
 import { type } from '@bemedev/typings';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 
 const _machine = createMachine(
   {

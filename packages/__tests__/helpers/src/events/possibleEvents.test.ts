@@ -15,8 +15,7 @@ describe('possibleEvents', () => {
         expected: [],
       },
       {
-        invite:
-          'should return an array of event keys when input has defined events',
+        invite: 'should return an array of event keys when input has defined events',
         parameters: {
           node1: { on: { event1: 'any', event2: 'any' } },
           node2: { on: { event3: 'any' } },

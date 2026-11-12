@@ -8,10 +8,10 @@ declare module '@bemedev/app' {
   interface Register {
     'src/__tests__/actions/action.batch.cov.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -31,12 +31,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/actions.1.machine': {
       paths: {
-        map: { targets: ('/state1' | '/state2'); 
+        map: { targets: ('/state1' | '/state2');
         initial: 'state1';
         states: {
-          'state1': { targets: ('/' | '/state2'); 
+          'state1': { targets: ('/' | '/state2');
           };
-          'state2': { targets: ('/' | '/state1'); 
+          'state2': { targets: ('/' | '/state1');
           };
         };
       };
@@ -56,12 +56,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/actions.2.machine': {
       paths: {
-        map: { targets: ('/state1' | '/state2'); 
+        map: { targets: ('/state1' | '/state2');
         initial: 'state1';
         states: {
-          'state1': { targets: ('/' | '/state2'); 
+          'state1': { targets: ('/' | '/state2');
           };
-          'state2': { targets: ('/' | '/state1'); 
+          'state2': { targets: ('/' | '/state1');
           };
         };
       };
@@ -81,10 +81,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/async-actions.1.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -104,10 +104,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/async-actions.2.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -127,10 +127,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/async-actions.3.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -150,10 +150,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/async-actions.4.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -173,10 +173,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/async-actions.5.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -196,10 +196,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/async-actions.6.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -219,10 +219,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/async-actions.7.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -242,10 +242,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/async-actions.8.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -265,12 +265,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/sendToActions/sendToActions1.machine': {
       paths: {
-        map: { targets: ('/idle' | '/next'); 
+        map: { targets: ('/idle' | '/next');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/next'); 
+          'idle': { targets: ('/' | '/next');
           };
-          'next': { targets: ('/' | '/idle'); 
+          'next': { targets: ('/' | '/idle');
           };
         };
       };
@@ -290,12 +290,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/actions/sendToActions/sendToActions2.machine': {
       paths: {
-        map: { targets: ('/idle' | '/next'); 
+        map: { targets: ('/idle' | '/next');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/next'); 
+          'idle': { targets: ('/' | '/next');
           };
-          'next': { targets: ('/' | '/idle'); 
+          'next': { targets: ('/' | '/idle');
           };
         };
       };
@@ -315,12 +315,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/delays/delay.notDefined.machine': {
       paths: {
-        map: { targets: ('/idle' | '/active'); 
+        map: { targets: ('/idle' | '/active');
         initial: 'idle';
         states: {
-          'active': { targets: ('/' | '/idle'); 
+          'active': { targets: ('/' | '/idle');
           };
-          'idle': { targets: ('/' | '/active'); 
+          'idle': { targets: ('/' | '/active');
           };
         };
       };
@@ -340,7 +340,7 @@ declare module '@bemedev/app' {
 
     'arrayAsyncAssign': {
       paths: {
-        map: { targets: (never); 
+        map: { targets: (never);
       };
         all: '/';
       };
@@ -358,7 +358,7 @@ declare module '@bemedev/app' {
 
     'arrayAssign': {
       paths: {
-        map: { targets: (never); 
+        map: { targets: (never);
       };
         all: '/';
       };
@@ -376,7 +376,7 @@ declare module '@bemedev/app' {
 
     'edges.arrayAssign.complex': {
       paths: {
-        map: { targets: (never); 
+        map: { targets: (never);
       };
         all: '/';
       };
@@ -394,7 +394,7 @@ declare module '@bemedev/app' {
 
     'edges.arrayAssign.sync.complex': {
       paths: {
-        map: { targets: (never); 
+        map: { targets: (never);
       };
         all: '/';
       };
@@ -412,7 +412,7 @@ declare module '@bemedev/app' {
 
     'arrayAssignSync': {
       paths: {
-        map: { targets: (never); 
+        map: { targets: (never);
       };
         all: '/';
       };
@@ -430,7 +430,7 @@ declare module '@bemedev/app' {
 
     'atomic': {
       paths: {
-        map: { targets: (never); 
+        map: { targets: (never);
       };
         all: '/';
       };
@@ -448,12 +448,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/guards/index.1.machine': {
       paths: {
-        map: { targets: ('/state1' | '/state2'); 
+        map: { targets: ('/state1' | '/state2');
         initial: 'state1';
         states: {
-          'state1': { targets: ('/' | '/state2'); 
+          'state1': { targets: ('/' | '/state2');
           };
-          'state2': { targets: ('/' | '/state1'); 
+          'state2': { targets: ('/' | '/state1');
           };
         };
       };
@@ -473,12 +473,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/guards/index.2.machine': {
       paths: {
-        map: { targets: ('/state1' | '/state2'); 
+        map: { targets: ('/state1' | '/state2');
         initial: 'state1';
         states: {
-          'state1': { targets: ('/' | '/state2'); 
+          'state1': { targets: ('/' | '/state2');
           };
-          'state2': { targets: ('/' | '/state1'); 
+          'state2': { targets: ('/' | '/state1');
           };
         };
       };
@@ -498,12 +498,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/guards/index.3.machine': {
       paths: {
-        map: { targets: ('/state1' | '/state2'); 
+        map: { targets: ('/state1' | '/state2');
         initial: 'state1';
         states: {
-          'state1': { targets: ('/' | '/state2'); 
+          'state1': { targets: ('/' | '/state2');
           };
-          'state2': { targets: ('/' | '/state1'); 
+          'state2': { targets: ('/' | '/state1');
           };
         };
       };
@@ -523,12 +523,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/guards/index.4.machine': {
       paths: {
-        map: { targets: ('/state1' | '/state2'); 
+        map: { targets: ('/state1' | '/state2');
         initial: 'state1';
         states: {
-          'state1': { targets: ('/' | '/state2'); 
+          'state1': { targets: ('/' | '/state2');
           };
-          'state2': { targets: ('/' | '/state1'); 
+          'state2': { targets: ('/' | '/state1');
           };
         };
       };
@@ -548,10 +548,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/addOptions-return.1.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -571,10 +571,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/addOptions-return.2.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -594,12 +594,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/addOptions-return.3.machine': {
       paths: {
-        map: { targets: ('/idle' | '/positive'); 
+        map: { targets: ('/idle' | '/positive');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/positive'); 
+          'idle': { targets: ('/' | '/positive');
           };
-          'positive': { targets: ('/' | '/idle'); 
+          'positive': { targets: ('/' | '/idle');
           };
         };
       };
@@ -619,10 +619,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/addOptions-return.4.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -642,25 +642,25 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/cov.1.machine': {
       paths: {
-        map: { targets: ('/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
+        map: { targets: ('/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
+          'idle': { targets: ('/' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112');
           };
-          'state1': { targets: ('/' | '/idle' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
+          'state1': { targets: ('/' | '/idle' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112');
             initial: 'state11';
             states: {
-              'state11': { targets: ('/' | '/idle' | '/state1' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
+              'state11': { targets: ('/' | '/idle' | '/state1' | '/state1/state11/state111' | '/state1/state11/state111/state1111' | '/state1/state11/state112');
                 initial: 'state111';
                 states: {
-                  'state111': { targets: ('/' | '/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111/state1111' | '/state1/state11/state112'); 
+                  'state111': { targets: ('/' | '/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111/state1111' | '/state1/state11/state112');
                     initial: 'state1111';
                     states: {
-                      'state1111': { targets: ('/' | '/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state112'); 
+                      'state1111': { targets: ('/' | '/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state112');
                       };
                     };
                   };
-                  'state112': { targets: ('/' | '/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111'); 
+                  'state112': { targets: ('/' | '/idle' | '/state1' | '/state1/state11' | '/state1/state11/state111' | '/state1/state11/state111/state1111');
                   };
                 };
               };
@@ -684,10 +684,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/cov.2.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -707,10 +707,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/cov.3.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -730,10 +730,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/longRuns.cov.1.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -753,10 +753,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/longRuns.cov.2.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -776,10 +776,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/longRuns.cov.3.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -799,10 +799,10 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/longRuns.cov.4.machine': {
       paths: {
-        map: { targets: ('/idle'); 
+        map: { targets: ('/idle');
         initial: 'idle';
         states: {
-          'idle': { targets: ('/'); 
+          'idle': { targets: ('/');
           };
         };
       };
@@ -822,12 +822,12 @@ declare module '@bemedev/app' {
 
     'src/__tests__/machine/longRuns.cov.5.machine': {
       paths: {
-        map: { targets: ('/idle' | '/active'); 
+        map: { targets: ('/idle' | '/active');
         initial: 'idle';
         states: {
-          'active': { targets: ('/' | '/idle'); 
+          'active': { targets: ('/' | '/idle');
           };
-          'idle': { targets: ('/' | '/active'); 
+          'idle': { targets: ('/' | '/active');
           };
         };
       };

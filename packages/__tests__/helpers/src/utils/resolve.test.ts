@@ -12,10 +12,7 @@ describe('#01 => Resolve', () => {
       {
         invite: 'Parent, on step',
         expected: '/parent/child/grandchild',
-        parameters: [
-          '/parent/child/grandchild/grantchild',
-          '../grandchild',
-        ],
+        parameters: ['/parent/child/grandchild/grantchild', '../grandchild'],
       },
 
       {
@@ -45,10 +42,7 @@ describe('#01 => Resolve', () => {
       {
         invite: 'Parent, on step, but missing args',
         expected: '/parent/child/grandchild',
-        parameters: [
-          '/parent/child/grandchild/grantchild',
-          '../../grandchild',
-        ],
+        parameters: ['/parent/child/grandchild/grantchild', '../../grandchild'],
       },
 
       {
@@ -59,10 +53,7 @@ describe('#01 => Resolve', () => {
       {
         invite: '3 steps',
         expected: '/parent',
-        parameters: [
-          '/parent/child/grandchild/grantchild',
-          '../../../parent',
-        ],
+        parameters: ['/parent/child/grandchild/grantchild', '../../../parent'],
       },
       {
         invite: '3 steps, without name',
@@ -73,36 +64,24 @@ describe('#01 => Resolve', () => {
       {
         invite: '4 steps, with name',
         expected: '/parent',
-        parameters: [
-          '/parent/child/grandchild/grantchild',
-          '../../../../parent',
-        ],
+        parameters: ['/parent/child/grandchild/grantchild', '../../../../parent'],
       },
       {
         invite: '4 steps, with ranom name',
         expected: '/random',
-        parameters: [
-          '/parent/child/grandchild/grantchild',
-          '../../../../random',
-        ],
+        parameters: ['/parent/child/grandchild/grantchild', '../../../../random'],
       },
 
       {
         invite: 'out of bounds',
         expected: '/',
-        parameters: [
-          '/parent/child/grandchild/grantchild',
-          '../../../../../',
-        ],
+        parameters: ['/parent/child/grandchild/grantchild', '../../../../../'],
       },
 
       {
         invite: 'out of bounds, with random name',
         expected: '/random',
-        parameters: [
-          '/parent/child/grandchild/grantchild',
-          '../../../../../random',
-        ],
+        parameters: ['/parent/child/grandchild/grantchild', '../../../../../random'],
       },
 
       {

@@ -6,40 +6,36 @@ import _raw_machine from './sendToActions2.machine';
 vi.useFakeTimers();
 
 describe('cov => Performs send to itself actions', () => {
-  const machine = _raw_machine.provideOptions(
-    ({ assign, forceSend, resend }) => ({
-      actions: {
-        inc: assign('iterator', ({ context }) => {
-          const iterator = notU(context?.iterator);
-          if (iterator === undefined) return;
+  const machine = _raw_machine.provideOptions(({ assign, forceSend, resend }) => ({
+    actions: {
+      inc: assign('iterator', ({ context }) => {
+        const iterator = notU(context?.iterator);
+        if (iterator === undefined) return;
 
-          return iterator + 1;
-        }),
+        return iterator + 1;
+      }),
 
-        dec: assign('iterator', ({ context }) => {
-          const iterator = notU(context?.iterator);
-          if (iterator === undefined) return;
-          return iterator - 1;
-        }),
+      dec: assign('iterator', ({ context }) => {
+        const iterator = notU(context?.iterator);
+        if (iterator === undefined) return;
+        return iterator - 1;
+      }),
 
-        init: assign(() => ({ iterator: 0 })),
+      init: assign(() => ({ iterator: 0 })),
 
-        forceSendInc: forceSend('INCREMENT'),
-        sendDec: resend('DECREMENT'),
-      },
-
-    }),
-  );
+      forceSendInc: forceSend('INCREMENT'),
+      sendDec: resend('DECREMENT'),
+    },
+  }));
 
   const service = interpret(machine, { exact: true, context: {} });
 
-  const { useIterator, start, dispose, useStateValue, send } =
-    constructTests(service, ({ contexts: constructContexts }) => ({
-      useIterator: constructContexts(
-        ({ context }) => context?.iterator,
-        'iterator',
-      ),
-    }));
+  const { useIterator, start, dispose, useStateValue, send } = constructTests(
+    service,
+    ({ contexts: constructContexts }) => ({
+      useIterator: constructContexts(({ context }) => context?.iterator, 'iterator'),
+    }),
+  );
 
   test(...start());
   test(...useIterator(0));

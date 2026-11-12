@@ -1,9 +1,6 @@
 import { createMachine } from '@bemedev/app';
 
-export default createMachine(
-  'src/__tests__/delays/delay.notDefined.machine',
-  {
-    initial: 'idle',
-    states: { idle: { after: { DELAY: '/active' } }, active: {} },
-  },
-);
+export default createMachine('src/__tests__/delays/delay.notDefined.machine', {
+  initial: 'idle',
+  states: { idle: { after: { DELAY: '/active' } }, active: {} },
+});

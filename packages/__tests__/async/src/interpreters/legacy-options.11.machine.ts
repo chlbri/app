@@ -6,9 +6,7 @@ export default createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        on: { ADD: { actions: 'add' }, MULTIPLY: { actions: 'multiply' } },
-      },
+      idle: { on: { ADD: { actions: 'add' }, MULTIPLY: { actions: 'multiply' } } },
     },
   },
   {

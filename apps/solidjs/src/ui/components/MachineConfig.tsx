@@ -2,11 +2,7 @@ import { createSignal, type Component } from 'solid-js';
 import { Expand, type ExpandSlotProps } from './Expand';
 import { cn } from '#cn';
 
-type Props = {
-  config: Record<string, any>;
-  title: string;
-  class?: string;
-};
+type Props = { config: Record<string, any>; title: string; class?: string };
 
 export const MachineConfig: Component<Props> = props => {
   const [copied, setCopied] = createSignal(false);
@@ -16,12 +12,7 @@ export const MachineConfig: Component<Props> = props => {
     <div class='flex w-full cursor-pointer items-center justify-between bg-slate-900 px-4 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/80'>
       <div class='flex items-center space-x-2.5'>
         <div class='rounded-lg border border-indigo-500/20 bg-indigo-500/10 p-1.5 text-indigo-400'>
-          <svg
-            class='h-4 w-4'
-            fill='none'
-            viewBox='0 0 24 24'
-            stroke='currentColor'
-          >
+          <svg class='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
             <path
               stroke-linecap='round'
               stroke-linejoin='round'

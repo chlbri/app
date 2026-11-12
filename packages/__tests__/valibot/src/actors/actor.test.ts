@@ -20,11 +20,7 @@ describe('TESTS', () => {
         parameters: [{ next: 'target1' }],
         expected: true,
       },
-      {
-        invite: 'invalid config => false',
-        parameters: [{}],
-        expected: false,
-      },
+      { invite: 'invalid config => false', parameters: [{}], expected: false },
       {
         invite: 'invalid next target => false',
         parameters: [{ next: 'invalid' }],

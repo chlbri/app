@@ -56,10 +56,7 @@ describe('nextSV', () => {
       },
       {
         invite: 'handles multiple parallel states',
-        parameters: [
-          { main: 'active', secondary: 'idle' },
-          '/main/finished',
-        ],
+        parameters: [{ main: 'active', secondary: 'idle' }, '/main/finished'],
         expected: { main: 'finished', secondary: 'idle' },
       },
       {

@@ -11,25 +11,13 @@ describe('TESTS', () => {
     success(
       { invite: 'string => true', parameters: ['foo'], expected: true },
       { invite: 'empty string => true', parameters: [''], expected: true },
-      {
-        invite: 'empty object => false',
-        parameters: [{}],
-        expected: false,
-      },
+      { invite: 'empty object => false', parameters: [{}], expected: false },
       { invite: 'null => false', parameters: [null], expected: false },
-      {
-        invite: 'undefined => false',
-        parameters: [undefined],
-        expected: false,
-      },
+      { invite: 'undefined => false', parameters: [undefined], expected: false },
       { invite: 'number => false', parameters: [34], expected: false },
       { invite: 'boolean => false', parameters: [true], expected: false },
       { invite: 'array #1 => false', parameters: [[]], expected: false },
-      {
-        invite: 'array #2 => false',
-        parameters: [['data', 34]],
-        expected: false,
-      },
+      { invite: 'array #2 => false', parameters: [['data', 34]], expected: false },
       {
         invite: 'random object => false',
         parameters: [{ data: 34 }],
@@ -42,9 +30,7 @@ describe('TESTS', () => {
       },
       {
         invite: 'describe object with extra keys => false',
-        parameters: [
-          { name: 'action', description: 'A action', extra: 34 },
-        ],
+        parameters: [{ name: 'action', description: 'A action', extra: 34 }],
         expected: false,
       },
       {

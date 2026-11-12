@@ -37,9 +37,7 @@ describe('TESTS', () => {
       },
       {
         invite: 'valid next, error, and complete => true',
-        parameters: [
-          { next: 'target1', error: 'target2', complete: 'action1' },
-        ],
+        parameters: [{ next: 'target1', error: 'target2', complete: 'action1' }],
         expected: true,
       },
       {

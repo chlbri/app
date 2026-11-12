@@ -1,16 +1,39 @@
 import tailwindcss from '@tailwindcss/vite';
 import { tanstackStart } from '@tanstack/solid-start/plugin/vite';
 import { nitro } from 'nitro/vite';
-import { defineConfig } from 'vite';
 import viteSolid from 'vite-plugin-solid';
+import { defineConfig, lazyPlugins } from 'vite-plus';
 
 export default defineConfig({
   server: { port: 3012 },
   resolve: { tsconfigPaths: true },
-  plugins: [
-    tailwindcss(),
-    tanstackStart({}),
-    nitro(),
-    viteSolid({ ssr: true, extensions: ['.js', '.ts', '.jsx', '.tsx'] }),
-  ],
+
+  plugins: lazyPlugins(() => {
+    const isTest = process.env.NODE_ENV === 'test';
+
+    return [
+      tailwindcss(),
+      // TanStack Start enumerates every env var during config resolution, so
+      // CI-only vars like ACTIONS_ORCHESTRATION_ID invalidate the task cache.
+      ...(isTest ? [] : [tanstackStart({})]),
+      nitro(),
+
+      viteSolid({
+        ssr: !isTest,
+        extensions: ['.js', '.ts', '.jsx', '.tsx'],
+        dev: isTest,
+      }),
+    ];
+  }),
+
+  test: {
+    bail: 100,
+    maxConcurrency: 100,
+    globals: true,
+    environment: 'jsdom',
+    testTimeout: 30000,
+    clearMocks: false,
+    // Inline dev-utils: it nests its own vitest copy, breaking test collection
+    server: { deps: { inline: ['@bemedev/dev-utils'] } },
+  },
 });

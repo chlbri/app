@@ -12,10 +12,7 @@ export default createMachine(
       idle: {
         on: {
           SET_SCORES: { actions: 'setScores' },
-          FILTER_HIGH_SCORES: {
-            actions: 'filterHighScores',
-            target: '/filtered',
-          },
+          FILTER_HIGH_SCORES: { actions: 'filterHighScores', target: '/filtered' },
         },
       },
       filtered: {},
@@ -24,10 +21,7 @@ export default createMachine(
   {
     context: type({ scores }),
 
-    eventsMap: type({
-      SET_SCORES: { scores },
-      FILTER_HIGH_SCORES: 'never',
-    }),
+    eventsMap: type({ SET_SCORES: { scores }, FILTER_HIGH_SCORES: 'never' }),
     sync: true,
   },
 );

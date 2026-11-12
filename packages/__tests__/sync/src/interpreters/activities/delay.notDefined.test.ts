@@ -24,9 +24,7 @@ describe('delay is not defined', () => {
     });
 
     test('#02 => Check the warning', () => {
-      expect(service._warningsCollector).toContain(
-        'Delay (DELAY) is not defined',
-      );
+      expect(service._warningsCollector).toContain('Delay (DELAY) is not defined');
     });
   });
 

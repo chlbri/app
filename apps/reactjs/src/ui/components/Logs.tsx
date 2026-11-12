@@ -2,11 +2,7 @@ import type { Service } from '#/machines/counter';
 import { useService } from '@bemedev/app-reactjs';
 import { wrap } from '@bemedev/hook-wrapper';
 import { History, RefreshCw } from 'lucide-react';
-import {
-  useLayoutEffect,
-  useState as useReactState,
-  type FC,
-} from 'react';
+import { useLayoutEffect, useState as useReactState, type FC } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { cn } from '../cn';
 import { Badge } from './badge';
@@ -34,10 +30,7 @@ export const Logs = ({ service }: Props) => {
   const Length = wrap.noParams(
     () => useState({ selector: s => s.context.logs.length }),
     len => (
-      <Badge
-        variant='secondary'
-        className='w-28 justify-center text-[10px]'
-      >
+      <Badge variant='secondary' className='w-28 justify-center text-[10px]'>
         New {len} Events
       </Badge>
     ),
@@ -103,10 +96,7 @@ export const Logs = ({ service }: Props) => {
               <button
                 className='flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-slate-800/60 bg-slate-950/70 px-2 py-3 text-xs'
                 onClick={() =>
-                  service.send({
-                    type: 'TOGGLE_LOG_EXPAND',
-                    payload: item.id,
-                  })
+                  service.send({ type: 'TOGGLE_LOG_EXPAND', payload: item.id })
                 }
               >
                 <div className='flex-col space-y-0.5'>
@@ -141,10 +131,7 @@ Logs.test = (({ service }) => {
   const Length = wrap.noParams(
     () => useState({ selector: s => s.context.logs.length }),
     len => (
-      <Badge
-        variant='secondary'
-        className='w-28 justify-center text-[10px]'
-      >
+      <Badge variant='secondary' className='w-28 justify-center text-[10px]'>
         New {len} Events
       </Badge>
     ),
@@ -196,10 +183,7 @@ Logs.test = (({ service }) => {
               <button
                 className='flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-slate-800/60 bg-slate-950/70 px-2 py-3 text-xs'
                 onClick={() =>
-                  service.send({
-                    type: 'TOGGLE_LOG_EXPAND',
-                    payload: item.id,
-                  })
+                  service.send({ type: 'TOGGLE_LOG_EXPAND', payload: item.id })
                 }
               >
                 <div className='flex-col space-y-0.5'>

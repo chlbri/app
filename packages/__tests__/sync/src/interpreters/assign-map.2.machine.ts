@@ -16,11 +16,7 @@ export default createMachine(
     },
   },
   {
-    context: type({
-      name: 'string',
-      age: 'number',
-      role: 'string',
-    }),
+    context: type({ name: 'string', age: 'number', role: 'string' }),
     eventsMap: type({
       UPDATE_ALL: { name: 'string', age: 'number', role: 'string' },
       PARTIAL_UPDATE: { name: 'string' },

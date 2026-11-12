@@ -15,9 +15,7 @@ export const Tags: FC<{ service: Service }> = ({ service }) => {
           </Badge>
         ))
       ) : (
-        <span className='text-xs text-slate-500 italic'>
-          No tags active
-        </span>
+        <span className='text-xs text-slate-500 italic'>No tags active</span>
       )}
     </div>
   );

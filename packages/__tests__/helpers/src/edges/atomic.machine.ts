@@ -1,9 +1,7 @@
 import { typings } from '@bemedev/app/utils';
 import { createMachine } from '@bemedev/app';
 
-const litts = typings.any(({ litterals }) =>
-  litterals('fr', 'en', 'es'),
-).__type;
+const litts = typings.any(({ litterals }) => litterals('fr', 'en', 'es')).__type;
 
 export default createMachine(
   'atomic',
@@ -15,5 +13,4 @@ export default createMachine(
   },
 ).provideOptions(({ assign }) => ({
   actions: { setLang: assign({ SET_LANG: c => c.payload }) },
-
 }));

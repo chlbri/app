@@ -34,16 +34,11 @@ export const config21 = createConfig({
           initial: 'idle',
           states: {
             idle: {
-              on: {
-                WRITE: { actions: 'write', target: '/working/ui/input' },
-              },
+              on: { WRITE: { actions: 'write', target: '/working/ui/input' } },
             },
             input: {
               activities: {
-                DELAY: {
-                  guards: 'isInputEmpty',
-                  actions: 'askUsertoInput',
-                },
+                DELAY: { guards: 'isInputEmpty', actions: 'askUsertoInput' },
               },
               on: {
                 WRITE: [
@@ -88,43 +83,30 @@ export const machine21 = createMachine(
 
     actorsMap: type({ children: { machine1: { NEXT: 'never' } } }),
   },
-).provideOptions(
-  ({ isNotValue, isValue, assign, action, sendTo }) => ({
-    actions: {
-      inc: assign(
-        'iterator',
-        ({ context }) => notU(context?.iterator) + 1,
-      ),
-      inc2: assign(
-        'iterator',
-        ({ context }) => notU(context?.iterator) + 4,
-      ),
-      sendPanelToUser: action(() => console.log('sendPanelToUser')),
-      askUsertoInput: action(() => console.log('Input, please !!')),
-      write: assign('input', {
-        WRITE: ({ payload: { value } }) => value,
-      }),
-      send: sendTo(machine1)(
-        async () => ({ to: 'machine1', event: 'NEXT' }),
-        { catch: emptyActionFn },
-      ),
-      insertData: assign('data', ({ context }) =>
-        fakeDB
-          .filter(item => item.name.includes(context?.input ?? ''))
-          .map(item => item.name),
-      ),
-    },
-    guards: {
-      isInputEmpty: isValue('context.input', ''),
-      isInputNotEmpty: isNotValue('context.input', ''),
-    },
-    actors: {
-      children: {
-        machine1: () => interpret(machine1, { context: { iterator: 0 } }),
-      },
-    },
-    delays: { DELAY, DELAY2: 2 * DELAY },
-  }),
-);
+).provideOptions(({ isNotValue, isValue, assign, action, sendTo }) => ({
+  actions: {
+    inc: assign('iterator', ({ context }) => notU(context?.iterator) + 1),
+    inc2: assign('iterator', ({ context }) => notU(context?.iterator) + 4),
+    sendPanelToUser: action(() => console.log('sendPanelToUser')),
+    askUsertoInput: action(() => console.log('Input, please !!')),
+    write: assign('input', { WRITE: ({ payload: { value } }) => value }),
+    send: sendTo(machine1)(async () => ({ to: 'machine1', event: 'NEXT' }), {
+      catch: emptyActionFn,
+    }),
+    insertData: assign('data', ({ context }) =>
+      fakeDB
+        .filter(item => item.name.includes(context?.input ?? ''))
+        .map(item => item.name),
+    ),
+  },
+  guards: {
+    isInputEmpty: isValue('context.input', ''),
+    isInputNotEmpty: isNotValue('context.input', ''),
+  },
+  actors: {
+    children: { machine1: () => interpret(machine1, { context: { iterator: 0 } }) },
+  },
+  delays: { DELAY, DELAY2: 2 * DELAY },
+}));
 
 // #endregion

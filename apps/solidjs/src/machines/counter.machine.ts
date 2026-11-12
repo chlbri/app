@@ -9,10 +9,7 @@ export const counterMachine = createMachine(
       idle: { tags: ['stopped'], on: { START: '/active' } },
       active: {
         tags: ['running'],
-        on: {
-          INC: { actions: 'increment' },
-          DEC: { actions: 'decrement' },
-        },
+        on: { INC: { actions: 'increment' }, DEC: { actions: 'decrement' } },
       },
     },
   },
@@ -29,10 +26,7 @@ export const counterMachine = createMachine(
   },
 ).provideOptions(({ assign }) => ({
   actions: {
-    increment: assign(
-      'count',
-      ({ context: { count, step } }) => count + step,
-    ),
+    increment: assign('count', ({ context: { count, step } }) => count + step),
 
     decrement: assign('count', ({ context: { count, step } }) =>
       Math.max(count - step, 0),
@@ -40,5 +34,4 @@ export const counterMachine = createMachine(
 
     reset: assign('count', () => 0),
   },
-
 }));
