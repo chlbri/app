@@ -35,18 +35,21 @@ jobs:
 
         with:
           path: node_modules/.vite/task-cache
-          key: ${{ runner.os }}-${{ runner.arch }}-vite-tasks-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-vite-tasks-main-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-vite-tasks
+            ${{ runner.os }}-${{ runner.arch }}-vite-tasks-main
 
       - name: Build
         run: vp run pretest
 
+      # Only save on a miss: an exact hit means the entry already exists, and
+      # cache/save@v6 fails the job when the key is already reserved.
       - name: Save Vite Task cache
+        if: steps.vite-task-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
         with:
           path: node_modules/.vite/task-cache
-          key: ${{ runner.os }}-${{ runner.arch }}-vite-tasks-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-vite-tasks-main-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Upload workspace
         uses: actions/upload-artifact@v7
