@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   # Cron chaque premier du mois à 4h UTC
   schedule:
-    - cron: '0 4 1 * *'
+    - cron: 0 4 1 * *
 
 jobs:
   all:
