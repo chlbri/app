@@ -15,6 +15,30 @@ jobs:
       - name: Checkout pnpm repo
         uses: chlbri/node-github-actions/.github/actions/pnpmi@main
 
+      - name: Setup Void Zero
+        uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: "24"
+          cache: true
+          # Default is true, set explicitly: this installs the workspace with
+          # the managed pnpm, which the publish action below relies on.
+          run-install: true
+
+      # Restore only. ci-vp.yml is the single writer of this cache: a publisher
+      # running on a tag/release ref can only ever write a cache scoped to that
+      # ref, which no other run can read. Same key scheme as ci-vp so the exact
+      # entry saved by CI in this run is reused when it already exists, and the
+      # prefix falls back to the newest entry of the branch/default branch.
+      - name: Restore Vite Task cache
+        if: ${{ !inputs.artifact }}
+        id: vite-task-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: node_modules/.vite/task-cache
+          key: vite-task-${{ runner.os }}-${{ runner.arch }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            vite-task-${{ runner.os }}-${{ runner.arch }}-
+
       - name: Build
         run: pnpm run pretest
 
@@ -22,10 +46,21 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: built-workspace
+          # Only the generated `lib` folders are consumed by the publish jobs.
+          # The previous `**/lib/**` pattern also matched every `lib` folder
+          # nested in node_modules (~1.2 GB and ~44k files), which made this
+          # step the slowest one of the run. `!node_modules` only excludes the
+          # root folder, not the per-package ones created by
+          # `hoistingLimits: workspaces`.
+          #
+          # packages/app/node_modules/@bemedev/app-utils-bemedev is the only
+          # injected/bundled workspace dependency: on a fresh install it is
+          # hardlink-snapshotted without its `lib`, so it must be restored from
+          # the artifact before publishing.
           path: |
-            **/lib/**
-            !node_modules
-            !.git
+            packages/*/lib/**
+            packages/app/node_modules/@bemedev/app-utils-bemedev/lib/**
+          if-no-files-found: error
           retention-days: 1
 
   app:
