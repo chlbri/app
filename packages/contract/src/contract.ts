@@ -1,19 +1,5 @@
 import type { CreateContract_F } from './contract.types';
 
-/**
- * Runtime shape produced by the contract factory.
- *
- * The function supports both forms:
- * - `createContract(config, types?)` for an unnamed contract.
- * - `createContract(name, config, types?)` for a registered contract.
- *
- * The name is type-level only: it selects the matching `Register` entry and is
- * not part of the returned object.
- *
- * @param nameOrConfig - Contract identifier, or the machine JSON config.
- * @param configOrTypes - Machine JSON config, or type schemas.
- * @param maybeTypes - Optional type schemas for the named form.
- */
 const createContractImpl = (
   nameOrConfig: any,
   configOrTypes?: any,
@@ -65,6 +51,6 @@ const createContractImpl = (
  * export default createContract('auth', config, types);
  * ```
  *
- * @see {@linkcode CreateContract_F}, {@linkcode Contract}
+ * @see -- type {@linkcode CreateContract_F}
  */
 export const createContract = createContractImpl as CreateContract_F;

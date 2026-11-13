@@ -135,7 +135,9 @@ it with a `createContract` starter.
 | `CreateContractNamed_F`     | Type | Named signature, resolved through `Register`.                     |
 | `CreateContractNoName_F`    | Type | Unnamed signature, resolved from the config.                      |
 | `Register`                  | Type | Registry augmented with pre-resolved contract types.              |
-| `ContractOf`                | Type | Inferred typing surface of a contract.                            |
+| `RegisterOptions`           | Type | Option identifiers available for a registry entry.                |
+| `TargetDef`                 | Type | Registry path tree node.                                          |
+| `ContractSchemas`           | Type | Schema map accepted by `createContract`.                          |
 | `ContractTypes`             | Type | Inferred typing surface shape.                                    |
 | `MachineOptions`            | Type | Union of async and sync machine options.                          |
 | `AnyMachineOptions`         | Type | Base shape satisfied by every machine options surface.            |

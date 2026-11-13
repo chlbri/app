@@ -103,7 +103,7 @@ export type ContractTypes = {
  * types and the machine options surface.
  *
  * It carries no option implementation: actions, guards, delays and actors are
- * described by {@linkcode MachineOptions} only.
+ * described by type {@linkcode MachineOptions} only.
  *
  * @template `Config` - Machine configuration type.
  * @template `Types` - Inferred typing surface.
