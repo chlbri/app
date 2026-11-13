@@ -12,7 +12,8 @@ import { emitRegisterEntry, extractMachineInfo } from './helpers';
 // ── Public API ────────────────────────────────────────────────────────
 
 /**
- * Generate app.gen.ts from all *.machine.ts / *.fsm.ts files in the workspace.
+ * Generate app.gen.ts from all *.machine.ts / *.fsm.ts / *.contract.ts files in
+ * the workspace.
  *
  * Main entry point for CLI commands. Orchestrates the entire 4-phase generation pipeline:
  * 1. **Discovery**: Find all machine files matching the glob pattern

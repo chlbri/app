@@ -1,16 +1,19 @@
 import { readFile, writeFile } from 'fs/promises';
 import { basename, resolve } from 'path';
-import { LIB } from '../constants';
+import { CONTRACT_LIB, CONTRACT_SUFFIX, LIB } from '../constants';
 
 /**
- * Checks whether a given file path is a machine file (`.machine.ts` or `.fsm.ts`).
+ * Checks whether a given file path is a machine file (`.machine.ts`,
+ * `.fsm.ts` or `.contract.ts`).
  *
  * @param filePath - File path string.
  *
- * @returns `true` if machine file, otherwise `false`.
+ * @returns `true` if machine or contract file, otherwise `false`.
  */
 const isMachineFile = (filePath: string) =>
-  filePath.endsWith('.machine.ts') || filePath.endsWith('.fsm.ts');
+  filePath.endsWith('.machine.ts') ||
+  filePath.endsWith('.fsm.ts') ||
+  filePath.endsWith(CONTRACT_SUFFIX);
 
 /**
  * Extracts default machine name from file path basename.
@@ -21,7 +24,9 @@ const isMachineFile = (filePath: string) =>
  */
 const getMachineName = (filePath: string) => {
   const filename = basename(filePath);
-  return filename.replace(/\.machine\.ts$|\.fsm\.ts$/i, '') || 'machine';
+  return (
+    filename.replace(/\.machine\.ts$|\.fsm\.ts$|\.contract\.ts$/i, '') || 'machine'
+  );
 };
 
 /**
@@ -33,6 +38,14 @@ const getMachineName = (filePath: string) => {
  */
 export const produceStarterContent = (filePath: string) => {
   const name = getMachineName(filePath);
+
+  if (filePath.endsWith(CONTRACT_SUFFIX)) {
+    return `import { createContract } from '${CONTRACT_LIB}';
+
+export default createContract('${name}', { initial: 'idle', states: { idle: {} } })
+`;
+  }
+
   return `import { createMachine } from '${LIB}';
 
 export default createMachine('${name}', { initial: 'idle', states: { idle: {} } })

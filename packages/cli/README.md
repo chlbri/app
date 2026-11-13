@@ -21,10 +21,10 @@ yarn add -D @bemedev/app-cli
 
 ## CLI Usage
 
-The CLI binary `app-cli` scans your workspace for machine definition files
-(`*.machine.ts` and `*.fsm.ts`), parses their configurations using AST traversal, and
-automatically generates ambient type definitions into `app.gen.ts` to register
-machine types into `@bemedev/app`'s `Register` interface.
+The CLI binary `app-cli` scans your workspace for machine definition and contract
+files (`*.machine.ts`, `*.fsm.ts` and `*.contract.ts`), parses their configurations
+using AST traversal, and automatically generates ambient type definitions into
+`app.gen.ts` to register machine types into `@bemedev/app`'s `Register` interface.
 
 ```bash
 npx app-cli <command> [options]
@@ -37,15 +37,16 @@ files in the workspace.
 
 #### How it works:
 
-1. **Discovery**: Searches for all files matching `*.machine.ts` and `*.fsm.ts`
-   (ignoring excluded directories such as `node_modules`, `dist`, `lib`).
+1. **Discovery**: Searches for all files matching `*.machine.ts`, `*.fsm.ts` and
+   `*.contract.ts` (ignoring excluded directories such as `node_modules`, `dist`,
+   `lib`).
 2. **Extraction & AST Analysis**: Uses `ts-morph` and the internal `parseTree`
    utility to extract machine names, initial states, target paths, events, options,
    and context types (`pContext`).
 3. **Type Emission**: Generates a strongly typed module declaration in `app.gen.ts`
    augmenting `@bemedev/app`'s `Register` interface.
-4. **Cleanup**: Automatically removes `app.gen.ts` if all machine files are deleted
-   or no valid machines are found.
+4. **Cleanup**: Automatically removes `app.gen.ts` if all machine and contract files
+   are deleted or no valid machines are found.
 
 #### Options:
 
@@ -75,18 +76,19 @@ npx app-cli generate --dry-run
 
 ### 2. `watch` (Alias: `dev`)
 
-Starts a persistent file watcher that monitors machine files and dynamically
-regenerates `app.gen.ts` whenever changes occur.
+Starts a persistent file watcher that monitors machine and contract files and
+dynamically regenerates `app.gen.ts` whenever changes occur.
 
 #### How it works:
 
 1. **Initial Build**: Executes an initial full generation on launch.
-2. **File Monitoring**: Uses `node-watch` to recursively monitor `*.machine.ts` and
-   `*.fsm.ts` files in real-time.
+2. **File Monitoring**: Uses `node-watch` to recursively monitor `*.machine.ts`,
+   `*.fsm.ts` and `*.contract.ts` files in real-time.
 3. **Debounced Regeneration**: Debounces changes (300ms delay) to handle file saving
    sequences smoothly.
-4. **Auto-Scaffolding**: Automatically populates newly created empty `.machine.ts` or
-   `.fsm.ts` files with starter boilerplate code (`createMachine(...)`).
+4. **Auto-Scaffolding**: Automatically populates newly created empty `.machine.ts`,
+   `.fsm.ts` or `.contract.ts` files with starter boilerplate code
+   (`createMachine(...)` or `createContract(...)`).
 5. **Clean Shutdown**: Listens for `SIGINT` (`Ctrl+C`) to terminate the watcher
    gracefully.
 

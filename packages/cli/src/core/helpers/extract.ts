@@ -4,24 +4,33 @@ import { evaluateNode } from './evaluate';
 import { extractPContextType } from './pContext';
 
 /**
- * Recursively locates the `createMachine` function call within a call expression.
+ * Names of the factory calls the CLI understands.
+ *
+ * `createMachine` comes from `@bemedev/app`, while `createContract` comes from
+ * `@bemedev/app-contract`. Both expose the same `(name, config, types?)`
+ * signature, so they can share the same extraction pipeline.
+ */
+const FACTORY_NAMES = new Set(['createMachine', 'createContract']);
+
+/**
+ * Recursively locates a supported machine factory call within a call expression.
  *
  * @param callNode - AST call expression node.
  *
  * @returns Found call node or `null`.
  */
-const findCreateMachineCall = (callNode: any): any => {
+const findMachineCall = (callNode: any): any => {
   const callee = callNode.getExpression?.();
   if (!callee) return null;
 
-  if (callee.getText?.() === 'createMachine') {
+  if (FACTORY_NAMES.has(callee.getText?.())) {
     return callNode;
   }
 
   if (callee.getKindName?.() === 'PropertyAccessExpression') {
     const object = callee.getExpression?.();
     if (object && object.getKindName?.() === 'CallExpression') {
-      return findCreateMachineCall(object);
+      return findMachineCall(object);
     }
   }
 
@@ -29,9 +38,10 @@ const findCreateMachineCall = (callNode: any): any => {
 };
 
 /**
- * Extracts machine metadata, static config, and protected context typings from a source file.
+ * Extracts machine or contract metadata, static config, and protected context
+ * typings from a source file.
  *
- * @param sourceFilePath - Absolute path to machine source file.
+ * @param sourceFilePath - Absolute path to machine or contract source file.
  * @param project - `ts-morph` class {@linkcode Project} instance.
  *
  * @returns Extracted machine info object or `null` if invalid/unparseable.
@@ -52,7 +62,7 @@ export const extractMachineInfo = (
       return null;
     }
 
-    const callNode = findCreateMachineCall(callExpr as any);
+    const callNode = findMachineCall(callExpr as any);
     if (!callNode) {
       return null;
     }

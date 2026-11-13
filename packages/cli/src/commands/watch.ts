@@ -13,7 +13,8 @@ import { relative } from 'path';
  *
  * Behavior:
  * 1. **Initial generation**: Performs full generation on startup
- * 2. **Watch phase**: Monitors all *.machine.ts and *.fsm.ts files for changes
+ * 2. **Watch phase**: Monitors all *.machine.ts, *.fsm.ts and *.contract.ts files
+ *    for changes
  * 3. **Debounced regeneration**: Waits 300ms of stability before regenerating
  *    (handles editor save sequences and git checkouts gracefully)
  * 4. **Feedback**: Logs change detection and regeneration completion
@@ -48,7 +49,8 @@ import { relative } from 'path';
  * **Important Notes:**
  * - Runs indefinitely until Ctrl+C is pressed
  * - Handles file stabilization with 300ms threshold via Chokidar `awaitWriteFinish`
- * - Automatically scaffolds a new `.machine.ts` / `.fsm.ts` file with
+ * - Automatically scaffolds a new `.machine.ts` / `.fsm.ts` / `.contract.ts` file
+ *   with
  *   `export default createMachine('name', { initial: 'idle', states: { idle: {} } })`
  *   when the file is created and initially empty
  * - Ignores changes in excluded directories and output file itself
@@ -66,7 +68,7 @@ import { relative } from 'path';
 export const watch = command({
   name: 'watch',
   description:
-    'Watch *.machine.ts / *.fsm.ts files and regenerate app.gen.ts on change',
+    'Watch *.machine.ts / *.fsm.ts / *.contract.ts files and regenerate app.gen.ts on change',
   aliases: ['dev'],
   args: {
     excludes: multioption({

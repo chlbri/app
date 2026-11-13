@@ -6,7 +6,8 @@ import { generator as handler } from '../core/generator';
  *
  * One-time generation of app.gen.ts from all discovered machine files.
  *
- * Scans the project for all *.machine.ts and *.fsm.ts files, extracts their
+ * Scans the project for all *.machine.ts, *.fsm.ts and *.contract.ts files,
+ * extracts their
  * TypeScript configurations and type definitions, and generates a consolidated
  * app.gen.ts module declaration containing the full Register interface with
  * inlined type information for every machine.
@@ -41,7 +42,8 @@ import { generator as handler } from '../core/generator';
  */
 export const generate = command({
   name: 'generate',
-  description: 'Generate app.gen.ts from all *.machine.ts / *.fsm.ts files',
+  description:
+    'Generate app.gen.ts from all *.machine.ts / *.fsm.ts / *.contract.ts files',
   args: {
     excludes: multioption({
       type: array(string),
