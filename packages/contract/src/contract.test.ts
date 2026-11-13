@@ -1,15 +1,27 @@
 import { type } from '@bemedev/typings';
-import {
-  createContract,
-  type ContractContext,
-  type ContractEventArg,
-  type ContractEvents,
-  type ContractEventType,
-  type ContractName,
-  type ContractPaths,
-  type ContractPContext,
-  type ContractSync,
-} from './index';
+import { createContract } from './index';
+
+import type {
+  AsyncMachineOptions2,
+  AsyncSimpleMachineOptions,
+  EmptyObject,
+  EventStrings,
+  StateValue,
+  SyncMachineOptions2,
+  SyncSimpleMachineOptions,
+  WorkingStatus,
+} from './internal';
+
+import type {
+  ContractContext,
+  ContractEventArg,
+  ContractEvents,
+  ContractEventType,
+  ContractOptions,
+  ContractPaths,
+  ContractPContext,
+  ContractSync,
+} from './types';
 
 const config = {
   initial: 'idle',
@@ -25,37 +37,37 @@ const types = {
   eventsMap: type({ LOGIN: 'never' }),
 } as const;
 
-const contract = createContract('auth', config, types);
+const contract = createContract(config, types);
 
 describe('#01 => createContract', () => {
-  test('#01 => exposes the contract name', () => {
-    expect(contract.name).toBe('auth');
-  });
-
-  test('#02 => keeps the config reference', () => {
+  test('#01 => keeps the config reference', () => {
     expect(contract.config).toBe(config);
   });
 
-  test('#03 => keeps the types reference', () => {
+  test('#02 => keeps the types reference', () => {
     expect(contract.types).toBe(types);
   });
 
-  test('#04 => is frozen', () => {
+  test('#03 => is frozen', () => {
     expect(Object.isFrozen(contract)).toBe(true);
   });
 
-  test('#05 => does not expose options', () => {
+  test('#04 => does not expose options', () => {
     expect('options' in contract).toBe(false);
   });
 
+  test('#05 => does not expose a name', () => {
+    expect('name' in contract).toBe(false);
+  });
+
   test('#06 => defaults types to an empty object', () => {
-    const empty = createContract('empty', { initial: 'idle', states: { idle: {} } });
+    const empty = createContract({ initial: 'idle', states: { idle: {} } });
 
     expect(empty.types).toEqual({});
   });
 
   test('#07 => accepts transitions, guarded actions and actors', () => {
-    const rich = createContract('rich', {
+    const rich = createContract({
       initial: 'idle',
       states: {
         idle: {
@@ -67,61 +79,231 @@ describe('#01 => createContract', () => {
       },
     });
 
-    expect(rich.name).toBe('rich');
+    expect(rich.config).toMatchObject({ initial: 'idle' });
   });
 });
 
 describe('#02 => contract types', () => {
-  test('#01 => name', () => {
-    expectTypeOf<ContractName<typeof contract>>().toEqualTypeOf<'auth'>();
-  });
+  const syncContract = createContract(
+    { initial: 'idle', states: { idle: {} } },
+    { sync: true },
+  );
 
-  test('#02 => paths', () => {
+  test('#01 => paths', () => {
     expectTypeOf<ContractPaths<typeof contract>>().toEqualTypeOf<
       '/' | '/idle' | '/authenticated' | '/authenticated/loading'
     >();
   });
 
-  test('#03 => context', () => {
+  test('#02 => context', () => {
     expectTypeOf<ContractContext<typeof contract>>().toEqualTypeOf<{
       count: number;
     }>();
   });
 
-  test('#04 => pContext', () => {
+  test('#03 => pContext', () => {
     expectTypeOf<ContractPContext<typeof contract>>().toEqualTypeOf<{
       token: string;
     }>();
   });
 
-  test('#05 => event type', () => {
+  test('#04 => event type', () => {
     expectTypeOf<
       Extract<ContractEventType<typeof contract>, 'LOGIN'>
     >().toEqualTypeOf<'LOGIN'>();
   });
 
-  test('#06 => event payload', () => {
+  test('#05 => event payload', () => {
     type Login = Extract<ContractEvents<typeof contract>, { type: 'LOGIN' }>;
     expectTypeOf<Login['payload']>().toEqualTypeOf<never>();
   });
 
-  test('#07 => event argument', () => {
+  test('#06 => event argument', () => {
     expectTypeOf<
       Extract<ContractEventArg<typeof contract>, 'LOGIN'>
     >().toEqualTypeOf<'LOGIN'>();
   });
 
-  test('#08 => default sync flag', () => {
+  test('#07 => default sync flag', () => {
     expectTypeOf<ContractSync<typeof contract>>().toEqualTypeOf<undefined>();
   });
 
-  test('#09 => explicit sync flag', () => {
-    const syncContract = createContract(
-      'sync',
-      { initial: 'idle', states: { idle: {} } },
+  test('#08 => explicit sync flag', () => {
+    expectTypeOf<ContractSync<typeof syncContract>>().toEqualTypeOf<true>();
+  });
+
+  test('#09 => async options surface', () => {
+    expectTypeOf<ContractOptions<typeof contract>>().toEqualTypeOf<
+      AsyncSimpleMachineOptions<
+        ContractPContext<typeof contract>,
+        ContractContext<typeof contract>,
+        string,
+        ContractEvents<typeof contract>
+      >
+    >();
+  });
+
+  test('#10 => sync options surface', () => {
+    expectTypeOf<ContractOptions<typeof syncContract>>().toEqualTypeOf<
+      SyncSimpleMachineOptions<
+        ContractPContext<typeof syncContract>,
+        ContractContext<typeof syncContract>,
+        string,
+        ContractEvents<typeof syncContract>
+      >
+    >();
+  });
+});
+
+declare module '@bemedev/app-contract' {
+  interface Register {
+    'named.contract': {
+      paths: {
+        map: {
+          targets: '/' | '/authenticated';
+          initial: 'idle';
+          states: {
+            idle: { targets: '/' | '/authenticated' };
+            authenticated: { targets: '/' };
+          };
+        };
+        all: '/' | '/idle' | '/authenticated';
+      };
+      events: 'LOGIN';
+      options: {
+        children: never;
+        emitters: never;
+        tags: never;
+        actions: 'login';
+        guards: never;
+        delays: never;
+      };
+      pContext: { token: string };
+    };
+  }
+}
+
+describe('#03 => named contract', () => {
+  const named = createContract('named.contract', {
+    initial: 'idle',
+    states: {
+      idle: { on: { LOGIN: { target: '/authenticated', actions: ['login'] } } },
+      authenticated: {},
+    },
+  });
+
+  test('#01 => keeps the config reference', () => {
+    expect(named.config).toMatchObject({ initial: 'idle' });
+  });
+
+  test('#02 => resolves paths from the registry', () => {
+    expectTypeOf<ContractPaths<typeof named>>().toEqualTypeOf<
+      '/' | '/idle' | '/authenticated'
+    >();
+  });
+
+  test('#03 => resolves pContext from the registry', () => {
+    expectTypeOf<ContractPContext<typeof named>>().toEqualTypeOf<{
+      token: string;
+    }>();
+  });
+
+  test('#04 => resolves events from the registry', () => {
+    type Login = Extract<ContractEvents<typeof named>, { type: 'LOGIN' }>;
+    expectTypeOf<Login['payload']>().toEqualTypeOf<never>();
+  });
+
+  test('#05 => resolves strict async options from the registry', () => {
+    expectTypeOf<ContractOptions<typeof named>>().toEqualTypeOf<
+      AsyncMachineOptions2<
+        ContractPContext<typeof named>,
+        ContractContext<typeof named>,
+        never,
+        ContractEvents<typeof named>,
+        {
+          children: never;
+          emitters: never;
+          tags: never;
+          actions: 'login';
+          guards: never;
+          delays: never;
+        }
+      >
+    >();
+  });
+
+  test('#06 => resolves strict sync options from the registry', () => {
+    const syncNamed = createContract(
+      'named.contract',
+      { initial: 'idle', states: { idle: { on: { LOGIN: '/authenticated' } } } },
       { sync: true },
     );
 
-    expectTypeOf<ContractSync<typeof syncContract>>().toEqualTypeOf<true>();
+    expectTypeOf<ContractOptions<typeof syncNamed>>().toEqualTypeOf<
+      SyncMachineOptions2<
+        ContractPContext<typeof syncNamed>,
+        ContractContext<typeof syncNamed>,
+        never,
+        ContractEvents<typeof syncNamed>,
+        {
+          children: never;
+          emitters: never;
+          tags: never;
+          actions: 'login';
+          guards: never;
+          delays: never;
+        }
+      >
+    >();
+  });
+
+  describe('#04 => Params of an option', () => {
+    type Params = Parameters<
+      NonNullable<NonNullable<ContractOptions<typeof named>['actions']>['login']>
+    >[0];
+
+    test('#01 => keyof State', () => {
+      type KeyParams = keyof Params;
+      expectTypeOf<KeyParams>().toEqualTypeOf<
+        'event' | 'pContext' | 'context' | 'status' | 'value' | 'tags'
+      >();
+    });
+
+    test('#02 => event', () => {
+      expectTypeOf<Params['event']>().toEqualTypeOf<
+        | { type: 'LOGIN'; payload: never; __internal?: EventStrings }
+        | { type: 'machine$$init'; payload: EmptyObject; __internal?: EventStrings }
+        | {
+            type: `${string}/machine$$after`;
+            payload: EmptyObject;
+            __internal?: EventStrings;
+          }
+        | {
+            type: `${string}/machine$$always`;
+            payload: EmptyObject;
+            __internal?: EventStrings;
+          }
+      >();
+    });
+
+    test('#03 => pContext', () => {
+      expectTypeOf<Params['pContext']>().toEqualTypeOf<{ token: string }>();
+    });
+
+    test('#04 => context', () => {
+      expectTypeOf<Params['context']>().toEqualTypeOf<undefined>();
+    });
+
+    test('#05 => status', () => {
+      expectTypeOf<Params['status']>().toEqualTypeOf<WorkingStatus>();
+    });
+
+    test('#06 => tags', () => {
+      expectTypeOf<Params['tags']>().toEqualTypeOf<never[]>();
+    });
+
+    test('#07 => value', () => {
+      expectTypeOf<Params['value']>().toEqualTypeOf<StateValue>();
+    });
   });
 });

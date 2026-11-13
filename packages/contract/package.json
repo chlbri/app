@@ -47,10 +47,14 @@
       "types": "./lib/index.d.ts"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "p-q": "pretty-quick",
     "posttest": "vp fmt",
     "pretest": "vp run pack",
+    "publish:first": "vp run pretest && pnpm publish --access public --no-git-checks",
     "rm:lib": "vp dlx rimraf ./lib",
     "test:coverage": "vp test run",
     "test": "vp run test:coverage --no-coverage",

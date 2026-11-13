@@ -1,13 +1,13 @@
 import type {
   ActorsConfigMap,
+  AnyMachineOptions,
+  CommonConfig2,
   EventArgAll,
   EventObject,
   EventsMap,
-  ToEventObject,
-  ToEvents,
-} from './internal/events';
-import type { CommonConfig2 } from './internal/machine';
-import type { inferT, PrimitiveObject, StandardOutput } from './internal/primitives';
+  PrimitiveObject,
+  StandardOutput,
+} from './internal';
 
 /**
  * Joins a parent state path with a child state key.
@@ -74,17 +74,19 @@ export type ContractSchemas = {
 };
 
 /**
- * Resolved typing surface of a contract.
+ * Inferred typing surface of a contract.
  *
- * These fields are type-only markers: they are never present at runtime and
- * are read through the helper types exported by this package.
+ * It is the resolved counterpart of {@linkcode ContractSchemas}: raw schemas
+ * become events, contexts and state paths. These fields are type-only; they are
+ * never present at runtime and are read through the helper types exported by
+ * this package.
  */
-export type ResolvedContract = {
+export type ContractTypes = {
   /** Union of every typed event object accepted by the machine. */
   events: EventObject;
-  /** Raw events map declared by the contract. */
+  /** Inferred events map declared by the contract. */
   eventMap: EventsMap;
-  /** Raw actors map declared by the contract. */
+  /** Inferred actors map declared by the contract. */
   actorsMap: ActorsConfigMap;
   /** Public machine context. */
   context: PrimitiveObject;
@@ -97,47 +99,40 @@ export type ResolvedContract = {
 };
 
 /**
- * A lightweight state machine contract: the machine JSON config plus its
- * types, without any option implementation.
+ * A lightweight state machine contract: the machine JSON config, its inferred
+ * types and the machine options surface.
  *
- * @template `Name` - Contract identifier.
+ * It carries no option implementation: actions, guards, delays and actors are
+ * described by type {@linkcode MachineOptions} only.
+ *
  * @template `Config` - Machine configuration type.
- * @template `Schemas` - Raw type schemas passed to the contract.
- * @template `Resolved` - Resolved typing surface, used by helper types.
+ * @template `Types` - Inferred typing surface.
+ * @template `Options` - Strict machine options surface, selected by the `sync`
+ * flag: `SyncMachineOptions2` / `SyncSimpleMachineOptions` when `sync` is `true`,
+ * `AsyncMachineOptions2` / `AsyncSimpleMachineOptions` otherwise.
  */
 export type Contract<
-  Name extends string = string,
   Config extends CommonConfig2 = CommonConfig2,
-  Schemas extends ContractSchemas = ContractSchemas,
-  Resolved extends ResolvedContract = ResolvedContract,
+  Types extends ContractTypes = ContractTypes,
+  Options extends AnyMachineOptions = AnyMachineOptions,
 > = {
-  /** Contract identifier. */
-  readonly name: Name;
   /** Machine JSON configuration. */
   readonly config: Config;
-  /** Type schemas passed to {@linkcode createContract}. */
-  readonly types: Schemas;
+  /** Inferred typing surface of the contract. */
+  readonly types: Types;
   /**
-   * Type-only resolved surface. Never defined at runtime.
-   *
-   * @internal
+   * Type-only options surface: the return type of `createOptions`. Never
+   * defined at runtime.
    */
-  readonly __contract?: Resolved;
+  readonly options?: Options;
 };
 
 /**
- * Extracts the resolved typing surface of a contract.
+ * Extracts the inferred typing surface of a contract.
  *
  * @template `C` - Contract type.
  */
-export type ContractOf<C extends Contract> = NonNullable<C['__contract']>;
-
-/**
- * Extracts the identifier of a contract.
- *
- * @template `C` - Contract type.
- */
-export type ContractName<C extends Contract> = C['name'];
+export type ContractTypesOf<C extends Contract> = C['types'];
 
 /**
  * Extracts the machine configuration of a contract.
@@ -147,18 +142,18 @@ export type ContractName<C extends Contract> = C['name'];
 export type ContractConfig<C extends Contract> = C['config'];
 
 /**
- * Extracts the raw type schemas of a contract.
+ * Extracts the machine options surface of a contract.
  *
  * @template `C` - Contract type.
  */
-export type ContractTypesOf<C extends Contract> = C['types'];
+export type ContractOptions<C extends Contract> = NonNullable<C['options']>;
 
 /**
  * Extracts every typed event object of a contract.
  *
  * @template `C` - Contract type.
  */
-export type ContractEvents<C extends Contract> = ContractOf<C>['events'];
+export type ContractEvents<C extends Contract> = ContractTypesOf<C>['events'];
 
 /**
  * Extracts the union of event names declared by a contract.
@@ -179,79 +174,39 @@ export type ContractEventArg<C extends Contract> = EventArgAll<ContractEvents<C>
  *
  * @template `C` - Contract type.
  */
-export type ContractEventsMap<C extends Contract> = ContractOf<C>['eventMap'];
+export type ContractEventsMap<C extends Contract> = ContractTypesOf<C>['eventMap'];
 
 /**
  * Extracts the raw actors map of a contract.
  *
  * @template `C` - Contract type.
  */
-export type ContractActorsMap<C extends Contract> = ContractOf<C>['actorsMap'];
+export type ContractActorsMap<C extends Contract> = ContractTypesOf<C>['actorsMap'];
 
 /**
  * Extracts the public context of a contract.
  *
  * @template `C` - Contract type.
  */
-export type ContractContext<C extends Contract> = ContractOf<C>['context'];
+export type ContractContext<C extends Contract> = ContractTypesOf<C>['context'];
 
 /**
  * Extracts the private context of a contract.
  *
  * @template `C` - Contract type.
  */
-export type ContractPContext<C extends Contract> = ContractOf<C>['pContext'];
+export type ContractPContext<C extends Contract> = ContractTypesOf<C>['pContext'];
 
 /**
  * Extracts the union of state paths declared by a contract.
  *
  * @template `C` - Contract type.
  */
-export type ContractPaths<C extends Contract> = ContractOf<C>['paths'];
+export type ContractPaths<C extends Contract> = ContractTypesOf<C>['paths'];
 
 /**
  * Extracts the synchronous execution flag of a contract.
  *
  * @template `C` - Contract type.
  */
-export type ContractSync<C extends Contract> = ContractOf<C>['sync'];
-
-/**
- * Function signature for {@linkcode createContract}.
- *
- * The arguments intentionally match the named overload of `createMachine`
- * from `@bemedev/app`: a name, a JSON config and optional type schemas.
- */
-export type CreateContract_F = <
-  const Name extends string,
-  const Config extends CommonConfig2,
-  const Pc extends StandardOutput<any> = StandardOutput<any>,
-  const Tc extends StandardOutput<PrimitiveObject> = StandardOutput<undefined>,
-  const E extends StandardOutput<Record<string, PrimitiveObject>> = StandardOutput<
-    Record<string, never>
-  >,
-  const A extends StandardOutput<ActorsConfigMap> = StandardOutput<ActorsConfigMap>,
-  _E extends inferT<E> = inferT<E>,
-  _A extends inferT<A> = inferT<A>,
-  _Pc extends inferT<Pc> = inferT<Pc>,
-  _Tc extends inferT<Tc> = inferT<Tc>,
-  Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
-  Sync extends true | undefined = undefined,
->(
-  name: Name,
-  config: Config,
-  types?: { context?: Tc; pContext?: Pc; eventsMap?: E; actorsMap?: A; sync?: Sync },
-) => Contract<
-  Name,
-  Config,
-  { context?: Tc; pContext?: Pc; eventsMap?: E; actorsMap?: A; sync?: Sync },
-  {
-    events: Eo;
-    eventMap: _E;
-    actorsMap: _A;
-    context: _Tc;
-    pContext: _Pc;
-    paths: StatePaths<Config>;
-    sync: Sync;
-  }
->;
+export type ContractSync<C extends Contract> = ContractTypesOf<C>['sync'];
