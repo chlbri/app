@@ -23,9 +23,9 @@ export type RegisterOptions = Record<
   string
 >;
 /**
- * The Register interface is augmented by the CLI-generated `app.gen.ts` file.
- * It uses the TanStack Start pattern of `declare module` augmentation
- * to wire pre-resolved types to machine paths.
+ * The Register interface is augmented by the CLI-generated
+ * `app.contract.gen.ts` file. It uses the TanStack Start pattern of
+ * `declare module` augmentation to wire pre-resolved types to machine paths.
  *
  */
 export interface Register extends Record<

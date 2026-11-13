@@ -1,4 +1,4 @@
-import { array, command, multioption, option, string } from 'cmd-ts';
+import { array, command, flag, multioption, option, string } from 'cmd-ts';
 import nodeWatch from 'node-watch';
 import { DEFAULT_REGEX } from '../core/constants';
 import { generator } from '../core/generator';
@@ -9,12 +9,14 @@ import { relative } from 'path';
  * CLI command: `app watch`
  *
  * Long-running file system watcher that monitors machine files and regenerates
- * app.gen.ts automatically on any change.
+ * their type declaration file automatically on any change.
  *
  * Behavior:
  * 1. **Initial generation**: Performs full generation on startup
  * 2. **Watch phase**: Monitors all *.machine.ts, *.fsm.ts and *.contract.ts files
- *    for changes
+ *    for changes (generation itself stays exclusive: `--contract` regenerates
+ *    contract types only into `app.contract.gen.ts`, otherwise machine types
+ *    only into `app.gen.ts`)
  * 3. **Debounced regeneration**: Waits 300ms of stability before regenerating
  *    (handles editor save sequences and git checkouts gracefully)
  * 4. **Feedback**: Logs change detection and regeneration completion
@@ -29,6 +31,7 @@ import { relative } from 'path';
  * **Arguments:**
  * - `--output, -o [path]` - Where to write app.gen.ts (default: 'app.gen.ts')
  * - `--excludes, -e [patterns...]` - Glob patterns to exclude (default: node_modules, dist, lib)
+ * - `--contract` - Generate types for `*.contract.ts` files instead of machine files (writes `app.contract.gen.ts`)
  *
  * **Usage Examples:**
  * ```bash
@@ -40,6 +43,9 @@ import { relative } from 'path';
  *
  * # Exclude additional directories
  * app watch --excludes temp build
+ *
+ * # Generate contract types only, into app.contract.gen.ts
+ * app watch --contract
  *
  * # Run alongside dev server
  * pnpm run dev &
@@ -68,7 +74,7 @@ import { relative } from 'path';
 export const watch = command({
   name: 'watch',
   description:
-    'Watch *.machine.ts / *.fsm.ts / *.contract.ts files and regenerate app.gen.ts on change',
+    'Watch *.machine.ts / *.fsm.ts files and regenerate app.gen.ts on change (use --contract for app.contract.gen.ts from *.contract.ts only)',
   aliases: ['dev'],
   args: {
     excludes: multioption({
@@ -76,6 +82,12 @@ export const watch = command({
       long: 'excludes',
       short: 'e',
       description: 'Directories to exclude',
+    }),
+
+    contract: flag({
+      long: 'contract',
+      description:
+        'Generate types for *.contract.ts files into app.contract.gen.ts instead of machine files',
     }),
 
     cwd: option({

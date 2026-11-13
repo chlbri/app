@@ -1,11 +1,17 @@
 /** Name of the CLI binary command. */
 export const BIN = 'app-cli';
 
-/** Default output file name for generated type declarations. */
+/** Default output file name for generated machine type declarations. */
 export const DEFAULT_OUTPUT = 'app.gen.ts';
 
-/** Glob pattern to match machine, finite state machine and contract source files. */
-export const MACHINE_GLOB = '**/*.{machine,fsm,contract}.ts';
+/** Output file name for generated contract type declarations. */
+export const CONTRACT_OUTPUT = 'app.contract.gen.ts';
+
+/** Glob pattern to match machine and finite state machine source files. */
+export const MACHINE_GLOB = '**/*.{machine,fsm}.ts';
+
+/** Glob pattern to match contract source files (opt-in via `--contract`). */
+export const CONTRACT_GLOB = '**/*.contract.ts';
 
 /** Default directory glob patterns to exclude from scanning. */
 export const DEFAULT_EXCLUDES = ['node_modules/**', 'lib/**', 'dist/**', 'temp/**'];

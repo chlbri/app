@@ -110,17 +110,26 @@ export const authMachine = createMachine(
 
 ## CLI compatibility
 
-`@bemedev/app-cli` discovers `*.contract.ts` files in addition to `*.machine.ts` and
-`*.fsm.ts` files. A default-exported named `createContract('name', ...)` call is
-parsed exactly like `createMachine(...)` and registered in the generated `Register`
-interface. The unnamed form is not discoverable, because it carries no name:
+`@bemedev/app-cli` handles `*.contract.ts` files in a dedicated pass, separate from
+machines. Machine generation (`*.machine.ts` and `*.fsm.ts`) is the default, and
+contract generation is opt-in through `--contract`, which then only scans
+`*.contract.ts` files. Machine types are written to `app.gen.ts`, while contract
+types are written to `app.contract.gen.ts` and registered in the
+`@bemedev/app-contract` `Register` interface. A default-exported named
+`createContract('name', ...)` call is parsed exactly like `createMachine(...)`. The
+unnamed form is not discoverable, because it carries no name:
 
 ```bash
+# Machine types only, into app.gen.ts (default)
 npx app-cli generate
+
+# Contract types only, into app.contract.gen.ts
+npx app-cli generate --contract
 ```
 
 Creating a new empty `*.contract.ts` file while `app-cli watch` is running scaffolds
-it with a `createContract` starter.
+it with a `createContract` starter. Run `app-cli watch --contract` to regenerate
+contract types on change.
 
 ---
 

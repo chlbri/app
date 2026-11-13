@@ -39,7 +39,7 @@
     "@bemedev/dev-utils": "^1.5.2",
     "@tanstack/solid-router-devtools": "1.167.3",
     "@types/node": "^26.6.6",
-    "jsdom": "^31.0.0",
+    "jsdom": "^31.0.1",
     "vite-plugin-solid": "^2.11.16",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "catalog:",

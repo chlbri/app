@@ -6,11 +6,15 @@ import { generator as handler } from '../core/generator';
  *
  * One-time generation of app.gen.ts from all discovered machine files.
  *
- * Scans the project for all *.machine.ts, *.fsm.ts and *.contract.ts files,
+ * Scans the project for all *.machine.ts and *.fsm.ts files,
  * extracts their
  * TypeScript configurations and type definitions, and generates a consolidated
  * app.gen.ts module declaration containing the full Register interface with
  * inlined type information for every machine.
+ *
+ * Contract files (`*.contract.ts`) are handled by a separate pass: pass
+ * `--contract` to generate types for contract files **instead of** machines.
+ * Contract types are written to `app.contract.gen.ts`.
  *
  * This command is useful for:
  * - Initial type generation after creating new machines
@@ -21,6 +25,7 @@ import { generator as handler } from '../core/generator';
  * **Arguments:**
  * - `--output, -o [path]` - Where to write app.gen.ts (default: 'app.gen.ts')
  * - `--excludes, -e [patterns...]` - Glob patterns to exclude (default: node_modules, dist, lib)
+ * - `--contract` - Generate types for `*.contract.ts` files instead of machine files (writes `app.contract.gen.ts`)
  * - `--dry-run` - Print output to stdout without writing file (useful for inspection)
  *
  * **Usage Examples:**
@@ -34,6 +39,9 @@ import { generator as handler } from '../core/generator';
  * # Exclude additional directories
  * app generate --excludes temp build
  *
+ * # Generate contract types only, into app.contract.gen.ts
+ * app generate --contract
+ *
  * # Dry-run to inspect output
  * app generate --dry-run | less
  * ```
@@ -43,7 +51,7 @@ import { generator as handler } from '../core/generator';
 export const generate = command({
   name: 'generate',
   description:
-    'Generate app.gen.ts from all *.machine.ts / *.fsm.ts / *.contract.ts files',
+    'Generate app.gen.ts from all *.machine.ts / *.fsm.ts files (use --contract for app.contract.gen.ts from *.contract.ts only)',
   args: {
     excludes: multioption({
       type: array(string),
@@ -51,6 +59,12 @@ export const generate = command({
       short: 'e',
       // defaultValue: () => DEFAULT_EXCLUDES,
       description: 'Directories to exclude',
+    }),
+
+    contract: flag({
+      long: 'contract',
+      description:
+        'Generate types for *.contract.ts files into app.contract.gen.ts instead of machine files',
     }),
 
     dryRun: flag({
