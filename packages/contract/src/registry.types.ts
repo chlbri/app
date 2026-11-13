@@ -1,4 +1,4 @@
-import type { RecordS } from './internal/primitives';
+import type { RecordS } from './internal';
 
 export type TargetDef = {
   readonly targets: string;
