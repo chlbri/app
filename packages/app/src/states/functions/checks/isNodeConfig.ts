@@ -76,6 +76,13 @@ export const checkActivities = (value: unknown): value is ActivityConfig => {
   return values.every(checkActivity);
 };
 
+/**
+ * Type guard variant accepting `undefined` in addition to activity configuration records.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if `undefined` or type {@linkcode ActivityConfig}, `false` otherwise.
+ */
 checkActivities.orUndefined = (value: unknown): boolean => {
   if (value === undefined) return true;
   return checkActivities(value);
@@ -149,6 +156,16 @@ export const isNodeConfig = <T extends string[] = string[]>(
   return nexts.every(v => isNodeConfig(v, ...keys));
 };
 
+/**
+ * Recursive type guard variant accepting `undefined` in addition to node configurations.
+ *
+ * @template `T` - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target state paths.
+ *
+ * @returns `true` if `undefined` or valid type {@linkcode NodeConfig2}, `false` otherwise.
+ */
 isNodeConfig.orUndefined = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

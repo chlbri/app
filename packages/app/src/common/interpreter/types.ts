@@ -52,40 +52,136 @@ export type AddSubscriber_F<
  * Generic interface for an interpreter instance.
  */
 export type AnyInterpreter = {
+  /**
+   * Current execution mode of type {@linkcode Mode}.
+   */
   mode: Mode;
+  /**
+   * Array of event type strings supported by the machine.
+   */
   eventsList: string[];
+  /**
+   * Events map exposed by the machine.
+   */
   eventsMap: EventsMap;
+  /**
+   * Initial resolved state node.
+   */
   initialNode: any;
+  /**
+   * Current resolved state node.
+   */
   node: any;
+  /**
+   * Switches the execution mode to `'strict'`.
+   */
   makeStrict: () => Mode;
+  /**
+   * Switches the execution mode to `'normal'`.
+   */
   makeNormal: () => Mode;
+  /**
+   * Machine classification type of type {@linkcode MachineType}.
+   */
   readonly TYPE: MachineType;
+  /**
+   * Checks whether all given event types can currently be performed.
+   */
   canEvents: (...events: string[]) => boolean;
 
+  /**
+   * Current working status of type {@linkcode WorkingStatus}.
+   */
   status: WorkingStatus;
+  /**
+   * Initial node configuration of the machine.
+   */
   initialConfig: any;
+  /**
+   * Initial state value of the machine.
+   */
   initialValue: StateValue;
+  /**
+   * Active node configuration.
+   */
   config: any;
+  /**
+   * Renewed interpreter instance sharing the same configuration.
+   */
   renew: any;
+  /**
+   * Current state value of type {@linkcode StateValue}.
+   */
   value: StateValue;
+  /**
+   * Current public context object.
+   */
   context: any;
+  /**
+   * Starts the interpreter.
+   */
   start: () => void;
+  /**
+   * Pauses the interpreter.
+   */
   pause: () => void;
+  /**
+   * Resumes the interpreter from a paused state.
+   */
   resume: () => void;
+  /**
+   * Stops the interpreter and releases its running resources.
+   */
   stop: () => void;
+  /**
+   * Provides the initial private context to the machine.
+   */
   _providePrivateContext: Fn;
+  /**
+   * Alias of {@linkcode AnyInterpreter._providePrivateContext}.
+   */
   _ppC: Fn;
+  /**
+   * Provides the initial public context to the machine.
+   */
   _provideContext: Fn;
 
+  /**
+   * Subscribes a listener to state changes.
+   */
   subscribe: Fn;
+  /**
+   * Sends an event to the interpreter.
+   */
   send: (event: any) => any;
+  /**
+   * Resolves an action describer into an executable action function.
+   */
   toActionFn: (action: WithDescriber) => any;
+  /**
+   * Resolves a guard configuration into an executable predicate function.
+   */
   toPredicateFn: (guard: GuardConfig) => any;
+  /**
+   * Resolves a delay key into a delay provider function.
+   */
   toDelayFn: (delay: string) => any;
+  /**
+   * Resolves a child key into a child machine factory function.
+   */
   toChildFn: (machine: string) => any;
+  /**
+   * Optional interpreter identifier.
+   */
   id?: string;
+  /**
+   * Optional origin state path that spawned this interpreter.
+   */
   from?: string;
 
+  /**
+   * Disposes the interpreter resources.
+   */
   dispose: () => void;
 };
 
@@ -129,7 +225,6 @@ export type SendToEvent<T = any> = { to: string; event: T };
 /**
  * Function signature for merging action execution result.
  *
- * @template `Pc` - Private context.
  * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
  */
 export type DirectMerge_F<Tc extends PrimitiveObject = PrimitiveObject> = Fn<
@@ -179,13 +274,6 @@ export type ContextFrom<T extends KeyU<'context'>> = Extract<
   PrimitiveObject
 >;
 
-/**
- * Getting events map from a machine.
- *
- * @template : {@linkcode KeyU}<'eventsMap'> [T] - type of the machine events map
- *
- * @see -- type {@linkcode EventsMap}
- */
 /**
  * Getting events map from a machine.
  *
@@ -437,7 +525,7 @@ export type Contexts<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> = {
 };
 
 /**
- * Alias of {@linkcode MachineOptionsFrom}.
+ * Alias of type {@linkcode MachineOptionsFrom}.
  *
  * @template `T` - Type of machine options.
  */

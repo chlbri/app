@@ -23,6 +23,16 @@ export const isActors = <T extends string[] = string[]>(
   return values.every(v => isActor(v, ...keys));
 };
 
+/**
+ * Type guard variant accepting `undefined` in addition to actors maps.
+ *
+ * @template `T` - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if `undefined` or record of actor configs, `false` otherwise.
+ */
 isActors.orUndefined = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

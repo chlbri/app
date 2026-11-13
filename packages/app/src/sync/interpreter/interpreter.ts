@@ -579,6 +579,7 @@ export class SyncInterpreter<
   /**
    * Performs `always` (transitional) logic for a state node configuration.
    *
+   * @param from - The state path originating the `always` transition.
    * @param alway - The `always` transition configuration of type {@linkcode AlwaysConfig}.
    *
    * @returns The target state path string if successful, or `false` otherwise.
@@ -807,7 +808,7 @@ export class SyncInterpreter<
   /**
    * Creates a curried sender function for the given event type.
    *
-   * @template T - The event type string extending `Eo['type']`.
+   * @template `T` - The event type string extending `Eo['type']`.
    *
    * @param type - The event type string.
    *

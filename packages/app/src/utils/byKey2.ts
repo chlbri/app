@@ -11,6 +11,15 @@ export type ByKey2Options = {
   start?: boolean;
 };
 
+/**
+ * Walks down `key` segments inside `obj` and returns the reached value.
+ *
+ * @param obj - Target object to traverse.
+ * @param key - Key path, split with `sep`.
+ * @param options - Optional configuration options of type {@linkcode ByKey2Options}.
+ *
+ * @returns The reached nested value; traversal stops and returns the current value when a parent is not a true object.
+ */
 const _byKey2 = (obj: any, key: string, options?: ByKey2Options) => {
   if (obj === undefined || obj === null) return undefined;
   const { sep = '.', start = false } = options ?? {};
@@ -31,9 +40,9 @@ const _byKey2 = (obj: any, key: string, options?: ByKey2Options) => {
  *
  * Includes property `low` for untyped key lookups.
  *
- * @template T - Target object type.
- * @template D - Decomposed representation of `T`.
- * @template K - Valid key path in `D`.
+ * @template `T` - Target object type.
+ * @template `D` - Decomposed representation of `T`.
+ * @template `K` - Valid key path in `D`.
  * @template | {@linkcode ByKey2Options} `O` - Options type.
  *
  * @param obj - Target object to retrieve property from.

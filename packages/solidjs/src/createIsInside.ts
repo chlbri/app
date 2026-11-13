@@ -19,7 +19,6 @@ import { createSignal, onCleanup } from 'solid-js';
  * @param service - Service object containing `subscribe` and `state`.
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
  * @param service.state - Current state of type {@linkcode State}.
- * @param equals - Optional equality comparator function for state comparison.
  *
  * @returns Object helper with `or` and `and` methods returning signals.
  *

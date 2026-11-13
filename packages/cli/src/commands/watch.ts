@@ -29,17 +29,17 @@ import { relative } from 'path';
  * - Works seamlessly with hot reload / dev servers
  *
  * **Arguments:**
- * - `--output, -o [path]` - Where to write app.gen.ts (default: 'app.gen.ts')
  * - `--excludes, -e [patterns...]` - Glob patterns to exclude (default: node_modules, dist, lib)
  * - `--contract` - Generate types for `*.contract.ts` files instead of machine files (writes `app.contract.gen.ts`)
+ * - `--cwd, -c [path]` - Directory where the glob pattern is applied (default: current working directory)
  *
  * **Usage Examples:**
  * ```bash
  * # Start watching
  * pnpm run generate:watch
  *
- * # Custom output
- * app watch --output lib/app.gen.ts
+ * # Custom working directory
+ * app watch --cwd ./packages/app
  *
  * # Exclude additional directories
  * app watch --excludes temp build
@@ -54,7 +54,7 @@ import { relative } from 'path';
  *
  * **Important Notes:**
  * - Runs indefinitely until Ctrl+C is pressed
- * - Handles file stabilization with 300ms threshold via Chokidar `awaitWriteFinish`
+ * - Handles file stabilization with a 300ms debounce applied to change events
  * - Automatically scaffolds a new `.machine.ts` / `.fsm.ts` / `.contract.ts` file
  *   with
  *   `export default createMachine('name', { initial: 'idle', states: { idle: {} } })`
@@ -62,14 +62,9 @@ import { relative } from 'path';
  * - Ignores changes in excluded directories and output file itself
  * - Logs are written to stderr for script integration
  *
- *
- * [node-watch](https://www.npmjs.com/package/node-watch) documentation for handling file change events and debouncing
- *
- * [cmd-ts](https://www.npmjs.com/package/cmd-ts) documentation for defining CLI commands and arguments
- *
- * [ts-morph](https://www.npmjs.com/package/ts-morph) documentation for programmatically creating starter machine files when new machine files are added
- *
- * Uses libs like `node-watch` for efficient file watching and `cmd-ts` for CLI argument parsing.
+ * @see [node-watch](https://www.npmjs.com/package/node-watch) for file change
+ * events, [cmd-ts](https://www.npmjs.com/package/cmd-ts) for CLI arguments and
+ * [ts-morph](https://www.npmjs.com/package/ts-morph) for starter machine files
  */
 export const watch = command({
   name: 'watch',

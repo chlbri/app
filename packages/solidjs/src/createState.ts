@@ -20,6 +20,9 @@ import type { CreateStateOptions } from './types';
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
  * @param service.state - Current state of type {@linkcode State}.
  * @param options - Optional configuration options of type {@linkcode CreateStateOptions}.
+ * @param options.selector - Optional selector function projecting the state into a sub-state.
+ * @param options.equals - Optional equality comparator for the selected state.
+ * @param options.stateEquals - Optional equality comparator for the machine state before selection.
  *
  * @returns A SolidJS Accessor containing the selected state of type `T`.
  *

@@ -73,7 +73,7 @@ export type SyncConfig<
  * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
  * @template `T` - State path string type.
  *
- * @see {@linkcode SyncAction}, -- type {@linkcode AsyncPredicate}
+ * @see -- type {@linkcode SyncAction}, -- type {@linkcode AsyncPredicate}
  */
 export type SyncTransition<
   E extends EventObject = EventObject,
@@ -175,7 +175,7 @@ export type SyncChildFunction<
  * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
  * @template `T` - State path string type.
  *
- * @see {@linkcode SyncTransition}, -- type {@linkcode Identify}
+ * @see -- type {@linkcode SyncTransition}, -- type {@linkcode Identify}
  */
 export type SyncTransitions<
   E extends EventObject = EventObject,

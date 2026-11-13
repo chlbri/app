@@ -6,8 +6,7 @@ import { generator as handler } from '../core/generator';
  *
  * One-time generation of app.gen.ts from all discovered machine files.
  *
- * Scans the project for all *.machine.ts and *.fsm.ts files,
- * extracts their
+ * Scans the project for all *.machine.ts and *.fsm.ts files, extracts their
  * TypeScript configurations and type definitions, and generates a consolidated
  * app.gen.ts module declaration containing the full Register interface with
  * inlined type information for every machine.
@@ -23,18 +22,18 @@ import { generator as handler } from '../core/generator';
  * - One-shot validation of machine type correctness
  *
  * **Arguments:**
- * - `--output, -o [path]` - Where to write app.gen.ts (default: 'app.gen.ts')
  * - `--excludes, -e [patterns...]` - Glob patterns to exclude (default: node_modules, dist, lib)
  * - `--contract` - Generate types for `*.contract.ts` files instead of machine files (writes `app.contract.gen.ts`)
- * - `--dry-run` - Print output to stdout without writing file (useful for inspection)
+ * - `--dry-run, -d` - Print output to stdout without writing file (useful for inspection)
+ * - `--cwd, -c [path]` - Directory where the glob pattern is applied (default: current working directory)
  *
  * **Usage Examples:**
  * ```bash
  * # Default generation
  * pnpm run generate
  *
- * # Custom output path
- * app generate --output lib/app.gen.ts
+ * # Custom working directory
+ * app generate --cwd ./packages/app
  *
  * # Exclude additional directories
  * app generate --excludes temp build
@@ -46,7 +45,7 @@ import { generator as handler } from '../core/generator';
  * app generate --dry-run | less
  * ```
  *
- * @see {@link generator} for the underlying generation logic
+ * @see {@linkcode handler} for the underlying generation logic
  */
 export const generate = command({
   name: 'generate',

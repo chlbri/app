@@ -224,7 +224,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving when the forced send action finishes.
    *
-   * @see {@linkcode TransitionConfig}
+   * @see -- type {@linkcode TransitionConfig}
    */
   protected __performForceSendAction = async (
     from: string | false,

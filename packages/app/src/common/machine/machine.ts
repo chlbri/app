@@ -84,6 +84,8 @@ export abstract class CommonMachine<
 
   /**
    * The machine configuration getter.
+   *
+   * @returns The configuration object of type `C`.
    */
   get config() {
     return this._config;
@@ -96,6 +98,8 @@ export abstract class CommonMachine<
 
   /**
    * List of event name strings getter.
+   *
+   * @returns The array of event name strings built from the configuration.
    */
   get eventsList() {
     return this.__eventsList;
@@ -108,11 +112,15 @@ export abstract class CommonMachine<
 
   /**
    * The public accessor for the flat map representation of the configuration.
+   *
+   * @returns The flat map of state nodes implemented by each concrete machine.
    */
   abstract get flat(): any;
 
   /**
    * Decomposed path mapping representation of the configuration.
+   *
+   * @returns The decomposed configuration object with `.` separators.
    */
   get decomposed() {
     return decompose(this._config, { sep: '.', start: false, object: 'both' });
@@ -124,6 +132,8 @@ export abstract class CommonMachine<
    * This property provides the decomposed state for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The decomposed state as a type.
    */
   get __decomposedState() {
     return _unknown<
@@ -133,6 +143,8 @@ export abstract class CommonMachine<
 
   /**
    * Public accessor for the events map for this {@linkcode CommonMachine}.
+   *
+   * @returns The events map as a type.
    */
   get eventsMap() {
     return _unknown<E>();
@@ -140,6 +152,8 @@ export abstract class CommonMachine<
 
   /**
    * Public accessor for the actors map for this {@linkcode CommonMachine}.
+   *
+   * @returns The actors configuration map as a type.
    */
   get actorsMap() {
     return _unknown<A>();
@@ -151,6 +165,8 @@ export abstract class CommonMachine<
    * This property provides the events map for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The event object type.
    */
   get __events() {
     return _unknown<Eo>();
@@ -167,6 +183,8 @@ export abstract class CommonMachine<
    * This property provides any action key for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The union of registered action keys.
    */
   get __actionKey() {
     return this._typingsByKey('actions');
@@ -178,6 +196,8 @@ export abstract class CommonMachine<
    * This property provides the action parameters of action function for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The action function parameters as a type.
    */
   get __actionParams() {
     return _unknown<{ pContext: Pc; context: Tc; map: E }>();
@@ -189,6 +209,8 @@ export abstract class CommonMachine<
    * This property provides the state for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The state as a type.
    */
   get __state() {
     return _unknown<State<Eo, Tc, Ta>>();
@@ -200,6 +222,8 @@ export abstract class CommonMachine<
    * This property provides the state extended for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The extended state as a type.
    */
   get __stateExtended() {
     return _unknown<StateExtended<Eo, Pc, Tc, Ta>>();
@@ -211,6 +235,8 @@ export abstract class CommonMachine<
    * This property provides the state payload for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The state payload as a type.
    */
   get __stateP() {
     return _unknown<StateP<Eo, Tc, Ta>>();
@@ -222,6 +248,8 @@ export abstract class CommonMachine<
    * This property provides the extended state payload for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The extended state payload as a type.
    */
   get __statePextended() {
     return _unknown<StatePextended<Eo, Pc, Tc, Ta>>();
@@ -229,6 +257,12 @@ export abstract class CommonMachine<
 
   /**
    * Internal helper to extract typing key names.
+   *
+   * @template `K` - Key of a machine member holding a typed map.
+   *
+   * @param key - The machine member name whose keys are extracted.
+   *
+   * @returns The union of key names of the selected member.
    */
   private _typingsByKey = <
     K extends AllowedNames<AnyMachine<E, A, Pc, Tc>, object | undefined>,
@@ -249,6 +283,8 @@ export abstract class CommonMachine<
    * This property provides any guard key for this {@linkcode Machine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The union of registered guard keys.
    */
   get __guardKey() {
     return this._typingsByKey('guards');
@@ -265,6 +301,8 @@ export abstract class CommonMachine<
    * This property provides any delay key for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The union of registered delay keys.
    */
   get __delayKey() {
     return this._typingsByKey('delays');
@@ -285,6 +323,8 @@ export abstract class CommonMachine<
    * This property provides any {@linkcode DefinedValue} for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns A defined value of the private or public context.
    */
   get __definedValue() {
     return _unknown<DefinedValue<Pc, Tc>>();
@@ -296,6 +336,8 @@ export abstract class CommonMachine<
    * This property provides any child key for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The union of registered child actor keys.
    */
   get __childKey() {
     return this._typingsByKey('children');
@@ -307,6 +349,8 @@ export abstract class CommonMachine<
    * Return this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns This machine instance as a type.
    */
   get __machine() {
     return _unknown<this>();
@@ -314,6 +358,8 @@ export abstract class CommonMachine<
 
   /**
    * Internal state tag string marker getter.
+   *
+   * @returns The state tag string type.
    */
   get __tag() {
     return _unknown<Ta>();
@@ -356,6 +402,8 @@ export abstract class CommonMachine<
 
   /**
    * Array of state tag strings defined on this machine.
+   *
+   * @returns The array of tag strings collected from the flat map.
    */
   get tags() {
     return this._tags;
@@ -419,6 +467,8 @@ export abstract class CommonMachine<
 
   /**
    * The accessor of context for this {@linkcode CommonMachine}.
+   *
+   * @returns The current public context object of type `Tc`.
    */
   get context() {
     const out = this.__elements.context;
@@ -427,6 +477,8 @@ export abstract class CommonMachine<
 
   /**
    * The accessor of private context for this {@linkcode CommonMachine}.
+   *
+   * @returns The current private context object of type `Pc`.
    */
   get pContext() {
     const out = this.__elements.pContext;
@@ -435,6 +487,8 @@ export abstract class CommonMachine<
 
   /**
    * Registered actions map getter.
+   *
+   * @returns The merged actions map, or `undefined` when none are registered.
    */
   get actions() {
     return this._actions;
@@ -442,6 +496,8 @@ export abstract class CommonMachine<
 
   /**
    * Registered guards map getter.
+   *
+   * @returns The merged guards map, or `undefined` when none are registered.
    */
   get guards() {
     return this._guards;
@@ -449,6 +505,8 @@ export abstract class CommonMachine<
 
   /**
    * Registered delays map getter.
+   *
+   * @returns The merged delays map, or `undefined` when none are registered.
    */
   get delays() {
     return this._delays;
@@ -456,6 +514,8 @@ export abstract class CommonMachine<
 
   /**
    * Registered child actors map getter.
+   *
+   * @returns The children map, or `undefined` when no child is registered.
    */
   get children() {
     return this._actors?.children;
@@ -463,6 +523,8 @@ export abstract class CommonMachine<
 
   /**
    * Registered emitters map getter.
+   *
+   * @returns The emitters map, or `undefined` when no emitter is registered.
    */
   get emitters() {
     return this._actors?.emitters;
@@ -474,6 +536,8 @@ export abstract class CommonMachine<
    * This property provides all possible paths for this {@linkcode CommonMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns All possible state paths as a type.
    */
   get __allPaths() {
     return _unknown<AllPaths>();
@@ -512,24 +576,40 @@ export abstract class CommonMachine<
 
   /**
    * Internal helper method to merge actions into machine options.
+   *
+   * @param actions - Actions map to merge into the current store.
+   *
+   * @returns The updated actions map.
    */
   private _addActions = (actions?: Mo['actions']) =>
     (this._actions = { ...this._actions, ...actions });
 
   /**
    * Internal helper method to merge guards into machine options.
+   *
+   * @param guards - Guards map to merge into the current store.
+   *
+   * @returns The updated guards map.
    */
   private _addGuards = (guards?: Mo['guards']) =>
     (this._guards = { ...this._guards, ...guards });
 
   /**
    * Internal helper method to merge delays into machine options.
+   *
+   * @param delays - Delays map to merge into the current store.
+   *
+   * @returns The updated delays map.
    */
   private _addDelays = (delays?: Mo['delays']) =>
     (this._delays = { ...this._delays, ...delays });
 
   /**
    * Internal helper method to merge child actors into machine options.
+   *
+   * @param children - Children map to merge into the actor store.
+   *
+   * @returns The updated actors store.
    */
   private _addChildren = (children?: NotUndefined<Mo['actors']>['children']) =>
     (this._actors = {
@@ -539,6 +619,10 @@ export abstract class CommonMachine<
 
   /**
    * Internal helper method to merge emitters into machine options.
+   *
+   * @param emitters - Emitters map to merge into the actor store.
+   *
+   * @returns The updated actors store.
    */
   private _addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
     (this._actors = {
@@ -585,6 +669,8 @@ export abstract class CommonMachine<
 
   /**
    * Returns a new instance from this {@linkcode CommonMachine} with all its elements.
+   *
+   * @returns A renewed machine instance holding the same configuration and options.
    */
   get renew() {
     const out = this.__renew();
@@ -607,6 +693,8 @@ export abstract class CommonMachine<
 
   /**
    * Get all meaningful elements of the machine.
+   *
+   * @returns The cloned configuration along with contexts and registered options.
    */
   protected get __elements(): CommonElements<C, Pc, Tc, Mo> {
     const config = structuredClone(this._config);
@@ -653,6 +741,8 @@ export abstract class CommonMachine<
 
   /**
    * The accessor of the initial node config of this {@linkcode CommonMachine}.
+   *
+   * @returns The initial node configuration object.
    */
   get initialConfig() {
     return this._initialConfig;
@@ -660,6 +750,8 @@ export abstract class CommonMachine<
 
   /**
    * The accessor of the initial {@linkcode StateValue} of this {@linkcode CommonMachine}.
+   *
+   * @returns The initial state value computed from the initial configuration.
    *
    * @see {@linkcode nodeToValue}
    */
@@ -674,6 +766,8 @@ export abstract class CommonMachine<
 
   /**
    * Machine options object getter containing actions, guards, delays, and actors.
+   *
+   * @returns The machine options object of type `Mo`.
    */
   get options() {
     const guards = this._guards;
@@ -689,6 +783,8 @@ export abstract class CommonMachine<
   /**
    * Function helper to check if a value matches the provided values.
    *
+   * @returns The value matcher guard factory.
+   *
    * @see {@linkcode isValue}
    */
   protected get __isValue() {
@@ -697,6 +793,8 @@ export abstract class CommonMachine<
 
   /**
    * Function helper to check if a value is not one of the provided values.
+   *
+   * @returns The value non-matcher guard factory.
    *
    * @see {@linkcode isNotValue}
    */
@@ -707,6 +805,8 @@ export abstract class CommonMachine<
   /**
    * Function helper to check if a value is defined.
    *
+   * @returns The defined-value guard factory.
+   *
    * @see {@linkcode isDefinedS}
    */
   protected get __isDefined() {
@@ -715,6 +815,8 @@ export abstract class CommonMachine<
 
   /**
    * Function helper to check if a value is undefined or null.
+   *
+   * @returns The not-defined guard factory.
    *
    * @see {@linkcode isNotDefinedS}
    */

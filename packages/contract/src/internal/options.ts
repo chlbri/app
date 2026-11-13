@@ -531,7 +531,7 @@ export type AsyncChildFunction2<
 > = FnR<E, Pc, Tc, T, MaybePromise<R>>;
 
 /**
- * Machine options for synchronous machines registered with a
+ * Machine options for synchronous machines registered with a type
  * {@linkcode RegisterOptions} entry.
  *
  * @template `Pc` - Private context type.
@@ -559,7 +559,8 @@ export type SyncMachineOptions2<
 }>;
 
 /**
- * Machine options for asynchronous machines registered with a `RegisterOptions` entry.
+ * Machine options for asynchronous machines registered with a type
+ * {@linkcode RegisterOptions} entry.
  *
  * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Context type.

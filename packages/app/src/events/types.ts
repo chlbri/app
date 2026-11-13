@@ -23,7 +23,7 @@ export type InitEvent = typeof INIT_EVENT;
 export type AlwaysEvent = `${string}/${typeof ALWAYS_EVENT}`;
 
 /**
- * Type alias for always machine event string type.
+ * Type alias for after machine event string type.
  */
 export type AfterEvent = `${string}/${typeof AFTER_EVENT}`;
 
@@ -51,9 +51,8 @@ export type AllEvent = EventObject | EventStrings;
 /**
  * Transforms a map of events into a union type of event objects.
  * Each event object has a type and payload.
- * @template | {@linkcode EventsMap} `T` - the map to transform.
  *
- * the keys of the map.
+ * @template | {@linkcode EventsMap} `T` - The map to transform.
  *
  * @see {@linkcode Unionize}
  */

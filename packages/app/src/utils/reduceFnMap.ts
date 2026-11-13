@@ -14,10 +14,10 @@ import { nothing } from './nothing';
 /**
  * Signature for function that reduces a function map to a unified event handler function.
  *
- * @template Pc - Public context type. Defaults to `any`.
+ * @template `Pc` - Public context type. Defaults to `any`.
  * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type. Defaults to type {@linkcode PrimitiveObject}.
  * @template `T` - Event string type. Defaults to `string`.
- * @template R - Return type. Defaults to `any`.
+ * @template `R` - Return type. Defaults to `any`.
  * @template | {@linkcode EventObject} `Eo` - Event object type. Defaults to type {@linkcode EventObject}.
  *
  * @param fn - Function map of type {@linkcode FnMap}.
@@ -38,9 +38,11 @@ export type ReduceFnMap_F = <
 
 /**
  * Reduces a function map to a single function that processes events.
- * @param fn the function map to reduce.
- * @param events the list of expected events to match against.
- * @returns a function that takes a context and an event, returning the result of the function map.
+ *
+ * @param fn - The function map to reduce.
+ * @param events - The list of expected events to match against.
+ *
+ * @returns A function that takes a context and an event, returning the result of the function map.
  *
  * @see {@linkcode isFunction}, {@linkcode nothing}
  */
@@ -69,10 +71,10 @@ export const reduceFnMap: ReduceFnMap_F = (fn, ...events) => {
 /**
  * Signature for function that reduces an array filter function map to a unified filter predicate.
  *
- * @template Pc - Public context type. Defaults to `any`.
+ * @template `Pc` - Public context type. Defaults to `any`.
  * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type. Defaults to type {@linkcode PrimitiveObject}.
  * @template `T` - Event string type. Defaults to `string`.
- * @template Item - Item type. Defaults to `any`.
+ * @template `Item` - Item type. Defaults to `any`.
  * @template | {@linkcode EventObject} `Eo` - Event object type. Defaults to type {@linkcode EventObject}.
  *
  * @param fn - Array filter function map of type {@linkcode FnMapFilterArray}.
@@ -125,10 +127,10 @@ export const reduceFnMapFilterArray: ReduceFnMapFilterArray_F = (fn, ...events) 
 /**
  * Signature for function that reduces an object filter function map to a unified filter predicate.
  *
- * @template Pc - Public context type. Defaults to `any`.
+ * @template `Pc` - Public context type. Defaults to `any`.
  * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type. Defaults to type {@linkcode PrimitiveObject}.
  * @template `T` - Event string type. Defaults to `string`.
- * @template Item - Item value type. Defaults to `any`.
+ * @template `Item` - Item value type. Defaults to `any`.
  * @template | {@linkcode EventObject} `Eo` - Event object type. Defaults to type {@linkcode EventObject}.
  *
  * @param fn - Object filter function map of type {@linkcode FnMapFilterObject}.

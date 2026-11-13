@@ -11,8 +11,10 @@ export type ReduceDescriber_F = (value: string | Describer) => string;
 
 /**
  * Reduces a value to its name if it is a describer, otherwise returns the value as is.
- * @param value of type {@linkcode Describer } or string, value to reduce
- * @returns prop "name" if the value is a describer, otherwise the value itself.
+ *
+ * @param value - String or type {@linkcode Describer} to reduce.
+ *
+ * @returns The `name` property when the value is a describer, otherwise the value itself.
  *
  * @see {@linkcode isDescriber}
  */

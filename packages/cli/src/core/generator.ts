@@ -60,24 +60,35 @@ import { emitRegisterEntry, extractMachineInfo } from './helpers';
  * @param options.dryRun - Optional flag. If `true`, outputs content to stdout without writing to file.
  * @param options.contract - Optional flag. If `true`, generates types only for `*.contract.ts` files instead of machine files, into `app.contract.gen.ts`.
  *
+ * @returns Generated file lines when `options.dryRun` is enabled, otherwise
+ * `void` once the output file is written.
+ *
  * @example
+ * ```ts
  * // One-time generation
  * await generator({ excludes: [], cwd: process.cwd() });
+ * ```
  *
  * @example
+ * ```ts
  * // Dry-run for inspection
  * await generator({ excludes: [], cwd: process.cwd(), dryRun: true });
+ * ```
  *
  * @example
+ * ```ts
  * // With custom excludes
  * await generator({
  *   excludes: ['node_modules', 'dist', 'temp'],
  *   cwd: '/path/to/project'
  * });
+ * ```
  *
  * @example
+ * ```ts
  * // Generate contract types only
  * await generator({ excludes: [], cwd: process.cwd(), contract: true });
+ * ```
  *
  * @see {@linkcode extractMachineInfo}, {@linkcode emitRegisterEntry}
  */

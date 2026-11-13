@@ -4,7 +4,8 @@ import { watch } from './commands/watch';
 import { BIN, LIB } from './core/constants';
 
 /**
- * Main CLI entry point defining subcommands for type generation and file watching.
+ * Main CLI entry point registering the {@linkcode generate} and
+ * {@linkcode watch} subcommands for type generation and file watching.
  */
 export const cli = subcommands({
   name: BIN,

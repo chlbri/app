@@ -22,6 +22,16 @@ export const isAfter = <T extends string[] = string[]>(
   return values.every(v => isSingleOrArrayT<T>(v, ...keys));
 };
 
+/**
+ * Type guard variant accepting `undefined` in addition to delayed transitions maps.
+ *
+ * @template `T` - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if `undefined` or type {@linkcode DelayedTransitions}, `false` otherwise.
+ */
 isAfter.orUndefined = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

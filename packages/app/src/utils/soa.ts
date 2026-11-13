@@ -4,7 +4,7 @@ import type { SoA } from '@bemedev/typings';
 /**
  * Type guard that checks if an entry is a Single-or-Array (SoA) of type `T`.
  *
- * @template T - The element type, defaults to `any`.
+ * @template `T` - The element type, defaults to `any`.
  * @param check - Predicate function to check individual elements.
  * @param entry - The candidate value or array of values.
  *

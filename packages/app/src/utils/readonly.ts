@@ -3,6 +3,14 @@ import { expandFn } from '@bemedev/app-utils-bemedev';
 
 /**
  * Utility function for making objects deeply read-only with optional property freezing.
+ *
+ * Includes property {@linkcode readonly.freeze}.
+ *
+ * @template `T` - Object type returned as deeply read-only.
+ *
+ * @param obj - The object to return as deeply read-only.
+ *
+ * @returns The same object typed as type {@linkcode DeepReadonly}.
  */
 export const readonly = expandFn(
   <const T extends object>(obj: T): DeepReadonly<T> => {

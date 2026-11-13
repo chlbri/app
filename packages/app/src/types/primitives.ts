@@ -23,22 +23,25 @@ import type { PrimitiveObject } from '@bemedev/typings';
 export type IsString_F = (value: unknown) => value is string;
 
 /**
- * Single or readonly array type of {@linkcode T}.
+ * Single element or readonly array type of `T`.
+ *
+ * @template `T` - The element type.
  */
 export type SingleOrArrayR<T> = T | readonly T[];
 
 /**
- * Single element or array type with at least two elements of type {@linkcode T}.
+ * Single element or array type with at least two elements of type `T`.
  *
  * @template `T` - The element type.
  */
 export type SingleOrArrayL2<T> = T | [T, T, ...T[]];
 
 /**
- * Single or readonly array type of {@linkcode T} with at least one element.
+ * Single or readonly array type of `T` with at least one element.
  * This type is useful when you want to ensure that the value is either a single
- * element of type {@linkcode T} or an array containing at least one element of
- * type {@linkcode T}.
+ * element or an array containing at least one element.
+ *
+ * @template `T` - The element type.
  */
 export type SingleOrArrayL<T> = T | readonly [...(readonly T[]), T];
 
@@ -53,12 +56,14 @@ export const DESCRIBER_KEYS = ['name', 'description'] as const;
 export type Describer = Record<(typeof DESCRIBER_KEYS)[number], string>;
 
 /**
- * Retrieves the name property from a Describer type.
+ * Retrieves the `name` property from a type {@linkcode Describer}.
+ *
+ * @template | {@linkcode Describer} `T` - The describer type.
  */
 export type FromDescriber<T extends Describer> = T['name'];
 
 /**
- * A {@linkcode Describer} type where the description property is optional.
+ * A type {@linkcode Describer} where the `description` property is optional.
  */
 export type Describer2 = NOmit<Describer, 'description'> &
   Partial<Pick<Describer, 'description'>>;
@@ -81,18 +86,18 @@ export const isFunction = (value: unknown): value is Fn => {
  *
  * @returns `true` if `value` is a string, `false` otherwise.
  *
- * @see {@linkcode IsString_F}
+ * @see -- type {@linkcode IsString_F}
  */
 export const isString: IsString_F = value => {
   return typeof value === 'string';
 };
 
 /**
- * Type guard that checks if an argument conforms to interface {@linkcode Describer}.
+ * Type guard that checks if an argument conforms to type {@linkcode Describer}.
  *
  * @param arg - The value to check.
  *
- * @returns `true` if `arg` is a valid {@linkcode Describer}, `false` otherwise.
+ * @returns `true` if `arg` is a valid describer, `false` otherwise.
  */
 export const isDescriber = (arg: any): arg is Describer => {
   const out = checkKeys.strict(arg, ...DESCRIBER_KEYS);
@@ -100,9 +105,9 @@ export const isDescriber = (arg: any): arg is Describer => {
 };
 
 /**
- * Extracts the string name from a string or interface {@linkcode Describer}.
+ * Extracts the string name from a string or type {@linkcode Describer}.
  *
- * @param value - The input string or {@linkcode Describer} object.
+ * @param value - The input string or describer object.
  *
  * @returns The string name or the original string.
  */
@@ -111,14 +116,21 @@ export const fromDescriber = (value: string | Describer) => {
 };
 
 /**
- * Can be used after
+ * Removes the `readonly` modifier from every property of type `T`.
+ *
+ * @template `T` - The object type to make mutable.
  */
 export type NotReadonly<T> = {
   -readonly [P in keyof T]: T[P];
 };
 
 /**
- * Can be used after
+ * Resolves the effective value type of `T`, falling back to `U` when `T` is strictly `undefined`.
+ *
+ * @template `T` - The source type.
+ * @template `U` - The fallback type used when `T` is `undefined`.
+ *
+ * @see -- type {@linkcode NotUndefined}
  */
 export type Define<T, U> = T extends undefined
   ? U
@@ -145,13 +157,13 @@ type ChangePropertyOption =
  * Changes the property access of a specific property in an object type.
  *
  * @template `T` - The object type to change.
- * @template `name` - The name of the property of {@linkcode T} to change.
+ * @template `name` - The name of the property of `T` to change.
  * @template `replace` - The name of the property to replace the original property with.
- * @template : {@linkcode ChangePropertyOption} [option] - The option for changing the property access.
+ * @template | {@linkcode ChangePropertyOption} `option` - The option for changing the property access.
  *
- * @remarks Can be used
+ * @remarks The remaining properties of `T` are preserved unchanged.
  *
- * @see {@linkcode NOmit}
+ * @see -- type {@linkcode NOmit}
  */
 
 export type ChangeProperty<
@@ -175,8 +187,8 @@ export type ChangeProperty<
  * Internal helper type for mapping object keys to key strings structure.
  *
  * @template `T` - Target object type.
- * @template | {@linkcode boolean} `AddObjectKey` - Flag to include object key.
- * @template | keyof `T` `Key` - Property key union.
+ * @template `AddObjectKey` - Whether to append the object key marker, defaults to `true`.
+ * @template `Key` - Property key union, defaults to `keyof T`.
  */
 type _KeyStrings<
   T extends object,
@@ -268,9 +280,9 @@ type _ChangeProperties<
  *
  * @template `T` - The object type to change.
  * @template `U` - The partial object type that defines the changes.
- * @template : {@linkcode ChangePropertyOption} [option] - The option for changing the property access.
+ * @template | {@linkcode ChangePropertyOption} `option` - The option for changing the property access.
  *
- * @remarks This can be usefull after
+ * @remarks Returns `T` unchanged when `U` already covers every key string of `T`.
  *
  * @see -- type {@linkcode DeepPartial}, -- type {@linkcode KeyStrings}, -- type {@linkcode _ChangeProperties}
  */
@@ -318,13 +330,13 @@ export type ToArray<T> = T extends readonly unknown[]
 /**
  * An helper to write common function signatures.
  *
- * @template : {@linkcode EventsMap} [E] - The events map used in the function.
- * @template : {@linkcode ActorsConfigMap} [A] - The actors configuration map used in the function.
+ * @template | {@linkcode EventObject} `E` - The event object type.
  * @template `Pc` - The private context.
- * @template : {@linkcode PrimitiveObject} [Tc] - The context of the function, defaults to any object.
+ * @template | {@linkcode PrimitiveObject} `Tc` - The context of the function, defaults to any object.
+ * @template `T` - State tag string type.
  * @template `R` - The return type of the function, defaults to any.
  *
- * @see -- type {@linkcode ToEvents2}
+ * @see -- type {@linkcode StateExtended}
  */
 export type FnR<
   E extends EventObject = EventObject,
@@ -337,14 +349,14 @@ export type FnR<
 /**
  * A helper type to reduce a function signature to its context and events map.
  *
- * @template : {@linkcode EventsMap} [E] - The events map used in the function.
- * @template : {@linkcode ActorsConfigMap} [A] - The actors configuration map used in the function.
- * @template : {@linkcode PrimitiveObject} [Tc] - The context of the function, defaults to any object.
+ * @template | {@linkcode EventObject} `E` - The event object type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - The context of the function, defaults to any object.
+ * @template `T` - State tag string type.
  * @template `R` - The return type of the function, defaults to any.
  *
- * @remarks This function signature is a reduced version of {@linkcode FnR} without the private context.
+ * @remarks This function signature is a reduced version of type {@linkcode FnR} without the private context.
  *
- * @see -- type {@linkcode ToEvents2}
+ * @see -- type {@linkcode State}
  */
 export type FnReduced<
   E extends EventObject = EventObject,
@@ -529,7 +541,7 @@ type _FnMapReduced<
 /**
  * Maps event types to their corresponding handler function signatures or fallback handler.
  *
- * @template `E` - The event object type extending interface {@linkcode EventObject}.
+ * @template | {@linkcode EventObject} `E` - The event object type.
  * @template `Pc` - Private context type.
  * @template `Tc` - Type {@linkcode PrimitiveObject} context.
  * @template `T` - State tag string type.
@@ -548,12 +560,13 @@ export type FnMap<
 /**
  * A helper type to reduce a function signature to its context and events map.
  *
- * @template : {@linkcode AllEvent} [E] - All Events map used in the function.
-
- * @template : {@linkcode PrimitiveObject} [Tc] - The context of the function, defaults to any object.
+ * @template | {@linkcode EventObject} `E` - The event object type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - The context of the function, defaults to any object.
+ * @template `T` - State tag string type.
  * @template `R` - The return type of the function, defaults to any.
+ * @template `Ex` - Event type strings to exclude.
  *
- * @see -- type {@linkcode ToEvents2}, -- type {@linkcode FnReduced}, -- type {@linkcode Extract}
+ * @see -- type {@linkcode _FnMapReduced}
  */
 export type FnMapR<
   E extends EventObject = EventObject,
@@ -570,14 +583,18 @@ export type FnMapR<
 export type EmptyObject = {};
 
 /**
- * A type that represents a record with string keys and values of type {@linkcode T}.
+ * A type that represents a record with string keys and values of type `T`.
  *
- * @see {@linkcode Record}
+ * @template `T` - The type of the record values, defaults to `unknown`.
+ *
+ * @see -- type {@linkcode Record}
  */
 export type RecordS<T = unknown> = Record<string, T>;
 
 /**
- * A type that represents all values of type {@linkcode T},
+ * A type that represents all values of type `T`.
+ *
+ * @template `T` - The object type whose values are extracted.
  *
  * @see -- type {@linkcode NotUndefined}
  */
@@ -599,12 +616,12 @@ export type KeyU<S extends string, R = unknown> = Record<S, R>;
  * @template `S` - The string keys of the record.
  * @template `R` - The type of the values in the record, optional
  *
- * @see {@linkcode Partial}
+ * @see -- type {@linkcode Partial}
  */
 export type KeyO<S extends string, R = unknown> = Partial<KeyU<S, R>>;
 
 /**
- * Extracts the string type from a union type {@linkcode T}.
+ * Extracts the string type from a union type `T`.
  *
  * @template `T` - The union type to extract the string type from.
  *
@@ -628,13 +645,10 @@ export type TrueObject = Ru & {
 };
 
 /**
- * A type that represents a not defined.
+ * A type that represents an absent value.
  *
  * @remarks This type is useful when you want to allow a value to be absent or
  * explicitly set to `null` or `undefined`.
- *
- * @remarks Can be usefull after.
- *
  */
 export type NoValue = void | undefined | null;
 
@@ -689,7 +703,7 @@ type RecursiveObjectKeys<T, Schema> = {
  * type Invalid = NoExtraKeys<{ name: 'test'; extra: true }, MySchema>;
  * ```
  *
- * @see {@linkcode NoExtraKeysStrict}
+ * @see -- type {@linkcode NoExtraKeysStrict}
  */
 export type NoExtraKeys<T, Schema> = T & {
   [K in Exclude<keyof T, keyof Schema>]: never;

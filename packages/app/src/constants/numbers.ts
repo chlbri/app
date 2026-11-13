@@ -1,6 +1,6 @@
 /**
  * The default maximum number of milliseconds to wait for a promise to resolve.
- * One hour.
+ * Ten minutes.
  */
 export const DEFAULT_MAX_TIME_PROMISE = 600_000;
 
@@ -10,12 +10,12 @@ export const DEFAULT_MAX_TIME_PROMISE = 600_000;
 export const DEFAULT_MIN_ACTIVITY_TIME = 10;
 
 /**
- * The default maximum number of milliseconds to wait for an activity to complete.
+ * The default maximum number of consecutive self transitions allowed before an error is thrown.
  */
 export const DEFAULT_MAX_SELF_TRANSITIONS = 100;
 
 /**
  * Time interval in milliseconds used to re-initialize the self transition counter.
- * Calculated as double constant {@linkcode DEFAULT_MIN_ACTIVITY_TIME}.
+ * Twice constant {@linkcode DEFAULT_MIN_ACTIVITY_TIME}.
  */
 export const TIME_TO_RINIT_SELF_COUNTER = DEFAULT_MIN_ACTIVITY_TIME * 2;

@@ -238,6 +238,7 @@ export type StateValue = string | StateValueMap;
  * Record map of state names to nested state values.
  */
 export interface StateValueMap {
+  /** State value stored under the corresponding state name key. */
   [key: string]: StateValue;
 }
 

@@ -194,6 +194,8 @@ export type TransitionConfigMapFG<Paths = string> = Require<
  * This type is used to ensure that the transition configuration
  * has either a target or actions defined, but not both.
  *
+ * @template `Paths` - State path union. Defaults to `string`.
+ *
  * @see {@linkcode TransitionConfigMapF}, {@linkcode TransitionConfigMapA}
  */
 export type TransitionConfig<Paths = string> = Paths | TransitionConfigMap<Paths>;
@@ -230,6 +232,8 @@ export type ArrayTransitionsF<Paths = string> = readonly [
 /**
  * A type that can be either an array of transitions or a single transition configuration.
  *
+ * @template `Paths` - State path union. Defaults to `string`.
+ *
  * @see {@linkcode ArrayTransitions}, {@linkcode TransitionConfig}
  */
 export type SingleOrArrayT<Paths = string> =
@@ -249,6 +253,8 @@ export type AlwaysConfig<Paths = string> =
 
 /**
  * A type used to represent a record of transitions.
+ *
+ * @template `Paths` - State path union. Defaults to `string`.
  *
  * @remarks For the purpose of delay transition config.
  */
@@ -292,10 +298,12 @@ export type ExtractGuardKeysFromDelayed<T> = ExtractGuardKeysFromTransition<
 /**
  * Represents a JSON configuration for delayed transitions.
  *
- * @remarks This type is used to define transitions that occur after a delay.
- * It can include actions, guards, and promises.
+ * @template `Paths` - State path union. Defaults to `string`.
  *
- * @see -- type {@linkcode DelayedTransitions}, -- type {@linkcode AlwaysConfig}, -- type {@linkcode PromiseeConfig}, -- type {@linkcode SingleOrArrayL}
+ * @remarks This type is used to define transitions that occur after a delay.
+ * It can include actions, guards, and actor configurations.
+ *
+ * @see -- type {@linkcode DelayedTransitions}, -- type {@linkcode AlwaysConfig}, -- type {@linkcode SingleOrArrayL}
  */
 
 export type TransitionsConfig<Paths extends string = string> = {
@@ -372,10 +380,11 @@ export type GetEventKeysFromTransitions<T> =
 /**
  * Extracts delay keys from a {@linkcode TransitionsConfig}.
  *
- * @template : {@linkcode TransitionsConfig} [T] - The transitions configuration type.
+ * @template | {@linkcode TransitionsConfig} `T` - The transitions configuration type.
+ *
  * @returns The keys of the delays extracted from the transitions configuration.
  *
- * @see -- type {@linkcode ExtractMaxFromPromisee}, -- type {@linkcode ReduceArray}, -- type {@linkcode Extract}, -- type {@linkcode NotUndefined}
+ * @see -- type {@linkcode ReduceArray}, -- type {@linkcode NotUndefined}
  */
 export type ExtractDelayKeysFromTransitions<T extends TransitionsConfig> =
   T['after'] extends undefined ? never : keyof T['after'];
@@ -391,6 +400,8 @@ type _ExtractActionsFromMap<T> = ExtractActionsFromTransition<
 
 /**
  * Extracts actions from the finally part of a completion configuration.
+ *
+ * @template `T` - Completion configuration type.
  */
 type _ExtractActionsFromFinally<T> =
   ReduceArray<T> extends infer Tr
@@ -431,10 +442,11 @@ export type ExtractActionKeysFromActor<T> = T extends EmitterConfig
 /**
  * Extracts actions keys from a {@linkcode TransitionsConfig}.
  *
- * @template : {@linkcode TransitionsConfig} [T] - The transitions configuration type.
+ * @template | {@linkcode TransitionsConfig} `T` - The transitions configuration type.
+ *
  * @returns The actions keys extracted from the transitions configuration.
  *
- * @see -- type {@linkcode ExtractActionsFromTransition}, -- type {@linkcode ExtractActionsFromDelayed}, -- type {@linkcode ExtractActionKeysFromPromisee}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}, -- type {@linkcode WithDescriber}, -- type {@linkcode NotUndefined}, -- type {@linkcode Extract}
+ * @see -- type {@linkcode ExtractActionsFromTransition}, -- type {@linkcode ExtractActionKeysFromDelayed}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}, -- type {@linkcode WithDescriber}, -- type {@linkcode NotUndefined}
  */
 export type ExtractActionKeysFromTransitions<T extends TransitionsConfig> =
   | ExtractActionKeysFromDelayed<T['on']>
@@ -489,10 +501,11 @@ export type ExtractGuardsKeysFromActor<T> = T extends EmitterConfig
 /**
  * Extracts guard keys from a {@linkcode TransitionsConfig}.
  *
- * @template : {@linkcode TransitionsConfig} [T] - The transitions configuration type.
+ * @template | {@linkcode TransitionsConfig} `T` - The transitions configuration type.
+ *
  * @returns The guard keys extracted from the transitions configuration.
  *
- * @see -- type {@linkcode ExtractGuardKeysFromTransition}, -- type {@linkcode ExtractGuardKeysFromDelayed}, -- type {@linkcode ExtractGuardKeysFromPromisee}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}, -- type {@linkcode GuardConfig}, -- type {@linkcode NotUndefined}, -- type {@linkcode Extract}
+ * @see -- type {@linkcode ExtractGuardKeysFromTransition}, -- type {@linkcode ExtractGuardKeysFromDelayed}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}, -- type {@linkcode GuardConfig}, -- type {@linkcode NotUndefined}
  */
 export type ExtractGuardKeysFromTransitions<T extends TransitionsConfig> =
   | ExtractGuardKeysFromDelayed<T['on']>
@@ -557,10 +570,10 @@ export type ExtractChildKeysFromTransitions<T extends TransitionsConfig> =
 /**
  * Represents a transition in a state machine with full defined functions.
  *
- * @template : {@linkcode EventsMap} [E] - The events map used in the transition.
- * @template : {@linkcode PromiseeMap} [P] - The promisees map used in the transition.
- * @template `Pc` - The private context type for the transition.
- * @template : {@linkcode types} [Tc] - The context for the transition.
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  *
  * @see -- type {@linkcode AsyncAction}, -- type {@linkcode AsyncPredicate}
  */
@@ -603,7 +616,7 @@ export type SyncTransition<
  * @template `Pc` - Private context type.
  * @template `Tc` - Type {@linkcode PrimitiveObject} context.
  * @template `T` - State tag string type.
- * @template R - Value emitted by Observable `src`.
+ * @template `R` - Value emitted by the Observable `src`.
  */
 export type AsyncEmiter4<
   E extends EventObject = EventObject,
@@ -626,7 +639,7 @@ export type AsyncEmiter4<
  * @template `Pc` - Private context type.
  * @template `Tc` - Type {@linkcode PrimitiveObject} context.
  * @template `T` - State tag string type.
- * @template R - Value emitted by Observable `src`.
+ * @template `R` - Value emitted by the Observable `src`.
  */
 export type SyncEmiter4<
   E extends EventObject = EventObject,
@@ -645,9 +658,10 @@ export type SyncEmiter4<
 /**
  * Represents all transitions inside a state config with full defined functions.
  *
- * @template : {@linkcode EventsMap} [E] - The events map used in the transitions.
- * @template `Pc` - The private context type for the transitions.
- * @template : {@linkcode PrimitiveObject} [Tc] - The context for the transitions
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template `T` - State path string type.
  *
  * @see -- type {@linkcode AsyncTransition}, -- type {@linkcode Identify}
  */

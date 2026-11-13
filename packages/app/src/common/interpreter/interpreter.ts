@@ -244,7 +244,14 @@ export abstract class CommonInterpreter<
     return this.__machine.initialValue;
   }
 
+  /**
+   * Current private and public context values of this interpreter.
+   */
   protected __contexts: Required<Contexts<Pc, Tc>> = {} as any;
+
+  /**
+   * Context values captured at initialization, used to restore state on reset.
+   */
   protected __initialContexts: Required<Contexts<Pc, Tc>> = {} as any;
 
   /**
@@ -404,9 +411,9 @@ export abstract class CommonInterpreter<
   /**
    * Selects a value from the public context using a key path string.
    *
-   * @returns A selector function of type {@linkcode Selector_F}.
+   * When the context is a primitive value, the selector is `undefined`.
    *
-   * Remarks : only th
+   * @returns A selector function of type {@linkcode Selector_F}.
    *
    * @see {@linkcode byKey2}
    */
@@ -1006,6 +1013,8 @@ export abstract class CommonInterpreter<
 
   /**
    * Merges partial state updates into the current state and triggers subscriber notifications.
+   *
+   * @param parts - Partial state fields to merge into the current state.
    */
   protected __performStates = (parts?: Partial<State<Eo, Tc, Ta>>) => {
     this.__state = { ...this.__state, ...parts };
@@ -1329,7 +1338,7 @@ export abstract class CommonInterpreter<
   /**
    * Creates a curried event sender function for a specific event type.
    *
-   * @template T - Event type string extending `Eo['type']`.
+   * @template `T` - Event type string extending `Eo['type']`.
    *
    * @param type - Target event type string.
    *
@@ -1757,7 +1766,7 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Alias for method {@linkcode CommonInterpreter}.
+   * Alias for method {@linkcode CommonInterpreter._providePrivateContext}.
    *
    * @deprecated Internal method.
    */

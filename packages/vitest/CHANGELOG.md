@@ -5,6 +5,24 @@
 <details>
 <summary>
 
+## **[2.8.2] - 13/11/2026** => _19:22_
+
+</summary>
+
+### Docs
+
+- Complete the JSDoc surface: drop the nonexistent `@param vi`, add missing
+  `@returns`/`@throws` tags and normalize blank-line separators.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.1] - 12/11/2026** => _16:48_
 
 </summary>

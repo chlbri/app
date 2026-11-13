@@ -2,7 +2,8 @@ import type { EventObject, State, PrimitiveObject } from '@bemedev/app';
 import type { Dequal_F } from '@bemedev/app/types';
 
 /**
- * Options for configuring state selectors and equality comparators.
+ * Options for configuring state selectors and equality comparators used by
+ * {@linkcode createState} signals.
  *
  * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
  * @template `Ta` - Tag type extending `string`.
@@ -25,7 +26,7 @@ export type CreateStateOptions<
 };
 
 /**
- * Type alias for {@linkcode CreateStateOptions}.
+ * Type alias for type {@linkcode CreateStateOptions}.
  *
  * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
  * @template `Ta` - Tag type extending `string`.

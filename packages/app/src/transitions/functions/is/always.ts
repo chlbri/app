@@ -35,6 +35,16 @@ export const isAlways = <T extends string[] = string[]>(
   return isTransitionConfigTarget(value, ...keys);
 };
 
+/**
+ * Type guard variant accepting `undefined` in addition to always transition configurations.
+ *
+ * @template `T` - Path keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if `undefined` or type {@linkcode AlwaysConfig}, `false` otherwise.
+ */
 isAlways.orUndefined = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

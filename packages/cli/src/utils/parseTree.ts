@@ -28,6 +28,10 @@ type Output = {
 
 /**
  * Type alias for function {@linkcode parseTree}.
+ *
+ * @param config - Machine configuration node of type {@linkcode NodeConfig2}.
+ *
+ * @returns Parsed tree analysis result.
  */
 export type ParseTree_F = (config: NodeConfig2) => Output;
 
@@ -37,6 +41,8 @@ export type ParseTree_F = (config: NodeConfig2) => Output;
  * @param config - Machine configuration node of type {@linkcode NodeConfig2}.
  *
  * @returns Parsed tree analysis result.
+ *
+ * @see {@linkcode traverse}, {@linkcode buildPaths}
  */
 export const parseTree: ParseTree_F = config => {
   const __config = config;

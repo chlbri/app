@@ -35,9 +35,11 @@ export type ToChild_F = <
 
 /**
  * Converts an emitter config to an emitter object with a source and transitions.
+ *
  * @param child - The child configuration to convert.
  * @param options - The machine options.
  * @param events - List of events of the machine.
+ *
  * @returns An emitter object with a source and transitions.
  *
  * @see {@linkcode toChildSrc}, {@linkcode toTransition}

@@ -26,7 +26,6 @@ import type { ConstructTestsResult, Option } from './types';
  * @template | {@linkcode SimpleMachineOptions2} `L` - Local machine options type extending type {@linkcode SimpleMachineOptions2}.
  * @template `T` - Custom helper return type extending `object`.
  *
- * @param vi - Vitest utility instance.
  * @param service - Interpreter service instance (type {@linkcode SyncInterpreter} or type {@linkcode AsyncInterpreter}).
  * @param helper - Optional helper builder callback receiving type {@linkcode Option}.
  * @param startIndex - Optional initial test step index.

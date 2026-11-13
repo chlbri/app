@@ -16,7 +16,7 @@ export type EscapeRexExp_F = (arg: string) => string;
  *
  * @returns The escaped string, where special characters are prefixed with `'\\$&'`.
  *
- * @see {@linkcode EscapeRexExp_F}
+ * @see -- type {@linkcode EscapeRexExp_F}
  */
 export const escapeRegExp: EscapeRexExp_F = arg => {
   const replacer = '\\$&';

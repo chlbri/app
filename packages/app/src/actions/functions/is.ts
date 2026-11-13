@@ -24,6 +24,13 @@ export const checkActions = (action: unknown): action is SoA<string | Describer>
   else return checkAction(action);
 };
 
+/**
+ * Type guard variant accepting `undefined` in addition to single or array action entries.
+ *
+ * @param action - Target value.
+ *
+ * @returns `true` if `undefined` or valid action entries, `false` otherwise.
+ */
 checkActions.orUndefined = (
   action: unknown,
 ): action is SoA<string | Describer> | undefined => {

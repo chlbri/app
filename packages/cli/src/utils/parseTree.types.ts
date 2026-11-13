@@ -31,7 +31,7 @@ export type ConfigPaths2 = { targets: string[]; initial?: string };
 /**
  * Strict version of type {@linkcode ConfigPaths} ensuring no extra keys are permitted.
  *
- * @template | {@linkcode ConfigPaths} `T` - ConfigPaths type extending type {@linkcode ConfigPaths}.
+ * @template | {@linkcode ConfigPaths} `T` - Configuration paths type to validate.
  */
 export type NoExtraKeysConfigPaths<T extends ConfigPaths> = T & {
   [K in Exclude<keyof T, keyof ConfigPaths>]: never;

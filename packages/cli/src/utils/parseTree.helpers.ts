@@ -26,6 +26,10 @@ import type { _TransitionsConfig } from '@bemedev/app/transitions';
  * Recursively builds the paths map from a flat map of node configurations.
  * `targets` is all state paths in the machine; `initial` is set for compound nodes;
  * `states` is recursively built for each child state.
+ *
+ * @param flat - Flat map of node configurations keyed by state path.
+ *
+ * @returns Configuration paths tree of type {@linkcode ConfigPaths}.
  */
 export const buildPaths = pipe(
   (flat: RecordS<NodeConfig2>) => Object.entries(flat),
@@ -126,6 +130,9 @@ export const processActivity = pipe(
  *
  * @param ctx - Parse tree context of type {@linkcode ParseTreeContext}.
  * @param transitions - Transitions config object of type {@linkcode _TransitionsConfig}.
+ *
+ * @returns Reduced symbol sets produced by {@linkcode reduceTransitionsConfig}
+ * while populating `ctx`.
  */
 export const processTransitionsConfig = (
   ctx: ParseTreeContext,

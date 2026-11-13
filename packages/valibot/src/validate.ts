@@ -7,7 +7,7 @@ import { createBetterSet } from '@bemedev/better-set';
  * Internal helper to recursively extract state target paths from a node config.
  *
  * @param node - The machine configuration node of type {@linkcode NodeConfig2}.
- * @param remain - The accumulated path prefix string.
+ * @param remain - The accumulated path prefix string, defaults to `'/'`.
  *
  * @returns A set of extracted state path target strings.
  *
@@ -45,11 +45,12 @@ export const getTargetsFromConfig = (node: NodeConfig2) => {
 
 /**
  * Validates a machine configuration against the generated Valibot schema.
- * Throws a Valibot error if validation fails.
  *
  * @param config - The machine configuration object to validate.
  *
  * @returns The parsed machine configuration object.
+ *
+ * @throws class {@linkcode v.ValiError} Throws when the configuration does not match the generated schema.
  *
  * @see {@linkcode getTargetsFromConfig}, {@linkcode Config_Schema}
  */

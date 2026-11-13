@@ -363,7 +363,7 @@ export type CommonElements<
 /**
  * Second version of simple machine options.
  *
- * @see {@linkcode Partial}, {@linkcode Record}
+ * @see -- type {@linkcode Partial}, -- type {@linkcode Record}
  */
 export type SimpleMachineOptions2 = Partial<
   Record<'actions' | 'guards' | 'delays', any> &
@@ -404,6 +404,12 @@ export type CommonTimeAction_F<
   T extends string = string,
 > = (name: string) => (id: string) => AsyncAction2<E, Pc, Tc, T>;
 
+/**
+ * Decomposed context paths of type `Tc`, excluding array index segments.
+ *
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type to decompose.
+ * @template `_Pc` - Unused private context placeholder, kept for signature parity.
+ */
 export type DecomposeC<
   Tc extends PrimitiveObject = PrimitiveObject,
   _Pc = any,
@@ -415,11 +421,10 @@ export type DecomposeC<
 /**
  * Function type signature for creating an erase property action helper.
  *
- * @template `Pc` - Private context type.
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `A` - Action return type.
  *
- * @returns Action of type `A`.
+ * @returns Action of type `A` erasing the supplied context keys.
  */
 export type CommonEraseAction_F<
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -440,7 +445,7 @@ export type CommonEraseAction_F<
  * @template `T` - State tag string type.
  * @template `A` - Action return type.
  *
- * @returns Action of type `A`.
+ * @returns Action of type `A` filtering the supplied context key.
  */
 export type CommonFilterAction_F<
   E extends EventObject = EventObject,
@@ -543,7 +548,7 @@ type _GetEventKeysFromFlat<Flat extends FlatMapN> = {
  *
  * @template | {@linkcode FlatMapN} `Flat` - Type of flat map of nodes.
  *
- * @see {@linkcode _GetEventKeysFromFlat}
+ * @see -- type {@linkcode _GetEventKeysFromFlat}
  */
 export type GetEventsFromFlat<Flat extends FlatMapN> = Record<
   _GetEventKeysFromFlat<Flat>,
@@ -555,7 +560,7 @@ export type GetEventsFromFlat<Flat extends FlatMapN> = Record<
  *
  * @template | {@linkcode CommonConfig3} `C` - Type of machine config.
  *
- * @see -- type {@linkcode FlatMapN}, {@linkcode GetEventsFromFlat}, {@linkcode ConfigFrom}
+ * @see -- type {@linkcode FlatMapN}, -- type {@linkcode GetEventsFromFlat}, -- type {@linkcode ConfigFrom}
  */
 export type GetEventsFromConfig<C extends CommonConfig3> = GetEventsFromFlat<
   FlatMapN<C>

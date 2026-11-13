@@ -34,7 +34,7 @@ export type SyncCollectedService = {
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `T` - State tag string type.
  * @param action - Action configuration type {@linkcode SyncAction2}.
  */
@@ -50,7 +50,7 @@ export type SyncPerformAction_F<
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `T` - State tag string type.
  * @param predicate - Guard configuration type {@linkcode GuardConfig}.
  *
@@ -68,7 +68,7 @@ export type SyncToPredicate_F<
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `T` - State tag string type.
  * @param predicate - Synchronous predicate guard type {@linkcode SyncPredicateS3}.
  *
@@ -129,7 +129,7 @@ export type _SyncSend_F<E extends EventObject> = (
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `T` - State tag string type.
  * @param delay - Synchronous delay function type {@linkcode SyncDelayFunction3}.
  *
@@ -147,7 +147,7 @@ export type SyncPerformDelay_F<
  *
  * @template `C` - Common machine config type {@linkcode CommonConfig3}.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `E` - Events map type.
  * @template `A` - Actors config map type.
  * @template `Ta` - State tag string type.

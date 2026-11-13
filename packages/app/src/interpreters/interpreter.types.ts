@@ -36,7 +36,7 @@ export type AsyncInterpreter_F = <M extends AnyMachine>(
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `T` - State tag string type.
  * @param action - Async action type {@linkcode AsyncAction2}.
  *
@@ -54,7 +54,7 @@ export type AsyncPerformActionLater_F<
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `T` - State tag string type.
  * @param from - Origin state identifier string or `false`.
  * @param action - Async action type {@linkcode AsyncAction2}.
@@ -73,7 +73,7 @@ export type AsyncPerformAction_F<
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `T` - State tag string type.
  * @param predicate - Async predicate guard type {@linkcode AsyncPredicateS3}.
  *
@@ -91,7 +91,7 @@ export type AsyncPerformPredicate_F<
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `T` - State tag string type.
  * @param delay - Async delay function type {@linkcode AsyncDelayFunction3}.
  *
@@ -187,7 +187,7 @@ export type _AsyncSend_F<E extends EventObject> = (
  *
  * @template `C` - Common machine config type {@linkcode CommonConfig3}.
  * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
  * @template `E` - Events map type.
  * @template `A` - Actors config map type.
  * @template `Ta` - State tag string type.

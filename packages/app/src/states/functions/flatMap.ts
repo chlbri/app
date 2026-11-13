@@ -30,7 +30,7 @@ export type FlatMap_F<T extends NodeConfig2 = NodeConfig2> = <
  * @param node - The state node configuration to flatten.
  * @param withChildren - Whether to include child states in the output.
  * @param delimiter - The delimiter to use for paths in the output map. Defaults to {@linkcode DEFAULT_DELIMITER}.
- * @param path - The current path in the output map (used for recursion).
+ *
  * @returns A flat map of the state node configuration.
  *
  * @see {@linkcode FlatMap_F}

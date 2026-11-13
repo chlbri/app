@@ -4,7 +4,7 @@ import type { NotReadonly, SingleOrArrayL2 } from './primitives';
 /**
  * Refines a readonly array of string literals `T` into a union of its elements or `string` if empty.
  *
- * @template T - The string array type extending `ReadonlyArray<string>`.
+ * @template `T` - The string array type extending `ReadonlyArray<string>`.
  */
 export type RefineStringArray<T extends ReadonlyArray<string>> = T extends []
   ? string
@@ -13,7 +13,7 @@ export type RefineStringArray<T extends ReadonlyArray<string>> = T extends []
 /**
  * Recursively enforces that elements of array `T` contain no extra keys relative to type `Parent`.
  *
- * @template T - Array type extending `ReadonlyArray<any>`.
+ * @template `T` - Array type extending `ReadonlyArray<any>`.
  * @template `Parent` - Expected parent structure.
  */
 export type NoExtraKeysArray<T extends ReadonlyArray<any>, Parent> = T extends [
@@ -26,7 +26,7 @@ export type NoExtraKeysArray<T extends ReadonlyArray<any>, Parent> = T extends [
 /**
  * Enforces no extra keys on a Single-or-Array (SoA) structure `T` relative to `Parent`.
  *
- * @template T - Target structure extending `SoA<any>`.
+ * @template `T` - Target structure extending `SoA<any>`.
  * @template `Parent` - Expected parent structure.
  */
 export type NoExtraKeySoa<T extends SoA<any>, Parent> =
@@ -55,7 +55,7 @@ type __TraversableTuple<T, K extends ReadonlyArray<keyof T>> = K extends [
  * Maps object keys `K` of type `T` into a traversable tuple or property value.
  *
  * @template `T` - Source object type.
- * @template K - Keys extending type {@linkcode SingleOrArrayL2} of `keyof T`.
+ * @template `K` - Keys extending type {@linkcode SingleOrArrayL2} of `keyof T`.
  */
 export type TraversableTuple<T, K extends SingleOrArrayL2<keyof T>> =
   K extends ReadonlyArray<keyof T>

@@ -11,9 +11,10 @@ import type { PrimitiveObject } from '@bemedev/typings';
  * Subscriber class that manages the subscription state and provides methods
  * to handle state changes and unsubscribe.
  *
- * @template : {@linkcode PrimitiveObject} [Tc] - Type of the context
- * @template `R` - Type of the return value
- *
+ * @template | {@linkcode PrimitiveObject} `Tc` - Type of the context.
+ * @template `T` - State path string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode State} `St` - State shape received by the subscriber.
  */
 class SubscriberClass<
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -46,6 +47,8 @@ class SubscriberClass<
 
   /**
    * Subscriber identifier getter.
+   *
+   * @returns The optional identifier string of this subscriber.
    */
   get id() {
     return this._id;
@@ -75,7 +78,7 @@ class SubscriberClass<
   /**
    * Getter that returns a reduced state handling function based on subscriber logic.
    *
-   * @returns State handler function.
+   * @returns State handler function dispatching on the event type or falling back to `else`.
    */
   private get _reduceFn() {
     const sub = this._subscriber;
@@ -103,6 +106,8 @@ class SubscriberClass<
 
   /**
    * Check if subscriber is not in active state.
+   *
+   * @returns `true` when the subscriber cannot perform its action; otherwise, `false`.
    */
   private get _cannotPerform() {
     return !(this._state === 'active');
@@ -130,6 +135,8 @@ class SubscriberClass<
 
   /**
    * Subscriber state getter.
+   *
+   * @returns The current timer state of this subscriber.
    */
   get state() {
     return this._state;
@@ -205,7 +212,8 @@ export type CreateSubscriber_F = <
  * @param subscriber - The subscriber function that will be called with the {@linkcode State}.
  * @param options - Optional parameters for the subscriber, including equality function and ID.
  * @param events - List of events of the machine.
- * @returns A new instance of {@linkcode SubscriberClass} that manages the subscription state and provides methods to handle state changes and unsubscribe.
+ *
+ * @returns A new instance of class {@linkcode SubscriberClass} that manages the subscription state and provides methods to handle state changes and unsubscribe.
  */
 export const createSubscriber: CreateSubscriber_F = (
   subscriber,

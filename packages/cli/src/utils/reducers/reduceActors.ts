@@ -6,7 +6,8 @@ import { createBetterSet } from '@bemedev/better-set';
 /**
  * Reduces a map of actor configurations into sets of actions, guards, targets, pContext keys, emitters, and children.
  *
- * @param actor - Map of actor configurations of type {@linkcode RecordS}<{@linkcode ActorConfig}>.
+ * @param actor - Map of actor configurations keyed by actor name, each of type
+ * {@linkcode ActorConfig}.
  *
  * @returns Reduced symbol sets object.
  */

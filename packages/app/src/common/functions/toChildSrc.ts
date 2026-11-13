@@ -32,10 +32,12 @@ export type ToChildSrc_F = <
 
 /**
  * Converts a child configuration to a child machine object.
+ *
  * @param child - The machine child identifier.
  * @param children - The map of children to look up the child configuration.
  * @param events - List of events of the machine.
- * @returns An emitter object with an id, or undefined if the emitter is not found.
+ *
+ * @returns The resolved child machine function, or `undefined` if not found.
  */
 export const toChildSrc: ToChildSrc_F = (child, children, ...events) => {
   const fn = children?.[child];

@@ -5,10 +5,13 @@ import type { FnMap, FnR } from '~types';
 /**
  * Delay type definition.
  * The function takes in a context object and returns a delay in milliseconds.
- * @template | {@linkcode EventObject} `E`, the events map.
- * @template `Pc`, the type of the private context.
- * @template | {@linkcode PrimitiveObject} `Tc`, the type of the context.
- * @returns : A number or a {@linkcode FnMap} function that returns a number.
+ *
+ * @template | {@linkcode EventObject} `E` - The events map.
+ * @template `Pc` - The type of the private context.
+ * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
+ * @template `T` - Event string type.
+ *
+ * @returns A number or a type {@linkcode FnMap} function that returns a number.
  */
 export type AsyncDelayFunction<
   E extends EventObject = EventObject,

@@ -11,9 +11,9 @@ import { SubscriberBase } from './subscriber.base';
  * Subscriber class that manages the subscription state and provides methods
  * to handle state changes and unsubscribe.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Type of the context
- * @template `T` - State path string type
- * @template | {@linkcode EventObject} `Eo` - Event object type
+ * @template | {@linkcode PrimitiveObject} `Tc` - Type of the context.
+ * @template `T` - State path string type.
+ * @template | {@linkcode EventObject} `Eo` - Event object type.
  */
 class Subscriber<
   Tc extends PrimitiveObject = PrimitiveObject,
@@ -22,6 +22,8 @@ class Subscriber<
 > extends SubscriberBase<State<Eo, Tc, T>> {
   /**
    * Subscriber identifier getter.
+   *
+   * @returns The optional identifier string of this subscriber.
    */
   get id() {
     return this._id;
@@ -140,7 +142,8 @@ export type CreateSubscriber_F = <
  * @param subscriber - The subscriber function that will be called with the {@linkcode State}.
  * @param options - Optional parameters for the subscriber, including equality function and ID.
  * @param events - List of events of the machine.
- * @returns A new instance of {@linkcode Subscriber} that manages the subscription state and provides methods to handle state changes and unsubscribe.
+ *
+ * @returns A new instance of class {@linkcode Subscriber} that manages the subscription state and provides methods to handle state changes and unsubscribe.
  */
 export const createSubscriber: CreateSubscriber_F = (
   subscriber,

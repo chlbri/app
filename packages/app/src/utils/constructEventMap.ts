@@ -7,7 +7,6 @@ import { type NodeConfig3 } from '#states';
  * @param node - The state node configuration of type {@linkcode NodeConfig3}.
  *
  * @returns Array of event string names.
- *
  */
 export const constructEvents = (node: NodeConfig3) => {
   const out = [];

@@ -38,6 +38,13 @@ export const checkGuards = (value: unknown): value is GuardConfig => {
   }
 };
 
+/**
+ * Type guard variant accepting `undefined` in addition to guard configurations.
+ *
+ * @param value - Target value.
+ *
+ * @returns `true` if `undefined` or valid guard configuration, `false` otherwise.
+ */
 checkGuards.orUndefined = (value: unknown): value is GuardConfig | undefined => {
   if (value === undefined) return true;
   return checkGuards(value);

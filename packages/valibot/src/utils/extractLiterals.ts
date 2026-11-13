@@ -17,7 +17,7 @@ type RL = ReadonlyArray<Literal>;
  *
  * @template | {@linkcode RL} `T` - Array of Valibot literal schemas.
  *
- * @see -- type {@linkcode RL}, -- type {@linkcode Literal}
+ * @see -- type {@linkcode Literal}
  */
 export type ExtractLiteralsOutput<T extends RL> = T extends [
   infer L extends Literal,
@@ -34,8 +34,6 @@ export type ExtractLiteralsOutput<T extends RL> = T extends [
  * @param schema - Union schema containing literal schema options.
  *
  * @returns Array of extracted literal values of type {@linkcode ExtractLiteralsOutput}.
- *
- * @see -- type {@linkcode ExtractLiteralsOutput}, -- type {@linkcode RL}
  */
 export const extractLiterals = <const TSchema extends RL>(
   schema: v.UnionSchema<TSchema, any>,

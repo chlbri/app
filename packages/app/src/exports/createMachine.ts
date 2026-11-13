@@ -20,13 +20,13 @@ const builder = (_config: any, types: any) => {
 /**
  * Factory function to instantiate a sync or async state machine.
  *
- * @param nameOrConfig - Machine name registered in type {@linkcode Register} or state machine configuration object.
+ * @param nameOrConfig - Machine name registered in interface {@linkcode Register} or state machine configuration object.
  * @param configOrTypes - Machine configuration object or type definitions map.
  * @param types - Optional type definition configuration if machine name was specified.
  *
- * @returns An instance of type {@linkcode SyncMachine} or type {@linkcode AsyncMachine}.
+ * @returns An instance of class {@linkcode SyncMachine} or class {@linkcode AsyncMachine}.
  *
- * @see {@linkcode CreateMachine_F}
+ * @see -- type {@linkcode CreateMachine_F}
  */
 // @ts-expect-error - This file is meant to be used in both sync and async contexts, so some types may not align perfectly.
 export const createMachine: CreateMachine_F = (

@@ -56,6 +56,8 @@ export class SyncMachine<
 
   /**
    * @deprecated Use the action function type.
+   *
+   * @returns The action function type of the machine.
    */
   get __actionFn() {
     return _unknown<SyncAction2<Eo, Pc, Tc, Ta>>();
@@ -63,6 +65,8 @@ export class SyncMachine<
 
   /**
    * The public accessor for the flat map representation of the configuration.
+   *
+   * @returns The flat map of state nodes.
    */
   get flat() {
     return this.__flat as FlatMapN<C, true>;
@@ -70,6 +74,8 @@ export class SyncMachine<
 
   /**
    * @deprecated Use the predicate function type.
+   *
+   * @returns The async predicate function type of the machine.
    */
   get __predicate() {
     return _unknown<AsyncPredicateS<Eo, Pc, Tc, Ta>>();
@@ -77,6 +83,8 @@ export class SyncMachine<
 
   /**
    * @deprecated Use the delay function type.
+   *
+   * @returns The delay function type of the machine.
    */
   get __delay() {
     return _unknown<SyncDelayFunction<Eo, Pc, Tc, Ta>>();
@@ -310,7 +318,9 @@ export class SyncMachine<
 
   /**
    * Provides elements of the machine.
+   *
    * @param helper - Option helper callback.
+   *
    * @returns Machine options structure.
    */
   addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
@@ -321,6 +331,7 @@ export class SyncMachine<
    * Provides options for the machine.
    *
    * @param helper - A function that provides options for the machine.
+   *
    * @returns A new instance of the machine with the provided options applied.
    */
   provideOptions: SyncProvideOptions_F<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L> =
@@ -331,7 +342,7 @@ export class SyncMachine<
   /**
    * Renews the machine with current configuration.
    *
-   * @returns A new instance of this {@linkcode SyncMachine}.
+   * @returns A new instance of this class {@linkcode SyncMachine}.
    */
   protected __renew = (): this => {
     const { config, pContext, context, guards, actions, delays, actors } =

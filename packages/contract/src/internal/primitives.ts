@@ -45,7 +45,7 @@ export type PrimitiveObject =
 export type StandardOutput<T = any> = { '~standard': { types?: { output: T } } };
 
 /**
- * Extracts the output type from a {@linkcode StandardOutput} schema.
+ * Extracts the output type from a type {@linkcode StandardOutput} schema.
  *
  * @template `T` - Standard output schema.
  */

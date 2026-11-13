@@ -76,10 +76,10 @@ export type ContractSchemas = {
 /**
  * Inferred typing surface of a contract.
  *
- * It is the resolved counterpart of {@linkcode ContractSchemas}: raw schemas
- * become events, contexts and state paths. These fields are type-only; they are
- * never present at runtime and are read through the helper types exported by
- * this package.
+ * It is the resolved counterpart of type {@linkcode ContractSchemas}: raw
+ * schemas become events, contexts and state paths. These fields are type-only;
+ * they are never present at runtime and are read through the helper types
+ * exported by this package.
  */
 export type ContractTypes = {
   /** Union of every typed event object accepted by the machine. */

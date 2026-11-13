@@ -50,7 +50,7 @@ export type Equals_F<T> = Fn<[T, T], boolean>;
  * Serves as the common parent class for class {@linkcode SubscriberClass} and class {@linkcode ManagedSubscriberClass}.
  *
  * @template `T` - Type of data emitted by the source.
- * @template R - Type of selected value derived from state, defaulting to `T`.
+ * @template `R` - Type of selected value derived from state, defaulting to `T`.
  */
 export class SubscriberBase<T, R = T> implements Disposable, AsyncDisposable {
   /**

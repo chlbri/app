@@ -175,6 +175,16 @@ export const isSingleOrArrayT = <T extends string[] = string[]>(
   return isTransitionArray(value, ...keys) || isTransitionConfig(value, ...keys);
 };
 
+/**
+ * Type guard variant accepting `undefined` in addition to single or array transitions.
+ *
+ * @template `T` - Keys tuple type.
+ *
+ * @param value - Value to check.
+ * @param keys - Allowed target paths.
+ *
+ * @returns `true` if `undefined` or type {@linkcode SingleOrArrayT}, `false` otherwise.
+ */
 isSingleOrArrayT.orUndefined = <T extends string[] = string[]>(
   value: unknown,
   ...keys: T

@@ -7,7 +7,7 @@ import sync from '@bemedev/boolean-recursive/sync';
  *
  * Includes properties {@linkcode checkValues.undefined} and {@linkcode checkValues.async}.
  *
- * @template T - The type of allowed values, defaults to `any`.
+ * @template `T` - The type of allowed values, defaults to `any`.
  * @param value - The candidate value to check.
  * @param values - Variadic array of allowed candidate values.
  *
@@ -24,7 +24,7 @@ export const checkValues = expandFn(
     /**
      * Type guard function to verify if a value is `undefined` or contained within a list of allowed values.
      *
-     * @template T - The type of allowed values, defaults to `any`.
+     * @template `T` - The type of allowed values, defaults to `any`.
      * @param value - The candidate value to check.
      * @param values - Variadic array of allowed candidate values.
      *
@@ -40,7 +40,7 @@ export const checkValues = expandFn(
      *
      * Includes property {@linkcode checkValues.async.undefined}.
      *
-     * @template T - The type of allowed values, defaults to `any`.
+     * @template `T` - The type of allowed values, defaults to `any`.
      * @param value - The candidate value to check.
      * @param values - Variadic array of allowed candidate values.
      *
@@ -57,7 +57,7 @@ export const checkValues = expandFn(
         /**
          * Asynchronously checks if a value is `undefined` or contained within a list of allowed values.
          *
-         * @template T - The type of allowed values, defaults to `any`.
+         * @template `T` - The type of allowed values, defaults to `any`.
          * @param value - The candidate value to check.
          * @param values - Variadic array of allowed candidate values.
          *

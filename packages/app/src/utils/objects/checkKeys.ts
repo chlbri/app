@@ -5,7 +5,7 @@ export type CheckKeys_F = {
   /**
    * Checks if all keys in object `arg` are present in `keys`.
    *
-   * @template T - Object type extending `object`.
+   * @template `T` - Object type extending `object`.
    * @param arg - Object to check keys against.
    * @param keys - Allowed keys.
    *
@@ -16,7 +16,7 @@ export type CheckKeys_F = {
   /**
    * Performs a strict check verifying both key containment and matching key counts.
    *
-   * @template T - Object type extending `object`.
+   * @template `T` - Object type extending `object`.
    * @param arg - Object to check.
    * @param keys - Required exact keys.
    *
@@ -34,7 +34,7 @@ export type CheckKeys_F = {
  *
  * @returns `true` if all keys are present, `false` otherwise.
  *
- * @see {@linkcode CheckKeys_F}
+ * @see -- type {@linkcode CheckKeys_F}
  */
 export const checkKeys: CheckKeys_F = (arg, ...keys) => {
   const argKeys = Object.keys(arg);

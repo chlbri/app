@@ -22,7 +22,7 @@ import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 
 /**
- * Resolves to type {@linkcode SyncMachine} or type {@linkcode AsyncMachine} depending on the `Sync` type parameter.
+ * Resolves to class {@linkcode SyncMachine} or class {@linkcode AsyncMachine} depending on the `Sync` type parameter.
  *
  * @template | {@linkcode CommonConfig3} `C` - Common configuration type.
  * @template `Pc` - Public context type.
@@ -112,7 +112,7 @@ export type CreateMachineNoName_F = <
 ) => OutMachine<C, _Pc, _Tc, _E, _A, Tags, Eo, string, RegisterOptions, Sync>;
 
 /**
- * Function overload signature for creating a named state machine backed by type {@linkcode Register}.
+ * Function overload signature for creating a named state machine backed by interface {@linkcode Register}.
  *
  * @template `Name` - Registered machine identifier.
  * @template `Current` - Resolved registry entry for `Name`.
@@ -182,7 +182,7 @@ export type CreateMachineNamed_F = <
 /**
  * Combined function signature for creating a state machine (named or unnamed).
  *
- * @see {@linkcode CreateMachineNamed_F}, {@linkcode CreateMachineNoName_F}
+ * @see -- type {@linkcode CreateMachineNamed_F}, -- type {@linkcode CreateMachineNoName_F}
  */
 export type CreateMachine_F = CreateMachineNamed_F & CreateMachineNoName_F;
 

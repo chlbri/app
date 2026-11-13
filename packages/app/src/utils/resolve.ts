@@ -1,10 +1,12 @@
 import { DEFAULT_DELIMITER } from '#constants';
 
 /**
- * Resolves a relative path against a base path, similar to path.resolve but without dependencies
- * @param basePath - The base path to resolve from
- * @param relativePath - The relative path to resolve
- * @returns The resolved absolute path
+ * Resolves a relative path against a base path, similar to `path.resolve` but without dependencies.
+ *
+ * @param basePath - The base path to resolve from.
+ * @param relativePath - The relative path to resolve.
+ *
+ * @returns The resolved absolute path.
  *
  * @example
  * resolve('/parent/child/grandchild/grantchild', '../grandchild')

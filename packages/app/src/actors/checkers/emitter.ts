@@ -46,6 +46,13 @@ export const isFinallyConfig = (value: unknown): value is FinallyConfig => {
   return isFinallyConfig1(value);
 };
 
+/**
+ * Type guard variant accepting `undefined` in addition to completion configurations.
+ *
+ * @param value - Value to check.
+ *
+ * @returns `true` if `undefined` or type {@linkcode FinallyConfig}, `false` otherwise.
+ */
 isFinallyConfig.orUndefined = (
   value: unknown,
 ): value is FinallyConfig | undefined => {

@@ -4,10 +4,10 @@ import type { RecordS } from '~types';
 
 /**
  * Returns a list of all possible events from a flat record of NodeConfig.
- * @param flat of type {@linkcode RecordS}<{@linkcode NodeConfig2}>, a flat record of NodeConfig.
- * @returns An array of event names.
  *
- * @see {@linkcode castings}
+ * @param flat - Flat record of type {@linkcode RecordS}<{@linkcode NodeConfig2}>.
+ *
+ * @returns An array of event names.
  */
 export const possibleEvents = (flat: RecordS<NodeConfig2>) => {
   const events: string[] = [];

@@ -16,7 +16,11 @@ const log10 = (index = 0) => {
  *
  * @param index - Current index number (default 0).
  * @param max - Maximum index number (default 0).
+ *
  * @returns Padded index string.
+ *
+ * @throws `Error` when `index` or `max` is negative.
+ * @throws `Error` when `index` is greater than `max`.
  *
  * @see {@linkcode log10}
  */
@@ -42,6 +46,7 @@ export const buildIndex = (index = 0, max = 0) => {
  * @param invite - Invite description string.
  * @param index - Current test index (default 0).
  * @param max - Maximum index count (default 0).
+ *
  * @returns Formatted test title string.
  *
  * @see {@linkcode buildIndex}

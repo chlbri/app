@@ -5,6 +5,26 @@
 <details>
 <summary>
 
+## **[2.8.2] - 13/11/2026** => _19:22_
+
+</summary>
+
+### Docs
+
+- Complete the JSDoc surface across the factory, contract helpers and vendored
+  machine types: document every template parameter with kind-prefixed `{@linkcode}`
+  constraints, fill missing `@param`/`@returns`/`@throws`, add the missing `Tags`
+  template and document the factory implementation.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.1] - 13/11/2026** => _17:41_
 
 </summary>

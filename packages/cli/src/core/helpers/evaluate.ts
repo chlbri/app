@@ -5,6 +5,9 @@
  * @param sourceFile - The containing source file node.
  *
  * @returns Evaluated literal value, array, or object structure.
+ *
+ * @throws type {@linkcode Error} When the node kind is unsupported or an
+ * identifier cannot be resolved.
  */
 export const evaluateNode = (node: any, sourceFile: any): any => {
   const kind = node.getKindName?.();
@@ -110,6 +113,8 @@ export const evaluateNode = (node: any, sourceFile: any): any => {
  * @param sourceFile - The containing source file node.
  *
  * @returns Evaluated declaration value.
+ *
+ * @throws type {@linkcode Error} When no declaration matches the given name.
  */
 const resolveIdentifier = (name: string, sourceFile: any): any => {
   const parts = name.split('.');

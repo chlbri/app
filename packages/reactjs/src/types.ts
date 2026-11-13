@@ -2,7 +2,8 @@ import type { EventObject, State, PrimitiveObject } from '@bemedev/app';
 import type { Dequal_F } from '@bemedev/app/types';
 
 /**
- * Options for configuring the `useService` hook.
+ * Options for configuring the {@linkcode useState} hook and the `state` helper
+ * returned by {@linkcode useService}.
  *
  * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
  * @template `Ta` - Tag type extending `string`.
@@ -11,6 +12,7 @@ import type { Dequal_F } from '@bemedev/app/types';
  *
  * @property selector - Optional selector function to project the state into a sub-state.
  * @property equals - Optional equality comparator function to compare previous and next selected state.
+ * @property stateEquals - Optional equality comparator function to compare previous and next machine state before selection.
  */
 export type UseStateOptions<
   Tc extends PrimitiveObject,

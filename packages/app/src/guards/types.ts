@@ -332,12 +332,6 @@ type _DefinedValue<
 }>;
 
 /**
- * Represents a type that can be a defined value or a string representing an event or its type
- *
- * @template `Pc` The type of the private context.
- * @template | {@linkcode PrimitiveObject} `Tc` The type of the context.
- */
-/**
  * Represents a type that can be a defined value or a string representing an event or its type.
  *
  * @template `Pc` - Private context type.

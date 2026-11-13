@@ -8,6 +8,33 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.8.2] - 13/11/2026** => _19:22_
+
+</summary>
+
+### Docs
+
+- Complete the JSDoc surface across the runtime, domain and public layers: document
+  every template parameter with its `{@linkcode}` constraint, fill missing
+  `@param`/`@returns`/`@throws`, normalize `type`/`interface`/`class` prefixes in
+  `{@linkcode}` references, consolidate `@see`, and correct inaccurate or dangling
+  links in constants, state, event and transition types.
+- Document interpreter, machine and subscriber class members, including private
+  context fields and the `AnyInterpreter` properties.
+
+### Dependencies
+
+- Bump `glob` to `^14.0.6`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.1] - 12/11/2026** => _16:48_
 
 </summary>

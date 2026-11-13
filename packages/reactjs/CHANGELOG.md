@@ -5,6 +5,28 @@
 <details>
 <summary>
 
+## **[2.8.2] - 13/11/2026** => _19:22_
+
+</summary>
+
+### Docs
+
+- Complete the JSDoc surface: document the `stateEquals` option, fill in
+  `@param options.*` tags and link `useState`/`useService` from the public types.
+
+### Dependencies
+
+- Bump `glob` to `^14.0.6` and `jsdom` to `^31.0.1`.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.1] - 12/11/2026** => _16:48_
 
 </summary>

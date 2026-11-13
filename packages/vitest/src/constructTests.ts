@@ -11,12 +11,11 @@ export { ConstructTests_F };
 /**
  * Constructs test suites and assertion utilities for an interpreter instance.
  *
- * @param vi - Vitest utility instance.
  * @param service - Interpreter service instance (sync or async).
  * @param helper - Optional helper builder callback function.
  * @param startIndex - Starting index for test step numbers (defaults to `0`).
  *
- * @returns Constructed test helpers object.
+ * @returns Constructed test helpers object of type {@linkcode ConstructTestsResult2}.
  *
  * @see -- type {@linkcode ConstructTests_F}, {@linkcode fakeWaiter}, {@linkcode buildIndex}, {@linkcode buildInvite}
  */

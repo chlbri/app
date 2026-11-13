@@ -8,6 +8,8 @@ import type { VitestUtils } from 'vite-plus/test';
  * @param ms - Duration in milliseconds to wait.
  * @param times - Multiplier for duration.
  *
+ * @returns A promise resolved once the computed duration has elapsed.
+ *
  * @see {@linkcode sleep}
  */
 export const fakeWaiter = async (vi: VitestUtils, ms = 0, times = 1) => {

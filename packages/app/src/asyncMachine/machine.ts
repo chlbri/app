@@ -63,9 +63,11 @@ export class AsyncMachine<
 
   /**
    * @deprecated
-   * This property provides the action function for this {@linkcode AsyncMachine} as a type.
+   * This property provides the action function for this class {@linkcode AsyncMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The action function type of the machine.
    */
   get __actionFn() {
     return _unknown<AsyncAction<Eo, Pc, Tc, Ta>>();
@@ -73,9 +75,11 @@ export class AsyncMachine<
 
   /**
    * @deprecated
-   * This property provides the predicate function for this {@linkcode AsyncMachine} as a type.
+   * This property provides the predicate function for this class {@linkcode AsyncMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The async predicate function type of the machine.
    */
   get __predicate() {
     return _unknown<AsyncPredicateS<Eo, Pc, Tc, Ta>>();
@@ -83,9 +87,11 @@ export class AsyncMachine<
 
   /**
    * @deprecated
-   * This property provides the delay function for this {@linkcode AsyncMachine} as a type.
+   * This property provides the delay function for this class {@linkcode AsyncMachine} as a type.
    *
    * @remarks Used for typing purposes only.
+   *
+   * @returns The delay function type of the machine.
    */
   get __delay() {
     return _unknown<AsyncDelayFunction<Eo, Pc, Tc, Ta>>();
@@ -95,6 +101,8 @@ export class AsyncMachine<
 
   /**
    * The public accessor for the flat map representation of the configuration.
+   *
+   * @returns The flat map of state nodes.
    */
   get flat() {
     return this.__flat as FlatMapN<C, true>;

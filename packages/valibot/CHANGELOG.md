@@ -5,6 +5,25 @@
 <details>
 <summary>
 
+## **[2.8.2] - 13/11/2026** => _19:22_
+
+</summary>
+
+### Docs
+
+- Complete the JSDoc surface: document `@throws class {@linkcode v.ValiError}`,
+  remove duplicated `@see` tags and correct the `primitiveObject` description for
+  nested arrays and maps.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.1] - 12/11/2026** => _16:48_
 
 </summary>

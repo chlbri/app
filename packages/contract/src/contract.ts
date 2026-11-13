@@ -1,5 +1,19 @@
 import type { CreateContract_F } from './contract.types';
 
+/**
+ * Runtime implementation shared by the named and unnamed contract forms.
+ *
+ * The first argument is a string when the contract is registered, in which case
+ * the next two arguments are the config and the schemas; otherwise the first
+ * argument is the config and the second one the schemas.
+ *
+ * @param nameOrConfig - Contract name (named form) or machine JSON config (unnamed form).
+ * @param configOrTypes - Machine JSON config (named form) or type schemas (unnamed form).
+ * @param maybeTypes - Optional type schemas (named form only).
+ *
+ * @returns A frozen object holding {@linkcode Contract.config} and
+ * {@linkcode Contract.types}.
+ */
 const createContractImpl = (
   nameOrConfig: any,
   configOrTypes?: any,

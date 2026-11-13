@@ -19,16 +19,16 @@ import type { Contract, StatePaths } from './types';
  * The arguments intentionally match the unnamed overload of `createMachine`
  * from `@bemedev/app`: a JSON config and optional type schemas.
  *
- * @template `Config` - Machine configuration type.
- * @template `Pc` - Private context output type schema.
- * @template `Tc` - Public context output type schema.
- * @template `E` - Events output type schema.
- * @template `A` - Actors output type schema.
- * @template `_E` - Inferred events map type.
- * @template `_A` - Inferred actors map type.
- * @template `_Pc` - Inferred private context type.
- * @template `_Tc` - Inferred public context type.
- * @template `Eo` - Resulting event object type.
+ * @template | {@linkcode CommonConfig2} `Config` - Machine configuration type.
+ * @template | {@linkcode StandardOutput} `Pc` - Private context output type schema.
+ * @template | {@linkcode StandardOutput} `Tc` - Public context output type schema.
+ * @template | {@linkcode StandardOutput} `E` - Events output type schema.
+ * @template | {@linkcode StandardOutput} `A` - Actors output type schema.
+ * @template | {@linkcode inferT} `_E` - Inferred events map type.
+ * @template | {@linkcode inferT} `_A` - Inferred actors map type.
+ * @template | {@linkcode inferT} `_Pc` - Inferred private context type.
+ * @template | {@linkcode inferT} `_Tc` - Inferred public context type.
+ * @template | {@linkcode EventObject} `Eo` - Resulting event object type.
  * @template `Sync` - Sync execution flag.
  *
  * @param config - The machine configuration object.
@@ -68,7 +68,7 @@ export type CreateContractNoName_F = <
 >;
 
 /**
- * Function signature for creating a named contract backed by type
+ * Function signature for creating a named contract backed by interface
  * {@linkcode Register}.
  *
  * The registered entry drives the typing surface: its `paths.all` union is the
@@ -77,18 +77,19 @@ export type CreateContractNoName_F = <
  * returned type {@linkcode MachineOptions}. Names missing from type
  * {@linkcode Register} resolve from the config instead.
  *
- * @template `Name` - Registered contract identifier.
- * @template `Current` - Resolved registry entry for `Name`.
- * @template `Config` - Machine configuration type.
- * @template `Pc` - Private context output type schema.
- * @template `Tc` - Public context output type schema.
- * @template `E` - Events output type schema.
- * @template `A` - Actors output type schema.
- * @template `_E` - Inferred events map type.
- * @template `_A` - Inferred actors map type.
- * @template `_Pc` - Inferred private context type.
- * @template `_Tc` - Inferred public context type.
- * @template `Eo` - Resulting event object type.
+ * @template | {@linkcode Register} `Name` - Registered contract identifier.
+ * @template | {@linkcode Register} `Current` - Resolved registry entry for `Name`.
+ * @template | {@linkcode CommonConfig2} `Config` - Machine configuration type.
+ * @template | {@linkcode StandardOutput} `Pc` - Private context output type schema.
+ * @template | {@linkcode StandardOutput} `Tc` - Public context output type schema.
+ * @template | {@linkcode StandardOutput} `E` - Events output type schema.
+ * @template | {@linkcode StandardOutput} `A` - Actors output type schema.
+ * @template | {@linkcode inferT} `_E` - Inferred events map type.
+ * @template | {@linkcode inferT} `_A` - Inferred actors map type.
+ * @template | {@linkcode inferT} `_Pc` - Inferred private context type.
+ * @template | {@linkcode inferT} `_Tc` - Inferred public context type.
+ * @template | {@linkcode EventObject} `Eo` - Resulting event object type.
+ * @template `Tags` - Tag union declared by the registered options.
  * @template `Sync` - Sync execution flag.
  *
  * @param _ - Registered contract name string.

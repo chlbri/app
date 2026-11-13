@@ -5,6 +5,37 @@
 <details>
 <summary>
 
+## **[2.8.2] - 13/11/2026** => _19:22_
+
+</summary>
+
+### Features
+
+- **Contract Generation**: Add `--contract` to `app generate` and `app watch` to emit
+  `app.contract.gen.ts` from `*.contract.ts` files and register contracts in
+  `@bemedev/app-contract`'s `Register` interface. Machine and contract passes stay
+  exclusive.
+- **Contract Discovery**: Recognize `createContract` next to `createMachine` in the
+  extraction pipeline, add `*.contract.ts` to the watcher globs, and scaffold a
+  ready-to-edit contract when an empty contract file is created.
+- **Constants**: Add `CONTRACT_OUTPUT`, `CONTRACT_GLOB`, `CONTRACT_LIB` and
+  `CONTRACT_SUFFIX`.
+
+### Docs
+
+- Complete the JSDoc surface: document every template parameter, add missing
+  `@param`/`@returns`/`@throws`, fix `{@linkcode}` kind prefixes, consolidate `@see`
+  and correct inaccurate option and watcher documentation.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.1] - 12/11/2026** => _16:48_
 
 </summary>

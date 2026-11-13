@@ -31,8 +31,6 @@ export type Output<T extends ReadonlyArray<string>> = T extends []
  * @param paths - Target path string literals array.
  *
  * @returns Valibot target schema of type {@linkcode Output}.
- *
- * @see type {@linkcode Output}
  */
 export const TargetSchema = <T extends ReadonlyArray<string>>(
   paths: T,

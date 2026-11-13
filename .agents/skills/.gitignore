@@ -1,0 +1,10 @@
+# pnpm
+/devtools-vite-plugin
+/migrate-from-nextjs
+/migrate-from-react-router
+/react-router
+/react-start
+/router-query
+/solid-router
+/solid-start
+# pnpm end

@@ -9,8 +9,6 @@ import * as v from 'valibot';
  * @param schema - Element schema to wrap.
  *
  * @returns Valibot schema validating a single value or non-empty array of type {@linkcode SingleOrArrayL}.
- *
- * @see -- type {@linkcode SingleOrArrayL}
  */
 export const SoaLSchema = <T extends v.BaseSchema<any, any, v.BaseIssue<unknown>>>(
   schema: T,
