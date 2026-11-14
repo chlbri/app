@@ -9,14 +9,18 @@ declare module '@bemedev/app-contract' {
     auth: {
       paths: {
         map: {
-          targets: '/idle' | '/authenticated';
+          targets: '/idle' | '/authenticated' | '/authenticated/loading';
           initial: 'idle';
           states: {
-            authenticated: { targets: '/' | '/idle' };
-            idle: { targets: '/' | '/authenticated' };
+            authenticated: {
+              targets: '/' | '/idle' | '/authenticated/loading';
+              initial: 'loading';
+              states: { loading: { targets: '/' | '/idle' | '/authenticated' } };
+            };
+            idle: { targets: '/' | '/authenticated' | '/authenticated/loading' };
           };
         };
-        all: '/' | '/idle' | '/authenticated';
+        all: '/' | '/idle' | '/authenticated' | '/authenticated/loading';
       };
       events: 'LOGIN';
       options: {
@@ -27,7 +31,7 @@ declare module '@bemedev/app-contract' {
         delays: never;
         guards: never;
       };
-      pContext: { token: string };
+      pContext: any;
     };
   }
 }

@@ -2,8 +2,8 @@ import { GUARD_TYPE } from '#constants';
 import type { EventObject } from '#events';
 import type { GuardConfig } from '#guards';
 import type { StateExtended } from '#states';
-import { reduceFnMap } from '#utils';
-import { expandFn, isDefined } from '@bemedev/app-utils-bemedev';
+import { reduceFnMap } from '@bemedev/app-options/internal';
+import { expandFn, isDefined } from '@bemedev/app-options/bemedev';
 import recursive, {
   type AsyncGuardDefUnion,
   type GuardDefUnion,

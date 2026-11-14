@@ -1,6 +1,6 @@
 import { interpret } from '@bemedev/app';
 import { notU } from '@bemedev/app/utils';
-import { tupleOf } from '@bemedev/app-utils-bemedev';
+import { tupleOf } from '@bemedev/app/bemedev';
 import _raw_machine from './perform.bis.machine';
 
 vi.useFakeTimers();

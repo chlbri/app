@@ -62,6 +62,7 @@ export type CreateContractNoName_F = <
     context: _Tc;
     pContext: _Pc;
     paths: StatePaths<Config>;
+    tags: string;
     sync: Sync;
   },
   ContractSimpleMachineOptions<Sync, _Pc, _Tc, string, Eo>
@@ -137,6 +138,7 @@ export type CreateContractNamed_F = <
     paths: string extends Current['paths']['all']
       ? StatePaths<Config>
       : Current['paths']['all'];
+    tags: Tags;
     sync: Sync;
   },
   ContractMachineOptions<Sync, _Pc, _Tc, Tags, Eo, Current['options']>

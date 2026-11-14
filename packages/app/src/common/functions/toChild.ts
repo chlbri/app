@@ -1,7 +1,7 @@
 import type { CommonChild, SimpleMachineOptions2 } from '#common/machine';
 import type { EventObject } from '#events';
 import { toTransition } from '#transitions';
-import { _any, identify } from '@bemedev/app-utils-bemedev';
+import { _any, identify } from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { ChildConfig } from '../../actors/types';
 import { toChildSrc } from './toChildSrc';

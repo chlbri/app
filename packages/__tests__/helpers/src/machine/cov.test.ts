@@ -1,4 +1,4 @@
-import { tupleOf } from '@bemedev/app-utils-bemedev';
+import { tupleOf } from '@bemedev/app/bemedev';
 import {
   _machine2,
   DELAY,
@@ -9,7 +9,9 @@ import { deepEqual, interpret } from '@bemedev/app';
 import { AsyncMachine } from '@bemedev/app';
 
 import { constructTests } from '@bemedev/app-vitest';
-import { nothing, reduceDescriber } from '@bemedev/app/utils';
+import { reduceDescriber } from '@bemedev/app/utils';
+import { nothing } from '@bemedev/app-options/internal';
+
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
 import path from 'path';
 import _machine1 from './cov.1.machine';

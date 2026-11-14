@@ -1,19 +1,4 @@
-import type { RecordS } from './internal';
-
-/**
- * Registry target definition describing every declared state path.
- *
- * It mirrors the CLI-generated `paths.map` tree: each node exposes its resolved
- * absolute path and, when compound, its initial child and nested nodes.
- */
-export type TargetDef = {
-  /** Resolved absolute path of the node. */
-  readonly targets: string;
-  /** Initial child key when the node is compound. */
-  readonly initial?: string;
-  /** Nested target definitions keyed by child state key. */
-  readonly states?: RecordS<TargetDef>;
-};
+import type { TargetDef } from './internal/machine';
 
 /**
  * Map of option categories to string identifiers for registry options.

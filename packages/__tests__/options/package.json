@@ -1,0 +1,26 @@
+{
+  "name": "options",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "test": "vp test run",
+    "test:only": "vp test run",
+    "_ci": "vp run test",
+    "generate": "app-cli generate -c ./src --contract && vp fmt ./src/app.contract.gen.ts",
+    "generate:watch": "app-cli watch -c ./src --contract",
+    "pretest": "vp run generate:lib"
+  },
+  "devDependencies": {
+    "@bemedev/app": "workspace:^",
+    "@bemedev/app-cli": "workspace:^",
+    "@bemedev/app-contract": "workspace:^",
+    "@bemedev/app-options": "workspace:^",
+    "@bemedev/dev-utils": "^1.5.2",
+    "@bemedev/typings": "^1.5.0",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "7.0.2",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  }
+}

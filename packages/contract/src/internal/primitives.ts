@@ -105,4 +105,4 @@ export type Unionize<T extends Record<string, any>> = {
  * @template `T` - Source type.
  * @template `K` - Keys to require.
  */
-export type Require<T, K extends keyof T> = T & Required<Pick<T, K>>;
+export type Require<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;

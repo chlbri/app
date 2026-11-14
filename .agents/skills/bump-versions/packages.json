@@ -2,6 +2,7 @@
   "packages": [
     "packages/app",
     "packages/contract",
+    "packages/options",
     "packages/cli",
     "packages/reactjs",
     "packages/solidjs",

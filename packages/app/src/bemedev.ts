@@ -1,4 +1,4 @@
-export * from '@bemedev/app-utils-bemedev';
+export * from '@bemedev/app-options/bemedev';
 export { sleep } from '@bemedev/sleep';
 export * from '@bemedev/scheduler';
 export { type, pretype } from '@bemedev/typings';

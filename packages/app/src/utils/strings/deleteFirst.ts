@@ -1,4 +1,4 @@
-import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { Fn } from '@bemedev/app-options/bemedev';
 import { DEFAULT_DELIMITER } from '#constants';
 
 /**

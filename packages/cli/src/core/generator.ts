@@ -117,17 +117,16 @@ export const generator = async (options: {
     absolute: true,
   });
 
+  const typeM = options.contract ? 'contract' : 'machine';
+
   if (files.length === 0) {
     if (existsSync(outputPath)) {
       unlinkSync(outputPath);
       console.log(
-        `[app] Removed ${relative(cwd, outputPath)} because no ${options.contract ? 'contract' : 'machine'} files were found.`,
+        `[app] Removed ${relative(cwd, outputPath)} because no ${typeM} files were found.`,
       );
-    } else {
-      console.log(
-        `[app] No ${options.contract ? 'contract' : 'machine'} files found.`,
-      );
-    }
+    } else console.log(`[app] No ${typeM} files found.`);
+
     return;
   }
 
@@ -137,16 +136,18 @@ export const generator = async (options: {
     skipAddingFilesFromTsConfig: true,
   });
 
-  for (const f of files) {
-    project.addSourceFileAtPath(f);
-  }
+  /**
+   * Files can be removed between discovery and parsing (watch mode deletions,
+   * git checkouts), so only keep the ones ts-morph could actually read.
+   */
+  const sources = files.filter(f => project.addSourceFileAtPathIfExists(f));
 
   const entries: string[] = [];
   const names = new Set<string>();
 
   // #region TS morph work
   /* v8 ignore start -- @preserve */
-  for (const f of files.sort()) {
+  for (const f of sources.sort()) {
     const info = extractMachineInfo(f, project);
     if (!info) {
       console.warn(`[app] Skipping: ${relative(cwd, f)}`);

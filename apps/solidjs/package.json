@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "vp run --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-solidjs pretest",
+    "_prebuild": "vp run --filter @bemedev/app-utils-bemedev --filter @bemedev/app-contract --filter @bemedev/app-options --filter @bemedev/app pretest",
+    "prebuild": "vp run _prebuild && vp run --filter @bemedev/app-solidjs pretest",
     "dev": "vp dev",
     "_build": "vp build",
     "build": "vp build",
@@ -26,7 +27,7 @@
     "@tanstack/solid-router": "1.170.43",
     "@tanstack/solid-start": "1.169.5",
     "clsx": "^2.1.1",
-    "lucide-solid": "^1.72.0",
+    "lucide-solid": "^1.73.0",
     "nitro": "3.0.261103-rc",
     "solid-js": "^1.9.19",
     "tailwind-merge": "^3.7.0",

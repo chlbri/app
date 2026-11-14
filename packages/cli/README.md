@@ -134,10 +134,11 @@ npx app-cli watch --contract
 ## Programmatic API
 
 In addition to CLI commands, `@bemedev/app-cli` exports AST parser utilities for
-programmatic integration:
+programmatic integration, plus the `cli` definition itself for embedding the commands
+in another `cmd-ts` program:
 
 ```typescript
-import { parseTree } from '@bemedev/app-cli';
+import { cli, parseTree } from '@bemedev/app-cli';
 import type { ParseTree_F, ConfigPaths, ParseTreeContext } from '@bemedev/app-cli';
 
 // Extract state paths, targets, and structure from machine config AST nodes

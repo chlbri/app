@@ -1,6 +1,7 @@
 packages:
   - 'packages/app'
   - 'packages/contract'
+  - 'packages/options'
   - 'packages/valibot'
   - 'packages/vitest'
   - 'packages/__tests__/*'

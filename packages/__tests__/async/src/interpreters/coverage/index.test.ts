@@ -1,4 +1,4 @@
-import { tupleOf } from '@bemedev/app-utils-bemedev';
+import { tupleOf } from '@bemedev/app/bemedev';
 import { interpret } from '@bemedev/app';
 import _raw_machine from './index.machine';
 

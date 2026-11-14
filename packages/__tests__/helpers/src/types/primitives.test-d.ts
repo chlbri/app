@@ -1,4 +1,4 @@
-import type { Fn, UnionToTuple } from '@bemedev/app-utils-bemedev';
+import type { Fn, UnionToTuple } from '@bemedev/app/bemedev';
 import type {
   ChangeProperties,
   KeyStrings,

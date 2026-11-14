@@ -1,4 +1,4 @@
-import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { Fn } from '@bemedev/app-options/bemedev';
 import type { NodeConfig2, StateType } from '../types';
 
 /**

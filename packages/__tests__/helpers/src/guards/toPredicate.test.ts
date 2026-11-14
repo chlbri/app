@@ -1,4 +1,4 @@
-import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { Fn } from '@bemedev/app/bemedev';
 import { toPredicate, _toPredicate } from '@bemedev/app/guards';
 import { sleep } from '@bemedev/sleep';
 

@@ -1,5 +1,5 @@
 import { flatMap, type NodeConfig2 } from '#states';
-import { toArray } from '@bemedev/app-utils-bemedev';
+import { toArray } from '@bemedev/app-options/bemedev';
 
 /**
  * Retrieves all unique tag strings declared across a state node and its children.

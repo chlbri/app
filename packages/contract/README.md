@@ -78,8 +78,9 @@ The returned object is frozen and has the shape `{ config, types }`. It does not
 expose any machine runtime, option implementation, or interpreter.
 
 A contract type carries three things: the `config`, the inferred `types` (`events`,
-`eventMap`, `actorsMap`, `context`, `pContext`, `paths`, `sync`) and the type-only
-`options` surface returned by `createOptions` (nothing is emitted at runtime).
+`eventMap`, `actorsMap`, `context`, `pContext`, `tags`, `paths`, `sync`) and the
+type-only `options` surface returned by `createOptions` (nothing is emitted at
+runtime).
 
 The options surface follows the `sync` flag:
 
@@ -93,17 +94,43 @@ Named contracts narrow the option keys with the `Register` entry (`actions`,
 
 ### Using a contract from a machine
 
-The `config` and `types` properties can be passed directly to `createMachine`:
+A contract can be passed directly to `createMachine`:
 
 ```typescript
 import { createMachine } from '@bemedev/app';
 import { authContract } from './auth.contract';
 
+export const authMachine = createMachine(authContract).createOptions(
+  ({ action }) => ({ actions: { login: action(() => {}) } }),
+);
+```
+
+The explicit form is still supported, and is useful when the machine is registered
+under a name:
+
+```typescript
 export const authMachine = createMachine(
   'auth',
   authContract.config,
   authContract.types,
 ).createOptions(({ action }) => ({ actions: { login: action(() => {}) } }));
+```
+
+Contract-driven options are built without a machine instance, using `createOptions`
+from `@bemedev/app-options`, then attached to the machine:
+
+```typescript
+import { createMachine } from '@bemedev/app';
+import { createOptions } from '@bemedev/app-options';
+
+const options = createOptions(authContract)(({ assign }) => ({
+  actions: {
+    increment: assign('context.count', ({ context }) => context.count + 1),
+  },
+}));
+
+const authMachine = createMachine(authContract);
+authMachine.addOptions(() => options);
 ```
 
 ---
@@ -165,6 +192,7 @@ contract types on change.
 | `ContractActorsMap`         | Type | Raw actors map.                                                   |
 | `ContractContext`           | Type | Public context.                                                   |
 | `ContractPContext`          | Type | Private context.                                                  |
+| `ContractTags`              | Type | Union of tags declared by the contract.                           |
 | `ContractPaths`             | Type | Union of state paths.                                             |
 | `ContractSync`              | Type | Sync execution flag.                                              |
 

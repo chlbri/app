@@ -5,7 +5,7 @@ import {
   DEFAULT_MIN_ACTIVITY_TIME,
   TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
-import { _any } from '@bemedev/app-utils-bemedev';
+import { _any } from '@bemedev/app-options/bemedev';
 
 import {
   AFTER_EVENT,
@@ -20,7 +20,7 @@ import {
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
-import { isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
+import { isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
 import {
   anyPromises,
   withTimeout,
@@ -538,7 +538,7 @@ export class AsyncInterpreter<
 
     if (response) {
       await this.__performActions(from, ...toArray.typed(diffExits));
-      await this.__performActions(from, ...toArray.typed(actions));
+      await this.__performActions(from, ...toArray<WithDescriber>(actions));
       await this.__performActions(from, ...toArray.typed(diffEntries));
       return target ?? false;
     }

@@ -8,7 +8,7 @@ type Literal = v.LiteralSchema<string | number | boolean, any>;
 /**
  * Type alias for a read-only array of literal schemas.
  *
- * @see type {@linkcode Literal}
+ * @see -- type {@linkcode Literal}
  */
 type RL = ReadonlyArray<Literal>;
 

@@ -9,7 +9,7 @@ import {
   type EventsMap,
   type ExtractSender,
 } from '#events';
-import { _any } from '@bemedev/app-utils-bemedev';
+import { _any } from '@bemedev/app-options/bemedev';
 
 import { toAction, type WithDescriber } from '#actions';
 import type { ChildConfig, EmitterConfig } from '#actor';
@@ -44,8 +44,8 @@ import {
   reduceDescriber,
   replaceAll,
 } from '#utils';
-import type { AllowedNames } from '@bemedev/app-utils-bemedev';
-import { isDefined, isPrimitive, toArray } from '@bemedev/app-utils-bemedev';
+import type { AllowedNames } from '@bemedev/app-options/bemedev';
+import { isDefined, isPrimitive, toArray } from '@bemedev/app-options/bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { createInterval, type Interval2 } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';

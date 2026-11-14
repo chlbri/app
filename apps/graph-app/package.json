@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "vp run --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-reactjs pretest",
+    "_prebuild": "vp run --filter @bemedev/app-utils-bemedev --filter @bemedev/app-contract --filter @bemedev/app-options --filter @bemedev/app pretest",
+    "prebuild": "vp run _prebuild && vp run --filter @bemedev/app-reactjs pretest",
     "dev": "vp dev",
     "generate-routes": "tsr generate",
     "app:types": "app-cli generate -c ./src/services",
@@ -23,7 +24,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cn": "^0.5.2",
-    "lucide-react": "^1.72.0",
+    "lucide-react": "^1.73.0",
     "nitro": "3.0.261103-rc",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

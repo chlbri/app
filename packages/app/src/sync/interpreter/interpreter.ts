@@ -35,7 +35,7 @@ import type {
   DelayedTransitions,
   TransitionConfig,
 } from '#transitions';
-import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
+import { _any, isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
 import { createInterval } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
@@ -298,7 +298,7 @@ export class SyncInterpreter<
 
     if (response) {
       this.__performActions(...toArray.typed(diffExits));
-      this.__performActions(...toArray.typed(actions));
+      this.__performActions(...toArray<WithDescriber>(actions));
       this.__performActions(...toArray.typed(diffEntries));
       return target ?? false;
     }

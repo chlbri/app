@@ -1,4 +1,4 @@
-import { partialCall } from '@bemedev/app-utils-bemedev';
+import { partialCall } from '@bemedev/app-options/bemedev';
 import type { SoA } from '@bemedev/typings';
 
 /**

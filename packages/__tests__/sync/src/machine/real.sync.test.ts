@@ -1,7 +1,7 @@
 import { interpret } from '@bemedev/app';
 import { constructTests } from '@bemedev/app-vitest';
 import { type StateValue } from '@bemedev/app/states';
-import { tupleOf } from '@bemedev/app-utils-bemedev';
+import { tupleOf } from '@bemedev/app/bemedev';
 import _machine1 from './real.1.machine';
 import _machine2 from './real.2.machine';
 import _mainMachine3 from './real.3.sync.machine';

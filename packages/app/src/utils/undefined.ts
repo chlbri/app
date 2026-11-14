@@ -1,4 +1,4 @@
-import type { NotUndefined } from '@bemedev/app-utils-bemedev';
+import type { NotUndefined } from '@bemedev/app-options/bemedev';
 
 /**
  * Casts a value of type `T` to type `NotUndefined<T>`.

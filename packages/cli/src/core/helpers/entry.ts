@@ -76,7 +76,7 @@ const configPathsToType = (cp: ConfigPaths, indent = 0): string => {
  * @param pContextType - Serialized protected context type string.
  *
  * @returns Formatted `Register` interface entry string.
- * @see type {@linkcode Register}
+ * @see -- type {@linkcode Register}
  */
 export const emitRegisterEntry = (
   name: string,

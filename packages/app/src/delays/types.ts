@@ -1,6 +1,13 @@
 import type { EventObject } from '#events';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { FnMap, FnR } from '~types';
+import type { FnMap } from '~types';
+
+export type {
+  AsyncDelayFunction2,
+  AsyncDelayFunction3,
+  SyncDelayFunction2,
+  SyncDelayFunction3,
+} from '@bemedev/app-options';
 
 /**
  * Delay type definition.
@@ -34,66 +41,6 @@ export type SyncDelayFunction<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = number | FnMap<E, Pc, Tc, T, number>;
-
-/**
- * Async delay function type resolver.
- *
- * @template | {@linkcode EventObject} `E` - Events map.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - Event string type.
- */
-export type AsyncDelayFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = number | AsyncDelayFunction3<E, Pc, Tc, T>;
-
-/**
- * Sync delay function type resolver.
- *
- * @template | {@linkcode EventObject} `E` - Events map.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - Event string type.
- */
-export type SyncDelayFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = number | SyncDelayFunction3<E, Pc, Tc, T>;
-
-/**
- * Async delay function execution handler.
- *
- * @template | {@linkcode EventObject} `E` - Events map.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - Event string type.
- */
-export type AsyncDelayFunction3<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, number>;
-
-/**
- * Sync delay function execution handler.
- *
- * @template | {@linkcode EventObject} `E` - Events map.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - Event string type.
- */
-export type SyncDelayFunction3<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, number>;
 
 /**
  * Delay configuration map.

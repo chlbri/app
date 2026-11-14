@@ -1,4 +1,4 @@
-import type { NoExtraKeys, SoA } from '@bemedev/app-utils-bemedev';
+import type { NoExtraKeys, SoA } from '@bemedev/app-options/bemedev';
 import type { NotReadonly, SingleOrArrayL2 } from './primitives';
 
 /**

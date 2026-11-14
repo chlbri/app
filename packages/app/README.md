@@ -532,6 +532,17 @@ const options = machine.createOptions(({
 }));
 ```
 
+> A machine can be created directly from a contract: `createMachine(contract)`. The
+> same options surface is also available without a machine instance through
+> `createOptions` from [`@bemedev/app-options`](../options):
+> `createOptions(contract)(helper)`. Attach them with
+> `machine.addOptions(() => options)`.
+>
+> `@bemedev/app` depends only on `@bemedev/app-options`. Every contract and option
+> type is re-exported from `@bemedev/app/contract` (contracts) and
+> `@bemedev/app/options` (options), which re-export `@bemedev/app-contract` and
+> `@bemedev/app-options` respectively.
+
 ### 5.1 assign
 
 Updates context values using decomposed dot-notation paths. Supports single-key

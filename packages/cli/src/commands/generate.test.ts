@@ -1,4 +1,5 @@
 import { run } from 'cmd-ts';
+import fg from 'fast-glob';
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -64,5 +65,29 @@ describe('#01 => generate', () => {
     await run(generate, ['-c', dir, '--contract']);
 
     expect(existsSync(join(dir, 'app.contract.gen.ts'))).toBe(true);
+  });
+});
+
+describe('#02 => stale discovery', () => {
+  test('#01 => skips files removed between discovery and parsing', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'app-cli-stale-'));
+    const kept = join(dir, 'kept.machine.ts');
+    const ghost = join(dir, 'ghost.machine.ts');
+    writeFileSync(kept, MACHINE_CONTENT);
+
+    /** Simulates a file deleted after `fast-glob` listed it (watch mode) */
+    const glob = vi.spyOn(fg, 'async');
+    glob.mockResolvedValueOnce([kept, ghost]);
+
+    try {
+      const result = await run(generate, ['-c', dir, '--dry-run']);
+      const content = (result as string[]).join('\n');
+
+      expect(content).toContain("'sample-machine'");
+      expect(content).not.toContain("'ghost'");
+    } finally {
+      glob.mockRestore();
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

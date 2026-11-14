@@ -3,6 +3,8 @@ import type { Fn } from '~types';
 import { interpretSync } from '../sync/interpreter';
 import type { CreateInterpreter_F } from './types.types';
 
+export type { CreateInterpreter_F, OutInterpreter } from './types.types';
+
 /**
  * Creates and starts an interpreter instance for a given machine (sync or async).
  *

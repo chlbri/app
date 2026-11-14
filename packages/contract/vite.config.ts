@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => ({
     bail: 100,
     maxConcurrency: 100,
     environment: 'node',
+    passWithNoTests: true,
     testTimeout: 30000,
     env: { NODE_ENV: 'test' },
     globals: true,

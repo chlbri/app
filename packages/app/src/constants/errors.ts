@@ -1,4 +1,4 @@
-import type { UnionToIntersection } from '@bemedev/app-utils-bemedev';
+import type { UnionToIntersection } from '@bemedev/app-options/bemedev';
 import type { STR } from './types';
 
 /** Action error descriptor mapping. */

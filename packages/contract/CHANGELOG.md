@@ -5,6 +5,36 @@
 <details>
 <summary>
 
+## **[2.8.3] - 14/11/2026** => _19:44_
+
+</summary>
+
+### Features
+
+- **Contract Tags**: Add `tags` to the contract types and expose the
+  `ContractTags<C>` helper to extract the union of tags declared by a contract.
+
+### Refactor
+
+- **Vendored Types**: Consolidate the machine configuration types in
+  `internal/machine.ts` and reuse a single `TargetDef` definition for the registry.
+
+### Docs
+
+- Document the contract-driven options workflow and the `tags` type in the README.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.8.3 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.2] - 13/11/2026** => _19:22_
 
 </summary>

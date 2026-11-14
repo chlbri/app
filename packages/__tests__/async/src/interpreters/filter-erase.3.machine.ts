@@ -20,7 +20,6 @@ export default createMachine(
   },
   {
     context: type({ scores }),
-
     eventsMap: type({ SET_SCORES: { scores }, FILTER_HIGH_SCORES: 'never' }),
   },
 );

@@ -268,12 +268,105 @@ export type NodeConfig2<Paths extends string = string> = CommonNodeConfig<Paths>
       }
   );
 
+/** State node type categories: atomic, compound, or parallel. */
+export type StateType = 'atomic' | 'compound' | 'parallel';
+
+/**
+ * Loose node configuration allowing every node property to be optional.
+ *
+ * @template `Paths` - Allowed target paths.
+ */
+export type NodeConfig3<Paths extends string = string> = CommonNodeConfig<Paths> & {
+  readonly type?: StateType;
+  readonly initial?: string;
+  readonly states?: RecordS<NodeConfig3<Paths>>;
+};
+
+/**
+ * Target definition hierarchy map.
+ */
+export type TargetDef = {
+  readonly targets: string;
+  readonly initial?: string;
+  readonly states?: RecordS<TargetDef>;
+};
+
+/**
+ * Node configuration mapped to a target definition type.
+ *
+ * @template `T` - Target definition type.
+ */
+export type NodeConfig<T extends TargetDef> = CommonNodeConfig<T['targets']> &
+  (undefined extends T['states']
+    ? { readonly type?: 'atomic'; readonly initial?: never; readonly states?: never }
+    : {
+        readonly states: {
+          [key in keyof T['states']]: T['states'][key] extends infer TK extends
+            TargetDef
+            ? NodeConfig<TK>
+            : CommonNodeConfig & {
+                readonly type?: 'atomic';
+                readonly initial?: never;
+                readonly states?: never;
+              };
+        };
+      } & (undefined extends T['initial']
+        ? { readonly type: 'parallel'; readonly initial?: never }
+        : Pick<T, 'initial'> & { type?: 'compound' }));
+
+/** Atomic node configuration. */
+export type NodeConfigAtomic2<Paths extends string = string> =
+  CommonNodeConfig<Paths> & {
+    readonly type?: 'atomic';
+    readonly initial?: never;
+    readonly states?: never;
+  };
+
+/** Compound node configuration. */
+export type NodeConfigCompound2<Paths extends string = string> =
+  CommonNodeConfig<Paths> & {
+    readonly type?: 'compound';
+    readonly initial: string;
+    readonly states: RecordS<NodeConfig2<Paths>>;
+  };
+
+/** Parallel node configuration. */
+export type NodeConfigParallel2<Paths extends string = string> =
+  CommonNodeConfig<Paths> & {
+    readonly type: 'parallel';
+    readonly initial?: never;
+    readonly states: RecordS<NodeConfig2<Paths>>;
+  };
+
+/** Union of non-atomic node configurations (compound or parallel). */
+export type CommonConfigNode = NodeConfigCompound2 | NodeConfigParallel2;
+
+/**
+ * Machine configuration with strict and longRuns flags.
+ *
+ * @template `Paths` - Target definition type.
+ */
+export type CommonConfig<Paths extends TargetDef = TargetDef> = NodeConfig<Paths> & {
+  readonly strict?: boolean;
+  readonly __longRuns?: boolean;
+};
+
 /**
  * Machine configuration with strict and longRuns flags.
  *
  * @template `Paths` - Allowed target paths.
  */
 export type CommonConfig2<Paths extends string = string> = NodeConfig2<Paths> & {
+  readonly strict?: boolean;
+  readonly __longRuns?: boolean;
+};
+
+/**
+ * Loose machine configuration with strict and longRuns flags.
+ *
+ * @template `Paths` - Allowed target paths.
+ */
+export type CommonConfig3<Paths extends string = string> = NodeConfig3<Paths> & {
   readonly strict?: boolean;
   readonly __longRuns?: boolean;
 };

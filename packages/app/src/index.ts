@@ -16,4 +16,4 @@ export {
   toArray,
   trueO,
   tupleOf,
-} from './bemedev';
+} from '@bemedev/app-options/bemedev';

@@ -8,6 +8,51 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[2.8.3] - 14/11/2026** => _19:44_
+
+</summary>
+
+### Breaking Changes
+
+- **Removed Exports**: Drop the `isDefined` and `value` guard helpers along with
+  their `IsDefinedS_F` and `IsValueS_F` types, the `CheckKeys_F` and `reduceFnMap`
+  utility types, and `nothing` from `@bemedev/app/utils`. Import those runtime
+  helpers from `@bemedev/app-options/internal` instead.
+
+### Features
+
+- **Contract Entry Points**: Add the `@bemedev/app/options` and
+  `@bemedev/app/contract` subpath exports, re-exporting `@bemedev/app-options` and
+  `@bemedev/app-contract`. `createMachine` accepts a contract directly and forwards
+  its `config` and `types` to the machine builder.
+
+### Docs
+
+- Document `Merge2_F` and its `multiple` property, the `getIO` parameters and the
+  `getEntries`/`getExits` returns, and the `__firstTime` constructor parameter.
+- Correct the `SubscriberBase` parent-class list, the `@bemedev/app/contract`
+  description and the dangling `Action`/`DelayFunction` references in the async
+  machine types.
+
+### Refactor
+
+- **Shared Option Types**: Source the transition, guard, action, actor, state and
+  machine configuration types from `@bemedev/app-options`, and re-export
+  `isTransitionConfig`, `isTransitionArray`, `isSingleOrArrayT`, `isOn`,
+  `checkAction`, `checkActions` and `checkValues` from its internal entry instead of
+  duplicating them.
+
+### Dependencies
+
+- Replace `@bemedev/app-utils-bemedev` with `@bemedev/app-options`.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.2] - 13/11/2026** => _19:22_
 
 </summary>

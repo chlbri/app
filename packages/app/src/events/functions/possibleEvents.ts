@@ -1,5 +1,5 @@
 import type { NodeConfig2 } from '#states';
-import { isDefined } from '@bemedev/app-utils-bemedev';
+import { isDefined } from '@bemedev/app-options/bemedev';
 import type { RecordS } from '~types';
 
 /**

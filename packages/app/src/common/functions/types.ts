@@ -1,4 +1,4 @@
-import type { Equals, Fn, Keys, NotUndefined } from '@bemedev/app-utils-bemedev';
+import type { Equals, Fn, Keys, NotUndefined } from '@bemedev/app-options/bemedev';
 import type { FnMap, FnMapR } from '~types';
 
 /**
