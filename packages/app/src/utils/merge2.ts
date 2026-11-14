@@ -16,6 +16,16 @@ type MergeProps2<T, K extends string = string> = {
   target: T;
 } & Merger<T, K>;
 
+/**
+ * Signature of the {@linkcode merge2} function, including its property
+ * {@linkcode Merge2_F.multiple}.
+ *
+ * @template `T` - Target object type.
+ * @template `D` - Decomposed representation of `T`.
+ * @template | {@linkcode Merger} `K` - Valid dot-separated key path in `D`.
+ *
+ * @see -- type {@linkcode MergeProps2}
+ */
 export type Merge2_F = FnBasic<
   <
     T,
@@ -27,6 +37,7 @@ export type Merge2_F = FnBasic<
     key,
   }: MergeProps2<T, K>) => T | undefined,
   {
+    /** Merges several `sources` into `target` in a single call. */
     readonly multiple: <
       T,
       D = Decompose<T, { object: 'both'; start: false; sep: '.' }>,

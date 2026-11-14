@@ -153,7 +153,7 @@ type _GetDelayKeysFromFlat<Flat extends FlatMapN> = {
 }[keyof Flat];
 
 /**
- * Provide a record of all actions by key and {@linkcode Action} function.
+ * Provide a record of all actions by key and {@linkcode AsyncAction2} function.
  *
  * @template | {@linkcode FlatMapN} `Flat` - Flat map of nodes.
  * @template | {@linkcode EventsMap} `E` - Events map type.
@@ -191,7 +191,7 @@ export type GetGuardsFromFlat<
 > = Record<_GetKeyGuardsFromFlat<Flat>, AsyncPredicateS<E, Pc, Tc, T>>;
 
 /**
- * Provide a record of all delays by key and {@linkcode DelayFunction} function.
+ * Provide a record of all delays by key and {@linkcode AsyncDelayFunction2} function.
  *
  * @template | {@linkcode FlatMapN} `Flat` - Flat map of nodes.
  * @template | {@linkcode EventsMap} `E` - Events map type.

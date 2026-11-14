@@ -47,7 +47,7 @@ export type Equals_F<T> = Fn<[T, T], boolean>;
  * Base class representing an active subscriber node that manages subscription state,
  * equality checking, child subscriber notifications, and explicit disposal.
  *
- * Serves as the common parent class for class {@linkcode SubscriberClass} and class {@linkcode ManagedSubscriberClass}.
+ * Serves as the common parent class for class {@linkcode SubscriberClass} and class {@linkcode Subscriber}.
  *
  * @template `T` - Type of data emitted by the source.
  * @template `R` - Type of selected value derived from state, defaulting to `T`.
@@ -92,8 +92,7 @@ export class SubscriberBase<T, R = T> implements Disposable, AsyncDisposable {
    * @param _subscriber - Subscriber callback function of type {@linkcode Subscriber_F}.
    * @param _selector - Optional selector function of type {@linkcode Selector_F}.
    * @param __equals - Optional equality comparator function of type {@linkcode Equals_F}.
-   *
-   * @see {@linkcode normalEquals}
+   * @param __firstTime - Whether the subscriber has not emitted yet.
    */
   constructor(
     protected _subscriber: Subscriber_F<T>,

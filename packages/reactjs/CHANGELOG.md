@@ -5,6 +5,22 @@
 <details>
 <summary>
 
+## **[2.8.3] - 14/11/2026** => _19:44_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.8.3 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.2] - 13/11/2026** => _19:22_
 
 </summary>

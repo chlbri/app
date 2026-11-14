@@ -1,7 +1,7 @@
 /**
- * Contract and option surface re-exported from `@bemedev/app-options`.
+ * Contract surface re-exported from `@bemedev/app-contract`.
  *
- * It exposes every export of `@bemedev/app-contract` plus the option helper
- * types, so `@bemedev/app` consumers only need this single dependency.
+ * It exposes every contract helper and type (including `createContract`) so
+ * `@bemedev/app` consumers can describe machines without an extra dependency.
  */
 export * from '@bemedev/app-contract';

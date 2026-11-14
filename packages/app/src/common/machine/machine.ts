@@ -759,6 +759,12 @@ export abstract class CommonMachine<
 /**
  * Helper to retrieve entry or exit actions from a node.
  *
+ * @param key - Node property to read, either `entry` or `exit`.
+ * @param node - Node configuration to inspect.
+ *
+ * @returns The collected actions of the requested key, including those of the
+ * nested initial states.
+ *
  * @see -- type {@linkcode GetIO_F}, {@linkcode isAtomic}, {@linkcode isCompound}
  */
 const getIO: GetIO_F = (key, node) => {
@@ -779,10 +785,14 @@ const getIO: GetIO_F = (key, node) => {
 
 /**
  * Retrieves all entry actions from a node.
+ *
+ * @returns The collected entry actions of the node and its initial states.
  */
 export const getEntries = partialCall.paramArray(getIO, 'entry');
 
 /**
  * Retrieves all exit actions from a node.
+ *
+ * @returns The collected exit actions of the node and its initial states.
  */
 export const getExits = partialCall.paramArray(getIO, 'exit');

@@ -539,8 +539,9 @@ const options = machine.createOptions(({
 > `machine.addOptions(() => options)`.
 >
 > `@bemedev/app` depends only on `@bemedev/app-options`. Every contract and option
-> type is re-exported from `@bemedev/app/contract`, which itself re-exports
-> `@bemedev/app-options`.
+> type is re-exported from `@bemedev/app/contract` (contracts) and
+> `@bemedev/app/options` (options), which re-export `@bemedev/app-contract` and
+> `@bemedev/app-options` respectively.
 
 ### 5.1 assign
 

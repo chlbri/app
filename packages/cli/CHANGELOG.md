@@ -5,6 +5,39 @@
 <details>
 <summary>
 
+## **[2.8.3] - 14/11/2026** => _19:44_
+
+</summary>
+
+### Features
+
+- **Public Entry**: Export the `cli` command definition from the package root.
+
+### Fixes
+
+- **Watch Mode**: Queue regeneration events so overlapping `node-watch` notifications
+  cannot race on the output file, and log generation failures instead of surfacing an
+  unhandled rejection.
+- **Discovery**: Load sources with `addSourceFileAtPathIfExists` so files deleted
+  between `fast-glob` and `ts-morph` are skipped.
+- **Messages**: Simplify the generation error handling and the empty-run messages.
+
+### Docs
+
+- Normalize the `@see` kind prefix on `emitRegisterEntry`.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 2.8.3 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.2] - 13/11/2026** => _19:22_
 
 </summary>
