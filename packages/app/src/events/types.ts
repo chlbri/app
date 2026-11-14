@@ -1,4 +1,4 @@
-import type { Equals } from '@bemedev/app-utils-bemedev';
+import type { Equals } from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EventArgObject,

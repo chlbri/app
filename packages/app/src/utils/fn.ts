@@ -1,4 +1,4 @@
-import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { Fn } from '@bemedev/app-options/bemedev';
 
 /**
  * Type guard to check if a given value is an asynchronous function returning a `Promise`.

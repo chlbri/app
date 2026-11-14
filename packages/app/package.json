@@ -55,6 +55,11 @@
       "require": "./lib/bemedev.cjs",
       "types": "./lib/bemedev.d.ts"
     },
+    "./options": {
+      "import": "./lib/options.js",
+      "require": "./lib/options.cjs",
+      "types": "./lib/options.d.ts"
+    },
     "./constants": {
       "import": "./lib/constants/index.js",
       "require": "./lib/constants/index.cjs",
@@ -139,7 +144,6 @@
     "fast-deep-equal": "^3.1.3"
   },
   "devDependencies": {
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "^1.5.2",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/sequence": "^1.0.0",
@@ -165,14 +169,6 @@
     "vitest": "catalog:",
     "zx": "^8.8.5"
   },
-  "dependenciesMeta": {
-    "@bemedev/app-utils-bemedev": {
-      "injected": true
-    }
-  },
-  "bundledDependencies": [
-    "@bemedev/app-utils-bemedev"
-  ],
   "engines": {
     "node": ">=24"
   }

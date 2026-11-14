@@ -1,4 +1,4 @@
-import { tupleOf } from '@bemedev/app-utils-bemedev';
+import { tupleOf } from '@bemedev/app-options/bemedev';
 import type { NodeConfig2, StateValue } from '../types';
 import { isAtomic, isCompound } from './checks';
 

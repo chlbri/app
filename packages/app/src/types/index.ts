@@ -296,7 +296,6 @@ export type {
 } from '#interpreters';
 
 export type {
-  CheckKeys_F,
   Decompose,
   DecomposeKeys,
   DeleteFirst_F,

@@ -27,8 +27,8 @@ import type {
   ExtractGuardKeysFromTransitions,
   TransitionsConfig,
 } from '#transitions';
-import type { Equals, Keys } from '@bemedev/app-utils-bemedev';
-import { Identitfy } from '@bemedev/app-utils-bemedev';
+import type { Equals, Keys } from '@bemedev/app-options/bemedev';
+import { Identitfy } from '@bemedev/app-options/bemedev';
 import type { Recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { KeyU, ReduceArray } from '~types';

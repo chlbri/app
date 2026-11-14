@@ -6,9 +6,10 @@ import { withTimeout } from '@bemedev/better-promise';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
 import { recompose } from '@bemedev/decompose';
 
-import { createCommonHelpers, toArray } from './common';
+import { createCommonHelpers } from './common';
 import { merge2 } from './merge2';
 import { reduceFnMap } from './reduceFnMap';
+import { toArray } from '@bemedev/app-utils-bemedev';
 
 /** Option helpers of an asynchronous machine. */
 export type AsyncHelpers = ReturnType<typeof createAsyncHelpers>;
@@ -97,7 +98,10 @@ export const createAsyncHelpers = (config: any) => {
           }
 
           if (thenFn) {
-            const nextContext = merge2.multiple(context, ...toArray(res?.mergers));
+            const nextContext = merge2.multiple(
+              context,
+              ...toArray.typed(res?.mergers),
+            );
             const thenRes = await thenFn({
               ...rest,
               context: nextContext,
@@ -186,7 +190,7 @@ export const createAsyncHelpers = (config: any) => {
         if (thenFn) {
           const nextContext = merge2.multiple(
             structuredClone(context),
-            ...toArray(res?.mergers),
+            ...toArray.typed(res?.mergers),
           );
           const thenRes = await thenFn({
             ...rest,

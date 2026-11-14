@@ -5,6 +5,8 @@
  * the helpers produced here behave exactly like the machine ones.
  */
 
+import { IS_TEST } from './environment';
+
 /** Internal event emitted when a machine starts. */
 export const INIT_EVENT = 'machine$$init' as const;
 
@@ -18,11 +20,14 @@ export const AFTER_EVENT = 'machine$$after' as const;
 export const DEFAULT_NOTHING = 'nothing' as const;
 
 /**
- * Fallback used when a function map has no matching event entry.
+ * A utility function used when no action is required or when a placeholder value is needed.
  *
- * @returns `'nothing'` in test environments, `undefined` otherwise.
+ * @returns In test environment constant {@linkcode DEFAULT_NOTHING}, otherwise `undefined`.
  */
 export const nothing = () => {
-  if (process.env.NODE_ENV === 'test') return DEFAULT_NOTHING;
+  if (IS_TEST()) {
+    console.log(`${DEFAULT_NOTHING} call ${DEFAULT_NOTHING}`);
+    return DEFAULT_NOTHING;
+  }
   return;
 };

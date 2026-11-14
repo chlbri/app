@@ -5,6 +5,7 @@
  * machine implementation while producing the same `eventsList`.
  */
 
+import { isChildConfig } from './checkers/children';
 import { AFTER_EVENT, ALWAYS_EVENT, INIT_EVENT } from './constants';
 
 /**
@@ -36,39 +37,6 @@ export const transformEventArg = (event: any) => {
   return { ...event, payload: event.payload };
 };
 
-/** Allowed property keys for child actor configurations. */
-const CHILD_KEYS = ['on', 'contexts', 'description'] as const;
-
-/**
- * Type guard checking that a value looks like a child actor configuration.
- *
- * @param value - Value to check.
- *
- * @returns `true` when `value` is a child actor configuration.
- */
-export const isChildConfig = (value: any): boolean => {
-  if (typeof value !== 'object' || value === null || Array.isArray(value))
-    return false;
-
-  const keys = Object.keys(value);
-  if (keys.length === 0) return false;
-  if (!keys.every(key => CHILD_KEYS.includes(key as any))) return false;
-
-  const { on, contexts, description } = value;
-
-  if (description !== undefined && typeof description !== 'string') return false;
-  if (on === undefined && contexts === undefined) return false;
-  if (on !== undefined) {
-    if (typeof on !== 'object' || on === null || Array.isArray(on)) return false;
-  }
-
-  if (contexts === undefined) return true;
-  if (typeof contexts !== 'object' || contexts === null || Array.isArray(contexts))
-    return false;
-
-  return Object.values(contexts).every(item => typeof item === 'string');
-};
-
 /**
  * Collects every event string supported by a configuration and its descendants.
  *
@@ -76,7 +44,7 @@ export const isChildConfig = (value: any): boolean => {
  *
  * @returns Array of event strings.
  */
-export const constructEvents = (node: any): string[] => {
+export const constructEventsMap = (node: any): string[] => {
   const out: string[] = [];
 
   const on = node?.on;
@@ -97,7 +65,7 @@ export const constructEvents = (node: any): string[] => {
 
   const states = node?.states;
   if (states) {
-    Object.values(states).forEach(state => out.push(...constructEvents(state)));
+    Object.values(states).forEach(state => out.push(...constructEventsMap(state)));
   }
 
   return out;

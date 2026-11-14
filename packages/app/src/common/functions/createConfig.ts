@@ -1,5 +1,5 @@
 import type { NodeConfig2 } from '#states';
-import { _any } from '@bemedev/app-utils-bemedev';
+import { _any } from '@bemedev/app-options/bemedev';
 
 /**
  * Function signature for machine configuration creation helper.

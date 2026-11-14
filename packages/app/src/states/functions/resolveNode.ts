@@ -4,7 +4,7 @@ import type { SimpleMachineOptions2 } from '#common/machine';
 import { toEmitter } from '#emitters';
 import type { EventObject } from '#events';
 import { toTransition } from '#transitions';
-import { _any, identify, toArray } from '@bemedev/app-utils-bemedev';
+import { _any, identify, toArray } from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { Node, NodeConfig2 } from '../types';
 import { stateType } from './stateType';

@@ -13,7 +13,6 @@
   "devDependencies": {
     "@bemedev/app": "workspace:^",
     "@bemedev/app-cli": "workspace:^",
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/app-valibot": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
     "@bemedev/dev-utils": "^1.5.2",

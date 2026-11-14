@@ -6,7 +6,7 @@
  * machine runtime.
  */
 
-import { expandFn } from './expandFn';
+import { expandFn } from '@bemedev/app-utils-bemedev';
 
 /** Source object and key path to merge. */
 export type Merger<T = any, K extends string = string> = {

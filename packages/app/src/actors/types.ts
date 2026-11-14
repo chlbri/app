@@ -12,7 +12,7 @@ import type {
   FinallyConfig,
   FinallyConfigArray,
 } from '@bemedev/app-options';
-import type { NoExtraKeys } from '@bemedev/app-utils-bemedev';
+import type { NoExtraKeys } from '@bemedev/app-options/bemedev';
 import type { Describer } from '~types';
 
 export type {

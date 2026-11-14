@@ -1,5 +1,5 @@
 import { createConfig, createMachine, interpret } from '@bemedev/app';
-import { nothing } from '@bemedev/app/utils';
+import { nothing } from '@bemedev/app-options/internal';
 import { type } from '@bemedev/typings';
 import { describe, expect, test, vi } from 'vite-plus/test';
 

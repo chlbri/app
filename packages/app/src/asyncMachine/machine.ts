@@ -4,7 +4,7 @@ import type { AsyncDelayFunction } from '#delays';
 import { ActorsConfigMap, type EventObject, type EventsMap } from '#events';
 import { type FlatMapN } from '#states';
 import { createAsyncHelpers } from '@bemedev/app-options/internal';
-import { _unknown } from '@bemedev/app-utils-bemedev';
+import { _unknown } from '@bemedev/app-options/bemedev';
 
 import {
   CommonMachine,

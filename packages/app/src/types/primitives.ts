@@ -10,7 +10,7 @@ import type {
   NotUndefined,
   Ru,
   UnionToIntersection,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   Describer,

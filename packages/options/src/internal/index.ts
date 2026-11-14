@@ -6,10 +6,11 @@
  */
 
 export * from './async';
+export * from './checkers';
 export * from './common';
 export * from './constants';
+export * from './environment';
 export * from './events';
-export * from './expandFn';
 export * from './guards';
 export * from './merge2';
 export * from './objects';

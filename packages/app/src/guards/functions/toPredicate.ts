@@ -3,7 +3,7 @@ import type { EventObject } from '#events';
 import type { GuardConfig } from '#guards';
 import type { StateExtended } from '#states';
 import { reduceFnMap } from '@bemedev/app-options/internal';
-import { expandFn, isDefined } from '@bemedev/app-utils-bemedev';
+import { expandFn, isDefined } from '@bemedev/app-options/bemedev';
 import recursive, {
   type AsyncGuardDefUnion,
   type GuardDefUnion,

@@ -47,6 +47,11 @@
       "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
     },
+    "./bemedev": {
+      "import": "./lib/bemedev.js",
+      "require": "./lib/bemedev.cjs",
+      "types": "./lib/bemedev.d.ts"
+    },
     "./better-promise": {
       "import": "./lib/better-promise.js",
       "require": "./lib/better-promise.cjs",
@@ -105,6 +110,7 @@
     "@bemedev/function-swap": "^0.2.5"
   },
   "devDependencies": {
+    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "^1.5.2",
     "@bemedev/typings": "^1.5.0",
     "@size-limit/file": "^14.3.0",
@@ -119,6 +125,14 @@
     "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
+  "dependenciesMeta": {
+    "@bemedev/app-utils-bemedev": {
+      "injected": true
+    }
+  },
+  "bundledDependencies": [
+    "@bemedev/app-utils-bemedev"
+  ],
   "engines": {
     "node": ">=24"
   }

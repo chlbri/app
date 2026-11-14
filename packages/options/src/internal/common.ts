@@ -7,7 +7,7 @@
 import { recompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
 
-import { constructEvents } from './events';
+import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';
 import { byKey2 } from './objects';
 import {
@@ -17,18 +17,6 @@ import {
 } from './reduceFnMap';
 
 /**
- * Wraps a value into an array, leaving `undefined` and `null` empty.
- *
- * @param value - Single value or array.
- *
- * @returns The value as an array.
- */
-export const toArray = <T = any>(value: T | T[] | undefined | null): T[] => {
-  if (value === undefined || value === null) return [];
-  return Array.isArray(value) ? value : [value];
-};
-
-/**
  * Creates the option helpers that do not depend on the sync/async mode.
  *
  * @param config - Contract machine configuration.
@@ -36,7 +24,7 @@ export const toArray = <T = any>(value: T | T[] | undefined | null): T[] => {
  * @returns Shared helpers plus the derived events list.
  */
 export const createCommonHelpers = (config: any) => {
-  const eventsList = constructEvents(config);
+  const eventsList = constructEventsMap(config);
 
   /**
    * Creates an action marking an activity or timer operation.
@@ -81,7 +69,9 @@ export const createCommonHelpers = (config: any) => {
       filteredValue = currentValue.filter((item, index) =>
         predicate(item, index, state),
       );
-    } else if (currentValue !== null && typeof currentValue === 'object') {
+    }
+    /* v8 ignore if -- @preserve */
+    else if (currentValue !== null && typeof currentValue === 'object') {
       const predicate = reduceFnMapFilterObject(fn, ...eventsList);
       filteredValue = Object.entries(currentValue).reduce((acc, [objKey, value]) => {
         if (predicate(value, state)) acc[objKey] = value;

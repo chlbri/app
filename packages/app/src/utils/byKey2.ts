@@ -2,7 +2,7 @@ import {
   byKey2 as _byKey2,
   type ByKey2Options,
 } from '@bemedev/app-options/internal';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-options/bemedev';
 import type { Decompose } from '@bemedev/decompose';
 
 /**

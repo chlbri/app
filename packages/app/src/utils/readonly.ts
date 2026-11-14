@@ -1,5 +1,5 @@
-import { DeepReadonly } from '@bemedev/app-utils-bemedev';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { DeepReadonly } from '@bemedev/app-options/bemedev';
+import { expandFn } from '@bemedev/app-options/bemedev';
 
 /**
  * Utility function for making objects deeply read-only with optional property freezing.

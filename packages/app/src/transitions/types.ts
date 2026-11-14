@@ -18,7 +18,7 @@ import type {
   IndexesOfArray,
   NotUndefined,
   SoA,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-options/bemedev';
 import type {
   _TransitionConfigMap,
   ArrayTransitions,

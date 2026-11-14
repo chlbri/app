@@ -6,7 +6,7 @@ import {
   keysOf,
   partialCall,
   toArray,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-options/bemedev';
 
 import { DEFAULT_DELIMITER } from '#constants';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
@@ -25,8 +25,8 @@ import {
   type StateValue,
 } from '#states';
 import { constructEvents } from '#utils';
-import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-utils-bemedev';
-import { _unknown } from '@bemedev/app-utils-bemedev';
+import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemedev';
+import { _unknown } from '@bemedev/app-options/bemedev';
 import { decompose, type Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {

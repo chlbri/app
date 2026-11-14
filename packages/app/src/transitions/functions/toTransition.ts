@@ -5,7 +5,7 @@ import { toPredicate } from '#guards';
 import { type GuardConfig } from '#guards';
 import type { AsyncTransition, TransitionConfig } from '#transitions';
 
-import { toArray } from '@bemedev/app-utils-bemedev';
+import { toArray } from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 /**

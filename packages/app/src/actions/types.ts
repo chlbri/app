@@ -4,7 +4,7 @@ import type {
   MaybeAsyncActionResult,
   WithDescriber,
 } from '@bemedev/app-options';
-import type { NoExtraKeys } from '@bemedev/app-utils-bemedev';
+import type { NoExtraKeys } from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { Describer, FnMap, FromDescriber } from '~types';
 

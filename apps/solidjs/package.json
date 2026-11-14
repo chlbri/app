@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "vp run --filter @bemedev/app-utils-bemedev --filter @bemedev/app --filter @bemedev/app-solidjs pretest",
+    "prebuild": "vp run --filter @bemedev/app-options --filter @bemedev/app --filter @bemedev/app-solidjs pretest",
     "dev": "vp dev",
     "_build": "vp build",
     "build": "vp build",

@@ -2,7 +2,11 @@ import type { AsyncAction, FromActionConfig, WithDescriber } from '#actions';
 import type { EventObject } from '#events';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { AsyncTransitions } from '#transitions';
-import type { Equals, Keys, UnionToIntersection } from '@bemedev/app-utils-bemedev';
+import type {
+  Equals,
+  Keys,
+  UnionToIntersection,
+} from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,

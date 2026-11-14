@@ -98,6 +98,7 @@ The runtime dependencies of the helpers are re-exported, so consumers of
 | Subpath                                  | Re-exports                   |
 | ---------------------------------------- | ---------------------------- |
 | `@bemedev/app-options/contract`          | `@bemedev/app-contract`      |
+| `@bemedev/app-options/bemedev`           | `@bemedev/app-utils-bemedev` |
 | `@bemedev/app-options/decompose`         | `@bemedev/decompose`         |
 | `@bemedev/app-options/function-swap`     | `@bemedev/function-swap`     |
 | `@bemedev/app-options/boolean-recursive` | `@bemedev/boolean-recursive` |

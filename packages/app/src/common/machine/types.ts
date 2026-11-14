@@ -24,7 +24,7 @@ import type {
   Ru,
   SubType,
   SubTypeLow,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-options/bemedev';
 import type { Decompose } from '@bemedev/decompose';
 
 import type {

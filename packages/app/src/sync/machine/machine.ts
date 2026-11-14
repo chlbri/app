@@ -10,7 +10,7 @@ import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
 import { createSyncHelpers } from '@bemedev/app-options/internal';
-import { _unknown } from '@bemedev/app-utils-bemedev';
+import { _unknown } from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { CommonMachine } from '../../common/machine';
 import type { SyncAddOptions_F, SyncProvideOptions_F } from './options.types';

@@ -1,7 +1,7 @@
 import { DEFAULT_DELIMITER } from '#constants';
 import { flatByKey } from '@bemedev/decompose';
 import type { FlatMapN, NodeConfig2 } from '../types';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-options/bemedev';
 import type { RecordS } from '~types';
 
 /**

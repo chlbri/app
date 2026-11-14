@@ -3,7 +3,7 @@ import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig } from '#guards';
 import type { ActivityConfig, StateValue, WorkingStatus } from '#states';
-import type { NOmit, NotUndefined, Primitive } from '@bemedev/app-utils-bemedev';
+import type { NOmit, NotUndefined, Primitive } from '@bemedev/app-options/bemedev';
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval2 } from '@bemedev/interval2';
 import type { IntervalParams } from '@bemedev/interval2/types';
