@@ -32,7 +32,7 @@
   },
   "type": "module",
   "scripts": {
-    "ci": "CIN=$(date +%s) && vp install  && vp run pretest && vp run lint && vp run test:only && vp run posttest && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
+    "ci": "CIN=$(date +%s) && vp install  && vp run pretest && vp run lint && vp run test:only && vp fmt && vp run posttest && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
     "ci:admin": "FULL_CI=$(date +%s) && pnpm run rm && pnpm run up && vp run ci && echo \"\n✅ Full CI takes $(($(date +%s) - FULL_CI))s\n\"",
     "pnpm:devPreinstall": "node -e \"const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); const version=require('child_process').execSync('pnpm -v').toString().trim(); pkg.packageManager='pnpm@' + version; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\\n');\"",
     "config": "vp i",
