@@ -15,13 +15,17 @@ export default createMachine(
           FILTER_HIGH_SCORES: { actions: 'filterHighScores', target: '/filtered' },
         },
       },
-      filtered: {},
+      filtered: { on: { RETURN: '/idle' } },
     },
   },
   {
-    context: type({ scores }),
+    context: type(({ partial }) => partial({ scores })),
 
-    eventsMap: type({ SET_SCORES: { scores }, FILTER_HIGH_SCORES: 'never' }),
+    eventsMap: type({
+      SET_SCORES: { scores },
+      FILTER_HIGH_SCORES: 'never',
+      RETURN: 'never',
+    }),
     sync: true,
   },
 );

@@ -9,6 +9,7 @@ import { swap as _swap } from '@bemedev/function-swap';
 
 import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';
+import { isDefined as _isDefined } from '@bemedev/app-utils-bemedev';
 import { byKey2 } from './objects';
 import {
   reduceFnMap,
@@ -69,7 +70,7 @@ export const createCommonHelpers = (config: any) => {
       filteredValue = currentValue.filter((item, index) =>
         predicate(item, index, state),
       );
-    } else if (typeof currentValue === 'object') {
+    } else if (_isDefined(currentValue) && typeof currentValue === 'object') {
       const predicate = reduceFnMapFilterObject(fn, ...eventsList);
       filteredValue = Object.entries(currentValue).reduce((acc, [objKey, value]) => {
         if (predicate(value, state)) acc[objKey] = value;

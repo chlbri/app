@@ -127,7 +127,7 @@ describe('Filter and Erase actions', () => {
     describe('#03 => Filter object properties', () => {
       const machine = _machine3;
 
-      const service = interpret(machine, { context: { scores: {} } });
+      const service = interpret(machine, { context: {} });
 
       const {
         useStateValue: useValue,
@@ -150,6 +150,9 @@ describe('Filter and Erase actions', () => {
           },
         }));
       });
+
+      test(...useSend('FILTER_HIGH_SCORES', 5));
+      test(...useSend('RETURN'));
 
       test(
         ...useSend({
@@ -235,17 +238,19 @@ describe('Filter and Erase actions', () => {
       test(...useValue('idle', 2));
 
       test('#03 => Add actions', () => {
-        service.addOptions(({ assign, filter }) => ({
+        service.addOptions(({ assign, filter, batch }) => ({
           actions: {
             setScores: assign('scores', {
               SET_SCORES: ({ payload }) => payload.scores,
             }),
-            filterHighScores: filter('scores', {
-              FILTER_HIGH_SCORES: (score, state) => {
-                expect(state).toHaveProperty('payload');
-                return score >= 80;
-              },
-            }),
+            filterHighScores: batch(
+              filter('scores', {
+                FILTER_HIGH_SCORES: (score, state) => {
+                  expect(state).toHaveProperty('payload');
+                  return score >= 80;
+                },
+              }),
+            ),
           },
         }));
       });
@@ -1107,6 +1112,53 @@ describe('Filter and Erase actions', () => {
 
       test('#07 => Check filtered scores after delayed transition (>= 80)', () => {
         expect(service.select('scores')).toEqual({ user1: 95, user3: 85 });
+      });
+    });
+
+    describe.skip('#18 => Filter without array nor object value', () => {
+      const machine = _machine3;
+
+      describe('#01 => undefined value', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('scores', (score: number) => score > 5),
+          },
+        }));
+
+        const state = { context: {}, event: 'FILTER_HIGH_SCORES' } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => {
+          expect(typeof result).toBe('object');
+        });
+
+        test('#02 => does not filter the value', () => {
+          expect(result).toEqual({ mergers: [{ key: 'scores', source: {} }] });
+        });
+      });
+
+      describe('#02 => null value', () => {
+        const { actions } = machine.createOptions(({ filter }) => ({
+          actions: {
+            filterHighScores: filter('scores', (score: number) => score > 5),
+          },
+        }));
+
+        const state = {
+          context: { scores: null },
+          event: 'FILTER_HIGH_SCORES',
+        } as any;
+
+        const result = actions?.filterHighScores?.(state);
+
+        test('#01 => is an object', () => {
+          expect(typeof result).toBe('object');
+        });
+
+        test('#02 => does not filter the value', () => {
+          expect(result).toEqual({ mergers: [{ key: 'scores', source: {} }] });
+        });
       });
     });
   });

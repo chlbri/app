@@ -669,7 +669,7 @@ declare module '@bemedev/app' {
         };
         all: '/' | '/idle' | '/filtered';
       };
-      events: 'SET_SCORES' | 'FILTER_HIGH_SCORES';
+      events: 'SET_SCORES' | 'FILTER_HIGH_SCORES' | 'RETURN';
       options: {
         children: never;
         emitters: never;
