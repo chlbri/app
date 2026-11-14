@@ -5,6 +5,7 @@
  * machine implementation.
  */
 
+import type { Describer } from '@bemedev/app-contract';
 import { expandFn } from '@bemedev/app-utils-bemedev';
 import { isDescriber, isString } from './primitives';
 
@@ -15,8 +16,7 @@ import { isDescriber, isString } from './primitives';
  *
  * @returns `true` when `entry` is a string or a describer.
  */
-export const checkAction = (entry: unknown): boolean => {
-  if (entry === null || entry === undefined) return false;
+export const checkAction = (entry: unknown): entry is string | Describer => {
   return isString(entry) || isDescriber(entry);
 };
 

@@ -1,3 +1,4 @@
+export { cli } from './cli';
 export { parseTree } from './utils/parseTree';
 export type { ParseTree_F } from './utils/parseTree';
 export type {

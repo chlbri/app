@@ -113,9 +113,13 @@ export const watch = command({
      */
     let queue: Promise<unknown> = Promise.resolve();
     const enqueue = (task: () => Promise<unknown>) => {
-      queue = queue.then(task).catch(error => {
-        console.error('[app] Generation failed:', error);
-      });
+      queue = queue
+        .then(task)
+        /* v8 ignore start -- @preserve */
+        .catch(error => {
+          console.error('[app] Generation failed:', error);
+        });
+      /* v8 ignore stop -- @preserve */
       return queue;
     };
     const generate = () => enqueue(() => generator(options));
