@@ -47,7 +47,6 @@ jobs:
       # Only save on a miss: an exact hit means the entry already exists, and
       # cache/save@v6 fails the job when the key is already reserved.
       - name: Save Vite Task cache
-        if: steps.vite-task-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
         with:
           path: node_modules/.vite/task-cache
