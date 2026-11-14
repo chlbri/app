@@ -47,7 +47,7 @@ import {
 import type { AllowedNames } from '@bemedev/app-options/bemedev';
 import { isDefined, isPrimitive, toArray } from '@bemedev/app-options/bemedev';
 import { asyncfy } from '@bemedev/better-promise';
-import { createInterval, type Interval2 } from '@bemedev/interval2';
+import { createInterval } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { Fn, MachineType, Pausable } from '~types';
 import {
@@ -64,6 +64,7 @@ import type {
   AddSubscriber_F,
   AllPathsFrom,
   AnyInterpreter,
+  CachedInterval_F,
   CollectedPausable,
   CommonCollectedService,
   ConfigFrom,
@@ -634,6 +635,9 @@ export abstract class CommonInterpreter<
   /**
    * Accessor filtering and gathering active intervals matching current state activities.
    *
+   * Every factory of type {@linkcode CachedInterval_F} creates its interval
+   * from the current state, so changes of path are taken into account.
+   *
    * @returns An array of active interval instances of type {@linkcode Interval2}, or `undefined`.
    */
   private get __currentActivities() {
@@ -648,7 +652,10 @@ export abstract class CommonInterpreter<
       ids.push(...this.__executeActivities(...args));
     }
 
-    return this.__cachedIntervals.filter(({ id }) => ids.includes(id));
+    return this.__cachedIntervals
+      .filter(({ id }) => ids.includes(id))
+      .map(factory => factory())
+      .filter(isDefined);
   }
 
   /**
@@ -662,7 +669,7 @@ export abstract class CommonInterpreter<
    * Pauses all currently active interval activities.
    */
   private __pauseAllActivities = () => {
-    this.__cachedIntervals.forEach(this.__pause);
+    this.__cachedIntervals.forEach(({ current }) => current?.pause());
   };
 
   /**
@@ -1090,7 +1097,7 @@ export abstract class CommonInterpreter<
   stop = () => {
     this.__setStatus('busy');
     this.__pauseAllActivities();
-    this.__cachedIntervals.forEach(this.__dispose);
+    this.__cachedIntervals.forEach(({ current }) => current?.dispose());
     this.__stopPausables();
     this.__stopChildren();
     this.__setStatus('stopped');
@@ -1706,9 +1713,13 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Cached array of active interval instances of type {@linkcode Interval2}.
+   * Cached array of activity interval factories.
+   *
+   * Each factory of type {@linkcode CachedInterval_F} creates its interval of
+   * type {@linkcode Interval2} from the current state, so delays are
+   * recalculated after every state path.
    */
-  protected __cachedIntervals: Interval2[] = [];
+  protected __cachedIntervals: CachedInterval_F[] = [];
 
   /**
    * Abstract method executing final state cleanup hooks.

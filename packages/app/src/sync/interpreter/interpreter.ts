@@ -3,6 +3,7 @@ import type { ChildConfig, EmitterConfig, FinallyConfig } from '#actor';
 import {
   type ActorsMapFrom,
   type AllPathsFrom,
+  type CachedInterval_F,
   type ContextFrom,
   type EventsFrom,
   type EventsMapFrom,
@@ -36,7 +37,7 @@ import type {
   TransitionConfig,
 } from '#transitions';
 import { _any, isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
-import { createInterval } from '@bemedev/interval2';
+import { createInterval, type Interval2 } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
 import { isDescriber, type KeyU } from '~types';
@@ -500,29 +501,16 @@ export class SyncInterpreter<
     for (const [_delay, _activity] of entries) {
       const id = `${from}::${_delay}`;
       let index = -1;
-      const _interval = this.__cachedIntervals.find((f, i) => {
+      const cached = this.__cachedIntervals.find((f, i) => {
         const check = f.id === id;
         if (check) index = i;
         return check;
       });
 
-      const buildCallback = () => {
+      const buildFactory = () => {
         const delayF = this.toDelayFn(_delay);
         const check0 = !isDefined(delayF);
         if (check0) return;
-        const interval = this.__executeDelay(delayF);
-
-        const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
-        if (check11) {
-          this._addWarning(`Delay (${_delay}) is too short`);
-          return;
-        }
-
-        const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
-        if (check12) {
-          this._addWarning(`Delay (${_delay}) is too long`);
-          return;
-        }
 
         const activities = toArray.typed(_activity);
 
@@ -549,28 +537,58 @@ export class SyncInterpreter<
           this.__flush();
         };
 
-        const promise = this.createInterval({ callback, interval, id });
+        let built = false;
 
-        this.__cachedIntervals.push(promise);
+        const factory: CachedInterval_F = Object.assign(
+          (): Interval2 | undefined => {
+            if (built) return factory.current;
+            built = true;
 
-        return id;
+            const interval = this.__executeDelay(delayF);
+
+            const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
+            if (check11) {
+              this._addWarning(`Delay (${_delay}) is too short`);
+              return;
+            }
+
+            const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
+            if (check12) {
+              this._addWarning(`Delay (${_delay}) is too long`);
+              return;
+            }
+
+            return (factory.current = this.createInterval({
+              callback,
+              interval,
+              id,
+            }));
+          },
+          { id },
+        );
+
+        this.__cachedIntervals.push(factory);
+
+        return factory;
       };
 
-      if (_interval) {
-        const check = _interval.state === 'idle' || _interval.state === 'paused';
+      if (cached) {
+        const state = cached.current?.state;
+        const check = !isDefined(state) || state === 'idle' || state === 'paused';
         if (check) {
+          cached.current?.dispose();
           this.__cachedIntervals.splice(index, 1);
-          const result = buildCallback();
-          if (!result) return [];
-          outs.push(result);
+          const factory = buildFactory();
+          if (!factory) return [];
+          outs.push(id);
         } else outs.push(id);
         continue;
       }
 
-      const result = buildCallback();
-      if (!result) return [];
+      const factory = buildFactory();
+      if (!factory) return [];
 
-      outs.push(result);
+      outs.push(id);
     }
 
     return outs;

@@ -230,6 +230,29 @@ export type CreateInterval2_F = (
 ) => Interval2;
 
 /**
+ * Factory creating the interval owned by a cached activity.
+ *
+ * The factory is called again for every state path, so the delay, and therefore
+ * the interval of type {@linkcode Interval2}, is recalculated from the current
+ * state of the interpreter.
+ */
+export type CachedInterval_F = {
+  /**
+   * Creates the interval from the current state of the interpreter.
+   *
+   * @returns New interval instance of type {@linkcode Interval2}, or
+   * `undefined` when the configured delay is invalid.
+   */
+  (): Interval2 | undefined;
+
+  /** Identifier of the activity owning the created interval. */
+  id: string;
+
+  /** Last interval created by the factory, if any. */
+  current?: Interval2;
+};
+
+/**
  * Difference calculation output structure for next state transition.
  */
 export type DiffNext = {

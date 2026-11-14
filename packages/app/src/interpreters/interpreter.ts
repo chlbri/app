@@ -5,7 +5,7 @@ import {
   DEFAULT_MIN_ACTIVITY_TIME,
   TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
-import { _any } from '@bemedev/app-options/bemedev';
+import { _any, expandFn } from '@bemedev/app-options/bemedev';
 
 import {
   AFTER_EVENT,
@@ -28,6 +28,7 @@ import {
 } from '@bemedev/better-promise';
 import { toPredicate } from '../guards/functions/toPredicate';
 
+import type { Interval2 } from '@bemedev/interval2';
 import { sleep } from '@bemedev/sleep';
 import equal from 'fast-deep-equal';
 import { isDescriber, type EmptyObject } from '~types';
@@ -52,6 +53,7 @@ import {
   CommonInterpreter,
   type ActorsMapFrom,
   type AllPathsFrom,
+  type CachedInterval_F,
   type ConfigFrom,
   type ContextFrom,
   type EventsFrom,
@@ -425,33 +427,19 @@ export class AsyncInterpreter<
     for (const [_delay, _activity] of entries) {
       const id = `${from}::${_delay}`;
       let index = -1;
-      const _interval = this.__cachedIntervals.find((f, i) => {
+      const cached = this.__cachedIntervals.find((f, i) => {
         const check = f.id === id;
         if (check) index = i;
         return check;
       });
 
-      const buildCallback = () => {
+      const buildFactory = () => {
         const delayF = this.toDelayFn(_delay);
         const check0 = !isDefined(delayF);
         if (check0) return;
-        const interval = this.#executeDelay(delayF);
-
-        const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
-        if (check11) {
-          this._addWarning(`Delay (${_delay}) is too short`);
-          return;
-        }
-
-        const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
-        if (check12) {
-          this._addWarning(`Delay (${_delay}) is too long`);
-          return;
-        }
-
-        const activities = toArray.typed(_activity);
 
         const callback = async () => {
+          const activities = toArray.typed(_activity);
           for (const activity of activities) {
             const check2 = typeof activity === 'string';
             const check3 = isDescriber(activity);
@@ -473,28 +461,58 @@ export class AsyncInterpreter<
           this.__flush();
         };
 
-        const promise = this.createInterval({ callback, interval, id });
+        let built = false;
 
-        this.__cachedIntervals.push(promise);
+        const factory: CachedInterval_F = expandFn(
+          (): Interval2 | undefined => {
+            if (built) return factory.current;
+            built = true;
 
-        return id;
+            const interval = this.#executeDelay(delayF);
+
+            const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
+            if (check11) {
+              this._addWarning(`Delay (${_delay}) is too short`);
+              return;
+            }
+
+            const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
+            if (check12) {
+              this._addWarning(`Delay (${_delay}) is too long`);
+              return;
+            }
+
+            return (factory.current = this.createInterval({
+              callback,
+              interval,
+              id,
+            }));
+          },
+          { id },
+        );
+
+        this.__cachedIntervals.push(factory);
+
+        return factory;
       };
 
-      if (_interval) {
-        const check = _interval.state === 'idle' || _interval.state === 'paused';
+      if (cached) {
+        const state = cached.current?.state;
+        const check = !isDefined(state) || state === 'idle' || state === 'paused';
         if (check) {
+          cached.current?.dispose();
           this.__cachedIntervals.splice(index, 1);
-          const result = buildCallback();
-          if (!result) return [];
-          outs.push(result);
+          const factory = buildFactory();
+          if (!factory) return [];
+          outs.push(id);
         } else outs.push(id);
         continue;
       }
 
-      const result = buildCallback();
-      if (!result) return [];
+      const factory = buildFactory();
+      if (!factory) return [];
 
-      outs.push(result);
+      outs.push(id);
     }
 
     return outs;
