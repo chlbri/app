@@ -17,8 +17,10 @@ import { relative } from 'path';
  *    for changes (generation itself stays exclusive: `--contract` regenerates
  *    contract types only into `app.contract.gen.ts`, otherwise machine types
  *    only into `app.gen.ts`)
- * 3. **Debounced regeneration**: Waits 300ms of stability before regenerating
- *    (handles editor save sequences and git checkouts gracefully)
+ * 3. **Debounced, serialized regeneration**: Waits 300ms of stability before
+ *    regenerating, queues overlapping events and logs generation failures
+ *    instead of crashing (handles editor save sequences and git checkouts
+ *    gracefully)
  * 4. **Feedback**: Logs change detection and regeneration completion
  * 5. **Graceful shutdown**: Responds to Ctrl+C and closes watcher cleanly
  *
@@ -101,16 +103,28 @@ export const watch = command({
     }),
   },
   handler: async options => {
-    const generate = () => generator(options);
-
     /** Initial generation */
-    await generate();
+    await generator(options);
+
+    /**
+     * Events are queued so overlapping changes cannot race on the output file,
+     * and failures are logged: `node-watch` ignores the handler's promise, so
+     * a rejection would surface as an unhandled rejection.
+     */
+    let queue: Promise<unknown> = Promise.resolve();
+    const enqueue = (task: () => Promise<unknown>) => {
+      queue = queue.then(task).catch(error => {
+        console.error('[app] Generation failed:', error);
+      });
+      return queue;
+    };
+    const generate = () => enqueue(() => generator(options));
 
     const watcher2 = nodeWatch(options.cwd, {
       recursive: true,
       delay: 300,
       filter: DEFAULT_REGEX,
-    }).on('change', async (event, path) => {
+    }).on('change', (event, path) => {
       /* v8 ignore start -- @preserve */
       if (typeof path !== 'string') return;
       /* v8 ignore stop -- @preserve */
@@ -118,12 +132,14 @@ export const watch = command({
       if (event === 'update') {
         console.warn('path', '=>', path);
         const relativePath = relative(options.cwd, path);
-        await createStarter(relativePath, options.cwd);
-        return generate();
-      } else {
-        console.log(`\nChange detected: ${path}`);
-        return generate();
+        return enqueue(async () => {
+          await createStarter(relativePath, options.cwd);
+          return generator(options);
+        });
       }
+
+      console.log(`\nChange detected: ${path}`);
+      return generate();
     });
 
     console.log(`\nWatching for changes in ${options.cwd}...`);
