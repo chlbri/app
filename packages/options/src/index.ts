@@ -12,6 +12,8 @@ export type {
   SyncOptionsHelpers,
 } from './types';
 
+export * from '@bemedev/app-contract';
+
 /**
  * Builds the options surface of a contract at runtime.
  *

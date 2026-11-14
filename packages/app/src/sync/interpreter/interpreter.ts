@@ -298,7 +298,7 @@ export class SyncInterpreter<
 
     if (response) {
       this.__performActions(...toArray.typed(diffExits));
-      this.__performActions(...toArray.typed(actions));
+      this.__performActions(...toArray<WithDescriber>(actions));
       this.__performActions(...toArray.typed(diffEntries));
       return target ?? false;
     }

@@ -1,6 +1,6 @@
 import type { ChildrenMap, CommonChildFunction2 } from '#common/machine';
 import type { EventObject } from '#events';
-import { reduceFnMap } from '#utils';
+import { reduceFnMap } from '@bemedev/app-options/internal';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 /**

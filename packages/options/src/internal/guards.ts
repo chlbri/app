@@ -26,16 +26,16 @@ export const isValue = (path: string, ...values: any[]) => {
 
     if (start('context.')) {
       const key = path.replace('context.', '');
-      return values.some(value => byKey2.low(context, key) === value);
+      return values.some(value => byKey2(context, key) === value);
     }
 
     if (start('pContext.')) {
       const key = path.replace('pContext.', '');
-      return values.some(value => byKey2.low(pContext, key) === value);
+      return values.some(value => byKey2(pContext, key) === value);
     }
 
     const key = path.replace('events.', '');
-    const toValidate = byKey2.low(event, key);
+    const toValidate = byKey2(event, key);
     return values.some(value => toValidate === value);
   };
 };

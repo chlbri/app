@@ -1,7 +1,7 @@
 import type { AsyncAction, FromActionConfig, WithDescriber } from '#actions';
 import type { EventObject } from '#events';
 import type { FromGuard, GuardConfig } from '#guards';
-import type { AsyncTransitions, TransitionsConfig } from '#transitions';
+import type { AsyncTransitions } from '#transitions';
 import type { Equals, Keys, UnionToIntersection } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
@@ -12,45 +12,42 @@ import type {
   SingleOrArrayL,
 } from '~types';
 
-/**
- * State node type categories: atomic, compound, or parallel.
- */
-export type StateType = 'atomic' | 'compound' | 'parallel';
+import type {
+  ActivityArray,
+  ActivityConfig,
+  NodeConfig2,
+  NodeConfig3,
+  StateType,
+} from '@bemedev/app-options';
+
+export type {
+  ActivityArray,
+  ActivityConfig,
+  ActivityMap,
+  BaseConfig,
+  CommonNodeConfig,
+  CommonState,
+  NodeConfig,
+  NodeConfig2,
+  NodeConfig3,
+  NodeConfigAtomic2,
+  NodeConfigCompound2,
+  NodeConfigParallel2,
+  State,
+  StateExtended,
+  StateP,
+  StatePextended,
+  StateType,
+  StateValue,
+  StateValueMap,
+  TargetDef,
+  WorkingStatus,
+} from '@bemedev/app-options';
 
 /**
  * Type alias for state node configuration type {@linkcode NodeConfig2}.
  */
 export type SNC = NodeConfig2;
-
-/**
- * Configuration structure or describer for state activity.
- */
-export type ActivityMap =
-  | {
-      guards?: SingleOrArrayL<GuardConfig>;
-      actions: SingleOrArrayL<WithDescriber>;
-      description?: string;
-    }
-  | WithDescriber;
-
-/**
- * Array or single instance of activity configurations.
- */
-export type ActivityArray =
-  | [
-      ...{
-        guards: SingleOrArrayL<GuardConfig>;
-        actions: SingleOrArrayL<WithDescriber>;
-        description?: string;
-      }[],
-      ActivityMap,
-    ]
-  | ActivityMap;
-
-/**
- * Map of activity names to activity configuration arrays.
- */
-export type ActivityConfig = Record<string, ActivityArray>;
 
 /**
  * Helper extracting actions from an activity configuration array.
@@ -111,153 +108,9 @@ export type ExtractDelaysFromActivity<T> = 'activities' extends keyof T
     : never
   : never;
 
-/**
- * Base configuration options shared by all state nodes.
- */
-export type BaseConfig = {
-  readonly description?: string;
-  readonly entry?: SingleOrArrayL<WithDescriber>;
-  readonly exit?: SingleOrArrayL<WithDescriber>;
-  readonly tags?: SingleOrArrayL<string>;
-  readonly activities?: ActivityConfig;
-};
-
-/**
- * Common configuration combining base options and transition declarations.
- *
- * @template `Paths` - State path union. Defaults to `string`.
- */
-export type CommonNodeConfig<Paths extends string = string> = BaseConfig &
-  TransitionsConfig<Paths>;
-
-/**
- * Full state node configuration for atomic, compound, or parallel state nodes.
- *
- * @template `Paths` - State path union. Defaults to `string`.
- */
-export type NodeConfig2<Paths extends string = string> = CommonNodeConfig<Paths> &
-  (
-    | { readonly type?: 'atomic'; readonly initial?: never; readonly states?: never }
-    | {
-        readonly type?: 'compound';
-        readonly initial: string;
-        readonly states: RecordS<NodeConfig2<Paths>>;
-      }
-    | {
-        readonly type: 'parallel';
-        readonly initial?: never;
-        readonly states: RecordS<NodeConfig2<Paths>>;
-      }
-  );
-
-/**
- * Loose node configuration structure allowing optional properties.
- *
- * @template `Paths` - State path union. Defaults to `string`.
- */
-export type NodeConfig3<Paths extends string = string> = CommonNodeConfig<Paths> & {
-  readonly type?: StateType;
-  readonly initial?: string;
-  readonly states?: RecordS<NodeConfig3<Paths>>;
-};
-
-/**
- * Target definition hierarchy map.
- */
-export type TargetDef = {
-  readonly targets: string;
-  readonly initial?: string;
-  readonly states?: RecordS<TargetDef>;
-};
-
-/**
- * Node configuration mapped to a target definition type `T`.
- *
- * @template | {@linkcode TargetDef} `T` - Target definition type.
- */
-export type NodeConfig<T extends TargetDef> = CommonNodeConfig<T['targets']> &
-  (undefined extends T['states']
-    ? { readonly type?: 'atomic'; readonly initial?: never; readonly states?: never }
-    : {
-        readonly states: {
-          [key in keyof T['states']]: T['states'][key] extends infer TK extends
-            TargetDef
-            ? NodeConfig<TK>
-            : CommonNodeConfig & {
-                readonly type?: 'atomic';
-                readonly initial?: never;
-                readonly states?: never;
-              };
-        };
-      } & (undefined extends T['initial']
-        ? { readonly type: 'parallel'; readonly initial?: never }
-        : Pick<T, 'initial'> & { type?: 'compound' }));
-
-/**
- * Atomic state node configuration.
- *
- * @template `Paths` - Allowed state path union.
- */
-export type NodeConfigAtomic2<Paths extends string = string> =
-  CommonNodeConfig<Paths> & {
-    readonly type?: 'atomic';
-    readonly initial?: never;
-    readonly states?: never;
-  };
-
-/**
- * Compound state node configuration.
- *
- * @template `Paths` - Allowed state path union.
- */
-export type NodeConfigCompound2<Paths extends string = string> =
-  CommonNodeConfig<Paths> & {
-    readonly type?: 'compound';
-    readonly initial: string;
-    readonly states: RecordS<NodeConfig2<Paths>>;
-  };
-
-/**
- * Parallel state node configuration.
- *
- * @template `Paths` - Allowed state path union.
- */
-export type NodeConfigParallel2<Paths extends string = string> =
-  CommonNodeConfig<Paths> & {
-    readonly type: 'parallel';
-    readonly initial?: never;
-    readonly states: RecordS<NodeConfig2<Paths>>;
-  };
-
-/**
- * Union representing string or nested state value map.
- */
-export type StateValue = string | StateValueMap;
-
-/**
- * Record map of state names to nested state values.
- */
-export interface StateValueMap {
-  /** State value stored under the corresponding state name key. */
-  [key: string]: StateValue;
-}
-
 // #region Flat
 
 // #region States
-/**
- * Working status lifecycle strings of a machine.
- */
-export type WorkingStatus =
-  | 'idle'
-  | 'starting'
-  | 'started'
-  | 'paused'
-  | 'working'
-  | 'sending'
-  | 'stopped'
-  | 'busy';
-
 /**
  * Internal helper to extract state tags from a flat node map.
  *
@@ -285,72 +138,6 @@ export type ExtractTagsFromFlat<Flat extends FlatMapN> =
         : Tags
     : string;
 
-/**
- * Common state properties structure.
- *
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - Tags string type.
- */
-export type CommonState<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { context: Tc; status: WorkingStatus; value: StateValue; tags: T[] };
-
-/**
- * Full active state object containing event and context data.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - Tags string type.
- */
-export type State<
-  E extends EventObject = EventObject,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { event: E } & CommonState<Tc, T>;
-
-/**
- * State object with custom event payload.
- *
- * @template `E` - Payload type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - Tags string type.
- */
-export type StateP<
-  E = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { payload: E } & CommonState<Tc, T>;
-
-/**
- * Extended active state object including private context `pContext`.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - Tags string type.
- */
-export type StateExtended<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { pContext: Pc } & State<E, Tc, T>;
-
-/**
- * Extended state object with payload and private context.
- *
- * @template `E` - Payload type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - Tags string type.
- */
-export type StatePextended<
-  E = any,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { pContext: Pc } & StateP<E, Tc, T>;
 // #endregion
 
 /**

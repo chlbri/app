@@ -3,45 +3,31 @@ import type {
   NoExtraKeysWithDescriber,
   WithDescriber,
 } from '#actions';
-import type { GUARD_TYPE } from '#constants';
 import type { EventObject } from '#events';
 import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { FnMap, FnR, MaybePromise, RecordS, ReduceArray } from '~types';
+import type { RecordS, ReduceArray } from '~types';
+import type {
+  AsyncPredicateS,
+  GuardAnd,
+  GuardConfig,
+  GuardOr,
+  SyncPredicateS2,
+} from '@bemedev/app-options';
 
-/** Internal type representation of GUARD_TYPE. */
-type gType = typeof GUARD_TYPE;
-/** Internal type representation of logical AND key. */
-type and = gType['and'];
-/** Internal type representation of logical OR key. */
-type or = gType['or'];
-
-/**
- * Union of guard descriptors and logical AND/OR guard configurations.
- */
-export type GuardUnion = WithDescriber | GuardAnd | GuardOr;
-
-/**
- * Logical AND guard structure.
- */
-export type GuardAnd = {
-  [k in and]: GuardUnion[];
-};
-
-/**
- * Logical OR guard structure.
- */
-export type GuardOr = {
-  [k in or]: GuardUnion[];
-};
-
-/**
- * JSON configuration for a guard.
- *
- * @see -- type {@linkcode WithDescriber}, {@linkcode GuardAnd}, {@linkcode GuardOr}
- */
-export type GuardConfig = GuardUnion;
+export type {
+  AsyncPredicateS,
+  AsyncPredicateS2,
+  AsyncPredicateS3,
+  GuardAnd,
+  GuardConfig,
+  GuardOr,
+  GuardUnion,
+  SyncPredicateS,
+  SyncPredicateS2,
+  SyncPredicateS3,
+} from '@bemedev/app-options';
 
 /**
  * Enforces no extra keys on guard configuration objects.
@@ -99,96 +85,6 @@ export type FromGuard<T extends GuardConfig> = T extends WithDescriber
     : T extends GuardOr
       ? FromGuard<ReduceArray<T['or']>>
       : never;
-
-/**
- * Async predicate function or constant boolean value.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
- */
-export type AsyncPredicateS<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = boolean | FnMap<E, Pc, Tc, T, MaybePromise<boolean>>;
-
-/**
- * Sync predicate function or constant boolean value.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
- */
-export type SyncPredicateS<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = boolean | FnMap<E, Pc, Tc, T, boolean>;
-
-/**
- * Async predicate function or constant boolean value resolver.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
- */
-export type AsyncPredicateS2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = boolean | AsyncPredicateS3<E, Pc, Tc, T>;
-
-/**
- * Sync predicate function or constant boolean value resolver.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
- */
-export type SyncPredicateS2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = boolean | SyncPredicateS3<E, Pc, Tc, T>;
-
-/**
- * Async predicate function runner.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
- */
-export type AsyncPredicateS3<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, MaybePromise<boolean>>;
-
-/**
- * Sync predicate function runner.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
- */
-export type SyncPredicateS3<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, boolean>;
 
 /**
  * Union of all predicate functions.

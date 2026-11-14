@@ -6,6 +6,8 @@
  * machine runtime.
  */
 
+import { expandFn } from './expandFn';
+
 /** Source object and key path to merge. */
 export type Merger<T = any, K extends string = string> = {
   /** Optional source object containing values to merge. */
@@ -61,7 +63,7 @@ const _merge2 = ({ target, source, key }: MergeProps2): any => {
  *
  * @returns The merged target.
  */
-export const merge2 = Object.assign(_merge2, {
+export const merge2 = expandFn(_merge2, {
   multiple: (target: any, ...sources: Merger[]): any =>
     sources.reduce((acc, source) => _merge2({ target: acc, ...source }), target),
 });

@@ -1,6 +1,6 @@
 import type { AsyncAction2, AsyncActionMap, WithDescriber } from '#actions';
 import type { EventObject } from '#events';
-import { reduceFnMap } from '#utils';
+import { reduceFnMap } from '@bemedev/app-options/internal';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { fromDescriber } from '~types';
 

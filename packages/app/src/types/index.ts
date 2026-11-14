@@ -107,8 +107,6 @@ export type {
   GuardConfig,
   GuardOr,
   GuardUnion,
-  IsDefinedS_F,
-  IsValueS_F,
   PredicateMap,
   SyncPredicate,
   SyncPredicateAnd,
@@ -306,9 +304,6 @@ export type {
   Fn,
   RecomposeSV_F,
   ReduceDescriber_F,
-  ReduceFnMapFilterArray_F,
-  ReduceFnMapFilterObject_F,
-  ReduceFnMap_F,
   ReplaceAll_F,
 } from '#utils';
 

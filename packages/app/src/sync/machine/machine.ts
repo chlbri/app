@@ -9,18 +9,11 @@ import type { SyncDelayFunction } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
-import { merge2, reduceFnMap } from '#utils';
+import { createSyncHelpers } from '@bemedev/app-options/internal';
 import { _unknown } from '@bemedev/app-utils-bemedev';
-import recursive from '@bemedev/boolean-recursive';
-import { recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import { CommonMachine } from '../../common/machine';
-import type {
-  SyncAction_F,
-  SyncAddOptions_F,
-  SyncProvideOptions_F,
-  SyncSendAction_F,
-} from './options.types';
+import type { SyncAddOptions_F, SyncProvideOptions_F } from './options.types';
 
 /**
  * A class representing a synchronous state machine.
@@ -101,15 +94,6 @@ export class SyncMachine<
    * @returns Option object for machine customization.
    */
   createOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
-    const isValue = this.__isValue;
-    const isNotValue = this.__isNotValue;
-    const isDefined = this.__isDefined;
-    const isNotDefined = this.__isNotDefined;
-    const action = this.__action;
-    const sendTo = this.__sendTo;
-    const erase = this.__erase;
-    const filter = this.__filter;
-
     const _legacy = Object.freeze({
       actions: this.__elements.actions,
       guards: this.__elements.guards,
@@ -117,203 +101,9 @@ export class SyncMachine<
       actors: this.__elements.actors,
     }) as any;
 
-    const out = helper(
-      {
-        isValue,
-        isNotValue,
-        isDefined,
-        isNotDefined,
+    const helpers = createSyncHelpers(this.config) as any;
 
-        guardBatch: (...guards) => {
-          const reduceGuardItem = (guard: any): any => {
-            if (typeof guard === 'boolean') return () => guard;
-            if (typeof guard === 'function') return guard;
-
-            if (typeof guard === 'object') {
-              if ('or' in guard) {
-                const or = guard.or.map(reduceGuardItem);
-                return { or };
-              }
-
-              const and = guard.and.map(reduceGuardItem);
-              return { and };
-            }
-
-            return undefined;
-          };
-
-          const prepareds = guards.map(reduceGuardItem).filter(Boolean);
-          const fn = recursive(...prepareds);
-          return fn;
-        },
-
-        swap: this.swap,
-        //@ts-expect-error ok for
-        assign: (keysOrFn, maybeFn) => {
-          if (
-            maybeFn === undefined &&
-            (typeof keysOrFn === 'function' || typeof keysOrFn === 'object')
-          ) {
-            const _fn = reduceFnMap(keysOrFn as any, ...this.__eventsList);
-            return state => {
-              const result = _fn(state);
-              return { mergers: [{ source: result }] };
-            };
-          }
-
-          const keys = keysOrFn as any;
-          const fn = maybeFn as any;
-          const keysArray = Array.isArray(keys) ? keys : [keys];
-          const isArray = Array.isArray(keys);
-
-          const _fn = reduceFnMap(fn as any, ...this.__eventsList);
-
-          return state => {
-            const result = _fn(state);
-            if (!isArray) {
-              return {
-                mergers: [
-                  {
-                    key: keysArray[0] as any,
-                    source: recompose({ [keysArray[0]]: result }) as any,
-                  },
-                ],
-              };
-            }
-            const mergers = keysArray.map((k, idx) => ({
-              key: k as any,
-              source: recompose({ [k]: result?.[idx] }) as any,
-            }));
-            return { mergers };
-          };
-        },
-
-        batch: (...fns) => {
-          return state => {
-            const mergers: any[] = [];
-            const extendeds: any = {};
-
-            for (const fn of fns.filter(f => !!f)) {
-              const { mergers: m, ...ext } = fn(state);
-              Object.assign(extendeds, ext);
-
-              if (m && m.length > 0) {
-                mergers.push(...m);
-                state.context = merge2.multiple(state.context, ...(m as any)) as any;
-              }
-            }
-            return { mergers, ...extendeds };
-          };
-        },
-
-        _for: (count, fn) => {
-          return state => {
-            const mergers: any[] = [];
-            const extendeds: any = {};
-
-            if (fn) {
-              const raw =
-                typeof count === 'number'
-                  ? count
-                  : reduceFnMap(count, ...this.__eventsList)(state);
-
-              if (!Number.isFinite(raw) || raw <= 0)
-                return { mergers, ...extendeds };
-              const iterations = Math.trunc(raw);
-
-              for (let index = 0; index < iterations; index++) {
-                const { mergers: m, ...ext } = fn(state);
-                Object.assign(extendeds, ext);
-
-                if (m && m.length > 0) {
-                  mergers.push(...m);
-                  // In-place merge: each iteration reads the previous committed context
-                  state.context = merge2.multiple(
-                    state.context,
-                    ...(m as any),
-                  ) as any;
-                }
-              }
-            }
-
-            return { mergers, ...extendeds };
-          };
-        },
-
-        _while: (predicate, fn) => {
-          return state => {
-            const mergers: any[] = [];
-            const extendeds: any = {};
-
-            if (fn) {
-              const predicateFn = reduceFnMap(predicate, ...this.__eventsList);
-
-              while (predicateFn(state)) {
-                const { mergers: m, ...ext } = fn(state);
-                Object.assign(extendeds, ext);
-
-                /* v8 ignore else -- @preserve */
-                if (m && m.length > 0) {
-                  mergers.push(...m);
-                  // In-place merge: each iteration reads the previous committed context
-                  state.context = merge2.multiple(
-                    state.context,
-                    ...(m as any),
-                  ) as any;
-                }
-              }
-            }
-
-            return { mergers, ...extendeds };
-          };
-        },
-
-        _doWhile: (predicate, fn) => {
-          return state => {
-            const mergers: any[] = [];
-            const extendeds: any = {};
-
-            if (fn) {
-              const predicateFn = reduceFnMap(predicate, ...this.__eventsList);
-
-              do {
-                const { mergers: m, ...ext } = fn(state);
-                Object.assign(extendeds, ext);
-
-                if (m && m.length > 0) {
-                  mergers.push(...m);
-                  // In-place merge: each iteration reads the previous committed context
-                  state.context = merge2.multiple(
-                    state.context,
-                    ...(m as any),
-                  ) as any;
-                }
-              } while (predicateFn(state));
-            }
-
-            return { mergers, ...extendeds };
-          };
-        },
-
-        filter,
-        erase,
-        action,
-        sendTo,
-
-        resend: resend => () => ({ resend }),
-        forceSend: forceSend => () => ({ forceSend }),
-
-        pauseActivity: this.__timeAction('pauseActivity') as any,
-        resumeActivity: this.__timeAction('resumeActivity') as any,
-        stopActivity: this.__timeAction('stopActivity') as any,
-        pauseTimer: this.__timeAction('pauseTimer') as any,
-        resumeTimer: this.__timeAction('resumeTimer') as any,
-        stopTimer: this.__timeAction('stopTimer') as any,
-      },
-      { _legacy },
-    );
-
-    return out;
+    return helper(helpers, { _legacy });
   };
 
   /**
@@ -356,35 +146,6 @@ export class SyncMachine<
     out.addOptions(() => ({ guards, actions, delays, actors }) as any);
 
     return out as any;
-  };
-
-  // #region Options helper functions
-
-  /**
-   * Function helper to send an event to a child service.
-   */
-  protected __sendTo: SyncSendAction_F<Eo, Pc, Tc, Ta> = () => {
-    return fn => {
-      const fn2 = reduceFnMap(fn, ...this.__eventsList);
-      return state => {
-        const { event, to } = fn2(state) as any;
-        const sentEvent = { to, event };
-        return { sentEvent };
-      };
-    };
-  };
-
-  /**
-   * Function helper to perform an action.
-   *
-   * @param fn - The action function to perform.
-   */
-  protected __action: SyncAction_F<Eo, Pc, Tc, Ta> = fn => {
-    return state => {
-      const _fn = reduceFnMap(fn, ...this.__eventsList);
-      _fn(state);
-      return {};
-    };
   };
 }
 

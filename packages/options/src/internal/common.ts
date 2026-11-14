@@ -73,7 +73,7 @@ export const createCommonHelpers = (config: any) => {
    * @returns Action filtering the property.
    */
   const filter = (key: string, fn: any) => (state: any) => {
-    const currentValue = byKey2.low(state.context, key);
+    const currentValue = byKey2(state.context, key);
     let filteredValue: any;
 
     if (Array.isArray(currentValue)) {

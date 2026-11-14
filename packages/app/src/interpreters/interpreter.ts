@@ -538,7 +538,7 @@ export class AsyncInterpreter<
 
     if (response) {
       await this.__performActions(from, ...toArray.typed(diffExits));
-      await this.__performActions(from, ...toArray.typed(actions));
+      await this.__performActions(from, ...toArray<WithDescriber>(actions));
       await this.__performActions(from, ...toArray.typed(diffEntries));
       return target ?? false;
     }

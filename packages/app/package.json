@@ -60,6 +60,11 @@
       "require": "./lib/constants/index.cjs",
       "types": "./lib/constants/index.d.ts"
     },
+    "./contract": {
+      "import": "./lib/contract.js",
+      "require": "./lib/contract.cjs",
+      "types": "./lib/contract.d.ts"
+    },
     "./delays": {
       "import": "./lib/delays/index.js",
       "require": "./lib/delays/index.cjs",
@@ -122,7 +127,7 @@
     "test:watch": "vp test"
   },
   "dependencies": {
-    "@bemedev/app-contract": "workspace:^",
+    "@bemedev/app-options": "workspace:^",
     "@bemedev/better-promise": "^0.1.1",
     "@bemedev/boolean-recursive": "^0.0.3",
     "@bemedev/decompose": "^2.3.0",

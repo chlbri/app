@@ -4,11 +4,7 @@ import type { ActorsConfigMap, EventObject, EventsMap, EventStrings } from '#eve
 
 import type {
   FlatMapN,
-  NodeConfig,
   NodeConfig2,
-  NodeConfig3,
-  NodeConfigCompound2,
-  NodeConfigParallel2,
   StateExtended,
   StatePextended,
   StateValue,
@@ -37,6 +33,7 @@ import type {
 } from '@bemedev/function-swap';
 
 import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
+import type { CommonConfig3 } from '@bemedev/app-options';
 import type {
   EmptyObject,
   FnMap,
@@ -48,6 +45,15 @@ import type {
   TrueObject,
   ValuesOf,
 } from '~types';
+
+export type {
+  ChildConfigDef,
+  ChildConfigMap,
+  CommonConfig,
+  CommonConfig2,
+  CommonConfig3,
+  CommonConfigNode,
+} from '@bemedev/app-options';
 
 /**
  * Type guard for enforcing no extra keys on target definitions.
@@ -107,41 +113,6 @@ export type TransformTargetDef2<
             : never;
         };
       });
-
-/**
- * Union of non-atomic node configurations (compound or parallel).
- */
-export type CommonConfigNode = NodeConfigCompound2 | NodeConfigParallel2;
-
-/**
- * Machine configuration with strict and longRuns flags.
- *
- * @template | {@linkcode TargetDef} `Paths` - Target definition type.
- */
-export type CommonConfig<Paths extends TargetDef = TargetDef> = NodeConfig<Paths> & {
-  readonly strict?: boolean;
-  readonly __longRuns?: boolean;
-};
-
-/**
- * Machine configuration version 2 with strict and longRuns flags.
- *
- * @template `Paths` - State path union.
- */
-export type CommonConfig2<Paths extends string = string> = NodeConfig2<Paths> & {
-  readonly strict?: boolean;
-  readonly __longRuns?: boolean;
-};
-
-/**
- * Loose machine configuration version 3 with strict and longRuns flags.
- *
- * @template `Paths` - State path union.
- */
-export type CommonConfig3<Paths extends string = string> = NodeConfig3<Paths> & {
-  readonly strict?: boolean;
-  readonly __longRuns?: boolean;
-};
 
 /**
  * Enforces no extra keys across full machine configuration object.
@@ -565,18 +536,6 @@ export type GetEventsFromFlat<Flat extends FlatMapN> = Record<
 export type GetEventsFromConfig<C extends CommonConfig3> = GetEventsFromFlat<
   FlatMapN<C>
 >;
-
-/**
- * Child configuration definition alias for events map.
- */
-export type ChildConfigDef = EventsMap;
-
-/**
- * Map of child names to child configuration definitions.
- *
- * @template `S` - Key string type.
- */
-export type ChildConfigMap<S extends string = string> = Record<S, ChildConfigDef>;
 
 /**
  * Child actor object representation.

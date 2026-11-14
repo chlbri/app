@@ -768,9 +768,9 @@ importers:
 
   packages/app:
     dependencies:
-      '@bemedev/app-contract':
+      '@bemedev/app-options':
         specifier: workspace:^
-        version: link:../contract
+        version: link:../options
       '@bemedev/better-promise':
         specifier: ^0.1.1
         version: 0.1.1

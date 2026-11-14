@@ -12,6 +12,23 @@ import type {
   UnionToIntersection,
 } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
+import type {
+  Describer,
+  EmptyObject,
+  EventToType,
+  RecordS,
+} from '@bemedev/app-options';
+
+export type {
+  Describer,
+  EmptyObject,
+  EventToType,
+  FnMap,
+  FnR,
+  MaybePromise,
+  RecordS,
+  SingleOrArrayL,
+} from '@bemedev/app-options';
 
 /**
  * Type guard function signature for checking if a value is of type `string`.
@@ -37,23 +54,9 @@ export type SingleOrArrayR<T> = T | readonly T[];
 export type SingleOrArrayL2<T> = T | [T, T, ...T[]];
 
 /**
- * Single or readonly array type of `T` with at least one element.
- * This type is useful when you want to ensure that the value is either a single
- * element or an array containing at least one element.
- *
- * @template `T` - The element type.
- */
-export type SingleOrArrayL<T> = T | readonly [...(readonly T[]), T];
-
-/**
  * Describer keys used to define the name and description of an object.
  */
 export const DESCRIBER_KEYS = ['name', 'description'] as const;
-
-/**
- * Describer type that contains a name and a description.
- */
-export type Describer = Record<(typeof DESCRIBER_KEYS)[number], string>;
 
 /**
  * Retrieves the `name` property from a type {@linkcode Describer}.
@@ -328,25 +331,6 @@ export type ToArray<T> = T extends readonly unknown[]
     : readonly T[];
 
 /**
- * An helper to write common function signatures.
- *
- * @template | {@linkcode EventObject} `E` - The event object type.
- * @template `Pc` - The private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - The context of the function, defaults to any object.
- * @template `T` - State tag string type.
- * @template `R` - The return type of the function, defaults to any.
- *
- * @see -- type {@linkcode StateExtended}
- */
-export type FnR<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = (state: StateExtended<E, Pc, Tc, T>) => R;
-
-/**
  * A helper type to reduce a function signature to its context and events map.
  *
  * @template | {@linkcode EventObject} `E` - The event object type.
@@ -364,44 +348,6 @@ export type FnReduced<
   T extends string = string,
   R = any,
 > = (state: State<E, Tc, T>) => R;
-
-/**
- * Extracts the string event type from an event type or string literal `T`.
- *
- * @template `T` - The event type or string.
- */
-export type EventToType<T extends string | { type: string }> = T extends {
-  type: infer U extends string;
-}
-  ? U
-  : T extends string
-    ? T
-    : never;
-
-/**
- * Internal helper function map type keyed by event types.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
- * @template `R` - Return value type.
- * @template `Ex` - Event types to exclude.
- * @template `TT` - Filtered event type.
- */
-type _FnMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-  Ex extends string = never,
-  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
-> = {
-  [key in Exclude<EventToType<TT>, EventStrings>]?: (
-    state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
-  ) => R;
-} & Partial<Record<EventStrings | 'else', FnR<E, Pc, Tc, T, R>>>;
 
 /**
  * Internal helper function map type keyed by event types.
@@ -539,25 +485,6 @@ type _FnMapReduced<
 } & Partial<Record<EventStrings | 'else', FnReduced<E, Tc, T, R>>>;
 
 /**
- * Maps event types to their corresponding handler function signatures or fallback handler.
- *
- * @template | {@linkcode EventObject} `E` - The event object type.
- * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
- * @template `T` - State tag string type.
- * @template `R` - Return type.
- * @template `Ex` - Event type strings to exclude.
- */
-export type FnMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-  Ex extends string = never,
-> = FnR<E, Pc, Tc, T, R> | _FnMap<E, Pc, Tc, T, R, Ex>;
-
-/**
  * A helper type to reduce a function signature to its context and events map.
  *
  * @template | {@linkcode EventObject} `E` - The event object type.
@@ -575,21 +502,6 @@ export type FnMapR<
   R = any,
   Ex extends string = never,
 > = FnReduced<E, Tc, T, R> | _FnMapReduced<E, Tc, T, R, Ex>;
-
-/**
- * Represents an empty object type with no properties.
- */
-// oxlint-disable-next-line typescript/no-empty-object-type
-export type EmptyObject = {};
-
-/**
- * A type that represents a record with string keys and values of type `T`.
- *
- * @template `T` - The type of the record values, defaults to `unknown`.
- *
- * @see -- type {@linkcode Record}
- */
-export type RecordS<T = unknown> = Record<string, T>;
 
 /**
  * A type that represents all values of type `T`.
@@ -842,13 +754,6 @@ export type OptionalDefinition<
   V extends string,
   R extends _OptionalDefinition<P, V> = _OptionalDefinition<P, V>,
 > = R extends never | RecordS<never> ? EmptyObject : R;
-
-/**
- * Type wrapping `T` or a `Promise` resolving to `T`.
- *
- * @template `T` - The resolved value type.
- */
-export type MaybePromise<T> = T | Promise<T>;
 
 /**
  * Type guard function signature for checking deep equality of two values.

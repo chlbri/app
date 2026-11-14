@@ -1,4 +1,4 @@
-import { toAction } from '#actions';
+import { toAction, type WithDescriber } from '#actions';
 import type { SimpleMachineOptions2 } from '#common/machine';
 import type { EventObject } from '#events';
 import { toPredicate } from '#guards';
@@ -48,9 +48,9 @@ export const toTransition: ToTransition_F = (config, options, ...events) => {
   if (isString) return { target: config };
   const { description, target } = config;
 
-  const actions = toArray
-    .typed(config.actions)
-    .map(action => toAction(action, options?.actions, ...events));
+  const actions = toArray<WithDescriber>(config.actions).map(action =>
+    toAction(action, options?.actions, ...events),
+  );
   const guards = toArray<GuardConfig>(config.guards).map(guard =>
     toPredicate(guard, options?.guards, ...events),
   );

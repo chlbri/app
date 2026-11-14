@@ -1,16 +1,20 @@
-import type { ExtendedActionsParams } from '#common/interpreter';
 import type { EventObject } from '#events';
-import type { Merger } from '#utils';
+import type {
+  ActionResult,
+  MaybeAsyncActionResult,
+  WithDescriber,
+} from '@bemedev/app-options';
 import type { NoExtraKeys } from '@bemedev/app-utils-bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { Describer, FnMap, FnR, FromDescriber } from '~types';
+import type { Describer, FnMap, FromDescriber } from '~types';
 
-/**
- * JSON configuration for an action.
- *
- * @see -- type {@linkcode Describer}
- */
-export type WithDescriber = string | Describer;
+export type {
+  ActionResult,
+  AsyncAction2,
+  MaybeAsyncActionResult,
+  SyncAction2,
+  WithDescriber,
+} from '@bemedev/app-options';
 
 /**
  * Enforces no extra keys when value is a describer object.
@@ -57,31 +61,6 @@ export type NoExtraKeysWithDescriberSoa<T> =
  * @see -- type {@linkcode FromDescriber}
  */
 export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
-
-/**
- * Represents the result of executing an action, which includes optional property mergers and extended actions.
- *
- * @template `Pc` - The type of the private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @returns An type {@linkcode ActionResult} object.
- */
-export type ActionResult<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  Eo extends EventObject = EventObject,
-> = { mergers?: Merger<Tc, string>[] } & ExtendedActionsParams<Eo>;
-
-/**
- * An action may return synchronously or asynchronously.
- *
- * Any action (user-provided or produced by an `addOptions` helper)
- * may return type {@linkcode ActionResult} or a promise that resolves to one.
- *
- * @template | {@linkcode PrimitiveObject} `Tc` - The type of the context.
- */
-export type MaybeAsyncActionResult<Tc extends PrimitiveObject = PrimitiveObject> =
-  | ActionResult<Tc>
-  | Promise<ActionResult<Tc>>;
 
 /**
  * Async action function map.
@@ -142,33 +121,3 @@ export type SyncActionMap<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = Partial<Record<string, SyncAction<E, Pc, Tc, T>>>;
-
-/**
- * Async action function executor.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path type.
- */
-export type AsyncAction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, MaybeAsyncActionResult<Tc>>;
-
-/**
- * Sync action function executor.
- *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path type.
- */
-export type SyncAction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, ActionResult<Tc>>;

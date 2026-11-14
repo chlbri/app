@@ -1,11 +1,6 @@
 import type { ActionResult, WithDescriber } from '#actions';
 import type { Pausable } from '#emitters';
-import type {
-  ActorsConfigMap,
-  EventArgObject,
-  EventObject,
-  EventsMap,
-} from '#events';
+import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig } from '#guards';
 import type { ActivityConfig, StateValue, WorkingStatus } from '#states';
 import type { NOmit, NotUndefined, Primitive } from '@bemedev/app-utils-bemedev';
@@ -17,6 +12,8 @@ import type { Fn, FnMap, FnMapR, KeyU, OptionalDefinition } from '~types';
 import type { SimpleMachineOptions2 } from '../machine';
 import type { AnyMachine, MachineType } from '../machine/types';
 import type { Subscriber, SubscriberOptions } from '../subscriber';
+
+export type { ExtendedActionsParams, SendToEvent } from '@bemedev/app-options';
 
 /**
  * Execution mode of state machine interpreter.
@@ -214,13 +211,6 @@ export type ExecuteActivities_F = (
   from: string,
   activity: ActivityConfig,
 ) => string[];
-
-/**
- * Target-directed event envelope.
- *
- * @template `T` - Event type.
- */
-export type SendToEvent<T = any> = { to: string; event: T };
 
 /**
  * Function signature for merging action execution result.
@@ -550,21 +540,6 @@ export type Selector_F<T = any> = 0 extends 1 & T
       >(
         selector: K,
       ) => R;
-
-/**
- * Map of built-in action payloads passed to action functions.
- *
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- */
-export type ExtendedActionsParams<Eo extends EventObject = EventObject> = Partial<{
-  resend: EventArgObject<Eo>;
-  forceSend: EventArgObject<Eo>;
-  pauseActivity: string;
-  resumeActivity: string;
-  stopActivity: string;
-
-  sentEvent: SendToEvent;
-}>;
 
 /**
  * Options for configuring an interpreter.

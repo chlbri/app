@@ -32,7 +32,7 @@ const isTrueObject = (value: unknown): value is Record<string, any> =>
  *
  * @returns The reached nested value.
  */
-export const byKey2Low = (obj: any, key: string, options?: ByKey2Options) => {
+export const byKey2 = (obj: any, key: string, options?: ByKey2Options) => {
   if (obj === undefined || obj === null) return undefined;
   const { sep = '.', start = false } = options ?? {};
   const __key = start ? key.substring(1) : key;
@@ -46,18 +46,6 @@ export const byKey2Low = (obj: any, key: string, options?: ByKey2Options) => {
 
   return current;
 };
-
-/**
- * Nested property reader with an untyped alias.
- *
- * @param obj - Target object to traverse.
- * @param key - Key path, split on `'.'`.
- *
- * @returns The reached nested value.
- */
-export const byKey2 = Object.assign((obj: any, key: string) => byKey2Low(obj, key), {
-  low: byKey2Low,
-});
 
 /**
  * Type guard checking that a value is a function.

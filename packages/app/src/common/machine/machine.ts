@@ -10,13 +10,7 @@ import {
 
 import { DEFAULT_DELIMITER } from '#constants';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
-import {
-  isDefinedS,
-  isNotDefinedS,
-  isNotValue,
-  isValue,
-  type DefinedValue,
-} from '#guards';
+import { type DefinedValue } from '#guards';
 import {
   flatMap,
   initialConfig,
@@ -30,27 +24,18 @@ import {
   type StatePextended,
   type StateValue,
 } from '#states';
-import {
-  byKey2,
-  constructEvents,
-  reduceFnMap,
-  reduceFnMapFilterArray,
-  reduceFnMapFilterObject,
-} from '#utils';
+import { constructEvents } from '#utils';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-utils-bemedev';
 import { _unknown } from '@bemedev/app-utils-bemedev';
-import { decompose, recompose, type Decompose } from '@bemedev/decompose';
-import { swap as _swap } from '@bemedev/function-swap';
+import { decompose, type Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   AnyMachine,
   CommonConfig3,
   CommonElements,
-  CommonTimeAction_F,
   GetIO_F,
   MachineType,
   SimpleMachineOptions2,
-  SwapFunction_F,
 } from './types';
 
 /**
@@ -456,16 +441,6 @@ export abstract class CommonMachine<
   }
 
   /**
-   * Swaps state arguments in functional transitions.
-   */
-  swap: SwapFunction_F<Eo, Pc, Tc, Ta> = (fn, ev) => types => {
-    const _swappped = _swap(fn).constraint()(types);
-    const __fn = ev ? { [ev]: _swappped } : _swappped;
-    const _fn = reduceFnMap(__fn, ...this.__eventsList);
-    return _fn;
-  };
-
-  /**
    * The accessor of context for this {@linkcode CommonMachine}.
    *
    * @returns The current public context object of type `Tc`.
@@ -779,132 +754,6 @@ export abstract class CommonMachine<
 
     return out;
   }
-
-  /**
-   * Function helper to check if a value matches the provided values.
-   *
-   * @returns The value matcher guard factory.
-   *
-   * @see {@linkcode isValue}
-   */
-  protected get __isValue() {
-    return isValue<Eo, Pc, Tc, Ta>;
-  }
-
-  /**
-   * Function helper to check if a value is not one of the provided values.
-   *
-   * @returns The value non-matcher guard factory.
-   *
-   * @see {@linkcode isNotValue}
-   */
-  protected get __isNotValue() {
-    return isNotValue<Eo, Pc, Tc, Ta>;
-  }
-
-  /**
-   * Function helper to check if a value is defined.
-   *
-   * @returns The defined-value guard factory.
-   *
-   * @see {@linkcode isDefinedS}
-   */
-  protected get __isDefined() {
-    return isDefinedS<Eo, Pc, Tc, Ta>;
-  }
-
-  /**
-   * Function helper to check if a value is undefined or null.
-   *
-   * @returns The not-defined guard factory.
-   *
-   * @see {@linkcode isNotDefinedS}
-   */
-  protected get __isNotDefined() {
-    return isNotDefinedS<Eo, Pc, Tc, Ta>;
-  }
-
-  /**
-   * Abstract helper function to send an event to a target child service.
-   */
-  protected abstract __sendTo: <M extends AnyMachine>(_?: M) => Fn;
-
-  /**
-   * Protected abstract action function getter.
-   */
-  protected abstract __action: Fn;
-
-  /**
-   * Protected time action handler factory.
-   *
-   * @param name - Activity or timer action type name.
-   *
-   * @returns Action function builder.
-   */
-  protected __timeAction: CommonTimeAction_F<Eo, Pc, Tc, Ta> = name => {
-    return id =>
-      ({ context, pContext }) => {
-        return _any({ context, pContext, [name]: id });
-      };
-  };
-
-  /**
-   * Protected helper function for creating an erase property action helper.
-   *
-   * @param keys - Key paths to erase.
-   *
-   * @returns Action function returning mergers for all specified keys.
-   */
-  protected __erase =
-    (...keys: string[]) =>
-    () => ({
-      mergers:
-        keys.length === 0
-          ? [{ source: undefined }]
-          : keys.map(key => ({
-              key: key as any,
-              source: recompose.low({ [key]: undefined }) as any,
-            })),
-    });
-
-  /**
-   * Protected helper function for creating a filter action helper.
-   *
-   * @param key - Key path to filter.
-   * @param fn - Filter predicate or predicate map.
-   *
-   * @returns Action function returning mergers for the filtered key.
-   */
-  protected __filter = (key: string, fn: any) => {
-    return (state: any) => {
-      const currentValue = byKey2.low(state.context, key);
-      let filteredValue: any;
-
-      /* v8 ignore else -- @preserve */
-      if (Array.isArray(currentValue)) {
-        const predicate = reduceFnMapFilterArray(fn as any, ...this.__eventsList);
-        filteredValue = currentValue.filter((item, index) =>
-          predicate(item, index, state),
-        );
-      } else if (currentValue !== null && typeof currentValue === 'object') {
-        const predicate = reduceFnMapFilterObject(fn as any, ...this.__eventsList);
-        filteredValue = Object.entries(currentValue).reduce(
-          (acc, [objKey, value]) => {
-            const check = predicate(value, state);
-            if (check) acc[objKey] = value;
-            return acc;
-          },
-          {} as any,
-        );
-      }
-
-      return {
-        mergers: [
-          { key: key as any, source: recompose({ [key]: filteredValue }) as any },
-        ],
-      };
-    };
-  };
 }
 
 /**

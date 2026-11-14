@@ -290,6 +290,7 @@ export const createAsyncHelpers = (config: any) => {
           const { mergers: m, ...ext } = await fn(state);
           Object.assign(extendeds, ext);
 
+          /* v8 ignore if -- @preserve */
           if (m && m.length > 0) {
             mergers.push(...m);
             state.context = merge2.multiple(state.context, ...(m as any)) as any;

@@ -17,9 +17,35 @@ import type {
   AnyArray,
   IndexesOfArray,
   NotUndefined,
-  Require,
   SoA,
 } from '@bemedev/app-utils-bemedev';
+import type {
+  _TransitionConfigMap,
+  ArrayTransitions,
+  ArrayTransitionsF,
+  TransitionConfigMapA,
+  TransitionConfigMapF,
+  TransitionConfigMapFG,
+  TransitionConfigMapG,
+  TransitionsConfig,
+} from '@bemedev/app-options';
+
+export type {
+  _TransitionConfigMap,
+  AlwaysConfig,
+  ArrayTransitions,
+  ArrayTransitionsF,
+  DelayedTransitions,
+  SingleOrArrayT,
+  TransitionConfig,
+  TransitionConfigF,
+  TransitionConfigMap,
+  TransitionConfigMapA,
+  TransitionConfigMapF,
+  TransitionConfigMapFG,
+  TransitionConfigMapG,
+  TransitionsConfig,
+} from '@bemedev/app-options';
 import type { Observable } from 'rxjs';
 import type { ActorConfig, ChildConfig, EmitterConfig } from '../actors/types';
 
@@ -33,19 +59,6 @@ import type { Identify, RecordS, ReduceArray, SingleOrArrayL } from '~types';
 //   readonly initial?: string;
 //   readonly states?: RecordS<TargetDef>;
 // };
-
-/**
- * Represents the simplest configuration map for a transition.
- * Used as Helper.
- *
- * @template Paths - Allowed state target paths. Defaults to `string`.
- */
-export type _TransitionConfigMap<Paths = string> = {
-  readonly target?: Paths;
-  readonly actions?: SingleOrArrayL<WithDescriber>;
-  readonly guards?: SingleOrArrayL<GuardConfig>;
-  readonly description?: string;
-};
 
 /**
  * Enforces no extra keys on transition configuration object or string target.
@@ -126,16 +139,6 @@ export type ExtractGuardKeysFromTransition<
     : never;
 
 /**
- * A type {@linkcode _TransitionConfigMap} that requires actions.
- *
- * @template `Paths` - State path union.
- */
-export type TransitionConfigMapA<Paths = string> = Require<
-  _TransitionConfigMap<Paths>,
-  'actions'
->;
-
-/**
  * Transition configuration requiring actions or string path.
  *
  * @template `Paths` - State path union.
@@ -143,122 +146,11 @@ export type TransitionConfigMapA<Paths = string> = Require<
 export type TransitionConfigA<Paths = string> = TransitionConfigMapA<Paths> | Paths;
 
 /**
- * A type {@linkcode _TransitionConfigMap} that requires target.
- *
- * @template `Paths` - State path union.
- */
-export type TransitionConfigMapF<Paths = string> = Require<
-  _TransitionConfigMap<Paths>,
-  'target'
->;
-
-/**
- * Transition configuration requiring target or string path.
- *
- * @template `Paths` - State path union.
- */
-export type TransitionConfigF<Paths = string> = TransitionConfigMapF<Paths> | Paths;
-
-/**
- * Union of target-required and action-required transition maps.
- *
- * @template `Paths` - State path union.
- */
-export type TransitionConfigMap<Paths = string> =
-  | TransitionConfigMapF<Paths>
-  | TransitionConfigMapA<Paths>;
-
-/**
- * Transition configuration map requiring guards.
- *
- * @template `Paths` - State path union.
- */
-export type TransitionConfigMapG<Paths = string> = Require<
-  TransitionConfigMap<Paths>,
-  'guards'
->;
-
-/**
- * Transition configuration map requiring both target and guards.
- *
- * @template `Paths` - State path union.
- */
-export type TransitionConfigMapFG<Paths = string> = Require<
-  TransitionConfigMapF<Paths>,
-  'guards'
->;
-
-/**
- * A better version type {@linkcode _TransitionConfigMap}.
- *
- * This type is used to ensure that the transition configuration
- * has either a target or actions defined, but not both.
- *
- * @template `Paths` - State path union. Defaults to `string`.
- *
- * @see {@linkcode TransitionConfigMapF}, {@linkcode TransitionConfigMapA}
- */
-export type TransitionConfig<Paths = string> = Paths | TransitionConfigMap<Paths>;
-
-/**
  * String target path or transition configuration map helper.
  *
  * @template `Paths` - State path union.
  */
 export type _TransitionConfig<Paths = string> = Paths | _TransitionConfigMap<Paths>;
-
-/**
- * An array of transitions that can be used in a state machine.
- *
- * @template `Paths` - State path union.
- *
- * @see {@linkcode TransitionConfigMapF}, {@linkcode TransitionConfigMapA}, {@linkcode TransitionConfig}, {@linkcode Require}
- */
-export type ArrayTransitions<Paths = string> = readonly [
-  ...TransitionConfigMapG<Paths>[],
-  TransitionConfig<Paths>,
-];
-
-/**
- * Array of target-required transition configurations ending with target transition.
- *
- * @template `Paths` - State path union.
- */
-export type ArrayTransitionsF<Paths = string> = readonly [
-  ...TransitionConfigMapFG<Paths>[],
-  TransitionConfigF<Paths>,
-];
-
-/**
- * A type that can be either an array of transitions or a single transition configuration.
- *
- * @template `Paths` - State path union. Defaults to `string`.
- *
- * @see {@linkcode ArrayTransitions}, {@linkcode TransitionConfig}
- */
-export type SingleOrArrayT<Paths = string> =
-  | ArrayTransitions<Paths>
-  | TransitionConfig<Paths>;
-
-/**
- * Representation of an always transition config.
- *
- * @template `Paths` - State path union.
- *
- * @see {@linkcode ArrayTransitions}, {@linkcode TransitionConfigF}, {@linkcode Require}
- */
-export type AlwaysConfig<Paths = string> =
-  | ArrayTransitionsF<Paths>
-  | TransitionConfigF<Paths>;
-
-/**
- * A type used to represent a record of transitions.
- *
- * @template `Paths` - State path union. Defaults to `string`.
- *
- * @remarks For the purpose of delay transition config.
- */
-export type DelayedTransitions<Paths = string> = RecordS<SingleOrArrayT<Paths>>;
 
 /**
  * Extracts event key path strings from a type {@linkcode DelayedTransitions} object.
@@ -305,14 +197,6 @@ export type ExtractGuardKeysFromDelayed<T> = ExtractGuardKeysFromTransition<
  *
  * @see -- type {@linkcode DelayedTransitions}, -- type {@linkcode AlwaysConfig}, -- type {@linkcode SingleOrArrayL}
  */
-
-export type TransitionsConfig<Paths extends string = string> = {
-  readonly on?: DelayedTransitions<Paths>;
-  readonly always?: AlwaysConfig<Paths>;
-  readonly after?: DelayedTransitions<Paths>;
-  readonly actors?: RecordS<ActorConfig<Paths>>;
-};
-
 /**
  * Internal partial transitions configuration structure.
  *

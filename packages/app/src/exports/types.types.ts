@@ -15,7 +15,7 @@ import type {
 } from '#events';
 import type { AsyncInterpreterFrom } from '#interpreter';
 import type { Register, RegisterOptions } from '#registry';
-import type { Contract } from '@bemedev/app-contract';
+import type { Contract } from '@bemedev/app-options';
 import type { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings';
 import type { AsyncMachineOptions2 } from '../asyncMachine';
 import type { AsyncMachine } from '../asyncMachine/machine';
@@ -183,7 +183,7 @@ export type CreateMachineNamed_F = <
 /**
  * Narrows a contract context to the machine `PrimitiveObject` constraint.
  *
- * Contract types are vendored in `@bemedev/app-contract`, so an unresolved
+ * Contract types are re-exported by `@bemedev/app-options`, so an unresolved
  * contract context does not satisfy the `PrimitiveObject` imported from
  * `@bemedev/typings`. Resolved contexts keep their shape, unresolved ones fall
  * back to `any`.

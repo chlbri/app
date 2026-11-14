@@ -1,12 +1,8 @@
 import type { TargetDef } from '#states';
+import type { RegisterOptions } from '@bemedev/app-options';
 
-/**
- * Map of option categories to string identifiers for registry options.
- */
-export type RegisterOptions = Record<
-  'children' | 'emitters' | 'tags' | 'actions' | 'guards' | 'delays',
-  string
->;
+export type { RegisterOptions } from '@bemedev/app-options';
+
 /**
  * The Register interface is augmented by the CLI-generated `app.gen.ts` file.
  * It uses the TanStack Start pattern of `declare module` augmentation

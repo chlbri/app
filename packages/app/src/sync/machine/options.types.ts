@@ -1,7 +1,5 @@
 import type { SyncAction2 } from '#actions';
 import type { EventsMapFrom } from '#common/interpreter';
-import type { SyncDelayFunction2 } from '#delays';
-import type { SyncEmitterFunction, SyncEmittersMap } from '#emitters';
 import type {
   ActorsConfigMap,
   EventArg,
@@ -9,7 +7,7 @@ import type {
   EventObject,
   EventsMap,
 } from '#events';
-import type { DefinedValue, SyncPredicateS, SyncPredicateS2 } from '#guards';
+import type { DefinedValue, SyncPredicateS } from '#guards';
 
 import type {
   AnyMachine,
@@ -20,16 +18,20 @@ import type {
   SimpleMachineOptions2,
   SwapFunction_F,
 } from '#common/machine';
-import type { RegisterOptions } from '#registry';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,
   FnMap,
   FnR,
-  RecordS,
   SingleOrArrayL2,
   TraversableTuple,
 } from '~types';
+
+export type {
+  SyncChildFunction2,
+  SyncMachineOptions2,
+  SyncSimpleMachineOptions,
+} from '@bemedev/app-options';
 import type { SyncMachine } from './machine';
 
 /**
@@ -622,70 +624,3 @@ export type SyncProvideOptions_F<
 > = <const T extends Mo>(
   option: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
 ) => SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
-
-/**
- * Helper type signature for defining a synchronous child machine function.
- *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @template `R` - Result type with `eventsMap`.
- */
-export type SyncChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, R>;
-
-/**
- * Machine options for synchronous machines registered with type {@linkcode RegisterOptions}.
- *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @template `Eo` - Event object type.
- * @template `O` - Register options type.
- */
-export type SyncMachineOptions2<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-  O extends RegisterOptions = RegisterOptions,
-> = Partial<{
-  actions: Partial<Record<O['actions'], SyncAction2<Eo, Pc, Tc, T>>>;
-  guards: Partial<Record<O['guards'], SyncPredicateS<Eo, Pc, Tc, T>>>;
-  delays: Partial<Record<O['delays'], SyncDelayFunction2<Eo, Pc, Tc, T>>>;
-  actors: Partial<{
-    children: Partial<Record<O['children'], SyncChildFunction2<Eo, Pc, Tc, T, any>>>;
-    emitters: Partial<
-      Record<O['emitters'], SyncEmitterFunction<Eo, Pc, Tc, T, any>>
-    >;
-  }>;
-}>;
-
-/**
- * Simple representation machine options
- *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- */
-export type SyncSimpleMachineOptions<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> = Partial<{
-  actions: Partial<RecordS<SyncAction2<Eo, Pc, Tc, T>>>;
-  guards: Partial<RecordS<SyncPredicateS2<Eo, Pc, Tc, T>>>;
-  delays: Partial<RecordS<SyncDelayFunction2<Eo, Pc, Tc, T>>>;
-  actors: Partial<{
-    children: RecordS<SyncChildFunction2<Eo, Pc, Tc, T>>;
-    emitters: SyncEmittersMap<Eo, Pc, Tc, T>;
-  }>;
-}>;

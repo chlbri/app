@@ -11,6 +11,9 @@ The package exposes a single function, `createOptions`. Both machine flavors are
 covered by the same entry point; the contract's `sync` flag selects the synchronous
 or the asynchronous helper surface.
 
+Every export of `@bemedev/app-contract` is also re-exported from the package root, so
+consumers only need to depend on `@bemedev/app-options`.
+
 ## Installation
 
 ```bash
@@ -113,6 +116,7 @@ The runtime dependencies of the helpers are re-exported, so consumers of
 | `OptionsHelper`       | Type | Callback signature, selected from the contract `sync` flag. |
 | `AsyncOptions`        | Type | `max`, `then` and `catch` options of async helpers.         |
 | `LegacyOptions`       | Type | `_legacy` accessor passed as the second callback argument.  |
+| _contract exports_    | All  | Every export of `@bemedev/app-contract`, re-exported as-is. |
 
 ## License
 

@@ -6,14 +6,9 @@ import type {
   NoExtraKeysTargetDef,
 } from '#common/machine';
 import type { AsyncDelayFunction2 } from '#delays';
-import type {
-  AsyncEmitterFunction,
-  AsyncEmittersMap,
-  EmitterDef,
-  EmitterReturn,
-} from '#emitters';
+import type { AsyncEmitterFunction, EmitterDef, EmitterReturn } from '#emitters';
 import type { ActorsConfigMap, EventObject } from '#events';
-import type { AsyncPredicateS, AsyncPredicateS2 } from '#guards';
+import type { AsyncPredicateS } from '#guards';
 import type {
   ActivityConfig,
   ExtractActionsFromActivity,
@@ -36,9 +31,16 @@ import type { Equals, Keys } from '@bemedev/app-utils-bemedev';
 import { Identitfy } from '@bemedev/app-utils-bemedev';
 import type { Recompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { FnR, KeyU, MaybePromise, ReduceArray } from '~types';
-import type { RegisterOptions } from '../registry.types';
+import type { KeyU, ReduceArray } from '~types';
 import { RecordS } from '../types/primitives';
+
+import type { AsyncChildFunction2 } from '@bemedev/app-options';
+
+export type {
+  AsyncChildFunction2,
+  AsyncMachineOptions2,
+  AsyncSimpleMachineOptions,
+} from '@bemedev/app-options';
 
 /**
  * Type representing the main JSON node config of a state machine.
@@ -333,23 +335,6 @@ export type GetChildrenSrcKeysFromFlat2<
 };
 
 /**
- * Function type signature for instantiating an async child machine.
- *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @template `R` - Result type with `eventsMap`.
- */
-export type AsyncChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, MaybePromise<R>>;
-
-/**
  * Record type mapping child keys to async child machine functions.
  *
  * @template `Flat` - Flat map of nodes.
@@ -549,58 +534,6 @@ export type AsyncChild<
   on: Identitfy<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
   contexts: string[];
 };
-
-/**
- * Options for async machine registered with type {@linkcode RegisterOptions}.
- *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @template `Eo` - Event object type.
- * @template `O` - Register options type.
- */
-export type AsyncMachineOptions2<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-  O extends RegisterOptions = RegisterOptions,
-> = Partial<{
-  actions: Partial<Record<O['actions'], AsyncAction2<Eo, Pc, Tc, T>>>;
-  guards: Partial<Record<O['guards'], AsyncPredicateS<Eo, Pc, Tc, T>>>;
-  delays: Partial<Record<O['delays'], AsyncDelayFunction2<Eo, Pc, Tc, T>>>;
-  actors: Partial<{
-    children: Partial<
-      Record<O['children'], AsyncChildFunction2<Eo, Pc, Tc, T, any>>
-    >;
-    emitters: Partial<
-      Record<O['emitters'], AsyncEmitterFunction<Eo, Pc, Tc, T, any>>
-    >;
-  }>;
-}>;
-
-/**
- * Simple representation machine options
- *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- */
-export type AsyncSimpleMachineOptions<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> = Partial<{
-  actions: Partial<RecordS<AsyncAction2<Eo, Pc, Tc, T>>>;
-  guards: Partial<RecordS<AsyncPredicateS2<Eo, Pc, Tc, T>>>;
-  delays: Partial<RecordS<AsyncDelayFunction2<Eo, Pc, Tc, T>>>;
-  actors: Partial<{
-    children: RecordS<AsyncChildFunction2<Eo, Pc, Tc, T>>;
-    emitters: AsyncEmittersMap<Eo, Pc, Tc, T>;
-  }>;
-}>;
 
 /**
  * Extracts context keys from child machine object `T`.
