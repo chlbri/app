@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "vp run --filter @bemedev/app-options --filter @bemedev/app --filter @bemedev/app-reactjs pretest",
+    "_prebuild": "vp run --filter @bemedev/app-utils-bemedev --filter @bemedev/app-contract --filter @bemedev/app-options --filter @bemedev/app pretest",
+    "prebuild": "vp run _prebuild && vp run --filter @bemedev/app-reactjs pretest",
     "dev": "vp dev",
     "generate-routes": "tsr generate",
     "_build": "vp build",

@@ -69,9 +69,7 @@ export const createCommonHelpers = (config: any) => {
       filteredValue = currentValue.filter((item, index) =>
         predicate(item, index, state),
       );
-    }
-    /* v8 ignore if -- @preserve */
-    else if (currentValue !== null && typeof currentValue === 'object') {
+    } else if (currentValue !== null && typeof currentValue === 'object') {
       const predicate = reduceFnMapFilterObject(fn, ...eventsList);
       filteredValue = Object.entries(currentValue).reduce((acc, [objKey, value]) => {
         if (predicate(value, state)) acc[objKey] = value;
