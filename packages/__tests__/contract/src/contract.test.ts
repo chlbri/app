@@ -1,7 +1,6 @@
 import {
   createContract,
   type AsyncMachineOptions2,
-  type AsyncSimpleMachineOptions,
   type ContractContext,
   type ContractEventArg,
   type ContractEvents,
@@ -73,7 +72,6 @@ describe('#02 => contract types', () => {
   );
 
   test('#01 => paths', () => {
-    type TT = ContractPaths<typeof contract>;
     expectTypeOf<ContractPaths<typeof contract>>().toEqualTypeOf<
       '/' | '/idle' | '/authenticated' | '/authenticated/loading'
     >();
@@ -117,13 +115,20 @@ describe('#02 => contract types', () => {
   });
 
   test('#09 => async options surface', () => {
-    type TT = ContractOptions<typeof contract>;
     expectTypeOf<ContractOptions<typeof contract>>().toEqualTypeOf<
-      AsyncSimpleMachineOptions<
+      AsyncMachineOptions2<
         ContractPContext<typeof contract>,
         ContractContext<typeof contract>,
-        string,
-        ContractEvents<typeof contract>
+        never,
+        ContractEvents<typeof contract>,
+        {
+          children: never;
+          emitters: never;
+          tags: never;
+          actions: never;
+          delays: never;
+          guards: never;
+        }
       >
     >();
   });

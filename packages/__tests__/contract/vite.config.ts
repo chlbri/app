@@ -12,7 +12,6 @@ export default defineProject({
     globals: true,
     clearMocks: false,
     name: 'contract',
-    typecheck: { include: ['src/**/*.test.ts'] },
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },

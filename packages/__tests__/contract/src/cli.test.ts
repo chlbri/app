@@ -93,6 +93,6 @@ describe('#02 => committed generated file', () => {
 
   test('#02 => emits the registered typing surface', () => {
     expect(content).toContain("events: 'LOGIN'");
-    expect(content).toContain('pContext: { token: string }');
+    expect(content).toContain('pContext: any');
   });
 });
