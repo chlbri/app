@@ -16,7 +16,7 @@ declare module '@bemedev/app-contract' {
             idle: { targets: '/' | '/authenticated' };
           };
         };
-        all: '/' | '/idle' | '/authenticated';
+        all: '/' | '/idle' | '/authenticated' | '/authenticated/loading';
       };
       events: 'LOGIN';
       options: {

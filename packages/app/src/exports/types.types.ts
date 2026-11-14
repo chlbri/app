@@ -14,10 +14,11 @@ import type {
   ToEvents,
 } from '#events';
 import type { AsyncInterpreterFrom } from '#interpreter';
-import type { AsyncMachine } from '../asyncMachine/machine';
-import type { AsyncMachineOptions2 } from '../asyncMachine';
 import type { Register, RegisterOptions } from '#registry';
+import type { Contract } from '@bemedev/app-contract';
 import type { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings';
+import type { AsyncMachineOptions2 } from '../asyncMachine';
+import type { AsyncMachine } from '../asyncMachine/machine';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
 
@@ -180,11 +181,82 @@ export type CreateMachineNamed_F = <
 >;
 
 /**
- * Combined function signature for creating a state machine (named or unnamed).
+ * Narrows a contract context to the machine `PrimitiveObject` constraint.
  *
- * @see -- type {@linkcode CreateMachineNamed_F}, -- type {@linkcode CreateMachineNoName_F}
+ * Contract types are vendored in `@bemedev/app-contract`, so an unresolved
+ * contract context does not satisfy the `PrimitiveObject` imported from
+ * `@bemedev/typings`. Resolved contexts keep their shape, unresolved ones fall
+ * back to `any`.
  */
-export type CreateMachine_F = CreateMachineNamed_F & CreateMachineNoName_F;
+type ContractPrimitive<T> = T extends PrimitiveObject ? T : any;
+
+/**
+ * Machine resolved from a contract.
+ *
+ * It mirrors type {@linkcode OutMachine} but everything is read from the
+ * contract typing surface, and the contract options surface is used directly
+ * as the machine options type. The `sync` flag selects class
+ * {@linkcode SyncMachine} or class {@linkcode AsyncMachine}.
+ *
+ * @template | {@linkcode Contract} `C` - Machine configuration type.
+ */
+export type ContractMachine<
+  C extends Contract,
+  T extends C['types'] = C['types'],
+  Co extends C['config'] = C['config'],
+  O extends NonNullable<C['options']> = NonNullable<C['options']>,
+> = T['sync'] extends true
+  ? SyncMachine<
+      Co,
+      T['pContext'],
+      ContractPrimitive<T['context']>,
+      EventsMap,
+      ActorsConfigMap,
+      T['tags'],
+      T['events'],
+      T['paths'],
+      O
+    >
+  : AsyncMachine<
+      Co,
+      T['pContext'],
+      ContractPrimitive<T['context']>,
+      EventsMap,
+      ActorsConfigMap,
+      T['tags'],
+      T['events'],
+      T['paths'],
+      O
+    >;
+
+/**
+ * Function signature for creating a state machine from a contract.
+ *
+ * The `Contract` type parameters are promoted to the function generics, and
+ * the contract is reassembled inside the `contract` argument, so the machine
+ * type is resolved from the contract surface directly.
+ *
+ * Options built by `@bemedev/app-options` are attached to the returned machine
+ * with `machine.addOptions(() => options)`.
+ *
+ * @param contract - Contract of type `Contract`.
+ *
+ * @returns Resolved machine instance of type {@linkcode ContractMachine}.
+ */
+export type CreateMachineContract_F = <C extends Contract>(
+  contract: C,
+) => ContractMachine<C>;
+
+/**
+ * Combined function signature for creating a state machine.
+ *
+ * Accepts a contract, or the named/unnamed machine forms.
+ *
+ * @see -- type {@linkcode CreateMachineNamed_F}, -- type {@linkcode CreateMachineNoName_F}, -- type {@linkcode CreateMachineContract_F}
+ */
+export type CreateMachine_F = CreateMachineNamed_F &
+  CreateMachineNoName_F &
+  CreateMachineContract_F;
 
 /**
  * Conditional type resolving to type {@linkcode SyncInterpreterFrom} or type {@linkcode AsyncInterpreterFrom} based on machine type.

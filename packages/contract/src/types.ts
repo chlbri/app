@@ -94,6 +94,8 @@ export type ContractTypes = {
   pContext: any;
   /** Union of every state path declared by the config. */
   paths: string;
+  /** Union of tags declared by the contract states. */
+  tags: string;
   /** Synchronous execution flag. */
   sync: true | undefined;
 };
@@ -196,6 +198,13 @@ export type ContractContext<C extends Contract> = ContractTypesOf<C>['context'];
  * @template `C` - Contract type.
  */
 export type ContractPContext<C extends Contract> = ContractTypesOf<C>['pContext'];
+
+/**
+ * Extracts the union of tags declared by a contract.
+ *
+ * @template `C` - Contract type.
+ */
+export type ContractTags<C extends Contract> = ContractTypesOf<C>['tags'];
 
 /**
  * Extracts the union of state paths declared by a contract.

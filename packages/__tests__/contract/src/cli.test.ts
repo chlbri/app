@@ -1,4 +1,4 @@
-import { execFileSync } from 'child_process';
+import { execFileSync } from 'node:child_process';
 import {
   cpSync,
   existsSync,
@@ -10,7 +10,10 @@ import {
 import { tmpdir } from 'os';
 import { join, resolve } from 'path';
 
-const SOURCE = resolve('src/auth.contract.ts');
+const HERE = import.meta.dirname;
+const PACKAGE = resolve(HERE, '..');
+
+const SOURCE = resolve(HERE, 'auth.contract.ts');
 
 const MACHINE_CONTENT = `import { createMachine } from '@bemedev/app';
 
@@ -21,8 +24,8 @@ export default createMachine('sample-machine', {
 `;
 
 const BIN = [
-  resolve('node_modules/.bin/app-cli'),
-  resolve('../../../node_modules/.bin/app-cli'),
+  resolve(PACKAGE, 'node_modules/.bin/app-cli'),
+  resolve(PACKAGE, '../../../node_modules/.bin/app-cli'),
 ].find(existsSync);
 
 const cli = (args: string[]) => {
@@ -30,6 +33,14 @@ const cli = (args: string[]) => {
 
   return execFileSync(BIN, args, { encoding: 'utf8' });
 };
+
+describe('#00 => app-cli binary', () => {
+  test('#01 => executes the cli bin', () => {
+    const output = cli(['generate', '--help']);
+
+    expect(output).toContain('generate');
+  });
+});
 
 describe('#01 => app-cli generate', () => {
   let dir: string;
@@ -73,7 +84,7 @@ describe('#01 => app-cli generate', () => {
 });
 
 describe('#02 => committed generated file', () => {
-  const content = readFileSync(resolve('src/app.contract.gen.ts'), 'utf8');
+  const content = readFileSync(resolve(HERE, 'app.contract.gen.ts'), 'utf8');
 
   test('#01 => targets the contract register', () => {
     expect(content).toContain("declare module '@bemedev/app-contract'");

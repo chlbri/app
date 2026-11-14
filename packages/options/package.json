@@ -1,0 +1,125 @@
+{
+  "name": "@bemedev/app-options",
+  "version": "2.8.2",
+  "description": "Contract-driven option helpers for @bemedev/app",
+  "keywords": [
+    "state machines",
+    "options",
+    "contracts",
+    "typescript"
+  ],
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/options/README.md",
+  "license": "MIT",
+  "author": {
+    "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
+    "url": "https://bemedev.vercel.app"
+  },
+  "maintainers": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "contributors": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chlbri/app"
+  },
+  "files": [
+    "lib"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    },
+    "./better-promise": {
+      "import": "./lib/better-promise.js",
+      "require": "./lib/better-promise.cjs",
+      "types": "./lib/better-promise.d.ts"
+    },
+    "./boolean-recursive": {
+      "import": "./lib/boolean-recursive.js",
+      "require": "./lib/boolean-recursive.cjs",
+      "types": "./lib/boolean-recursive.d.ts"
+    },
+    "./contract": {
+      "import": "./lib/contract.js",
+      "require": "./lib/contract.cjs",
+      "types": "./lib/contract.d.ts"
+    },
+    "./decompose": {
+      "import": "./lib/decompose.js",
+      "require": "./lib/decompose.cjs",
+      "types": "./lib/decompose.d.ts"
+    },
+    "./function-swap": {
+      "import": "./lib/function-swap.js",
+      "require": "./lib/function-swap.cjs",
+      "types": "./lib/function-swap.d.ts"
+    },
+    "./internal": {
+      "import": "./lib/internal/index.js",
+      "require": "./lib/internal/index.cjs",
+      "types": "./lib/internal/index.d.ts"
+    },
+    "./types": {
+      "import": "./lib/types.js",
+      "require": "./lib/types.cjs",
+      "types": "./lib/types.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "p-q": "pretty-quick",
+    "posttest": "vp fmt",
+    "pretest": "vp run pack",
+    "publish:first": "vp run pretest && pnpm publish --access public --no-git-checks",
+    "rm:lib": "vp dlx rimraf ./lib",
+    "test:coverage": "vp test run",
+    "test": "vp run test:coverage --no-coverage",
+    "test:only": "vp run test",
+    "test:watch": "vp test"
+  },
+  "dependencies": {
+    "@bemedev/app-contract": "workspace:^",
+    "@bemedev/better-promise": "^0.1.1",
+    "@bemedev/boolean-recursive": "^0.0.3",
+    "@bemedev/decompose": "^2.3.0",
+    "@bemedev/function-swap": "^0.2.5"
+  },
+  "devDependencies": {
+    "@bemedev/dev-utils": "^1.5.2",
+    "@bemedev/typings": "^1.5.0",
+    "@size-limit/file": "^14.3.0",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "catalog:",
+    "pretty-quick": "^4.2.2",
+    "rimraf": "^6.1.4",
+    "size-limit": "^14.3.0",
+    "tslib": "^2.9.1",
+    "tsx": "^4.23.15",
+    "typescript": "7.0.2",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

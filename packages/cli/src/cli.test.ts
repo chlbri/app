@@ -91,7 +91,7 @@ export default createMachine(
     const END = 'packages/cli';
     const _cwd = process.cwd();
     if (!_cwd.trim().endsWith(END)) {
-      spy.mockReturnValue(resolve(process.cwd(), 'packages/cli'));
+      spy.mockReturnValue(resolve(process.cwd(), END));
     }
   });
 

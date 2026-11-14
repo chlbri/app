@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite-plus';
+import { defineProject } from 'vite-plus';
 
-export default defineConfig({
+export default defineProject({
   test: {
     bail: 100,
     maxConcurrency: 100,
@@ -11,6 +11,8 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     globals: true,
     clearMocks: false,
+    name: 'contract',
+    typecheck: { include: ['src/**/*.test.ts'] },
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },
