@@ -90,17 +90,19 @@ public API changed.
 The `@bemedev/app/bemedev` entry point re-exports `@bemedev/interval3` instead of
 `@bemedev/interval2`:
 
-- `createInterval` now comes from `@bemedev/interval3`
+- `createInterval` is replaced by `createInterval3`
 - `Interval2` is replaced by `Interval3`
 - `createInterval3`, `TimerState`, `IntervalParams` and every other interval3 type
   are re-exported as well
+- the `createInterval` and `create` aliases are no longer re-exported by this
+  package; import them from `@bemedev/interval3/interval` when needed
 
 ```typescript
 // Before — a fixed delay in milliseconds
 createInterval({ id: 'tick', callback, interval: 1_000 });
 
 // After — a delay computer, evaluated right before every pass
-createInterval({ id: 'tick', callback, interval: () => 1_000 });
+createInterval3({ id: 'tick', callback, interval: () => 1_000 });
 ```
 
 If the previous `setInterval` scheduling is still required, depend on

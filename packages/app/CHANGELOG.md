@@ -8,6 +8,37 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.0.1] - 15/11/2026** => _20:22_
+
+</summary>
+
+### Breaking Changes
+
+- **Interval Re-export**: `@bemedev/app/bemedev` re-exports `createInterval3` from
+  the `@bemedev/interval3/interval` subpath and no longer re-exports the
+  `createInterval` and `create` aliases. Import them from
+  `@bemedev/interval3/interval` when the previous names are required.
+
+### Docs
+
+- Update the v3.0.0 migration section of the README with the narrowed interval
+  re-export and the `createInterval3` example.
+
+### Dependencies
+
+- **Interval Runtime**: `@bemedev/interval3` becomes a direct `dependencies` entry
+  and is bundled instead of injected, so a fresh install no longer snapshots a
+  `lib`-less copy of the dependency.
+- **Workspace Dependencies**: Bump version to 3.0.1 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.0] - 15/11/2026** => _17:57_
 
 </summary>

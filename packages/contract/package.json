@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-contract",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Lightweight machine contracts for @bemedev/app",
   "keywords": [
     "state machines",

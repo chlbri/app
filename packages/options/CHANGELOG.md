@@ -8,6 +8,31 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.0.1] - 15/11/2026** => _20:22_
+
+</summary>
+
+### Build
+
+- **npm Publication**: `@bemedev/app-options` is now built and published by the
+  release workflow, with its artifacts pre-staged alongside the other packages before
+  upload.
+
+### Dependencies
+
+- **Bundled Utilities**: `@bemedev/app-utils-bemedev` becomes a direct `dependencies`
+  entry instead of an injected dev dependency, so the bundled copy survives a fresh
+  install and `pnpm pack` follows the workspace link.
+- **Workspace Dependencies**: Bump version to 3.0.1 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.0] - 15/11/2026** => _17:57_
 
 </summary>
