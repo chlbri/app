@@ -176,6 +176,19 @@ jobs:
       package: ./packages/contract
       artifact: built-workspace
 
+  options:
+    needs: [build]
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
+    secrets: inherit
+
+    with:
+      type:
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
+
+      package: ./packages/options
+      artifact: built-workspace
+
   cleanup:
     name: Cleanup Artifacts
     runs-on: ubuntu-latest
