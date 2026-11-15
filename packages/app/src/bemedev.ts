@@ -1,5 +1,5 @@
 export * from '@bemedev/app-options/bemedev';
-export { createInterval, createInterval3 } from '@bemedev/interval3';
+export { createInterval3 } from '@bemedev/interval3/interval';
 export type {
   Interval3,
   IntervalListener,
