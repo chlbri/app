@@ -1,4 +1,4 @@
-import { createInterval } from '@bemedev/app/bemedev';
+import { createInterval } from '@bemedev/interval2';
 import { eventToType } from '@bemedev/app/events';
 import { faker } from '@faker-js/faker';
 import { counterMachine, type Service } from './counter';

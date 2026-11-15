@@ -133,7 +133,6 @@
   },
   "dependencies": {
     "@bemedev/app-options": "workspace:^",
-    "@bemedev/interval3": "workspace:^",
     "@bemedev/better-promise": "^0.1.1",
     "@bemedev/boolean-recursive": "^0.0.3",
     "@bemedev/decompose": "^2.3.0",
@@ -145,6 +144,7 @@
   },
   "devDependencies": {
     "@bemedev/dev-utils": "^1.5.2",
+    "@bemedev/interval3": "workspace:^",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/sequence": "^1.0.0",
     "@size-limit/file": "^14.3.0",
@@ -169,6 +169,14 @@
     "vitest": "catalog:",
     "zx": "^8.8.5"
   },
+  "dependenciesMeta": {
+    "@bemedev/interval3": {
+      "injected": true
+    }
+  },
+  "bundledDependencies": [
+    "@bemedev/interval3"
+  ],
   "engines": {
     "node": ">=24"
   }

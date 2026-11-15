@@ -1,10 +1,17 @@
 export * from '@bemedev/app-options/bemedev';
-export { sleep } from '@bemedev/sleep';
-export * from '@bemedev/scheduler';
-export { type, pretype } from '@bemedev/typings';
+export { createInterval, createInterval3 } from '@bemedev/interval3';
 export type {
-  PreTransform_F,
-  Transform_F,
+  Interval3,
+  IntervalListener,
+  IntervalParams,
+  PauserListener,
+  RenewIntervalParams,
+  TimerState,
+} from '@bemedev/interval3';
+export * from '@bemedev/scheduler';
+export { sleep } from '@bemedev/sleep';
+export { pretype, type } from '@bemedev/typings';
+export type {
   ArrayCustom,
   Custom,
   EmptyObject,
@@ -17,8 +24,9 @@ export type {
   ObjectT,
   Optional,
   OptionalHelperClass,
-  PartialCustom,
   POS,
+  PartialCustom,
+  PreTransform_F,
   PrimitiveObject,
   PrimitiveObjectT,
   PrimitiveT,
@@ -28,15 +36,16 @@ export type {
   SoRaCustom,
   SoaCustom,
   StandardHelper,
-  StandardKey,
   StandardJSONSchemaV1,
+  StandardKey,
   StandardTypedV1,
   TransformT,
   TransformTypes,
+  Transform_F,
+  Types,
   UnionCustom,
   __ObjectT,
   inferO,
   inferSh,
   inferT,
-  Types,
 } from '@bemedev/typings';

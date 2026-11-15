@@ -1,5 +1,3 @@
-import { sleep } from '@bemedev/sleep';
-import * as helpers from './helpers';
 import {
   create,
   createInterval,
@@ -191,7 +189,7 @@ describe('TESTS', () => {
     });
 
     const callback = vi.fn();
-    const pauser = vi.fn<PauserListener>((_state, ticks) => ticks >= 2);
+    const pauser = vi.fn<PauserListener>(({ ticks }) => ticks >= 2);
     const timer = createInterval3({
       id: 'pauser',
       interval: () => 50,
@@ -203,8 +201,16 @@ describe('TESTS', () => {
 
     test('#02 => receives the state and ticks', async () => {
       await vi.advanceTimersByTimeAsync(100);
-      expect(pauser).toHaveBeenNthCalledWith(1, 'active', 0);
-      expect(pauser).toHaveBeenNthCalledWith(2, 'active', 1);
+      expect(pauser).toHaveBeenNthCalledWith(1, {
+        interval: 50,
+        state: 'active',
+        ticks: 0,
+      });
+      expect(pauser).toHaveBeenNthCalledWith(2, {
+        interval: 50,
+        state: 'active',
+        ticks: 1,
+      });
     });
 
     test('#03 => pauses when truthy', () => {
@@ -366,7 +372,53 @@ describe('TESTS', () => {
     });
   });
 
-  describe('#09 => helpers', () => {
-    test('#01 => re-exports sleep', () => expect(helpers.sleep).toBe(sleep));
+  describe('#09 => pause between ticks', () => {
+    beforeAll(() => {
+      vi.useFakeTimers();
+    });
+
+    afterAll(() => {
+      vi.useRealTimers();
+    });
+
+    const callback = vi.fn();
+    const timer = createInterval3({
+      id: 'between-ticks',
+      interval: () => 100,
+      callback,
+    });
+
+    test('#01 => pauses from a subscriber on the first tick', async () => {
+      timer.start();
+
+      const unsubscribe = timer.subscribe(state => {
+        if (state !== 'active' || timer.ticks !== 1) return;
+        unsubscribe();
+        timer.pause();
+      });
+
+      await vi.advanceTimersByTimeAsync(100);
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(timer.ticks).toBe(1);
+      expect(timer.state).toBe('paused');
+    });
+
+    test('#02 => ignores the pass armed before the pause', async () => {
+      await vi.advanceTimersByTimeAsync(1_000);
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(timer.ticks).toBe(1);
+      expect(timer.state).toBe('paused');
+    });
+
+    test('#03 => resumes with a fresh delay after the drop', async () => {
+      expect(timer.resume()).toBe('active');
+
+      await vi.advanceTimersByTimeAsync(99);
+      expect(callback).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(1);
+      expect(callback).toHaveBeenCalledTimes(2);
+      expect(timer.ticks).toBe(2);
+    });
   });
 });

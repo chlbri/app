@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@bemedev/dev-utils": "^1.5.2",
+    "@bemedev/interval2": "^1.2.1",
     "@tailwindcss/typography": "^0.5.20",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.168.0",
@@ -50,8 +51,8 @@
     "jsdom": "^31.0.1",
     "typescript": "7.0.2",
     "vite": "catalog:",
-    "vitest": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -27,6 +27,12 @@ export type CommonTimerParams = {
   callback: Cb;
 };
 
+export type PauseListenerParams = {
+  state: TimerState;
+  ticks: number;
+  interval: number;
+};
+
 /**
  * Listener function to determine if the interval should pause based on state
  * and tick count.
@@ -36,7 +42,7 @@ export type CommonTimerParams = {
  *
  * @returns Boolean indicating whether the interval should pause.
  */
-export type PauserListener = (state: TimerState, ticks: number) => boolean;
+export type PauserListener = (params: PauseListenerParams) => boolean;
 
 /**
  * Configuration parameters for creating an interval timer.

@@ -1,4 +1,3 @@
-import { sleep } from '@bemedev/sleep';
 import { Timer3 } from './timer';
 import type {
   IntervalFn,
@@ -12,10 +11,10 @@ import type {
  * Class representing a cancellable interval whose delay is recomputed on
  * every pass.
  *
- * Unlike a native `setInterval`, no handle is scheduled once and for all:
- * a `while` loop awaits type {@linkcode IntervalFn} result before invoking the
- * callback, then starts the next pass. Inherits from abstract class
- * {@linkcode Timer3}.
+ * Unlike a native `setInterval`, no handle is scheduled once and for all: a
+ * single timeout is armed per pass. The delay computer of type
+ * {@linkcode IntervalFn} is invoked again after every callback, before arming
+ * the next pass. Inherits from abstract class {@linkcode Timer3}.
  */
 class Interval3 extends Timer3<IntervalListener> {
   /**
@@ -141,49 +140,66 @@ class Interval3 extends Timer3<IntervalListener> {
   start = () => {
     if (this.__canStart) {
       this.state = 'active';
-      void this.__build();
+      this.__schedule();
     }
     return this.state;
   };
 
   /**
-   * Internal loop awaiting the delay computer result before each callback.
+   * Pending timeout handle, `undefined` while no pass is scheduled.
    */
-  private __build = async () => {
-    while (this.state === 'active') {
-      const paused = this.__pauser?.(this.state, this.__ticks);
-      if (paused) {
-        this.pause();
-        return;
-      }
+  private __timer?: ReturnType<typeof setTimeout>;
 
-      const interval = this.__interval();
-      await sleep(interval);
-      if (this.state !== 'active') return;
+  /**
+   * Schedules the next pass by computing the delay and arming a single
+   * timeout.
+   *
+   * A pass is never armed twice: the next one is scheduled from
+   * {@linkcode Interval3.__cb} once the previous one has been consumed.
+   *
+   * @returns Current timer state of type {@linkcode Timer3.state}.
+   */
+  private __schedule = () => {
+    const interval = this.__interval();
+    const state = this.state;
+    const ticks = this.__ticks;
+    const pausered = this.__pauser?.({ state, ticks, interval });
+    if (pausered) return this.pause();
 
-      this.callback();
-      this.__ticks++;
+    this.__timer = setTimeout(this.__cb, interval);
+    return this.state;
+  };
 
-      if (this.__ticks >= this.__maxTicks) {
-        this.pause();
-        return;
-      }
-      this.__notifySubscribers();
-    }
+  /**
+   * Consumes the scheduled pass: performs the callback, increments the tick
+   * count, notifies subscribers and chains the next pass.
+   *
+   * @returns Current timer state of type {@linkcode Timer3.state}.
+   */
+  private __cb = () => {
+    if (this.state !== 'active') return this.pause();
+
+    this.callback();
+    this.__ticks++;
+    if (this.__ticks >= this.__maxTicks) return this.pause();
+
+    this.__notifySubscribers();
+    return this.__schedule();
   };
 
   /**
    * Pauses the currently running interval timer.
    *
-   * The pass already sleeping is not interrupted: it is discarded as soon as
-   * it wakes up.
+   * The pass already scheduled is cancelled and no callback is performed for
+   * it.
    *
    * @returns Current timer state of type {@linkcode Timer3.state}.
    */
   pause = () => {
+    clearTimeout(this.__timer);
     if (this.state !== 'active') return this.state;
-    this.state = 'paused';
-    return this.state;
+
+    return (this.state = 'paused');
   };
 }
 
