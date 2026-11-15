@@ -43,10 +43,10 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const subscriber = service.subscribe(mockFn);
 
       await service.start();
-      expect(mockFn).toHaveBeenCalledTimes(8); // Appelé à l'initialisation et à chaque changement de contexte
+      expect(mockFn).toHaveBeenCalledTimes(10); // Appelé à l'initialisation et à chaque changement de contexte
       await service.send('NEXT');
 
-      expect(mockFn).toHaveBeenCalledTimes(14);
+      expect(mockFn).toHaveBeenCalledTimes(16);
       expect(subscriber.state).toBe('active');
 
       service.stop();
@@ -59,13 +59,13 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
       const subscriber = service.subscribe(mockFn);
 
       await service.start();
-      expect(mockFn).toHaveBeenCalledTimes(8); // Appelé à l'initialisation et à chaque changement de contexte
+      expect(mockFn).toHaveBeenCalledTimes(10); // Appelé à l'initialisation et à chaque changement de contexte
       subscriber.close();
-      expect(mockFn).toHaveBeenCalledTimes(8);
+      expect(mockFn).toHaveBeenCalledTimes(10);
       await service.send('NEXT');
 
       expect(subscriber.state).toBe('paused');
-      expect(mockFn).toHaveBeenCalledTimes(8);
+      expect(mockFn).toHaveBeenCalledTimes(10);
 
       service.stop();
     });

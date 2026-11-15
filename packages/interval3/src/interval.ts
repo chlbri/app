@@ -151,6 +151,12 @@ class Interval3 extends Timer3<IntervalListener> {
    */
   private __build = async () => {
     while (this.state === 'active') {
+      const paused = this.__pauser?.(this.state, this.__ticks);
+      if (paused) {
+        this.pause();
+        return;
+      }
+
       const interval = this.__interval();
       await sleep(interval);
       if (this.state !== 'active') return;
@@ -158,8 +164,7 @@ class Interval3 extends Timer3<IntervalListener> {
       this.callback();
       this.__ticks++;
 
-      const paused = this.__pauser?.(this.state, this.__ticks);
-      if (paused === true || this.__ticks >= this.__maxTicks) {
+      if (this.__ticks >= this.__maxTicks) {
         this.pause();
         return;
       }

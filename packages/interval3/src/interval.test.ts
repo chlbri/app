@@ -203,8 +203,8 @@ describe('TESTS', () => {
 
     test('#02 => receives the state and ticks', async () => {
       await vi.advanceTimersByTimeAsync(100);
-      expect(pauser).toHaveBeenNthCalledWith(1, 'active', 1);
-      expect(pauser).toHaveBeenNthCalledWith(2, 'active', 2);
+      expect(pauser).toHaveBeenNthCalledWith(1, 'active', 0);
+      expect(pauser).toHaveBeenNthCalledWith(2, 'active', 1);
     });
 
     test('#03 => pauses when truthy', () => {
