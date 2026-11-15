@@ -125,11 +125,6 @@
     "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
-  "dependenciesMeta": {
-    "@bemedev/app-utils-bemedev": {
-      "injected": true
-    }
-  },
   "bundledDependencies": [
     "@bemedev/app-utils-bemedev"
   ],

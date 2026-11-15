@@ -73,13 +73,14 @@ jobs:
           # `packages/app/lib/index.js` and the publish jobs (which download
           # into the repo root) would never find the build output.
           #
-          # packages/options/node_modules/@bemedev/app-utils-bemedev is the only
-          # injected/bundled workspace dependency: on a fresh install it is
-          # hardlink-snapshotted without its `lib`, so it must be restored from
-          # the artifact before publishing.
+          # Bundled workspace deps are linked, not injected, so their `lib`
+          # folders live in the workspace: packing follows the symlink and
+          # `**/packages/*/lib/**` misses `packages/utils/bemedev` (used by
+          # @bemedev/app-options). Restore it too or the published tarball
+          # would embed a `lib`-less copy of the bundled dep.
           path: |
             **/packages/*/lib/**
-            packages/options/node_modules/@bemedev/app-utils-bemedev/lib/**
+            packages/utils/*/lib/**
 
           if-no-files-found: error
           retention-days: 1

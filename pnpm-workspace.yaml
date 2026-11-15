@@ -16,15 +16,13 @@ allowBuilds:
   '@parcel/watcher': true
   esbuild: true
 
-# bundleDependencies needs a real, in-package copy of the injected workspace dep.
+# Workspace deps that are bundled into a published package stay linked (not
+# injected): an injected dep is a hardlink snapshot taken at install time, so a
+# fresh CI install would snapshot a `lib`-less copy and every runtime import of
+# the package would fail during the build. `pnpm pack` follows the symlink and
+# still bundles the dep's files into the tarball.
 nodeLinker: hoisted
-dedupeInjectedDeps: false
 hoistingLimits: workspaces
-
-# Injected deps are hardlink snapshots: refresh them after a build so that
-# dependent packages resolve freshly generated lib/ outputs in CI.
-syncInjectedDepsAfterScripts:
-  - build
 
 minimumReleaseAge: 300
 
@@ -72,9 +70,4 @@ permissions:
     skills: true
 skills:
   dirs:
-    - .agent/skills
     - .agents/skills
-    - .claude/skills
-    - .cursor/skills
-    - .gemini/skills
-    - .github/skills

@@ -169,11 +169,6 @@
     "vitest": "catalog:",
     "zx": "^8.8.5"
   },
-  "dependenciesMeta": {
-    "@bemedev/interval3": {
-      "injected": true
-    }
-  },
   "bundledDependencies": [
     "@bemedev/interval3"
   ],
