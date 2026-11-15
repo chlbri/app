@@ -19,7 +19,6 @@ jobs:
         uses: voidzero-dev/setup-vp@v1
         with:
           node-version: 24
-          cache: true
           # Default is true, set explicitly: this installs the workspace with
           # the managed pnpm, which the publish action below relies on.
           run-install: true
