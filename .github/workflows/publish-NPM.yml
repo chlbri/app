@@ -36,10 +36,10 @@ jobs:
         with:
           path: node_modules/.vite/task-cache
           key:
-            ${{ runner.os }}-${{ runner.arch }}-vite-tasks-main-${{
+            ${{ runner.os }}-${{ runner.arch }}-vite-tasks-${{ github.ref }}-${{
             hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-vite-tasks-main
+            ${{ runner.os }}-${{ runner.arch }}-vite-tasks-${{ github.ref }}
 
       - name: Build
         run: vp run pretest
@@ -51,7 +51,7 @@ jobs:
         with:
           path: node_modules/.vite/task-cache
           key:
-            ${{ runner.os }}-${{ runner.arch }}-vite-tasks-main-${{
+            ${{ runner.os }}-${{ runner.arch }}-vite-tasks-${{ github.ref }}-${{
             hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Upload workspace
