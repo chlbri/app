@@ -1114,53 +1114,6 @@ describe('Filter and Erase actions', () => {
         expect(service.select('scores')).toEqual({ user1: 95, user3: 85 });
       });
     });
-
-    describe.skip('#18 => Filter without array nor object value', () => {
-      const machine = _machine3;
-
-      describe('#01 => undefined value', () => {
-        const { actions } = machine.createOptions(({ filter }) => ({
-          actions: {
-            filterHighScores: filter('scores', (score: number) => score > 5),
-          },
-        }));
-
-        const state = { context: {}, event: 'FILTER_HIGH_SCORES' } as any;
-
-        const result = actions?.filterHighScores?.(state);
-
-        test('#01 => is an object', () => {
-          expect(typeof result).toBe('object');
-        });
-
-        test('#02 => does not filter the value', () => {
-          expect(result).toEqual({ mergers: [{ key: 'scores', source: {} }] });
-        });
-      });
-
-      describe('#02 => null value', () => {
-        const { actions } = machine.createOptions(({ filter }) => ({
-          actions: {
-            filterHighScores: filter('scores', (score: number) => score > 5),
-          },
-        }));
-
-        const state = {
-          context: { scores: null },
-          event: 'FILTER_HIGH_SCORES',
-        } as any;
-
-        const result = actions?.filterHighScores?.(state);
-
-        test('#01 => is an object', () => {
-          expect(typeof result).toBe('object');
-        });
-
-        test('#02 => does not filter the value', () => {
-          expect(result).toEqual({ mergers: [{ key: 'scores', source: {} }] });
-        });
-      });
-    });
   });
 
   describe('#02 => Erase action', () => {
