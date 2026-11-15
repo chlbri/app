@@ -8,6 +8,26 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.0.2] - 15/11/2026** => _21:37_
+
+</summary>
+
+### Dependencies
+
+- **Bundled Utilities**: `@bemedev/app-utils-bemedev` is declared in
+  `devDependencies` again while staying in `bundledDependencies`, so it is installed
+  for the build and packed into the published tarball without becoming a runtime
+  dependency of the package.
+- **Workspace Dependencies**: Bump version to 3.0.2 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.1] - 15/11/2026** => _20:22_
 
 </summary>
