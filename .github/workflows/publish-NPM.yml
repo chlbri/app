@@ -53,35 +53,44 @@ jobs:
             ${{ runner.os }}-${{ runner.arch }}-vite-tasks-${{ github.ref }}-${{
             hashFiles('**/pnpm-lock.yaml') }}
 
+      # Only the generated `lib` folders are consumed by the publish jobs.
+      #
+      # They are staged into a temporary directory first: `upload-artifact`
+      # resolves its input with @actions/glob *before* logging anything, and a
+      # pattern starting with `**/` makes the search path the workspace root.
+      # The globber then walks every directory (root and per-package
+      # `node_modules` created by `hoistingLimits: workspaces`, `apps/*`,
+      # `.pnpm-store`, ~300k entries) to keep 1177 files: that walk was 4 of the
+      # 5 minutes of this job, while the transfer itself took 0.6s for 848KB.
+      # `compression-level` is therefore irrelevant here.
+      #
+      # Staging also fixes the layout. The artifact root directory is the least
+      # common ancestor of the search paths, i.e. the literal part before the
+      # first wildcard. With `packages/*/lib/**` that root is `packages`, so the
+      # archive would store `app/lib/index.js` instead of
+      # `packages/app/lib/index.js` and the publish jobs (which download into
+      # the repo root) would never find the build output. With one directory and
+      # no wildcard, the root is that directory and the `packages/` prefix is
+      # preserved exactly as before.
+      #
+      # Bundled workspace deps are linked, not injected, so their `lib` folders
+      # live in the workspace: packing follows the symlink and `packages/*/lib`
+      # misses `packages/utils/bemedev` (used by @bemedev/app-options). Stage it
+      # too or the published tarball would embed a `lib`-less copy of the
+      # bundled dep.
+      - name: Stage build output
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/artifact"
+          mkdir -p "$RUNNER_TEMP/artifact"
+          cp -a --parents packages/*/lib packages/utils/*/lib "$RUNNER_TEMP/artifact"
+
       - name: Upload workspace
         uses: actions/upload-artifact@v7
 
         with:
           name: built-workspace
-
-          # Only the generated `lib` folders are consumed by the publish jobs.
-          # The previous `**/lib/**` pattern also matched every `lib` folder
-          # nested in node_modules (~1.2 GB and ~44k files), which made this
-          # step the slowest one of the run. `!node_modules` only excludes the
-          # root folder, not the per-package ones created by
-          # `hoistingLimits: workspaces`.
-          #
-          # The leading `**/` is required: the artifact root directory is the
-          # least common ancestor of the search paths, i.e. the literal part
-          # before the first wildcard. With `packages/*/lib/**` that root is
-          # `packages`, so the archive stores `app/lib/index.js` instead of
-          # `packages/app/lib/index.js` and the publish jobs (which download
-          # into the repo root) would never find the build output.
-          #
-          # Bundled workspace deps are linked, not injected, so their `lib`
-          # folders live in the workspace: packing follows the symlink and
-          # `**/packages/*/lib/**` misses `packages/utils/bemedev` (used by
-          # @bemedev/app-options). Restore it too or the published tarball
-          # would embed a `lib`-less copy of the bundled dep.
-          path: |
-            **/packages/*/lib/**
-            packages/utils/*/lib/**
-
+          path: ${{ runner.temp }}/artifact
           if-no-files-found: error
           retention-days: 1
 
