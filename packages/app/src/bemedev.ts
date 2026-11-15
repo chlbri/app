@@ -40,4 +40,3 @@ export type {
   inferT,
   Types,
 } from '@bemedev/typings';
-export * from '@bemedev/interval2';

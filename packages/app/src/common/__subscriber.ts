@@ -2,7 +2,7 @@ import type { EventObject } from '#events';
 import type { State } from '#states';
 import { nothing } from '@bemedev/app-options/internal';
 import { _any } from '@bemedev/app-options/bemedev';
-import type { TimerState } from '@bemedev/interval2/types';
+import type { TimerState } from '@bemedev/interval3/types';
 import equal from 'fast-deep-equal';
 import { FnMapR, isFunction } from '../types/primitives';
 import type { PrimitiveObject } from '@bemedev/typings';
