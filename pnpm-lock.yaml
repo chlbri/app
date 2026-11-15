@@ -392,8 +392,8 @@ importers:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
       react-virtuoso:
-        specifier: ^4.18.22
-        version: 4.18.22(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: ^4.18.23
+        version: 4.18.23(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-window:
         specifier: ^2.5.3
         version: 2.5.3(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -780,6 +780,9 @@ importers:
       '@bemedev/function-swap':
         specifier: ^0.2.5
         version: 0.2.5(@bemedev/decompose@2.3.0)
+      '@bemedev/interval3':
+        specifier: workspace:^
+        version: file:packages/interval3
       '@bemedev/scheduler':
         specifier: ^1.2.1
         version: 1.2.1
@@ -799,9 +802,6 @@ importers:
       '@bemedev/dev-utils':
         specifier: ^1.5.2
         version: 1.5.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@1.6.0(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.2)(rollup@4.68.3)(supports-color@10.2.2)(terser@5.51.2)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.0)
-      '@bemedev/interval3':
-        specifier: workspace:^
-        version: file:packages/interval3
       '@bemedev/rx-pausable':
         specifier: ^1.2.0
         version: 1.2.0
@@ -1028,6 +1028,9 @@ importers:
       '@bemedev/app-contract':
         specifier: workspace:^
         version: link:../contract
+      '@bemedev/app-utils-bemedev':
+        specifier: workspace:^
+        version: file:packages/utils/bemedev
       '@bemedev/better-promise':
         specifier: ^0.1.1
         version: 0.1.1
@@ -1044,9 +1047,6 @@ importers:
       '@bemedev/app-utils-bemedev':
         injected: true
     devDependencies:
-      '@bemedev/app-utils-bemedev':
-        specifier: workspace:^
-        version: file:packages/utils/bemedev
       '@bemedev/dev-utils':
         specifier: ^1.5.2
         version: 1.5.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@1.6.0(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.2)(rollup@4.68.3)(supports-color@10.2.2)(terser@5.51.2)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.0)
@@ -4575,8 +4575,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.5.485:
-    resolution: {integrity: sha512-m3uadzR0Z+sR19HGWgfxoZcKv9hE/edVM9OZ+FJ4wNRyfuFtkwZJIDoehEty5sisYVwmge8lKV1tenWOyClVgw==}
+  electron-to-chromium@1.5.486:
+    resolution: {integrity: sha512-rpybw4Ac4ak/An6G1Me2+61xzwobowDGyuJe71QHHOVpkZv4fPVobsLl7WH6zHSKusAMpaHxGKTpOvpy7+r3dQ==}
 
   emoji-regex@10.6.0:
     resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==}
@@ -5688,8 +5688,8 @@ packages:
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
-  react-virtuoso@4.18.22:
-    resolution: {integrity: sha512-0Jga1NmJsAwhxZlEyE6xN1HtEHePgsWbuzYcJokanaIDVTbc59ocm3MocQ6yJIYTJICaWqYY3+Z4FQ3mnGuD+w==}
+  react-virtuoso@4.18.23:
+    resolution: {integrity: sha512-J/FpyeLUbU6uEXiMsTKjlJaSMqpjxPCanjSYRxFKobLhP73Wo4gloFldDD7osmFUEv2VMF8Ki/YScofwa3ymyw==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -6133,11 +6133,11 @@ packages:
     resolution: {integrity: sha512-LgO3D9yZJjApUiuUfl9iFAwrtaX4+lok3wJIqttGoKCHlWUqHqbQpnxCf82L8FjgKsh4iGo78hqJwgL8F6To2A==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@7.5.2:
-    resolution: {integrity: sha512-8W1topazDwhMKbm2I83IPa57Ow5VUxFgLbXv42+vSILnv8FY5OHvdEY/tS6WoWeMbxkHZQhra5cmeFHriKptSQ==}
+  tldts-core@7.5.4:
+    resolution: {integrity: sha512-9+4zWtKEDZ3V3FoZ1B97rv+5z5oqp7yeXGVze3CxgQ+CJro9do9DCPD00wxstYZDXDMXsurkBerFfiB6GYtPbA==}
 
-  tldts@7.5.2:
-    resolution: {integrity: sha512-p+JwEdxIWQx033pMvW9ULBbyC1Eg6JtWo2Mo0jbC8TVSjp2QrHFE+WKs8JpMGc3ECMsmBpU2RH/25NgX3k1ulg==}
+  tldts@7.5.4:
+    resolution: {integrity: sha512-Rn2ABgjHZrA+jzqom5zhxA0hLohzYrIgfCPyhpTUxqsUrcsBYuab49LseR9waB9Jr8/MxdodvMHA91oRiGLO3Q==}
     hasBin: true
 
   to-regex-range@5.0.1:
@@ -9066,7 +9066,7 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.11.37
       caniuse-lite: 1.0.30001826
-      electron-to-chromium: 1.5.485
+      electron-to-chromium: 1.5.486
       node-releases: 2.0.64
       update-browserslist-db: 1.3.4(browserslist@4.29.5)
 
@@ -9407,7 +9407,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.5.485: {}
+  electron-to-chromium@1.5.486: {}
 
   emoji-regex@10.6.0: {}
 
@@ -10627,7 +10627,7 @@ snapshots:
 
   react-is@17.0.2: {}
 
-  react-virtuoso@4.18.22(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
+  react-virtuoso@4.18.23(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
@@ -11115,11 +11115,11 @@ snapshots:
 
   tinyrainbow@3.2.0: {}
 
-  tldts-core@7.5.2: {}
+  tldts-core@7.5.4: {}
 
-  tldts@7.5.2:
+  tldts@7.5.4:
     dependencies:
-      tldts-core: 7.5.2
+      tldts-core: 7.5.4
 
   to-regex-range@5.0.1:
     dependencies:
@@ -11131,7 +11131,7 @@ snapshots:
 
   tough-cookie@6.1.0:
     dependencies:
-      tldts: 7.5.2
+      tldts: 7.5.4
 
   tr46@0.0.3: {}
 
