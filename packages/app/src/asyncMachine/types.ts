@@ -5,7 +5,7 @@ import type {
   CommonConfig,
   NoExtraKeysTargetDef,
 } from '#common/machine';
-import type { AsyncDelayFunction2 } from '#delays';
+import type { DelayFunction2 } from '#delays';
 import type { AsyncEmitterFunction, EmitterDef, EmitterReturn } from '#emitters';
 import type { ActorsConfigMap, EventObject } from '#events';
 import type { AsyncPredicateS } from '#guards';
@@ -191,7 +191,7 @@ export type GetGuardsFromFlat<
 > = Record<_GetKeyGuardsFromFlat<Flat>, AsyncPredicateS<E, Pc, Tc, T>>;
 
 /**
- * Provide a record of all delays by key and {@linkcode AsyncDelayFunction2} function.
+ * Provide a record of all delays by key and {@linkcode DelayFunction2} function.
  *
  * @template | {@linkcode FlatMapN} `Flat` - Flat map of nodes.
  * @template | {@linkcode EventsMap} `E` - Events map type.
@@ -207,7 +207,7 @@ export type GetDelaysFromFlat<
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
-> = Record<_GetDelayKeysFromFlat<Flat>, AsyncDelayFunction2<E, Pc, Tc, T>>;
+> = Record<_GetDelayKeysFromFlat<Flat>, DelayFunction2<E, Pc, Tc, T>>;
 
 /**
  * Provide a record of all events by key and {@linkcode PrimitiveObject} payload.

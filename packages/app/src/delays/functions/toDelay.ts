@@ -1,7 +1,7 @@
 import type { EventObject } from '#events';
 import { reduceFnMap } from '@bemedev/app-options/internal';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { AsyncDelayFunction3, AsyncDelayMap } from '../types';
+import type { DelayFunction3, DelayMap } from '../types';
 
 /**
  * Function signature for converting a delay config string into an executable delay function.
@@ -15,7 +15,7 @@ import type { AsyncDelayFunction3, AsyncDelayMap } from '../types';
  * @param delays - Optional delay map.
  * @param events - List of machine event keys.
  *
- * @returns Executable delay function of type {@linkcode AsyncDelayFunction3} or `undefined`.
+ * @returns Executable delay function of type {@linkcode DelayFunction3} or `undefined`.
  */
 export type ToDelay_F = <
   Pc = any,
@@ -24,9 +24,9 @@ export type ToDelay_F = <
   Eo extends EventObject = EventObject,
 >(
   delay: string,
-  delays: AsyncDelayMap<Eo, Pc, Tc, T> | undefined,
+  delays: DelayMap<Eo, Pc, Tc, T> | undefined,
   ...events: string[]
-) => AsyncDelayFunction3<Eo, Pc, Tc, T> | undefined;
+) => DelayFunction3<Eo, Pc, Tc, T> | undefined;
 
 /**
  * Converts a delay configuration to a function that returns the delay in milliseconds.
@@ -34,7 +34,7 @@ export type ToDelay_F = <
  * If the delay is a function, it reduces the function map with the provided events list.
  *
  * @param delay of type string,  The delay configuration.
- * @param delays of type {@linkcode AsyncDelayMap}, the map of delays containing functions to execute.
+ * @param delays of type {@linkcode DelayMap}, the map of delays containing functions to execute.
  * @param events of type {@linkcode string[]}, list of events of the machine.
  * @returns a function that returns the delay in milliseconds or undefined if not found.
  *

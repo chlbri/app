@@ -2,7 +2,6 @@ import { type WithDescriber } from '#actions';
 import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
-  DEFAULT_MIN_ACTIVITY_TIME,
   TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
 import { _any } from '@bemedev/app-options/bemedev';
@@ -39,7 +38,6 @@ import type {
   AsyncPerformActionLater_F,
   AsyncPerformAfter_F,
   AsyncPerformAlway_F,
-  AsyncPerformDelay_F,
   AsyncPerformPredicate_F,
   AsyncPerformTransition_F,
   AsyncPerformTransitions_F,
@@ -56,7 +54,7 @@ import {
   type ContextFrom,
   type EventsFrom,
   type EventsMapFrom,
-  type ExecuteActivities_F,
+  type ExecuteActivity_F,
   type ExtendedActionsParams,
   type MachineOptionsFrom,
   type Mode,
@@ -376,129 +374,36 @@ export class AsyncInterpreter<
       const out = await this.#executePredicate(predicate);
       if (!out) return false;
     }
+
     return true;
   };
 
-  /**
-   * Evaluates a delay function asynchronously against state.
-   *
-   * @param delay - The delay evaluator function.
-   *
-   * @returns The computed delay in milliseconds.
-   */
-  #performDelay: AsyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
-    this._iterate();
-    return delay(this.__cloneState);
-  };
+  __executeActivity: ExecuteActivity_F = (from, activities) => {
+    const callback = async () => {
+      for (const activity of activities) {
+        const check2 = typeof activity === 'string';
+        const check3 = isDescriber(activity);
+        const check4 = check2 || check3;
 
-  /**
-   * Evaluates a delay function while updating internal working status.
-   *
-   * @param delay - The delay evaluator function to execute.
-   *
-   * @returns The computed delay duration in milliseconds.
-   */
-  #executeDelay: AsyncPerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
-    this.__setStatus('busy');
-    const out = this.#performDelay(delay);
-    this.__setStatus('started');
-    return out;
-  };
+        if (check4) {
+          await this.__performActions(from, activity);
+          continue;
+        }
 
-  /**
-   * Registers and executes periodic activities (interval timers) associated with a given state path.
-   *
-   * @param from - The state path originating the activities.
-   * @param _activities - Map of delay strings to activity definitions.
-   *
-   * @returns An array of activity identifier strings.
-   */
-  __executeActivities: ExecuteActivities_F = (from, _activities) => {
-    const entries = Object.entries(_activities);
-    const outs: string[] = [];
+        const check5 = await this.#performPredicates(
+          ...toArray.typed(activity.guards),
+        );
 
-    for (const [_delay, _activity] of entries) {
-      const id = `${from}::${_delay}`;
-      let index = -1;
-      const _interval = this.__cachedIntervals.find((f, i) => {
-        const check = f.id === id;
-        if (check) index = i;
-        return check;
-      });
-
-      const buildCallback = () => {
-        const delayF = this.toDelayFn(_delay);
-        const check0 = !isDefined(delayF);
-        if (check0) return;
-        const interval = () => this.#executeDelay(delayF);
-        const activities = toArray.typed(_activity);
-
-        const pauser = () => {
-          const __interval = interval();
-          const check11 = __interval < DEFAULT_MIN_ACTIVITY_TIME;
-          if (check11) {
-            this._addWarning(`Delay (${_delay}) is too short`);
-            return true;
-          }
-
-          const check12 = __interval > DEFAULT_MAX_TIME_PROMISE;
-          if (check12) {
-            this._addWarning(`Delay (${_delay}) is too long`);
-            return true;
-          }
-
-          return false;
-        };
-
-        if (pauser()) return;
-
-        const callback = async () => {
-          for (const activity of activities) {
-            const check2 = typeof activity === 'string';
-            const check3 = isDescriber(activity);
-            const check4 = check2 || check3;
-
-            if (check4) {
-              await this.__performActions(from, activity);
-              continue;
-            }
-
-            const check5 = await this.#performPredicates(
-              ...toArray.typed(activity.guards),
-            );
-            if (check5) {
-              const actions = toArray.typed(activity.actions);
-              await this.__performActions(from, ...actions);
-            }
-          }
-          this.__flush();
-        };
-
-        const promise = this.createInterval({ callback, interval, id, pauser });
-
-        this.__cachedIntervals.push(promise);
-
-        return id;
-      };
-
-      if (_interval) {
-        const check = _interval.state === 'idle' || _interval.state === 'paused';
-        if (check) {
-          this.__cachedIntervals.splice(index, 1);
-          const result = buildCallback();
-          if (!result) return [];
-          outs.push(result);
-        } else outs.push(id);
-        continue;
+        if (check5) {
+          const actions = toArray.typed(activity.actions);
+          await this.__performActions(from, ...actions);
+        }
       }
 
-      const result = buildCallback();
-      if (!result) return [];
+      this.__flush();
+    };
 
-      outs.push(result);
-    }
-
-    return outs;
+    return callback;
   };
 
   /**
@@ -646,7 +551,7 @@ export class AsyncInterpreter<
       const delayF = this.toDelayFn(_delay);
       const check0 = !isDefined(delayF);
       if (check0) return;
-      const delay = this.#executeDelay(delayF);
+      const delay = this.__executeDelay(delayF);
 
       const check1 = delay > DEFAULT_MAX_TIME_PROMISE;
       if (check1) {

@@ -17,6 +17,8 @@ import { getTags, toChildSrc } from '#common/functions';
 import {
   DEFAULT_DELIMITER,
   DEFAULT_MAX_SELF_TRANSITIONS,
+  DEFAULT_MAX_TIME_PROMISE,
+  DEFAULT_MIN_ACTIVITY_TIME,
   type EventStrings,
 } from '#constants';
 import { toDelay } from '#delays';
@@ -49,7 +51,7 @@ import { isDefined, isPrimitive, toArray } from '@bemedev/app-options/bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { createInterval, type Interval3 } from '@bemedev/interval3';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type { Fn, MachineType, Pausable } from '~types';
+import { type Fn, type MachineType, type Pausable } from '~types';
 import {
   getEntries,
   getExits,
@@ -74,8 +76,10 @@ import type {
   EventsFrom,
   EventsMapFrom,
   ExecuteActivities_F,
+  ExecuteActivity_F,
   MachineOptionsFrom,
   Mode,
+  PerformDelay_F,
   PrivateContextFrom,
   Selector_F,
   SimpleScheduler,
@@ -1651,7 +1655,7 @@ export abstract class CommonInterpreter<
    *
    * @param result - Partial action result object.
    *
-   * @returns Scheduled context merge result.
+   * @return__executeActivitiessxt merge result.
    */
   protected __mergeContexts: DirectMerge_F<Tc> = result => {
     const cb = () => {
@@ -1672,9 +1676,88 @@ export abstract class CommonInterpreter<
   };
 
   /**
-   * Abstract method executing activities configured for active states.
+   * Evaluates a delay function against the current state.
+   *
+   * @param delay - The delay function of type {@linkcode PerformDelay_F}.
+   *
+   * @returns The evaluated delay time in milliseconds.
    */
-  protected abstract __executeActivities: ExecuteActivities_F;
+  protected __performDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+    this._iterate();
+    return delay(this.__cloneState);
+  };
+
+  /**
+   * Evaluates a delay function while updating internal working status.
+   *
+   * @param delay - The delay function of type {@linkcode PerformDelay_F}.
+   *
+   * @returns The evaluated delay time in milliseconds.
+   */
+  protected __executeDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+    this.__setStatus('busy');
+    const out = this.__performDelay(delay);
+    this.__setStatus('started');
+    return out;
+  };
+
+  protected __executeActivities: ExecuteActivities_F = (from, _activities) => {
+    const entries = Object.entries(_activities);
+    const outs: string[] = [];
+
+    for (const [_delay, _activity] of entries) {
+      const id = `${from}::${_delay}`;
+      let index = -1;
+      const _interval = this.__cachedIntervals.find((f, i) => {
+        const check = f.id === id;
+        if (check) index = i;
+        return check;
+      });
+
+      const buildCallback = () => {
+        const delayF = this.toDelayFn(_delay);
+        const check0 = !isDefined(delayF);
+        if (check0) return;
+
+        const interval = () => this.__executeDelay(delayF);
+        if (this._pauser(_delay, interval())) return;
+
+        const actions = toArray.typed(_activity);
+        const callback = this.__executeActivity(from, actions);
+
+        const promise = this.createInterval({
+          callback,
+          interval,
+          id,
+          pauser: ({ interval }) => this._pauser(_delay, interval),
+        });
+
+        this.__cachedIntervals.push(promise);
+
+        return id;
+      };
+
+      if (_interval) {
+        const check = _interval.state === 'idle' || _interval.state === 'paused';
+        if (check) {
+          this.__cachedIntervals.splice(index, 1);
+          const result = buildCallback();
+          if (!result) return [];
+          outs.push(result);
+        } else outs.push(id);
+        continue;
+      }
+
+      const result = buildCallback();
+      if (!result) return [];
+
+      outs.push(result);
+    }
+
+    return outs;
+  };
+
+  protected abstract __executeActivity: ExecuteActivity_F;
 
   /**
    * Creates an interval instance of type {@linkcode Interval2}.
@@ -1694,6 +1777,22 @@ export abstract class CommonInterpreter<
    * Abstract method executing final state cleanup hooks.
    */
   protected abstract __performFinally: Fn;
+
+  protected _pauser = (id: string, interval: number) => {
+    const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
+    if (check11) {
+      this._addWarning(`Delay (${id}) is too short`);
+      return true;
+    }
+
+    const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
+    if (check12) {
+      this._addWarning(`Delay (${id}) is too long`);
+      return true;
+    }
+
+    return false;
+  };
 
   /**
    * Evaluates whether operations originating from a state path are prohibited.

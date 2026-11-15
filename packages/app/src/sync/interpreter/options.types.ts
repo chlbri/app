@@ -1,7 +1,6 @@
 import type { SyncAction2 } from '#actions';
 import type { AnyInterpreter } from '#common/interpreter';
 import type { CommonConfig3, SimpleMachineOptions2 } from '#common/machine';
-import type { SyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig, SyncPredicateS2, SyncPredicateS3 } from '#guards';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
@@ -123,24 +122,6 @@ export type SyncPerformAlway_F = (always: AlwaysConfig) => string | false;
 export type _SyncSend_F<E extends EventObject> = (
   event: E,
 ) => SyncNodeConfig | undefined;
-
-/**
- * Function type signature for evaluating a synchronous delay value.
- *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @param delay - Synchronous delay function type {@linkcode SyncDelayFunction3}.
- *
- * @returns Delay duration in milliseconds.
- */
-export type SyncPerformDelay_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (delay: SyncDelayFunction3<E, Pc, Tc, T>) => number;
 
 /**
  * Function type signature for providing machine options to a synchronous interpreter class {@linkcode SyncInterpreter}.

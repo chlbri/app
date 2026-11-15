@@ -1,6 +1,6 @@
 import type { AsyncAction } from '#actions';
 
-import type { AsyncDelayFunction } from '#delays';
+import type { DelayFunction } from '#delays';
 import { ActorsConfigMap, type EventObject, type EventsMap } from '#events';
 import { type FlatMapN } from '#states';
 import { createAsyncHelpers } from '@bemedev/app-options/internal';
@@ -86,7 +86,7 @@ export class AsyncMachine<
    * @returns The delay function type of the machine.
    */
   get __delay() {
-    return _unknown<AsyncDelayFunction<Eo, Pc, Tc, Ta>>();
+    return _unknown<DelayFunction<Eo, Pc, Tc, Ta>>();
   }
 
   // #endregion

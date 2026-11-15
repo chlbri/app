@@ -64,14 +64,10 @@ export type {
 export type * from '../registry.types';
 
 export type {
-  AsyncDelayFunction,
-  AsyncDelayFunction2,
-  AsyncDelayFunction3,
-  AsyncDelayMap,
-  SyncDelayFunction,
-  SyncDelayFunction2,
-  SyncDelayFunction3,
-  SyncDelayMap,
+  DelayFunction,
+  DelayFunction2,
+  DelayFunction3,
+  DelayMap,
   ToDelay_F,
 } from '#delays';
 
@@ -208,6 +204,7 @@ export type {
   MoF,
   Mode,
   OptionalDefinitions,
+  PerformDelay_F,
   PredicateSFrom,
   PredicatesMapFrom,
   PrivateContextFrom,
@@ -278,7 +275,6 @@ export type {
   SyncInterpreter_F,
   SyncPerformAction_F,
   SyncPerformAlway_F,
-  SyncPerformDelay_F,
   SyncPerformPredicate_F,
   SyncPerformTransition_F,
   SyncPerformTransitions_F,

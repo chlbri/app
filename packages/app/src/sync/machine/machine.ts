@@ -5,7 +5,7 @@ import type {
   CommonCreateMachine_F,
   SimpleMachineOptions2,
 } from '#common/machine';
-import type { SyncDelayFunction } from '#delays';
+import type { DelayFunction } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
@@ -80,7 +80,7 @@ export class SyncMachine<
    * @returns The delay function type of the machine.
    */
   get __delay() {
-    return _unknown<SyncDelayFunction<Eo, Pc, Tc, Ta>>();
+    return _unknown<DelayFunction<Eo, Pc, Tc, Ta>>();
   }
 
   // #region Providers

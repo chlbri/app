@@ -5,7 +5,6 @@ import type {
   CommonConfig3,
   SimpleMachineOptions2,
 } from '#common/machine';
-import type { AsyncDelayFunction3 } from '#delays';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { AsyncPredicateS3 } from '#guards';
 import type { AsyncAddOptionsParam_F } from '../asyncMachine';
@@ -85,24 +84,6 @@ export type AsyncPerformPredicate_F<
   Tc extends PrimitiveObject = PrimitiveObject,
   T extends string = string,
 > = (predicate: AsyncPredicateS3<E, Pc, Tc, T>) => MaybePromise<boolean>;
-
-/**
- * Function type signature for evaluating an async delay value.
- *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @param delay - Async delay function type {@linkcode AsyncDelayFunction3}.
- *
- * @returns Delay duration in milliseconds.
- */
-export type AsyncPerformDelay_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (delay: AsyncDelayFunction3<E, Pc, Tc, T>) => number;
 
 /**
  * Function type signature for performing an after delay transition asynchronously.

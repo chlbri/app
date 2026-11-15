@@ -1,8 +1,14 @@
 import type { ActionResult, WithDescriber } from '#actions';
+import type { DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig } from '#guards';
-import type { ActivityConfig, StateValue, WorkingStatus } from '#states';
+import type {
+  ActivityConfig,
+  ActivityMap,
+  StateValue,
+  WorkingStatus,
+} from '#states';
 import type { NotUndefined, Primitive } from '@bemedev/app-options/bemedev';
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval3, IntervalParams } from '@bemedev/interval3';
@@ -210,6 +216,29 @@ export type ExecuteActivities_F = (
   from: string,
   activity: ActivityConfig,
 ) => string[];
+
+/**
+ * Function signature for executing activities.
+ */
+export type ExecuteActivity_F = (from: string, actions: ActivityMap[]) => () => any;
+
+/**
+ * Function signature for evaluating a delay function against the current state.
+ *
+ * @template | {@linkcode EventObject} `E` - Event object type.
+ * @template `Pc` - Private context type.
+ * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ * @template `T` - State tag string type.
+ * @param delay - Delay function type {@linkcode DelayFunction3}.
+ *
+ * @returns Delay duration in milliseconds.
+ */
+export type PerformDelay_F<
+  E extends EventObject = EventObject,
+  Pc = any,
+  Tc extends PrimitiveObject = PrimitiveObject,
+  T extends string = string,
+> = (delay: DelayFunction3<E, Pc, Tc, T>) => number;
 
 /**
  * Function signature for merging action execution result.
