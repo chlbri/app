@@ -1,0 +1,101 @@
+{
+  "name": "@bemedev/interval3",
+  "version": "1.0.0",
+  "description": "A cancellable interval library with a recomputed delay on every pass.",
+  "keywords": [
+    "timer",
+    "interval",
+    "cancellable",
+    "time",
+    "sleep",
+    "typescript"
+  ],
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/interval3/README.md",
+  "license": "MIT",
+  "author": {
+    "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
+    "url": "https://bemedev.vercel.app"
+  },
+  "maintainers": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "contributors": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chlbri/app"
+  },
+  "files": [
+    "lib"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    },
+    "./interval": {
+      "import": "./lib/interval.js",
+      "types": "./lib/interval.d.ts"
+    },
+    "./timer": {
+      "import": "./lib/timer.js",
+      "types": "./lib/timer.d.ts"
+    },
+    "./types": {
+      "types": "./lib/types.types.d.ts"
+    },
+    "./helpers": {
+      "import": "./lib/helpers.js",
+      "types": "./lib/helpers.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "p-q": "pretty-quick",
+    "posttest": "vp fmt",
+    "pretest": "vp run pack",
+    "rm:lib": "vp dlx rimraf ./lib",
+    "test:coverage": "vp test run",
+    "test": "vp run test:coverage --no-coverage",
+    "test:only": "vp run test",
+    "test:watch": "vp test"
+  },
+  "dependencies": {
+    "@bemedev/sleep": "^0.2.2"
+  },
+  "devDependencies": {
+    "@bemedev/dev-utils": "^1.5.2",
+    "@bemedev/typings": "^1.5.0",
+    "@size-limit/file": "^14.3.0",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "catalog:",
+    "pretty-quick": "^4.2.2",
+    "rimraf": "^6.1.4",
+    "size-limit": "^14.3.0",
+    "tslib": "^2.9.1",
+    "tsx": "^4.23.15",
+    "typescript": "7.0.2",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

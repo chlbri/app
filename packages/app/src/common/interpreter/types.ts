@@ -3,10 +3,9 @@ import type { Pausable } from '#emitters';
 import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import type { GuardConfig } from '#guards';
 import type { ActivityConfig, StateValue, WorkingStatus } from '#states';
-import type { NOmit, NotUndefined, Primitive } from '@bemedev/app-options/bemedev';
+import type { NotUndefined, Primitive } from '@bemedev/app-options/bemedev';
 import type { Decompose } from '@bemedev/decompose';
-import type { Interval2 } from '@bemedev/interval2';
-import type { IntervalParams } from '@bemedev/interval2/types';
+import type { Interval3, IntervalParams } from '@bemedev/interval3';
 import type { Equals, PrimitiveObject } from '@bemedev/typings';
 import type { Fn, FnMap, FnMapR, KeyU, OptionalDefinition } from '~types';
 import type { SimpleMachineOptions2 } from '../machine';
@@ -225,9 +224,7 @@ export type DirectMerge_F<Tc extends PrimitiveObject = PrimitiveObject> = Fn<
 /**
  * Function signature for creating timer instance.
  */
-export type CreateInterval2_F = (
-  config: NOmit<IntervalParams, 'exact'>,
-) => Interval2;
+export type CreateInterval2_F = (config: IntervalParams) => Interval3;
 
 /**
  * Difference calculation output structure for next state transition.

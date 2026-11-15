@@ -130,7 +130,6 @@ export class AsyncInterpreter<
     const out = new AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>(
       this.machine,
       this.__mode,
-      this.__exact,
     );
 
     out._ppC(this.__initialContexts.pContext);
@@ -156,12 +155,8 @@ export class AsyncInterpreter<
    * @param mode - The type {@linkcode Mode} of the interpreter, defaults to `'strict'`.
    * @param exact - Whether to use exact interval calculations, defaults to `true`.
    */
-  constructor(
-    machine: AnyMachine<E, A, Pc, Tc>,
-    mode: Mode = 'strict',
-    exact = true,
-  ) {
-    super(machine, mode, exact);
+  constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
+    super(machine, mode);
     this.#initSchedulers();
     this.__performConfig(true);
   }
@@ -435,21 +430,27 @@ export class AsyncInterpreter<
         const delayF = this.toDelayFn(_delay);
         const check0 = !isDefined(delayF);
         if (check0) return;
-        const interval = this.#executeDelay(delayF);
-
-        const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
-        if (check11) {
-          this._addWarning(`Delay (${_delay}) is too short`);
-          return;
-        }
-
-        const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
-        if (check12) {
-          this._addWarning(`Delay (${_delay}) is too long`);
-          return;
-        }
-
+        const interval = () => this.#executeDelay(delayF);
         const activities = toArray.typed(_activity);
+
+        const pauser = () => {
+          const __interval = interval();
+          const check11 = __interval < DEFAULT_MIN_ACTIVITY_TIME;
+          if (check11) {
+            this._addWarning(`Delay (${_delay}) is too short`);
+            return true;
+          }
+
+          const check12 = __interval > DEFAULT_MAX_TIME_PROMISE;
+          if (check12) {
+            this._addWarning(`Delay (${_delay}) is too long`);
+            return true;
+          }
+
+          return false;
+        };
+
+        if (pauser()) return;
 
         const callback = async () => {
           for (const activity of activities) {
@@ -473,7 +474,7 @@ export class AsyncInterpreter<
           this.__flush();
         };
 
-        const promise = this.createInterval({ callback, interval, id });
+        const promise = this.createInterval({ callback, interval, id, pauser });
 
         this.__cachedIntervals.push(promise);
 
@@ -1139,8 +1140,8 @@ export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
  */
 export const interpretAsync: AsyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
-  const { mode, exact, pContext, context } = _any(args);
-  const out = new AsyncInterpreter(machine, mode, exact);
+  const { mode, pContext, context } = _any(args);
+  const out = new AsyncInterpreter(machine, mode);
   out._providePrivateContext(pContext);
   out._provideContext(context);
   return out as any;

@@ -47,7 +47,7 @@ import {
 import type { AllowedNames } from '@bemedev/app-options/bemedev';
 import { isDefined, isPrimitive, toArray } from '@bemedev/app-options/bemedev';
 import { asyncfy } from '@bemedev/better-promise';
-import { createInterval, type Interval2 } from '@bemedev/interval2';
+import { createInterval, type Interval3 } from '@bemedev/interval3';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { Fn, MachineType, Pausable } from '~types';
 import {
@@ -69,7 +69,6 @@ import type {
   ConfigFrom,
   ContextFrom,
   Contexts,
-  CreateInterval2_F,
   DiffNext,
   DirectMerge_F,
   EventsFrom,
@@ -272,11 +271,6 @@ export abstract class CommonInterpreter<
    * Flag indicating whether an event has been dispatched during execution.
    */
   protected __sent = false;
-
-  /**
-   * Flag indicating whether precise interval timing is enabled for activity schedulers.
-   */
-  protected __exact!: boolean;
 
   /**
    * Public accessor for all collected child interpreter services.
@@ -498,12 +492,8 @@ export abstract class CommonInterpreter<
    * @param mode - The execution mode of type {@linkcode Mode}. Defaults to `'strict'`.
    * @param exact - Whether to use exact timer intervals. Defaults to `true`.
    */
-  constructor(
-    machine: AnyMachine<E, A, Pc, Tc>,
-    mode: Mode = 'strict',
-    exact = true,
-  ) {
-    this.__init(machine.renew, mode, exact);
+  constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
+    this.__init(machine.renew, mode);
     this.__initialConfig = this.__machine.initialConfig;
     this.__initialNode = this.__resolveNode(this.__initialConfig);
   }
@@ -515,16 +505,11 @@ export abstract class CommonInterpreter<
    * @param mode - The execution mode of type {@linkcode Mode}.
    * @param exact - Whether exact timer intervals are configured.
    */
-  private __init = (
-    machine: AnyMachine<E, A, Pc, Tc>,
-    mode: Mode = 'strict',
-    exact = true,
-  ) => {
+  private __init = (machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') => {
     this.__machine = machine.renew;
     this.__config = this.__machine.initialConfig;
     this.__value = nodeToValue(this.__machine.initialConfig);
     this.__mode = mode;
-    this.__exact = exact;
 
     this.__state = {
       status: this.__status,
@@ -545,7 +530,7 @@ export abstract class CommonInterpreter<
   softReset = () => {
     this.__value = nodeToValue(this.__initialConfig);
     this.__contexts = this.__initialContexts;
-    this.__init(this.__machine, this.__mode, this.__exact);
+    this.__init(this.__machine, this.__mode);
     this.__flush();
   };
 
@@ -1698,17 +1683,12 @@ export abstract class CommonInterpreter<
    *
    * @returns New interval instance of type {@linkcode Interval2}.
    */
-  protected createInterval: CreateInterval2_F = ({ callback, id, interval }) => {
-    const exact = this.__exact;
-    const out = createInterval({ callback, id, interval, exact });
-
-    return out;
-  };
+  protected createInterval = createInterval;
 
   /**
    * Cached array of active interval instances of type {@linkcode Interval2}.
    */
-  protected __cachedIntervals: Interval2[] = [];
+  protected __cachedIntervals: Interval3[] = [];
 
   /**
    * Abstract method executing final state cleanup hooks.

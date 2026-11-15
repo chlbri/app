@@ -193,6 +193,10 @@ describe('Coverage actors', () => {
     test(...useIter2(2));
     test(...useAll({ iter1: 4, iter2: 2 }));
     test(...useStateValue('working'));
+    test(...waiter(100));
+    test('', () => {
+      console.warn('pContext', '=>', service._pContext);
+    });
     test(...stop());
   });
 });

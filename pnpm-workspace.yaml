@@ -9,6 +9,7 @@ packages:
   - 'packages/reactjs'
   - 'packages/utils/bemedev'
   - 'packages/cli'
+  - 'packages/interval3'
   - 'apps/*'
 
 allowBuilds:

@@ -36,7 +36,6 @@ import type {
   TransitionConfig,
 } from '#transitions';
 import { _any, isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
-import { createInterval } from '@bemedev/interval2';
 import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
 import { isDescriber, type KeyU } from '~types';
@@ -50,12 +49,7 @@ import type {
   SyncProvideMachineOptions_F,
 } from './options.types';
 
-import type {
-  CreateInterval2_F,
-  ExecuteActivities_F,
-  InterpretArgs,
-  Mode,
-} from '#common/interpreter';
+import type { ExecuteActivities_F, InterpretArgs, Mode } from '#common/interpreter';
 import type {
   AnyMachine,
   CommonChildFunction2,
@@ -125,7 +119,6 @@ export class SyncInterpreter<
     const out = new SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
       this.machine,
       this.__mode,
-      this.__exact,
     );
     out._ppC(this.__initialContexts.pContext);
     out._provideContext(this.__initialContexts.context);
@@ -150,12 +143,8 @@ export class SyncInterpreter<
    * @param mode - The execution mode of the interpreter, defaults to `'strict'`.
    * @param exact - Whether to use exact interval and timeout evaluation, defaults to `true`.
    */
-  constructor(
-    machine: AnyMachine<E, A, Pc, Tc>,
-    mode: Mode = 'strict',
-    exact = true,
-  ) {
-    super(machine, mode, exact);
+  constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
+    super(machine, mode);
     this.__initSchedulers();
     this.__performConfig(true);
   }
@@ -471,19 +460,18 @@ export class SyncInterpreter<
     return out;
   };
 
-  /**
-   * Creates an interval instance for executing periodic tasks or activities.
-   *
-   * @param options - Configuration options for interval creation of type {@linkcode CreateInterval2_F}.
-   *
-   * @returns The created interval handle.
-   */
-  protected createInterval: CreateInterval2_F = ({ callback, id, interval }) => {
-    const exact = this.__exact;
-    const out = createInterval({ callback, id, interval, exact });
+  // /**
+  //  * Creates an interval instance for executing periodic tasks or activities.
+  //  *
+  //  * @param options - Configuration options for interval creation of type {@linkcode CreateInterval2_F}.
+  //  *
+  //  * @returns The created interval handle.
+  //  */
+  // protected createInterval: CreateInterval2_F = args => {
+  //   const out = createInterval(args);
 
-    return out;
-  };
+  //   return out;
+  // };
 
   /**
    * Executes activity timers for a state node.
@@ -510,21 +498,27 @@ export class SyncInterpreter<
         const delayF = this.toDelayFn(_delay);
         const check0 = !isDefined(delayF);
         if (check0) return;
-        const interval = this.__executeDelay(delayF);
-
-        const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
-        if (check11) {
-          this._addWarning(`Delay (${_delay}) is too short`);
-          return;
-        }
-
-        const check12 = interval > DEFAULT_MAX_TIME_PROMISE;
-        if (check12) {
-          this._addWarning(`Delay (${_delay}) is too long`);
-          return;
-        }
-
+        const interval = () => this.__executeDelay(delayF);
         const activities = toArray.typed(_activity);
+
+        const pauser = () => {
+          const __interval = interval();
+          const check11 = __interval < DEFAULT_MIN_ACTIVITY_TIME;
+          if (check11) {
+            this._addWarning(`Delay (${_delay}) is too short`);
+            return true;
+          }
+
+          const check12 = __interval > DEFAULT_MAX_TIME_PROMISE;
+          if (check12) {
+            this._addWarning(`Delay (${_delay}) is too long`);
+            return true;
+          }
+
+          return false;
+        };
+
+        if (pauser()) return;
 
         const callback = () => {
           for (const activity of activities) {
@@ -549,7 +543,7 @@ export class SyncInterpreter<
           this.__flush();
         };
 
-        const promise = this.createInterval({ callback, interval, id });
+        const promise = this.createInterval({ callback, interval, id, pauser });
 
         this.__cachedIntervals.push(promise);
 
@@ -1064,8 +1058,8 @@ export type SyncInterpreter_F = <M extends AnyMachine>(
  */
 export const interpretSync: SyncInterpreter_F = (..._args) => {
   const [machine, args] = _args;
-  const { mode, exact, pContext, context } = _any(args);
-  const out: any = new SyncInterpreter(machine, mode, exact);
+  const { mode, pContext, context } = _any(args);
+  const out: any = new SyncInterpreter(machine, mode);
   out._providePrivateContext(pContext);
   out._provideContext(context);
   return out;
