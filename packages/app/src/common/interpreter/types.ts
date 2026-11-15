@@ -210,7 +210,12 @@ export type SimpleScheduler = {
 };
 
 /**
- * Function signature for executing activities.
+ * Function signature for executing the activities of a state node.
+ *
+ * @param from - The origin state path string.
+ * @param activity - The activities map, keyed by delay name.
+ *
+ * @returns The identifiers of the started activity intervals.
  */
 export type ExecuteActivities_F = (
   from: string,
@@ -218,7 +223,12 @@ export type ExecuteActivities_F = (
 ) => string[];
 
 /**
- * Function signature for executing activities.
+ * Function signature building the callback run on every pass of an activity.
+ *
+ * @param from - The origin state path string.
+ * @param actions - The activity definitions to run on each pass.
+ *
+ * @returns The callback invoked by the interval.
  */
 export type ExecuteActivity_F = (from: string, actions: ActivityMap[]) => () => any;
 
@@ -251,7 +261,14 @@ export type DirectMerge_F<Tc extends PrimitiveObject = PrimitiveObject> = Fn<
 >;
 
 /**
- * Function signature for creating timer instance.
+ * Function signature for creating a timer instance.
+ *
+ * The returned instance is a type {@linkcode Interval3}, whose `interval` member
+ * is recomputed on every pass.
+ *
+ * @param config - Interval parameters of type {@linkcode IntervalParams}.
+ *
+ * @returns A new interval instance of type {@linkcode Interval3}.
  */
 export type CreateInterval2_F = (config: IntervalParams) => Interval3;
 
@@ -573,12 +590,23 @@ export type Selector_F<T = any> = 0 extends 1 & T
  * @template | {@linkcode AnyMachine} `M` - Machine type.
  * @template `P` - Private context.
  * @template `C` - Internal context.
+ *
+ * @see {@linkcode InterpreterOptions.exact}
  */
 export type InterpreterOptions<
   M extends AnyMachine,
   P extends PrivateContextFrom<M> = PrivateContextFrom<M>,
   C extends ContextFrom<M> = ContextFrom<M>,
-> = { mode?: Mode; exact?: boolean } & OptionalDefinitions<P, C>;
+> = {
+  /** Execution mode of type {@linkcode Mode}, `'strict'` by default. */
+  mode?: Mode;
+  /**
+   * @deprecated Interval timing is no longer configurable: the interval engine
+   * always recomputes the delay on every pass. The flag is still accepted for
+   * backward compatibility and ignored.
+   */
+  exact?: boolean;
+} & OptionalDefinitions<P, C>;
 
 /**
  * Arguments tuple passed to interpret function.

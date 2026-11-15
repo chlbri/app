@@ -193,7 +193,43 @@ export function useSubscriber<T, R = T>(
 }
 ````
 
-### 9. Others
+### 9. Functions Typed by an Exported Type
+
+When a function, method, or class member is annotated with a type exported from
+another file — typically an imported `_F` alias, as in
+`__executeActivity: ExecuteActivity_F = ...`:
+
+- **Do NOT** describe the parameter types or the return type.
+- **Do NOT** use `{@linkcode ...}` for the types of the parameters or of the return
+  type.
+- **Only** `{@linkcode ...}` the type of the function itself.
+
+Keep `@param` and `@returns` for the semantics — what each parameter means and what
+the function gives back — but never repeat the types that the exported annotation
+already carries.
+
+Example:
+
+```ts
+/**
+ * Builds the callback executed on every pass of an activity interval.
+ *
+ * @param from - The origin state path string.
+ * @param activities - The activity definitions to run on each pass.
+ *
+ * @returns The callback invoked by the interval.
+ *
+ * @see -- type {@linkcode ExecuteActivity_F}
+ */
+__executeActivity: ExecuteActivity_F = (from, activities) => {
+  // ...
+};
+```
+
+The type declaration itself, where `ExecuteActivity_F` is authored and exported,
+still documents its `@param` and `@returns` types, since nothing else carries them.
+
+### 10. Others
 
 Add also jsdoc to type definitions, even if they are alias
 

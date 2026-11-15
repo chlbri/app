@@ -8,6 +8,30 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.0.0] - 15/11/2026** => _17:57_
+
+</summary>
+
+### Breaking Changes
+
+- **Unified Delay Types**: `@bemedev/app-contract` renames the delay types it
+  re-exports. `SyncDelayFunction3` and `AsyncDelayFunction3` become `DelayFunction3`,
+  while `SyncDelayFunction2` and `AsyncDelayFunction2` become `DelayFunction2`.
+  Synchronous and asynchronous machines share the same delay signature, so the
+  flavor-suffixed names no longer exist.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 3.0.0 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.3] - 14/11/2026** => _19:44_
 
 </summary>

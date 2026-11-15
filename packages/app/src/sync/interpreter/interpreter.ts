@@ -136,7 +136,6 @@ export class SyncInterpreter<
    *
    * @param machine - The machine instance of interface {@linkcode AnyMachine} to be interpreted.
    * @param mode - The execution mode of the interpreter, defaults to `'strict'`.
-   * @param exact - Whether to use exact interval and timeout evaluation, defaults to `true`.
    */
   constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
     super(machine, mode);
@@ -191,7 +190,9 @@ export class SyncInterpreter<
   /**
    * Executes a single synchronous action, updating context and running extended actions.
    *
-   * @param action - The action function of type {@linkcode SyncPerformAction_F}.
+   * @param action - The action function to execute.
+   *
+   * @see -- type {@linkcode SyncPerformAction_F}
    */
   protected __executeAction: SyncPerformAction_F<Eo, Pc, Tc, Ta> = action => {
     this.__setStatus('busy');
@@ -220,9 +221,11 @@ export class SyncInterpreter<
   /**
    * Evaluates a single predicate function against the current cloned state.
    *
-   * @param predicate - The predicate function of type {@linkcode SyncPerformPredicate_F}.
+   * @param predicate - The predicate function to evaluate.
    *
    * @returns `true` if the predicate condition is met, `false` otherwise.
+   *
+   * @see -- type {@linkcode SyncPerformPredicate_F}
    */
   private __performPredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
     this._iterate();
@@ -232,9 +235,11 @@ export class SyncInterpreter<
   /**
    * Executes a predicate function while managing the status of the interpreter.
    *
-   * @param predicate - The predicate function of type {@linkcode SyncPerformPredicate_F}.
+   * @param predicate - The predicate function to execute.
    *
    * @returns `true` if the predicate condition is met, `false` otherwise.
+   *
+   * @see -- type {@linkcode SyncPerformPredicate_F}
    */
   private __executePredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
     this.__setStatus('busy');
@@ -262,9 +267,11 @@ export class SyncInterpreter<
   /**
    * Performs a single state transition, executing exit, action, and entry callbacks.
    *
-   * @param transition - The transition target string or configuration of type {@linkcode SyncPerformTransition_F}.
+   * @param transition - The transition target string or configuration to perform.
    *
    * @returns The target state path string if the transition succeeded, or `false` if it failed.
+   *
+   * @see -- type {@linkcode SyncPerformTransition_F}
    */
   protected __performTransition: SyncPerformTransition_F = transition => {
     const check = typeof transition == 'string';
@@ -292,9 +299,11 @@ export class SyncInterpreter<
   /**
    * Performs the first valid transition from a list of transition configurations.
    *
-   * @param transitions - The transition configurations of type {@linkcode SyncPerformTransitions_F}.
+   * @param transitions - The transition configurations to try in order.
    *
    * @returns The target state path string if a transition succeeded, or `false` otherwise.
+   *
+   * @see -- type {@linkcode SyncPerformTransitions_F}
    */
   protected __performTransitions: SyncPerformTransitions_F = (...transitions) => {
     for (const _transition of transitions) {
@@ -429,6 +438,20 @@ export class SyncInterpreter<
     return entries;
   }
 
+  /**
+   * Builds the callback executed on every pass of an activity interval.
+   *
+   * Each activity is either an action name, a describer, or a definition whose
+   * guards are checked before its actions run.
+   *
+   * @param _ - The origin state path string, unused by the synchronous
+   * interpreter.
+   * @param activities - The activity definitions to run on each pass.
+   *
+   * @returns The callback performing the actions on each pass.
+   *
+   * @see -- type {@linkcode ExecuteActivity_F}
+   */
   __executeActivity: ExecuteActivity_F = (_, activities) => {
     const callback = () => {
       for (const activity of activities) {
@@ -600,9 +623,11 @@ export class SyncInterpreter<
   /**
    * Adds options to the inner class {@linkcode SyncMachine} of this interpreter service.
    *
-   * @param helper - The options provider function of type {@linkcode SyncAddOptions_F}.
+   * @param helper - The options provider callback.
    *
    * @returns The interpreter instance with updated options.
+   *
+   * @see -- type {@linkcode SyncAddOptions_F}
    */
   addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
@@ -611,9 +636,11 @@ export class SyncInterpreter<
   /**
    * Provides options for the interpreter and returns a new interpreter instance.
    *
-   * @param option - A function that provides options for the machine of type {@linkcode SyncProvideMachineOptions_F}.
+   * @param option - A function that provides options for the machine.
    *
-   * @returns A new class {@linkcode SyncInterpreter} instance with the provided options applied.
+   * @returns A new interpreter instance with the provided options applied.
+   *
+   * @see -- type {@linkcode SyncProvideMachineOptions_F}
    */
   provideOptions: SyncProvideMachineOptions_F<
     C,
@@ -636,7 +663,9 @@ export class SyncInterpreter<
    * @param _subscriber - The subscriber callback function.
    * @param options - Subscription configuration options.
    *
-   * @returns The created subscriber object of type {@linkcode AddSubscriber_F}.
+   * @returns The created subscriber object, or the existing one with the same id.
+   *
+   * @see -- type {@linkcode AddSubscriber_F}
    */
   subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.machine.eventsList;
@@ -937,7 +966,7 @@ export type SyncInterpreter_F = <M extends AnyMachine>(
 /**
  * Creates and initializes a class {@linkcode SyncInterpreter} service from the given interface {@linkcode AnyMachine}.
  *
- * @param _args - The interpretation arguments including the machine, mode, exact, context, and private context.
+ * @param _args - The interpretation arguments including the machine, mode, context, and private context.
  *
  * @returns A new class {@linkcode SyncInterpreter} service instance.
  */

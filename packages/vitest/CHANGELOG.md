@@ -5,6 +5,22 @@
 <details>
 <summary>
 
+## **[3.0.0] - 15/11/2026** => _17:57_
+
+</summary>
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 3.0.0 to align with the workspace
+  release of `@bemedev/app`.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.3] - 14/11/2026** => _19:44_
 
 </summary>

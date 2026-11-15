@@ -5,6 +5,35 @@
 <details>
 <summary>
 
+## **[3.0.0] - 15/11/2026** => _17:57_
+
+</summary>
+
+### Breaking Changes
+
+- **Unified Delay Types**: Replace `SyncDelayFunction3` and `AsyncDelayFunction3`
+  with `DelayFunction3`, and `SyncDelayFunction2` and `AsyncDelayFunction2` with
+  `DelayFunction2`. Synchronous and asynchronous machines share the same delay
+  signature, so the flavor-suffixed names are removed from `SyncMachineOptions2`,
+  `AsyncMachineOptions2`, `SyncSimpleMachineOptions` and `AsyncSimpleMachineOptions`.
+
+### Docs
+
+- Document the unified delay types, shared by both machine flavors, on the option
+  shapes.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 3.0.0 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.3] - 14/11/2026** => _19:44_
 
 </summary>

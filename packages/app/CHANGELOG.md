@@ -8,6 +8,63 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.0.0] - 15/11/2026** => _17:57_
+
+</summary>
+
+### Breaking Changes
+
+- **Interval Engine**: `@bemedev/app/bemedev` re-exports `@bemedev/interval3` instead
+  of `@bemedev/interval2`. The interval factory now expects its `interval` member as
+  a `() => number` function, evaluated on every pass, instead of a fixed `number`.
+  Depend on `@bemedev/interval2` directly to keep the previous `setInterval`
+  scheduling.
+- **Delay Types**: `SyncDelayFunction`, `SyncDelayFunction2`, `SyncDelayFunction3`,
+  `AsyncDelayFunction`, `AsyncDelayFunction2`, `AsyncDelayFunction3`, `SyncDelayMap`
+  and `AsyncDelayMap` are replaced by `DelayFunction`, `DelayFunction2`,
+  `DelayFunction3` and `DelayMap`, shared by synchronous and asynchronous machines.
+- **Interpreter Options**: `interpret`, `interpretSync` and `interpretAsync` no
+  longer read `exact`, and the third constructor argument is removed. Interval timing
+  is always precise, so `exact` is still accepted by `InterpreterOptions` for
+  backward compatibility but ignored.
+- **Delay Evaluation Types**: `SyncPerformDelay_F` and `AsyncPerformDelay_F` are
+  replaced by a single `PerformDelay_F`.
+- **Interval Factory Type**: `CreateInterval2_F` now takes `IntervalParams` and
+  returns an `Interval3` instance.
+
+### Features
+
+- **Dynamic Activity Delays**: activities recompute their delay on every pass, so a
+  delay function can follow the context between two ticks.
+- **Delay Range Guard**: an activity whose computed delay is below
+  `DEFAULT_MIN_ACTIVITY_TIME` (10 ms) or above `DEFAULT_MAX_TIME_PROMISE` (600 000
+  ms) is paused and reports a warning instead of being armed.
+- **Bundled Interval**: `@bemedev/interval3` is injected and bundled, so it ships
+  with the package and requires no separate installation.
+
+### Docs
+
+- Document the interval engine, the unified delay types and the ignored `exact`
+  option, and add a v3.0.0 migration section to the README.
+
+### Refactor
+
+- **Shared Activities Engine**: move `__executeActivities`, `__executeDelay`,
+  `__performDelay` and the delay range guard to class `CommonInterpreter`, leaving
+  each interpreter to build only its `__executeActivity` callback.
+
+### Dependencies
+
+- **Workspace Dependencies**: Bump version to 3.0.0 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[2.8.3] - 14/11/2026** => _19:44_
 
 </summary>

@@ -151,7 +151,6 @@ export class AsyncInterpreter<
    *
    * @param machine - The class {@linkcode AsyncMachine} or interface {@linkcode AnyMachine} to interpret.
    * @param mode - The type {@linkcode Mode} of the interpreter, defaults to `'strict'`.
-   * @param exact - Whether to use exact interval calculations, defaults to `true`.
    */
   constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
     super(machine, mode);
@@ -378,6 +377,20 @@ export class AsyncInterpreter<
     return true;
   };
 
+  /**
+   * Builds the asynchronous callback executed on every pass of an activity
+   * interval.
+   *
+   * Each activity is either an action name, a describer, or a definition whose
+   * guards are awaited before its actions run.
+   *
+   * @param from - The origin state path string.
+   * @param activities - The activity definitions to run on each pass.
+   *
+   * @returns The asynchronous callback performing the actions on each pass.
+   *
+   * @see -- type {@linkcode ExecuteActivity_F}
+   */
   __executeActivity: ExecuteActivity_F = (from, activities) => {
     const callback = async () => {
       for (const activity of activities) {
@@ -778,7 +791,9 @@ export class AsyncInterpreter<
    *
    * @param helper - Option configuration helper or partial options.
    *
-   * @returns A new class {@linkcode AsyncInterpreter} with the updated options applied.
+   * @returns A new interpreter instance with the updated options applied.
+   *
+   * @see -- type {@linkcode AsyncAddOptions_F}
    */
   addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
     return super.addOptions(helper) as any;
@@ -789,7 +804,9 @@ export class AsyncInterpreter<
    *
    * @param option - Function or object providing options for the machine (actions, guards, delays, child machines, etc.).
    *
-   * @returns A new class {@linkcode AsyncInterpreter} instance with the provided options applied.
+   * @returns A new interpreter instance with the provided options applied.
+   *
+   * @see -- type {@linkcode AsyncProvideMachineOptions_F}
    */
   provideOptions: AsyncProvideMachineOptions_F<
     C,

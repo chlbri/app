@@ -80,6 +80,60 @@ pnpm add @bemedev/app
 
 <br/>
 
+## Breaking changes in v3.0.0
+
+`v3.0.0` swaps the interval engine and unifies the delay types. Nothing else in the
+public API changed.
+
+### 1. Interval engine
+
+The `@bemedev/app/bemedev` entry point re-exports `@bemedev/interval3` instead of
+`@bemedev/interval2`:
+
+- `createInterval` now comes from `@bemedev/interval3`
+- `Interval2` is replaced by `Interval3`
+- `createInterval3`, `TimerState`, `IntervalParams` and every other interval3 type
+  are re-exported as well
+
+```typescript
+// Before — a fixed delay in milliseconds
+createInterval({ id: 'tick', callback, interval: 1_000 });
+
+// After — a delay computer, evaluated right before every pass
+createInterval({ id: 'tick', callback, interval: () => 1_000 });
+```
+
+If the previous `setInterval` scheduling is still required, depend on
+`@bemedev/interval2` directly — it is no longer re-exported by this package.
+
+### 2. Unified delay types
+
+Synchronous and asynchronous machines share the same delay signature, so the
+`Sync*`/`Async*` delay types are now a single set:
+
+- `SyncDelayFunction` and `AsyncDelayFunction` → `DelayFunction`
+- `SyncDelayFunction2` and `AsyncDelayFunction2` → `DelayFunction2`
+- `SyncDelayFunction3` and `AsyncDelayFunction3` → `DelayFunction3`
+- `SyncDelayMap` and `AsyncDelayMap` → `DelayMap`
+- `SyncPerformDelay_F` and `AsyncPerformDelay_F` → `PerformDelay_F`
+
+`CreateInterval2_F` keeps its name but now consumes an `IntervalParams` object and
+returns an `Interval3` instance.
+
+### 3. The `exact` option is ignored
+
+Interval timing is always precise, so `interpret(machine, { exact })` no longer reads
+the flag and the third interpreter constructor argument is gone. The option is still
+declared on `InterpreterOptions` to keep existing calls compiling, and it has no
+effect:
+
+```typescript
+// Still compiles, `exact` is ignored
+interpret(machine, { exact: false });
+```
+
+<br/>
+
 ## Quick Start
 
 ```typescript
@@ -121,6 +175,10 @@ await service[Symbol.asyncDispose]();
   - [Names, not references](#names-not-references)
   - [Actors — two kinds of external work](#actors--two-kinds-of-external-work)
 - [Installation](#installation)
+- [Breaking changes in v3.0.0](#breaking-changes-in-v300)
+  - [1. Interval engine](#1-interval-engine)
+  - [2. Unified delay types](#2-unified-delay-types)
+  - [3. The `exact` option is ignored](#3-the-exact-option-is-ignored)
 - [Quick Start](#quick-start)
 - [1. Machine Configuration](#1-machine-configuration)
   - [`createConfig(config)`](#createconfigconfig)
@@ -415,9 +473,6 @@ const service = interpret(machine, {
   // 'strict' (default) — throws on unknown events/options
   // 'normal' — silently ignores unknown events
   mode: 'strict',
-
-  // Use exact interval timing (default: true)
-  exact: true,
 });
 
 // Must call start() before sending events
@@ -1156,6 +1211,33 @@ The activity `refresh` runs every 3 000 ms. `PAUSE` freezes it (timer stopped,
 context preserved), `RESUME` restarts the timer, `STOP` terminates it permanently for
 the current state visit.
 
+### Dynamic cadence
+
+Activities run on `@bemedev/interval3`, which recomputes the delay before arming each
+pass. A delay declared as a function is therefore re-evaluated on every tick:
+
+```typescript
+delays: {
+  // Re-read on each pass — the cadence follows the context
+  POLL: ({ context }) => context.backoffMs,
+}
+```
+
+Because the delay is read again before each pass, `context.backoffMs` can grow after
+each failure and the next tick honours the new value.
+
+### Delay bounds
+
+A computed activity delay outside the allowed range is rejected: the activity is
+paused and a warning is recorded instead of being armed.
+
+- Below `DEFAULT_MIN_ACTIVITY_TIME` (10 ms) → `Delay (<state>::<name>) is too short`
+- Above `DEFAULT_MAX_TIME_PROMISE` (600 000 ms) →
+  `Delay (<state>::<name>) is too long`
+
+`<state>::<name>` is the activity identifier, the same path used by `pauseActivity` /
+`resumeActivity` / `stopActivity`.
+
 <br/>
 
 ---
@@ -1790,12 +1872,14 @@ The root package now re-exports a small set of generic utility helpers from
 
 ### `interpret(machine, options?)`
 
-| Option     | Default     | Description               |
-| ---------- | ----------- | ------------------------- |
-| `context`  | —           | Initial public context    |
-| `pContext` | `undefined` | Initial private context   |
-| `mode`     | `'strict'`  | `'strict'` \| `'normal'`  |
-| `exact`    | `true`      | Use exact interval timing |
+| Option     | Default     | Description              |
+| ---------- | ----------- | ------------------------ |
+| `context`  | —           | Initial public context   |
+| `pContext` | `undefined` | Initial private context  |
+| `mode`     | `'strict'`  | `'strict'` \| `'normal'` |
+
+> **Deprecated:** `exact` is accepted for backward compatibility but ignored —
+> interval timing is always precise.
 
 ### Interpreter properties
 
@@ -1897,6 +1981,11 @@ compile-time checks, tooling integration, or typing extension points:
 | `DelayFunction2<E, Pc, Tc, T>`      | The signature for delayed transition functions (resolves to a `number` or a context-aware function returning a `number`).  |
 | `EmitterFunction2<E, Pc, Tc, T, R>` | Type for emitter sources (takes `StateExtended` and returns a framework-agnostic `Pausable<R>` instance).                  |
 | `PredicateS<E, Tc, T>`              | Type signature for guard predicate functions (takes a reduced state `State<E, Tc, T>` and returns `boolean`).              |
+
+`DelayFunction3` is the delay runner itself — a callback returning a `number` —
+`DelayMap` a partial record of named delays, and `PerformDelay_F` the interpreter
+hook evaluating a runner. The three are shared by synchronous and asynchronous
+machines.
 
 ### CLI
 

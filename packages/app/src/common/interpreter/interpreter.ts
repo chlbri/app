@@ -411,9 +411,9 @@ export abstract class CommonInterpreter<
    *
    * When the context is a primitive value, the selector is `undefined`.
    *
-   * @returns A selector function of type {@linkcode Selector_F}.
+   * @returns A selector function reading the public context by key path.
    *
-   * @see {@linkcode byKey2}
+   * @see -- type {@linkcode Selector_F} · {@linkcode byKey2}
    */
   get select(): Selector_F<Tc> {
     const check = isPrimitive(this.__contexts.context);
@@ -427,9 +427,9 @@ export abstract class CommonInterpreter<
    *
    * @deprecated Use for testing only. Returns `undefined` in production.
    *
-   * @returns A selector function of type {@linkcode Selector_F}.
+   * @returns A selector function reading the private context by key path.
    *
-   * @see {@linkcode byKey2}
+   * @see -- type {@linkcode Selector_F} · {@linkcode byKey2}
    */
   get _pSelect(): Selector_F<Pc> {
     /* v8 ignore else -- @preserve */
@@ -494,7 +494,6 @@ export abstract class CommonInterpreter<
    *
    * @param machine - The state machine instance of interface {@linkcode AnyMachine}.
    * @param mode - The execution mode of type {@linkcode Mode}. Defaults to `'strict'`.
-   * @param exact - Whether to use exact timer intervals. Defaults to `true`.
    */
   constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
     this.__init(machine.renew, mode);
@@ -507,7 +506,6 @@ export abstract class CommonInterpreter<
    *
    * @param machine - The state machine instance of interface {@linkcode AnyMachine}.
    * @param mode - The execution mode of type {@linkcode Mode}.
-   * @param exact - Whether exact timer intervals are configured.
    */
   private __init = (machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') => {
     this.__machine = machine.renew;
@@ -1135,7 +1133,9 @@ export abstract class CommonInterpreter<
    * @param _subscriber - Subscriber callback function.
    * @param options - Subscription configuration options.
    *
-   * @returns A subscriber object of type {@linkcode Subscriber}.
+   * @returns A subscriber object tracking every state change.
+   *
+   * @see -- type {@linkcode AddSubscriber_F}
    */
   subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
     const events = this.__machine.eventsList;
@@ -1655,7 +1655,7 @@ export abstract class CommonInterpreter<
    *
    * @param result - Partial action result object.
    *
-   * @return__executeActivitiessxt merge result.
+   * @returns Scheduled context merge result.
    */
   protected __mergeContexts: DirectMerge_F<Tc> = result => {
     const cb = () => {
@@ -1678,9 +1678,11 @@ export abstract class CommonInterpreter<
   /**
    * Evaluates a delay function against the current state.
    *
-   * @param delay - The delay function of type {@linkcode PerformDelay_F}.
+   * @param delay - The delay function to evaluate.
    *
    * @returns The evaluated delay time in milliseconds.
+   *
+   * @see -- type {@linkcode PerformDelay_F}
    */
   protected __performDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this._iterate();
@@ -1690,9 +1692,11 @@ export abstract class CommonInterpreter<
   /**
    * Evaluates a delay function while updating internal working status.
    *
-   * @param delay - The delay function of type {@linkcode PerformDelay_F}.
+   * @param delay - The delay function to evaluate.
    *
    * @returns The evaluated delay time in milliseconds.
+   *
+   * @see -- type {@linkcode PerformDelay_F}
    */
   protected __executeDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
     this.__setStatus('busy');
@@ -1701,6 +1705,21 @@ export abstract class CommonInterpreter<
     return out;
   };
 
+  /**
+   * Registers and executes the periodic activities of a state node.
+   *
+   * Every activity is identified by `${from}::${delay}`. An interval that is
+   * still active is reused, while an idle or paused one is rebuilt, so context
+   * changes affecting the delay are taken into account.
+   *
+   * @param from - The origin state path string.
+   * @param _activities - The activities map, keyed by delay name, to execute.
+   *
+   * @returns The list of started activity identifiers, or an empty array when one
+   * of them cannot be started.
+   *
+   * @see -- type {@linkcode ExecuteActivities_F}
+   */
   protected __executeActivities: ExecuteActivities_F = (from, _activities) => {
     const entries = Object.entries(_activities);
     const outs: string[] = [];
@@ -1757,19 +1776,32 @@ export abstract class CommonInterpreter<
     return outs;
   };
 
+  /**
+   * Builds the callback executed on every pass of an activity interval.
+   *
+   * @param from - The origin state path string.
+   * @param actions - The activity definitions to run on each pass.
+   *
+   * @returns The callback performing the actions on each pass.
+   *
+   * @see -- type {@linkcode ExecuteActivity_F}
+   */
   protected abstract __executeActivity: ExecuteActivity_F;
 
   /**
-   * Creates an interval instance of type {@linkcode Interval2}.
+   * Creates an interval instance of type {@linkcode Interval3}.
    *
-   * @param config - Interval parameters object.
+   * The `interval` member is a function evaluated on every pass, so an activity
+   * can adapt its cadence to the current context.
    *
-   * @returns New interval instance of type {@linkcode Interval2}.
+   * @param config - Interval parameters object of type {@linkcode IntervalParams}.
+   *
+   * @returns New interval instance of type {@linkcode Interval3}.
    */
   protected createInterval = createInterval;
 
   /**
-   * Cached array of active interval instances of type {@linkcode Interval2}.
+   * Cached array of active interval instances of type {@linkcode Interval3}.
    */
   protected __cachedIntervals: Interval3[] = [];
 
@@ -1778,6 +1810,20 @@ export abstract class CommonInterpreter<
    */
   protected abstract __performFinally: Fn;
 
+  /**
+   * Pauses an activity whose computed delay is out of the allowed range.
+   *
+   * A delay below type {@linkcode DEFAULT_MIN_ACTIVITY_TIME} or above
+   * {@linkcode DEFAULT_MAX_TIME_PROMISE} is rejected, a warning is recorded, and
+   * the activity is paused instead of being armed.
+   *
+   * @param id - The activity identifier, formatted as `state::delay`.
+   * @param interval - The computed delay in milliseconds.
+   *
+   * @returns `true` when the activity must be paused, `false` otherwise.
+   *
+   * @see {@linkcode _addWarning}
+   */
   protected _pauser = (id: string, interval: number) => {
     const check11 = interval < DEFAULT_MIN_ACTIVITY_TIME;
     if (check11) {

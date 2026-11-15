@@ -20,6 +20,17 @@ consumers only need to depend on `@bemedev/app-options`.
 pnpm add @bemedev/app-options
 ```
 
+## Breaking changes in v3.0.0
+
+The delay types re-exported from `@bemedev/app-contract` are unified across both
+machine flavors:
+
+- `SyncDelayFunction3` and `AsyncDelayFunction3` → `DelayFunction3`
+- `SyncDelayFunction2` and `AsyncDelayFunction2` → `DelayFunction2`
+
+Annotate your `delays` callbacks with `DelayFunction3` / `DelayFunction2` instead of
+the removed flavor-suffixed names.
+
 ---
 
 ## Usage

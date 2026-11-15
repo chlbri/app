@@ -17,6 +17,17 @@ The package is self-contained: every type it needs is vendored inside
 pnpm add @bemedev/app-contract
 ```
 
+## Breaking changes in v3.0.0
+
+The delay types are unified across both machine flavors:
+
+- `SyncDelayFunction3` and `AsyncDelayFunction3` → `DelayFunction3`
+- `SyncDelayFunction2` and `AsyncDelayFunction2` → `DelayFunction2`
+
+The `delays` members of `SyncMachineOptions2`, `AsyncMachineOptions2`,
+`SyncSimpleMachineOptions` and `AsyncSimpleMachineOptions` now use `DelayFunction2`,
+so annotate your delay callbacks with the new names.
+
 ---
 
 ## Usage
@@ -198,9 +209,9 @@ contract types on change.
 
 The vendored machine types are exported from the same entry point: `CommonConfig2`,
 `NodeConfig2`, `TransitionsConfig`, `EventObject`, `EventsMap`, `ActorsConfigMap`,
-`PrimitiveObject`, `StandardOutput`, `inferT`, and their supporting helper types.
-Import them from `@bemedev/app-contract` — no `@bemedev/app` installation is
-required.
+`PrimitiveObject`, `StandardOutput`, `inferT`, `DelayFunction2`, `DelayFunction3`,
+and their supporting helper types. Import them from `@bemedev/app-contract` — no
+`@bemedev/app` installation is required.
 
 ## License
 
