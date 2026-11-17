@@ -16,6 +16,7 @@ const buildPack = () =>
       '@bemedev/boolean-recursive',
       '@bemedev/decompose',
       '@bemedev/function-swap',
+      '@bemedev/app-utils-bemedev',
     ],
   });
 

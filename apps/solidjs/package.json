@@ -37,7 +37,7 @@
     "vite": "catalog:"
   },
   "devDependencies": {
-    "@bemedev/dev-utils": "^1.5.2",
+    "@bemedev/dev-utils": "^1.5.3",
     "@tanstack/solid-router-devtools": "1.167.3",
     "@types/node": "^26.6.6",
     "jsdom": "^31.0.1",

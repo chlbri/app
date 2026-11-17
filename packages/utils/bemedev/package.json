@@ -31,7 +31,7 @@
     "test:watch": "vp test"
   },
   "devDependencies": {
-    "@bemedev/dev-utils": "^1.5.2",
+    "@bemedev/dev-utils": "^1.5.3",
     "@size-limit/file": "^14.3.0",
     "@types/node": "^26.6.6",
     "husky": "^9.1.7",

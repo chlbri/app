@@ -2,7 +2,12 @@ import { defineConfig as pack } from '@bemedev/dev-utils/pack';
 import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
-  pack: pack.bemedev({ clean: true, sourcemap: true, ignoresJS: '**/*.example.ts' }),
+  pack: pack.bemedev({
+    clean: true,
+    sourcemap: true,
+    ignoresJS: '**/*.example.ts',
+    externals: ['@bemedev/interval3'],
+  }),
   run: {
     tasks: {
       pack: {

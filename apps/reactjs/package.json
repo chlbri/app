@@ -38,7 +38,7 @@
     "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
-    "@bemedev/dev-utils": "^1.5.2",
+    "@bemedev/dev-utils": "^1.5.3",
     "@bemedev/interval2": "^1.2.1",
     "@tailwindcss/typography": "^0.5.20",
     "@tanstack/devtools-vite": "latest",
