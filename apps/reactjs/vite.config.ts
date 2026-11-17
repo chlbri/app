@@ -8,7 +8,7 @@ import { defineConfig, lazyPlugins } from 'vite-plus';
 const config = defineConfig({
   server: { port: 3011 },
   resolve: { tsconfigPaths: true, dedupe: ['react', 'react-dom'] },
-  ssr: { noExternal: ['lucide-react', '@bemedev/app', '@bemedev/app-reactjs'] },
+  ssr: { noExternal: ['@bemedev/app', '@bemedev/app-reactjs'] },
 
   plugins: lazyPlugins(() => {
     const isTest = process.env.NODE_ENV === 'test';

@@ -57,7 +57,7 @@
     "@bemedev/app": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
     "@bemedev/decompose": "2.3.0",
-    "@bemedev/dev-utils": "^1.5.3",
+    "@bemedev/dev-utils": "^1.5.4",
     "@bemedev/sleep": "^0.2.2",
     "@size-limit/file": "^14.3.0",
     "@solidjs/testing-library": "^0.8.10",
@@ -74,7 +74,7 @@
     "prettier": "^3.10.1",
     "pretty-quick": "^4.2.2",
     "size-limit": "^14.3.0",
-    "solid-js": "^1.9.19",
+    "solid-js": "^2.0.0",
     "tslib": "^2.9.1",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
@@ -84,7 +84,7 @@
   },
   "peerDependencies": {
     "@bemedev/app": "workspace:^",
-    "solid-js": "^1.9.19"
+    "solid-js": "^2.0.0"
   },
   "engines": {
     "node": ">=24"

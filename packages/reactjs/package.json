@@ -60,7 +60,7 @@
     "@bemedev/app": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
     "@bemedev/decompose": "2.3.0",
-    "@bemedev/dev-utils": "^1.5.3",
+    "@bemedev/dev-utils": "^1.5.4",
     "@bemedev/sleep": "^0.2.2",
     "@size-limit/file": "^14.3.0",
     "@testing-library/jest-dom": "^7.0.1",

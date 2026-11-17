@@ -44,15 +44,14 @@ type JoinPath<Prefix extends string, Key extends string> = Prefix extends ''
 export type StatePaths<Config, Prefix extends string = ''> = Config extends {
   states: infer States;
 }
-  ?
-      | (Prefix extends '' ? '/' : never)
-      | {
-          [Key in keyof States & string]:
-            | JoinPath<Prefix, Key>
-            | (States[Key] extends { states: any }
-                ? StatePaths<States[Key], JoinPath<Prefix, Key>>
-                : never);
-        }[keyof States & string]
+  ? | (Prefix extends '' ? '/' : never)
+    | {
+        [Key in keyof States & string]:
+          | JoinPath<Prefix, Key>
+          | (States[Key] extends { states: any }
+              ? StatePaths<States[Key], JoinPath<Prefix, Key>>
+              : never);
+      }[keyof States & string]
   : Prefix extends ''
     ? '/'
     : never;

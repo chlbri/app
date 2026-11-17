@@ -67,7 +67,7 @@ export const Route = createFileRoute('/test-index')({
         const seconds = `second${isPlural ? 's' : ''}`;
 
         const countClass = cn(
-          'text-sm w-5 text-center mt-0.5',
+          'text-sm w-5 text-center',
           count <= secs / 4 ? 'text-red-400 font-bold' : 'font-semibold',
         );
 

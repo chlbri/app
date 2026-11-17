@@ -27,7 +27,7 @@
     "@tanstack/solid-router": "1.170.43",
     "@tanstack/solid-start": "1.169.5",
     "clsx": "^2.1.1",
-    "lucide-solid": "^1.73.0",
+    "lucide-solid": "^1.74.0",
     "nitro": "3.0.261103-rc",
     "solid-js": "^1.9.19",
     "tailwind-merge": "^3.7.0",
@@ -37,13 +37,13 @@
     "vite": "catalog:"
   },
   "devDependencies": {
-    "@bemedev/dev-utils": "^1.5.3",
+    "@bemedev/dev-utils": "^1.5.4",
     "@tanstack/solid-router-devtools": "1.167.3",
     "@types/node": "^26.6.6",
     "jsdom": "^31.0.1",
     "vite-plugin-solid": "^2.11.16",
+    "vite-plus": "catalog:",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "catalog:",
-    "vite-plus": "catalog:"
+    "vitest": "catalog:"
   }
 }

@@ -15,7 +15,7 @@
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-valibot": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
-    "@bemedev/dev-utils": "^1.5.3",
+    "@bemedev/dev-utils": "^1.5.4",
     "@types/node": "^26.6.6",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
