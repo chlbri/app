@@ -8,6 +8,26 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.0.3] - 17/11/2026** => _13:00_
+
+</summary>
+
+### Dependencies
+
+- **Build Externals**: `@bemedev/app-utils-bemedev` is declared in the package build
+  `externals`, so the bundled utilities are resolved from the bundled dependency
+  instead of being inlined in the published bundle.
+- **Dev Utils**: Bump `@bemedev/dev-utils` to `^1.5.4`.
+- **Workspace Dependencies**: Bump version to 3.0.3 to align with the workspace
+  release.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.2] - 15/11/2026** => _21:37_
 
 </summary>

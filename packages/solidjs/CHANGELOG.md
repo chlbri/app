@@ -5,6 +5,26 @@
 <details>
 <summary>
 
+## **[3.0.3] - 17/11/2026** => _13:00_
+
+</summary>
+
+### Dependencies
+
+- **SolidJS Runtime**: Raise the `solid-js` peer dependency to `^2.0.0` and update the
+  documented requirement accordingly.
+- **Dev Utils**: Bump `@bemedev/dev-utils` to `^1.5.4`.
+- **Testing Library**: Bump `@testing-library/user-event` to `^14.6.12`.
+- **Workspace Dependencies**: Bump version to 3.0.3 to align with the workspace
+  release of `@bemedev/app`.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.2] - 15/11/2026** => _21:37_
 
 </summary>
