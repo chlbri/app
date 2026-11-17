@@ -11,8 +11,6 @@
 
 ### Dependencies
 
-- **SolidJS Runtime**: Raise the `solid-js` peer dependency to `^2.0.0` and update the
-  documented requirement accordingly.
 - **Dev Utils**: Bump `@bemedev/dev-utils` to `^1.5.4`.
 - **Testing Library**: Bump `@testing-library/user-event` to `^14.6.12`.
 - **Workspace Dependencies**: Bump version to 3.0.3 to align with the workspace
