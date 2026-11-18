@@ -5,6 +5,22 @@
 <details>
 <summary>
 
+## **[3.0.4] - 18/11/2026** => _15:01_
+
+</summary>
+
+### Fixes
+
+- **Lazy Initial State**: Pass an accessor to `createSignal` so the selector is
+  evaluated on first read instead of eagerly when the primitive is created.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.3] - 17/11/2026** => _13:00_
 
 </summary>

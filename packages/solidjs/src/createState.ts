@@ -3,10 +3,10 @@ import type {
   EventObject,
   PrimitiveObject,
   State,
-} from '@bemedev/app';
-import { deepEqual, identity } from '@bemedev/app/utils';
-import { createSignal, onCleanup } from 'solid-js';
-import type { CreateStateOptions } from './types';
+} from "@bemedev/app";
+import { deepEqual, identity } from "@bemedev/app/utils";
+import { createSignal, onCleanup } from "solid-js";
+import type { CreateStateOptions } from "./types";
 
 /**
  * A SolidJS primitive that creates a reactive signal from a service with a subscribe function.
@@ -43,11 +43,16 @@ export function createState<
     stateEquals = deepEqual,
   } = options ?? {};
 
-  const [state, setState] = createSignal<T>(selector(service.state), { equals });
-
-  const sub = service.subscribe(nextState => setState(() => selector(nextState)), {
-    equals: stateEquals,
+  const [state, setState] = createSignal<T>(() => selector(service.state), {
+    equals,
   });
+
+  const sub = service.subscribe(
+    (nextState) => setState(() => selector(nextState)),
+    {
+      equals: stateEquals,
+    },
+  );
 
   onCleanup(sub.unsubscribe);
   return state;
