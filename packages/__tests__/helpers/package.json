@@ -15,7 +15,7 @@
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
     "@bemedev/decompose": "^2.3.0",
-    "@bemedev/dev-utils": "^1.5.4",
+    "@bemedev/dev-utils": "^1.6.2",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/sequence": "^1.0.0",
     "@bemedev/sleep": "^0.2.2",

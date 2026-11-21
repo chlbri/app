@@ -14,7 +14,7 @@
     "@bemedev/app": "workspace:^",
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
-    "@bemedev/dev-utils": "^1.5.4",
+    "@bemedev/dev-utils": "^1.6.2",
     "@bemedev/rx-pausable": "^1.2.0",
     "@bemedev/typings": "^1.5.0",
     "@types/node": "^26.6.6",

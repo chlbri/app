@@ -38,6 +38,7 @@ export default defineConfig({
       '**/*.typegen.ts',
       '**/*.test-d.ts',
       '**/libs/bemedev/*',
+      '.agents/**',
     ],
 
     options: { typeAware: true, typeCheck: true },

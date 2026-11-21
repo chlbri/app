@@ -26,6 +26,7 @@
     "**/rolldown.config.ts",
     "**/vitest.config.ts",
     "**/vite.config.ts",
-    "**/vitest.setup.ts"
+    "**/vitest.setup.ts",
+    "**/.agents/**"
   ]
 }
