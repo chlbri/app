@@ -6,6 +6,7 @@
 
 import { recompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
+import { same, type UtilityMap } from '@bemedev/app-utility';
 
 import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';
@@ -104,8 +105,30 @@ export const createCommonHelpers = (config: any) => {
             })),
     });
 
+  const resend = (resend: any) => () => ({ resend });
+  const forceSend = (forceSend: any) => () => ({ forceSend });
+
+  const utilities: UtilityMap = {
+    isValue: same(isValue),
+    isNotValue: same(isNotValue),
+    isDefined: same(isDefined),
+    isNotDefined: same(isNotDefined),
+    swap: same(swap),
+    filter: same(filter),
+    erase: same(erase),
+    pauseActivity: same(timeAction('pauseActivity')),
+    resumeActivity: same(timeAction('resumeActivity')),
+    stopActivity: same(timeAction('stopActivity')),
+    pauseTimer: same(timeAction('pauseTimer')),
+    resumeTimer: same(timeAction('resumeTimer')),
+    stopTimer: same(timeAction('stopTimer')),
+    resend: same(resend),
+    forceSend: same(forceSend),
+  };
+
   return {
     eventsList,
+    utilities,
     isValue,
     isNotValue,
     isDefined,
@@ -114,7 +137,7 @@ export const createCommonHelpers = (config: any) => {
     filter,
     erase,
     timeAction,
-    resend: (resend: any) => () => ({ resend }),
-    forceSend: (forceSend: any) => () => ({ forceSend }),
+    resend,
+    forceSend,
   };
 };

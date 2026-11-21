@@ -3,6 +3,7 @@
     "packages/app",
     "packages/contract",
     "packages/options",
+    "packages/utility",
     "packages/cli",
     "packages/reactjs",
     "packages/solidjs",

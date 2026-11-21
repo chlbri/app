@@ -13,10 +13,14 @@ import type {
 } from '#common/machine';
 import type { EventArg, EventArgAll } from '#events';
 import type {
+  AugmentedAddons,
   Contract,
   ContractContext,
   ContractEvents,
   ContractOptions,
+  OptionsPlugin,
+  PluginAddons,
+  ResolveUtilities,
 } from '@bemedev/app-options';
 import type {
   EmptyObject,
@@ -594,8 +598,11 @@ export type AsyncAddOptionsParam_F<
   Ct extends Contract = Contract,
   Mo = SimpleMachineOptions2,
   L = SimpleMachineOptions2,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = (
-  option: AsyncAddOption<Ct>,
+  option: AsyncAddOption<Ct> &
+    AugmentedAddons<Ct, 'async', keyof AsyncAddOption<Ct>> &
+    ResolveUtilities<PluginAddons<Ps>, 'async'>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.
@@ -616,8 +623,9 @@ export type AsyncAddOptionsParam_F<
 export type AsyncAddOptions_F<
   Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = <const T extends ContractOptions<Ct>>(
-  option: AsyncAddOptionsParam_F<Ct, T, L>,
+  option: AsyncAddOptionsParam_F<Ct, T, L, Ps>,
 ) => ContractOptions<Ct>;
 
 /**
@@ -633,6 +641,7 @@ export type AsyncAddOptions_F<
 export type AsyncProvideOptions_F<
   Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = EmptyObject,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = <const T extends ContractOptions<Ct>>(
-  option: AsyncAddOptionsParam_F<Ct, T, L>,
-) => AsyncMachine<Ct, L & T>;
+  option: AsyncAddOptionsParam_F<Ct, T, L, Ps>,
+) => AsyncMachine<Ct, L & T, Ps>;

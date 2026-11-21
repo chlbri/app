@@ -59,7 +59,7 @@ import {
 } from '#common/machine';
 import { type AsyncEmitterFunction } from '#emitters';
 import { byKey2, merge2 } from '#utils';
-import type { Contract } from '@bemedev/app-options';
+import type { Contract, OptionsPlugin } from '@bemedev/app-options';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types';
@@ -82,6 +82,7 @@ import type { AsyncMachine } from '../asyncMachine/machine';
 export class AsyncInterpreter<
   const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = EmptyObject,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
 > extends CommonInterpreter<Ct> {
   /**
    * The interpreter type identifier, set to `'async'`.
@@ -94,7 +95,7 @@ export class AsyncInterpreter<
    * @returns The inner class {@linkcode AsyncMachine} instance.
    */
   get machine() {
-    return super.machine as AsyncMachine<Ct, L>;
+    return super.machine as AsyncMachine<Ct, L, Ps>;
   }
 
   /**
@@ -103,7 +104,7 @@ export class AsyncInterpreter<
    * @returns A fresh class {@linkcode AsyncInterpreter} instance.
    */
   get renew() {
-    const out = new AsyncInterpreter<Ct, L>(this.machine, this.__mode);
+    const out = new AsyncInterpreter<Ct, L, Ps>(this.machine, this.__mode);
 
     out._ppC(this.__initialContexts.pContext);
     out._provideContext(this.__initialContexts.context);
@@ -493,7 +494,7 @@ export class AsyncInterpreter<
    * @returns The internal class {@linkcode AsyncMachine}.
    */
   get #machine() {
-    return this.__machine as unknown as AsyncMachine<Ct, L>;
+    return this.__machine as unknown as AsyncMachine<Ct, L, Ps>;
   }
 
   /**
@@ -752,7 +753,7 @@ export class AsyncInterpreter<
    *
    * @see -- type {@linkcode AsyncAddOptions_F}
    */
-  addOptions: AsyncAddOptions_F<Ct, L> = helper => {
+  addOptions: AsyncAddOptions_F<Ct, L, Ps> = helper => {
     return super.addOptions(helper) as any;
   };
 
@@ -765,7 +766,7 @@ export class AsyncInterpreter<
    *
    * @see -- type {@linkcode AsyncProvideMachineOptions_F}
    */
-  provideOptions: AsyncProvideMachineOptions_F<Ct, L> = option => {
+  provideOptions: AsyncProvideMachineOptions_F<Ct, L, Ps> = option => {
     return super.provideOptions(option) as any;
   };
 
@@ -988,9 +989,16 @@ type AsyncLegacyOf<M> = M extends { __legacy: infer L extends SimpleMachineOptio
   ? L
   : EmptyObject;
 
+type AsyncPluginsOf<M> = M extends {
+  __plugins: infer Ps extends readonly OptionsPlugin<any, any>[];
+}
+  ? Ps
+  : [];
+
 export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
   M['__contract'],
-  AsyncLegacyOf<M>
+  AsyncLegacyOf<M>,
+  AsyncPluginsOf<M>
 >;
 
 /**

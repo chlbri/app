@@ -241,6 +241,7 @@ export default defineConfig({
     projects: [
       'packages/__tests__/contract/vite.config.ts',
       'packages/__tests__/options/vite.config.ts',
+      'packages/__tests__/utilities/vite.config.ts',
       'packages/__tests__/sync/vite.config.ts',
       'packages/__tests__/async/vite.config.ts',
       'packages/__tests__/helpers/vite.config.ts',
@@ -249,6 +250,7 @@ export default defineConfig({
       'packages/contract/vite.config.ts',
       'packages/interval3/vite.config.ts',
       'packages/options/vite.config.ts',
+      'packages/utility/vite.config.ts',
       'apps/reactjs/vite.config.ts',
       'apps/solidjs/vite.config.ts',
     ],

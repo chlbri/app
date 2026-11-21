@@ -45,6 +45,7 @@ import type {
   ContractPaths,
   ContractPContext,
   ContractTags,
+  OptionsPlugin,
 } from '@bemedev/app-options';
 import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
 import type {
@@ -434,7 +435,10 @@ export type CommonFilterAction_F<Ct extends Contract = Contract, A = any> = <
  *
  * @template `T` - Target machine type.
  */
-export type CommonCreateMachine_F<T = any> = (contract: Contract) => T;
+export type CommonCreateMachine_F<T = any> = (
+  contract: Contract,
+  plugins?: readonly OptionsPlugin<any, any>[],
+) => T;
 
 /**
  * Map of child names to child actor machine functions.

@@ -35,6 +35,7 @@ import type {
   ContractTags,
 } from '@bemedev/app-options';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemedev';
+import type { OptionsPlugin } from '@bemedev/app-options';
 import { _unknown } from '@bemedev/app-options/bemedev';
 import { decompose, type Decompose } from '@bemedev/decompose';
 import type { AnyMachine, CommonElements, GetIO_F, MachineType } from './types';
@@ -55,6 +56,14 @@ export abstract class CommonMachine<
    * The contract carried by this {@linkcode CommonMachine}.
    */
   private readonly _contract: Ct;
+
+  /**
+   * Plugins attached to this machine.
+   *
+   * @remarks Kept public so `SyncMachine` and `AsyncMachine` can narrow its
+   * type and interpreters can infer the plugin tuple.
+   */
+  readonly __plugins: readonly OptionsPlugin<any, any>[];
 
   /**
    * The contract getter.
@@ -431,13 +440,15 @@ export abstract class CommonMachine<
    * Creates an instance of class {@linkcode CommonMachine}.
    *
    * @param contract - The contract carrying the machine configuration.
+   * @param plugins - Plugins extending the option helpers of the machine.
    *
    * @remarks
    * This constructor initializes the machine from its contract. It flattens the
    * configuration and prepares it for further operations ({@linkcode flat}).
    */
-  constructor(contract: Ct) {
+  constructor(contract: Ct, plugins: readonly OptionsPlugin<any, any>[] = []) {
     this._contract = contract;
+    this.__plugins = plugins;
     this.__flat = flatMap.low(this.config as any, true);
 
     this._tags = Object.values<any>(this.__flat)

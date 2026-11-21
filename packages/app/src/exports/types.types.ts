@@ -5,6 +5,7 @@ import type {
   CommonConfig2,
   CommonConfig3,
   NoExtraKeysConfig,
+  SimpleMachineOptions2,
 } from '#common/machine';
 import type {
   ActorsConfigMap,
@@ -15,7 +16,12 @@ import type {
 } from '#events';
 import type { AsyncInterpreterFrom } from '#interpreter';
 import type { Register, RegisterOptions } from '#registry';
-import type { Contract, ContractMachineOptions } from '@bemedev/app-options';
+import type {
+  Contract,
+  ContractMachineOptions,
+  EmptyObject,
+  OptionsPlugin,
+} from '@bemedev/app-options';
 import type { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings';
 import type { AsyncMachine } from '../asyncMachine/machine';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
@@ -105,8 +111,12 @@ export type OutContract<
  *
  * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type OutMachine<Ct extends Contract = Contract> =
-  Ct['types']['sync'] extends true ? SyncMachine<Ct> : AsyncMachine<Ct>;
+export type OutMachine<
+  Ct extends Contract = Contract,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
+> = Ct['types']['sync'] extends true
+  ? SyncMachine<Ct, SimpleMachineOptions2, Ps>
+  : AsyncMachine<Ct, EmptyObject, Ps>;
 
 /**
  * Function overload signature for creating an unnamed state machine.
@@ -144,9 +154,17 @@ export type CreateMachineNoName_F = <
   Tags extends string = string,
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
   Sync extends true | undefined = undefined,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
 >(
   config: NoExtraKeysConfig<C>,
-  types?: { context?: Tc; pContext?: Pc; eventsMap?: E; actorsMap?: A; sync?: Sync },
+  types?: {
+    context?: Tc;
+    pContext?: Pc;
+    eventsMap?: E;
+    actorsMap?: A;
+    sync?: Sync;
+    plugins?: Ps;
+  },
 ) => OutMachine<
   OutContract<
     C,
@@ -162,7 +180,8 @@ export type CreateMachineNoName_F = <
       OutContractSurface<C, _Pc, _Tc, _E, _A, Tags, Eo, string, Sync>,
       RegisterOptions
     >
-  >
+  >,
+  Ps
 >;
 
 /**
@@ -216,10 +235,18 @@ export type CreateMachineNamed_F = <
   >,
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
   Sync extends true | undefined = undefined,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
 >(
   _: Name,
   config: NoExtraKeysConfig<C>,
-  types?: { context?: Tc; pContext?: Pc; eventsMap?: E; actorsMap?: A; sync?: Sync },
+  types?: {
+    context?: Tc;
+    pContext?: Pc;
+    eventsMap?: E;
+    actorsMap?: A;
+    sync?: Sync;
+    plugins?: Ps;
+  },
 ) => OutMachine<
   OutContract<
     C,
@@ -245,7 +272,8 @@ export type CreateMachineNamed_F = <
       >,
       Current['options']
     >
-  >
+  >,
+  Ps
 >;
 
 /**

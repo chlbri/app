@@ -39,7 +39,7 @@ import type {
   SimpleMachineOptions2,
 } from '#common/machine';
 import { byKey2, merge2 } from '#utils';
-import type { Contract } from '@bemedev/app-options';
+import type { Contract, OptionsPlugin } from '@bemedev/app-options';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
@@ -67,6 +67,7 @@ import type { SyncMachine } from '../machine/machine';
 export class SyncInterpreter<
   const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
 > extends CommonInterpreter<Ct> {
   /**
    * The type identifier for the synchronous interpreter.
@@ -79,7 +80,7 @@ export class SyncInterpreter<
    * @returns The class {@linkcode SyncMachine} instance.
    */
   get machine() {
-    return super.machine as SyncMachine<Ct, L>;
+    return super.machine as SyncMachine<Ct, L, Ps>;
   }
 
   /**
@@ -88,7 +89,7 @@ export class SyncInterpreter<
    * @returns A new instance of class {@linkcode SyncInterpreter}.
    */
   get renew() {
-    const out = new SyncInterpreter<Ct, L>(this.machine, this.__mode);
+    const out = new SyncInterpreter<Ct, L, Ps>(this.machine, this.__mode);
     out._ppC(this.__initialContexts.pContext);
     out._provideContext(this.__initialContexts.context);
 
@@ -605,7 +606,7 @@ export class SyncInterpreter<
    *
    * @see -- type {@linkcode SyncAddOptions_F}
    */
-  addOptions: SyncAddOptions_F<Ct, L> = helper => {
+  addOptions: SyncAddOptions_F<Ct, L, Ps> = helper => {
     return super.addOptions(helper) as any;
   };
 
@@ -618,7 +619,7 @@ export class SyncInterpreter<
    *
    * @see -- type {@linkcode SyncProvideMachineOptions_F}
    */
-  provideOptions: SyncProvideMachineOptions_F<Ct, L> = option => {
+  provideOptions: SyncProvideMachineOptions_F<Ct, L, Ps> = option => {
     return super.provideOptions(option) as any;
   };
 
@@ -899,9 +900,16 @@ type SyncLegacyOf<M> = M extends { __legacy: infer L extends SimpleMachineOption
   ? L
   : SimpleMachineOptions2;
 
+type SyncPluginsOf<M> = M extends {
+  __plugins: infer Ps extends readonly OptionsPlugin<any, any>[];
+}
+  ? Ps
+  : [];
+
 export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
   M['__contract'],
-  SyncLegacyOf<M>
+  SyncLegacyOf<M>,
+  SyncPluginsOf<M>
 >;
 
 /**

@@ -4,24 +4,26 @@
 
 import recursive from '@bemedev/boolean-recursive';
 import { recompose } from '@bemedev/decompose';
+import { createUtility, same, type UtilityMap } from '@bemedev/app-utility';
 
+import type { SyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
 import { merge2 } from './merge2';
 import { reduceFnMap } from './reduceFnMap';
 
 /** Option helpers of a synchronous machine. */
-export type SyncHelpers = ReturnType<typeof createSyncHelpers>;
+export type SyncHelpers = SyncAddons;
 
 /**
- * Builds every helper exposed by `machine.createOptions` for a sync machine.
+ * Builds the synchronous descriptor map of every mode-specific helper.
  *
  * @param config - Contract machine configuration.
  *
- * @returns The synchronous helper surface.
+ * @returns Synchronous utilities, keyed by helper name.
  */
-export const createSyncHelpers = (config: any) => {
+export const createSyncUtilities = (config: any): UtilityMap => {
   const common = createCommonHelpers(config);
-  const { eventsList, timeAction } = common;
+  const { eventsList } = common;
 
   /**
    * Batches multiple guards into a single synchronous guard.
@@ -245,20 +247,24 @@ export const createSyncHelpers = (config: any) => {
   };
 
   return {
-    ...common,
-    guardBatch,
-    assign,
-    batch,
-    _for,
-    _while,
-    _doWhile,
-    action,
-    sendTo,
-    pauseActivity: timeAction('pauseActivity'),
-    resumeActivity: timeAction('resumeActivity'),
-    stopActivity: timeAction('stopActivity'),
-    pauseTimer: timeAction('pauseTimer'),
-    resumeTimer: timeAction('resumeTimer'),
-    stopTimer: timeAction('stopTimer'),
+    ...common.utilities,
+    guardBatch: same(guardBatch),
+    assign: same(assign),
+    batch: same(batch),
+    _for: same(_for),
+    _while: same(_while),
+    _doWhile: same(_doWhile),
+    action: same(action),
+    sendTo: same(sendTo),
   };
 };
+
+/**
+ * Builds every helper exposed by `machine.createOptions` for a sync machine.
+ *
+ * @param config - Contract machine configuration.
+ *
+ * @returns The synchronous helper surface.
+ */
+export const createSyncHelpers = (config: any) =>
+  createUtility(createSyncUtilities(config)).resolve('sync');

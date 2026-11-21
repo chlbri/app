@@ -1,0 +1,81 @@
+{
+  "name": "@bemedev/app-utility",
+  "version": "0.0.1",
+  "description": "Typed sync/async utility maps and plugins for @bemedev/app",
+  "keywords": [
+    "state machines",
+    "utilities",
+    "plugins",
+    "typescript"
+  ],
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/utility/README.md",
+  "license": "MIT",
+  "author": {
+    "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
+    "url": "https://bemedev.vercel.app"
+  },
+  "maintainers": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "contributors": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chlbri/app"
+  },
+  "files": [
+    "lib"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "p-q": "pretty-quick",
+    "posttest": "vp fmt",
+    "pretest": "vp run pack",
+    "publish:first": "vp run pretest && pnpm publish --access public --no-git-checks",
+    "rm:lib": "vp dlx rimraf ./lib",
+    "test:coverage": "vp test run",
+    "test": "vp run test:coverage --no-coverage",
+    "test:only": "vp run test",
+    "test:watch": "vp test"
+  },
+  "devDependencies": {
+    "@bemedev/dev-utils": "^1.6.2",
+    "@size-limit/file": "^14.3.0",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "catalog:",
+    "pretty-quick": "^4.2.2",
+    "rimraf": "^6.1.4",
+    "size-limit": "^14.3.0",
+    "tslib": "^2.9.1",
+    "tsx": "^4.23.15",
+    "typescript": "7.0.2",
+    "vite-plus": "catalog:"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

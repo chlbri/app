@@ -4,9 +4,9 @@ import type { CommonCreateMachine_F, SimpleMachineOptions2 } from '#common/machi
 import type { DelayFunction } from '#delays';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
-import type { Contract, ContractConfig } from '@bemedev/app-options';
+import type { Contract, ContractConfig, OptionsPlugin } from '@bemedev/app-options';
 import { _unknown } from '@bemedev/app-options/bemedev';
-import { createSyncHelpers } from '@bemedev/app-options/internal';
+import { buildHelpers } from '@bemedev/app-options';
 import { CommonMachine } from '../../common/machine';
 import type { SyncAddOptions_F, SyncProvideOptions_F } from './options.types';
 
@@ -25,11 +25,20 @@ import type { SyncAddOptions_F, SyncProvideOptions_F } from './options.types';
 export class SyncMachine<
   const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
 > extends CommonMachine<Ct> {
   /**
    * Machine type identifier string.
    */
   readonly TYPE = 'sync';
+
+  /**
+   * Plugins attached to this machine.
+   *
+   * @remarks Used for typing purposes only; the runtime value lives on
+   * {@linkcode CommonMachine}.
+   */
+  declare readonly __plugins: Ps;
 
   /**
    * Accumulated options type marker.
@@ -84,7 +93,7 @@ export class SyncMachine<
    *
    * @returns Option object for machine customization.
    */
-  createOptions: SyncAddOptions_F<Ct, L> = helper => {
+  createOptions: SyncAddOptions_F<Ct, L, Ps> = helper => {
     const _legacy = Object.freeze({
       actions: this.__elements.actions,
       guards: this.__elements.guards,
@@ -92,7 +101,13 @@ export class SyncMachine<
       actors: this.__elements.actors,
     }) as any;
 
-    const helpers = createSyncHelpers(this.config) as any;
+    const helpers = buildHelpers({
+      contract: this.contract,
+      config: this.config,
+      mode: 'sync',
+      plugins: this.__plugins,
+      legacy: { _legacy },
+    }) as any;
 
     return helper(helpers, { _legacy });
   };
@@ -104,7 +119,7 @@ export class SyncMachine<
    *
    * @returns Machine options structure.
    */
-  addOptions: SyncAddOptions_F<Ct, L> = helper => {
+  addOptions: SyncAddOptions_F<Ct, L, Ps> = helper => {
     return super.addOptions(helper) as any;
   };
 
@@ -115,7 +130,7 @@ export class SyncMachine<
    *
    * @returns A new instance of the machine with the provided options applied.
    */
-  provideOptions: SyncProvideOptions_F<Ct, L> = helper =>
+  provideOptions: SyncProvideOptions_F<Ct, L, Ps> = helper =>
     super.provideOptions(helper);
 
   // #endregion
@@ -128,7 +143,7 @@ export class SyncMachine<
   protected __renew = (): this => {
     const { pContext, context, guards, actions, delays, actors } = this.__elements;
 
-    const out = new SyncMachine<Ct, L>(this.contract);
+    const out = new SyncMachine<Ct, L, Ps>(this.contract, this.__plugins);
 
     out.__pContext = pContext;
     out.__context = context;
@@ -146,6 +161,6 @@ export class SyncMachine<
  *
  * @returns Instance of class {@linkcode SyncMachine}.
  */
-export const createSyncMachine: CommonCreateMachine_F = contract => {
-  return new SyncMachine(contract);
+export const createSyncMachine: CommonCreateMachine_F = (contract, plugins) => {
+  return new SyncMachine(contract, plugins);
 };

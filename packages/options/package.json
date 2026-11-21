@@ -104,6 +104,7 @@
   },
   "dependencies": {
     "@bemedev/app-contract": "workspace:^",
+    "@bemedev/app-utility": "workspace:^",
     "@bemedev/better-promise": "^0.1.1",
     "@bemedev/boolean-recursive": "^0.0.3",
     "@bemedev/decompose": "^2.3.0",

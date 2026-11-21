@@ -1,2 +1,10 @@
 export * from './createOptions';
-export type { Addons, AsyncAddons, SyncAddons } from './addons';
+export * from './plugins';
+export { buildHelpers, type BuildHelpersOptions } from './internal/engine';
+export type {
+  Addons,
+  AsyncAddons,
+  AugmentedAddons,
+  BaseAddons,
+  SyncAddons,
+} from './addons';

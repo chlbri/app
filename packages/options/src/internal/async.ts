@@ -5,25 +5,27 @@
 import { withTimeout } from '@bemedev/better-promise';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
 import { recompose } from '@bemedev/decompose';
+import { createUtility, same, type UtilityMap } from '@bemedev/app-utility';
 
+import type { AsyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
 import { merge2 } from './merge2';
 import { reduceFnMap } from './reduceFnMap';
 import { toArray } from '@bemedev/app-utils-bemedev';
 
 /** Option helpers of an asynchronous machine. */
-export type AsyncHelpers = ReturnType<typeof createAsyncHelpers>;
+export type AsyncHelpers = AsyncAddons;
 
 /**
- * Builds every helper exposed by `machine.createOptions` for an async machine.
+ * Builds the asynchronous descriptor map of every mode-specific helper.
  *
  * @param config - Contract machine configuration.
  *
- * @returns The asynchronous helper surface.
+ * @returns Asynchronous utilities, keyed by helper name.
  */
-export const createAsyncHelpers = (config: any) => {
+export const createAsyncUtilities = (config: any): UtilityMap => {
   const common = createCommonHelpers(config);
-  const { eventsList, timeAction } = common;
+  const { eventsList } = common;
 
   /**
    * Batches multiple guards into a single asynchronous guard.
@@ -421,20 +423,24 @@ export const createAsyncHelpers = (config: any) => {
   };
 
   return {
-    ...common,
-    guardBatch,
-    assign,
-    batch,
-    _for,
-    _while,
-    _doWhile,
-    action,
-    sendTo,
-    pauseActivity: timeAction('pauseActivity'),
-    resumeActivity: timeAction('resumeActivity'),
-    stopActivity: timeAction('stopActivity'),
-    pauseTimer: timeAction('pauseTimer'),
-    resumeTimer: timeAction('resumeTimer'),
-    stopTimer: timeAction('stopTimer'),
+    ...common.utilities,
+    guardBatch: same(guardBatch),
+    assign: same(assign),
+    batch: same(batch),
+    _for: same(_for),
+    _while: same(_while),
+    _doWhile: same(_doWhile),
+    action: same(action),
+    sendTo: same(sendTo),
   };
 };
+
+/**
+ * Builds every helper exposed by `machine.createOptions` for an async machine.
+ *
+ * @param config - Contract machine configuration.
+ *
+ * @returns The asynchronous helper surface.
+ */
+export const createAsyncHelpers = (config: any) =>
+  createUtility(createAsyncUtilities(config)).resolve('async');

@@ -12,6 +12,7 @@ import type {
   Contract,
   ContractEvents,
   ContractOptions,
+  OptionsPlugin,
 } from '@bemedev/app-options';
 import type { EmptyObject, MaybePromise } from '~types';
 import type { AsyncAddOptionsParam_F } from '../asyncMachine';
@@ -158,6 +159,7 @@ export type _AsyncSend_F<Ct extends Contract = Contract> = (
 export type AsyncProvideMachineOptions_F<
   Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = EmptyObject,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = <const T extends ContractOptions<Ct>>(
-  option: AsyncAddOptionsParam_F<Ct, T, L>,
-) => AsyncInterpreter<Ct, L & T>;
+  option: AsyncAddOptionsParam_F<Ct, T, L, Ps>,
+) => AsyncInterpreter<Ct, L & T, Ps>;

@@ -2,14 +2,18 @@ import type { AsyncAction } from '#actions';
 
 import { type DelayFunction } from '#delays';
 import { type FlatMapN } from '#states';
-import { createAsyncHelpers } from '@bemedev/app-options/internal';
+import {
+  buildHelpers,
+  type Contract,
+  type ContractConfig,
+  type OptionsPlugin,
+} from '@bemedev/app-options';
 import { _unknown } from '@bemedev/app-options/bemedev';
 
 import type { CommonCreateMachine_F, SimpleMachineOptions2 } from '#common/machine';
 
 import type { AsyncPredicateS } from '#guards';
 
-import type { Contract, ContractConfig } from '@bemedev/app-options';
 import { CommonMachine } from '../common/machine';
 import type { EmptyObject } from '~types';
 import type { AsyncAddOptions_F, AsyncProvideOptions_F } from './machine.types';
@@ -29,11 +33,20 @@ import type { AsyncAddOptions_F, AsyncProvideOptions_F } from './machine.types';
 export class AsyncMachine<
   const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = EmptyObject,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
 > extends CommonMachine<Ct> {
   /**
    * Machine type identifier string.
    */
   readonly TYPE = 'async';
+
+  /**
+   * Plugins attached to this machine.
+   *
+   * @remarks Used for typing purposes only; the runtime value lives on
+   * {@linkcode CommonMachine}.
+   */
+  declare readonly __plugins: Ps;
 
   /**
    * Accumulated options type marker.
@@ -99,7 +112,7 @@ export class AsyncMachine<
    *
    * @returns Option object for machine customization.
    */
-  createOptions: AsyncAddOptions_F<Ct, L> = helper => {
+  createOptions: AsyncAddOptions_F<Ct, L, Ps> = helper => {
     const _legacy = Object.freeze({
       actions: this.__elements.actions,
       guards: this.__elements.guards,
@@ -107,7 +120,14 @@ export class AsyncMachine<
       actors: this.__elements.actions,
     }) as any;
 
-    const helpers = createAsyncHelpers(this.config) as any;
+    const helpers = buildHelpers({
+      contract: this.contract,
+      config: this.config,
+      mode: 'async',
+      plugins: this.__plugins,
+      legacy: { _legacy },
+    }) as any;
+
     return helper(helpers, { _legacy }) as any;
   };
 
@@ -118,7 +138,7 @@ export class AsyncMachine<
    *
    * @returns Machine options structure.
    */
-  addOptions: AsyncAddOptions_F<Ct, L> = helper => {
+  addOptions: AsyncAddOptions_F<Ct, L, Ps> = helper => {
     return super.addOptions(helper) as any;
   };
 
@@ -129,7 +149,7 @@ export class AsyncMachine<
    *
    * @returns A new instance of the machine with the provided options applied.
    */
-  provideOptions: AsyncProvideOptions_F<Ct, L> = helper =>
+  provideOptions: AsyncProvideOptions_F<Ct, L, Ps> = helper =>
     super.provideOptions(helper);
 
   // #endregion
@@ -142,7 +162,7 @@ export class AsyncMachine<
   protected __renew = (): this => {
     const { pContext, context, guards, actions, delays, actors } = this.__elements;
 
-    const out = new AsyncMachine<Ct, L>(this.contract);
+    const out = new AsyncMachine<Ct, L, Ps>(this.contract, this.__plugins);
 
     out.__pContext = pContext;
     out.__context = context;
@@ -162,8 +182,8 @@ export class AsyncMachine<
    *
    * @param contract - Contract carrying the machine configuration.
    */
-  constructor(contract: Ct) {
-    super(contract);
+  constructor(contract: Ct, plugins: readonly OptionsPlugin<any, any>[] = []) {
+    super(contract, plugins);
     this.longRuns = this.config.__longRuns === true;
   }
 }
@@ -175,6 +195,6 @@ export class AsyncMachine<
  *
  * @returns A new instance of class {@linkcode AsyncMachine}.
  */
-export const createAsyncMachine: CommonCreateMachine_F = contract => {
-  return new AsyncMachine(contract);
+export const createAsyncMachine: CommonCreateMachine_F = (contract, plugins) => {
+  return new AsyncMachine(contract, plugins);
 };

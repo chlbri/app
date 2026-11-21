@@ -8,6 +8,34 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **Unreleased**
+
+</summary>
+
+### Features
+
+- **Plugins**: `createOptions(contract, ...plugins)`, `.use()` and `.useAll()` add
+  helpers to the option surface with full type inference.
+- **Global registry**: `configureOptions` and `registerOptionsPlugin` apply plugins
+  to every build at library level.
+- **Engine**: `buildHelpers({ config, mode, plugins })` is the single builder behind
+  every derived API.
+- **Utilities**: helper surfaces are derived from one descriptor map per mode, so
+  synchronous and asynchronous helpers no longer drift.
+- **Cache**: resolved helpers are cached by contract, mode and plugin signature; the
+  registry version invalidates the cache.
+
+### Dependencies
+
+- Add `@bemedev/app-utility` as a dependency.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.3] - 17/11/2026** => _13:00_
 
 </summary>

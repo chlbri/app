@@ -1,8 +1,13 @@
-import { createContract, type Contract } from '@bemedev/app-options';
+import {
+  createContract,
+  type Contract,
+  type OptionsPlugin,
+} from '@bemedev/app-options';
 import { createAsyncMachine } from '../asyncMachine/machine';
 import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
 export type { ContractMachine, CreateMachine_F } from './types.types';
+import { toArray } from '@bemedev/app-utils-bemedev';
 
 /**
  * Internal helper function to instantiate a state machine from a contract.
@@ -11,10 +16,36 @@ export type { ContractMachine, CreateMachine_F } from './types.types';
  *
  * @returns Synchronous or asynchronous state machine instance.
  */
-const builder = (contract: Contract) => {
+const builder = (
+  contract: Contract,
+  plugins: readonly OptionsPlugin<any, any>[] = [],
+) => {
   const check = contract.types?.sync === true;
   const fn = check ? createSyncMachine : createAsyncMachine;
-  return fn(contract);
+  return fn(contract, plugins);
+};
+
+/**
+ * Splits the optional `plugins` entry out of a type schema object.
+ *
+ * @param types - Type schema object, possibly carrying plugins.
+ *
+ * @returns The type schemas without `plugins`, and the extracted plugins.
+ */
+const splitPlugins = (types?: any) => {
+  if (!types || typeof types !== 'object' || Array.isArray(types)) {
+    return { plugins: [] as readonly OptionsPlugin<any, any>[], types };
+  }
+
+  const { plugins, ...rest } = types;
+
+  return {
+    plugins: (Array.isArray(plugins) ? plugins : []) as readonly OptionsPlugin<
+      any,
+      any
+    >[],
+    types: rest,
+  };
 };
 
 /**
@@ -26,15 +57,21 @@ const builder = (contract: Contract) => {
  *
  * @returns A frozen contract.
  */
-const toContract = (
-  nameOrConfig: any,
-  configOrTypes?: any,
-  types?: any,
-): Contract => {
-  if (typeof nameOrConfig === 'string')
-    return createContract(nameOrConfig, configOrTypes, types);
+const toContract = (nameOrConfig: any, configOrTypes?: any, types?: any) => {
+  if (typeof nameOrConfig === 'string') {
+    const split = splitPlugins(types);
+    return {
+      contract: createContract(nameOrConfig, configOrTypes, split.types),
+      plugins: split.plugins,
+    };
+  }
 
-  return createContract(nameOrConfig, configOrTypes);
+  const split = splitPlugins(configOrTypes);
+
+  return {
+    contract: createContract(nameOrConfig, split.types),
+    plugins: split.plugins,
+  };
 };
 
 /**
@@ -67,7 +104,11 @@ export const createMachine: CreateMachine_F = (
   configOrTypes?: any,
   types?: any,
 ) => {
-  if (isContract(nameOrConfig)) return builder(nameOrConfig);
+  if (isContract(nameOrConfig)) {
+    const plugins = (nameOrConfig.types as any)?.plugins;
+    return builder(nameOrConfig, toArray(plugins));
+  }
 
-  return builder(toContract(nameOrConfig, configOrTypes, types));
+  const { contract, plugins } = toContract(nameOrConfig, configOrTypes, types);
+  return builder(contract, plugins);
 };

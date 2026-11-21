@@ -9,6 +9,11 @@ import type {
 } from '@bemedev/app-contract';
 
 import type { Fn } from '@bemedev/app-utils-bemedev';
+import type {
+  ResolveUtilities,
+  UtilityMode,
+  UtilityPair,
+} from '@bemedev/app-utility';
 
 import { AsyncActionHelper, AsyncAssign, AsyncOptions, SyncAssign } from './actions';
 
@@ -23,7 +28,7 @@ import {
  * Contract followed by every addon: a synchronous and an asynchronous
  * variant of the same helper.
  */
-export type _Addons = Record<string, { sync: Fn; async: Fn }>;
+export type _Addons = Record<string, UtilityPair<Fn, Fn>>;
 
 /** Swaps state arguments in functional transitions. */
 type Swap<C extends Contract> = <
@@ -35,6 +40,13 @@ type Swap<C extends Contract> = <
 ) => (types: any) => FnR<C, ReturnType<F>>;
 
 /**
+ * Contract followed by every addon: a synchronous and an asynchronous
+ * variant of the same helper.
+ *
+ * Augment this interface from a plugin package to expose its utilities to
+ * `createOptions` callbacks. Augmentation only changes types: the plugin must
+ * still be registered at runtime with `configureOptions` or
+ * `registerOptionsPlugin`.
  *
  * @template | {@linkcode Contract} `Ct` - Contract type.
  */
@@ -191,12 +203,44 @@ type _DefinedKey<K> = [K] extends [string] ? (string extends K ? never : K) : ne
 /** Keeps declared keys only, dropping the `_Addons` index signature. */
 type _DefinedKeys<T> = { [K in keyof T as _DefinedKey<K>]: T[K] };
 
+/**
+ * Closed descriptor map declared by the package, without the `_Addons` index
+ * signature.
+ *
+ * It stays closed so that an unknown helper name is a compile error, while
+ * {@linkcode Addons} remains an augmentable interface for plugin packages.
+ */
+export type BaseAddons<Ct extends Contract = Contract> = _DefinedKeys<Addons<Ct>>;
+
 /** Synchronous helper surface resolved from {@linkcode Addons}. */
-export type SyncAddons<Ct extends Contract = Contract> = {
-  [K in keyof _DefinedKeys<Addons<Ct>>]: Addons<Ct>[K]['sync'];
-};
+export type SyncAddons<Ct extends Contract = Contract> = ResolveUtilities<
+  BaseAddons<Ct>,
+  'sync'
+>;
 
 /** Asynchronous helper surface resolved from {@linkcode Addons}. */
-export type AsyncAddons<Ct extends Contract = Contract> = {
-  [K in keyof _DefinedKeys<Addons<Ct>>]: Addons<Ct>[K]['async'];
-};
+export type AsyncAddons<Ct extends Contract = Contract> = ResolveUtilities<
+  BaseAddons<Ct>,
+  'async'
+>;
+
+/**
+ * Resolves only the addons not already declared by the consumer.
+ *
+ * Machine option surfaces declare their own built-in helpers, so they use this
+ * type to remap every *extra* key of {@linkcode Addons} — typically utilities
+ * added by module augmentation in a plugin package — without replacing their
+ * more precise built-in signatures.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract type.
+ * @template | {@linkcode UtilityMode} `M` - Execution mode.
+ * @template `Declared` - Keys already declared by the consumer.
+ */
+export type AugmentedAddons<
+  Ct extends Contract = Contract,
+  M extends UtilityMode = 'sync',
+  Declared extends PropertyKey = never,
+> = ResolveUtilities<
+  Pick<BaseAddons<Ct>, Exclude<keyof BaseAddons<Ct>, Declared>>,
+  M
+>;

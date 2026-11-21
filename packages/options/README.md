@@ -101,6 +101,114 @@ machine.addOptions(() => counterOptions);
 
 ---
 
+## Plugins
+
+Every option helper is a _utility_: a descriptor carrying a synchronous and an
+asynchronous implementation. Plugins add utilities to `createOptions`, to
+`machine.createOptions`, to `machine.addOptions` / `machine.provideOptions` and to
+`interpreter.addOptions`.
+
+### Writing a plugin
+
+```typescript
+import { same, type UtilityPlugin } from '@bemedev/app-options';
+
+export const retryPlugin = {
+  name: 'retry',
+  create: () => ({
+    retry: same((times: number, action: () => unknown) => () => {
+      let last: unknown;
+
+      for (let index = 0; index < times; index++) {
+        try {
+          return action();
+        } catch (error) {
+          last = error;
+        }
+      }
+
+      throw last;
+    }),
+  }),
+} satisfies UtilityPlugin;
+```
+
+`create` receives the configuration, the event names, the contract when available,
+the current legacy options, and the utilities built so far. A plugin can therefore
+build on another one without importing it:
+
+```typescript
+export const logPlugin = {
+  name: 'log',
+  requires: ['retry'],
+  create: ({ utilities }) => ({
+    log: same((message: string) =>
+      utilities.retry.sync(1, () => console.log(message)),
+    ),
+  }),
+} satisfies UtilityPlugin;
+```
+
+`requires` is resolved with a topological sort. Missing dependencies and cycles
+throw, duplicate utility keys throw unless the plugin sets `override: true`.
+
+### Applying plugins
+
+At call level:
+
+```typescript
+const options = createOptions(
+  contract,
+  retryPlugin,
+)(({ retry }) => ({ actions: { load: retry(3, loadUser) } }));
+
+// or chained
+createOptions(contract).use(retryPlugin).useAll([logPlugin]);
+```
+
+At machine level, pass `plugins` in the type schema object:
+
+```typescript
+const machine = createMachine(config, { sync: true, plugins: [retryPlugin] });
+
+machine.createOptions(({ retry }) => ({ actions: { load: retry(3, loadUser) } }));
+```
+
+`plugins` is extracted from the type schemas and attached to the machine, so `renew`,
+`provideOptions`, `addOptions` and interpreters keep it.
+
+### Registering at library level
+
+```typescript
+import { configureOptions, registerOptionsPlugin } from '@bemedev/app-options';
+import { retryPlugin, logPlugin } from '@my/lib';
+
+configureOptions([retryPlugin, logPlugin]);
+// or append once
+registerOptionsPlugin(retryPlugin);
+```
+
+Global plugins are merged with per-call ones, the per-call plugin winning on shared
+names. `configureOptions([])` resets the registry, which is the recommended setup for
+tests and SSR.
+
+**Typing note**: registering at runtime does not change types. To make a helper
+visible in every callback, a plugin package can augment `Addons`:
+
+```typescript
+declare module '@bemedev/app-options' {
+  interface Addons<Ct> {
+    retry: UtilityPair<RetryHelper, RetryHelper>;
+  }
+}
+```
+
+The plugin must still be registered at runtime; augmentation only changes types. The
+remapping applies to `createOptions` and to every machine surface (`createOptions`,
+`addOptions`, `provideOptions`) without passing the plugin to `createMachine`.
+
+---
+
 ## Subpath exports
 
 The runtime dependencies of the helpers are re-exported, so consumers of
@@ -119,16 +227,24 @@ The runtime dependencies of the helpers are re-exported, so consumers of
 
 ## Exports
 
-| Export                | Kind | Description                                                 |
-| --------------------- | ---- | ----------------------------------------------------------- |
-| `createOptions`       | Fn   | Curried contract options factory.                           |
-| `CreateOptions_F`     | Type | Function signature of `createOptions`.                      |
-| `SyncOptionsHelpers`  | Type | Helper surface injected for a `sync: true` contract.        |
-| `AsyncOptionsHelpers` | Type | Helper surface injected for an asynchronous contract.       |
-| `OptionsHelper`       | Type | Callback signature, selected from the contract `sync` flag. |
-| `AsyncOptions`        | Type | `max`, `then` and `catch` options of async helpers.         |
-| `LegacyOptions`       | Type | `_legacy` accessor passed as the second callback argument.  |
-| _contract exports_    | All  | Every export of `@bemedev/app-contract`, re-exported as-is. |
+| Export                  | Kind | Description                                                 |
+| ----------------------- | ---- | ----------------------------------------------------------- |
+| `createOptions`         | Fn   | Curried contract options factory.                           |
+| `CreateOptions_F`       | Type | Function signature of `createOptions`.                      |
+| `CreateOptionsWith`     | Type | Curried callable carrying the applied plugins.              |
+| `OptionsHelpers`        | Type | Helper surface of a contract and a plugin tuple.            |
+| `AugmentedAddons`       | Type | Remaps the extra `Addons` keys onto a machine surface.      |
+| `SyncOptionsHelpers`    | Type | Helper surface injected for a `sync: true` contract.        |
+| `AsyncOptionsHelpers`   | Type | Helper surface injected for an asynchronous contract.       |
+| `OptionsHelper`         | Type | Callback signature, selected from the contract `sync` flag. |
+| `AsyncOptions`          | Type | `max`, `then` and `catch` options of async helpers.         |
+| `LegacyOptions`         | Type | `_legacy` accessor passed as the second callback argument.  |
+| `configureOptions`      | Fn   | Replaces the global plugin registry.                        |
+| `registerOptionsPlugin` | Fn   | Appends a plugin to the global registry, once.              |
+| `buildHelpers`          | Fn   | Builds a helper surface for a config, mode and plugins.     |
+| `OptionsPlugin`         | Type | Plugin accepted by the options engine.                      |
+| `UtilityPlugin`         | Type | Low-level plugin type from `@bemedev/app-utility`.          |
+| _contract exports_      | All  | Every export of `@bemedev/app-contract`, re-exported as-is. |
 
 ## License
 

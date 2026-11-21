@@ -7,6 +7,7 @@ import type {
   Contract,
   ContractEvents,
   ContractOptions,
+  OptionsPlugin,
 } from '@bemedev/app-options';
 import type { SyncAddOptionsParam_F } from '../machine/options.types';
 import type { SyncNodeConfig } from '../types.types';
@@ -120,6 +121,7 @@ export type _SyncSend_F<Ct extends Contract = Contract> = (
 export type SyncProvideMachineOptions_F<
   Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = <const T extends ContractOptions<Ct>>(
-  option: SyncAddOptionsParam_F<Ct, T, L>,
-) => SyncInterpreter<Ct, L & T>;
+  option: SyncAddOptionsParam_F<Ct, T, L, Ps>,
+) => SyncInterpreter<Ct, L & T, Ps>;

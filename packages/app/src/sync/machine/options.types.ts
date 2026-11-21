@@ -12,10 +12,14 @@ import type {
   SwapFunction_F,
 } from '#common/machine';
 import type {
+  AugmentedAddons,
   Contract,
   ContractContext,
   ContractEvents,
   ContractOptions,
+  OptionsPlugin,
+  PluginAddons,
+  ResolveUtilities,
 } from '@bemedev/app-options';
 import type { FnMap, FnR, SingleOrArrayL2, TraversableTuple } from '~types';
 import type { SyncMachine } from './machine';
@@ -459,8 +463,11 @@ export type SyncAddOptionsParam_F<
   Ct extends Contract = Contract,
   Mo = SimpleMachineOptions2,
   L = SimpleMachineOptions2,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = (
-  option: SyncAddOption<Ct>,
+  option: SyncAddOption<Ct> &
+    AugmentedAddons<Ct, 'sync', keyof SyncAddOption<Ct>> &
+    ResolveUtilities<PluginAddons<Ps>, 'sync'>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.
@@ -481,8 +488,9 @@ export type SyncAddOptionsParam_F<
 export type SyncAddOptions_F<
   Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = <const T extends ContractOptions<Ct>>(
-  option: SyncAddOptionsParam_F<Ct, T, L>,
+  option: SyncAddOptionsParam_F<Ct, T, L, Ps>,
 ) => ContractOptions<Ct>;
 
 /**
@@ -498,6 +506,7 @@ export type SyncAddOptions_F<
 export type SyncProvideOptions_F<
   Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = <const T extends ContractOptions<Ct>>(
-  option: SyncAddOptionsParam_F<Ct, T, L>,
-) => SyncMachine<Ct, L & T>;
+  option: SyncAddOptionsParam_F<Ct, T, L, Ps>,
+) => SyncMachine<Ct, L & T, Ps>;

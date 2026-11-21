@@ -1,46 +1,64 @@
 import type { Contract } from '@bemedev/app-contract';
 
-import { createAsyncHelpers, createSyncHelpers } from './internal';
-import type { CreateOptions_F } from './types';
+import { buildHelpers } from './internal';
+import type { OptionsPlugin } from './plugins';
+import type { CreateOptions_F, CreateOptionsWith } from './types';
 
 export type {
   AsyncOptions,
   AsyncOptionsHelpers,
   CreateOptions_F,
+  CreateOptionsWith,
   LegacyOptions,
   OptionsHelper,
+  OptionsHelpers,
   SyncOptionsHelpers,
 } from './types';
 
 export * from '@bemedev/app-contract';
 
 /**
- * Builds the options surface of a contract at runtime.
- *
- * The contract's `sync` flag selects the synchronous or the asynchronous
- * helper set, so a single entry point covers both machine flavors.
+ * Builds the options callable of a contract.
  *
  * @param contract - Contract created with `createContract`.
+ * @param plugins - Plugins applied to this callable.
  *
- * @returns A function accepting the options callback.
+ * @returns The callable, extended with `use` and `useAll`.
  */
-const builder = (contract: Contract) => {
-  const sync = contract.types?.sync === true;
-  const helpers = sync
-    ? createSyncHelpers(contract.config)
-    : createAsyncHelpers(contract.config);
+const builder = (
+  contract: Contract,
+  plugins: readonly OptionsPlugin<any, any>[],
+): CreateOptionsWith<any, any> => {
+  const mode = contract.types?.sync === true ? 'sync' : 'async';
 
   const legacyOptions = Object.freeze({ _legacy: Object.freeze({}) }) as any;
 
-  return (helper: (option: any, legacyOptions: any) => any) =>
-    helper(helpers, legacyOptions);
+  const callable = (helper: (options: any, legacy: any) => any) =>
+    helper(
+      buildHelpers({
+        contract,
+        config: contract.config,
+        mode,
+        plugins,
+        legacy: legacyOptions,
+      }),
+      legacyOptions,
+    );
+
+  return Object.assign(callable, {
+    use: (plugin: OptionsPlugin<any, any>) =>
+      builder(contract, [...plugins, plugin]),
+    useAll: (more: readonly OptionsPlugin<any, any>[]) =>
+      builder(contract, [...plugins, ...more]),
+  }) as CreateOptionsWith<any, any>;
 };
 
 /**
  * Creates machine options from a contract, without a machine instance.
  *
  * The returned function receives the same helpers as
- * `machine.createOptions` and produces the contract options object.
+ * `machine.createOptions` and produces the contract options object. Plugins
+ * can be passed directly or chained with `.use()` / `.useAll()`.
  *
  * @example
  * ```ts
@@ -64,5 +82,7 @@ const builder = (contract: Contract) => {
  *
  * @see -- type {@linkcode CreateOptions_F}
  */
-export const createOptions = ((contract: Contract) =>
-  builder(contract)) as CreateOptions_F;
+export const createOptions = ((
+  contract: Contract,
+  ...plugins: readonly OptionsPlugin<any, any>[]
+) => builder(contract, plugins)) as CreateOptions_F;
