@@ -43,7 +43,6 @@
     "jsdom": "^31.0.1",
     "vite-plugin-solid": "^2.11.17",
     "vite-plus": "catalog:",
-    "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "catalog:"
+    "vite-tsconfig-paths": "^6.1.1"
   }
 }

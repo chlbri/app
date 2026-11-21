@@ -166,7 +166,6 @@
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
     "vite-plus": "catalog:",
-    "vitest": "catalog:",
     "zx": "^8.8.5"
   },
   "bundledDependencies": [

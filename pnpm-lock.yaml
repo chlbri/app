@@ -174,11 +174,11 @@ settings:
 catalogs:
   default:
     '@vitest/coverage-v8':
-      specifier: 5.1.1
-      version: 5.1.1
+      specifier: 5.1.0
+      version: 5.1.0
     '@vitest/ui':
-      specifier: 5.1.1
-      version: 5.1.1
+      specifier: 5.1.0
+      version: 5.1.0
     vite:
       specifier: npm:@voidzero-dev/vite-plus-core@8.3.8000
       version: 8.3.8000
@@ -197,7 +197,7 @@ importers:
     devDependencies:
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/sleep':
         specifier: ^0.2.2
         version: 0.2.2
@@ -215,10 +215,10 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       '@vitest/ui':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(vitest@5.1.1)
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -251,10 +251,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   apps/graph-app:
     dependencies:
@@ -278,7 +275,7 @@ importers:
         version: 1.167.4(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.39)(csstype@3.2.4)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-start':
         specifier: latest
-        version: 1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
+        version: 1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -342,7 +339,7 @@ importers:
         version: '@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)'
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   apps/reactjs:
     dependencies:
@@ -372,7 +369,7 @@ importers:
         version: 1.167.4(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.39)(csstype@3.2.4)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-start':
         specifier: latest
-        version: 1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
+        version: 1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -406,7 +403,7 @@ importers:
     devDependencies:
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/interval2':
         specifier: ^1.2.1
         version: 1.2.1
@@ -445,10 +442,7 @@ importers:
         version: '@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)'
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   apps/solidjs:
     dependencies:
@@ -475,7 +469,7 @@ importers:
         version: 1.170.43(solid-js@1.9.20)
       '@tanstack/solid-start':
         specifier: 1.169.7
-        version: 1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(solid-js@1.9.20)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
+        version: 1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(solid-js@1.9.20)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -506,7 +500,7 @@ importers:
     devDependencies:
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@tanstack/solid-router-devtools':
         specifier: 1.167.4
         version: 1.167.4(@tanstack/router-core@1.171.39)(@tanstack/solid-router@1.170.43(solid-js@1.9.20))(csstype@3.2.4)(solid-js@1.9.20)
@@ -518,16 +512,13 @@ importers:
         version: 31.0.1
       vite-plugin-solid:
         specifier: ^2.11.17
-        version: 2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2)
+        version: 2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2)
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
       vite-tsconfig-paths:
         specifier: ^6.1.1
         version: 6.1.1(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(supports-color@10.2.2)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
 
   packages/__tests__/async:
     devDependencies:
@@ -542,7 +533,7 @@ importers:
         version: link:../../vitest
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/rx-pausable':
         specifier: ^1.2.0
         version: 1.2.0
@@ -569,10 +560,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/__tests__/contract:
     devDependencies:
@@ -584,7 +572,7 @@ importers:
         version: link:../../contract
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/typings':
         specifier: ^1.5.0
         version: 1.5.0
@@ -599,10 +587,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/__tests__/helpers:
     devDependencies:
@@ -620,7 +605,7 @@ importers:
         version: 2.3.0
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/rx-pausable':
         specifier: ^1.2.0
         version: 1.2.0
@@ -647,10 +632,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/__tests__/options:
     devDependencies:
@@ -668,7 +650,7 @@ importers:
         version: link:../../options
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/typings':
         specifier: ^1.5.0
         version: 1.5.0
@@ -683,10 +665,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/__tests__/sync:
     devDependencies:
@@ -701,7 +680,7 @@ importers:
         version: link:../../vitest
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/rx-pausable':
         specifier: ^1.2.0
         version: 1.2.0
@@ -722,10 +701,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/__tests__/valibot:
     devDependencies:
@@ -743,7 +719,7 @@ importers:
         version: link:../../vitest
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@types/node':
         specifier: ^26.6.6
         version: 26.6.6
@@ -758,10 +734,7 @@ importers:
         version: 1.5.0(typescript@6.0.3)
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/app:
     dependencies:
@@ -795,7 +768,7 @@ importers:
     devDependencies:
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/interval3':
         specifier: workspace:^
         version: link:../interval3
@@ -816,10 +789,10 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       '@vitest/ui':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(vitest@5.1.1)
       add:
         specifier: ^2.0.9
         version: 2.0.9
@@ -861,10 +834,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
       zx:
         specifier: ^8.8.5
         version: 8.8.5
@@ -901,7 +871,7 @@ importers:
         version: link:../app
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@size-limit/file':
         specifier: ^14.3.0
         version: 14.3.0(size-limit@14.3.0)
@@ -910,7 +880,7 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       pretty-quick:
         specifier: ^4.2.2
         version: 4.2.2(prettier@3.10.1)
@@ -931,16 +901,13 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/contract:
     devDependencies:
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/typings':
         specifier: ^1.5.0
         version: 1.5.0
@@ -952,7 +919,7 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       pretty-quick:
         specifier: ^4.2.2
         version: 4.2.2(prettier@3.10.1)
@@ -973,16 +940,13 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/interval3:
     devDependencies:
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/typings':
         specifier: ^1.5.0
         version: 1.5.0
@@ -994,7 +958,7 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       pretty-quick:
         specifier: ^4.2.2
         version: 4.2.2(prettier@3.10.1)
@@ -1015,10 +979,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/options:
     dependencies:
@@ -1043,7 +1004,7 @@ importers:
         version: link:../utils/bemedev
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/typings':
         specifier: ^1.5.0
         version: 1.5.0
@@ -1055,7 +1016,7 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       pretty-quick:
         specifier: ^4.2.2
         version: 4.2.2(prettier@3.10.1)
@@ -1076,10 +1037,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/reactjs:
     dependencies:
@@ -1098,7 +1056,7 @@ importers:
         version: 2.3.0
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/sleep':
         specifier: ^0.2.2
         version: 0.2.2
@@ -1125,10 +1083,10 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       '@vitest/ui':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(vitest@5.1.1)
       glob:
         specifier: ^14.0.6
         version: 14.0.6
@@ -1170,10 +1128,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/solidjs:
     devDependencies:
@@ -1188,7 +1143,7 @@ importers:
         version: 2.3.0
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/sleep':
         specifier: ^0.2.2
         version: 0.2.2
@@ -1209,10 +1164,10 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       '@vitest/ui':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(vitest@5.1.1)
       glob:
         specifier: ^14.0.6
         version: 14.0.6
@@ -1254,16 +1209,13 @@ importers:
         version: 2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2)
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/utils/bemedev:
     devDependencies:
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@size-limit/file':
         specifier: ^14.3.0
         version: 14.3.0(size-limit@14.3.0)
@@ -1293,10 +1245,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/valibot:
     dependencies:
@@ -1315,7 +1264,7 @@ importers:
         version: link:../cli
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@size-limit/file':
         specifier: ^14.3.0
         version: 14.3.0(size-limit@14.3.0)
@@ -1324,10 +1273,10 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       '@vitest/ui':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(vitest@5.1.1)
       pretty-quick:
         specifier: ^4.2.2
         version: 4.2.2(prettier@3.10.1)
@@ -1348,12 +1297,13 @@ importers:
         version: 1.5.0(typescript@6.0.3)
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   packages/vitest:
+    dependencies:
+      vitest:
+        specifier: 5.1.1
+        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
     devDependencies:
       '@bemedev/app':
         specifier: workspace:^
@@ -1363,7 +1313,7 @@ importers:
         version: link:../cli
       '@bemedev/dev-utils':
         specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/sleep':
         specifier: ^0.2.2
         version: 0.2.2
@@ -1378,10 +1328,10 @@ importers:
         version: 26.6.6
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       '@vitest/ui':
         specifier: 'catalog:'
-        version: 5.1.1(vitest@5.1.1)
+        version: 5.1.0(vitest@5.1.1)
       pretty-quick:
         specifier: ^4.2.2
         version: 4.2.2(prettier@3.10.1)
@@ -1402,10 +1352,7 @@ importers:
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-      vitest:
-        specifier: 5.1.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
 packages:
 
@@ -3452,16 +3399,6 @@ packages:
     resolution: {integrity: sha512-yzr2S9HyAIdhz2/6qHgbs665Q7PKVcDF05vsOlHPxG1mo36gKVesdYVeDLnXgfjJ03CrKRk08knc6+E/9m8v2Q==}
     engines: {node: '>=18'}
 
-  '@testing-library/jest-dom@7.0.1':
-    resolution: {integrity: sha512-oMDTC3oA+6CXSO2JZnvOI7CA6oVub6kij5ggk9ohwye5slmkwxYDXcPOVxgMw/RQlticjtO0C1RZkR97HgrWMw==}
-    engines: {node: '>=22', npm: '>=6', yarn: '>=1'}
-    peerDependencies:
-      '@testing-library/dom': '>=10 <11'
-      vitest: 5.1.1
-    peerDependenciesMeta:
-      vitest:
-        optional: true
-
   '@testing-library/jest-dom@8.0.0':
     resolution: {integrity: sha512-Nu45KEeFgP/ydCMipnisMblq6YHViqEFi3fKN0a40s+zdKDDD7vEPCEavS0i7i4RxmclcEIL8q2o42pu+WgNgg==}
     engines: {node: '>=22', npm: '>=6', yarn: '>=1'}
@@ -3736,10 +3673,10 @@ packages:
     peerDependencies:
       vitest: 5.1.1
 
-  '@vitest/coverage-v8@5.1.1':
-    resolution: {integrity: sha512-xL4NkbVx/UqqDHaXSOyvB8qsSoLQ+dVNGR9H2Bh/4ggQtmaPFNPUC9gZQwKZePLOQ6WDcgwXVnPulFW9eCHt0w==}
+  '@vitest/coverage-v8@5.1.0':
+    resolution: {integrity: sha512-OY9aShBQG5KOIw2zCo9fDoCHI9RHliNHJ//nM7m6jGg41Hyke9JOGWmeMlK74xYErsxMoK8mIB3gAeEyFVA7LA==}
     peerDependencies:
-      '@vitest/browser': 5.1.1
+      '@vitest/browser': 5.1.0
       vitest: 5.1.1
     peerDependenciesMeta:
       '@vitest/browser':
@@ -3778,9 +3715,6 @@ packages:
   '@vitest/pretty-format@5.1.0':
     resolution: {integrity: sha512-IRx5mc30CrFzyMNni6SZKQ1r53kv049Mcvvk0WbWcD6PUz/bFjG4zYv0KosQAeonPpGp5WxqYBMqdSOfJfvVWw==}
 
-  '@vitest/pretty-format@5.1.1':
-    resolution: {integrity: sha512-25VrNCa2fxNyRv7VTtYBjJnC7hQkAzDLuSWJb8kHJATfCPe+5YPferPPDrSO7pcxik4+cBo4IXS2H7rf4OOXgg==}
-
   '@vitest/snapshot@5.1.0':
     resolution: {integrity: sha512-6tLM70+37LVXz+A6QmOlMQUuj+taODAyXZhz58lNNNNKHH0D81yzPBEezKQQGPlABc8OpAQBOBVvssVLLQqixw==}
 
@@ -3795,16 +3729,8 @@ packages:
     peerDependencies:
       vitest: 5.1.1
 
-  '@vitest/ui@5.1.1':
-    resolution: {integrity: sha512-qpNyZ9CAKhBCnWMZSYQMFJzcBvpqb7ssC9NHJUq8haNZkjC4rSMSmKZzMu7IYR1XMqiKOSIAF34FmOQkGP77Mw==}
-    peerDependencies:
-      vitest: 5.1.1
-
   '@vitest/utils@5.1.0':
     resolution: {integrity: sha512-V+qgCwkvVw+s1t1S5TaoBHsLi5Sz/YmohCMoOu0mZ8ZQst2bKhRYARAQucWpVg8D0mv0x5MHcWXY5QdOsoiGBQ==}
-
-  '@vitest/utils@5.1.1':
-    resolution: {integrity: sha512-CtwJP89ozg9RLHb70HM9jwzHnzZDaLTCovwr313CSRM6IkwNuIcORlZluW0zVNkmjJWBxPRLpvjnX6XhztjS2w==}
 
   '@voidzero-dev/vite-plus-core@8.3.8000':
     resolution: {integrity: sha512-kWOoI7ut3UE83p87jJxcxxg92pbipmC/aakCm6mfm1nkPyPnEZngNaRjiVRPrvxk3vSgy54A4fdlTeb++dSKfg==}
@@ -6817,7 +6743,7 @@ snapshots:
     dependencies:
       ts-deepmerge: 8.0.0
 
-  '@bemedev/dev-utils@1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)':
+  '@bemedev/dev-utils@1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@typescript/typescript6': 6.0.2
@@ -6831,9 +6757,9 @@ snapshots:
       shelljs: 0.10.0
       sort-keys: 6.0.1
       tsc-alias: 1.9.10
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
     optionalDependencies:
-      vite-plus: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
+      vite-plus: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
     transitivePeerDependencies:
       - '@arethetypeswrong/core'
       - '@astrojs/compiler-rs'
@@ -8045,14 +7971,14 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@tanstack/react-start-rsc@0.1.68(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
+  '@tanstack/react-start-rsc@0.1.68(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
     dependencies:
       '@tanstack/react-router': 1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/router-core': 1.171.39
       '@tanstack/router-utils': 1.163.0(supports-color@10.2.2)
       '@tanstack/start-client-core': 1.170.39
       '@tanstack/start-fn-stubs': 1.162.0
-      '@tanstack/start-plugin-core': 1.172.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
+      '@tanstack/start-plugin-core': 1.172.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
       '@tanstack/start-storage-context': 1.167.41
       pathe: 2.0.3
       react: 19.3.1
@@ -8078,15 +8004,15 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@tanstack/react-start@1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
+  '@tanstack/react-start@1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
     dependencies:
       '@tanstack/react-router': 1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-start-client': 1.168.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@tanstack/react-start-rsc': 0.1.68(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
+      '@tanstack/react-start-rsc': 0.1.68(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
       '@tanstack/react-start-server': 1.167.52(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/router-utils': 1.163.0(supports-color@10.2.2)
       '@tanstack/start-client-core': 1.170.39
-      '@tanstack/start-plugin-core': 1.172.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
+      '@tanstack/start-plugin-core': 1.172.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
       '@tanstack/start-server-core': 1.169.45
       pathe: 2.0.3
       react: 19.3.1
@@ -8147,7 +8073,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@tanstack/router-plugin@1.169.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
+  '@tanstack/router-plugin@1.169.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
     dependencies:
       '@babel/core': 7.29.13(supports-color@10.2.2)
       '@babel/template': 7.29.7
@@ -8161,7 +8087,7 @@ snapshots:
     optionalDependencies:
       '@tanstack/react-router': 1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       vite: '@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)'
-      vite-plugin-solid: 2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2)
+      vite-plugin-solid: 2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rspack/core'
@@ -8218,13 +8144,13 @@ snapshots:
       '@tanstack/start-server-core': 1.169.45
       solid-js: 1.9.20
 
-  '@tanstack/solid-start@1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(solid-js@1.9.20)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
+  '@tanstack/solid-start@1.169.7(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(solid-js@1.9.20)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
     dependencies:
       '@tanstack/solid-router': 1.170.43(solid-js@1.9.20)
       '@tanstack/solid-start-client': 1.168.42(solid-js@1.9.20)
       '@tanstack/solid-start-server': 1.167.50(solid-js@1.9.20)
       '@tanstack/start-client-core': 1.170.39
-      '@tanstack/start-plugin-core': 1.172.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
+      '@tanstack/start-plugin-core': 1.172.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
       '@tanstack/start-server-core': 1.169.45
       pathe: 2.0.3
       solid-js: 1.9.20
@@ -8252,7 +8178,7 @@ snapshots:
 
   '@tanstack/start-fn-stubs@1.162.0': {}
 
-  '@tanstack/start-plugin-core@1.172.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
+  '@tanstack/start-plugin-core@1.172.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/core': 7.29.13(supports-color@10.2.2)
@@ -8260,7 +8186,7 @@ snapshots:
       '@jridgewell/remapping': 2.3.5
       '@tanstack/router-core': 1.171.39
       '@tanstack/router-generator': 1.168.0(supports-color@10.2.2)
-      '@tanstack/router-plugin': 1.169.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
+      '@tanstack/router-plugin': 1.169.0(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(rolldown@1.3.3)(rollup@4.68.7)(supports-color@10.2.2)(vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2))
       '@tanstack/router-utils': 1.163.0(supports-color@10.2.2)
       '@tanstack/start-server-core': 1.169.45
       exsolve: 1.2.0
@@ -8319,19 +8245,6 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
-  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1)':
-    dependencies:
-      '@adobe/css-tools': 4.5.0
-      '@testing-library/dom': 10.4.2
-      aria-query: 5.3.2
-      css.escape: 1.5.1
-      dom-accessibility-api: 0.6.3
-      picocolors: 1.1.1
-      redent: 3.0.0
-    optionalDependencies:
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
-    optional: true
-
   '@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1)':
     dependencies:
       '@adobe/css-tools': 4.5.0
@@ -8342,7 +8255,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
     optionalDependencies:
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
 
   '@testing-library/react@16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
@@ -8621,7 +8534,7 @@ snapshots:
       '@testing-library/dom': 10.4.2
       '@testing-library/user-event': 14.6.13(@testing-library/dom@10.4.2)
       '@vitest/browser': 5.1.0(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(vitest@5.1.1)
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
     transitivePeerDependencies:
       - bufferutil
       - msw
@@ -8638,7 +8551,7 @@ snapshots:
       pngjs: 7.0.0
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
       ws: 8.23.0
     transitivePeerDependencies:
       - bufferutil
@@ -8646,7 +8559,7 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@5.1.1(vitest@5.1.1)':
+  '@vitest/coverage-v8@5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)':
     dependencies:
       '@bcoe/v8-coverage': 1.0.2
       '@vitest/istanbul-lib-coverage': 2.1.1
@@ -8656,7 +8569,9 @@ snapshots:
       obug: 3.0.0
       std-env: 4.3.0
       tinyrainbow: 3.2.0
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+    optionalDependencies:
+      '@vitest/browser': 5.1.0(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(vitest@5.1.1)
 
   '@vitest/istanbul-lib-coverage@2.1.1': {}
 
@@ -8686,10 +8601,6 @@ snapshots:
     dependencies:
       tinyrainbow: 3.2.0
 
-  '@vitest/pretty-format@5.1.1':
-    dependencies:
-      tinyrainbow: 3.2.0
-
   '@vitest/snapshot@5.1.0':
     dependencies:
       '@vitest/pretty-format': 5.1.0
@@ -8709,27 +8620,11 @@ snapshots:
       pathe: 2.0.3
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
-
-  '@vitest/ui@5.1.1(vitest@5.1.1)':
-    dependencies:
-      '@vitest/utils': 5.1.1
-      fflate: 0.8.3
-      flatted: 3.4.4
-      pathe: 2.0.3
-      sirv: 3.0.2
-      tinyrainbow: 3.2.0
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
 
   '@vitest/utils@5.1.0':
     dependencies:
       '@vitest/pretty-format': 5.1.0
-      convert-source-map: 2.0.0
-      tinyrainbow: 3.2.0
-
-  '@vitest/utils@5.1.1':
-    dependencies:
-      '@vitest/pretty-format': 5.1.1
       convert-source-map: 2.0.0
       tinyrainbow: 3.2.0
 
@@ -10380,7 +10275,7 @@ snapshots:
       '@oxc-transform/binding-win32-ia32-msvc': 0.159.0
       '@oxc-transform/binding-win32-x64-msvc': 0.159.0
 
-  oxfmt@0.79.0(vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)):
+  oxfmt@0.79.0(vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)):
     dependencies:
       tinypool: 2.2.0
     optionalDependencies:
@@ -10403,9 +10298,9 @@ snapshots:
       '@oxfmt/binding-win32-arm64-msvc': 0.79.0
       '@oxfmt/binding-win32-ia32-msvc': 0.79.0
       '@oxfmt/binding-win32-x64-msvc': 0.79.0
-      vite-plus: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
+      vite-plus: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
-  oxlint@1.94.0(vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)):
+  oxlint@1.94.0(vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)):
     optionalDependencies:
       '@oxlint/binding-android-arm-eabi': 1.94.0
       '@oxlint/binding-android-arm64': 1.94.0
@@ -10426,7 +10321,7 @@ snapshots:
       '@oxlint/binding-win32-arm64-msvc': 1.94.0
       '@oxlint/binding-win32-ia32-msvc': 1.94.0
       '@oxlint/binding-win32-x64-msvc': 1.94.0
-      vite-plus: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
+      vite-plus: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
 
   p-any@4.0.0:
     dependencies:
@@ -11393,21 +11288,6 @@ snapshots:
       - xml2js
       - yaml
 
-  vite-plugin-solid@2.11.17(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2):
-    dependencies:
-      '@babel/core': 7.29.13(supports-color@10.2.2)
-      '@types/babel__core': 7.20.5
-      babel-preset-solid: 1.9.19(@babel/core@7.29.13(supports-color@10.2.2))(solid-js@1.9.20)
-      merge-anything: 5.1.7
-      solid-js: 1.9.20
-      solid-refresh: 0.6.3(solid-js@1.9.20)(supports-color@10.2.2)
-      vite: '@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)'
-      vitefu: 1.1.4(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))
-    optionalDependencies:
-      '@testing-library/jest-dom': 7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1)
-    transitivePeerDependencies:
-      - supports-color
-
   vite-plugin-solid@2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2):
     dependencies:
       '@babel/core': 7.29.13(supports-color@10.2.2)
@@ -11423,7 +11303,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3):
+  vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3):
     dependencies:
       '@oxc-project/runtime': 0.159.0
       '@oxc-project/types': 0.159.0
@@ -11435,11 +11315,11 @@ snapshots:
       '@vitest/snapshot': 5.1.0
       '@vitest/spy': 5.1.0
       '@vitest/utils': 5.1.0
-      oxfmt: 0.79.0(vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))
-      oxlint: 1.94.0(vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))
+      oxfmt: 0.79.0(vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))
+      oxlint: 1.94.0(vite-plus@1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))
       tsrs: 7.1.0-beta.tsrs2
       vite: '@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)'
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
+      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1)
     optionalDependencies:
       '@voidzero-dev/vite-plus-darwin-arm64': 1.7.0
       '@voidzero-dev/vite-plus-darwin-x64': 1.7.0
@@ -11499,7 +11379,7 @@ snapshots:
     optionalDependencies:
       vite: '@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)'
 
-  vitest@5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1):
+  vitest@5.1.1(@types/node@26.6.6)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(jsdom@31.0.1):
     dependencies:
       '@types/chai': 5.2.3
       '@vitest/mocker': 5.1.1(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))
@@ -11518,8 +11398,8 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.6.6
       '@vitest/browser-preview': 5.1.0(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(vitest@5.1.1)
-      '@vitest/coverage-v8': 5.1.1(vitest@5.1.1)
-      '@vitest/ui': 5.1.1(vitest@5.1.1)
+      '@vitest/coverage-v8': 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
+      '@vitest/ui': 5.1.0(vitest@5.1.1)
       jsdom: 31.0.1
     transitivePeerDependencies:
       - msw

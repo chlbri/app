@@ -89,8 +89,7 @@
     "tslib": "^2.9.1",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
-    "vite-plus": "catalog:",
-    "vitest": "catalog:"
+    "vite-plus": "catalog:"
   },
   "engines": {
     "node": ">=24"

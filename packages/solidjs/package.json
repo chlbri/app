@@ -79,8 +79,7 @@
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
     "vite-plugin-solid": "^2.11.17",
-    "vite-plus": "catalog:",
-    "vitest": "catalog:"
+    "vite-plus": "catalog:"
   },
   "peerDependencies": {
     "@bemedev/app": "workspace:^",
