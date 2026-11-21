@@ -1,24 +1,24 @@
-import type { AsyncAction } from '#actions';
+import type { AsyncAction } from "#actions";
 
-import type { DelayFunction } from '#delays';
-import { ActorsConfigMap, type EventObject, type EventsMap } from '#events';
-import { type FlatMapN } from '#states';
-import { createAsyncHelpers } from '@bemedev/app-options/internal';
-import { _unknown } from '@bemedev/app-options/bemedev';
+import type { DelayFunction } from "#delays";
+import { ActorsConfigMap, type EventObject, type EventsMap } from "#events";
+import { type FlatMapN } from "#states";
+import { createAsyncHelpers } from "@bemedev/app-options/internal";
+import { _unknown } from "@bemedev/app-options/bemedev";
 
 import {
   CommonMachine,
   type CommonConfig3,
   type CommonCreateMachine_F,
   type SimpleMachineOptions2,
-} from '#common/machine';
+} from "#common/machine";
 
-import type { AsyncPredicateS } from '#guards';
+import type { AsyncPredicateS } from "#guards";
 
-import type { AsyncAddOptions_F, AsyncProvideOptions_F } from './machine.types';
+import type { AsyncAddOptions_F, AsyncProvideOptions_F } from "./machine.types";
 
-import type { PrimitiveObject } from '@bemedev/typings';
-import type { EmptyObject } from '~types';
+import type { PrimitiveObject } from "@bemedev/typings";
+import type { EmptyObject } from "~types";
 
 /**
  * A class representing an asynchronous state machine.
@@ -51,7 +51,7 @@ export class AsyncMachine<
   /**
    * Machine type identifier string.
    */
-  readonly TYPE = 'async';
+  readonly TYPE = "async";
 
   /**
    * @deprecated
@@ -110,7 +110,7 @@ export class AsyncMachine<
    *
    * @returns Option object for machine customization.
    */
-  createOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  createOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = (helper) => {
     const _legacy = Object.freeze({
       actions: this.__elements.actions,
       guards: this.__elements.guards,
@@ -119,7 +119,6 @@ export class AsyncMachine<
     }) as any;
 
     const helpers = createAsyncHelpers(this.config) as any;
-
     return helper(helpers, { _legacy }) as any;
   };
 
@@ -130,7 +129,7 @@ export class AsyncMachine<
    *
    * @returns Machine options structure.
    */
-  addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = (helper) => {
     return super.addOptions(helper) as any;
   };
 
@@ -141,8 +140,18 @@ export class AsyncMachine<
    *
    * @returns A new instance of the machine with the provided options applied.
    */
-  provideOptions: AsyncProvideOptions_F<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L> =
-    helper => super.provideOptions(helper);
+  provideOptions: AsyncProvideOptions_F<
+    C,
+    Pc,
+    Tc,
+    E,
+    A,
+    Ta,
+    Eo,
+    AllPaths,
+    Mo,
+    L
+  > = (helper) => super.provideOptions(helper);
 
   // #endregion
 
@@ -188,6 +197,6 @@ export class AsyncMachine<
  *
  * @returns A new instance of class {@linkcode AsyncMachine}.
  */
-export const createAsyncMachine: CommonCreateMachine_F = config => {
+export const createAsyncMachine: CommonCreateMachine_F = (config) => {
   return new AsyncMachine(config);
 };
