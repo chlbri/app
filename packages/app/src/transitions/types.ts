@@ -5,7 +5,6 @@ import type {
   SyncAction,
   WithDescriber,
 } from '#actions';
-import type { EventObject } from '#events';
 import type {
   AsyncPredicate,
   FromGuard,
@@ -51,7 +50,7 @@ import type { ActorConfig, ChildConfig, EmitterConfig } from '../actors/types';
 
 import type { CommonChild } from '#common/machine';
 import type { AsyncEmitter } from '#emitters';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract } from '@bemedev/app-options';
 import type { Identify, RecordS, ReduceArray, SingleOrArrayL } from '~types';
 
 // type TargetDef = {
@@ -454,131 +453,82 @@ export type ExtractChildKeysFromTransitions<T extends TransitionsConfig> =
 /**
  * Represents a transition in a state machine with full defined functions.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  *
  * @see -- type {@linkcode AsyncAction}, -- type {@linkcode AsyncPredicate}
  */
-export type AsyncTransition<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type AsyncTransition<Ct extends Contract = Contract> = {
   readonly target?: string;
-  readonly actions: AsyncAction<E, Pc, Tc, T>[];
-  readonly guards: AsyncPredicate<E, Pc, Tc, T>[];
+  readonly actions: AsyncAction<Ct>[];
+  readonly guards: AsyncPredicate<Ct>[];
   readonly description?: string;
 };
 
 /**
  * Represents a synchronous transition configuration in a state machine.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type SyncTransition<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type SyncTransition<Ct extends Contract = Contract> = {
   readonly target?: string;
-  readonly actions: SyncAction<E, Pc, Tc, T>[];
-  readonly guards: SyncPredicate<E, Pc, Tc, T>[];
+  readonly actions: SyncAction<Ct>[];
+  readonly guards: SyncPredicate<Ct>[];
   readonly description?: string;
 };
 
 /**
  * Structure representing an async emitter configuration.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `R` - Value emitted by the Observable `src`.
  */
-export type AsyncEmiter4<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = {
+export type AsyncEmiter4<Ct extends Contract = Contract, R = any> = {
   src: Observable<R>;
   description?: string;
-  then: AsyncTransition<E, Pc, Tc, T>[];
-  catch: AsyncTransition<E, Pc, Tc, T>[];
-  finally: AsyncTransition<E, Pc, Tc, T>[];
+  then: AsyncTransition<Ct>[];
+  catch: AsyncTransition<Ct>[];
+  finally: AsyncTransition<Ct>[];
 };
 
 /**
  * Structure representing a synchronous emitter configuration.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `R` - Value emitted by the Observable `src`.
  */
-export type SyncEmiter4<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = {
+export type SyncEmiter4<Ct extends Contract = Contract, R = any> = {
   src: Observable<R>;
   description?: string;
-  then: SyncTransition<E, Pc, Tc, T>[];
-  catch: SyncTransition<E, Pc, Tc, T>[];
-  finally: SyncTransition<E, Pc, Tc, T>[];
+  then: SyncTransition<Ct>[];
+  catch: SyncTransition<Ct>[];
+  finally: SyncTransition<Ct>[];
 };
 
 /**
  * Represents all transitions inside a state config with full defined functions.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  *
  * @see -- type {@linkcode AsyncTransition}, -- type {@linkcode Identify}
  */
-export type AsyncTransitions<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
-  on: Identify<AsyncTransition<E, Pc, Tc, T>>[];
-  always: AsyncTransition<E, Pc, Tc, T>[];
-  after: Identify<AsyncTransition<E, Pc, Tc, T>>[];
-  emitters: AsyncEmitter<E, Pc, Tc, T>[];
-  children: CommonChild<E, Pc, Tc, T>[];
+export type AsyncTransitions<Ct extends Contract = Contract> = {
+  on: Identify<AsyncTransition<Ct>>[];
+  always: AsyncTransition<Ct>[];
+  after: Identify<AsyncTransition<Ct>>[];
+  emitters: AsyncEmitter<Ct>[];
+  children: CommonChild<Ct>[];
 };
 
 /**
- * Represents all synchronous transitions inside a state config with fully defined functions.
+ * Represents all synchronous transitions inside a state config with fully
+ * defined functions.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template `Tc` - Type {@linkcode PrimitiveObject} context.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type SyncTransitions<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
-  on: Identify<SyncTransition<E, Pc, Tc, T>>[];
-  always: SyncTransition<E, Pc, Tc, T>[];
-  after: Identify<SyncTransition<E, Pc, Tc, T>>[];
-  emitters: AsyncEmitter<E, Pc, Tc, T>[];
-  children: CommonChild<E, Pc, Tc, T>[];
+export type SyncTransitions<Ct extends Contract = Contract> = {
+  on: Identify<SyncTransition<Ct>>[];
+  always: SyncTransition<Ct>[];
+  after: Identify<SyncTransition<Ct>>[];
+  emitters: AsyncEmitter<Ct>[];
+  children: CommonChild<Ct>[];
 };

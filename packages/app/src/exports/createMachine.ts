@@ -1,20 +1,40 @@
+import { createContract, type Contract } from '@bemedev/app-options';
 import { createAsyncMachine } from '../asyncMachine/machine';
 import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
 export type { ContractMachine, CreateMachine_F } from './types.types';
 
 /**
- * Internal helper function to instantiate state machine instance based on options.
+ * Internal helper function to instantiate a state machine from a contract.
  *
- * @param _config - State machine configuration object.
- * @param types - Type definitions or options map.
+ * @param contract - Contract carrying the configuration and its types.
  *
  * @returns Synchronous or asynchronous state machine instance.
  */
-const builder = (_config: any, types: any) => {
-  const check = types?.sync === true;
+const builder = (contract: Contract) => {
+  const check = contract.types?.sync === true;
   const fn = check ? createSyncMachine : createAsyncMachine;
-  return fn(_config);
+  return fn(contract);
+};
+
+/**
+ * Creates the runtime contract consumed by machine classes.
+ *
+ * @param nameOrConfig - Contract name, configuration, or an existing contract.
+ * @param configOrTypes - Configuration or types, depending on the call form.
+ * @param types - Optional types for the named form.
+ *
+ * @returns A frozen contract.
+ */
+const toContract = (
+  nameOrConfig: any,
+  configOrTypes?: any,
+  types?: any,
+): Contract => {
+  if (typeof nameOrConfig === 'string')
+    return createContract(nameOrConfig, configOrTypes, types);
+
+  return createContract(nameOrConfig, configOrTypes);
 };
 
 /**
@@ -47,11 +67,7 @@ export const createMachine: CreateMachine_F = (
   configOrTypes?: any,
   types?: any,
 ) => {
-  if (typeof nameOrConfig === 'string') {
-    return builder(configOrTypes, types);
-  }
-  if (isContract(nameOrConfig)) {
-    return builder(nameOrConfig.config, nameOrConfig.types);
-  }
-  return builder(nameOrConfig, configOrTypes);
+  if (isContract(nameOrConfig)) return builder(nameOrConfig);
+
+  return builder(toContract(nameOrConfig, configOrTypes, types));
 };

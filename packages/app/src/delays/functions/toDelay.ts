@@ -1,6 +1,5 @@
-import type { EventObject } from '#events';
 import { reduceFnMap } from '@bemedev/app-options/internal';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract } from '@bemedev/app-options';
 import type { DelayFunction3, DelayMap } from '../types';
 
 /**
@@ -17,16 +16,11 @@ import type { DelayFunction3, DelayMap } from '../types';
  *
  * @returns Executable delay function of type {@linkcode DelayFunction3} or `undefined`.
  */
-export type ToDelay_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
+export type ToDelay_F = <Ct extends Contract = Contract>(
   delay: string,
-  delays: DelayMap<Eo, Pc, Tc, T> | undefined,
+  delays: DelayMap<Ct> | undefined,
   ...events: string[]
-) => DelayFunction3<Eo, Pc, Tc, T> | undefined;
+) => DelayFunction3<Ct> | undefined;
 
 /**
  * Converts a delay configuration to a function that returns the delay in milliseconds.

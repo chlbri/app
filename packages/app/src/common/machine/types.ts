@@ -1,12 +1,12 @@
 import type { AsyncAction2, WithDescriber } from '#actions';
 import type { NoExtraKeysActorConfig } from '#actors';
-import type { ActorsConfigMap, EventObject, EventsMap, EventStrings } from '#events';
+import type { ActorsConfigMap, EventStrings } from '#events';
 
 import type {
   FlatMapN,
   NodeConfig2,
   StateExtended,
-  StatePextended,
+  StatePextendedOf,
   StateValue,
   TargetDef,
 } from '#states';
@@ -32,8 +32,21 @@ import type {
   DecomposeString,
 } from '@bemedev/function-swap';
 
+import type {
+  CommonConfig3,
+  Contract,
+  ContractActorsMap,
+  ContractConfig,
+  ContractContext,
+  ContractEvents,
+  ContractEventsMap,
+  ContractEventType,
+  ContractOptions,
+  ContractPaths,
+  ContractPContext,
+  ContractTags,
+} from '@bemedev/app-options';
 import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
-import type { CommonConfig3 } from '@bemedev/app-options';
 import type {
   EmptyObject,
   FnMap,
@@ -148,28 +161,28 @@ export type MachineType = 'sync' | 'async';
 /**
  * Simple representation of a machine with meaningful properties.
  *
- * @template | {@linkcode EventsMap} `E` - Type of events map.
- * @template | {@linkcode ActorsConfigMap} `A` - Type of actors configuration map.
- * @template `Pc` - Type of private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Type of context.
+ * Every machine property is derived from the contract carried by the machine:
+ * no event, context or tag type is declared independently.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
  *
  * @see -- type {@linkcode StateValue}, -- type {@linkcode Fn}
  */
-export interface AnyMachine<
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> {
+export interface AnyMachine<Ct extends Contract = Contract> {
+  /**
+   * Contract of the machine.
+   */
+  contract: Ct;
+
   /**
    * Machine options object.
    */
-  options: any;
+  options: ContractOptions<Ct>;
 
   /**
    * Machine configuration object.
    */
-  config: CommonConfig3;
+  config: ContractConfig<Ct>;
 
   /**
    * Classification type of the machine ('sync' or 'async').
@@ -184,27 +197,32 @@ export interface AnyMachine<
   /**
    * Machine context object.
    */
-  context: Tc;
+  context: ContractContext<Ct>;
 
   /**
    * Machine private context object.
    */
-  pContext: Pc;
+  pContext: ContractPContext<Ct>;
 
   /**
    * Map of machine events.
    */
-  eventsMap: E;
+  eventsMap: ContractEventsMap<Ct>;
 
   /**
    * Map of machine actor configurations.
    */
-  actorsMap: A;
+  actorsMap: ContractActorsMap<Ct>;
+
+  /**
+   * Internal contract type marker.
+   */
+  __contract: Ct;
 
   /**
    * Internal event object type marker.
    */
-  __events: any;
+  __events: ContractEvents<Ct>;
 
   /**
    * Internal state object type marker.
@@ -239,17 +257,17 @@ export interface AnyMachine<
   /**
    * Internal state path string type marker.
    */
-  __allPaths: string;
+  __allPaths: ContractPaths<Ct>;
 
   /**
    * Internal state tag string type marker.
    */
-  __tag: string;
+  __tag: ContractTags<Ct>;
 
   /**
    * Array of state tag strings defined on the machine.
    */
-  tags: string[];
+  tags: ContractTags<Ct>[];
 
   /**
    * Registered child actors map.
@@ -308,27 +326,16 @@ export type CommonAddOptions_F<
 /**
  * Core elements of a state machine initialization payload.
  *
- * @template `C` - Configuration type.
- * @template `Pc` - Private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Options type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type CommonElements<
-  C extends { readonly strict?: boolean; readonly __longRuns?: boolean } = {
-    readonly strict?: boolean;
-    readonly __longRuns?: boolean;
-  },
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> = {
-  config: C;
-  pContext: Pc;
-  context: Tc;
-  actions?: Mo['actions'];
-  guards?: Mo['guards'];
-  delays?: Mo['delays'];
-  actors?: Mo['actors'];
+export type CommonElements<Ct extends Contract = Contract> = {
+  config: ContractConfig<Ct>;
+  pContext: ContractPContext<Ct>;
+  context: ContractContext<Ct>;
+  actions?: ContractOptions<Ct>['actions'];
+  guards?: ContractOptions<Ct>['guards'];
+  delays?: ContractOptions<Ct>['delays'];
+  actors?: ContractOptions<Ct>['actors'];
 };
 
 /**
@@ -363,17 +370,11 @@ export type StdO2<T extends ObjectT> = StandardOutput2<T>;
 /**
  * Common function signature for timer actions.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type CommonTimeAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (name: string) => (id: string) => AsyncAction2<E, Pc, Tc, T>;
+export type CommonTimeAction_F<Ct extends Contract = Contract> = (
+  name: string,
+) => (id: string) => AsyncAction2<Ct>;
 
 /**
  * Decomposed context paths of type `Tc`, excluding array index segments.
@@ -392,16 +393,15 @@ export type DecomposeC<
 /**
  * Function type signature for creating an erase property action helper.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `A` - Action return type.
  *
  * @returns Action of type `A` erasing the supplied context keys.
  */
-export type CommonEraseAction_F<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  A = any,
-> = <
-  D = 0 extends 1 & Tc ? Record<string, any> : SubTypeLow<DecomposeC<Tc>, undefined>,
+export type CommonEraseAction_F<Ct extends Contract = Contract, A = any> = <
+  D = 0 extends 1 & ContractContext<Ct>
+    ? Record<string, any>
+    : SubTypeLow<DecomposeC<ContractContext<Ct>>, undefined>,
   K extends keyof D & string = keyof D & string,
 >(
   ...keys: K[]
@@ -410,31 +410,22 @@ export type CommonEraseAction_F<
 /**
  * Function type signature for creating a filter property action helper.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `A` - Action return type.
  *
  * @returns Action of type `A` filtering the supplied context key.
  */
-export type CommonFilterAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  A = any,
-> = <
-  D = 0 extends 1 & Tc
+export type CommonFilterAction_F<Ct extends Contract = Contract, A = any> = <
+  D = 0 extends 1 & ContractContext<Ct>
     ? Record<string, any>
-    : SubType<DecomposeC<Tc>, TrueObject | any[] | undefined>,
+    : SubType<DecomposeC<ContractContext<Ct>>, TrueObject | any[] | undefined>,
   K extends keyof D & string = keyof D & string,
 >(
   key: K,
   fn: NotUndefined<D[K]> extends Array<infer Item>
-    ? FnMapFilterArray<E, Pc, Tc, T, Item>
+    ? FnMapFilterArray<Ct, Item>
     : NotUndefined<D[K]> extends Ru
-      ? FnMapFilterObject<E, Pc, Tc, T, ValuesOf<NotUndefined<D[K]>>>
+      ? FnMapFilterObject<Ct, ValuesOf<NotUndefined<D[K]>>>
       : never,
 ) => A;
 
@@ -443,56 +434,38 @@ export type CommonFilterAction_F<
  *
  * @template `T` - Target machine type.
  */
-export type CommonCreateMachine_F<T = any> = (config: any) => T;
+export type CommonCreateMachine_F<T = any> = (contract: Contract) => T;
 
 /**
  * Map of child names to child actor machine functions.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type ChildrenMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = RecordS<CommonChildFunction<E, Pc, Tc, T>>;
+export type ChildrenMap<Ct extends Contract = Contract> = RecordS<
+  CommonChildFunction<Ct>
+>;
 
 /**
  * Child machine function map signature.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `R` - Machine return type.
  */
 export type CommonChildFunction<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
-> = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
+> = FnMap<Ct, R, `${string}::on::${string}`>;
 
 /**
  * Child machine single function signature returning maybe promise of `R`.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `R` - Machine return type.
  */
 export type CommonChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, MaybePromise<R>>;
+> = FnR<Ct, MaybePromise<R>>;
 
 /**
  * Extract child event payload type by child key `K`.
@@ -540,49 +513,38 @@ export type GetEventsFromConfig<C extends CommonConfig3> = GetEventsFromFlat<
 /**
  * Child actor object representation.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `R` - Child return type.
  */
 export type CommonChild<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
 > = {
-  src: CommonChildFunction2<E, Pc, Tc, T, R>;
+  src: CommonChildFunction2<Ct, R>;
   description?: string;
   id: string;
-  on: Identitfy<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
+  on: Identitfy<RecordS<AsyncTransition<Ct>>>[];
   contexts: string[];
 };
 
 /**
  * Helper function for swapping state signatures in functional transitions.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type SwapFunction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <const F2 extends Fn, const Ev extends E['type'] = string>(
+export type SwapFunction_F<Ct extends Contract = Contract> = <
+  const F2 extends Fn,
+  const Ev extends ContractEventType<Ct> = string,
+>(
   fn: F2,
   event?: Ev,
 ) => (
   types: DecomposeString<
     [
       EventStrings extends Ev
-        ? StateExtended<E, Pc, Tc, T>
-        : Required<StatePextended<Extract<E, { type: Ev }>['payload'], Pc, Tc, T>>,
+        ? StateExtended<Ct>
+        : Required<StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: Ev }>>>,
     ],
     _Decompose<Parameters<F2>>
   >,
-) => FnR<E, Pc, Tc, T, ReturnType<F2>>;
+) => FnR<Ct, ReturnType<F2>>;

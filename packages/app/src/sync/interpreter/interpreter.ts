@@ -1,16 +1,6 @@
 import { type WithDescriber } from '#actions';
 import type { ChildConfig, EmitterConfig, FinallyConfig } from '#actor';
-import {
-  type ActorsMapFrom,
-  type AllPathsFrom,
-  type ContextFrom,
-  type EventsFrom,
-  type EventsMapFrom,
-  type ExtendedActionsParams,
-  type MachineOptionsFrom,
-  type PrivateContextFrom,
-  type TagFrom,
-} from '#common/interpreter';
+import { type ExtendedActionsParams } from '#common/interpreter';
 import { DEFAULT_MAX_SELF_TRANSITIONS, DEFAULT_MAX_TIME_PROMISE } from '#constants';
 import { type AsyncEmitterFunction } from '#emitters';
 import {
@@ -18,10 +8,8 @@ import {
   ALWAYS_EVENT,
   eventToType,
   transformEventArg,
-  type ActorsConfigMap,
   type EventArgObject,
   type EventObject,
-  type EventsMap,
   type ExtractSender,
 } from '#events';
 import { type GuardConfig } from '#guards';
@@ -32,9 +20,8 @@ import type {
   TransitionConfig,
 } from '#transitions';
 import { _any, isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
 import equal from 'fast-deep-equal';
-import { isDescriber, type KeyU } from '~types';
+import { isDescriber } from '~types';
 import type {
   _SyncSend_F,
   SyncPerformAction_F,
@@ -48,10 +35,11 @@ import type { ExecuteActivity_F, InterpretArgs, Mode } from '#common/interpreter
 import type {
   AnyMachine,
   CommonChildFunction2,
-  CommonConfig3,
+  MachineEventsOf,
   SimpleMachineOptions2,
 } from '#common/machine';
 import { byKey2, merge2 } from '#utils';
+import type { Contract } from '@bemedev/app-options';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
@@ -68,29 +56,18 @@ import type { SyncMachine } from '../machine/machine';
  * It provides methods to start, stop, pause, and resume the machine, as well as to send events
  * and subscribe to state changes.
  *
- * @template | {@linkcode CommonConfig3} `C` - The configuration type of the machine.
- * @template `Pc` - The private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - The context type.
- * @template | {@linkcode EventsMap} `E` - The events map type.
- * @template | {@linkcode ActorsConfigMap} `A` - The actors config map type.
- * @template `Ta` - Tag string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template `AllPaths` - All state paths type.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
- * @template | {@linkcode SimpleMachineOptions2} `L` - Additional options type.
+ * The class is parameterized by a contract: every member type is read from it
+ * instead of being declared independently. The second parameter `L` is not part
+ * of the contract: it accumulates the options of chained `provideOptions`
+ * calls.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Accumulated options.
  */
 export class SyncInterpreter<
-  const C extends CommonConfig3 = CommonConfig3,
-  const Pc = any,
-  const Tc extends PrimitiveObject = PrimitiveObject,
-  const E extends EventsMap = EventsMap,
-  const A extends ActorsConfigMap = ActorsConfigMap,
-  const Ta extends string = string,
-  const Eo extends EventObject = EventObject,
-  const AllPaths extends string = string,
-  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
+> extends CommonInterpreter<Ct> {
   /**
    * The type identifier for the synchronous interpreter.
    */
@@ -102,7 +79,7 @@ export class SyncInterpreter<
    * @returns The class {@linkcode SyncMachine} instance.
    */
   get machine() {
-    return super.machine as SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
+    return super.machine as SyncMachine<Ct, L>;
   }
 
   /**
@@ -111,10 +88,7 @@ export class SyncInterpreter<
    * @returns A new instance of class {@linkcode SyncInterpreter}.
    */
   get renew() {
-    const out = new SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(
-      this.machine,
-      this.__mode,
-    );
+    const out = new SyncInterpreter<Ct, L>(this.machine, this.__mode);
     out._ppC(this.__initialContexts.pContext);
     out._provideContext(this.__initialContexts.context);
 
@@ -137,7 +111,7 @@ export class SyncInterpreter<
    * @param machine - The machine instance of interface {@linkcode AnyMachine} to be interpreted.
    * @param mode - The execution mode of the interpreter, defaults to `'strict'`.
    */
-  constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
+  constructor(machine: AnyMachine<Ct>, mode: Mode = 'strict') {
     super(machine, mode);
     this.__initSchedulers();
     this.__performConfig(true);
@@ -149,7 +123,9 @@ export class SyncInterpreter<
    *
    * @param forceSend - The optional event payload of type {@linkcode EventArgObject} to force send.
    */
-  protected __performForceSendAction = (forceSend?: EventArgObject<Eo>) => {
+  protected __performForceSendAction = (
+    forceSend?: EventArgObject<MachineEventsOf<Ct>>,
+  ) => {
     if (!forceSend) return;
     const values = Object.values(this.machine.flat);
 
@@ -174,7 +150,7 @@ export class SyncInterpreter<
     resumeActivity,
     stopActivity,
     sentEvent,
-  }: ExtendedActionsParams<Eo>) => {
+  }: ExtendedActionsParams<Ct>) => {
     this.__performSendToAction(sentEvent);
     this.__performPauseActivityAction(pauseActivity);
     this.__performResumeActivityAction(resumeActivity);
@@ -194,7 +170,7 @@ export class SyncInterpreter<
    *
    * @see -- type {@linkcode SyncPerformAction_F}
    */
-  protected __executeAction: SyncPerformAction_F<Eo, Pc, Tc, Ta> = action => {
+  protected __executeAction: SyncPerformAction_F<Ct> = action => {
     this.__setStatus('busy');
     this._iterate();
     const { mergers, ...extendeds } = action(this.__cloneState);
@@ -227,7 +203,7 @@ export class SyncInterpreter<
    *
    * @see -- type {@linkcode SyncPerformPredicate_F}
    */
-  private __performPredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
+  private __performPredicate: SyncPerformPredicate_F<Ct> = predicate => {
     this._iterate();
     return predicate(this.__cloneState);
   };
@@ -241,7 +217,7 @@ export class SyncInterpreter<
    *
    * @see -- type {@linkcode SyncPerformPredicate_F}
    */
-  private __executePredicate: SyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
+  private __executePredicate: SyncPerformPredicate_F<Ct> = predicate => {
     this.__setStatus('busy');
     const out = this.__performPredicate(predicate);
     this.__setStatus('working');
@@ -552,7 +528,7 @@ export class SyncInterpreter<
    */
   protected __collectPausables = () => {
     type _Emitter = EmitterConfig & {
-      emitterFn: AsyncEmitterFunction<Eo, Pc, Tc, Ta>;
+      emitterFn: AsyncEmitterFunction<Ct>;
       id: string;
     };
     return this.__collectedEmitterConfigs
@@ -629,7 +605,7 @@ export class SyncInterpreter<
    *
    * @see -- type {@linkcode SyncAddOptions_F}
    */
-  addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  addOptions: SyncAddOptions_F<Ct, L> = helper => {
     return super.addOptions(helper) as any;
   };
 
@@ -642,18 +618,7 @@ export class SyncInterpreter<
    *
    * @see -- type {@linkcode SyncProvideMachineOptions_F}
    */
-  provideOptions: SyncProvideMachineOptions_F<
-    C,
-    Pc,
-    Tc,
-    E,
-    A,
-    Ta,
-    Eo,
-    AllPaths,
-    Mo,
-    L
-  > = option => {
+  provideOptions: SyncProvideMachineOptions_F<Ct, L> = option => {
     return super.provideOptions(option) as any;
   };
 
@@ -667,7 +632,7 @@ export class SyncInterpreter<
    *
    * @see -- type {@linkcode AddSubscriber_F}
    */
-  subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
+  subscribe: AddSubscriber_F<Ct> = (_subscriber, options) => {
     const events = this.machine.eventsList;
     const id = options?.id;
     const find = id
@@ -675,7 +640,7 @@ export class SyncInterpreter<
       : undefined;
     if (find) return find;
 
-    const subscriber = createSubscriber(_subscriber, options, ...events);
+    const subscriber = createSubscriber<Ct>(_subscriber, options, ...events);
     this.__subscribers.add(subscriber as any);
     return subscriber as any;
   };
@@ -687,7 +652,7 @@ export class SyncInterpreter<
    *
    * @returns The computed next state configuration, or `undefined` if unchanged.
    */
-  protected __presend: _SyncSend_F<Eo> = event => {
+  protected __presend: _SyncSend_F<Ct> = event => {
     this.__sent = true;
     this.__changeEvent(event);
     this.__setStatus('sending');
@@ -716,16 +681,18 @@ export class SyncInterpreter<
   /**
    * Creates a curried sender function for the given event type.
    *
-   * @template `T` - The event type string extending `Eo['type']`.
+   * @template `T` - The event type string extending `MachineEventsOf<Ct>['type']`.
    *
    * @param type - The event type string.
    *
    * @returns A function that accepts payload data and sends the event.
    */
-  sender = <const T extends Eo['type']>(type: T) => {
-    return (...data: ExtractSender<Eo, T>) => {
+  sender = <const T extends MachineEventsOf<Ct>['type']>(type: T) => {
+    return (...data: ExtractSender<MachineEventsOf<Ct>, T>) => {
       const payload = data.length === 1 ? data[0] : {};
-      const event = { type, payload } as unknown as EventArgObject<Eo>;
+      const event = { type, payload } as unknown as EventArgObject<
+        MachineEventsOf<Ct>
+      >;
       return this.send(event);
     };
   };
@@ -761,7 +728,7 @@ export class SyncInterpreter<
    *
    * @param _event - The event argument object of type {@linkcode EventArgObject}.
    */
-  protected __send = (_event: EventArgObject<Eo>) => {
+  protected __send = (_event: EventArgObject<MachineEventsOf<Ct>>) => {
     const event = transformEventArg(_event);
     const next = this.__presend(event as any);
 
@@ -782,10 +749,7 @@ export class SyncInterpreter<
    * @returns An array of spawned child service objects.
    */
   protected __collectChildren = () => {
-    type _Child = ChildConfig & {
-      childFn: CommonChildFunction2<Eo, Pc, Tc, Ta>;
-      id: string;
-    };
+    type _Child = ChildConfig & { childFn: CommonChildFunction2<Ct>; id: string };
 
     return this.__collectedChildrenConfig
       .filter(([from]) => this.__isInsideValue(from))
@@ -900,7 +864,7 @@ export class SyncInterpreter<
    *
    * @returns The spawned child machine interpreter instance.
    */
-  private __executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
+  private __executeChild = (child: CommonChildFunction2<Ct>) => {
     const instance = child(this.__cloneState);
     return instance;
   };
@@ -927,27 +891,17 @@ export class SyncInterpreter<
 }
 
 /**
- * Type helper to extract the machine configuration property from a type {@linkcode KeyU}.
- *
- * @template `T` - The target type extending type {@linkcode KeyU}.
- */
-type SyncConfigFrom<T extends KeyU<'config'>> = T['config'];
-
-/**
  * Retrieves the type {@linkcode SyncInterpreter} service type from a given interface {@linkcode AnyMachine}.
  *
  * @template `M` - The machine type extending interface {@linkcode AnyMachine}.
  */
+type SyncLegacyOf<M> = M extends { __legacy: infer L extends SimpleMachineOptions2 }
+  ? L
+  : SimpleMachineOptions2;
+
 export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
-  SyncConfigFrom<M>,
-  PrivateContextFrom<M>,
-  ContextFrom<M>,
-  EventsMapFrom<M>,
-  ActorsMapFrom<M>,
-  TagFrom<M>,
-  EventsFrom<M>,
-  AllPathsFrom<M>,
-  MachineOptionsFrom<M>
+  M['__contract'],
+  SyncLegacyOf<M>
 >;
 
 /**

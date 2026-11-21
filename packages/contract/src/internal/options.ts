@@ -1,15 +1,20 @@
 /**
  * Vendored machine options types.
  *
- * Copied from the machine option surface so contracts can describe the object
- * returned by `createOptions` without importing `@bemedev/app`. Both the
- * synchronous and asynchronous variants are provided; the contract factory
- * selects one from its `sync` flag.
+ * Every machine-dependent type is contract-first: events, contexts, tags and
+ * the sync flag are read from the contract carried as the first type parameter.
  */
 
 import type { RegisterOptions } from '../registry.types';
-import type { EventArgObject, EventObject, EventStrings } from './events';
-import type { PrimitiveObject, RecordS } from './primitives';
+import type {
+  ContractContextOf,
+  ContractEventsOf,
+  ContractLike,
+  ContractPContextOf,
+  ContractTagsOf,
+} from './contract';
+import type { EventArgObject, EventStrings } from './events';
+import type { RecordS } from './primitives';
 
 /**
  * Merger descriptor accepted by an action result.
@@ -34,36 +39,34 @@ export type SendToEvent<T = any> = { to: string; event: T };
 /**
  * Extra parameters accepted by extended actions.
  *
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type ExtendedActionsParams<Eo extends EventObject = EventObject> = Partial<{
-  resend: EventArgObject<Eo>;
-  forceSend: EventArgObject<Eo>;
+export type ExtendedActionsParams<Ct extends ContractLike = ContractLike> = Partial<{
+  resend: EventArgObject<ContractEventsOf<Ct>>;
+  forceSend: EventArgObject<ContractEventsOf<Ct>>;
   pauseActivity: string;
   resumeActivity: string;
   stopActivity: string;
-  sentEvent: SendToEvent;
+  sentEvent: SendToEvent<EventArgObject<ContractEventsOf<Ct>>>;
 }>;
 
 /**
  * Result of executing an action.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type ActionResult<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  Eo extends EventObject = EventObject,
-> = { mergers?: Merger<Tc, string>[] } & ExtendedActionsParams<Eo>;
+export type ActionResult<Ct extends ContractLike = ContractLike> = {
+  mergers?: Merger<ContractContextOf<Ct>, string>[];
+} & ExtendedActionsParams<Ct>;
 
 /**
  * Action result, synchronous or asynchronous.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type MaybeAsyncActionResult<Tc extends PrimitiveObject = PrimitiveObject> =
-  | ActionResult<Tc>
-  | Promise<ActionResult<Tc>>;
+export type MaybeAsyncActionResult<Ct extends ContractLike = ContractLike> =
+  | ActionResult<Ct>
+  | Promise<ActionResult<Ct>>;
 
 /**
  * Value or promise of that value.
@@ -94,69 +97,88 @@ export type StateValue = string | StateValueMap;
 /**
  * Fields shared by every active state object.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type CommonState<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { context: Tc; status: WorkingStatus; value: StateValue; tags: T[] };
+export type CommonState<Ct extends ContractLike = ContractLike> = {
+  context: ContractContextOf<Ct>;
+  status: WorkingStatus;
+  value: StateValue;
+  tags: ContractTagsOf<Ct>[];
+};
 
 /**
  * Active state object.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type State<
-  E extends EventObject = EventObject,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { event: E } & CommonState<Tc, T>;
+export type State<Ct extends ContractLike = ContractLike> = {
+  event: ContractEventsOf<Ct>;
+} & CommonState<Ct>;
+
+/**
+ * Internal payload state object with a specialized payload type.
+ *
+ * It lets a function map narrow the payload of each event without exposing a
+ * separate event parameter on the public `StateP` type.
+ */
+type _StateP<Ct extends ContractLike, P> = { payload: P } & CommonState<Ct>;
 
 /**
  * Active state object with a raw payload.
  *
- * @template `E` - Payload type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type StateP<
-  E = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { payload: E } & CommonState<Tc, T>;
+export type StateP<Ct extends ContractLike = ContractLike> = _StateP<
+  Ct,
+  ContractEventsOf<Ct>['payload']
+>;
+
+/**
+ * Payload state object narrowed to a specific event.
+ *
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
+ * @template `Ev` - Event object type.
+ */
+export type StatePOf<Ct extends ContractLike, Ev> = _StateP<
+  Ct,
+  Ev extends { payload: infer P } ? P : any
+>;
 
 /**
  * Active state object including the private context.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type StateExtended<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { pContext: Pc } & State<E, Tc, T>;
+export type StateExtended<Ct extends ContractLike = ContractLike> = {
+  pContext: ContractPContextOf<Ct>;
+} & State<Ct>;
+
+/** Internal payload state object including the private context. */
+type _StatePextended<Ct extends ContractLike, P> = {
+  pContext: ContractPContextOf<Ct>;
+} & _StateP<Ct, P>;
 
 /**
  * Payload state object including the private context.
  *
- * @template `E` - Payload type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type StatePextended<
-  E = any,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { pContext: Pc } & StateP<E, Tc, T>;
+export type StatePextended<Ct extends ContractLike = ContractLike> = _StatePextended<
+  Ct,
+  ContractEventsOf<Ct>['payload']
+>;
+
+/**
+ * Payload state object including the private context, narrowed to a specific
+ * event.
+ *
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
+ * @template `Ev` - Event object type.
+ */
+export type StatePextendedOf<Ct extends ContractLike, Ev> = _StatePextended<
+  Ct,
+  Ev extends { payload: infer P } ? P : any
+>;
 
 /** Extracts the string event type from an event object or string. */
 export type EventToType<T extends string | { type: string }> = T extends {
@@ -170,183 +192,117 @@ export type EventToType<T extends string | { type: string }> = T extends {
 /**
  * Common function signature receiving an extended state.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template `R` - Returned value type.
  */
-export type FnR<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = (state: StateExtended<E, Pc, Tc, T>) => R;
+export type FnR<Ct extends ContractLike = ContractLike, R = any> = (
+  state: StateExtended<Ct>,
+) => R;
 
 /**
  * Internal function map keyed by event types.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template `R` - Returned value type.
  * @template `Ex` - Event types to exclude.
- * @template | {@linkcode EventObject} `TT` - Event union after exclusions.
  */
-type _FnMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-  Ex extends string = never,
-  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
-> = {
-  [key in Exclude<EventToType<TT>, EventStrings>]?: (
-    state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
+type _FnMap<Ct extends ContractLike, R, Ex extends string> = {
+  [key in Exclude<EventToType<ContractEventsOf<Ct>>, EventStrings | Ex>]?: (
+    state: _StatePextended<
+      Ct,
+      Extract<ContractEventsOf<Ct>, { type: key }>['payload']
+    >,
   ) => R;
-} & Partial<Record<EventStrings | 'else', FnR<E, Pc, Tc, T, R>>>;
+} & Partial<Record<EventStrings | 'else', FnR<Ct, R>>>;
 
 /**
  * Maps event types to handler functions, with a fallback handler.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template `R` - Returned value type.
  * @template `Ex` - Event types to exclude.
  */
 export type FnMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends ContractLike = ContractLike,
   R = any,
   Ex extends string = never,
-> = FnR<E, Pc, Tc, T, R> | _FnMap<E, Pc, Tc, T, R, Ex>;
+> = FnR<Ct, R> | _FnMap<Ct, R, Ex>;
 
 /**
  * Synchronous action function.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type SyncAction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, ActionResult<Tc>>;
+export type SyncAction2<Ct extends ContractLike = ContractLike> = FnR<
+  Ct,
+  ActionResult<Ct>
+>;
 
 /**
  * Asynchronous action function.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type AsyncAction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, MaybeAsyncActionResult<Tc>>;
+export type AsyncAction2<Ct extends ContractLike = ContractLike> = FnR<
+  Ct,
+  MaybeAsyncActionResult<Ct>
+>;
 
 /**
  * Synchronous predicate.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type SyncPredicateS<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = boolean | FnMap<E, Pc, Tc, T, boolean>;
+export type SyncPredicateS<Ct extends ContractLike = ContractLike> =
+  | boolean
+  | FnMap<Ct, boolean>;
 
 /**
  * Asynchronous predicate.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type AsyncPredicateS<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = boolean | FnMap<E, Pc, Tc, T, MaybePromise<boolean>>;
+export type AsyncPredicateS<Ct extends ContractLike = ContractLike> =
+  | boolean
+  | FnMap<Ct, MaybePromise<boolean>>;
 
 /**
  * Synchronous predicate runner.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type SyncPredicateS3<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, boolean>;
+export type SyncPredicateS3<Ct extends ContractLike = ContractLike> = FnR<
+  Ct,
+  boolean
+>;
 
 /**
  * Asynchronous predicate runner.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type AsyncPredicateS3<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, MaybePromise<boolean>>;
+export type AsyncPredicateS3<Ct extends ContractLike = ContractLike> = FnR<
+  Ct,
+  MaybePromise<boolean>
+>;
 
 /**
  * Synchronous predicate or runner.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type SyncPredicateS2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = boolean | SyncPredicateS3<E, Pc, Tc, T>;
+export type SyncPredicateS2<Ct extends ContractLike = ContractLike> =
+  | boolean
+  | SyncPredicateS3<Ct>;
 
 /**
  * Asynchronous predicate or runner.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type AsyncPredicateS2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = boolean | AsyncPredicateS3<E, Pc, Tc, T>;
+export type AsyncPredicateS2<Ct extends ContractLike = ContractLike> =
+  | boolean
+  | AsyncPredicateS3<Ct>;
 
 /**
  * Delay runner.
@@ -355,32 +311,18 @@ export type AsyncPredicateS2<
  * callback receiving the extended state and returning a `number`, so a single
  * type covers both flavors.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type DelayFunction3<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnR<E, Pc, Tc, T, number>;
+export type DelayFunction3<Ct extends ContractLike = ContractLike> = FnR<Ct, number>;
 
 /**
  * Delay value or runner.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type DelayFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = number | DelayFunction3<E, Pc, Tc, T>;
+export type DelayFunction2<Ct extends ContractLike = ContractLike> =
+  | number
+  | DelayFunction3<Ct>;
 
 /**
  * Observer wired into a pausable source.
@@ -409,126 +351,80 @@ export type Pausable<R = any> = {
 /**
  * Emitter factory function.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template `R` - Emitted value type.
  */
-export type SyncEmitterFunction<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = (state: StateExtended<E, Pc, Tc, T>) => Pausable<R>;
+export type SyncEmitterFunction<Ct extends ContractLike = ContractLike, R = any> = (
+  state: StateExtended<Ct>,
+) => Pausable<R>;
 
 /**
  * Asynchronous emitter factory function.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template `R` - Emitted value type.
  */
-export type AsyncEmitterFunction<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = (state: StateExtended<E, Pc, Tc, T>) => Pausable<R>;
+export type AsyncEmitterFunction<Ct extends ContractLike = ContractLike, R = any> = (
+  state: StateExtended<Ct>,
+) => Pausable<R>;
 
 /**
  * Map of emitter names to emitter factories.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type SyncEmittersMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = RecordS<SyncEmitterFunction<E, Pc, Tc, T>>;
+export type SyncEmittersMap<Ct extends ContractLike = ContractLike> = RecordS<
+  SyncEmitterFunction<Ct>
+>;
 
 /**
  * Map of emitter names to asynchronous emitter factories.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type AsyncEmittersMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = RecordS<AsyncEmitterFunction<E, Pc, Tc, T>>;
+export type AsyncEmittersMap<Ct extends ContractLike = ContractLike> = RecordS<
+  AsyncEmitterFunction<Ct>
+>;
 
 /**
  * Synchronous child machine factory.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template `R` - Child machine type.
  */
 export type SyncChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends ContractLike = ContractLike,
   R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, R>;
+> = FnR<Ct, R>;
 
 /**
  * Asynchronous child machine factory.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template `R` - Child machine type.
  */
 export type AsyncChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends ContractLike = ContractLike,
   R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, MaybePromise<R>>;
+> = FnR<Ct, MaybePromise<R>>;
 
 /**
  * Machine options for synchronous machines registered with a type
  * {@linkcode RegisterOptions} entry.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template | {@linkcode RegisterOptions} `O` - Registered option identifiers.
  */
 export type SyncMachineOptions2<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
+  Ct extends ContractLike = ContractLike,
   O extends RegisterOptions = RegisterOptions,
 > = Partial<{
-  actions: Partial<Record<O['actions'], SyncAction2<Eo, Pc, Tc, T>>>;
-  guards: Partial<Record<O['guards'], SyncPredicateS<Eo, Pc, Tc, T>>>;
-  delays: Partial<Record<O['delays'], DelayFunction2<Eo, Pc, Tc, T>>>;
+  actions: Partial<Record<O['actions'], SyncAction2<Ct>>>;
+  guards: Partial<Record<O['guards'], SyncPredicateS<Ct>>>;
+  delays: Partial<Record<O['delays'], DelayFunction2<Ct>>>;
   actors: Partial<{
-    children: Partial<Record<O['children'], SyncChildFunction2<Eo, Pc, Tc, T, any>>>;
-    emitters: Partial<
-      Record<O['emitters'], SyncEmitterFunction<Eo, Pc, Tc, T, any>>
-    >;
+    children: Partial<Record<O['children'], SyncChildFunction2<Ct, any>>>;
+    emitters: Partial<Record<O['emitters'], SyncEmitterFunction<Ct, any>>>;
   }>;
 }>;
 
@@ -536,94 +432,64 @@ export type SyncMachineOptions2<
  * Machine options for asynchronous machines registered with a type
  * {@linkcode RegisterOptions} entry.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template | {@linkcode RegisterOptions} `O` - Registered option identifiers.
  */
 export type AsyncMachineOptions2<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
+  Ct extends ContractLike = ContractLike,
   O extends RegisterOptions = RegisterOptions,
 > = Partial<{
-  actions: Partial<Record<O['actions'], AsyncAction2<Eo, Pc, Tc, T>>>;
-  guards: Partial<Record<O['guards'], AsyncPredicateS<Eo, Pc, Tc, T>>>;
-  delays: Partial<Record<O['delays'], DelayFunction2<Eo, Pc, Tc, T>>>;
+  actions: Partial<Record<O['actions'], AsyncAction2<Ct>>>;
+  guards: Partial<Record<O['guards'], AsyncPredicateS<Ct>>>;
+  delays: Partial<Record<O['delays'], DelayFunction2<Ct>>>;
   actors: Partial<{
-    children: Partial<
-      Record<O['children'], AsyncChildFunction2<Eo, Pc, Tc, T, any>>
-    >;
-    emitters: Partial<
-      Record<O['emitters'], AsyncEmitterFunction<Eo, Pc, Tc, T, any>>
-    >;
+    children: Partial<Record<O['children'], AsyncChildFunction2<Ct, any>>>;
+    emitters: Partial<Record<O['emitters'], AsyncEmitterFunction<Ct, any>>>;
   }>;
 }>;
 
 /**
  * Simple machine options for synchronous machines.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type SyncSimpleMachineOptions<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> = Partial<{
-  actions: Partial<RecordS<SyncAction2<Eo, Pc, Tc, T>>>;
-  guards: Partial<RecordS<SyncPredicateS2<Eo, Pc, Tc, T>>>;
-  delays: Partial<RecordS<DelayFunction2<Eo, Pc, Tc, T>>>;
-  actors: Partial<{
-    children: RecordS<SyncChildFunction2<Eo, Pc, Tc, T>>;
-    emitters: SyncEmittersMap<Eo, Pc, Tc, T>;
+export type SyncSimpleMachineOptions<Ct extends ContractLike = ContractLike> =
+  Partial<{
+    actions: Partial<RecordS<SyncAction2<Ct>>>;
+    guards: Partial<RecordS<SyncPredicateS2<Ct>>>;
+    delays: Partial<RecordS<DelayFunction2<Ct>>>;
+    actors: Partial<{
+      children: RecordS<SyncChildFunction2<Ct>>;
+      emitters: SyncEmittersMap<Ct>;
+    }>;
   }>;
-}>;
 
 /**
  * Simple machine options for asynchronous machines.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type AsyncSimpleMachineOptions<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> = Partial<{
-  actions: Partial<RecordS<AsyncAction2<Eo, Pc, Tc, T>>>;
-  guards: Partial<RecordS<AsyncPredicateS2<Eo, Pc, Tc, T>>>;
-  delays: Partial<RecordS<DelayFunction2<Eo, Pc, Tc, T>>>;
-  actors: Partial<{
-    children: RecordS<AsyncChildFunction2<Eo, Pc, Tc, T>>;
-    emitters: AsyncEmittersMap<Eo, Pc, Tc, T>;
+export type AsyncSimpleMachineOptions<Ct extends ContractLike = ContractLike> =
+  Partial<{
+    actions: Partial<RecordS<AsyncAction2<Ct>>>;
+    guards: Partial<RecordS<AsyncPredicateS2<Ct>>>;
+    delays: Partial<RecordS<DelayFunction2<Ct>>>;
+    actors: Partial<{
+      children: RecordS<AsyncChildFunction2<Ct>>;
+      emitters: AsyncEmittersMap<Ct>;
+    }>;
   }>;
-}>;
 
 /**
  * Union of every machine options surface supported by a contract.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template | {@linkcode RegisterOptions} `O` - Registered option identifiers.
  */
 export type MachineOptions<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
+  Ct extends ContractLike = ContractLike,
   O extends RegisterOptions = RegisterOptions,
-> = AsyncMachineOptions2<Pc, Tc, T, Eo, O> | SyncMachineOptions2<Pc, Tc, T, Eo, O>;
+> = AsyncMachineOptions2<Ct, O> | SyncMachineOptions2<Ct, O>;
 
 /** Base shape satisfied by every machine options surface. */
 export type AnyMachineOptions = {
@@ -636,56 +502,31 @@ export type AnyMachineOptions = {
 /**
  * Union of every simple machine options surface supported by a contract.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type SimpleMachineOptions<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> =
-  | AsyncSimpleMachineOptions<Pc, Tc, T, Eo>
-  | SyncSimpleMachineOptions<Pc, Tc, T, Eo>;
+export type SimpleMachineOptions<Ct extends ContractLike = ContractLike> =
+  | AsyncSimpleMachineOptions<Ct>
+  | SyncSimpleMachineOptions<Ct>;
 
 /**
- * Selects the machine options surface matching the `sync` flag.
+ * Selects the machine options surface matching the contract `sync` flag.
  *
- * @template `Sync` - Sync execution flag.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  * @template | {@linkcode RegisterOptions} `O` - Registered option identifiers.
  */
 export type ContractMachineOptions<
-  Sync extends true | undefined,
-  Pc,
-  Tc extends PrimitiveObject,
-  T extends string,
-  Eo extends EventObject,
-  O extends RegisterOptions,
-> = Sync extends true
-  ? SyncMachineOptions2<Pc, Tc, T, Eo, O>
-  : AsyncMachineOptions2<Pc, Tc, T, Eo, O>;
+  Ct extends ContractLike = ContractLike,
+  O extends RegisterOptions = RegisterOptions,
+> = Ct['types']['sync'] extends true
+  ? SyncMachineOptions2<Ct, O>
+  : AsyncMachineOptions2<Ct, O>;
 
 /**
- * Selects the simple machine options surface matching the `sync` flag.
+ * Selects the simple machine options surface matching the contract `sync` flag.
  *
- * @template `Sync` - Sync execution flag.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - Tag union type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode ContractLike} `Ct` - Contract of the machine.
  */
-export type ContractSimpleMachineOptions<
-  Sync extends true | undefined,
-  Pc,
-  Tc extends PrimitiveObject,
-  T extends string,
-  Eo extends EventObject,
-> = Sync extends true
-  ? SyncSimpleMachineOptions<Pc, Tc, T, Eo>
-  : AsyncSimpleMachineOptions<Pc, Tc, T, Eo>;
+export type ContractSimpleMachineOptions<Ct extends ContractLike = ContractLike> =
+  Ct['types']['sync'] extends true
+    ? SyncSimpleMachineOptions<Ct>
+    : AsyncSimpleMachineOptions<Ct>;

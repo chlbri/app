@@ -1,5 +1,4 @@
 import {
-  _any,
   byKey,
   commonT,
   extract,
@@ -9,7 +8,6 @@ import {
 } from '@bemedev/app-options/bemedev';
 
 import { DEFAULT_DELIMITER } from '#constants';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type DefinedValue } from '#guards';
 import {
   flatMap,
@@ -25,61 +23,68 @@ import {
   type StateValue,
 } from '#states';
 import { constructEvents } from '#utils';
+import type {
+  Contract,
+  ContractActorsMap,
+  ContractContext,
+  ContractEvents,
+  ContractEventsMap,
+  ContractOptions,
+  ContractPContext,
+  ContractPaths,
+  ContractTags,
+} from '@bemedev/app-options';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemedev';
 import { _unknown } from '@bemedev/app-options/bemedev';
 import { decompose, type Decompose } from '@bemedev/decompose';
-import type { PrimitiveObject } from '@bemedev/typings';
-import type {
-  AnyMachine,
-  CommonConfig3,
-  CommonElements,
-  GetIO_F,
-  MachineType,
-  SimpleMachineOptions2,
-} from './types';
+import type { AnyMachine, CommonElements, GetIO_F, MachineType } from './types';
 
 /**
  * Abstract base class for state machines (synchronous and asynchronous).
  *
- * @template | {@linkcode CommonConfig3} `C` - Configuration type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template | {@linkcode EventsMap} `E` - Events map type.
- * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map type.
- * @template `Ta` - Tag string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template `AllPaths` - All state paths type.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
+ * The class is parameterized by a contract. Configuration, contexts, events,
+ * actors, tags, paths and options are all derived from it, so no machine member
+ * redeclares a type the contract already owns.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
  */
 export abstract class CommonMachine<
-  const C extends CommonConfig3 = CommonConfig3,
-  const Pc = any,
-  const Tc extends PrimitiveObject = PrimitiveObject,
-  const E extends EventsMap = EventsMap,
-  const A extends ActorsConfigMap = ActorsConfigMap,
-  const Ta extends string = string,
-  const Eo extends EventObject = EventObject,
-  const AllPaths extends string = string,
-  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> implements AnyMachine<E, A, Pc, Tc> {
+  const Ct extends Contract = Contract,
+> implements AnyMachine<Ct> {
   /**
-   * The configuration of the machine for this {@linkcode CommonMachine}.
+   * The contract carried by this {@linkcode CommonMachine}.
    */
-  private _config: C;
+  private readonly _contract: Ct;
+
+  /**
+   * The contract getter.
+   *
+   * @returns The contract object of type `Ct`.
+   */
+  get contract() {
+    return this._contract;
+  }
 
   /**
    * The machine configuration getter.
    *
-   * @returns The configuration object of type `C`.
+   * @returns The configuration object owned by the contract.
    */
   get config() {
-    return this._config;
+    return this._contract.config;
   }
+
+  /**
+   * Contract type marker.
+   *
+   * @remarks Used for typing purposes only.
+   */
+  declare readonly __contract: Ct;
 
   /**
    * Protected event name list.
    */
-  protected readonly __eventsList: Extract<keyof E, string>[];
+  protected readonly __eventsList: Extract<keyof ContractEventsMap<Ct>, string>[];
 
   /**
    * List of event name strings getter.
@@ -108,7 +113,7 @@ export abstract class CommonMachine<
    * @returns The decomposed configuration object with `.` separators.
    */
   get decomposed() {
-    return decompose(this._config, { sep: '.', start: false, object: 'both' });
+    return decompose(this.config as any, { sep: '.', start: false, object: 'both' });
   }
 
   /**
@@ -122,7 +127,7 @@ export abstract class CommonMachine<
    */
   get __decomposedState() {
     return _unknown<
-      Decompose<State<Eo, Tc, Ta>, { sep: '.'; start: false; object: 'both' }>
+      Decompose<State<Ct>, { sep: '.'; start: false; object: 'both' }>
     >();
   }
 
@@ -132,7 +137,7 @@ export abstract class CommonMachine<
    * @returns The events map as a type.
    */
   get eventsMap() {
-    return _unknown<E>();
+    return _unknown<ContractEventsMap<Ct>>();
   }
 
   /**
@@ -141,7 +146,7 @@ export abstract class CommonMachine<
    * @returns The actors configuration map as a type.
    */
   get actorsMap() {
-    return _unknown<A>();
+    return _unknown<ContractActorsMap<Ct>>();
   }
 
   /**
@@ -154,7 +159,7 @@ export abstract class CommonMachine<
    * @returns The event object type.
    */
   get __events() {
-    return _unknown<Eo>();
+    return _unknown<ContractEvents<Ct>>();
   }
 
   /**
@@ -185,7 +190,11 @@ export abstract class CommonMachine<
    * @returns The action function parameters as a type.
    */
   get __actionParams() {
-    return _unknown<{ pContext: Pc; context: Tc; map: E }>();
+    return _unknown<{
+      pContext: ContractPContext<Ct>;
+      context: ContractContext<Ct>;
+      map: ContractEventsMap<Ct>;
+    }>();
   }
 
   /**
@@ -198,7 +207,7 @@ export abstract class CommonMachine<
    * @returns The state as a type.
    */
   get __state() {
-    return _unknown<State<Eo, Tc, Ta>>();
+    return _unknown<State<Ct>>();
   }
 
   /**
@@ -211,7 +220,7 @@ export abstract class CommonMachine<
    * @returns The extended state as a type.
    */
   get __stateExtended() {
-    return _unknown<StateExtended<Eo, Pc, Tc, Ta>>();
+    return _unknown<StateExtended<Ct>>();
   }
 
   /**
@@ -224,7 +233,7 @@ export abstract class CommonMachine<
    * @returns The state payload as a type.
    */
   get __stateP() {
-    return _unknown<StateP<Eo, Tc, Ta>>();
+    return _unknown<StateP<Ct>>();
   }
 
   /**
@@ -237,7 +246,7 @@ export abstract class CommonMachine<
    * @returns The extended state payload as a type.
    */
   get __statePextended() {
-    return _unknown<StatePextended<Eo, Pc, Tc, Ta>>();
+    return _unknown<StatePextended<Ct>>();
   }
 
   /**
@@ -250,7 +259,7 @@ export abstract class CommonMachine<
    * @returns The union of key names of the selected member.
    */
   private _typingsByKey = <
-    K extends AllowedNames<AnyMachine<E, A, Pc, Tc>, object | undefined>,
+    K extends AllowedNames<AnyMachine<Ct>, object | undefined>,
   >(
     key: K,
   ) => {
@@ -312,7 +321,7 @@ export abstract class CommonMachine<
    * @returns A defined value of the private or public context.
    */
   get __definedValue() {
-    return _unknown<DefinedValue<Pc, Tc>>();
+    return _unknown<DefinedValue<Ct>>();
   }
 
   /**
@@ -347,43 +356,43 @@ export abstract class CommonMachine<
    * @returns The state tag string type.
    */
   get __tag() {
-    return _unknown<Ta>();
+    return _unknown<ContractTags<Ct>>();
   }
 
   /**
    * Private actions map store.
    */
-  private _actions?: Mo['actions'];
+  private _actions?: ContractOptions<Ct>['actions'];
 
   /**
    * Private guards map store.
    */
-  private _guards?: Mo['guards'];
+  private _guards?: ContractOptions<Ct>['guards'];
 
   /**
    * Private delays map store.
    */
-  private _delays?: Mo['delays'];
+  private _delays?: ContractOptions<Ct>['delays'];
 
   /**
    * Private actors map store.
    */
-  private _actors?: Mo['actors'];
+  private _actors?: ContractOptions<Ct>['actors'];
 
   /**
    * Context for this {@linkcode CommonMachine}.
    */
-  protected __context!: Tc;
+  protected __context!: ContractContext<Ct>;
 
   /**
    * Private context for this {@linkcode CommonMachine}.
    */
-  protected __pContext!: Pc;
+  protected __pContext!: ContractPContext<Ct>;
 
   /**
    * Private tags array store.
    */
-  private _tags: Ta[];
+  private _tags: ContractTags<Ct>[];
 
   /**
    * Array of state tag strings defined on this machine.
@@ -421,23 +430,23 @@ export abstract class CommonMachine<
   /**
    * Creates an instance of class {@linkcode CommonMachine}.
    *
-   * @param config - The configuration for the machine.
+   * @param contract - The contract carrying the machine configuration.
    *
    * @remarks
-   * This constructor initializes the machine with the provided configuration.
-   * It flattens the configuration and prepares it for further operations ({@linkcode flat}).
+   * This constructor initializes the machine from its contract. It flattens the
+   * configuration and prepares it for further operations ({@linkcode flat}).
    */
-  constructor(config: C) {
-    this._config = config;
-    this.__flat = flatMap.low(this._config as any, true);
+  constructor(contract: Ct) {
+    this._contract = contract;
+    this.__flat = flatMap.low(this.config as any, true);
 
     this._tags = Object.values<any>(this.__flat)
       .map(({ tags }) => toArray.typed(tags))
       .filter(Boolean)
       .flat() as any;
-    this._initialConfig = initialConfig(this._config as any);
+    this._initialConfig = initialConfig(this.config as any);
     this._getInitialKeys();
-    this.__eventsList = constructEvents(this._config as any) as any;
+    this.__eventsList = constructEvents(this.config as any) as any;
   }
 
   /**
@@ -515,7 +524,7 @@ export abstract class CommonMachine<
    * @returns All possible state paths as a type.
    */
   get __allPaths() {
-    return _unknown<AllPaths>();
+    return _unknown<ContractPaths<Ct>>();
   }
 
   /**
@@ -556,7 +565,7 @@ export abstract class CommonMachine<
    *
    * @returns The updated actions map.
    */
-  private _addActions = (actions?: Mo['actions']) =>
+  private _addActions = (actions?: ContractOptions<Ct>['actions']) =>
     (this._actions = { ...this._actions, ...actions });
 
   /**
@@ -566,7 +575,7 @@ export abstract class CommonMachine<
    *
    * @returns The updated guards map.
    */
-  private _addGuards = (guards?: Mo['guards']) =>
+  private _addGuards = (guards?: ContractOptions<Ct>['guards']) =>
     (this._guards = { ...this._guards, ...guards });
 
   /**
@@ -576,7 +585,7 @@ export abstract class CommonMachine<
    *
    * @returns The updated delays map.
    */
-  private _addDelays = (delays?: Mo['delays']) =>
+  private _addDelays = (delays?: ContractOptions<Ct>['delays']) =>
     (this._delays = { ...this._delays, ...delays });
 
   /**
@@ -586,7 +595,9 @@ export abstract class CommonMachine<
    *
    * @returns The updated actors store.
    */
-  private _addChildren = (children?: NotUndefined<Mo['actors']>['children']) =>
+  private _addChildren = (
+    children?: NotUndefined<ContractOptions<Ct>['actors']>['children'],
+  ) =>
     (this._actors = {
       ...this._actors,
       children: { ...this._actors?.children, ...children },
@@ -599,7 +610,9 @@ export abstract class CommonMachine<
    *
    * @returns The updated actors store.
    */
-  private _addEmitters = (emitters?: NotUndefined<Mo['actors']>['emitters']) =>
+  private _addEmitters = (
+    emitters?: NotUndefined<ContractOptions<Ct>['actors']>['emitters'],
+  ) =>
     (this._actors = {
       ...this._actors,
       emitters: { ...this._actors?.emitters, ...emitters },
@@ -610,7 +623,7 @@ export abstract class CommonMachine<
    *
    * @param helper - Option helper callback function.
    */
-  abstract createOptions: (helper: Fn) => Mo | undefined;
+  abstract createOptions: (helper: Fn) => ContractOptions<Ct> | undefined;
 
   /**
    * Machine classification type ('sync' or 'async').
@@ -671,8 +684,8 @@ export abstract class CommonMachine<
    *
    * @returns The cloned configuration along with contexts and registered options.
    */
-  protected get __elements(): CommonElements<C, Pc, Tc, Mo> {
-    const config = structuredClone(this._config);
+  protected get __elements(): CommonElements<Ct> {
+    const config = structuredClone(this.config);
     const pContext = this.__pContext;
     const context = structuredClone(this.__context);
     const actions = this._actions;
@@ -688,7 +701,7 @@ export abstract class CommonMachine<
    *
    * @param pContext - Private context value.
    */
-  addPrivateContext = (pContext: Pc) => {
+  addPrivateContext = (pContext: ContractPContext<Ct>) => {
     this.__pContext = pContext;
   };
 
@@ -697,7 +710,7 @@ export abstract class CommonMachine<
    *
    * @param context - Internal context value.
    */
-  addContext = (context: Tc) => {
+  addContext = (context: ContractContext<Ct>) => {
     this.__context = context;
   };
 
@@ -711,7 +724,7 @@ export abstract class CommonMachine<
    * @see {@linkcode valueToNodeConfig}
    */
   valueToConfig = (from: StateValue) => {
-    return valueToNodeConfig(this._config as any, from);
+    return valueToNodeConfig(this.config as any, from);
   };
 
   /**
@@ -750,7 +763,7 @@ export abstract class CommonMachine<
     const delays = this._delays;
     const actors = this._actors;
 
-    const out = _unknown<Mo>({ guards, actions, delays, actors });
+    const out = _unknown<ContractOptions<Ct>>({ guards, actions, delays, actors });
 
     return out;
   }

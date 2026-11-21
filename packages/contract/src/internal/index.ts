@@ -1,3 +1,4 @@
+export * from './contract';
 export * from './events';
 export * from './machine';
 export * from './options';

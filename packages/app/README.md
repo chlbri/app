@@ -46,6 +46,34 @@ states: {                actions: {
 The **interpreter** receives the machine and brings it to life at runtime. It holds
 context, processes events, schedules timers, and subscribes to actors.
 
+### The contract is the single source of truth
+
+A contract carries the machine config and its inferred typing surface. Every machine
+and interpreter class is parameterized by that contract only: the config, public and
+private contexts, events map, event union, actors map, tags, paths and options are
+all derived from it. No class declares its own `Event`, `EventsMap`, `Tags` or
+context type parameter.
+
+The same rule applies to typing primitives. `State`, `StateP`, `StateExtended`,
+`StatePextended`, `FnR`, `FnMap`, actions, guards, delays, emitters, transitions and
+every options surface take a contract as their first type parameter.
+
+```typescript
+import { createContract, createMachine, interpret } from '@bemedev/app';
+
+const contract = createContract(config, types);
+
+// SyncMachine<typeof contract> or AsyncMachine<typeof contract>
+const machine = createMachine(contract);
+const service = interpret(machine);
+
+type Events = ContractEvents<typeof contract>;
+type Options = ContractOptions<typeof contract>;
+```
+
+The second class parameter, `L`, is intentionally **outside** the contract: it only
+accumulates the options of chained `provideOptions` calls.
+
 ### Names, not references
 
 Every action, guard, delay, and actor is referred to by a **string name** in the

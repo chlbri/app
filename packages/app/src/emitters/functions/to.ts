@@ -1,8 +1,6 @@
-import type { SimpleMachineOptions2 } from '#common/machine';
-import type { EventObject } from '#events';
 import { toTransition } from '#transitions';
 import { toArray } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract, ContractOptions } from '@bemedev/app-options';
 import type { EmitterConfig } from '../../actors/types';
 import type { AsyncEmitter } from '../types';
 import { toEmitterSrc } from './src';
@@ -22,17 +20,11 @@ import { toEmitterSrc } from './src';
  *
  * @returns Configured type {@linkcode AsyncEmitter} instance.
  */
-export type ToEmitter_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-  Eo extends EventObject = EventObject,
->(
+export type ToEmitter_F = <Ct extends Contract = Contract, R = any>(
   emitter: EmitterConfig & { __id: string },
-  options: SimpleMachineOptions2 | undefined,
+  options: ContractOptions<Ct> | undefined,
   ...events: string[]
-) => AsyncEmitter<Eo, Pc, Tc, T, R>;
+) => AsyncEmitter<Ct, R>;
 
 /**
  * Converts an emitter config to an emitter object with a source and transitions.

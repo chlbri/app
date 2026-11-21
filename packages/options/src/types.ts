@@ -13,17 +13,14 @@ import type {
   Contract,
   ContractContext,
   ContractEventArg,
-  ContractEvents,
   ContractOptions,
-  ContractPContext,
   ContractSync,
-  EventObject,
   FnMap,
   FnR,
-  PrimitiveObject,
   SyncAction2,
   SyncPredicateS,
 } from '@bemedev/app-contract';
+import { AsyncAddons, SyncAddons } from './addons';
 
 /**
  * Extra options accepted by async action helpers.
@@ -33,16 +30,11 @@ import type {
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `T` - State tag string type.
  */
-export type AsyncOptions<
-  Eo extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type AsyncOptions<C extends Contract = Contract> = {
   /** Called with the thrown error when the async function rejects. */
-  catch: (err: any) => AsyncAction2<Eo, Pc, Tc, T>;
+  catch: (err: any) => AsyncAction2<C>;
   /** Optional action executed upon success. */
-  then?: AsyncAction2<Eo, Pc, Tc, T>;
+  then?: AsyncAction2<C>;
   /** Maximum duration in milliseconds before the action is aborted. */
   max?: number;
 };
@@ -55,46 +47,20 @@ export type AsyncOptions<
  */
 type AsyncActionHelper<C extends Contract, F = any> =
   F extends Promise<any>
-    ? (
-        fn: FnMap<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>,
-          string,
-          F
-        >,
-        options: AsyncOptions<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>
-        >,
-      ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-    : (
-        fn: FnMap<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>,
-          string,
-          F
-        >,
-        options?: AsyncOptions<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>
-        >,
-      ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    ? (fn: FnMap<C, F>, options: AsyncOptions<C>) => AsyncAction2<C>
+    : (fn: FnMap<C, F>, options?: AsyncOptions<C>) => AsyncAction2<C>;
 
 /** Union of synchronous guard items accepted by `guardBatch`. */
 type SyncGuardUnion<C extends Contract> =
   | undefined
-  | SyncPredicateS<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
+  | SyncPredicateS<C>
   | { and: SyncGuardUnion<C>[] }
   | { or: SyncGuardUnion<C>[] };
 
 /** Union of asynchronous guard items accepted by `guardBatch`. */
 type AsyncGuardUnion<C extends Contract> =
   | undefined
-  | AsyncPredicateS<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
+  | AsyncPredicateS<C>
   | { and: AsyncGuardUnion<C>[] }
   | { or: AsyncGuardUnion<C>[] };
 
@@ -102,50 +68,22 @@ type AsyncGuardUnion<C extends Contract> =
 type SyncAssign<C extends Contract> = {
   <const K extends string, R = any>(
     keys: K | readonly K[],
-    fn: FnMap<ContractEvents<C>, ContractPContext<C>, ContractContext<C>, string, R>,
-  ): SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  (
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      ContractContext<C>
-    >,
-  ): SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    fn: FnMap<C, R>,
+  ): SyncAction2<C>;
+  (fn: FnMap<C, ContractContext<C>>): SyncAction2<C>;
 };
 
 /** Asynchronous `assign` overloads. */
 type AsyncAssign<C extends Contract> = {
   <const K extends string, R = any>(
     keys: K | readonly K[],
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<R>
-    >,
-    options?: AsyncOptions<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>
-    >,
-  ): AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    fn: FnMap<C, MaybePromise<R>>,
+    options?: AsyncOptions<C>,
+  ): AsyncAction2<C>;
   (
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<ContractContext<C>>
-    >,
-    options?: AsyncOptions<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>
-    >,
-  ): AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    fn: FnMap<C, MaybePromise<ContractContext<C>>>,
+    options?: AsyncOptions<C>,
+  ): AsyncAction2<C>;
 };
 
 /** Value that may be wrapped in a promise. */
@@ -158,181 +96,65 @@ type MaybePromise<T> = T | Promise<T>;
  */
 export type SyncOptionsHelpers<C extends Contract> = {
   /** Guard checking that a context path is defined. */
-  isDefined: (
-    path: string,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
+  isDefined: (path: string) => FnR<C, boolean>;
   /** Guard checking that a context path is not defined. */
-  isNotDefined: (
-    path: string,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
+  isNotDefined: (path: string) => FnR<C, boolean>;
   /** Guard checking that a context path matches one of the values. */
-  isValue: (
-    path: string,
-    ...values: any[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
+  isValue: (path: string, ...values: any[]) => FnR<C, boolean>;
   /** Guard checking that a context path matches none of the values. */
-  isNotValue: (
-    path: string,
-    ...values: any[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
+  isNotValue: (path: string, ...values: any[]) => FnR<C, boolean>;
   /** Batches multiple guards into a single one. */
-  guardBatch: (
-    ...guards: SyncGuardUnion<C>[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
+  guardBatch: (...guards: SyncGuardUnion<C>[]) => FnR<C, boolean>;
   /** Swaps state arguments in functional transitions. */
   swap: <F extends (...args: any[]) => any, Ev extends string = string>(
     fn: F,
     event?: Ev,
-  ) => (
-    types: any,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    ReturnType<F>
-  >;
+  ) => (types: any) => FnR<C, ReturnType<F>>;
   /** Assigns context keys. */
   assign: SyncAssign<C>;
   /** Batches multiple actions. */
-  batch: (
-    ...fns: (
-      | SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined
-    )[]
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  batch: (...fns: (SyncAction2<C> | undefined)[]) => SyncAction2<C>;
   /** Repeats an action a fixed number of times. */
   _for: (
-    count:
-      | number
-      | FnMap<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>,
-          string,
-          number
-        >,
-    fn:
-      | SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    count: number | FnMap<C, number>,
+    fn: SyncAction2<C> | undefined,
+  ) => SyncAction2<C>;
   /** Repeats an action while a predicate holds. */
   _while: (
-    predicate: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      boolean
-    >,
-    fn:
-      | SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    predicate: FnMap<C, boolean>,
+    fn: SyncAction2<C> | undefined,
+  ) => SyncAction2<C>;
   /** Repeats an action at least once while a predicate holds. */
   _doWhile: (
-    predicate: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      boolean
-    >,
-    fn:
-      | SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    predicate: FnMap<C, boolean>,
+    fn: SyncAction2<C> | undefined,
+  ) => SyncAction2<C>;
   /** Filters an array or object context property. */
-  filter: (
-    key: string,
-    fn: any,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  filter: (key: string, fn: any) => SyncAction2<C>;
   /** Erases context properties. */
-  erase: (
-    ...keys: string[]
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  erase: (...keys: string[]) => SyncAction2<C>;
   /** Creates an action running a side effect. */
-  action: (
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      any
-    >,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  action: (fn: FnMap<C, any>) => SyncAction2<C>;
   /** Sends an event to a child actor. */
   sendTo: () => (
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      { to: string; event: ContractEventArg<C> }
-    >,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    fn: FnMap<C, { to: string; event: ContractEventArg<C> }>,
+  ) => SyncAction2<C>;
   /** Resends an event. */
-  resend: (
-    event: ContractEventArg<C>,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  resend: (event: ContractEventArg<C>) => SyncAction2<C>;
   /** Forcibly sends an event. */
-  forceSend: (
-    event: ContractEventArg<C>,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  forceSend: (event: ContractEventArg<C>) => SyncAction2<C>;
   /** Pauses an activity. */
-  pauseActivity: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  pauseActivity: (id: string) => SyncAction2<C>;
   /** Resumes an activity. */
-  resumeActivity: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  resumeActivity: (id: string) => SyncAction2<C>;
   /** Stops an activity. */
-  stopActivity: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  stopActivity: (id: string) => SyncAction2<C>;
   /** Pauses a timer. */
-  pauseTimer: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  pauseTimer: (id: string) => SyncAction2<C>;
   /** Resumes a timer. */
-  resumeTimer: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  resumeTimer: (id: string) => SyncAction2<C>;
   /** Stops a timer. */
-  stopTimer: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  stopTimer: (id: string) => SyncAction2<C>;
 };
 
 /**
@@ -342,129 +164,43 @@ export type SyncOptionsHelpers<C extends Contract> = {
  */
 export type AsyncOptionsHelpers<C extends Contract> = {
   /** Guard checking that a context path is defined. */
-  isDefined: (
-    path: string,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    MaybePromise<boolean>
-  >;
+  isDefined: (path: string) => FnR<C, MaybePromise<boolean>>;
   /** Guard checking that a context path is not defined. */
-  isNotDefined: (
-    path: string,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    MaybePromise<boolean>
-  >;
+  isNotDefined: (path: string) => FnR<C, MaybePromise<boolean>>;
   /** Guard checking that a context path matches one of the values. */
-  isValue: (
-    path: string,
-    ...values: any[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    MaybePromise<boolean>
-  >;
+  isValue: (path: string, ...values: any[]) => FnR<C, MaybePromise<boolean>>;
   /** Guard checking that a context path matches none of the values. */
-  isNotValue: (
-    path: string,
-    ...values: any[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    MaybePromise<boolean>
-  >;
+  isNotValue: (path: string, ...values: any[]) => FnR<C, MaybePromise<boolean>>;
   /** Batches multiple guards into a single one. */
-  guardBatch: (
-    ...guards: AsyncGuardUnion<C>[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    Promise<boolean>
-  >;
+  guardBatch: (...guards: AsyncGuardUnion<C>[]) => FnR<C, Promise<boolean>>;
   /** Swaps state arguments in functional transitions. */
   swap: <F extends (...args: any[]) => any, Ev extends string = string>(
     fn: F,
     event?: Ev,
-  ) => (
-    types: any,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    ReturnType<F>
-  >;
+  ) => (types: any) => FnR<C, ReturnType<F>>;
   /** Assigns context keys. */
   assign: AsyncAssign<C>;
   /** Batches multiple actions. */
-  batch: (
-    ...fns: (
-      | AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined
-    )[]
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  batch: (...fns: (AsyncAction2<C> | undefined)[]) => AsyncAction2<C>;
   /** Repeats an action a fixed number of times. */
   _for: (
-    count:
-      | number
-      | FnMap<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>,
-          string,
-          MaybePromise<number>
-        >,
-    fn:
-      | AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    count: number | FnMap<C, MaybePromise<number>>,
+    fn: AsyncAction2<C> | undefined,
+  ) => AsyncAction2<C>;
   /** Repeats an action while a predicate holds. */
   _while: (
-    predicate: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<boolean>
-    >,
-    fn:
-      | AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    predicate: FnMap<C, MaybePromise<boolean>>,
+    fn: AsyncAction2<C> | undefined,
+  ) => AsyncAction2<C>;
   /** Repeats an action at least once while a predicate holds. */
   _doWhile: (
-    predicate: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<boolean>
-    >,
-    fn:
-      | AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    predicate: FnMap<C, MaybePromise<boolean>>,
+    fn: AsyncAction2<C> | undefined,
+  ) => AsyncAction2<C>;
   /** Filters an array or object context property. */
-  filter: (
-    key: string,
-    fn: any,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  filter: (key: string, fn: any) => AsyncAction2<C>;
   /** Erases context properties. */
-  erase: (
-    ...keys: string[]
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  erase: (...keys: string[]) => AsyncAction2<C>;
   /** Creates an action running a side effect. */
   action: AsyncActionHelper<C>;
   /** Sends an event to a child actor. */
@@ -474,51 +210,25 @@ export type AsyncOptionsHelpers<C extends Contract> = {
       event: ContractEventArg<C>;
     },
   >(
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<F>
-    >,
-    options?: AsyncOptions<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>
-    >,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+    fn: FnMap<C, MaybePromise<F>>,
+    options?: AsyncOptions<C>,
+  ) => AsyncAction2<C>;
   /** Resends an event. */
-  resend: (
-    event: ContractEventArg<C>,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  resend: (event: ContractEventArg<C>) => AsyncAction2<C>;
   /** Forcibly sends an event. */
-  forceSend: (
-    event: ContractEventArg<C>,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  forceSend: (event: ContractEventArg<C>) => AsyncAction2<C>;
   /** Pauses an activity. */
-  pauseActivity: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  pauseActivity: (id: string) => AsyncAction2<C>;
   /** Resumes an activity. */
-  resumeActivity: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  resumeActivity: (id: string) => AsyncAction2<C>;
   /** Stops an activity. */
-  stopActivity: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  stopActivity: (id: string) => AsyncAction2<C>;
   /** Pauses a timer. */
-  pauseTimer: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  pauseTimer: (id: string) => AsyncAction2<C>;
   /** Resumes a timer. */
-  resumeTimer: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  resumeTimer: (id: string) => AsyncAction2<C>;
   /** Stops a timer. */
-  stopTimer: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
+  stopTimer: (id: string) => AsyncAction2<C>;
 };
 
 /** Access to previously defined options. */
@@ -535,8 +245,8 @@ export type LegacyOptions<C extends Contract> = {
  */
 export type OptionsHelper<C extends Contract, O = ContractOptions<C>> =
   ContractSync<C> extends true
-    ? (option: SyncOptionsHelpers<C>, legacyOptions: LegacyOptions<C>) => O
-    : (option: AsyncOptionsHelpers<C>, legacyOptions: LegacyOptions<C>) => O;
+    ? (option: SyncAddons<C>, legacyOptions: LegacyOptions<C>) => O
+    : (option: AsyncAddons<C>, legacyOptions: LegacyOptions<C>) => O;
 
 /**
  * Curried `createOptions` signature.

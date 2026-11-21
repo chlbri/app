@@ -23,7 +23,7 @@ type RecursiveArrayOf<T> =
  * Dictionary mapping property keys to primitive objects.
  */
 export interface PrimitiveObjectMap {
-  [key: string]: PrimitiveObject;
+  [key: keyof any]: PrimitiveObject;
 }
 
 /**

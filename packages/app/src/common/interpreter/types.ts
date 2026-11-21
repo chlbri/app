@@ -10,6 +10,11 @@ import type {
   WorkingStatus,
 } from '#states';
 import type { NotUndefined, Primitive } from '@bemedev/app-options/bemedev';
+import type {
+  Contract,
+  ContractContext,
+  ContractPContext,
+} from '@bemedev/app-options';
 import type { Decompose } from '@bemedev/decompose';
 import type { Interval3, IntervalParams } from '@bemedev/interval3';
 import type { Equals, PrimitiveObject } from '@bemedev/typings';
@@ -37,18 +42,14 @@ export type OptionalDefinitions<P, C> = OptionalDefinition<P, 'pContext'> &
 /**
  * Function signature for adding subscriber instance to interpreter.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * Every subscriber type is derived from the contract.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the observed machine.
  */
-export type AddSubscriber_F<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> = (
-  subscriber: FnMapR<Eo, Tc, T, void>,
-  options?: SubscriberOptions<Eo, Tc, T>,
-) => Subscriber<Tc, T, Eo>;
+export type AddSubscriber_F<Ct extends Contract = Contract> = (
+  subscriber: FnMapR<Ct, void>,
+  options?: SubscriberOptions<Ct>,
+) => Subscriber<Ct>;
 
 /**
  * Generic interface for an interpreter instance.
@@ -235,28 +236,22 @@ export type ExecuteActivity_F = (from: string, actions: ActivityMap[]) => () => 
 /**
  * Function signature for evaluating a delay function against the current state.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @param delay - Delay function type {@linkcode DelayFunction3}.
  *
  * @returns Delay duration in milliseconds.
  */
-export type PerformDelay_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (delay: DelayFunction3<E, Pc, Tc, T>) => number;
+export type PerformDelay_F<Ct extends Contract = Contract> = (
+  delay: DelayFunction3<Ct>,
+) => number;
 
 /**
  * Function signature for merging action execution result.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type DirectMerge_F<Tc extends PrimitiveObject = PrimitiveObject> = Fn<
-  [result?: ActionResult<Tc>],
+export type DirectMerge_F<Ct extends Contract = Contract> = Fn<
+  [result?: ActionResult<Ct>],
   void
 >;
 
@@ -342,17 +337,10 @@ export type DecomposedStateFrom<T extends KeyU<'__decomposedState'>> =
  * @template `Ex` - Exception string type.
  */
 export type FnMapFrom<
-  T extends KeyU<'__events' | 'pContext' | 'context' | 'actorsMap' | '__tag'>,
+  T extends KeyU<'__contract'>,
   R = any,
   Ex extends string = never,
-> = FnMap<
-  Extract<T['__events'], EventObject>,
-  PrivateContextFrom<T>,
-  ContextFrom<T>,
-  Extract<T['__tag'], string>,
-  R,
-  Ex
->;
+> = FnMap<Extract<T['__contract'], Contract>, R, Ex>;
 
 /**
  * Getting extended state from a machine.
@@ -549,12 +537,11 @@ export type MachineOptionsFrom<T extends KeyU<'options'>> = Extract<
 /**
  * Object structure storing private and internal contexts.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type Contexts<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> = {
-  pContext?: Pc;
-  context?: Tc;
+export type Contexts<Ct extends Contract = Contract> = {
+  pContext?: ContractPContext<Ct>;
+  context?: ContractContext<Ct>;
 };
 
 /**

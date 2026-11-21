@@ -3,10 +3,8 @@ import {
   INIT_EVENT,
   possibleEvents,
   transformEventArg,
-  type ActorsConfigMap,
   type EventArgObject,
   type EventObject,
-  type EventsMap,
   type ExtractSender,
 } from '#events';
 import { _any } from '@bemedev/app-options/bemedev';
@@ -48,42 +46,35 @@ import {
 } from '#utils';
 import type { AllowedNames } from '@bemedev/app-options/bemedev';
 import { isDefined, isPrimitive, toArray } from '@bemedev/app-options/bemedev';
+import type { Contract } from '@bemedev/app-options';
 import { asyncfy } from '@bemedev/better-promise';
 import { createInterval, type Interval3 } from '@bemedev/interval3';
-import type { PrimitiveObject } from '@bemedev/typings';
 import { type Fn, type MachineType, type Pausable } from '~types';
 import {
   getEntries,
   getExits,
   type AnyMachine,
-  type CommonConfig3,
   type CommonMachine,
-  type SimpleMachineOptions2,
+  type MachineContextOf,
+  type MachineEventsOf,
+  type MachinePContextOf,
+  type MachineTagsOf,
 } from '../machine';
 import { createSubscriber, type Subscriber } from '../subscriber';
 import type {
-  ActorsMapFrom,
   AddSubscriber_F,
-  AllPathsFrom,
   AnyInterpreter,
   CollectedPausable,
   CommonCollectedService,
-  ConfigFrom,
-  ContextFrom,
   Contexts,
   DiffNext,
   DirectMerge_F,
-  EventsFrom,
-  EventsMapFrom,
   ExecuteActivities_F,
   ExecuteActivity_F,
-  MachineOptionsFrom,
   Mode,
   PerformDelay_F,
-  PrivateContextFrom,
   Selector_F,
   SimpleScheduler,
-  TagFrom,
 } from './types';
 
 /**
@@ -92,33 +83,18 @@ import type {
  * Implements state management, event dispatching, subscriber notifications,
  * child actor spawning, activity scheduling, and lifecycle management.
  *
- * @template | {@linkcode CommonConfig3} `C` - Machine configuration type extending type {@linkcode CommonConfig3}.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
- * @template | {@linkcode EventsMap} `E` - Events map type extending type {@linkcode EventsMap}.
- * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map type extending type {@linkcode ActorsConfigMap}.
- * @template `Ta` - Tag type string.
- * @template | {@linkcode EventObject} `Eo` - Event object type extending interface {@linkcode EventObject}.
- * @template `AllPaths` - All paths type string.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * The class is parameterized by a single contract: configuration, contexts,
+ * events, actors, tags, paths and options are all derived from it.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
  */
-export abstract class CommonInterpreter<
-  const C extends CommonConfig3 = CommonConfig3,
-  const Pc = any,
-  const Tc extends PrimitiveObject = PrimitiveObject,
-  const E extends EventsMap = EventsMap,
-  const A extends ActorsConfigMap = ActorsConfigMap,
-  const Ta extends string = string,
-  const Eo extends EventObject = EventObject,
-  const AllPaths extends string = string,
-  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
->
+export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   implements AnyInterpreter, Disposable, AsyncDisposable
 {
   /**
    * The inner class {@linkcode CommonMachine} instance associated with this interpreter.
    */
-  protected __machine!: CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
+  protected __machine!: CommonMachine<Ct>;
 
   /**
    * Accessor for the inner class {@linkcode CommonMachine} instance.
@@ -222,7 +198,7 @@ export abstract class CommonInterpreter<
   /**
    * The active event object currently processed by this interpreter service.
    */
-  private __event: Eo = transformEventArg(INIT_EVENT);
+  private __event: MachineEventsOf<Ct> = transformEventArg(INIT_EVENT);
 
   /**
    * The initial node configuration of the state machine.
@@ -250,17 +226,17 @@ export abstract class CommonInterpreter<
   /**
    * Current private and public context values of this interpreter.
    */
-  protected __contexts: Required<Contexts<Pc, Tc>> = {} as any;
+  protected __contexts: Required<Contexts<Ct>> = {} as any;
 
   /**
    * Context values captured at initialization, used to restore state on reset.
    */
-  protected __initialContexts: Required<Contexts<Pc, Tc>> = {} as any;
+  protected __initialContexts: Required<Contexts<Ct>> = {} as any;
 
   /**
-   * Public accessor for the current public context of type `Tc`.
+   * Public accessor for the current public context of type `MachineContextOf<Ct>`.
    *
-   * @returns The active context object of type `Tc`.
+   * @returns The active context object of type `MachineContextOf<Ct>`.
    */
   get context() {
     return this.__contexts.context;
@@ -269,7 +245,7 @@ export abstract class CommonInterpreter<
   /**
    * The active public state object of type {@linkcode State}.
    */
-  protected __state!: State<Eo, Tc, Ta>;
+  protected __state!: State<Ct>;
 
   /**
    * Flag indicating whether an event has been dispatched during execution.
@@ -377,7 +353,7 @@ export abstract class CommonInterpreter<
    *
    * @deprecated Use for testing only. Returns `undefined` in production.
    *
-   * @returns The active private context object of type `Pc`, or `undefined` in production.
+   * @returns The active private context object of type `MachinePContextOf<Ct>`, or `undefined` in production.
    *
    * @see {@linkcode context}
    */
@@ -415,7 +391,7 @@ export abstract class CommonInterpreter<
    *
    * @see -- type {@linkcode Selector_F} · {@linkcode byKey2}
    */
-  get select(): Selector_F<Tc> {
+  get select(): Selector_F<MachineContextOf<Ct>> {
     const check = isPrimitive(this.__contexts.context);
     if (check) return undefined as any;
     const out = (path: string) => byKey2.low(this.__state.context, path);
@@ -431,7 +407,7 @@ export abstract class CommonInterpreter<
    *
    * @see -- type {@linkcode Selector_F} · {@linkcode byKey2}
    */
-  get _pSelect(): Selector_F<Pc> {
+  get _pSelect(): Selector_F<MachinePContextOf<Ct>> {
     /* v8 ignore else -- @preserve */
     if (IS_TEST()) {
       const pContext = this.__contexts.pContext;
@@ -452,7 +428,7 @@ export abstract class CommonInterpreter<
   }
 
   /**
-   * Accessor for the current event object of type `Eo`.
+   * Accessor for the current event object of type `MachineEventsOf<Ct>`.
    *
    * @deprecated Intended primarily for type inference and debugging.
    *
@@ -481,12 +457,12 @@ export abstract class CommonInterpreter<
   }
 
   /**
-   * Accessor for the active state tags of type `Ta[]`.
+   * Accessor for the active state tags of type `MachineTagsOf<Ct>[]`.
    *
    * @returns An array of active state tag strings.
    */
   get tags() {
-    return getTags<Ta>(this.__config);
+    return getTags<MachineTagsOf<Ct>>(this.__config);
   }
 
   /**
@@ -495,7 +471,7 @@ export abstract class CommonInterpreter<
    * @param machine - The state machine instance of interface {@linkcode AnyMachine}.
    * @param mode - The execution mode of type {@linkcode Mode}. Defaults to `'strict'`.
    */
-  constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
+  constructor(machine: AnyMachine<Ct>, mode: Mode = 'strict') {
     this.__init(machine.renew, mode);
     this.__initialConfig = this.__machine.initialConfig;
     this.__initialNode = this.__resolveNode(this.__initialConfig);
@@ -507,7 +483,7 @@ export abstract class CommonInterpreter<
    * @param machine - The state machine instance of interface {@linkcode AnyMachine}.
    * @param mode - The execution mode of type {@linkcode Mode}.
    */
-  private __init = (machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') => {
+  private __init = (machine: AnyMachine<Ct>, mode: Mode = 'strict') => {
     this.__machine = machine.renew;
     this.__config = this.__machine.initialConfig;
     this.__value = nodeToValue(this.__machine.initialConfig);
@@ -547,11 +523,11 @@ export abstract class CommonInterpreter<
   /**
    * Schedules a change to the current active event.
    *
-   * @param event - The new event object of type `Eo`.
+   * @param event - The new event object of type `MachineEventsOf<Ct>`.
    *
    * @returns The scheduled task result.
    */
-  protected __changeEvent = (event: Eo) => {
+  protected __changeEvent = (event: MachineEventsOf<Ct>) => {
     const cb = () => {
       this.__performStates({ event });
       this.__event = event;
@@ -569,7 +545,7 @@ export abstract class CommonInterpreter<
    */
   protected __changeEventInternal = (__internal: EventStrings) => {
     const __event = this.__event;
-    const event: Eo = { ...__event, __internal };
+    const event: MachineEventsOf<Ct> = { ...__event, __internal };
 
     return this.__changeEvent(event);
   };
@@ -864,12 +840,12 @@ export abstract class CommonInterpreter<
   /**
    * Set of public subscribers attached to this interpreter of type {@linkcode Subscriber}.
    */
-  protected __subscribers = new Set<Subscriber<Tc, Ta, Eo>>();
+  protected __subscribers = new Set<Subscriber<Ct>>();
 
   /**
    * Set of internal subscribers attached to this interpreter of type {@linkcode Subscriber}.
    */
-  private __innerSubscribers = new Set<Subscriber<Tc, Ta, Eo>>();
+  private __innerSubscribers = new Set<Subscriber<Ct>>();
 
   /**
    * Flushes and notifies all registered subscribers with the current state.
@@ -1003,7 +979,7 @@ export abstract class CommonInterpreter<
    *
    * @param parts - Partial state fields to merge into the current state.
    */
-  protected __performStates = (parts?: Partial<State<Eo, Tc, Ta>>) => {
+  protected __performStates = (parts?: Partial<State<Ct>>) => {
     this.__state = { ...this.__state, ...parts };
     this.__flush();
   };
@@ -1091,11 +1067,11 @@ export abstract class CommonInterpreter<
    *
    * @deprecated Internal method.
    *
-   * @param context - The context object of type `Tc`.
+   * @param context - The context object of type `MachineContextOf<Ct>`.
    *
    * @returns The updated inner machine instance.
    */
-  _provideContext = (context: Tc) => {
+  _provideContext = (context: MachineContextOf<Ct>) => {
     this.__initialContexts.context = this.__contexts.context = context;
     this.__performStates({ context });
     this.__machine.addContext(context);
@@ -1137,7 +1113,7 @@ export abstract class CommonInterpreter<
    *
    * @see -- type {@linkcode AddSubscriber_F}
    */
-  subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
+  subscribe: AddSubscriber_F<Ct> = (_subscriber, options) => {
     const events = this.__machine.eventsList;
     const id = options?.id;
     const find = id
@@ -1145,7 +1121,7 @@ export abstract class CommonInterpreter<
       : undefined;
     if (find) return find;
 
-    const subscriber = createSubscriber(_subscriber, options, ...events);
+    const subscriber = createSubscriber<Ct>(_subscriber, options, ...events);
     this.__subscribers.add(subscriber as any);
     return subscriber as any;
   };
@@ -1159,9 +1135,9 @@ export abstract class CommonInterpreter<
    * @returns A subscriber object of type {@linkcode Subscriber}.
    */
   // @ts-expect-error Already used recursively
-  private __subscribe: AddSubscriber_F<Tc, Ta, Eo> = (_subscriber, options) => {
+  private __subscribe: AddSubscriber_F<Ct> = (_subscriber, options) => {
     const events = this.__machine.eventsList;
-    const subscriber = createSubscriber(_subscriber, options, ...events);
+    const subscriber = createSubscriber<Ct>(_subscriber, options, ...events);
     this.__innerSubscribers.add(subscriber as any);
     return subscriber as any;
   };
@@ -1239,11 +1215,11 @@ export abstract class CommonInterpreter<
   /**
    * Extracts valid transition definitions matching a given event.
    *
-   * @param event - Event object of type `Eo`.
+   * @param event - Event object of type `MachineEventsOf<Ct>`.
    *
    * @returns Sorted array of state path and transition tuples.
    */
-  protected __extractTransitions = (event: Eo) => {
+  protected __extractTransitions = (event: MachineEventsOf<Ct>) => {
     type FlatArray = [from: string, transitions: TransitionConfig[]][];
     const entriesFlat = Object.entries(this.__flat);
     const flat: FlatArray = [];
@@ -1289,7 +1265,7 @@ export abstract class CommonInterpreter<
   /**
    * Abstract pre-send handler hook.
    */
-  protected abstract __presend: Fn<[event: Eo], any>;
+  protected abstract __presend: Fn<[event: MachineEventsOf<Ct>], any>;
 
   /**
    * Accessor for all event types that can currently trigger state transitions.
@@ -1307,7 +1283,7 @@ export abstract class CommonInterpreter<
    *
    * @returns `true` if all events can be performed; otherwise, `false`.
    */
-  canEvents = (...events: Eo['type'][]) => {
+  canEvents = (...events: MachineEventsOf<Ct>['type'][]) => {
     return events.every(event => this.possibleEvents.includes(event));
   };
 
@@ -1318,7 +1294,7 @@ export abstract class CommonInterpreter<
    *
    * @returns `true` if the event cannot be processed; otherwise, `false`.
    */
-  private __cannotPerformEvents = (_event: EventArgObject<Eo>) => {
+  private __cannotPerformEvents = (_event: EventArgObject<MachineEventsOf<Ct>>) => {
     const type = eventToType(_event);
     const check = !this.possibleEvents.includes(type);
     return check;
@@ -1327,16 +1303,18 @@ export abstract class CommonInterpreter<
   /**
    * Creates a curried event sender function for a specific event type.
    *
-   * @template `T` - Event type string extending `Eo['type']`.
+   * @template `T` - Event type string extending `MachineEventsOf<Ct>['type']`.
    *
    * @param type - Target event type string.
    *
    * @returns Function accepting payload data and sending the event.
    */
-  sender = <const T extends Eo['type']>(type: T) => {
-    return (...data: ExtractSender<Eo, T>) => {
+  sender = <const T extends MachineEventsOf<Ct>['type']>(type: T) => {
+    return (...data: ExtractSender<MachineEventsOf<Ct>, T>) => {
       const payload = data.length === 1 ? data[0] : {};
-      const event = { type, payload } as unknown as EventArgObject<Eo>;
+      const event = { type, payload } as unknown as EventArgObject<
+        MachineEventsOf<Ct>
+      >;
       return this.send(event);
     };
   };
@@ -1352,7 +1330,7 @@ export abstract class CommonInterpreter<
     const options = this.__machine.options;
     const events = this.__machine.eventsList;
 
-    return resolveNode<Pc, Tc, Ta, Eo>(config, options as any, ...events);
+    return resolveNode<Ct>(config, options as any, ...events);
   };
 
   /**
@@ -1587,7 +1565,7 @@ export abstract class CommonInterpreter<
    *
    * @param _event - Event argument object of type {@linkcode EventArgObject}.
    */
-  protected abstract __send: (_event: EventArgObject<Eo>) => any;
+  protected abstract __send: (_event: EventArgObject<MachineEventsOf<Ct>>) => any;
 
   /**
    * Dispatches an event to the interpreter if permitted by active state rules.
@@ -1596,7 +1574,7 @@ export abstract class CommonInterpreter<
    *
    * @returns Dispatch operation result.
    */
-  send = (_event: EventArgObject<Eo>) => {
+  send = (_event: EventArgObject<MachineEventsOf<Ct>>) => {
     const check = !this.isReady || this.__cannotPerformEvents(_event);
     if (check) return;
     return this.__send(_event);
@@ -1621,7 +1599,9 @@ export abstract class CommonInterpreter<
    *
    * @returns Event dispatch result.
    */
-  protected __performResendAction = (resend?: EventArgObject<Eo>) => {
+  protected __performResendAction = (
+    resend?: EventArgObject<MachineEventsOf<Ct>>,
+  ) => {
     if (!resend) return;
     const cannot = this.__cannotPerformEvents(resend);
     if (cannot) return;
@@ -1634,15 +1614,15 @@ export abstract class CommonInterpreter<
    *
    * @returns Cloned extended state snapshot of type {@linkcode StateExtended}.
    */
-  protected get __cloneState(): StateExtended<Eo, Pc, Tc, Ta> {
+  protected get __cloneState(): StateExtended<Ct> {
     const contexts = this.__contexts;
 
     return {
-      get pContext(): Pc {
+      get pContext(): MachinePContextOf<Ct> {
         return contexts.pContext;
       },
 
-      set pContext(val: Pc) {
+      set pContext(val: MachinePContextOf<Ct>) {
         contexts.pContext = val;
       },
 
@@ -1657,7 +1637,7 @@ export abstract class CommonInterpreter<
    *
    * @returns Scheduled context merge result.
    */
-  protected __mergeContexts: DirectMerge_F<Tc> = result => {
+  protected __mergeContexts: DirectMerge_F<Ct> = result => {
     const cb = () => {
       const mergers = result?.mergers;
       /* v8 ignore else -- @preserve */
@@ -1684,7 +1664,7 @@ export abstract class CommonInterpreter<
    *
    * @see -- type {@linkcode PerformDelay_F}
    */
-  protected __performDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+  protected __performDelay: PerformDelay_F<Ct> = delay => {
     this._iterate();
     return delay(this.__cloneState);
   };
@@ -1698,7 +1678,7 @@ export abstract class CommonInterpreter<
    *
    * @see -- type {@linkcode PerformDelay_F}
    */
-  protected __executeDelay: PerformDelay_F<Eo, Pc, Tc, Ta> = delay => {
+  protected __executeDelay: PerformDelay_F<Ct> = delay => {
     this.__setStatus('busy');
     const out = this.__performDelay(delay);
     this.__setStatus('started');
@@ -1879,11 +1859,11 @@ export abstract class CommonInterpreter<
    *
    * @deprecated Internal method.
    *
-   * @param pContext - Private context object of type `Pc`.
+   * @param pContext - Private context object of type `MachinePContextOf<Ct>`.
    *
    * @returns Updated machine instance.
    */
-  _providePrivateContext = (pContext: Pc) => {
+  _providePrivateContext = (pContext: MachinePContextOf<Ct>) => {
     // this.__initialPpc = this.__pContext = pContext;
     this.__initialContexts.pContext = this.__contexts.pContext = pContext;
     this.__machine.addPrivateContext(pContext);
@@ -1909,7 +1889,7 @@ export abstract class CommonInterpreter<
     const actions = this.__machine.actions;
 
     const out = this.__returnWithWarning(
-      toAction<Pc, Tc, Ta, Eo>(action, actions, ...events),
+      toAction<Ct>(action, actions, ...events),
       `Action (${reduceDescriber(action)}) is not defined`,
     );
 
@@ -1927,11 +1907,7 @@ export abstract class CommonInterpreter<
     const events = this.__machine.eventsList;
     const guards = this.__machine.guards;
 
-    const { predicate, errors } = toPredicate<Pc, Tc, Ta, Eo>(
-      guard,
-      guards,
-      ...events,
-    );
+    const { predicate, errors } = toPredicate<Ct>(guard, guards, ...events);
 
     return this.__returnWithWarning(predicate, ...errors);
   };
@@ -1948,7 +1924,7 @@ export abstract class CommonInterpreter<
     const delays = this.__machine.delays;
 
     return this.__returnWithWarning(
-      toDelay<Pc, Tc, Ta, Eo>(delay, delays, ...events),
+      toDelay<Ct>(delay, delays, ...events),
       `Delay (${delay}) is not defined`,
     );
   };
@@ -1965,7 +1941,7 @@ export abstract class CommonInterpreter<
     const machines = this.__machine.children;
 
     return this.__returnWithWarning(
-      toChildSrc<Pc, Tc, Ta>(machine, machines as any, ...events),
+      toChildSrc<Ct>(machine, machines as any, ...events),
       `Machine (${reduceDescriber(machine)}) is not defined`,
     );
   };
@@ -1981,7 +1957,7 @@ export abstract class CommonInterpreter<
     const emitters = this.__machine.emitters;
 
     return this.__returnWithWarning(
-      toEmitterSrc<Pc, Tc, Ta>(emitter, emitters as any),
+      toEmitterSrc<Ct>(emitter, emitters as any),
       `Emitter (${reduceDescriber(emitter)}) is not defined`,
     );
   };
@@ -2029,13 +2005,5 @@ export abstract class CommonInterpreter<
  * @template `M` - Machine type extending interface {@linkcode AnyMachine}.
  */
 export type CommonInterpreterFrom<M extends AnyMachine> = CommonInterpreter<
-  ConfigFrom<M>,
-  PrivateContextFrom<M>,
-  ContextFrom<M>,
-  EventsMapFrom<M>,
-  ActorsMapFrom<M>,
-  TagFrom<M>,
-  EventsFrom<M>,
-  AllPathsFrom<M>,
-  MachineOptionsFrom<M>
+  M['__contract']
 >;

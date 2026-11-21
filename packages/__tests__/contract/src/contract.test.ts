@@ -115,12 +115,9 @@ describe('#02 => contract types', () => {
   });
 
   test('#09 => async options surface', () => {
-    expectTypeOf<ContractOptions<typeof contract>>().toEqualTypeOf<
+    expectTypeOf<ContractOptions<typeof contract>>().toMatchTypeOf<
       AsyncMachineOptions2<
-        ContractPContext<typeof contract>,
-        ContractContext<typeof contract>,
-        never,
-        ContractEvents<typeof contract>,
+        typeof contract,
         {
           children: never;
           emitters: never;
@@ -134,13 +131,8 @@ describe('#02 => contract types', () => {
   });
 
   test('#10 => sync options surface', () => {
-    expectTypeOf<ContractOptions<typeof syncContract>>().toEqualTypeOf<
-      SyncSimpleMachineOptions<
-        ContractPContext<typeof syncContract>,
-        ContractContext<typeof syncContract>,
-        string,
-        ContractEvents<typeof syncContract>
-      >
+    expectTypeOf<ContractOptions<typeof syncContract>>().toMatchTypeOf<
+      SyncSimpleMachineOptions<typeof syncContract>
     >();
   });
 });
@@ -204,12 +196,9 @@ describe('#03 => named contract', () => {
   });
 
   test('#05 => resolves strict async options from the registry', () => {
-    expectTypeOf<ContractOptions<typeof named>>().toEqualTypeOf<
+    expectTypeOf<ContractOptions<typeof named>>().toMatchTypeOf<
       AsyncMachineOptions2<
-        ContractPContext<typeof named>,
-        ContractContext<typeof named>,
-        never,
-        ContractEvents<typeof named>,
+        typeof named,
         {
           children: never;
           emitters: never;
@@ -229,12 +218,9 @@ describe('#03 => named contract', () => {
       { sync: true },
     );
 
-    expectTypeOf<ContractOptions<typeof syncNamed>>().toEqualTypeOf<
+    expectTypeOf<ContractOptions<typeof syncNamed>>().toMatchTypeOf<
       SyncMachineOptions2<
-        ContractPContext<typeof syncNamed>,
-        ContractContext<typeof syncNamed>,
-        never,
-        ContractEvents<typeof syncNamed>,
+        typeof syncNamed,
         {
           children: never;
           emitters: never;

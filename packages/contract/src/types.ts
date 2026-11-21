@@ -1,7 +1,7 @@
 import type {
   ActorsConfigMap,
   AnyMachineOptions,
-  CommonConfig2,
+  CommonConfig3,
   EventArgAll,
   EventObject,
   EventsMap,
@@ -96,7 +96,7 @@ export type ContractTypes = {
   /** Union of tags declared by the contract states. */
   tags: string;
   /** Synchronous execution flag. */
-  sync: true | undefined;
+  sync?: true;
 };
 
 /**
@@ -113,7 +113,7 @@ export type ContractTypes = {
  * `AsyncMachineOptions2` / `AsyncSimpleMachineOptions` otherwise.
  */
 export type Contract<
-  Config extends CommonConfig2 = CommonConfig2,
+  Config extends CommonConfig3 = CommonConfig3,
   Types extends ContractTypes = ContractTypes,
   Options extends AnyMachineOptions = AnyMachineOptions,
 > = {

@@ -1,14 +1,11 @@
 import { describe, expect, test, vi } from 'vite-plus/test';
 import { interpret } from '@bemedev/app';
 import type { State } from '@bemedev/app/states';
-import type { EventObject } from '@bemedev/app/events';
 import { defaultCheck, returnTrue } from '@bemedev/app/guards';
 import { machine1, type Machine1 } from './data';
 import type { StatePFrom } from '@bemedev/app/types';
 
 describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
-  type TestContext = { iterator: number };
-
   // Configuration de base pour l'interpréteur
   const baseConfig = {
     context: { iterator: 0 },
@@ -36,7 +33,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
     test('#01 => should handle function subscriber with different states', async () => {
       const service = interpret(machine1, baseConfig);
       const mockFn = vi.fn(
-        (state: State<EventObject, TestContext>) =>
+        (state: State<(typeof machine1)['__contract']>) =>
           `result-${state.context.iterator}`,
       );
 
@@ -403,7 +400,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
   describe('#01.05 => integration with machine states', () => {
     test('#01.05 => should handle state transitions', async () => {
       const service = interpret(machine1, baseConfig);
-      const mockFn = vi.fn((state: State<EventObject, TestContext>) => {
+      const mockFn = vi.fn((state: State<(typeof machine1)['__contract']>) => {
         return `state-${state.value}`;
       });
 
@@ -423,7 +420,7 @@ describe.concurrent('#01 => subscriberMap reduceFn coverage', () => {
 
     test('#01.05 => should handle context changes', async () => {
       const service = interpret(machine1, baseConfig);
-      const mockFn = vi.fn((state: State<EventObject, TestContext>) => {
+      const mockFn = vi.fn((state: State<(typeof machine1)['__contract']>) => {
         return `iterator-${state.context.iterator}`;
       });
 

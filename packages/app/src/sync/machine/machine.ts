@@ -1,17 +1,12 @@
 import type { SyncAction2 } from '#actions';
 
-import type {
-  CommonConfig3,
-  CommonCreateMachine_F,
-  SimpleMachineOptions2,
-} from '#common/machine';
+import type { CommonCreateMachine_F, SimpleMachineOptions2 } from '#common/machine';
 import type { DelayFunction } from '#delays';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
 import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
-import { createSyncHelpers } from '@bemedev/app-options/internal';
+import type { Contract, ContractConfig } from '@bemedev/app-options';
 import { _unknown } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import { createSyncHelpers } from '@bemedev/app-options/internal';
 import { CommonMachine } from '../../common/machine';
 import type { SyncAddOptions_F, SyncProvideOptions_F } from './options.types';
 
@@ -19,33 +14,29 @@ import type { SyncAddOptions_F, SyncProvideOptions_F } from './options.types';
  * A class representing a synchronous state machine.
  * It provides methods to manage states, actions, guards, delays, promises, and machines.
  *
- * @template | {@linkcode CommonConfig3} `C` - Configuration type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template | {@linkcode EventsMap} `E` - Events map type.
- * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map type.
- * @template `Ta` - Tag string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template `AllPaths` - All state paths type.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
- * @template | {@linkcode SimpleMachineOptions2} `L` - Additional options type.
+ * The class is parameterized by a contract: every member type is read from it
+ * instead of being declared independently. The second parameter `L` is not part
+ * of the contract: it accumulates the options of chained `provideOptions`
+ * calls.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Accumulated options.
  */
 export class SyncMachine<
-  const C extends CommonConfig3 = CommonConfig3,
-  const Pc = any,
-  const Tc extends PrimitiveObject = PrimitiveObject,
-  const E extends EventsMap = EventsMap,
-  const A extends ActorsConfigMap = ActorsConfigMap,
-  const Ta extends string = string,
-  const Eo extends EventObject = EventObject,
-  const AllPaths extends string = string,
-  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> extends CommonMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
+> extends CommonMachine<Ct> {
   /**
    * Machine type identifier string.
    */
   readonly TYPE = 'sync';
+
+  /**
+   * Accumulated options type marker.
+   *
+   * @remarks Used for typing purposes only.
+   */
+  declare readonly __legacy: L;
 
   /**
    * @deprecated Use the action function type.
@@ -53,7 +44,7 @@ export class SyncMachine<
    * @returns The action function type of the machine.
    */
   get __actionFn() {
-    return _unknown<SyncAction2<Eo, Pc, Tc, Ta>>();
+    return _unknown<SyncAction2<Ct>>();
   }
 
   /**
@@ -62,7 +53,7 @@ export class SyncMachine<
    * @returns The flat map of state nodes.
    */
   get flat() {
-    return this.__flat as FlatMapN<C, true>;
+    return this.__flat as FlatMapN<ContractConfig<Ct>, true>;
   }
 
   /**
@@ -71,7 +62,7 @@ export class SyncMachine<
    * @returns The async predicate function type of the machine.
    */
   get __predicate() {
-    return _unknown<AsyncPredicateS<Eo, Pc, Tc, Ta>>();
+    return _unknown<AsyncPredicateS<Ct>>();
   }
 
   /**
@@ -80,7 +71,7 @@ export class SyncMachine<
    * @returns The delay function type of the machine.
    */
   get __delay() {
-    return _unknown<DelayFunction<Eo, Pc, Tc, Ta>>();
+    return _unknown<DelayFunction<Ct>>();
   }
 
   // #region Providers
@@ -93,7 +84,7 @@ export class SyncMachine<
    *
    * @returns Option object for machine customization.
    */
-  createOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  createOptions: SyncAddOptions_F<Ct, L> = helper => {
     const _legacy = Object.freeze({
       actions: this.__elements.actions,
       guards: this.__elements.guards,
@@ -113,7 +104,7 @@ export class SyncMachine<
    *
    * @returns Machine options structure.
    */
-  addOptions: SyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  addOptions: SyncAddOptions_F<Ct, L> = helper => {
     return super.addOptions(helper) as any;
   };
 
@@ -124,8 +115,8 @@ export class SyncMachine<
    *
    * @returns A new instance of the machine with the provided options applied.
    */
-  provideOptions: SyncProvideOptions_F<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L> =
-    helper => super.provideOptions(helper);
+  provideOptions: SyncProvideOptions_F<Ct, L> = helper =>
+    super.provideOptions(helper);
 
   // #endregion
 
@@ -135,10 +126,9 @@ export class SyncMachine<
    * @returns A new instance of this class {@linkcode SyncMachine}.
    */
   protected __renew = (): this => {
-    const { config, pContext, context, guards, actions, delays, actors } =
-      this.__elements;
+    const { pContext, context, guards, actions, delays, actors } = this.__elements;
 
-    const out = new SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>(config);
+    const out = new SyncMachine<Ct, L>(this.contract);
 
     out.__pContext = pContext;
     out.__context = context;
@@ -152,10 +142,10 @@ export class SyncMachine<
 /**
  * Creates a new synchronous state machine instance.
  *
- * @param config - Machine configuration object.
+ * @param contract - Contract carrying the machine configuration.
  *
  * @returns Instance of class {@linkcode SyncMachine}.
  */
-export const createSyncMachine: CommonCreateMachine_F = config => {
-  return new SyncMachine(config);
+export const createSyncMachine: CommonCreateMachine_F = contract => {
+  return new SyncMachine(contract);
 };

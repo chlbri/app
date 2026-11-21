@@ -1,12 +1,10 @@
 import { toAction, type WithDescriber } from '#actions';
-import type { SimpleMachineOptions2 } from '#common/machine';
-import type { EventObject } from '#events';
 import { toPredicate } from '#guards';
 import { type GuardConfig } from '#guards';
 import type { AsyncTransition, TransitionConfig } from '#transitions';
 
 import { toArray } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract, ContractOptions } from '@bemedev/app-options';
 
 /**
  * Function signature for converting transition config into structured transition object.
@@ -22,16 +20,11 @@ import type { PrimitiveObject } from '@bemedev/typings';
  *
  * @returns Structured transition instance of type {@linkcode AsyncTransition}.
  */
-export type ToTransition_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
+export type ToTransition_F = <Ct extends Contract = Contract>(
   config: TransitionConfig,
-  options: Pick<SimpleMachineOptions2, 'actions' | 'guards'> | undefined,
+  options: Pick<ContractOptions<Ct>, 'actions' | 'guards'> | undefined,
   ...events: string[]
-) => AsyncTransition<Eo, Pc, Tc, T>;
+) => AsyncTransition<Ct>;
 
 /**
  * Converts a transition configuration to a structured transition object with all functions.

@@ -1,12 +1,8 @@
+import type { Contract } from '@bemedev/app/contract';
 import type {
-  ActorsConfigMap,
   AsyncInterpreter,
-  CommonConfig3,
-  EventObject,
-  EventsMap,
   SimpleMachineOptions2,
   SyncInterpreter,
-  PrimitiveObject,
 } from '@bemedev/app/types';
 // import type { VitestUtils } from 'vitest';
 import type { ConstructTestsResult, Option } from './types';
@@ -14,16 +10,11 @@ import type { ConstructTestsResult, Option } from './types';
 /**
  * Type definition for the `constructTests` test builder function.
  *
- * @template | {@linkcode CommonConfig3} `C` - Machine configuration type extending type {@linkcode CommonConfig3}.
- * @template `Pc` - Protected context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
- * @template | {@linkcode EventsMap} `E` - Events map type extending type {@linkcode EventsMap}.
- * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map extending type {@linkcode ActorsConfigMap}.
- * @template `Ta` - Tag type extending `string`.
- * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
- * @template `AllPaths` - All paths union type extending `string`.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type extending type {@linkcode SimpleMachineOptions2}.
- * @template | {@linkcode SimpleMachineOptions2} `L` - Local machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * The service type is contract-first: `Ct` is inferred from the interpreter,
+ * and every generated helper derives its events, contexts and tags from it.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the tested machine.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Accumulated options.
  * @template `T` - Custom helper return type extending `object`.
  *
  * @param service - Interpreter service instance (type {@linkcode SyncInterpreter} or type {@linkcode AsyncInterpreter}).
@@ -33,36 +24,12 @@ import type { ConstructTestsResult, Option } from './types';
  * @returns Result object of type {@linkcode ConstructTestsResult}.
  */
 export type ConstructTests_F = <
-  const C extends CommonConfig3 = CommonConfig3,
-  const Pc = any,
-  const Tc extends PrimitiveObject = PrimitiveObject,
-  const E extends EventsMap = EventsMap,
-  const A extends ActorsConfigMap = ActorsConfigMap,
-  const Ta extends string = string,
-  const Eo extends EventObject = EventObject,
-  const AllPaths extends string = string,
-  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
   const T extends object = object,
 >(
   // vi: VitestUtils,
-  service:
-    | SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>
-    | AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>,
-  helper?: (
-    option: Option<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      Mo,
-      L,
-      (typeof service)['TYPE']
-    >,
-  ) => T,
+  service: SyncInterpreter<Ct, L> | AsyncInterpreter<Ct, L>,
+  helper?: (option: Option<Ct, L, (typeof service)['TYPE']>) => T,
   startIndex?: number,
-) => ConstructTestsResult<Eo, T, Ta>;
+) => ConstructTestsResult<Ct, T>;

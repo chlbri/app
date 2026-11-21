@@ -1,98 +1,67 @@
 import type { SyncAction2 } from '#actions';
 import type { EventsMapFrom } from '#common/interpreter';
-import type {
-  ActorsConfigMap,
-  EventArg,
-  EventArgAll,
-  EventObject,
-  EventsMap,
-} from '#events';
+import type { EventArg, EventArgAll } from '#events';
 import type { DefinedValue, SyncPredicateS } from '#guards';
 
 import type {
   AnyMachine,
-  CommonConfig3,
   CommonEraseAction_F,
   CommonFilterAction_F,
   DecomposeC,
   SimpleMachineOptions2,
   SwapFunction_F,
 } from '#common/machine';
-import type { PrimitiveObject } from '@bemedev/typings';
 import type {
-  EmptyObject,
-  FnMap,
-  FnR,
-  SingleOrArrayL2,
-  TraversableTuple,
-} from '~types';
+  Contract,
+  ContractContext,
+  ContractEvents,
+  ContractOptions,
+} from '@bemedev/app-options';
+import type { FnMap, FnR, SingleOrArrayL2, TraversableTuple } from '~types';
+import type { SyncMachine } from './machine';
 
 export type {
   SyncChildFunction2,
   SyncMachineOptions2,
   SyncSimpleMachineOptions,
 } from '@bemedev/app-options';
-import type { SyncMachine } from './machine';
 
 /**
  * Function type signature for creating a synchronous filter action helper.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  */
-export type SyncFilterAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = CommonFilterAction_F<E, Pc, Tc, T, SyncAction2<E, Pc, Tc, T>>;
+export type SyncFilterAction_F<Ct extends Contract = Contract> =
+  CommonFilterAction_F<Ct, SyncAction2<Ct>>;
 
 /**
  * Function type signature for creating a synchronous erase action helper.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  */
-export type SyncEraseAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = CommonEraseAction_F<Tc, SyncAction2<E, Pc, Tc, T>>;
+export type SyncEraseAction_F<Ct extends Contract = Contract> = CommonEraseAction_F<
+  Ct,
+  SyncAction2<Ct>
+>;
 
 /**
  * Function type signature for creating a synchronous property definition guard helper.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  */
-export type SyncDefineGuard_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (path: DefinedValue<Pc, Tc>) => FnR<E, Pc, Tc, T, boolean>;
+export type SyncDefineGuard_F<Ct extends Contract = Contract> = (
+  path: DefinedValue<Ct>,
+) => FnR<Ct, boolean>;
 
 /**
  * Function type signature for creating a synchronous value checker guard helper.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  */
-export type SyncValueCheckerGuard_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (path: DefinedValue<Pc, Tc>, ...values: any[]) => FnR<E, Pc, Tc, T, boolean>;
+export type SyncValueCheckerGuard_F<Ct extends Contract = Contract> = (
+  path: DefinedValue<Ct>,
+  ...values: any[]
+) => FnR<Ct, boolean>;
 
 /**
  * Synchronous traversable tuple type alias for type {@linkcode TraversableTuple}.
@@ -108,46 +77,35 @@ export type TraversableTupleSync<
 /**
  * Function type signature for creating a synchronous assign action helper.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  * @template `D` - Decomposed context paths object.
  */
 export type SyncAssignAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  D = DecomposeC<Tc>,
+  Ct extends Contract = Contract,
+  D = DecomposeC<ContractContext<Ct>>,
 > = {
   <
     const K extends SingleOrArrayL2<keyof D>,
     const F extends TraversableTupleSync<D, K> = TraversableTupleSync<D, K>,
   >(
     keys: K,
-    fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
-  ): SyncAction2<E, Pc, Tc, T>;
+    fn: FnMap<Ct, NoInfer<F>>,
+  ): SyncAction2<Ct>;
 
-  (fn: FnMap<E, Pc, Tc, T, Tc>): SyncAction2<E, Pc, Tc, T>;
+  (fn: FnMap<Ct, ContractContext<Ct>>): SyncAction2<Ct>;
 };
 
 /**
  * Function type signature for batching multiple synchronous actions into a single action.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+
  * @template `T` - State tag string type.
  */
-export type SyncBatchAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <A extends (SyncAction2<E, Pc, Tc, T> | undefined)[]>(
+export type SyncBatchAction_F<Ct extends Contract = Contract> = <
+  A extends (SyncAction2<Ct> | undefined)[],
+>(
   ...fns: A
-) => SyncAction2<E, Pc, Tc, T>;
+) => SyncAction2<Ct>;
 
 /**
  * Function type signature for repeating a single synchronous action.
@@ -157,20 +115,13 @@ export type SyncBatchAction_F<
  * {@linkcode FnMap} receiving the extended state (per event or `else`) and
  * returning a number. It is resolved once, before the first iteration.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+
  * @template `T` - State tag string type.
  */
-export type SyncForAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (
-  count: number | FnMap<E, Pc, Tc, T, number>,
-  fn: SyncAction2<E, Pc, Tc, T> | undefined,
-) => SyncAction2<E, Pc, Tc, T>;
+export type SyncForAction_F<Ct extends Contract = Contract> = (
+  count: number | FnMap<Ct, number>,
+  fn: SyncAction2<Ct> | undefined,
+) => SyncAction2<Ct>;
 
 /**
  * Function type signature for repeating a single synchronous action while a
@@ -181,55 +132,35 @@ export type SyncForAction_F<
  * the action at least once). The action may itself be a batch action, and an
  * `undefined` action produces a no-op action.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  * @param predicate - Function map of type {@linkcode FnMap} receiving the extended
  * state and returning a boolean.
  * @param fn - Single synchronous action of type {@linkcode SyncAction2}, or `undefined`.
  *
  * @returns Synchronous action of type {@linkcode SyncAction2}.
  */
-export type SyncWhileAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (
-  predicate: FnMap<E, Pc, Tc, T, boolean>,
-  fn: SyncAction2<E, Pc, Tc, T> | undefined,
-) => SyncAction2<E, Pc, Tc, T>;
+export type SyncWhileAction_F<Ct extends Contract = Contract> = (
+  predicate: FnMap<Ct, boolean>,
+  fn: SyncAction2<Ct> | undefined,
+) => SyncAction2<Ct>;
 
 /**
  * Function type signature for creating a synchronous action helper.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  */
-export type SyncAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (fn: FnMap<E, Pc, Tc, T, any>) => SyncAction2<E, Pc, Tc, T>;
+export type SyncAction_F<Ct extends Contract = Contract> = (
+  fn: FnMap<Ct, any>,
+) => SyncAction2<Ct>;
 
 /**
  * Function type signature for sending an event to an actor machine synchronously.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  */
-export type SyncSendAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <M extends AnyMachine>(
+export type SyncSendAction_F<Ct extends Contract = Contract> = <
+  M extends AnyMachine,
+>(
   _?: M,
 ) => <
   F extends { to: string; event: EventArg<EventsMapFrom<M>> } = {
@@ -237,177 +168,140 @@ export type SyncSendAction_F<
     event: EventArg<EventsMapFrom<M>>;
   },
 >(
-  fn: FnMap<E, Pc, Tc, T, F>,
-) => SyncAction2<E, Pc, Tc, T>;
+  fn: FnMap<Ct, F>,
+) => SyncAction2<Ct>;
 
 /**
  * Function type signature for resending an event as a synchronous action.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
- * @param event - Event argument.
+
  *
  * @returns Synchronous action type {@linkcode SyncAction2}.
  */
-export type SyncResendAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (event: EventArgAll<E>) => SyncAction2<E, Pc, Tc, T>;
+export type SyncResendAction_F<Ct extends Contract = Contract> = (
+  event: EventArgAll<ContractEvents<Ct>>,
+) => SyncAction2<Ct>;
 
 /**
  * Function type signature for creating a synchronous activity or timer control action.
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ *
  * @template `T` - State tag string type.
  * @param id - Activity or timer string identifier.
  *
  * @returns Synchronous action type {@linkcode SyncAction2}.
  */
-export type SyncTimeAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (id: string) => SyncAction2<E, Pc, Tc, T>;
+export type SyncTimeAction_F<Ct extends Contract = Contract> = (
+  id: string,
+) => SyncAction2<Ct>;
 
 /**
  * Union of all supported synchronous action factory function types.
- *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+
  * @template `T` - State tag string type.
  */
-export type SyncAllActions_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> =
-  | SyncAssignAction_F<E, Pc, Tc, T>
-  | SyncAction_F<E, Pc, Tc, T>
-  | SyncSendAction_F<E, Pc, Tc, T>
-  | SyncResendAction_F<E, Pc, Tc, T>
-  | SyncTimeAction_F<E, Pc, Tc, T>
-  | SyncBatchAction_F<E, Pc, Tc, T>
-  | SyncForAction_F<E, Pc, Tc, T>
-  | SyncWhileAction_F<E, Pc, Tc, T>
-  | SyncEraseAction_F<E, Pc, Tc, T>
-  | SyncFilterAction_F<E, Pc, Tc, T>;
+export type SyncAllActions_F<Ct extends Contract = Contract> =
+  | SyncAssignAction_F<Ct>
+  | SyncAction_F<Ct>
+  | SyncSendAction_F<Ct>
+  | SyncResendAction_F<Ct>
+  | SyncTimeAction_F<Ct>
+  | SyncBatchAction_F<Ct>
+  | SyncForAction_F<Ct>
+  | SyncWhileAction_F<Ct>
+  | SyncEraseAction_F<Ct>
+  | SyncFilterAction_F<Ct>;
 
 /**
  * Logical AND guard structure for synchronous guard batching options.
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ *
  * @template `T` - State tag string type.
  */
-export type SyncGuardAndOption<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { and: SyncGuardUnionOption<E, Pc, Tc, T>[] };
+export type SyncGuardAndOption<Ct extends Contract = Contract> = {
+  and: SyncGuardUnionOption<Ct>[];
+};
 
 /**
  * Logical OR guard structure for synchronous guard batching options.
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ *
  * @template `T` - State tag string type.
  */
-export type SyncGuardOrOption<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { or: SyncGuardUnionOption<E, Pc, Tc, T>[] };
+export type SyncGuardOrOption<Ct extends Contract = Contract> = {
+  or: SyncGuardUnionOption<Ct>[];
+};
 
 /**
  * Union of synchronous guard items for batching.
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ *
  * @template `T` - State tag string type.
  */
-export type SyncGuardUnionOption<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> =
+export type SyncGuardUnionOption<Ct extends Contract = Contract> =
   | undefined
-  | SyncPredicateS<E, Pc, Tc, T>
-  | SyncGuardAndOption<E, Pc, Tc, T>
-  | SyncGuardOrOption<E, Pc, Tc, T>;
+  | SyncPredicateS<Ct>
+  | SyncGuardAndOption<Ct>
+  | SyncGuardOrOption<Ct>;
 
 /**
  * Function type signature for batching multiple synchronous guards into a single guard.
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ *
  * @template `T` - State tag string type.
  * @param guards - Variadic array of guard functions or logical guard objects.
  *
  * @returns Synchronous guard function of type {@linkcode FnR}.
  */
-export type SyncBatchGuard_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (...guards: SyncGuardUnionOption<E, Pc, Tc, T>[]) => FnR<E, Pc, Tc, T, boolean>;
+export type SyncBatchGuard_F<Ct extends Contract = Contract> = (
+  ...guards: SyncGuardUnionOption<Ct>[]
+) => FnR<Ct, boolean>;
 
 /**
  * Object containing all action, guard, timer, and activity helper functions for a synchronous machine.
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ *
  * @template `T` - State tag string type.
  */
-export type SyncAddOption<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type SyncAddOption<Ct extends Contract = Contract> = {
   /**
    * Guard helper that checks whether a context property is defined.
    *
    * @see -- type {@linkcode SyncDefineGuard_F}
    */
-  isDefined: SyncDefineGuard_F<E, Pc, Tc, T>;
+  isDefined: SyncDefineGuard_F<Ct>;
   /**
    * Guard helper that checks whether a context property is not defined.
    *
    * @see -- type {@linkcode SyncDefineGuard_F}
    */
-  isNotDefined: SyncDefineGuard_F<E, Pc, Tc, T>;
+  isNotDefined: SyncDefineGuard_F<Ct>;
   /**
    * Guard helper that checks whether a context property equals one of the
    * provided values.
    *
    * @see -- type {@linkcode SyncValueCheckerGuard_F}
    */
-  isValue: SyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  isValue: SyncValueCheckerGuard_F<Ct>;
   /**
    * Guard helper that checks whether a context property differs from all
    * provided values.
    *
    * @see -- type {@linkcode SyncValueCheckerGuard_F}
    */
-  isNotValue: SyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  isNotValue: SyncValueCheckerGuard_F<Ct>;
   /**
    * Helper function to batch multiple guards into a single synchronous guard.
    *
@@ -417,14 +311,14 @@ export type SyncAddOption<
    *
    * @see -- type {@linkcode SyncBatchGuard_F}
    */
-  guardBatch: SyncBatchGuard_F<E, Pc, Tc, T>;
+  guardBatch: SyncBatchGuard_F<Ct>;
   /**
    * Swap helper function that swaps the state arguments in functional
    * transitions.
    *
    * @see -- type {@linkcode SwapFunction_F}
    */
-  swap: SwapFunction_F<E, Pc, Tc, T>;
+  swap: SwapFunction_F<Ct>;
   /**
    * Helper function to assign context variables synchronously.
    *
@@ -434,7 +328,7 @@ export type SyncAddOption<
    *
    * @see -- type {@linkcode SyncAssignAction_F}
    */
-  assign: SyncAssignAction_F<E, Pc, Tc, T>;
+  assign: SyncAssignAction_F<Ct>;
   /**
    * Helper function to batch multiple synchronous actions into a single action.
    *
@@ -444,7 +338,7 @@ export type SyncAddOption<
    *
    * @see -- type {@linkcode SyncBatchAction_F}
    */
-  batch: SyncBatchAction_F<E, Pc, Tc, T>;
+  batch: SyncBatchAction_F<Ct>;
   /**
    * Helper function to repeat a single action a fixed number of times.
    *
@@ -455,7 +349,7 @@ export type SyncAddOption<
    *
    * @see -- type {@linkcode SyncForAction_F}
    */
-  _for: SyncForAction_F<E, Pc, Tc, T>;
+  _for: SyncForAction_F<Ct>;
   /**
    * Helper function to repeat a single action while a predicate holds.
    *
@@ -464,7 +358,7 @@ export type SyncAddOption<
    *
    * @see -- type {@linkcode SyncWhileAction_F}
    */
-  _while: SyncWhileAction_F<E, Pc, Tc, T>;
+  _while: SyncWhileAction_F<Ct>;
   /**
    * Helper function to repeat a single action while a predicate holds, running
    * it at least once.
@@ -474,81 +368,81 @@ export type SyncAddOption<
    *
    * @see -- type {@linkcode SyncWhileAction_F}
    */
-  _doWhile: SyncWhileAction_F<E, Pc, Tc, T>;
+  _doWhile: SyncWhileAction_F<Ct>;
   /**
    * Helper function to filter array or object properties synchronously.
    *
    * @see -- type {@linkcode SyncFilterAction_F}
    */
-  filter: SyncFilterAction_F<E, Pc, Tc, T>;
+  filter: SyncFilterAction_F<Ct>;
   /**
    * Helper function to erase object properties synchronously.
    *
    * @see -- type {@linkcode SyncEraseAction_F}
    */
-  erase: SyncEraseAction_F<E, Pc, Tc, T>;
+  erase: SyncEraseAction_F<Ct>;
   /**
    * Helper function to create synchronous actions.
    *
    * @see -- type {@linkcode SyncAction_F}
    */
-  action: SyncAction_F<E, Pc, Tc, T>;
+  action: SyncAction_F<Ct>;
   /**
    * Helper function to send events to actor machines synchronously.
    *
    * @see -- type {@linkcode SyncSendAction_F}
    */
-  sendTo: SyncSendAction_F<E, Pc, Tc, T>;
+  sendTo: SyncSendAction_F<Ct>;
 
   /**
    * Helper function to resend an event as a synchronous action.
    *
    * @see -- type {@linkcode SyncResendAction_F}
    */
-  resend: SyncResendAction_F<E, Pc, Tc, T>;
+  resend: SyncResendAction_F<Ct>;
   /**
    * Helper function to force sending an event as a synchronous action, whatever
    * the current state is.
    *
    * @see -- type {@linkcode SyncResendAction_F}
    */
-  forceSend: SyncResendAction_F<E, Pc, Tc, T>;
+  forceSend: SyncResendAction_F<Ct>;
   /**
    * Helper function to pause an activity.
    *
    * @see -- type {@linkcode SyncTimeAction_F}
    */
-  pauseActivity: SyncTimeAction_F<E, Pc, Tc, T>;
+  pauseActivity: SyncTimeAction_F<Ct>;
   /**
    * Helper function to resume an activity.
    *
    * @see -- type {@linkcode SyncTimeAction_F}
    */
-  resumeActivity: SyncTimeAction_F<E, Pc, Tc, T>;
+  resumeActivity: SyncTimeAction_F<Ct>;
   /**
    * Helper function to stop an activity.
    *
    * @see -- type {@linkcode SyncTimeAction_F}
    */
-  stopActivity: SyncTimeAction_F<E, Pc, Tc, T>;
+  stopActivity: SyncTimeAction_F<Ct>;
   /**
    * Helper function to pause a timer.
    *
    * @see -- type {@linkcode SyncTimeAction_F}
    */
-  pauseTimer: SyncTimeAction_F<E, Pc, Tc, T>;
+  pauseTimer: SyncTimeAction_F<Ct>;
   /**
    * Helper function to resume a timer.
    *
    * @see -- type {@linkcode SyncTimeAction_F}
    */
-  resumeTimer: SyncTimeAction_F<E, Pc, Tc, T>;
+  resumeTimer: SyncTimeAction_F<Ct>;
   /**
    * Helper function to stop a timer.
    *
    * @see -- type {@linkcode SyncTimeAction_F}
    */
-  stopTimer: SyncTimeAction_F<E, Pc, Tc, T>;
+  stopTimer: SyncTimeAction_F<Ct>;
 };
 
 /**
@@ -556,20 +450,17 @@ export type SyncAddOption<
  *
  * @template `E` - Event object type.
  * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
+ *
  * @template `T` - State tag string type.
  * @template `Mo` - Simple machine options type.
  * @template `L` - Legacy options type.
  */
 export type SyncAddOptionsParam_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ct extends Contract = Contract,
+  Mo = SimpleMachineOptions2,
+  L = SimpleMachineOptions2,
 > = (
-  option: SyncAddOption<E, Pc, Tc, T>,
+  option: SyncAddOption<Ct>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.
@@ -578,49 +469,35 @@ export type SyncAddOptionsParam_F<
 ) => Mo;
 
 /**
- * Function type signature for adding options to a synchronous machine configuration.
+ * Function type signature for adding options to a synchronous machine
+ * configuration.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `Ta` - State tag string type.
- * @template `Mo` - Simple machine options type.
+ * Every option type is derived from the contract: events, contexts and tags are
+ * read through the contract helpers instead of being passed separately.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
  * @template `L` - Existing options type.
  */
 export type SyncAddOptions_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  Ta extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> = <const T extends Mo>(option: SyncAddOptionsParam_F<E, Pc, Tc, Ta, T, L>) => Mo;
+> = <const T extends ContractOptions<Ct>>(
+  option: SyncAddOptionsParam_F<Ct, T, L>,
+) => ContractOptions<Ct>;
 
 /**
- * Function type signature for providing options to a synchronous machine class {@linkcode SyncMachine}.
+ * Function type signature for providing options to a synchronous machine class
+ * {@linkcode SyncMachine}.
  *
- * @template `C` - Common machine config type {@linkcode CommonConfig3}.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `E` - Events map type.
- * @template `A` - Actors config map type.
- * @template `Ta` - State tag string type.
- * @template `Eo` - Event object type.
- * @template `AllPaths` - All path strings type.
- * @template `Mo` - Simple machine options type.
+ * The machine stays parameterized by the same contract, so the returned
+ * instance exposes the contract options surface.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
  * @template `L` - Existing options type.
  */
 export type SyncProvideOptions_F<
-  C extends CommonConfig3 = CommonConfig3,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Ta extends string = string,
-  Eo extends EventObject = EventObject,
-  AllPaths extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-  L extends SimpleMachineOptions2 = EmptyObject,
-> = <const T extends Mo>(
-  option: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
-) => SyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
+  Ct extends Contract = Contract,
+  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+> = <const T extends ContractOptions<Ct>>(
+  option: SyncAddOptionsParam_F<Ct, T, L>,
+) => SyncMachine<Ct, L & T>;
