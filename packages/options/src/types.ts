@@ -4,545 +4,129 @@
  * The option helpers mirror the ones injected by `machine.createOptions`, but
  * their generic parameters are resolved from a contract instead of a machine
  * instance. The `sync` flag carried by the contract selects the synchronous or
- * the asynchronous surface.
+ * the asynchronous surface, and plugins extend it through their additive
+ * utility maps.
  */
 
 import type {
   AsyncAction2,
-  AsyncPredicateS,
   Contract,
-  ContractContext,
-  ContractEventArg,
-  ContractEvents,
   ContractOptions,
-  ContractPContext,
   ContractSync,
-  EventObject,
-  FnMap,
-  FnR,
-  PrimitiveObject,
-  SyncAction2,
-  SyncPredicateS,
 } from '@bemedev/app-contract';
+import type { ResolveUtilities, UtilityMode } from './utility';
+import { AsyncAddons, BaseAddons, SyncAddons } from './addons';
+import type { OptionsPlugin, PluginAddons } from './plugins';
+import type { LegacyOptions } from './utility/plugin';
+
+export type { LegacyOptions } from './utility/plugin';
 
 /**
  * Extra options accepted by async action helpers.
  *
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `C` - Contract type.
  */
-export type AsyncOptions<
-  Eo extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type AsyncOptions<C extends Contract = Contract> = {
   /** Called with the thrown error when the async function rejects. */
-  catch: (err: any) => AsyncAction2<Eo, Pc, Tc, T>;
+  catch: (err: any) => AsyncAction2<C>;
   /** Optional action executed upon success. */
-  then?: AsyncAction2<Eo, Pc, Tc, T>;
+  then?: AsyncAction2<C>;
   /** Maximum duration in milliseconds before the action is aborted. */
   max?: number;
 };
 
 /**
- * Async action helper accepting optional {@linkcode AsyncOptions}.
+ * Helper surface injected into an options callback.
+ *
+ * `Ps` accumulates the plugins applied to the `createOptions` call, so their
+ * utilities are visible in the callback parameters.
  *
  * @template | {@linkcode Contract} `C` - Contract type.
- * @template `F` - Handler return type.
+ * @template | {@linkcode UtilityMode} `M` - Execution mode.
+ * @template `Ps` - Plugins applied to the call.
  */
-type AsyncActionHelper<C extends Contract, F = any> =
-  F extends Promise<any>
-    ? (
-        fn: FnMap<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>,
-          string,
-          F
-        >,
-        options: AsyncOptions<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>
-        >,
-      ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-    : (
-        fn: FnMap<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>,
-          string,
-          F
-        >,
-        options?: AsyncOptions<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>
-        >,
-      ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-
-/** Union of synchronous guard items accepted by `guardBatch`. */
-type SyncGuardUnion<C extends Contract> =
-  | undefined
-  | SyncPredicateS<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-  | { and: SyncGuardUnion<C>[] }
-  | { or: SyncGuardUnion<C>[] };
-
-/** Union of asynchronous guard items accepted by `guardBatch`. */
-type AsyncGuardUnion<C extends Contract> =
-  | undefined
-  | AsyncPredicateS<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-  | { and: AsyncGuardUnion<C>[] }
-  | { or: AsyncGuardUnion<C>[] };
-
-/** Synchronous `assign` overloads. */
-type SyncAssign<C extends Contract> = {
-  <const K extends string, R = any>(
-    keys: K | readonly K[],
-    fn: FnMap<ContractEvents<C>, ContractPContext<C>, ContractContext<C>, string, R>,
-  ): SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  (
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      ContractContext<C>
-    >,
-  ): SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-};
-
-/** Asynchronous `assign` overloads. */
-type AsyncAssign<C extends Contract> = {
-  <const K extends string, R = any>(
-    keys: K | readonly K[],
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<R>
-    >,
-    options?: AsyncOptions<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>
-    >,
-  ): AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  (
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<ContractContext<C>>
-    >,
-    options?: AsyncOptions<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>
-    >,
-  ): AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-};
-
-/** Value that may be wrapped in a promise. */
-type MaybePromise<T> = T | Promise<T>;
+export type OptionsHelpers<
+  C extends Contract,
+  M extends UtilityMode,
+  Ps extends readonly OptionsPlugin<any, C>[] = [],
+> = [Ps[number]] extends [never]
+  ? ResolveUtilities<BaseAddons<C>, M>
+  : ResolveUtilities<BaseAddons<C>, M> & ResolveUtilities<PluginAddons<Ps>, M>;
 
 /**
- * Helper surface injected into a synchronous options callback.
+ * Synchronous helper surface of a contract.
  *
  * @template | {@linkcode Contract} `C` - Contract type.
+ *
+ * @deprecated Use {@linkcode SyncAddons} instead.
  */
-export type SyncOptionsHelpers<C extends Contract> = {
-  /** Guard checking that a context path is defined. */
-  isDefined: (
-    path: string,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
-  /** Guard checking that a context path is not defined. */
-  isNotDefined: (
-    path: string,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
-  /** Guard checking that a context path matches one of the values. */
-  isValue: (
-    path: string,
-    ...values: any[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
-  /** Guard checking that a context path matches none of the values. */
-  isNotValue: (
-    path: string,
-    ...values: any[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
-  /** Batches multiple guards into a single one. */
-  guardBatch: (
-    ...guards: SyncGuardUnion<C>[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    boolean
-  >;
-  /** Swaps state arguments in functional transitions. */
-  swap: <F extends (...args: any[]) => any, Ev extends string = string>(
-    fn: F,
-    event?: Ev,
-  ) => (
-    types: any,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    ReturnType<F>
-  >;
-  /** Assigns context keys. */
-  assign: SyncAssign<C>;
-  /** Batches multiple actions. */
-  batch: (
-    ...fns: (
-      | SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined
-    )[]
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Repeats an action a fixed number of times. */
-  _for: (
-    count:
-      | number
-      | FnMap<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>,
-          string,
-          number
-        >,
-    fn:
-      | SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Repeats an action while a predicate holds. */
-  _while: (
-    predicate: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      boolean
-    >,
-    fn:
-      | SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Repeats an action at least once while a predicate holds. */
-  _doWhile: (
-    predicate: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      boolean
-    >,
-    fn:
-      | SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Filters an array or object context property. */
-  filter: (
-    key: string,
-    fn: any,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Erases context properties. */
-  erase: (
-    ...keys: string[]
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Creates an action running a side effect. */
-  action: (
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      any
-    >,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Sends an event to a child actor. */
-  sendTo: () => (
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      { to: string; event: ContractEventArg<C> }
-    >,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Resends an event. */
-  resend: (
-    event: ContractEventArg<C>,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Forcibly sends an event. */
-  forceSend: (
-    event: ContractEventArg<C>,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Pauses an activity. */
-  pauseActivity: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Resumes an activity. */
-  resumeActivity: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Stops an activity. */
-  stopActivity: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Pauses a timer. */
-  pauseTimer: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Resumes a timer. */
-  resumeTimer: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Stops a timer. */
-  stopTimer: (
-    id: string,
-  ) => SyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-};
+export type SyncOptionsHelpers<C extends Contract> = SyncAddons<C>;
 
 /**
- * Helper surface injected into an asynchronous options callback.
+ * Asynchronous helper surface of a contract.
  *
  * @template | {@linkcode Contract} `C` - Contract type.
+ *
+ * @deprecated Use {@linkcode AsyncAddons} instead.
  */
-export type AsyncOptionsHelpers<C extends Contract> = {
-  /** Guard checking that a context path is defined. */
-  isDefined: (
-    path: string,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    MaybePromise<boolean>
-  >;
-  /** Guard checking that a context path is not defined. */
-  isNotDefined: (
-    path: string,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    MaybePromise<boolean>
-  >;
-  /** Guard checking that a context path matches one of the values. */
-  isValue: (
-    path: string,
-    ...values: any[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    MaybePromise<boolean>
-  >;
-  /** Guard checking that a context path matches none of the values. */
-  isNotValue: (
-    path: string,
-    ...values: any[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    MaybePromise<boolean>
-  >;
-  /** Batches multiple guards into a single one. */
-  guardBatch: (
-    ...guards: AsyncGuardUnion<C>[]
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    Promise<boolean>
-  >;
-  /** Swaps state arguments in functional transitions. */
-  swap: <F extends (...args: any[]) => any, Ev extends string = string>(
-    fn: F,
-    event?: Ev,
-  ) => (
-    types: any,
-  ) => FnR<
-    ContractEvents<C>,
-    ContractPContext<C>,
-    ContractContext<C>,
-    string,
-    ReturnType<F>
-  >;
-  /** Assigns context keys. */
-  assign: AsyncAssign<C>;
-  /** Batches multiple actions. */
-  batch: (
-    ...fns: (
-      | AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined
-    )[]
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Repeats an action a fixed number of times. */
-  _for: (
-    count:
-      | number
-      | FnMap<
-          ContractEvents<C>,
-          ContractPContext<C>,
-          ContractContext<C>,
-          string,
-          MaybePromise<number>
-        >,
-    fn:
-      | AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Repeats an action while a predicate holds. */
-  _while: (
-    predicate: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<boolean>
-    >,
-    fn:
-      | AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Repeats an action at least once while a predicate holds. */
-  _doWhile: (
-    predicate: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<boolean>
-    >,
-    fn:
-      | AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>
-      | undefined,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Filters an array or object context property. */
-  filter: (
-    key: string,
-    fn: any,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Erases context properties. */
-  erase: (
-    ...keys: string[]
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Creates an action running a side effect. */
-  action: AsyncActionHelper<C>;
-  /** Sends an event to a child actor. */
-  sendTo: () => <
-    F extends { to: string; event: ContractEventArg<C> } = {
-      to: string;
-      event: ContractEventArg<C>;
-    },
-  >(
-    fn: FnMap<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>,
-      string,
-      MaybePromise<F>
-    >,
-    options?: AsyncOptions<
-      ContractEvents<C>,
-      ContractPContext<C>,
-      ContractContext<C>
-    >,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Resends an event. */
-  resend: (
-    event: ContractEventArg<C>,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Forcibly sends an event. */
-  forceSend: (
-    event: ContractEventArg<C>,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Pauses an activity. */
-  pauseActivity: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Resumes an activity. */
-  resumeActivity: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Stops an activity. */
-  stopActivity: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Pauses a timer. */
-  pauseTimer: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Resumes a timer. */
-  resumeTimer: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-  /** Stops a timer. */
-  stopTimer: (
-    id: string,
-  ) => AsyncAction2<ContractEvents<C>, ContractPContext<C>, ContractContext<C>>;
-};
-
-/** Access to previously defined options. */
-export type LegacyOptions<C extends Contract> = {
-  /** Previously defined options, empty for a freshly built contract. */
-  _legacy: ContractOptions<C>;
-};
+export type AsyncOptionsHelpers<C extends Contract> = AsyncAddons<C>;
 
 /**
  * Options helper callback resolved from the contract's `sync` flag.
  *
  * @template | {@linkcode Contract} `C` - Contract type.
  * @template `O` - Resulting machine options type.
+ * @template `Ps` - Plugins applied to the call.
  */
-export type OptionsHelper<C extends Contract, O = ContractOptions<C>> =
+export type OptionsHelper<
+  C extends Contract,
+  O = ContractOptions<C>,
+  Ps extends readonly OptionsPlugin<any, C>[] = [],
+> =
   ContractSync<C> extends true
-    ? (option: SyncOptionsHelpers<C>, legacyOptions: LegacyOptions<C>) => O
-    : (option: AsyncOptionsHelpers<C>, legacyOptions: LegacyOptions<C>) => O;
+    ? (option: OptionsHelpers<C, 'sync', Ps>, legacy: LegacyOptions<C>) => O
+    : (option: OptionsHelpers<C, 'async', Ps>, legacy: LegacyOptions<C>) => O;
+
+/**
+ * Curried options callable carrying the applied plugins.
+ *
+ * @template | {@linkcode Contract} `C` - Contract type.
+ * @template `Ps` - Plugins already applied.
+ */
+export type CreateOptionsWith<
+  C extends Contract,
+  Ps extends readonly OptionsPlugin<any, C>[] = [],
+> = {
+  /**
+   * Builds the options object.
+   *
+   * @param helper - Options callback receiving the resolved helpers.
+   */
+  <const O extends ContractOptions<C>>(helper: OptionsHelper<C, O, Ps>): O;
+
+  /**
+   * Applies one more plugin to this callable.
+   *
+   * @param plugin - Plugin to apply.
+   */
+  use<P extends OptionsPlugin<any, C>>(plugin: P): CreateOptionsWith<C, [...Ps, P]>;
+
+  /**
+   * Applies several plugins to this callable.
+   *
+   * @param plugins - Plugins to apply.
+   */
+  useAll<const Qs extends readonly OptionsPlugin<any, C>[]>(
+    plugins: Qs,
+  ): CreateOptionsWith<C, [...Ps, ...Qs]>;
+};
 
 /**
  * Curried `createOptions` signature.
  *
  * The returned function accepts an options callback and produces the machine
- * options object, typed with the contract option surface.
+ * options object, typed with the contract option surface. Plugins can be
+ * passed once or chained with `use` / `useAll`.
  *
  * @example
  * ```ts
@@ -550,7 +134,18 @@ export type OptionsHelper<C extends Contract, O = ContractOptions<C>> =
  *   actions: { increment: assign('context.count', ({ context }) => context.count + 1) },
  * }));
  * ```
+ *
+ * @example
+ * ```ts
+ * const options = createOptions(contract, retryPlugin)(({ retry }) => ({
+ *   actions: { load: retry(3, fetchAction) },
+ * }));
+ * ```
  */
-export type CreateOptions_F = <const C extends Contract>(
+export type CreateOptions_F = <
+  const C extends Contract,
+  const Ps extends readonly OptionsPlugin<any, C>[] = [],
+>(
   contract: C,
-) => <const O extends ContractOptions<C>>(helper: OptionsHelper<C, O>) => O;
+  ...plugins: Ps
+) => CreateOptionsWith<C, Ps>;

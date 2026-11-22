@@ -6,8 +6,8 @@ import type { AsyncPredicate } from '#guards';
 
 import type { BaseConfig, StateType, TargetDef } from '#states';
 import type { AlwaysConfig, DelayedTransitions } from '#transitions';
-import type { PrimitiveObject } from '@bemedev/typings';
-import type { EventObject, FnMap, FnR, Identify, RecordS } from '~types';
+import type { Contract } from '@bemedev/app-options';
+import type { FnMap, FnR, Identify, RecordS } from '~types';
 
 /**
  * Transitions configuration container for synchronous state machines.
@@ -75,15 +75,10 @@ export type SyncConfig<
  *
  * @see -- type {@linkcode SyncAction}, -- type {@linkcode AsyncPredicate}
  */
-export type SyncTransition<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type SyncTransition<Ct extends Contract = Contract> = {
   readonly target?: string;
-  readonly actions: SyncAction<E, Pc, Tc, T>[];
-  readonly guards: AsyncPredicate<E, Pc, Tc, T>[];
+  readonly actions: SyncAction<Ct>[];
+  readonly guards: AsyncPredicate<Ct>[];
   readonly description?: string;
 };
 
@@ -96,18 +91,12 @@ export type SyncTransition<
  * @template `T` - State path string type.
  * @template `R` - Return value type.
  */
-export type SyncEmitter<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = {
-  src: AsyncEmitterFunction<E, Pc, Tc, T, R>;
+export type SyncEmitter<Ct extends Contract = Contract, R = any> = {
+  src: AsyncEmitterFunction<Ct, R>;
   description?: string;
-  next: SyncTransition<E, Pc, Tc, T>[];
-  error: SyncTransition<E, Pc, Tc, T>[];
-  complete: SyncTransition<E, Pc, Tc, T>[];
+  next: SyncTransition<Ct>[];
+  error: SyncTransition<Ct>[];
+  complete: SyncTransition<Ct>[];
 };
 
 /**
@@ -120,12 +109,9 @@ export type SyncEmitter<
  * @template `R` - Return type.
  */
 export type ChildFunction2<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
-> = FnR<E, Pc, Tc, T, R>;
+> = FnR<Ct, R>;
 
 /**
  * Synchronous child actor configuration.
@@ -137,16 +123,13 @@ export type ChildFunction2<
  * @template `R` - Return type.
  */
 export type SyncChild<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
 > = {
-  src: ChildFunction2<E, Pc, Tc, T, R>;
+  src: ChildFunction2<Ct, R>;
   description?: string;
   id: string;
-  on: Identify<RecordS<SyncTransition<E, Pc, Tc, T>>>[];
+  on: Identify<RecordS<SyncTransition<Ct>>>[];
   contexts: string[];
 };
 
@@ -160,12 +143,9 @@ export type SyncChild<
  * @template `R` - Return type.
  */
 export type SyncChildFunction<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
-> = FnMap<E, Pc, Tc, T, R, `${string}::on::${string}`>;
+> = FnMap<Ct, R, `${string}::on::${string}`>;
 
 /**
  * Represents all transitions inside a state config with full defined functions.
@@ -177,17 +157,12 @@ export type SyncChildFunction<
  *
  * @see -- type {@linkcode SyncTransition}, -- type {@linkcode Identify}
  */
-export type SyncTransitions<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
-  on: Identify<SyncTransition<E, Pc, Tc, T>>[];
-  always: SyncTransition<E, Pc, Tc, T>[];
-  after: Identify<SyncTransition<E, Pc, Tc, T>>[];
-  emitters: SyncEmitter<E, Pc, Tc, T>[];
-  children: SyncChild<E, Pc, Tc, T>[];
+export type SyncTransitions<Ct extends Contract = Contract> = {
+  on: Identify<SyncTransition<Ct>>[];
+  always: SyncTransition<Ct>[];
+  after: Identify<SyncTransition<Ct>>[];
+  emitters: SyncEmitter<Ct>[];
+  children: SyncChild<Ct>[];
 };
 
 /**
@@ -198,18 +173,13 @@ export type SyncTransitions<
  * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
  * @template `T` - State path string type.
  */
-export type SyncNode<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type SyncNode<Ct extends Contract = Contract> = {
   id?: string;
   description?: string;
   type: StateType;
-  entry: SyncAction<E, Pc, Tc, T>[];
-  exit: SyncAction<E, Pc, Tc, T>[];
+  entry: SyncAction<Ct>[];
+  exit: SyncAction<Ct>[];
   tags: string[];
-  states: Identify<SyncNode<E, Pc, Tc, T>>[];
+  states: Identify<SyncNode<Ct>>[];
   initial?: string;
-} & SyncTransitions<E, Pc, Tc, T>;
+} & SyncTransitions<Ct>;

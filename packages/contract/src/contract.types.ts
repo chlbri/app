@@ -14,6 +14,34 @@ import type { Register } from './registry.types';
 import type { Contract, StatePaths } from './types';
 
 /**
+ * Internal contract surface used to select the options type before the
+ * contract is fully assembled.
+ */
+type ContractSurface<
+  Config,
+  Eo extends EventObject,
+  E extends Record<string, PrimitiveObject>,
+  A extends ActorsConfigMap,
+  Pc,
+  Tc extends PrimitiveObject,
+  Tags extends string,
+  Paths extends string,
+  Sync extends true | undefined,
+> = {
+  config: Config;
+  types: {
+    events: Eo;
+    eventMap: E;
+    actorsMap: A;
+    context: Tc;
+    pContext: Pc;
+    paths: Paths;
+    tags: Tags;
+    sync: Sync;
+  };
+};
+
+/**
  * Function signature for creating an unnamed contract.
  *
  * The arguments intentionally match the unnamed overload of `createMachine`
@@ -65,7 +93,9 @@ export type CreateContractNoName_F = <
     tags: string;
     sync: Sync;
   },
-  ContractSimpleMachineOptions<Sync, _Pc, _Tc, string, Eo>
+  ContractSimpleMachineOptions<
+    ContractSurface<Config, Eo, _E, _A, _Pc, _Tc, string, StatePaths<Config>, Sync>
+  >
 >;
 
 /**
@@ -141,7 +171,22 @@ export type CreateContractNamed_F = <
     tags: Tags;
     sync: Sync;
   },
-  ContractMachineOptions<Sync, _Pc, _Tc, Tags, Eo, Current['options']>
+  ContractMachineOptions<
+    ContractSurface<
+      Config,
+      Eo,
+      _E,
+      _A,
+      _Pc,
+      _Tc,
+      Tags,
+      string extends Current['paths']['all']
+        ? StatePaths<Config>
+        : Current['paths']['all'],
+      Sync
+    >,
+    Current['options']
+  >
 >;
 
 /**

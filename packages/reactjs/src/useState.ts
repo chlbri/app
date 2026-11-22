@@ -1,9 +1,4 @@
-import {
-  type AddSubscriber_F,
-  type EventObject,
-  type PrimitiveObject,
-  type State,
-} from '@bemedev/app';
+import type { AddSubscriber_F, Contract, MachineStateOf } from '@bemedev/app';
 import { deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';
 import type { UseStateOptions } from './types';
@@ -11,14 +6,14 @@ import type { UseStateOptions } from './types';
 /**
  * A hook that creates a React state from a service with a subscribe function.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
- * @template `Ta` - Tag type extending `string`.
- * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
- * @template `T` - Selected state type, defaults to type {@linkcode State}<{@linkcode Eo}, {@linkcode Tc}, {@linkcode Ta}>.
+ * Every type is derived from the contract of the service.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the service.
+ * @template `T` - Selected state type, defaults to the contract state.
  *
  * @param service - The service containing state and subscribe method.
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
- * @param service.state - Current state of type {@linkcode State}.
+ * @param service.state - Current state derived from the contract.
  * @param options - Optional configuration options of type {@linkcode UseStateOptions}.
  * @param options.selector - Optional selector function projecting the state into a sub-state.
  * @param options.equals - Optional equality comparator for the selected state.
@@ -29,13 +24,11 @@ import type { UseStateOptions } from './types';
  * @see {@linkcode useSync}, {@linkcode deepEqual}, {@linkcode identity}
  */
 export function useState<
-  Tc extends PrimitiveObject,
-  Ta extends string,
-  Eo extends EventObject,
-  T = State<Eo, Tc, Ta>,
+  const Ct extends Contract = Contract,
+  T = MachineStateOf<Ct>,
 >(
-  service: { subscribe: AddSubscriber_F<Tc, Ta, Eo>; state: State<Eo, Tc, Ta> },
-  options?: UseStateOptions<Tc, Ta, Eo, T>,
+  service: { subscribe: AddSubscriber_F<Ct>; state: MachineStateOf<Ct> },
+  options?: UseStateOptions<Ct, T>,
 ): T {
   const {
     selector = identity,

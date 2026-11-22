@@ -46,6 +46,34 @@ states: {                actions: {
 The **interpreter** receives the machine and brings it to life at runtime. It holds
 context, processes events, schedules timers, and subscribes to actors.
 
+### The contract is the single source of truth
+
+A contract carries the machine config and its inferred typing surface. Every machine
+and interpreter class is parameterized by that contract only: the config, public and
+private contexts, events map, event union, actors map, tags, paths and options are
+all derived from it. No class declares its own `Event`, `EventsMap`, `Tags` or
+context type parameter.
+
+The same rule applies to typing primitives. `State`, `StateP`, `StateExtended`,
+`StatePextended`, `FnR`, `FnMap`, actions, guards, delays, emitters, transitions and
+every options surface take a contract as their first type parameter.
+
+```typescript
+import { createContract, createMachine, interpret } from '@bemedev/app';
+
+const contract = createContract(config, types);
+
+// SyncMachine<typeof contract> or AsyncMachine<typeof contract>
+const machine = createMachine(contract);
+const service = interpret(machine);
+
+type Events = ContractEvents<typeof contract>;
+type Options = ContractOptions<typeof contract>;
+```
+
+The second class parameter, `L`, is intentionally **outside** the contract: it only
+accumulates the options of chained `provideOptions` calls.
+
 ### Names, not references
 
 Every action, guard, delay, and actor is referred to by a **string name** in the
@@ -192,6 +220,7 @@ await service[Symbol.asyncDispose]();
   - [Full Machine Typings Example](#full-machine-typings-example)
 - [3. Interpreter](#3-interpreter)
   - [Adding options at runtime](#adding-options-at-runtime)
+  - [Plugins and standalone utilities](#plugins-and-standalone-utilities)
 - [4. State Subscriptions](#4-state-subscriptions)
   - [Subscribe to all state changes](#subscribe-to-all-state-changes)
   - [Subscribe to specific events](#subscribe-to-specific-events)
@@ -520,6 +549,38 @@ const enrichedService = service.provideOptions(({ action }) => ({
   actions: { log: action(() => console.log('state changed')) },
 }));
 ```
+
+### Plugins and standalone utilities
+
+`@bemedev/app` re-exports the plugin registry and the contract-aware utility builder
+from `@bemedev/app-options`. Register a plugin once, then every machine and
+interpreter surface can use the helper it contributes:
+
+```typescript
+import {
+  configureOptions,
+  createContract,
+  createUtility,
+  same,
+  type UtilityPlugin,
+} from '@bemedev/app';
+
+export const retryPlugin = {
+  name: 'retry',
+  create: () => ({ retry: same((action: () => unknown) => action) }),
+} satisfies UtilityPlugin;
+
+configureOptions(retryPlugin);
+
+const contract = createContract(config, types);
+const utilities = createUtility({ contract }).build();
+const sync = utilities.resolve('sync');
+```
+
+Per-call plugins win over registered ones with the same name:
+`createUtility({ contract }, retryPlugin)` or `createOptions(contract, retryPlugin)`.
+See the [`@bemedev/app-options`](../options) README for the plugin contract,
+`requires` ordering and `override` semantics.
 
 <br/>
 

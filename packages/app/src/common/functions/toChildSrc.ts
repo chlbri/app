@@ -1,7 +1,6 @@
 import type { ChildrenMap, CommonChildFunction2 } from '#common/machine';
-import type { EventObject } from '#events';
 import { reduceFnMap } from '@bemedev/app-options/internal';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract } from '@bemedev/app-options';
 
 /**
  * Function signature for converting child identifier into child machine function.
@@ -19,16 +18,13 @@ import type { PrimitiveObject } from '@bemedev/typings';
  * @returns Child machine function or `undefined`.
  */
 export type ToChildSrc_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
 >(
   child: string,
-  children: ChildrenMap<Eo, Pc, Tc, T> | undefined,
+  children: ChildrenMap<Ct> | undefined,
   ...events: string[]
-) => CommonChildFunction2<Eo, Pc, Tc, T, R> | undefined;
+) => CommonChildFunction2<Ct, R> | undefined;
 
 /**
  * Converts a child configuration to a child machine object.

@@ -1,8 +1,8 @@
 import type {
   AddSubscriber_F,
-  EventObject,
-  PrimitiveObject,
-  State,
+  Contract,
+  ContractEventType,
+  MachineStateOf,
 } from '@bemedev/app';
 import { createCan } from './createCan';
 import { createIsInside } from './createIsInside';
@@ -12,31 +12,27 @@ import type { CreateStateOptions } from './types';
 /**
  * SolidJS primitive that binds state signals, event checking, and hierarchy querying for a service.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
- * @template `Ta` - Tag type extending `string`.
- * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
+ * Every type is derived from the contract of the service.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the service.
  *
  * @param service - Service instance containing `subscribe`, `state`, and `canEvents`.
  * @param service.subscribe - Subscription function of type {@linkcode AddSubscriber_F}.
- * @param service.state - Current state of type {@linkcode State}.
+ * @param service.state - Current state derived from the contract.
  * @param service.canEvents - Method to check event execution capability.
  *
  * @returns Service hooks object containing `state`, `can`, and `isInside`.
  *
  * @see {@linkcode createState}, {@linkcode createCan}, {@linkcode createIsInside}, -- type {@linkcode CreateStateOptions}
  */
-export function createService<
-  Tc extends PrimitiveObject,
-  Ta extends string,
-  Eo extends EventObject,
->(service: {
-  subscribe: AddSubscriber_F<Tc, Ta, Eo>;
-  state: State<Eo, Tc, Ta>;
-  canEvents: (...events: Eo['type'][]) => boolean;
+export function createService<const Ct extends Contract = Contract>(service: {
+  subscribe: AddSubscriber_F<Ct>;
+  state: MachineStateOf<Ct>;
+  canEvents: (...events: ContractEventType<Ct>[]) => boolean;
 }) {
   return {
-    state: <T = State<Eo, Tc, Ta>>(options?: CreateStateOptions<Tc, Ta, Eo, T>) => {
-      return createState<Tc, Ta, Eo, T>(service, options);
+    state: <T = MachineStateOf<Ct>>(options?: CreateStateOptions<Ct, T>) => {
+      return createState<Ct, T>(service, options);
     },
 
     can: createCan(service),

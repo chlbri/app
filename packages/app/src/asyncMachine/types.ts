@@ -7,7 +7,6 @@ import type {
 } from '#common/machine';
 import type { DelayFunction2 } from '#delays';
 import type { AsyncEmitterFunction, EmitterDef, EmitterReturn } from '#emitters';
-import type { ActorsConfigMap, EventObject } from '#events';
 import type { AsyncPredicateS } from '#guards';
 import type {
   ActivityConfig,
@@ -34,7 +33,11 @@ import type { PrimitiveObject } from '@bemedev/typings';
 import type { KeyU, ReduceArray } from '~types';
 import { RecordS } from '../types/primitives';
 
-import type { AsyncChildFunction2 } from '@bemedev/app-options';
+import type {
+  AsyncChildFunction2,
+  Contract,
+  ContractActorsMap,
+} from '@bemedev/app-options';
 
 export type {
   AsyncChildFunction2,
@@ -165,11 +168,8 @@ type _GetDelayKeysFromFlat<Flat extends FlatMapN> = {
  */
 export type GetActionsFromFlat<
   Flat extends FlatMapN,
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = Record<_GetKeyActionsFromFlat<Flat>, AsyncAction2<E, Pc, Tc, T>>;
+  Ct extends Contract = Contract,
+> = Record<_GetKeyActionsFromFlat<Flat>, AsyncAction2<Ct>>;
 
 /**
  * Provide a record of all guards by key and {@linkcode AsyncPredicateS} function.
@@ -184,11 +184,8 @@ export type GetActionsFromFlat<
  */
 export type GetGuardsFromFlat<
   Flat extends FlatMapN,
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = Record<_GetKeyGuardsFromFlat<Flat>, AsyncPredicateS<E, Pc, Tc, T>>;
+  Ct extends Contract = Contract,
+> = Record<_GetKeyGuardsFromFlat<Flat>, AsyncPredicateS<Ct>>;
 
 /**
  * Provide a record of all delays by key and {@linkcode DelayFunction2} function.
@@ -203,11 +200,8 @@ export type GetGuardsFromFlat<
  */
 export type GetDelaysFromFlat<
   Flat extends FlatMapN,
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = Record<_GetDelayKeysFromFlat<Flat>, DelayFunction2<E, Pc, Tc, T>>;
+  Ct extends Contract = Contract,
+> = Record<_GetDelayKeysFromFlat<Flat>, DelayFunction2<Ct>>;
 
 /**
  * Provide a record of all events by key and {@linkcode PrimitiveObject} payload.
@@ -265,18 +259,11 @@ export type GetEmittersSrcKeyFromFlat<Flat extends FlatMapN> = Record<
  */
 export type GetEmittersSrcFromFlat<
   Flat extends FlatMapN,
-  E extends EventObject = EventObject,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
 > = {
   [key in _GetEmitterSrcKeyFromFlat<Flat>]: AsyncEmitterFunction<
-    E,
-    Pc,
-    Tc,
-    T,
-    EmitterReturn<key, A>
+    Ct,
+    EmitterReturn<key, ContractActorsMap<Ct>>
   >;
 };
 
@@ -348,20 +335,13 @@ export type GetChildrenSrcKeysFromFlat2<
  */
 export type GetChildrenSrcFromFlat<
   Flat extends FlatMapN,
-  E extends EventObject = EventObject,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   G extends _GetChildKeysFromFlat<Flat> = _GetChildKeysFromFlat<Flat>,
 > = {
   [key in G['src']]: AsyncChildFunction2<
-    E,
-    Pc,
-    Tc,
-    T,
+    Ct,
     {
-      eventsMap: ChildEvents<key & string, A>;
+      eventsMap: ChildEvents<key & string, ContractActorsMap<Ct>>;
       context: Recomposer<keyof Extract<G, { src: key }>['contexts']>;
     }
   >;
@@ -399,14 +379,10 @@ export type GetChildrenSrcFromMachine<T extends KeyU<'config'>> =
  */
 export type GetActorsFromFlat<
   Flat extends FlatMapN,
-  E extends EventObject = EventObject,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
 > = {
-  children: Partial<GetChildrenSrcFromFlat<Flat, E, A, Pc, Tc, T>>;
-  emitters: Partial<GetEmittersSrcFromFlat<Flat, E, A, Pc, Tc, T>>;
+  children: Partial<GetChildrenSrcFromFlat<Flat, Ct>>;
+  emitters: Partial<GetEmittersSrcFromFlat<Flat, Ct>>;
 };
 
 /**
@@ -421,12 +397,8 @@ export type GetActorsFromFlat<
  */
 export type GetActorsFromConfig<
   C extends AsyncConfig,
-  E extends EventObject = EventObject,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = GetActorsFromFlat<FlatMapN<C>, E, A, Pc, Tc, T>;
+  Ct extends Contract = Contract,
+> = GetActorsFromFlat<FlatMapN<C>, Ct>;
 
 /**
  * Structure containing all actors from a machine type `M`.
@@ -440,12 +412,8 @@ export type GetActorsFromConfig<
  */
 export type GetActorsFromMachine<
   M extends KeyU<'config'>,
-  E extends EventObject = EventObject,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = GetActorsFromConfig<Extract<ConfigFrom<M>, AsyncConfig>, E, A, Pc, Tc, T>;
+  Ct extends Contract = Contract,
+> = GetActorsFromConfig<Extract<ConfigFrom<M>, AsyncConfig>, Ct>;
 
 /**
  * Actor source keys structure extracted from a flat map.
@@ -522,16 +490,13 @@ export type GetActorKeysFromMachine<T extends KeyU<'config'>> =
  * @template `R` - Result type.
  */
 export type AsyncChild<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
 > = {
-  src: AsyncChildFunction2<E, Pc, Tc, T, R>;
+  src: AsyncChildFunction2<Ct, R>;
   description?: string;
   id: string;
-  on: Identitfy<RecordS<AsyncTransition<E, Pc, Tc, T>>>[];
+  on: Identitfy<RecordS<AsyncTransition<Ct>>>[];
   contexts: string[];
 };
 

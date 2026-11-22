@@ -1,23 +1,24 @@
 import type { DEFAULT_DELIMITER } from '#constants';
-import type { EventObject, EventStrings } from '#events';
-import type { State, StateExtended, StateP, StatePextended } from '#states';
+import type { EventStrings } from '#events';
+import type { State, StateExtended, StatePOf, StatePextendedOf } from '#states';
 import { checkKeys } from '#utils';
 import type {
-  _UnionToIntersection2,
+  Contract,
+  ContractEventType,
+  ContractEvents,
+  Describer,
+  EmptyObject,
+  RecordS,
+} from '@bemedev/app-options';
+import type {
   DeepPartial,
   Fn,
   NOmit,
   NotUndefined,
   Ru,
   UnionToIntersection,
+  _UnionToIntersection2,
 } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
-import type {
-  Describer,
-  EmptyObject,
-  EventToType,
-  RecordS,
-} from '@bemedev/app-options';
 
 export type {
   Describer,
@@ -331,177 +332,113 @@ export type ToArray<T> = T extends readonly unknown[]
     : readonly T[];
 
 /**
- * A helper type to reduce a function signature to its context and events map.
+ * A helper type to reduce a function signature to its contract state.
  *
- * @template | {@linkcode EventObject} `E` - The event object type.
- * @template | {@linkcode PrimitiveObject} `Tc` - The context of the function, defaults to any object.
- * @template `T` - State tag string type.
- * @template `R` - The return type of the function, defaults to any.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
+ * @template `R` - The return type of the function, defaults to `any`.
  *
- * @remarks This function signature is a reduced version of type {@linkcode FnR} without the private context.
+ * @remarks This function signature is a reduced version of type
+ * {@linkcode FnR} without the private context.
  *
  * @see -- type {@linkcode State}
  */
-export type FnReduced<
-  E extends EventObject = EventObject,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = (state: State<E, Tc, T>) => R;
+export type FnReduced<Ct extends Contract = Contract, R = any> = (
+  state: State<Ct>,
+) => R;
 
 /**
  * Internal helper function map type keyed by event types.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `Item` - Type of the item to filter.
  * @template `Ex` - Event types to exclude.
- * @template `TT` - Filtered event type.
  */
-type _FnMapFilterArray<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Item = any,
-  Ex extends string = never,
-  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
-> = {
-  [key in Exclude<EventToType<TT>, EventStrings>]?: (
+type _FnMapFilterArray<Ct extends Contract, Item, Ex extends string> = {
+  [key in Exclude<ContractEventType<Ct>, EventStrings | Ex>]?: (
     item: Item,
     index: number,
-    state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
+    state: StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: key }>>,
   ) => boolean;
 } & Partial<
   Record<
     EventStrings | 'else',
-    (item: Item, index: number, state: StateExtended<E, Pc, Tc, T>) => boolean
+    (item: Item, index: number, state: StateExtended<Ct>) => boolean
   >
 >;
 
 /**
  * Function map filter array type.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `Item` - Type of the item to filter.
  * @template `Ex` - Event types to exclude.
- * @template `TT` - Filtered event type.
  */
 export type FnMapFilterArray<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   Item = any,
   Ex extends string = never,
-  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > =
-  | ((item: Item, index: number, state: StateExtended<E, Pc, Tc, T>) => boolean)
-  | _FnMapFilterArray<E, Pc, Tc, T, Item, Ex, TT>;
+  | ((item: Item, index: number, state: StateExtended<Ct>) => boolean)
+  | _FnMapFilterArray<Ct, Item, Ex>;
 
 /**
  * Internal helper function map type keyed by event types.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `Item` - Type of the item to filter.
  * @template `Ex` - Event types to exclude.
- * @template `TT` - Filtered event type.
  */
-type _FnMapFilterObject<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Item = any,
-  Ex extends string = never,
-  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
-> = {
-  [key in Exclude<EventToType<TT>, EventStrings>]?: (
+type _FnMapFilterObject<Ct extends Contract, Item, Ex extends string> = {
+  [key in Exclude<ContractEventType<Ct>, EventStrings | Ex>]?: (
     item: Item,
-    state: StatePextended<Extract<TT, { type: key }>['payload'], Pc, Tc, T>,
+    state: StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: key }>>,
   ) => boolean;
 } & Partial<
-  Record<
-    EventStrings | 'else',
-    (item: Item, state: StateExtended<E, Pc, Tc, T>) => boolean
-  >
+  Record<EventStrings | 'else', (item: Item, state: StateExtended<Ct>) => boolean>
 >;
 
 /**
  * Function map filter object type.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `Item` - Type of the item to filter.
  * @template `Ex` - Event types to exclude.
- * @template `TT` - Filtered event type.
  */
 export type FnMapFilterObject<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   Item = any,
   Ex extends string = never,
-  TT extends Exclude<E, Ex> = Exclude<E, Ex>,
 > =
-  | ((item: Item, state: StateExtended<E, Pc, Tc, T>) => boolean)
-  | _FnMapFilterObject<E, Pc, Tc, T, Item, Ex, TT>;
+  | ((item: Item, state: StateExtended<Ct>) => boolean)
+  | _FnMapFilterObject<Ct, Item, Ex>;
 
 /**
  * Internal helper type for reduced function maps.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State tag string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `R` - Return value type.
  * @template `Ex` - Event types to exclude.
  */
-type _FnMapReduced<
-  E extends EventObject = EventObject,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-  Ex extends string = never,
-  /**
-   * @deprecated
-   * Used internally
-   */
-  TT extends Exclude<E, Ex | { type: Ex }> = Exclude<E, Ex | { type: Ex }>,
-> = {
-  [key in TT['type']]?: (
-    state: StateP<Extract<TT, { type: key }>['payload'], Tc, T>,
+type _FnMapReduced<Ct extends Contract, R = any, Ex extends string = never> = {
+  [key in Exclude<ContractEventType<Ct>, Ex>]?: (
+    state: StatePOf<Ct, Extract<ContractEvents<Ct>, { type: key }>>,
   ) => R;
-} & Partial<Record<EventStrings | 'else', FnReduced<E, Tc, T, R>>>;
+} & Partial<Record<EventStrings | 'else', FnReduced<Ct, R>>>;
 
 /**
- * A helper type to reduce a function signature to its context and events map.
+ * A helper type to reduce a function signature to its contract state.
  *
- * @template | {@linkcode EventObject} `E` - The event object type.
- * @template | {@linkcode PrimitiveObject} `Tc` - The context of the function, defaults to any object.
- * @template `T` - State tag string type.
- * @template `R` - The return type of the function, defaults to any.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
+ * @template `R` - The return type of the function, defaults to `any`.
  * @template `Ex` - Event type strings to exclude.
  *
  * @see -- type {@linkcode _FnMapReduced}
  */
 export type FnMapR<
-  E extends EventObject = EventObject,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R = any,
   Ex extends string = never,
-> = FnReduced<E, Tc, T, R> | _FnMapReduced<E, Tc, T, R, Ex>;
+> = FnReduced<Ct, R> | _FnMapReduced<Ct, R, Ex>;
 
 /**
  * A type that represents all values of type `T`.

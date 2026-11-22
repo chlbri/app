@@ -11,10 +11,8 @@ import {
   ALWAYS_EVENT,
   eventToType,
   transformEventArg,
-  type ActorsConfigMap,
   type EventArgObject,
   type EventObject,
-  type EventsMap,
 } from '#events';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
@@ -48,63 +46,45 @@ import {
   AddSubscriber_F,
   AnyInterpreter,
   CommonInterpreter,
-  type ActorsMapFrom,
-  type AllPathsFrom,
-  type ConfigFrom,
-  type ContextFrom,
-  type EventsFrom,
-  type EventsMapFrom,
   type ExecuteActivity_F,
   type ExtendedActionsParams,
-  type MachineOptionsFrom,
   type Mode,
-  type PrivateContextFrom,
-  type TagFrom,
 } from '#common/interpreter';
 import {
   CommonChildFunction2,
   getEntries,
   type AnyMachine,
-  type CommonConfig3,
+  type MachineEventsOf,
   type SimpleMachineOptions2,
 } from '#common/machine';
 import { type AsyncEmitterFunction } from '#emitters';
-import { byKey2, merge2 } from '#utils';
+import { byKey2 } from '#utils';
+import type { Contract, OptionsPlugin } from '@bemedev/app-options';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
-import type { PrimitiveObject } from '@bemedev/typings';
 import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types';
 import type { AsyncAddOptions_F } from '../asyncMachine';
 import type { AsyncMachine } from '../asyncMachine/machine';
+import { merge2 } from '@bemedev/app-options/internal';
 
 /**
  * The class {@linkcode AsyncInterpreter} is responsible for interpreting and managing the state of an asynchronous machine.
  * It provides methods to start, stop, pause, and resume the machine, as well as to send events
  * and subscribe to state changes.
  *
- * @template | {@linkcode CommonConfig3} `C` - The configuration type of the machine.
- * @template `Pc` - The private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - The context type.
- * @template | {@linkcode EventsMap} `E` - The events map type.
- * @template | {@linkcode ActorsConfigMap} `A` - The actors config map type.
- * @template `Ta` - Tag string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template `AllPaths` - All state paths type.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
- * @template | {@linkcode SimpleMachineOptions2} `L` - Additional options type.
+ * The class is parameterized by a contract: every member type is read from it
+ * instead of being declared independently. The second parameter `L` is not part
+ * of the contract: it accumulates the options of chained `provideOptions`
+ * calls.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Accumulated options.
  */
 export class AsyncInterpreter<
-  const C extends CommonConfig3 = CommonConfig3,
-  const Pc = any,
-  const Tc extends PrimitiveObject = PrimitiveObject,
-  const E extends EventsMap = EventsMap,
-  const A extends ActorsConfigMap = ActorsConfigMap,
-  const Ta extends string = string,
-  const Eo extends EventObject = EventObject,
-  const AllPaths extends string = string,
-  const Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = EmptyObject,
-> extends CommonInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo> {
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
+> extends CommonInterpreter<Ct> {
   /**
    * The interpreter type identifier, set to `'async'`.
    */
@@ -116,7 +96,7 @@ export class AsyncInterpreter<
    * @returns The inner class {@linkcode AsyncMachine} instance.
    */
   get machine() {
-    return super.machine as AsyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo>;
+    return super.machine as AsyncMachine<Ct, L, Ps>;
   }
 
   /**
@@ -125,10 +105,7 @@ export class AsyncInterpreter<
    * @returns A fresh class {@linkcode AsyncInterpreter} instance.
    */
   get renew() {
-    const out = new AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>(
-      this.machine,
-      this.__mode,
-    );
+    const out = new AsyncInterpreter<Ct, L, Ps>(this.machine, this.__mode);
 
     out._ppC(this.__initialContexts.pContext);
     out._provideContext(this.__initialContexts.context);
@@ -152,7 +129,7 @@ export class AsyncInterpreter<
    * @param machine - The class {@linkcode AsyncMachine} or interface {@linkcode AnyMachine} to interpret.
    * @param mode - The type {@linkcode Mode} of the interpreter, defaults to `'strict'`.
    */
-  constructor(machine: AnyMachine<E, A, Pc, Tc>, mode: Mode = 'strict') {
+  constructor(machine: AnyMachine<Ct>, mode: Mode = 'strict') {
     super(machine, mode);
     this.#initSchedulers();
     this.__performConfig(true);
@@ -196,7 +173,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving to the result of the action execution.
    */
-  protected __performAction: AsyncPerformActionLater_F<Eo, Pc, Tc, Ta> = action => {
+  protected __performAction: AsyncPerformActionLater_F<Ct> = action => {
     this._iterate();
     const out = withTimeout(
       async () => action(this.__cloneState),
@@ -220,7 +197,7 @@ export class AsyncInterpreter<
    */
   protected __performForceSendAction = async (
     from: string | false,
-    forceSend?: EventArgObject<Eo>,
+    forceSend?: EventArgObject<MachineEventsOf<Ct>>,
   ) => {
     if (!forceSend) return;
     const values = Object.values(this.machine.flat);
@@ -250,7 +227,7 @@ export class AsyncInterpreter<
       stopActivity,
 
       sentEvent,
-    }: ExtendedActionsParams<Eo>,
+    }: ExtendedActionsParams<Ct>,
   ) => {
     this.__performSendToAction(sentEvent);
     this.__performPauseActivityAction(pauseActivity);
@@ -273,10 +250,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving when the action execution completes.
    */
-  protected __executeAction: AsyncPerformAction_F<Eo, Pc, Tc, Ta> = async (
-    from,
-    action,
-  ) => {
+  protected __executeAction: AsyncPerformAction_F<Ct> = async (from, action) => {
     this.__setStatus('busy');
 
     const { mergers, ...extendeds } = await this.__performAction(action);
@@ -315,7 +289,7 @@ export class AsyncInterpreter<
    *
    * @returns The boolean result or a promise resolving to a boolean.
    */
-  #performPredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
+  #performPredicate: AsyncPerformPredicate_F<Ct> = predicate => {
     this._iterate();
     return predicate(this.__cloneState);
   };
@@ -327,7 +301,7 @@ export class AsyncInterpreter<
    *
    * @returns The boolean result or a promise resolving to a boolean.
    */
-  #executePredicate: AsyncPerformPredicate_F<Eo, Pc, Tc, Ta> = predicate => {
+  #executePredicate: AsyncPerformPredicate_F<Ct> = predicate => {
     this.__setStatus('busy');
     const out = this.#performPredicate(predicate);
 
@@ -347,11 +321,7 @@ export class AsyncInterpreter<
     const events = this.__machine.eventsList;
     const guards = this.__machine.guards;
 
-    const { predicate, errors } = toPredicate.async<Pc, Tc, Ta, Eo>(
-      guard,
-      guards,
-      ...events,
-    );
+    const { predicate, errors } = toPredicate.async<Ct>(guard, guards, ...events);
 
     if (isDefined(predicate)) return predicate;
     this._addWarning(...errors);
@@ -525,18 +495,7 @@ export class AsyncInterpreter<
    * @returns The internal class {@linkcode AsyncMachine}.
    */
   get #machine() {
-    return this.__machine as unknown as AsyncMachine<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      Mo,
-      L
-    >;
+    return this.__machine as unknown as AsyncMachine<Ct, L, Ps>;
   }
 
   /**
@@ -716,7 +675,7 @@ export class AsyncInterpreter<
    */
   protected __collectPausables = () => {
     type _Emitter = EmitterConfig & {
-      emitterFn: AsyncEmitterFunction<Eo, Pc, Tc, Ta>;
+      emitterFn: AsyncEmitterFunction<Ct>;
       id: string;
     };
     return this.__collectedEmitterConfigs
@@ -795,7 +754,7 @@ export class AsyncInterpreter<
    *
    * @see -- type {@linkcode AsyncAddOptions_F}
    */
-  addOptions: AsyncAddOptions_F<Eo, Pc, Tc, Ta, Mo, L> = helper => {
+  addOptions: AsyncAddOptions_F<Ct, L, Ps> = helper => {
     return super.addOptions(helper) as any;
   };
 
@@ -808,18 +767,7 @@ export class AsyncInterpreter<
    *
    * @see -- type {@linkcode AsyncProvideMachineOptions_F}
    */
-  provideOptions: AsyncProvideMachineOptions_F<
-    C,
-    Pc,
-    Tc,
-    E,
-    A,
-    Ta,
-    Eo,
-    AllPaths,
-    Mo,
-    L
-  > = option => {
+  provideOptions: AsyncProvideMachineOptions_F<Ct, L, Ps> = option => {
     return super.provideOptions(option) as any;
   };
 
@@ -832,7 +780,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving to the next configuration node or `undefined` if unchanged.
    */
-  protected __presend: _AsyncSend_F<Eo> = async event => {
+  protected __presend: _AsyncSend_F<Ct> = async event => {
     this.__sent = true;
     this.__changeEvent(event);
     this.__setStatus('sending');
@@ -868,7 +816,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving when event processing and state updates complete.
    */
-  protected __send = async (_event: EventArgObject<Eo>) => {
+  protected __send = async (_event: EventArgObject<MachineEventsOf<Ct>>) => {
     const event = transformEventArg(_event);
     const next = await this.__presend(event as any);
 
@@ -889,10 +837,7 @@ export class AsyncInterpreter<
    * @returns An array of spawned child service records.
    */
   protected __collectChildren = () => {
-    type _Child = ChildConfig & {
-      childFn: CommonChildFunction2<Eo, Pc, Tc, Ta>;
-      id: string;
-    };
+    type _Child = ChildConfig & { childFn: CommonChildFunction2<Ct>; id: string };
 
     return this.__collectedChildrenConfig
       .filter(([from]) => this.__isInsideValue(from))
@@ -1008,7 +953,7 @@ export class AsyncInterpreter<
    *
    * @returns The created child interpreter instance of interface {@linkcode AnyInterpreter}.
    */
-  #executeChild = (child: CommonChildFunction2<Eo, Pc, Tc, Ta>) => {
+  #executeChild = (child: CommonChildFunction2<Ct>) => {
     const instance = child(this.__cloneState);
     return instance;
   };
@@ -1035,22 +980,38 @@ export class AsyncInterpreter<
 }
 
 /**
- * Utility type to infer the class {@linkcode AsyncInterpreter} type corresponding to a given interface {@linkcode AnyMachine}.
+ * Extracts the legacy options carried by an asynchronous machine.
  *
- * @template | {@linkcode AnyMachine} `M` - The machine type from which to infer the interpreter type.
+ * @template | {@linkcode AnyMachine} `M` - Machine type carrying `__legacy`.
+ */
+type AsyncLegacyOf<M> = M extends { __legacy: infer L extends SimpleMachineOptions2 }
+  ? L
+  : EmptyObject;
+
+/**
+ * Extracts the options plugins carried by an asynchronous machine.
+ *
+ * @template | {@linkcode AnyMachine} `M` - Machine type carrying `__plugins`.
+ */
+type AsyncPluginsOf<M> = M extends {
+  __plugins: infer Ps extends readonly OptionsPlugin<any, any>[];
+}
+  ? Ps
+  : [];
+
+/**
+ * Infers the interface {@linkcode AsyncInterpreter} type corresponding to a
+ * given interface {@linkcode AnyMachine}.
+ *
+ * @template | {@linkcode AnyMachine} `M` - The machine type from which to infer
+ * the interpreter type.
  *
  * @see -- type {@linkcode ConfigFrom}, -- type {@linkcode PrivateContextFrom}, -- type {@linkcode ContextFrom}, -- type {@linkcode EventsMapFrom}, -- type {@linkcode ActorsMapFrom}, -- type {@linkcode TagFrom}, -- type {@linkcode EventsFrom}, -- type {@linkcode AllPathsFrom}, -- type {@linkcode MachineOptionsFrom}
  */
 export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
-  ConfigFrom<M>,
-  PrivateContextFrom<M>,
-  ContextFrom<M>,
-  EventsMapFrom<M>,
-  ActorsMapFrom<M>,
-  TagFrom<M>,
-  EventsFrom<M>,
-  AllPathsFrom<M>,
-  MachineOptionsFrom<M>
+  M['__contract'],
+  AsyncLegacyOf<M>,
+  AsyncPluginsOf<M>
 >;
 
 /**

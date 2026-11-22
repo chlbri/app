@@ -1,5 +1,4 @@
 import type { AsyncAction, FromActionConfig, WithDescriber } from '#actions';
-import type { EventObject } from '#events';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { AsyncTransitions } from '#transitions';
 import type {
@@ -7,7 +6,6 @@ import type {
   Keys,
   UnionToIntersection,
 } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   EmptyObject,
   Identify,
@@ -19,6 +17,7 @@ import type {
 import type {
   ActivityArray,
   ActivityConfig,
+  Contract,
   NodeConfig2,
   NodeConfig3,
   StateType,
@@ -41,6 +40,8 @@ export type {
   StateExtended,
   StateP,
   StatePextended,
+  StatePextendedOf,
+  StatePOf,
   StateType,
   StateValue,
   StateValueMap,
@@ -202,17 +203,9 @@ export type EndwA<T extends Keys> = EndWithAlways<T>;
 /**
  * Internal state node structure holding executed functions and sub-nodes.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - Tags string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type Node<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type Node<Ct extends Contract = Contract> = {
   /**
    * Node path identifier.
    */
@@ -228,11 +221,11 @@ export type Node<
   /**
    * Entry actions.
    */
-  entry: AsyncAction<E, Pc, Tc, T>[];
+  entry: AsyncAction<Ct>[];
   /**
    * Exit actions.
    */
-  exit: AsyncAction<E, Pc, Tc, T>[];
+  exit: AsyncAction<Ct>[];
   /**
    * Tag strings.
    */
@@ -240,9 +233,9 @@ export type Node<
   /**
    * Child state nodes.
    */
-  states: Identify<Node<E, Pc, Tc, T>>[];
+  states: Identify<Node<Ct>>[];
   /**
    * Default initial child state name.
    */
   initial?: string;
-} & AsyncTransitions<E, Pc, Tc, T>;
+} & AsyncTransitions<Ct>;

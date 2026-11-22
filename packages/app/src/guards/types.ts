@@ -3,10 +3,14 @@ import type {
   NoExtraKeysWithDescriber,
   WithDescriber,
 } from '#actions';
-import type { EventObject } from '#events';
 import type { Equals, NotUndefined } from '@bemedev/app-options/bemedev';
 import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
+import type {
+  Contract,
+  ContractContext,
+  ContractPContext,
+} from '@bemedev/app-options';
 import type { RecordS, ReduceArray } from '~types';
 import type {
   AsyncPredicateS,
@@ -88,132 +92,85 @@ export type FromGuard<T extends GuardConfig> = T extends WithDescriber
 
 /**
  * Union of all predicate functions.
- * @template | {@linkcode EventObject} `E` - the events map to use for resolving the predicate.
- * @template `Pc` - the type of the private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - the type of the context.
- * @template `T` - state path string type.
  *
- * @returns A union type that can be a single predicate function, a combination of guards with AND logic, or a combination of guards with OR logic.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
+ *
+ * @returns A union type that can be a single predicate function, a combination
+ * of guards with AND logic, or a combination of guards with OR logic.
  *
  * @see {@linkcode AsyncPredicateS2}, {@linkcode AsyncPredicateAnd}, {@linkcode AsyncPredicateOr}
  */
-export type AsyncPredicate<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> =
-  | AsyncPredicateS<E, Pc, Tc, T>
-  | AsyncPredicateAnd<E, Pc, Tc, T>
-  | AsyncPredicateOr<E, Pc, Tc, T>;
+export type AsyncPredicate<Ct extends Contract = Contract> =
+  | AsyncPredicateS<Ct>
+  | AsyncPredicateAnd<Ct>
+  | AsyncPredicateOr<Ct>;
 
 /**
  * Async logical AND predicate wrapper.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type AsyncPredicateAnd<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { and: AsyncPredicate<E, Pc, Tc, T>[] };
+export type AsyncPredicateAnd<Ct extends Contract = Contract> = {
+  and: AsyncPredicate<Ct>[];
+};
 
 /**
  * Async logical OR predicate wrapper.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type AsyncPredicateOr<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { or: AsyncPredicate<E, Pc, Tc, T>[] };
+export type AsyncPredicateOr<Ct extends Contract = Contract> = {
+  or: AsyncPredicate<Ct>[];
+};
 
 /**
  * Sync logical AND predicate wrapper.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type SyncPredicateAnd<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { and: SyncPredicate<E, Pc, Tc, T>[] };
+export type SyncPredicateAnd<Ct extends Contract = Contract> = {
+  and: SyncPredicate<Ct>[];
+};
 
 /**
  * Sync logical OR predicate wrapper.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type SyncPredicateOr<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { or: SyncPredicate<E, Pc, Tc, T>[] };
+export type SyncPredicateOr<Ct extends Contract = Contract> = {
+  or: SyncPredicate<Ct>[];
+};
 
 /**
  * Sync predicate union structure.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type SyncPredicate<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> =
-  | SyncPredicateS2<E, Pc, Tc, T>
-  | AsyncPredicateAnd<E, Pc, Tc, T>
-  | AsyncPredicateOr<E, Pc, Tc, T>;
+export type SyncPredicate<Ct extends Contract = Contract> =
+  | SyncPredicateS2<Ct>
+  | AsyncPredicateAnd<Ct>
+  | AsyncPredicateOr<Ct>;
 
 /**
- * Represents a map of guards, where each key is a string and each value is an type {@linkcode AsyncPredicate}.
+ * Represents a map of guards, where each key is a string and each value is an
+ * {@linkcode AsyncPredicate}.
  *
- * @template | {@linkcode EventObject} `E` - the events map to use for resolving the predicate.
- * @template `Pc` - the type of the private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - the type of the context.
- * @template `T` - state path type.
- *
- * @returns A partial record where each key is a string and each value is an type {@linkcode AsyncPredicateS}.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  *
  * @see -- type {@linkcode RecordS}
  */
-export type PredicateMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = Partial<RecordS<AsyncPredicateS<E, Pc, Tc, T>>>;
+export type PredicateMap<Ct extends Contract = Contract> = Partial<
+  RecordS<AsyncPredicateS<Ct>>
+>;
 
 /**
- * Helper type extracting keys matching non-undefined values in private or public context.
+ * Helper type extracting keys matching non-undefined values in private or
+ * public context.
  *
  * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template `Tc` - Public context type.
  */
-type _DefinedValue<
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-> = KeysMatching<{
+type _DefinedValue<Pc = any, Tc = any> = KeysMatching<{
   pContext: Equals<any, Pc> extends true
     ? EmptyObject
     : NotUndefined<Pc> extends never
@@ -228,13 +185,13 @@ type _DefinedValue<
 }>;
 
 /**
- * Represents a type that can be a defined value or a string representing an event or its type.
+ * Represents a type that can be a defined value or a string representing an
+ * event or its type.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type DefinedValue<Pc = any, Tc extends PrimitiveObject = PrimitiveObject> =
-  | _DefinedValue<Pc, Tc>
+export type DefinedValue<Ct extends Contract = Contract> =
+  | _DefinedValue<ContractPContext<Ct>, ContractContext<Ct>>
   | 'events'
   | 'events.type'
   | 'events.payload';
