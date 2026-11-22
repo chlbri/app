@@ -108,62 +108,6 @@ pnpm add @bemedev/app
 
 <br/>
 
-## Breaking changes in v3.0.0
-
-`v3.0.0` swaps the interval engine and unifies the delay types. Nothing else in the
-public API changed.
-
-### 1. Interval engine
-
-The `@bemedev/app/bemedev` entry point re-exports `@bemedev/interval3` instead of
-`@bemedev/interval2`:
-
-- `createInterval` is replaced by `createInterval3`
-- `Interval2` is replaced by `Interval3`
-- `createInterval3`, `TimerState`, `IntervalParams` and every other interval3 type
-  are re-exported as well
-- the `createInterval` and `create` aliases are no longer re-exported by this
-  package; import them from `@bemedev/interval3/interval` when needed
-
-```typescript
-// Before — a fixed delay in milliseconds
-createInterval({ id: 'tick', callback, interval: 1_000 });
-
-// After — a delay computer, evaluated right before every pass
-createInterval3({ id: 'tick', callback, interval: () => 1_000 });
-```
-
-If the previous `setInterval` scheduling is still required, depend on
-`@bemedev/interval2` directly — it is no longer re-exported by this package.
-
-### 2. Unified delay types
-
-Synchronous and asynchronous machines share the same delay signature, so the
-`Sync*`/`Async*` delay types are now a single set:
-
-- `SyncDelayFunction` and `AsyncDelayFunction` → `DelayFunction`
-- `SyncDelayFunction2` and `AsyncDelayFunction2` → `DelayFunction2`
-- `SyncDelayFunction3` and `AsyncDelayFunction3` → `DelayFunction3`
-- `SyncDelayMap` and `AsyncDelayMap` → `DelayMap`
-- `SyncPerformDelay_F` and `AsyncPerformDelay_F` → `PerformDelay_F`
-
-`CreateInterval2_F` keeps its name but now consumes an `IntervalParams` object and
-returns an `Interval3` instance.
-
-### 3. The `exact` option is ignored
-
-Interval timing is always precise, so `interpret(machine, { exact })` no longer reads
-the flag and the third interpreter constructor argument is gone. The option is still
-declared on `InterpreterOptions` to keep existing calls compiling, and it has no
-effect:
-
-```typescript
-// Still compiles, `exact` is ignored
-interpret(machine, { exact: false });
-```
-
-<br/>
-
 ## Quick Start
 
 ```typescript
@@ -205,10 +149,6 @@ await service[Symbol.asyncDispose]();
   - [Names, not references](#names-not-references)
   - [Actors — two kinds of external work](#actors--two-kinds-of-external-work)
 - [Installation](#installation)
-- [Breaking changes in v3.0.0](#breaking-changes-in-v300)
-  - [1. Interval engine](#1-interval-engine)
-  - [2. Unified delay types](#2-unified-delay-types)
-  - [3. The `exact` option is ignored](#3-the-exact-option-is-ignored)
 - [Quick Start](#quick-start)
 - [1. Machine Configuration](#1-machine-configuration)
   - [`createConfig(config)`](#createconfigconfig)

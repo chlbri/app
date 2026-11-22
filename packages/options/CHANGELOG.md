@@ -8,6 +8,25 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.1.1] - 22/11/2026** => _00:59_
+
+</summary>
+
+### Docs
+
+- **README**: Remove the obsolete v3.0.0 breaking-changes section. The delay types
+  re-exported from `@bemedev/app-contract` were renamed in v3.0.0, so the migration
+  note no longer describes the current API.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.1.0] - 22/11/2026** => _00:34_
 
 </summary>

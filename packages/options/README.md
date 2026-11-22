@@ -40,17 +40,6 @@ names are derived from the contract, so the former separate config and mode inpu
 are gone. `buildHelpers` follows the same rule and accepts
 `{ contract, plugins, legacy }`.
 
-## Breaking changes in v3.0.0
-
-The delay types re-exported from `@bemedev/app-contract` are unified across both
-machine flavors:
-
-- `SyncDelayFunction3` and `AsyncDelayFunction3` → `DelayFunction3`
-- `SyncDelayFunction2` and `AsyncDelayFunction2` → `DelayFunction2`
-
-Annotate your `delays` callbacks with `DelayFunction3` / `DelayFunction2` instead of
-the removed flavor-suffixed names.
-
 ---
 
 ## Usage
