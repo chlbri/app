@@ -4,7 +4,8 @@
 
 import recursive from '@bemedev/boolean-recursive';
 import { recompose } from '@bemedev/decompose';
-import { createUtility, same, type UtilityMap } from '@bemedev/app-utility';
+import type { Contract } from '@bemedev/app-contract';
+import { same, type UtilityMap } from '../utility';
 
 import type { SyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
@@ -17,12 +18,15 @@ export type SyncHelpers = SyncAddons;
 /**
  * Builds the synchronous descriptor map of every mode-specific helper.
  *
- * @param config - Contract machine configuration.
+ * @param contract - Contract carrying the configuration.
+ * @param common - Shared helpers, rebuilt from the contract when omitted.
  *
  * @returns Synchronous utilities, keyed by helper name.
  */
-export const createSyncUtilities = (config: any): UtilityMap => {
-  const common = createCommonHelpers(config);
+export const createSyncUtilities = (
+  contract: Contract,
+  common = createCommonHelpers(contract),
+): UtilityMap => {
   const { eventsList } = common;
 
   /**
@@ -258,13 +262,3 @@ export const createSyncUtilities = (config: any): UtilityMap => {
     sendTo: same(sendTo),
   };
 };
-
-/**
- * Builds every helper exposed by `machine.createOptions` for a sync machine.
- *
- * @param config - Contract machine configuration.
- *
- * @returns The synchronous helper surface.
- */
-export const createSyncHelpers = (config: any) =>
-  createUtility(createSyncUtilities(config)).resolve('sync');

@@ -5,7 +5,8 @@
 import { withTimeout } from '@bemedev/better-promise';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
 import { recompose } from '@bemedev/decompose';
-import { createUtility, same, type UtilityMap } from '@bemedev/app-utility';
+import type { Contract } from '@bemedev/app-contract';
+import { same, type UtilityMap } from '../utility';
 
 import type { AsyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
@@ -19,12 +20,15 @@ export type AsyncHelpers = AsyncAddons;
 /**
  * Builds the asynchronous descriptor map of every mode-specific helper.
  *
- * @param config - Contract machine configuration.
+ * @param contract - Contract carrying the configuration.
+ * @param common - Shared helpers, rebuilt from the contract when omitted.
  *
  * @returns Asynchronous utilities, keyed by helper name.
  */
-export const createAsyncUtilities = (config: any): UtilityMap => {
-  const common = createCommonHelpers(config);
+export const createAsyncUtilities = (
+  contract: Contract,
+  common = createCommonHelpers(contract),
+): UtilityMap => {
   const { eventsList } = common;
 
   /**
@@ -434,13 +438,3 @@ export const createAsyncUtilities = (config: any): UtilityMap => {
     sendTo: same(sendTo),
   };
 };
-
-/**
- * Builds every helper exposed by `machine.createOptions` for an async machine.
- *
- * @param config - Contract machine configuration.
- *
- * @returns The asynchronous helper surface.
- */
-export const createAsyncHelpers = (config: any) =>
-  createUtility(createAsyncUtilities(config)).resolve('async');

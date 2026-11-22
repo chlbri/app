@@ -103,8 +103,6 @@ export class SyncMachine<
 
     const helpers = buildHelpers({
       contract: this.contract,
-      config: this.config,
-      mode: 'sync',
       plugins: this.__plugins,
       legacy: { _legacy },
     }) as any;

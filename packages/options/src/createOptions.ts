@@ -29,19 +29,11 @@ const builder = (
   contract: Contract,
   plugins: readonly OptionsPlugin<any, any>[],
 ): CreateOptionsWith<any, any> => {
-  const mode = contract.types?.sync === true ? 'sync' : 'async';
-
   const legacyOptions = Object.freeze({ _legacy: Object.freeze({}) }) as any;
 
   const callable = (helper: (options: any, legacy: any) => any) =>
     helper(
-      buildHelpers({
-        contract,
-        config: contract.config,
-        mode,
-        plugins,
-        legacy: legacyOptions,
-      }),
+      buildHelpers({ contract, plugins, legacy: legacyOptions }),
       legacyOptions,
     );
 

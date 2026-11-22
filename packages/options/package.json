@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-options",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Contract-driven option helpers for @bemedev/app",
   "keywords": [
     "state machines",
@@ -82,6 +82,11 @@
       "require": "./lib/internal/index.cjs",
       "types": "./lib/internal/index.d.ts"
     },
+    "./plugins": {
+      "import": "./lib/plugins.js",
+      "require": "./lib/plugins.cjs",
+      "types": "./lib/plugins.d.ts"
+    },
     "./types": {
       "import": "./lib/types.js",
       "require": "./lib/types.cjs",
@@ -103,14 +108,16 @@
     "test:watch": "vp test"
   },
   "dependencies": {
-    "@bemedev/app-contract": "workspace:^",
-    "@bemedev/app-utility": "workspace:^",
     "@bemedev/better-promise": "^0.1.1",
     "@bemedev/boolean-recursive": "^0.0.3",
     "@bemedev/decompose": "^2.3.0",
     "@bemedev/function-swap": "^0.2.5"
   },
+  "peerDependencies": {
+    "@bemedev/app-contract": "workspace:^"
+  },
   "devDependencies": {
+    "@bemedev/app-contract": "workspace:^",
     "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "^1.6.2",
     "@bemedev/typings": "^1.5.0",

@@ -9,11 +9,7 @@ import type {
 } from '@bemedev/app-contract';
 
 import type { Fn } from '@bemedev/app-utils-bemedev';
-import type {
-  ResolveUtilities,
-  UtilityMode,
-  UtilityPair,
-} from '@bemedev/app-utility';
+import type { ResolveUtilities, UtilityMode, UtilityPair } from '../utility';
 
 import { AsyncActionHelper, AsyncAssign, AsyncOptions, SyncAssign } from './actions';
 
@@ -25,8 +21,8 @@ import {
 } from './guards.types';
 
 /**
- * Contract followed by every addon: a synchronous and an asynchronous
- * variant of the same helper.
+ * Open helper map that every addon extends: each key holds the synchronous and
+ * the asynchronous variant of the same helper.
  */
 export type _Addons = Record<string, UtilityPair<Fn, Fn>>;
 

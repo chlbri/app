@@ -58,13 +58,14 @@ import {
   type SimpleMachineOptions2,
 } from '#common/machine';
 import { type AsyncEmitterFunction } from '#emitters';
-import { byKey2, merge2 } from '#utils';
+import { byKey2 } from '#utils';
 import type { Contract, OptionsPlugin } from '@bemedev/app-options';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types';
 import type { AsyncAddOptions_F } from '../asyncMachine';
 import type { AsyncMachine } from '../asyncMachine/machine';
+import { merge2 } from '@bemedev/app-options/internal';
 
 /**
  * The class {@linkcode AsyncInterpreter} is responsible for interpreting and managing the state of an asynchronous machine.
@@ -979,22 +980,34 @@ export class AsyncInterpreter<
 }
 
 /**
- * Utility type to infer the class {@linkcode AsyncInterpreter} type corresponding to a given interface {@linkcode AnyMachine}.
+ * Extracts the legacy options carried by an asynchronous machine.
  *
- * @template | {@linkcode AnyMachine} `M` - The machine type from which to infer the interpreter type.
- *
- * @see -- type {@linkcode ConfigFrom}, -- type {@linkcode PrivateContextFrom}, -- type {@linkcode ContextFrom}, -- type {@linkcode EventsMapFrom}, -- type {@linkcode ActorsMapFrom}, -- type {@linkcode TagFrom}, -- type {@linkcode EventsFrom}, -- type {@linkcode AllPathsFrom}, -- type {@linkcode MachineOptionsFrom}
+ * @template | {@linkcode AnyMachine} `M` - Machine type carrying `__legacy`.
  */
 type AsyncLegacyOf<M> = M extends { __legacy: infer L extends SimpleMachineOptions2 }
   ? L
   : EmptyObject;
 
+/**
+ * Extracts the options plugins carried by an asynchronous machine.
+ *
+ * @template | {@linkcode AnyMachine} `M` - Machine type carrying `__plugins`.
+ */
 type AsyncPluginsOf<M> = M extends {
   __plugins: infer Ps extends readonly OptionsPlugin<any, any>[];
 }
   ? Ps
   : [];
 
+/**
+ * Infers the interface {@linkcode AsyncInterpreter} type corresponding to a
+ * given interface {@linkcode AnyMachine}.
+ *
+ * @template | {@linkcode AnyMachine} `M` - The machine type from which to infer
+ * the interpreter type.
+ *
+ * @see -- type {@linkcode ConfigFrom}, -- type {@linkcode PrivateContextFrom}, -- type {@linkcode ContextFrom}, -- type {@linkcode EventsMapFrom}, -- type {@linkcode ActorsMapFrom}, -- type {@linkcode TagFrom}, -- type {@linkcode EventsFrom}, -- type {@linkcode AllPathsFrom}, -- type {@linkcode MachineOptionsFrom}
+ */
 export type AsyncInterpreterFrom<M extends AnyMachine> = AsyncInterpreter<
   M['__contract'],
   AsyncLegacyOf<M>,

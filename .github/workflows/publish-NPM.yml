@@ -185,19 +185,6 @@ jobs:
       package: ./packages/contract
       artifact: built-workspace
 
-  utility:
-    needs: [build]
-    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
-    secrets: inherit
-
-    with:
-      type:
-        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
-        'canary' || 'latest' }}
-
-      package: ./packages/utility
-      artifact: built-workspace
-
   options:
     needs: [build]
     uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
@@ -214,19 +201,7 @@ jobs:
   cleanup:
     name: Cleanup Artifacts
     runs-on: ubuntu-latest
-    needs:
-      [
-        build,
-        app,
-        vitest,
-        solidjs,
-        reactjs,
-        cli,
-        valibot,
-        contract,
-        utility,
-        options,
-      ]
+    needs: [build, app, vitest, solidjs, reactjs, cli, valibot, contract, options]
     if: always()
 
     permissions:

@@ -220,6 +220,7 @@ await service[Symbol.asyncDispose]();
   - [Full Machine Typings Example](#full-machine-typings-example)
 - [3. Interpreter](#3-interpreter)
   - [Adding options at runtime](#adding-options-at-runtime)
+  - [Plugins and standalone utilities](#plugins-and-standalone-utilities)
 - [4. State Subscriptions](#4-state-subscriptions)
   - [Subscribe to all state changes](#subscribe-to-all-state-changes)
   - [Subscribe to specific events](#subscribe-to-specific-events)
@@ -548,6 +549,38 @@ const enrichedService = service.provideOptions(({ action }) => ({
   actions: { log: action(() => console.log('state changed')) },
 }));
 ```
+
+### Plugins and standalone utilities
+
+`@bemedev/app` re-exports the plugin registry and the contract-aware utility builder
+from `@bemedev/app-options`. Register a plugin once, then every machine and
+interpreter surface can use the helper it contributes:
+
+```typescript
+import {
+  configureOptions,
+  createContract,
+  createUtility,
+  same,
+  type UtilityPlugin,
+} from '@bemedev/app';
+
+export const retryPlugin = {
+  name: 'retry',
+  create: () => ({ retry: same((action: () => unknown) => action) }),
+} satisfies UtilityPlugin;
+
+configureOptions(retryPlugin);
+
+const contract = createContract(config, types);
+const utilities = createUtility({ contract }).build();
+const sync = utilities.resolve('sync');
+```
+
+Per-call plugins win over registered ones with the same name:
+`createUtility({ contract }, retryPlugin)` or `createOptions(contract, retryPlugin)`.
+See the [`@bemedev/app-options`](../options) README for the plugin contract,
+`requires` ordering and `override` semantics.
 
 <br/>
 

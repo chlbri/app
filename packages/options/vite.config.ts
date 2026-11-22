@@ -12,7 +12,6 @@ const buildPack = () =>
     clean: true,
     externals: [
       '@bemedev/app-contract',
-      '@bemedev/app-utility',
       '@bemedev/better-promise',
       '@bemedev/boolean-recursive',
       '@bemedev/decompose',

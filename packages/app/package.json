@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "A reprogramming method to code better",
   "keywords": [
     "state machines",
@@ -132,6 +132,7 @@
     "test:watch": "vp test"
   },
   "dependencies": {
+    "@bemedev/app-contract": "workspace:^",
     "@bemedev/app-options": "workspace:^",
     "@bemedev/better-promise": "^0.1.1",
     "@bemedev/boolean-recursive": "^0.0.3",

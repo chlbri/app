@@ -9,51 +9,59 @@
  */
 
 import type { Contract } from '@bemedev/app-contract';
+
+import { createUtility } from '../plugins';
+import { getGlobalPlugins, getPluginsVersion } from '../plugins';
 import {
-  createUtility,
+  mergePlugins,
   orderPlugins,
-  type UtilityMap,
+  type LegacyOptions,
   type UtilityMode,
   type UtilityPlugin,
-} from '@bemedev/app-utility';
-
-import { getGlobalPlugins, getPluginsVersion, type OptionsPlugin } from '../plugins';
-import { createAsyncUtilities } from './async';
-import { createCommonHelpers } from './common';
-import { createSyncUtilities } from './sync';
+} from '../utility';
 
 /**
  * Options accepted by {@linkcode buildHelpers}.
  *
+ * The contract is the single source of truth: the configuration and the
+ * execution mode are read from it, and the event list is collected from
+ * `contract.config`.
+ *
  * @template | {@linkcode Contract} `Ct` - Contract type.
  */
 export type BuildHelpersOptions<Ct extends Contract = Contract> = {
-  /** Contract machine configuration. */
-  config: unknown;
-  /** Execution mode to project the utilities on. */
-  mode: UtilityMode;
-  /** Per-call plugins, applied after the global ones. */
-  plugins?: readonly UtilityPlugin<any, Ct>[];
-  /** Contract carried by the consumer, when available. */
-  contract?: Ct;
+  /** Contract carried by the consumer. */
+  contract: Ct;
+  /** Per-call plugins, applied after the registered ones. */
+  plugins?: readonly UtilityPlugin<any, any>[];
   /** Current legacy options handed to plugins. */
-  legacy?: unknown;
+  legacy?: LegacyOptions<Ct>;
 };
 
 /** Resolved helper surface. */
 type Helpers = Record<string, any>;
 
-/** Cache keyed by the contract (or the configuration) and a build signature. */
+/** Cache keyed by the contract and a build signature. */
 const CACHE = new WeakMap<object, Map<string, Helpers>>();
 
 /** Stable identity for plugin objects, used in cache keys. */
 const PLUGIN_IDS = new WeakMap<object, number>();
 
+/** Last numeric identity allocated to a plugin object. */
 let nextPluginId = 0;
 
+/**
+ * Reads, or lazily allocates, the stable numeric identity of a plugin.
+ *
+ * The identity only feeds the helper cache signature, so a given plugin object
+ * always maps to the same key.
+ *
+ * @param plugin - Plugin object to identify.
+ *
+ * @returns The stable numeric identity of the plugin.
+ */
 const pluginId = (plugin: object) => {
   const current = PLUGIN_IDS.get(plugin);
-
   if (current !== undefined) return current;
 
   const id = ++nextPluginId;
@@ -62,84 +70,36 @@ const pluginId = (plugin: object) => {
 };
 
 /**
- * Merges global and per-call plugins, per-call plugins winning on shared
- * names.
- *
- * @param globals - Registered plugins.
- * @param locals - Per-call plugins.
- *
- * @returns The effective plugin list.
- */
-const mergePluginLists = (
-  globals: readonly OptionsPlugin<any, any>[],
-  locals: readonly OptionsPlugin<any, any>[],
-) => {
-  if (globals.length === 0) return [...locals];
-
-  const byName = new Map<string, OptionsPlugin<any, any>>();
-
-  for (const plugin of globals) byName.set(plugin.name, plugin);
-  for (const plugin of locals) byName.set(plugin.name, plugin);
-
-  return [...byName.values()];
-};
-
-const createModeUtilities = (config: unknown, mode: UtilityMode): UtilityMap =>
-  mode === 'sync' ? createSyncUtilities(config) : createAsyncUtilities(config);
-
-/**
  * Builds the helper surface of one execution mode.
  *
- * Global plugins are merged with per-call ones, ordered by `requires`, then
- * applied on top of the built-in utilities. Results are cached by contract,
- * mode and plugin signature; configure or register a plugin to invalidate.
+ * The contract drives everything: mode, configuration and event list. Global
+ * plugins are merged with per-call ones, ordered by `requires`, then applied on
+ * top of the built-in utilities. Results are cached by contract and plugin
+ * signature; configure, register or remove a plugin to invalidate the cache.
  *
- * @param options - Configuration, mode and optional plugins.
+ * @param options - Contract and optional per-call plugins.
  *
- * @returns The resolved helper object of the requested mode.
+ * @returns The resolved helper object of the contract mode.
  */
 export const buildHelpers = <Ct extends Contract = Contract>({
-  config,
-  mode,
-  plugins,
   contract,
+  plugins = [],
   legacy,
 }: BuildHelpersOptions<Ct>): Helpers => {
-  const effective = mergePluginLists(getGlobalPlugins(), plugins ?? []);
+  const mode: UtilityMode = contract.types?.sync === true ? 'sync' : 'async';
+  const effective = mergePlugins(getGlobalPlugins(), plugins);
   const ordered = orderPlugins(effective);
-
-  const cacheOwner = (contract ?? config) as object | undefined;
-  const cacheable = !!cacheOwner && typeof cacheOwner === 'object';
-
+  const cacheOwner = contract as object;
   const signature = [getPluginsVersion(), mode, ...ordered.map(pluginId)].join('|');
+  const cached = CACHE.get(cacheOwner)?.get(signature);
+  if (cached) return cached;
 
-  if (cacheable) {
-    const cached = CACHE.get(cacheOwner)?.get(signature);
-    if (cached) return cached;
-  }
+  const helpers = createUtility({ contract, legacy }, ...plugins).resolve(
+    mode,
+  ) as Helpers;
 
-  const common = createCommonHelpers(config);
-  const base: UtilityMap = {
-    ...common.utilities,
-    ...createModeUtilities(config, mode),
-  };
-
-  const builder = createUtility(base, {
-    contract,
-    config,
-    eventsList: common.eventsList,
-    legacy,
-  });
-
-  for (const plugin of ordered) builder.use(plugin);
-
-  const helpers = builder.resolve(mode) as Helpers;
-
-  if (cacheable) {
-    const bucket = CACHE.get(cacheOwner) ?? new Map<string, Helpers>();
-    bucket.set(signature, helpers);
-    CACHE.set(cacheOwner, bucket);
-  }
-
+  const bucket = CACHE.get(cacheOwner) ?? new Map<string, Helpers>();
+  bucket.set(signature, helpers);
+  CACHE.set(cacheOwner, bucket);
   return helpers;
 };

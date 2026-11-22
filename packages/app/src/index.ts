@@ -5,6 +5,7 @@ export { createContract } from '@bemedev/app-options';
 export {
   buildHelpers,
   configureOptions,
+  createUtility,
   registerPlugins,
   same,
 } from '@bemedev/app-options';
@@ -14,8 +15,12 @@ export type {
   OptionsPlugin,
   PluginAddons,
   PluginUtilities,
+  UtilityBuilder,
+  UtilityBuilderContext,
   UtilityContext,
+  UtilityInstance,
   UtilityMap,
+  UtilityMode,
   UtilityPair,
   UtilityPlugin,
 } from '@bemedev/app-options';

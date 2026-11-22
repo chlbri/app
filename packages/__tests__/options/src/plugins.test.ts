@@ -219,7 +219,7 @@ describe('TESTS', () => {
       expect(options.actions!.doubled).toBe(6);
     });
 
-    test('#04 => configureOptions([]) resets the registry', () => {
+    test('#04 => configureOptions() resets the registry', () => {
       configureOptions(doublePlugin);
       configureOptions();
 

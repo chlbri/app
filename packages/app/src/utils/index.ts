@@ -5,7 +5,7 @@ export { decompose, decomposeSV, recompose } from '@bemedev/decompose';
 export type { Decompose, DecomposeKeys, DecomposeOptions } from '@bemedev/decompose';
 
 export * from './environment';
-export * from './merge2';
+export { merge2 } from '@bemedev/app-options/internal';
 export * from './byKey2';
 export * from './objects';
 export * from './constructEventMap';

@@ -38,7 +38,7 @@ import type {
   MachineEventsOf,
   SimpleMachineOptions2,
 } from '#common/machine';
-import { byKey2, merge2 } from '#utils';
+import { byKey2 } from '#utils';
 import type { Contract, OptionsPlugin } from '@bemedev/app-options';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
@@ -50,6 +50,7 @@ import type {
 import { createSubscriber } from '../../common/subscriber';
 import type { SyncAddOptions_F } from '../machine';
 import type { SyncMachine } from '../machine/machine';
+import { merge2 } from '@bemedev/app-options/internal';
 
 /**
  * The class {@linkcode SyncInterpreter} is responsible for interpreting and managing the state of a synchronous machine.
@@ -892,20 +893,32 @@ export class SyncInterpreter<
 }
 
 /**
- * Retrieves the type {@linkcode SyncInterpreter} service type from a given interface {@linkcode AnyMachine}.
+ * Extracts the legacy options carried by a synchronous machine.
  *
- * @template `M` - The machine type extending interface {@linkcode AnyMachine}.
+ * @template | {@linkcode AnyMachine} `M` - Machine type carrying `__legacy`.
  */
 type SyncLegacyOf<M> = M extends { __legacy: infer L extends SimpleMachineOptions2 }
   ? L
   : SimpleMachineOptions2;
 
+/**
+ * Extracts the options plugins carried by a synchronous machine.
+ *
+ * @template | {@linkcode AnyMachine} `M` - Machine type carrying `__plugins`.
+ */
 type SyncPluginsOf<M> = M extends {
   __plugins: infer Ps extends readonly OptionsPlugin<any, any>[];
 }
   ? Ps
   : [];
 
+/**
+ * Infers the interface {@linkcode SyncInterpreter} type corresponding to a
+ * given interface {@linkcode AnyMachine}.
+ *
+ * @template | {@linkcode AnyMachine} `M` - The machine type from which to infer
+ * the interpreter type.
+ */
 export type SyncInterpreterFrom<M extends AnyMachine> = SyncInterpreter<
   M['__contract'],
   SyncLegacyOf<M>,

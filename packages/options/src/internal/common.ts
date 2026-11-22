@@ -6,7 +6,8 @@
 
 import { recompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
-import { same, type UtilityMap } from '@bemedev/app-utility';
+import type { Contract } from '@bemedev/app-contract';
+import { same, type UtilityMap } from '../utility';
 
 import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';
@@ -21,11 +22,12 @@ import {
 /**
  * Creates the option helpers that do not depend on the sync/async mode.
  *
- * @param config - Contract machine configuration.
+ * @param contract - Contract carrying the configuration.
  *
  * @returns Shared helpers plus the derived events list.
  */
-export const createCommonHelpers = (config: any) => {
+export const createCommonHelpers = (contract: Contract) => {
+  const config = contract.config as any;
   const eventsList = constructEventsMap(config);
 
   /**

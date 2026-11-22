@@ -10,7 +10,6 @@
     "@bemedev/app": "workspace:^",
     "@bemedev/app-contract": "workspace:^",
     "@bemedev/app-options": "workspace:^",
-    "@bemedev/app-utility": "workspace:^",
     "@bemedev/dev-utils": "^1.6.2",
     "@types/node": "^26.6.6",
     "tsx": "^4.23.15",

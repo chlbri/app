@@ -14,9 +14,12 @@ import type {
   ContractOptions,
   ContractSync,
 } from '@bemedev/app-contract';
-import type { ResolveUtilities, UtilityMode } from '@bemedev/app-utility';
+import type { ResolveUtilities, UtilityMode } from './utility';
 import { AsyncAddons, BaseAddons, SyncAddons } from './addons';
 import type { OptionsPlugin, PluginAddons } from './plugins';
+import type { LegacyOptions } from './utility/plugin';
+
+export type { LegacyOptions } from './utility/plugin';
 
 /**
  * Extra options accepted by async action helpers.
@@ -67,12 +70,6 @@ export type SyncOptionsHelpers<C extends Contract> = SyncAddons<C>;
  * @deprecated Use {@linkcode AsyncAddons} instead.
  */
 export type AsyncOptionsHelpers<C extends Contract> = AsyncAddons<C>;
-
-/** Access to previously defined options. */
-export type LegacyOptions<C extends Contract> = {
-  /** Previously defined options, empty for a freshly built contract. */
-  _legacy: ContractOptions<C>;
-};
 
 /**
  * Options helper callback resolved from the contract's `sync` flag.

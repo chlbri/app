@@ -6,6 +6,12 @@
 > package (`@bemedev/app-utility`). Goal: stop duplicating option helpers, make every
 > helper a _utility_, and allow libraries to register plugins that extend
 > `createOptions` and everything derived from it.
+>
+> **Current evolution**: `@bemedev/app-utility` was merged into
+> `@bemedev/app-options`. `createUtility(context, ...plugins)` is contract-aware,
+> seeds the built-in helpers, applies the global registry, and exposes the contract
+> to plugins. The sections below record the original design and are kept for
+> historical context.
 
 ---
 

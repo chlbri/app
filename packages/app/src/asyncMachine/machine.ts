@@ -122,8 +122,6 @@ export class AsyncMachine<
 
     const helpers = buildHelpers({
       contract: this.contract,
-      config: this.config,
-      mode: 'async',
       plugins: this.__plugins,
       legacy: { _legacy },
     }) as any;

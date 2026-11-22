@@ -41,9 +41,9 @@
     "test": "vp test",
     "pretest": "vp run -r pretest",
     "posttest": "vp run size",
-    "rm": "rm -rf **/node_modules **/pnpm-lock.yaml && pnpm clean --lockfile --yes",
-    "up": "pnpm update !solid-js --latest && vp run check-updates",
-    "check-updates": "vp dlx npm-check-updates -x solid-js -w -u --dep dev,peer,optional,prod",
+    "rm": "pnpm clean --lockfile --yes",
+    "up": "pnpm update !solid-js !@vitest/coverage-v8 !@vitest/ui --latest && vp run check-updates",
+    "check-updates": "vp dlx npm-check-updates -x solid-js -x @vitest/coverage-v8 -x @vitest/ui -w -u --dep dev,peer,optional,prod",
     "rm:lib": "pnpm run -r rm:lib",
     "generate:lib": "vp run -r generate:lib",
     "prepare": "husky"

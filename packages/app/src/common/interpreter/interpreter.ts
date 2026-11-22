@@ -40,7 +40,6 @@ import {
   decomposeSV,
   IS_TEST,
   isStringEmpty,
-  merge2,
   reduceDescriber,
   replaceAll,
 } from '#utils';
@@ -76,6 +75,7 @@ import type {
   Selector_F,
   SimpleScheduler,
 } from './types';
+import { merge2 } from '@bemedev/app-options/internal';
 
 /**
  * Abstract base class for state machine interpreters.
