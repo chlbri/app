@@ -17,8 +17,6 @@ The package is self-contained: every type it needs is vendored inside
 pnpm add @bemedev/app-contract
 ```
 
-
-
 ---
 
 ## Usage

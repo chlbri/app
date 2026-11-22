@@ -23,7 +23,7 @@ export * from '@bemedev/app-contract';
  * @param contract - Contract created with `createContract`.
  * @param plugins - Plugins applied to this callable.
  *
- * @returns The callable, extended with `use` and `useAll`.
+ * @returns The callable, extended with `use`.
  */
 const builder = (
   contract: Contract,
@@ -38,9 +38,7 @@ const builder = (
     );
 
   return Object.assign(callable, {
-    use: (plugin: OptionsPlugin<any, any>) =>
-      builder(contract, [...plugins, plugin]),
-    useAll: (more: readonly OptionsPlugin<any, any>[]) =>
+    use: (...more: readonly OptionsPlugin<any, any>[]) =>
       builder(contract, [...plugins, ...more]),
   }) as CreateOptionsWith<any, any>;
 };
@@ -50,7 +48,7 @@ const builder = (
  *
  * The returned function receives the same helpers as
  * `machine.createOptions` and produces the contract options object. Plugins
- * can be passed directly or chained with `.use()` / `.useAll()`.
+ * can be passed directly or chained with `.use()`.
  *
  * @example
  * ```ts

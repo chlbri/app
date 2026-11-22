@@ -215,12 +215,8 @@ export type UtilityBuilder<U extends UtilityMap = {}> = {
     impl: UtilityPair<S, A>,
   ): UtilityBuilder<U & { [P in K]: UtilityPair<S, A> }>;
 
-  use<const P extends UtilityPlugin<any, any>>(
-    plugin: P,
-  ): UtilityBuilder<U & PluginUtilities<P>>;
-
-  useAll<const Ps extends readonly UtilityPlugin<any, any>[]>(
-    plugins: Ps,
+  use<const Ps extends readonly UtilityPlugin<any, any>[]>(
+    ...plugins: Ps,
   ): UtilityBuilder<U & UnionToIntersection<PluginUtilities<Ps[number]>>>;
 
   build(): U;
@@ -357,9 +353,8 @@ Keep the curried callable shape and add `.use`:
 ```ts
 type CreateOptionsWith<C extends Contract, Ps extends readonly any[]> = {
   <const O extends ContractOptions<C>>(helper: OptionsHelperOf<C, Ps, O>): O;
-  use<P extends UtilityPlugin<any, C>>(plugin: P): CreateOptionsWith<C, [...Ps, P]>;
-  useAll<const Qs extends readonly UtilityPlugin<any, C>[]>(
-    plugins: Qs,
+  use<const Qs extends readonly UtilityPlugin<any, C>[]>(
+    ...plugins: Qs,
   ): CreateOptionsWith<C, [...Ps, ...Qs]>;
 };
 
@@ -376,8 +371,7 @@ export const createOptions = <
     helper(buildHelpers({ config: contract.config, mode, plugins }), legacy);
 
   return Object.assign(callable, {
-    use: (plugin: any) => createOptions(contract, ...plugins, plugin),
-    useAll: (more: any[]) => createOptions(contract, ...plugins, ...more),
+    use: (...more: any[]) => createOptions(contract, ...plugins, ...more),
   }) as never;
 };
 ```
@@ -665,7 +659,7 @@ something" API (`createActor`, `createInterpreter`) can reuse it.
 
 - Add `plugins/` with `UtilityPlugin` re-export, `configureOptions`,
   `registerOptionsPlugin`.
-- Add `createOptions(contract, ...plugins)` and `.use` / `.useAll`.
+- Add `createOptions(contract, ...plugins)` and `.use`.
 - Add an internal test plugin (`log`) exercised in sync and async machines.
 
 ### Phase 4 — `app` integration
@@ -705,7 +699,7 @@ packages/options/src/
   internal/common.ts                  createCommonUtilities(config): UtilityMap
   internal/engine.ts                  buildHelpers({ config, mode, plugins })
   plugins/index.ts                    OptionsPlugin, configureOptions, registry
-  createOptions.ts                    callable + .use/.useAll
+  createOptions.ts                    callable + .use
   types.ts                            OptionsHelpers, OptionsHelper (derived)
   index.ts                            export plugin types
 

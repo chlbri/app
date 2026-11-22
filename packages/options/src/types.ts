@@ -105,19 +105,12 @@ export type CreateOptionsWith<
   <const O extends ContractOptions<C>>(helper: OptionsHelper<C, O, Ps>): O;
 
   /**
-   * Applies one more plugin to this callable.
-   *
-   * @param plugin - Plugin to apply.
-   */
-  use<P extends OptionsPlugin<any, C>>(plugin: P): CreateOptionsWith<C, [...Ps, P]>;
-
-  /**
-   * Applies several plugins to this callable.
+   * Applies one or more plugins to this callable.
    *
    * @param plugins - Plugins to apply.
    */
-  useAll<const Qs extends readonly OptionsPlugin<any, C>[]>(
-    plugins: Qs,
+  use<const Qs extends readonly OptionsPlugin<any, C>[]>(
+    ...plugins: Qs
   ): CreateOptionsWith<C, [...Ps, ...Qs]>;
 };
 
@@ -126,7 +119,7 @@ export type CreateOptionsWith<
  *
  * The returned function accepts an options callback and produces the machine
  * options object, typed with the contract option surface. Plugins can be
- * passed once or chained with `use` / `useAll`.
+ * passed once or chained with `use`.
  *
  * @example
  * ```ts

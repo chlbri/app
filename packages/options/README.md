@@ -173,7 +173,7 @@ const options = createOptions(
 )(({ retry }) => ({ actions: { load: retry(3, loadUser) } }));
 
 // or chained
-createOptions(contract).use(retryPlugin).useAll([logPlugin]);
+createOptions(contract).use(retryPlugin, logPlugin);
 ```
 
 At machine level, pass `plugins` in the type schema object:

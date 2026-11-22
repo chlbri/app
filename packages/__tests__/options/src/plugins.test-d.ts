@@ -59,12 +59,13 @@ const quadruplePlugin = {
   }),
 } satisfies UtilityPlugin;
 
-createOptions(syncContract).useAll([quadruplePlugin, doublePlugin])(
-  ({ quadruple }) => {
-    expectTypeOf(quadruple).toEqualTypeOf<(value: number) => number>();
-    return {};
-  },
-);
+createOptions(syncContract).use(
+  quadruplePlugin,
+  doublePlugin,
+)(({ quadruple }) => {
+  expectTypeOf(quadruple).toEqualTypeOf<(value: number) => number>();
+  return {};
+});
 
 createOptions(syncContract).use(doublePlugin).use(otherPlugin)(
   ({ double, other }) => {
@@ -74,13 +75,14 @@ createOptions(syncContract).use(doublePlugin).use(otherPlugin)(
   },
 );
 
-createOptions(syncContract).useAll([doublePlugin, otherPlugin])(
-  ({ double, other }) => {
-    expectTypeOf(double).toEqualTypeOf<(value: number) => number>();
-    expectTypeOf(other).toEqualTypeOf<(value: string) => number>();
-    return {};
-  },
-);
+createOptions(syncContract).use(
+  doublePlugin,
+  otherPlugin,
+)(({ double, other }) => {
+  expectTypeOf(double).toEqualTypeOf<(value: number) => number>();
+  expectTypeOf(other).toEqualTypeOf<(value: string) => number>();
+  return {};
+});
 
 // @ts-expect-error - an unknown helper must not compile
 createOptions(syncContract)(({ unknownHelper }) => ({}));

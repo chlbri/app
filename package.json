@@ -39,6 +39,7 @@
     "rinit": "vp run rm && vp run config",
     "fmt": "vp fmt",
     "test": "vp test",
+    "test:ui": "vp test watch --ui",
     "pretest": "vp run -r pretest",
     "posttest": "vp run size",
     "rm": "pnpm clean --lockfile --yes",
@@ -67,7 +68,8 @@
     "tslib": "^2.9.1",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
   },
   "engines": {
     "node": ">=24"

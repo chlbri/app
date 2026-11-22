@@ -218,8 +218,7 @@ export type UtilityBuilder<
  * @param context - Contract (and optional legacy options) to build for.
  * @param plugins - Per-call plugins, applied after the registered ones.
  *
- * @returns A typed builder supporting `add`, `use`, `useAll`, `build` and
- * `resolve`.
+ * @returns A typed builder supporting `add`, `use`, `build` and `resolve`.
  *
  * @example
  * ```ts

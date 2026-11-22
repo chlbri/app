@@ -133,11 +133,11 @@ describe('TESTS', () => {
       expect(used.actions!.doubled).toBe(8);
     });
 
-    test('#04 => accepts plugins through useAll', () => {
-      const options = createOptions(syncContract).useAll([
+    test('#04 => accepts several plugins through use', () => {
+      const options = createOptions(syncContract).use(
         quadruplePlugin,
         doublePlugin,
-      ])(({ quadruple }) => ({ actions: { quadrupled: quadruple(2) as any } }));
+      )(({ quadruple }) => ({ actions: { quadrupled: quadruple(2) as any } }));
 
       expect(options.actions!.quadrupled).toBe(8);
     });

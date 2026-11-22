@@ -5,12 +5,6 @@
 /react-router
 /react-start
 /router-query
-/pnpm-@tanstack+devtools-vite-devtools-vite-plugin
-/pnpm-@tanstack+react-router-migrate-from-react-router
-/pnpm-@tanstack+react-router-react-router
-/pnpm-@tanstack+react-router-router-query
-/pnpm-@tanstack+react-start-migrate-from-nextjs
-/pnpm-@tanstack+react-start-react-start
 /solid-router
 /solid-start
 # pnpm end

@@ -74,13 +74,13 @@ describe('#01 => utility added to options', () => {
     expect(options.actions!.total).toBe(13);
   });
 
-  test('#05 => use and useAll apply and type it', () => {
+  test('#05 => use applies and types plugins', () => {
     const used = createOptions(syncContract).use(sumPlugin)(({ sum }) => {
       expectTypeOf(sum).toEqualTypeOf<(a: number, b: number) => number>();
       return { actions: { total: sum(8, 9) as any } };
     });
 
-    const all = createOptions(syncContract).useAll([sumPlugin])(({ sum }) => ({
+    const all = createOptions(syncContract).use(sumPlugin)(({ sum }) => ({
       actions: { total: sum(10, 11) as any },
     }));
 
