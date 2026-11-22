@@ -1,11 +1,14 @@
 import type { SyncAction2 } from '#actions';
 import type { AnyInterpreter } from '#common/interpreter';
-import type { CommonConfig3, SimpleMachineOptions2 } from '#common/machine';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { SimpleMachineOptions2 } from '#common/machine';
 import type { GuardConfig, SyncPredicateS2, SyncPredicateS3 } from '#guards';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
-import type { PrimitiveObject } from '@bemedev/typings';
-import type { EmptyObject } from '~types';
+import type {
+  Contract,
+  ContractEvents,
+  ContractOptions,
+  OptionsPlugin,
+} from '@bemedev/app-options';
 import type { SyncAddOptionsParam_F } from '../machine/options.types';
 import type { SyncNodeConfig } from '../types.types';
 import type { SyncInterpreter } from './interpreter';
@@ -31,54 +34,36 @@ export type SyncCollectedService = {
 /**
  * Function type signature for performing a synchronous action.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  * @param action - Action configuration type {@linkcode SyncAction2}.
  */
-export type SyncPerformAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (action: SyncAction2<E, Pc, Tc, T>) => void;
+export type SyncPerformAction_F<Ct extends Contract = Contract> = (
+  action: SyncAction2<Ct>,
+) => void;
 
 /**
  * Function type signature for building a synchronous predicate guard.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  * @param predicate - Guard configuration type {@linkcode GuardConfig}.
  *
  * @returns Synchronous predicate guard type {@linkcode SyncPredicateS2}.
  */
-export type SyncToPredicate_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (predicate?: GuardConfig) => SyncPredicateS2<E, Pc, Tc, T>;
+export type SyncToPredicate_F<Ct extends Contract = Contract> = (
+  predicate?: GuardConfig,
+) => SyncPredicateS2<Ct>;
 
 /**
  * Function type signature for evaluating a synchronous predicate guard.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  * @param predicate - Synchronous predicate guard type {@linkcode SyncPredicateS3}.
  *
  * @returns Boolean result.
  */
-export type SyncPerformPredicate_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (predicate: SyncPredicateS3<E, Pc, Tc, T>) => boolean;
+export type SyncPerformPredicate_F<Ct extends Contract = Contract> = (
+  predicate: SyncPredicateS3<Ct>,
+) => boolean;
 
 /**
  * Function type signature for evaluating a synchronous transition.
@@ -119,38 +104,24 @@ export type SyncPerformAlway_F = (always: AlwaysConfig) => string | false;
  *
  * @returns Synchronous state node configuration type {@linkcode SyncNodeConfig} or `undefined`.
  */
-export type _SyncSend_F<E extends EventObject> = (
-  event: E,
+export type _SyncSend_F<Ct extends Contract = Contract> = (
+  event: ContractEvents<Ct>,
 ) => SyncNodeConfig | undefined;
 
 /**
- * Function type signature for providing machine options to a synchronous interpreter class {@linkcode SyncInterpreter}.
+ * Function type signature for providing machine options to a synchronous
+ * interpreter class {@linkcode SyncInterpreter}.
  *
- * @template `C` - Common machine config type {@linkcode CommonConfig3}.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `E` - Events map type.
- * @template `A` - Actors config map type.
- * @template `Ta` - State tag string type.
- * @template `Eo` - Event object type.
- * @template `AllPaths` - All path strings type.
- * @template `Mo` - Simple machine options type.
+ * The interpreter stays parameterized by the same contract, so the returned
+ * instance exposes the contract options surface.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
  * @template `L` - Existing options type.
- * @param option - Machine options param.
- *
- * @returns Updated class {@linkcode SyncInterpreter} instance.
  */
 export type SyncProvideMachineOptions_F<
-  C extends CommonConfig3 = CommonConfig3,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Ta extends string = string,
-  Eo extends EventObject = EventObject,
-  AllPaths extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-  L extends SimpleMachineOptions2 = EmptyObject,
-> = <const T extends Mo>(
-  option: SyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
-) => SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
+  Ct extends Contract = Contract,
+  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
+> = <const T extends ContractOptions<Ct>>(
+  option: SyncAddOptionsParam_F<Ct, T, L, Ps>,
+) => SyncInterpreter<Ct, L & T, Ps>;

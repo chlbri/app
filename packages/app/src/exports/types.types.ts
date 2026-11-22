@@ -5,6 +5,7 @@ import type {
   CommonConfig2,
   CommonConfig3,
   NoExtraKeysConfig,
+  SimpleMachineOptions2,
 } from '#common/machine';
 import type {
   ActorsConfigMap,
@@ -15,61 +16,107 @@ import type {
 } from '#events';
 import type { AsyncInterpreterFrom } from '#interpreter';
 import type { Register, RegisterOptions } from '#registry';
-import type { Contract } from '@bemedev/app-options';
+import type {
+  Contract,
+  ContractMachineOptions,
+  EmptyObject,
+  OptionsPlugin,
+} from '@bemedev/app-options';
 import type { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings';
-import type { AsyncMachineOptions2 } from '../asyncMachine';
 import type { AsyncMachine } from '../asyncMachine/machine';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
-import type { SyncMachine, SyncMachineOptions2 } from '../sync/machine';
+import type { SyncMachine } from '../sync/machine';
 
 /**
- * Resolves to class {@linkcode SyncMachine} or class {@linkcode AsyncMachine} depending on the `Sync` type parameter.
- *
- * @template | {@linkcode CommonConfig3} `C` - Common configuration type.
- * @template `Pc` - Public context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template | {@linkcode EventsMap} `E` - Events map.
- * @template | {@linkcode ActorsConfigMap} `A` - Actors map.
- * @template `Ta` - Tags type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template `AllPaths` - String union of all state paths.
- * @template | {@linkcode RegisterOptions} `Options` - Registry options type.
- * @template `Sync` - Flag indicating sync machine execution.
+ * Contract surface used to select the machine options type before the full
+ * contract object is assembled.
  */
-export type OutMachine<
+type OutContractSurface<
+  C extends CommonConfig3,
+  Pc,
+  Tc extends PrimitiveObject,
+  E extends EventsMap,
+  A extends ActorsConfigMap,
+  Tags extends string,
+  Eo extends EventObject,
+  AllPaths extends string,
+  Sync extends true | undefined,
+> = {
+  config: C;
+  types: {
+    events: Eo;
+    eventMap: E;
+    actorsMap: A;
+    context: Tc;
+    pContext: Pc;
+    paths: AllPaths;
+    tags: Tags;
+    sync: Sync;
+  };
+};
+
+/**
+ * Assembles the contract typing surface produced by `createMachine`.
+ *
+ * It is the single input of {@linkcode OutMachine}: the machine class is
+ * selected from the contract `sync` flag, and every class member is derived
+ * from it.
+ *
+ * @template `C` - Machine configuration type.
+ * @template `Pc` - Public context type.
+ * @template `Tc` - Internal context type.
+ * @template `E` - Events map.
+ * @template `A` - Actors map.
+ * @template `Tags` - Tags type.
+ * @template `Eo` - Event object type.
+ * @template `AllPaths` - String union of all state paths.
+ * @template `Sync` - Flag indicating sync machine execution.
+ * @template `O` - Machine options surface.
+ */
+export type OutContract<
   C extends CommonConfig3 = CommonConfig3,
   Pc = any,
   Tc extends PrimitiveObject = PrimitiveObject,
   E extends EventsMap = EventsMap,
   A extends ActorsConfigMap = ActorsConfigMap,
-  Ta extends string = string,
+  Tags extends string = string,
   Eo extends EventObject = EventObject,
   AllPaths extends string = string,
-  Options extends RegisterOptions = RegisterOptions,
   Sync extends true | undefined = undefined,
-> = Sync extends true
-  ? SyncMachine<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      SyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
-    >
-  : AsyncMachine<
-      C,
-      Pc,
-      Tc,
-      E,
-      A,
-      Ta,
-      Eo,
-      AllPaths,
-      AsyncMachineOptions2<Pc, Tc, Ta, Eo, Options>
-    >;
+  O extends ContractMachineOptions<
+    OutContractSurface<C, Pc, Tc, E, A, Tags, Eo, AllPaths, Sync>,
+    RegisterOptions
+  > = ContractMachineOptions<
+    OutContractSurface<C, Pc, Tc, E, A, Tags, Eo, AllPaths, Sync>,
+    RegisterOptions
+  >,
+> = Contract<
+  C,
+  {
+    events: Eo;
+    eventMap: E;
+    actorsMap: A;
+    context: Tc;
+    pContext: Pc;
+    paths: AllPaths;
+    tags: Tags;
+    sync: Sync;
+  },
+  O
+>;
+
+/**
+ * Resolves to class {@linkcode SyncMachine} or class {@linkcode AsyncMachine}
+ * depending on the contract `sync` flag.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
+ */
+export type OutMachine<
+  Ct extends Contract = Contract,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
+> = Ct['types']['sync'] extends true
+  ? SyncMachine<Ct, SimpleMachineOptions2, Ps>
+  : AsyncMachine<Ct, EmptyObject, Ps>;
 
 /**
  * Function overload signature for creating an unnamed state machine.
@@ -107,10 +154,35 @@ export type CreateMachineNoName_F = <
   Tags extends string = string,
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
   Sync extends true | undefined = undefined,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
 >(
   config: NoExtraKeysConfig<C>,
-  types?: { context?: Tc; pContext?: Pc; eventsMap?: E; actorsMap?: A; sync?: Sync },
-) => OutMachine<C, _Pc, _Tc, _E, _A, Tags, Eo, string, RegisterOptions, Sync>;
+  types?: {
+    context?: Tc;
+    pContext?: Pc;
+    eventsMap?: E;
+    actorsMap?: A;
+    sync?: Sync;
+    plugins?: Ps;
+  },
+) => OutMachine<
+  OutContract<
+    C,
+    _Pc,
+    _Tc,
+    _E,
+    _A,
+    Tags,
+    Eo,
+    string,
+    Sync,
+    ContractMachineOptions<
+      OutContractSurface<C, _Pc, _Tc, _E, _A, Tags, Eo, string, Sync>,
+      RegisterOptions
+    >
+  >,
+  Ps
+>;
 
 /**
  * Function overload signature for creating a named state machine backed by interface {@linkcode Register}.
@@ -163,71 +235,57 @@ export type CreateMachineNamed_F = <
   >,
   Eo extends EventObject = ToEventObject<ToEvents<_E, _A>>,
   Sync extends true | undefined = undefined,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
 >(
   _: Name,
   config: NoExtraKeysConfig<C>,
-  types?: { context?: Tc; pContext?: Pc; eventsMap?: E; actorsMap?: A; sync?: Sync },
+  types?: {
+    context?: Tc;
+    pContext?: Pc;
+    eventsMap?: E;
+    actorsMap?: A;
+    sync?: Sync;
+    plugins?: Ps;
+  },
 ) => OutMachine<
-  C,
-  _Pc,
-  _Tc,
-  _E,
-  _A,
-  Tags,
-  Eo,
-  Current['paths']['all'],
-  Current['options'],
-  Sync
+  OutContract<
+    C,
+    _Pc,
+    _Tc,
+    _E,
+    _A,
+    Tags,
+    Eo,
+    Current['paths']['all'],
+    Sync,
+    ContractMachineOptions<
+      OutContractSurface<
+        C,
+        _Pc,
+        _Tc,
+        _E,
+        _A,
+        Tags,
+        Eo,
+        Current['paths']['all'],
+        Sync
+      >,
+      Current['options']
+    >
+  >,
+  Ps
 >;
-
-/**
- * Narrows a contract context to the machine `PrimitiveObject` constraint.
- *
- * Contract types are re-exported by `@bemedev/app-options`, so an unresolved
- * contract context does not satisfy the `PrimitiveObject` imported from
- * `@bemedev/typings`. Resolved contexts keep their shape, unresolved ones fall
- * back to `any`.
- */
-type ContractPrimitive<T> = T extends PrimitiveObject ? T : any;
 
 /**
  * Machine resolved from a contract.
  *
- * It mirrors type {@linkcode OutMachine} but everything is read from the
- * contract typing surface, and the contract options surface is used directly
- * as the machine options type. The `sync` flag selects class
- * {@linkcode SyncMachine} or class {@linkcode AsyncMachine}.
+ * It is exactly {@linkcode OutMachine}: the contract `sync` flag selects class
+ * {@linkcode SyncMachine} or class {@linkcode AsyncMachine}, and every member
+ * type is derived from the contract.
  *
- * @template | {@linkcode Contract} `C` - Machine configuration type.
+ * @template | {@linkcode Contract} `C` - Contract of the machine.
  */
-export type ContractMachine<
-  C extends Contract,
-  T extends C['types'] = C['types'],
-  Co extends C['config'] = C['config'],
-  O extends NonNullable<C['options']> = NonNullable<C['options']>,
-> = T['sync'] extends true
-  ? SyncMachine<
-      Co,
-      T['pContext'],
-      ContractPrimitive<T['context']>,
-      EventsMap,
-      ActorsConfigMap,
-      T['tags'],
-      T['events'],
-      T['paths'],
-      O
-    >
-  : AsyncMachine<
-      Co,
-      T['pContext'],
-      ContractPrimitive<T['context']>,
-      EventsMap,
-      ActorsConfigMap,
-      T['tags'],
-      T['events'],
-      T['paths'],
-      O
-    >;
+export type ContractMachine<C extends Contract> = OutMachine<C>;
 
 /**
  * Function signature for creating a state machine from a contract.

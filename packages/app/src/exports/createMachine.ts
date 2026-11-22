@@ -1,20 +1,77 @@
+import {
+  createContract,
+  type Contract,
+  type OptionsPlugin,
+} from '@bemedev/app-options';
 import { createAsyncMachine } from '../asyncMachine/machine';
 import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
 export type { ContractMachine, CreateMachine_F } from './types.types';
+import { toArray } from '@bemedev/app-utils-bemedev';
 
 /**
- * Internal helper function to instantiate state machine instance based on options.
+ * Internal helper function to instantiate a state machine from a contract.
  *
- * @param _config - State machine configuration object.
- * @param types - Type definitions or options map.
+ * @param contract - Contract carrying the configuration and its types.
  *
  * @returns Synchronous or asynchronous state machine instance.
  */
-const builder = (_config: any, types: any) => {
-  const check = types?.sync === true;
+const builder = (
+  contract: Contract,
+  plugins: readonly OptionsPlugin<any, any>[] = [],
+) => {
+  const check = contract.types?.sync === true;
   const fn = check ? createSyncMachine : createAsyncMachine;
-  return fn(_config);
+  return fn(contract, plugins);
+};
+
+/**
+ * Splits the optional `plugins` entry out of a type schema object.
+ *
+ * @param types - Type schema object, possibly carrying plugins.
+ *
+ * @returns The type schemas without `plugins`, and the extracted plugins.
+ */
+const splitPlugins = (types?: any) => {
+  if (!types || typeof types !== 'object' || Array.isArray(types)) {
+    return { plugins: [] as readonly OptionsPlugin<any, any>[], types };
+  }
+
+  const { plugins, ...rest } = types;
+
+  return {
+    plugins: (Array.isArray(plugins) ? plugins : []) as readonly OptionsPlugin<
+      any,
+      any
+    >[],
+    types: rest,
+  };
+};
+
+/**
+ * Creates the runtime contract consumed by machine classes.
+ *
+ * @param nameOrConfig - Contract name, configuration, or an existing contract.
+ * @param configOrTypes - Configuration or types, depending on the call form.
+ * @param types - Optional types for the named form.
+ *
+ * @returns A frozen contract.
+ */
+const toContract = (nameOrConfig: any, configOrTypes?: any, types?: any) => {
+  if (typeof nameOrConfig === 'string') {
+    const split = splitPlugins(types);
+    return {
+      contract: createContract(nameOrConfig, configOrTypes, split.types),
+      plugins: split.plugins,
+    };
+  }
+
+  const split = splitPlugins(configOrTypes);
+
+  return {
+    contract: createContract(nameOrConfig, split.types),
+    plugins: split.plugins,
+  };
 };
 
 /**
@@ -47,11 +104,11 @@ export const createMachine: CreateMachine_F = (
   configOrTypes?: any,
   types?: any,
 ) => {
-  if (typeof nameOrConfig === 'string') {
-    return builder(configOrTypes, types);
-  }
   if (isContract(nameOrConfig)) {
-    return builder(nameOrConfig.config, nameOrConfig.types);
+    const plugins = (nameOrConfig.types as any)?.plugins;
+    return builder(nameOrConfig, toArray(plugins));
   }
-  return builder(nameOrConfig, configOrTypes);
+
+  const { contract, plugins } = toContract(nameOrConfig, configOrTypes, types);
+  return builder(contract, plugins);
 };

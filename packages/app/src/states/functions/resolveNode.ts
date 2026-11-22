@@ -1,11 +1,9 @@
 import { toAction } from '#actions';
 import { toChild } from '#common/functions';
-import type { SimpleMachineOptions2 } from '#common/machine';
 import { toEmitter } from '#emitters';
-import type { EventObject } from '#events';
 import { toTransition } from '#transitions';
 import { _any, identify, toArray } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract, ContractOptions } from '@bemedev/app-options';
 import type { Node, NodeConfig2 } from '../types';
 import { stateType } from './stateType';
 
@@ -23,16 +21,11 @@ import { stateType } from './stateType';
  *
  * @returns Resolved type {@linkcode Node} object.
  */
-export type ResolveNode_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
+export type ResolveNode_F = <Ct extends Contract = Contract>(
   config: NodeConfig2,
-  options?: SimpleMachineOptions2,
+  options?: ContractOptions<Ct>,
   ...events: string[]
-) => Node<Eo, Pc, Tc, T>;
+) => Node<Ct>;
 
 /**
  * Resolves a node configuration into a full node with all functions.

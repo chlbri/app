@@ -116,6 +116,25 @@ export type {
 } from '#guards';
 
 export type {
+  Contract,
+  ContractActorsMap,
+  ContractConfig,
+  ContractContext,
+  ContractEventArg,
+  ContractEvents,
+  ContractEventsMap,
+  ContractEventType,
+  ContractOptions,
+  ContractPContext,
+  ContractPaths,
+  ContractSchemas,
+  ContractSync,
+  ContractTags,
+  ContractTypes,
+  ContractTypesOf,
+} from '@bemedev/app-options';
+
+export type {
   PrimitiveObject,
   PrimitiveObjectMap,
   PrimitiveObjectT,
@@ -149,6 +168,16 @@ export type {
   GetEventsFromConfig,
   GetEventsFromFlat,
   GetIO_F,
+  MachineActorsOf,
+  MachineConfigOf,
+  MachineContextOf,
+  MachineEventsMapOf,
+  MachineEventsOf,
+  MachineOptionsOf,
+  MachinePathsOf,
+  MachinePContextOf,
+  MachineStateOf,
+  MachineTagsOf,
   MachineType,
   NoExtraKeysTargetDef,
   SimpleMachineOptions2,

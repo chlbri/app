@@ -1,16 +1,12 @@
 import type { AsyncAction2, AsyncActionMap, WithDescriber } from '#actions';
-import type { EventObject } from '#events';
 import { reduceFnMap } from '@bemedev/app-options/internal';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract } from '@bemedev/app-options';
 import { fromDescriber } from '~types';
 
 /**
  * Function signature for converting an action describer to an executable action function.
  *
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `T` - State path string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  *
  * @param action - Action describer or string key.
  * @param actions - Optional map of async actions.
@@ -19,16 +15,11 @@ import { fromDescriber } from '~types';
  * @returns Executable action function of type {@linkcode AsyncAction2} or `undefined`.
  */
 export type ToAction_F = {
-  <
-    Pc = any,
-    Tc extends PrimitiveObject = PrimitiveObject,
-    T extends string = string,
-    Eo extends EventObject = EventObject,
-  >(
+  <Ct extends Contract = Contract>(
     action: WithDescriber,
-    actions: AsyncActionMap<Eo, Pc, Tc, T> | undefined,
+    actions: AsyncActionMap<Ct> | undefined,
     ...events: string[]
-  ): AsyncAction2<Eo, Pc, Tc, T> | undefined;
+  ): AsyncAction2<Ct> | undefined;
 };
 
 /**

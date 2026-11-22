@@ -5,21 +5,23 @@ import type { AsyncPredicateS, DefinedValue } from '#guards';
 import type { EventsMapFrom } from '#common/interpreter';
 import type {
   AnyMachine,
-  CommonConfig3,
   CommonEraseAction_F,
   CommonFilterAction_F,
   DecomposeC,
   SimpleMachineOptions2,
   SwapFunction_F,
 } from '#common/machine';
+import type { EventArg, EventArgAll } from '#events';
 import type {
-  ActorsConfigMap,
-  EventArg,
-  EventArgAll,
-  EventObject,
-  EventsMap,
-} from '#events';
-import type { PrimitiveObject } from '@bemedev/typings';
+  AugmentedAddons,
+  Contract,
+  ContractContext,
+  ContractEvents,
+  ContractOptions,
+  OptionsPlugin,
+  PluginAddons,
+  ResolveUtilities,
+} from '@bemedev/app-options';
 import type {
   EmptyObject,
   FnMap,
@@ -37,12 +39,7 @@ import type { AsyncMachine } from './machine';
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `T` - State tag string type.
  */
-export type AsyncOptions<
-  Eo extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type AsyncOptions<Ct extends Contract = Contract> = {
   /**
    * Called with the thrown error and current context snapshot when
    * the async function rejects. Return value is merged as ActionResult.
@@ -50,11 +47,11 @@ export type AsyncOptions<
    *
    * @see -- type {@linkcode ErrorFn}
    */
-  catch: ErrorFn<Eo, Pc, Tc, T>;
+  catch: ErrorFn<Ct>;
   /**
    * Optional async action of type {@linkcode AsyncAction2} executed upon success.
    */
-  then?: AsyncAction2<Eo, Pc, Tc, T>;
+  then?: AsyncAction2<Ct>;
   /**
    * Maximum duration in milliseconds before the async action is forcibly aborted.
    * When omitted, no timeout is applied.
@@ -76,16 +73,10 @@ export type AsyncOptions<
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `T` - State tag string type.
  */
-type AsyncOptionsArgs<
-  F,
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = unknown extends F
-  ? [AsyncOptions<E, Pc, Tc, T>?]
+type AsyncOptionsArgs<F, Ct extends Contract = Contract> = unknown extends F
+  ? [AsyncOptions<Ct>?]
   : F extends Promise<any>
-    ? [AsyncOptions<E, Pc, Tc, T>]
+    ? [AsyncOptions<Ct>]
     : [];
 
 /**
@@ -99,12 +90,9 @@ type AsyncOptionsArgs<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type ErrorFn<
-  Eo extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <Err>(err: Err) => AsyncAction2<Eo, Pc, Tc, T>;
+export type ErrorFn<Ct extends Contract = Contract> = <Err>(
+  err: Err,
+) => AsyncAction2<Ct>;
 
 /**
  * Union type of traversable tuple `R` or Promise resolving to `R`.
@@ -131,25 +119,22 @@ export type TraversableTupleAsync<
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
 export type AsyncAssignAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  D = DecomposeC<Tc>,
+  Ct extends Contract = Contract,
+  D = DecomposeC<ContractContext<Ct>>,
 > = {
   <
     const K extends SingleOrArrayL2<keyof D>,
     const F extends TraversableTupleAsync<D, K> = TraversableTupleAsync<D, K>,
   >(
     keys: K,
-    fn: FnMap<E, Pc, Tc, T, NoInfer<F>>,
-    ...args: AsyncOptionsArgs<F, E, Pc, Tc, T>
-  ): AsyncAction2<E, Pc, Tc, T>;
+    fn: FnMap<Ct, NoInfer<F>>,
+    ...args: AsyncOptionsArgs<F, Ct>
+  ): AsyncAction2<Ct>;
 
-  <F extends Tc | Promise<Tc>>(
-    fn: FnMap<E, Pc, Tc, T, F>,
-    ...args: AsyncOptionsArgs<F, E, Pc, Tc, T>
-  ): AsyncAction2<E, Pc, Tc, T>;
+  <F extends ContractContext<Ct> | Promise<ContractContext<Ct>>>(
+    fn: FnMap<Ct, F>,
+    ...args: AsyncOptionsArgs<F, Ct>
+  ): AsyncAction2<Ct>;
 };
 
 /**
@@ -163,12 +148,9 @@ export type AsyncAssignAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncResendAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (event: EventArgAll<E>) => AsyncAction2<E, Pc, Tc, T>;
+export type AsyncResendAction_F<Ct extends Contract = Contract> = (
+  event: EventArgAll<ContractEvents<Ct>>,
+) => AsyncAction2<Ct>;
 
 /**
  * Function type signature for forcibly sending an event as an async action.
@@ -181,12 +163,9 @@ export type AsyncResendAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncForceSendAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (event: EventArg<E>) => AsyncAction2<E, Pc, Tc, T>;
+export type AsyncForceSendAction_F<Ct extends Contract = Contract> = (
+  event: EventArg<ContractEvents<Ct>>,
+) => AsyncAction2<Ct>;
 
 /**
  * Function type signature for time-related async actions (activities, timers).
@@ -199,12 +178,9 @@ export type AsyncForceSendAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncTimeAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (id: string) => AsyncAction2<E, Pc, Tc, T>;
+export type AsyncTimeAction_F<Ct extends Contract = Contract> = (
+  id: string,
+) => AsyncAction2<Ct>;
 
 /**
  * Function type signature for creating an async action helper.
@@ -216,15 +192,10 @@ export type AsyncTimeAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <F>(
-  fn: FnMap<E, Pc, Tc, T, F>,
-  ...args: AsyncOptionsArgs<F, E, Pc, Tc, T>
-) => AsyncAction2<E, Pc, Tc, T>;
+export type AsyncAction_F<Ct extends Contract = Contract> = <F>(
+  fn: FnMap<Ct, F>,
+  ...args: AsyncOptionsArgs<F, Ct>
+) => AsyncAction2<Ct>;
 
 /**
  * Function type signature for creating an array/object filter action helper.
@@ -236,12 +207,8 @@ export type AsyncAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncFilterAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = CommonFilterAction_F<E, Pc, Tc, T, AsyncAction2<E, Pc, Tc, T>>;
+export type AsyncFilterAction_F<Ct extends Contract = Contract> =
+  CommonFilterAction_F<Ct, AsyncAction2<Ct>>;
 
 /**
  * Function type signature for creating an erase property action helper.
@@ -253,12 +220,10 @@ export type AsyncFilterAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncEraseAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = CommonEraseAction_F<Tc, AsyncAction2<E, Pc, Tc, T>>;
+export type AsyncEraseAction_F<Ct extends Contract = Contract> = CommonEraseAction_F<
+  Ct,
+  AsyncAction2<Ct>
+>;
 
 /**
  * Function type signature for sending an event to an actor machine asynchronously.
@@ -270,12 +235,9 @@ export type AsyncEraseAction_F<
  *
  * @returns Function returning an async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncSendAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <M extends AnyMachine>(
+export type AsyncSendAction_F<Ct extends Contract = Contract> = <
+  M extends AnyMachine,
+>(
   _?: M,
 ) => <
   F extends
@@ -284,11 +246,11 @@ export type AsyncSendAction_F<
     | { to: string; event: EventArg<EventsMapFrom<M>> }
     | Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }>,
 >(
-  fn: FnMap<E, Pc, Tc, T, F>,
+  fn: FnMap<Ct, F>,
   ...args: F extends Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }>
-    ? [AsyncOptions<E, Pc, Tc, T>]
+    ? [AsyncOptions<Ct>]
     : []
-) => AsyncAction2<E, Pc, Tc, T>;
+) => AsyncAction2<Ct>;
 
 /**
  * Function type signature for creating a value checker guard helper.
@@ -302,12 +264,10 @@ export type AsyncSendAction_F<
  *
  * @returns Guard function of type {@linkcode FnR}.
  */
-export type AsyncValueCheckerGuard_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (path: DefinedValue<Pc, Tc>, ...values: any[]) => FnR<E, Pc, Tc, T, boolean>;
+export type AsyncValueCheckerGuard_F<Ct extends Contract = Contract> = (
+  path: DefinedValue<Ct>,
+  ...values: any[]
+) => FnR<Ct, boolean>;
 
 /**
  * Function type signature for creating a property definition guard helper.
@@ -320,12 +280,9 @@ export type AsyncValueCheckerGuard_F<
  *
  * @returns Guard function of type {@linkcode FnR}.
  */
-export type AsyncDefineGuard_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (path: DefinedValue<Pc, Tc>) => FnR<E, Pc, Tc, T, boolean>;
+export type AsyncDefineGuard_F<Ct extends Contract = Contract> = (
+  path: DefinedValue<Ct>,
+) => FnR<Ct, boolean>;
 
 /**
  * Function type signature for batching multiple actions into a single async action.
@@ -338,14 +295,11 @@ export type AsyncDefineGuard_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncBatchAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = <A extends (AsyncAction2<E, Pc, Tc, T> | undefined)[]>(
+export type AsyncBatchAction_F<Ct extends Contract = Contract> = <
+  A extends (AsyncAction2<Ct> | undefined)[],
+>(
   ...fns: A
-) => AsyncAction2<E, Pc, Tc, T>;
+) => AsyncAction2<Ct>;
 
 /**
  * Function type signature for repeating a single action.
@@ -366,15 +320,10 @@ export type AsyncBatchAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncForAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (
-  count: number | FnMap<E, Pc, Tc, T, MaybePromise<number>>,
-  fn: AsyncAction2<E, Pc, Tc, T> | undefined,
-) => AsyncAction2<E, Pc, Tc, T>;
+export type AsyncForAction_F<Ct extends Contract = Contract> = (
+  count: number | FnMap<Ct, MaybePromise<number>>,
+  fn: AsyncAction2<Ct> | undefined,
+) => AsyncAction2<Ct>;
 
 /**
  * Function type signature for repeating a single action while a predicate holds.
@@ -394,15 +343,10 @@ export type AsyncForAction_F<
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncWhileAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (
-  predicate: FnMap<E, Pc, Tc, T, MaybePromise<boolean>>,
-  fn: AsyncAction2<E, Pc, Tc, T> | undefined,
-) => AsyncAction2<E, Pc, Tc, T>;
+export type AsyncWhileAction_F<Ct extends Contract = Contract> = (
+  predicate: FnMap<Ct, MaybePromise<boolean>>,
+  fn: AsyncAction2<Ct> | undefined,
+) => AsyncAction2<Ct>;
 
 /**
  * Logical AND guard structure for async guard batching options.
@@ -412,12 +356,9 @@ export type AsyncWhileAction_F<
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `T` - State tag string type.
  */
-export type AsyncGuardAndOption<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { and: AsyncGuardUnionOption<E, Pc, Tc, T>[] };
+export type AsyncGuardAndOption<Ct extends Contract = Contract> = {
+  and: AsyncGuardUnionOption<Ct>[];
+};
 
 /**
  * Logical OR guard structure for async guard batching options.
@@ -427,12 +368,9 @@ export type AsyncGuardAndOption<
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `T` - State tag string type.
  */
-export type AsyncGuardOrOption<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = { or: AsyncGuardUnionOption<E, Pc, Tc, T>[] };
+export type AsyncGuardOrOption<Ct extends Contract = Contract> = {
+  or: AsyncGuardUnionOption<Ct>[];
+};
 
 /**
  * Union of async guard items for batching.
@@ -442,16 +380,11 @@ export type AsyncGuardOrOption<
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `T` - State tag string type.
  */
-export type AsyncGuardUnionOption<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> =
+export type AsyncGuardUnionOption<Ct extends Contract = Contract> =
   | undefined
-  | AsyncPredicateS<E, Pc, Tc, T>
-  | AsyncGuardAndOption<E, Pc, Tc, T>
-  | AsyncGuardOrOption<E, Pc, Tc, T>;
+  | AsyncPredicateS<Ct>
+  | AsyncGuardAndOption<Ct>
+  | AsyncGuardOrOption<Ct>;
 
 /**
  * Function type signature for batching multiple guards into a single async guard.
@@ -464,14 +397,9 @@ export type AsyncGuardUnionOption<
  *
  * @returns Async guard function of type {@linkcode FnR}.
  */
-export type AsyncBatchGuard_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (
-  ...guards: AsyncGuardUnionOption<E, Pc, Tc, T>[]
-) => FnR<E, Pc, Tc, T, Promise<boolean>>;
+export type AsyncBatchGuard_F<Ct extends Contract = Contract> = (
+  ...guards: AsyncGuardUnionOption<Ct>[]
+) => FnR<Ct, Promise<boolean>>;
 
 /**
  * Object containing all action, guard, timer, and activity helper functions for an async machine.
@@ -481,38 +409,33 @@ export type AsyncBatchGuard_F<
  * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
  * @template `T` - State tag string type.
  */
-export type AsyncAddOption<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type AsyncAddOption<Ct extends Contract = Contract> = {
   /**
    * Guard helper that checks whether a context property is defined.
    *
    * @see -- type {@linkcode AsyncDefineGuard_F}
    */
-  isDefined: AsyncDefineGuard_F<E, Pc, Tc, T>;
+  isDefined: AsyncDefineGuard_F<Ct>;
   /**
    * Guard helper that checks whether a context property is not defined.
    *
    * @see -- type {@linkcode AsyncDefineGuard_F}
    */
-  isNotDefined: AsyncDefineGuard_F<E, Pc, Tc, T>;
+  isNotDefined: AsyncDefineGuard_F<Ct>;
   /**
    * Guard helper that checks whether a context property equals one of the
    * provided values.
    *
    * @see -- type {@linkcode AsyncValueCheckerGuard_F}
    */
-  isValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  isValue: AsyncValueCheckerGuard_F<Ct>;
   /**
    * Guard helper that checks whether a context property differs from all
    * provided values.
    *
    * @see -- type {@linkcode AsyncValueCheckerGuard_F}
    */
-  isNotValue: AsyncValueCheckerGuard_F<E, Pc, Tc, T>;
+  isNotValue: AsyncValueCheckerGuard_F<Ct>;
   /**
    * Helper function to batch multiple guards into a single async guard.
    *
@@ -522,14 +445,14 @@ export type AsyncAddOption<
    *
    * @see -- type {@linkcode AsyncBatchGuard_F}
    */
-  guardBatch: AsyncBatchGuard_F<E, Pc, Tc, T>;
+  guardBatch: AsyncBatchGuard_F<Ct>;
   /**
    * Swap helper function that swaps the state arguments in functional
    * transitions.
    *
    * @see -- type {@linkcode SwapFunction_F}
    */
-  swap: SwapFunction_F<E, Pc, Tc, T>;
+  swap: SwapFunction_F<Ct>;
   /**
    * Helper function to assign context variables asynchronously.
    *
@@ -541,7 +464,7 @@ export type AsyncAddOption<
    *
    * @see -- type {@linkcode AsyncAssignAction_F}
    */
-  assign: AsyncAssignAction_F<E, Pc, Tc, T>;
+  assign: AsyncAssignAction_F<Ct>;
   /**
    * Helper function to batch multiple async actions into a single action.
    *
@@ -551,7 +474,7 @@ export type AsyncAddOption<
    *
    * @see -- type {@linkcode AsyncBatchAction_F}
    */
-  batch: AsyncBatchAction_F<E, Pc, Tc, T>;
+  batch: AsyncBatchAction_F<Ct>;
   /**
    * Helper function to repeat a single action a fixed number of times.
    *
@@ -562,7 +485,7 @@ export type AsyncAddOption<
    *
    * @see -- type {@linkcode AsyncForAction_F}
    */
-  _for: AsyncForAction_F<E, Pc, Tc, T>;
+  _for: AsyncForAction_F<Ct>;
   /**
    * Helper function to repeat a single action while a predicate holds.
    *
@@ -571,7 +494,7 @@ export type AsyncAddOption<
    *
    * @see -- type {@linkcode AsyncWhileAction_F}
    */
-  _while: AsyncWhileAction_F<E, Pc, Tc, T>;
+  _while: AsyncWhileAction_F<Ct>;
   /**
    * Helper function to repeat a single action while a predicate holds, running
    * it at least once.
@@ -581,80 +504,80 @@ export type AsyncAddOption<
    *
    * @see -- type {@linkcode AsyncWhileAction_F}
    */
-  _doWhile: AsyncWhileAction_F<E, Pc, Tc, T>;
+  _doWhile: AsyncWhileAction_F<Ct>;
   /**
    * Helper function to filter array or object properties asynchronously.
    *
    * @see -- type {@linkcode AsyncFilterAction_F}
    */
-  filter: AsyncFilterAction_F<E, Pc, Tc, T>;
+  filter: AsyncFilterAction_F<Ct>;
   /**
    * Helper function to erase object properties asynchronously.
    *
    * @see -- type {@linkcode AsyncEraseAction_F}
    */
-  erase: AsyncEraseAction_F<E, Pc, Tc, T>;
+  erase: AsyncEraseAction_F<Ct>;
   /**
    * Helper function to create async actions.
    *
    * @see -- type {@linkcode AsyncAction_F}
    */
-  action: AsyncAction_F<E, Pc, Tc, T>;
+  action: AsyncAction_F<Ct>;
   /**
    * Helper function to send events to actor machines asynchronously.
    *
    * @see -- type {@linkcode AsyncSendAction_F}
    */
-  sendTo: AsyncSendAction_F<E, Pc, Tc, T>;
+  sendTo: AsyncSendAction_F<Ct>;
   /**
    * Helper function to resend an event as an async action.
    *
    * @see -- type {@linkcode AsyncResendAction_F}
    */
-  resend: AsyncResendAction_F<E, Pc, Tc, T>;
+  resend: AsyncResendAction_F<Ct>;
   /**
    * Helper function to force sending an event as an async action, whatever the
    * current state is.
    *
    * @see -- type {@linkcode AsyncForceSendAction_F}
    */
-  forceSend: AsyncResendAction_F<E, Pc, Tc, T>;
+  forceSend: AsyncResendAction_F<Ct>;
   /**
    * Helper function to pause an activity.
    *
    * @see -- type {@linkcode AsyncTimeAction_F}
    */
-  pauseActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
+  pauseActivity: AsyncTimeAction_F<Ct>;
   /**
    * Helper function to resume an activity.
    *
    * @see -- type {@linkcode AsyncTimeAction_F}
    */
-  resumeActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
+  resumeActivity: AsyncTimeAction_F<Ct>;
   /**
    * Helper function to stop an activity.
    *
    * @see -- type {@linkcode AsyncTimeAction_F}
    */
-  stopActivity: AsyncTimeAction_F<E, Pc, Tc, T>;
+  stopActivity: AsyncTimeAction_F<Ct>;
   /**
    * Helper function to pause a timer.
    *
    * @see -- type {@linkcode AsyncTimeAction_F}
    */
-  pauseTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
+  pauseTimer: AsyncTimeAction_F<Ct>;
   /**
    * Helper function to resume a timer.
    *
    * @see -- type {@linkcode AsyncTimeAction_F}
    */
-  resumeTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
+  resumeTimer: AsyncTimeAction_F<Ct>;
   /**
    * Helper function to stop a timer.
    *
    * @see -- type {@linkcode AsyncTimeAction_F}
    */
-  stopTimer: AsyncTimeAction_F<E, Pc, Tc, T>;
+  stopTimer: AsyncTimeAction_F<Ct>;
 };
 
 /**
@@ -672,14 +595,14 @@ export type AsyncAddOption<
  * @returns Machine options of type {@linkcode SimpleMachineOptions2}.
  */
 export type AsyncAddOptionsParam_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
-  L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ct extends Contract = Contract,
+  Mo = SimpleMachineOptions2,
+  L = SimpleMachineOptions2,
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = (
-  option: AsyncAddOption<E, Pc, Tc, T>,
+  option: AsyncAddOption<Ct> &
+    AugmentedAddons<Ct, 'async', keyof AsyncAddOption<Ct>> &
+    ResolveUtilities<PluginAddons<Ps>, 'async'>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.
@@ -688,51 +611,37 @@ export type AsyncAddOptionsParam_F<
 ) => Mo;
 
 /**
- * Function type signature for adding options to an async machine configuration.
+ * Function type signature for adding options to an async machine
+ * configuration.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template `Ta` - State tag string type.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Simple machine options type.
- * @template | {@linkcode SimpleMachineOptions2} `L` - Existing options type.
+ * Every option type is derived from the contract: events, contexts and tags are
+ * read through the contract helpers instead of being passed separately.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
+ * @template `L` - Existing options type.
  */
 export type AsyncAddOptions_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  Ta extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
-> = <const T extends Mo>(
-  option: AsyncAddOptionsParam_F<E, Pc, Tc, Ta, T, L>,
-) => L & T;
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
+> = <const T extends ContractOptions<Ct>>(
+  option: AsyncAddOptionsParam_F<Ct, T, L, Ps>,
+) => ContractOptions<Ct>;
 
 /**
- * Function type signature for providing options to an async machine class {@linkcode AsyncMachine}.
+ * Function type signature for providing options to an async machine class
+ * {@linkcode AsyncMachine}.
  *
- * @template | {@linkcode CommonConfig3} `C` - Common machine config type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Public context type.
- * @template | {@linkcode EventsMap} `E` - Events map type.
- * @template | {@linkcode ActorsConfigMap} `A` - Actors config map type.
- * @template `Ta` - State tag string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
- * @template `AllPaths` - All path strings type.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Simple machine options type.
- * @template | {@linkcode EmptyObject} `L` - Existing options type.
+ * The machine stays parameterized by the same contract, so the returned
+ * instance exposes the contract options surface.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
+ * @template `L` - Existing options type.
  */
 export type AsyncProvideOptions_F<
-  C extends CommonConfig3 = CommonConfig3,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Ta extends string = string,
-  Eo extends EventObject = EventObject,
-  AllPaths extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = EmptyObject,
-> = <const T extends Mo>(
-  option: AsyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
-) => AsyncMachine<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
+> = <const T extends ContractOptions<Ct>>(
+  option: AsyncAddOptionsParam_F<Ct, T, L, Ps>,
+) => AsyncMachine<Ct, L & T, Ps>;

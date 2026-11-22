@@ -1,26 +1,24 @@
-import type { EventObject, State, PrimitiveObject } from '@bemedev/app';
+import type { Contract, MachineStateOf } from '@bemedev/app';
 import type { Dequal_F } from '@bemedev/app/types';
 
 /**
  * Options for configuring the {@linkcode useState} hook and the `state` helper
  * returned by {@linkcode useService}.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
- * @template `Ta` - Tag type extending `string`.
- * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
- * @template `T` - Selected state type, defaults to type {@linkcode State}<{@linkcode Eo}, {@linkcode Tc}, {@linkcode Ta}>.
+ * Every type is derived from the contract of the service.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the service.
+ * @template `T` - Selected state type, defaults to the contract state.
  *
  * @property selector - Optional selector function to project the state into a sub-state.
  * @property equals - Optional equality comparator function to compare previous and next selected state.
  * @property stateEquals - Optional equality comparator function to compare previous and next machine state before selection.
  */
 export type UseStateOptions<
-  Tc extends PrimitiveObject,
-  Ta extends string,
-  Eo extends EventObject,
-  T = State<Eo, Tc, Ta>,
+  Ct extends Contract = Contract,
+  T = MachineStateOf<Ct>,
 > = {
-  selector?: (state: State<Eo, Tc, Ta>) => T;
+  selector?: (state: MachineStateOf<Ct>) => T;
   equals?: Dequal_F<T>;
-  stateEquals?: Dequal_F<State<Eo, Tc, Ta>>;
+  stateEquals?: Dequal_F<MachineStateOf<Ct>>;
 };

@@ -1,11 +1,10 @@
-import type { EventObject } from '#events';
 import type {
   ActionResult,
   MaybeAsyncActionResult,
   WithDescriber,
 } from '@bemedev/app-options';
 import type { NoExtraKeys } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract } from '@bemedev/app-options';
 import type { Describer, FnMap, FromDescriber } from '~types';
 
 export type {
@@ -65,59 +64,35 @@ export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
 /**
  * Async action function map.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type AsyncAction<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnMap<E, Pc, Tc, T, MaybeAsyncActionResult<Tc>>;
+export type AsyncAction<Ct extends Contract = Contract> = FnMap<
+  Ct,
+  MaybeAsyncActionResult<Ct>
+>;
 
 /**
  * Synchronous action function map.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type SyncAction<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = FnMap<E, Pc, Tc, T, ActionResult<Tc>>;
+export type SyncAction<Ct extends Contract = Contract> = FnMap<Ct, ActionResult<Ct>>;
 
 /**
- * Represents a collection of actions, where each action is identified by a string key.
+ * Represents a collection of actions, where each action is identified by a
+ * string key.
  *
- * @template | {@linkcode EventObject} `E` - all events.
- * @template `Pc` - the type of the private context.
- * @template | {@linkcode PrimitiveObject} `Tc` - the type of the context.
- * @template `T` - state path type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type AsyncActionMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = Partial<Record<string, AsyncAction<E, Pc, Tc, T>>>;
+export type AsyncActionMap<Ct extends Contract = Contract> = Partial<
+  Record<string, AsyncAction<Ct>>
+>;
 
 /**
  * Sync action configuration map.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type SyncActionMap<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = Partial<Record<string, SyncAction<E, Pc, Tc, T>>>;
+export type SyncActionMap<Ct extends Contract = Contract> = Partial<
+  Record<string, SyncAction<Ct>>
+>;

@@ -4,24 +4,30 @@
 
 import recursive from '@bemedev/boolean-recursive';
 import { recompose } from '@bemedev/decompose';
+import type { Contract } from '@bemedev/app-contract';
+import { same, type UtilityMap } from '../utility';
 
+import type { SyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
 import { merge2 } from './merge2';
 import { reduceFnMap } from './reduceFnMap';
 
 /** Option helpers of a synchronous machine. */
-export type SyncHelpers = ReturnType<typeof createSyncHelpers>;
+export type SyncHelpers = SyncAddons;
 
 /**
- * Builds every helper exposed by `machine.createOptions` for a sync machine.
+ * Builds the synchronous descriptor map of every mode-specific helper.
  *
- * @param config - Contract machine configuration.
+ * @param contract - Contract carrying the configuration.
+ * @param common - Shared helpers, rebuilt from the contract when omitted.
  *
- * @returns The synchronous helper surface.
+ * @returns Synchronous utilities, keyed by helper name.
  */
-export const createSyncHelpers = (config: any) => {
-  const common = createCommonHelpers(config);
-  const { eventsList, timeAction } = common;
+export const createSyncUtilities = (
+  contract: Contract,
+  common = createCommonHelpers(contract),
+): UtilityMap => {
+  const { eventsList } = common;
 
   /**
    * Batches multiple guards into a single synchronous guard.
@@ -245,20 +251,14 @@ export const createSyncHelpers = (config: any) => {
   };
 
   return {
-    ...common,
-    guardBatch,
-    assign,
-    batch,
-    _for,
-    _while,
-    _doWhile,
-    action,
-    sendTo,
-    pauseActivity: timeAction('pauseActivity'),
-    resumeActivity: timeAction('resumeActivity'),
-    stopActivity: timeAction('stopActivity'),
-    pauseTimer: timeAction('pauseTimer'),
-    resumeTimer: timeAction('resumeTimer'),
-    stopTimer: timeAction('stopTimer'),
+    ...common.utilities,
+    guardBatch: same(guardBatch),
+    assign: same(assign),
+    batch: same(batch),
+    _for: same(_for),
+    _while: same(_while),
+    _doWhile: same(_doWhile),
+    action: same(action),
+    sendTo: same(sendTo),
   };
 };

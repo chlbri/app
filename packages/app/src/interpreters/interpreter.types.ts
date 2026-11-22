@@ -1,21 +1,21 @@
 import type { AsyncAction2, MaybeAsyncActionResult } from '#actions';
 import type { InterpretArgs } from '#common/interpreter';
-import type {
-  AnyMachine,
-  CommonConfig3,
-  SimpleMachineOptions2,
-} from '#common/machine';
-import type { ActorsConfigMap, EventObject, EventsMap } from '#events';
+import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
 import type { AsyncPredicateS3 } from '#guards';
-import type { AsyncAddOptionsParam_F } from '../asyncMachine';
 import type { NodeConfig2 } from '#states';
 import type {
   AlwaysConfig,
   DelayedTransitions,
   TransitionConfig,
 } from '#transitions';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type {
+  Contract,
+  ContractEvents,
+  ContractOptions,
+  OptionsPlugin,
+} from '@bemedev/app-options';
 import type { EmptyObject, MaybePromise } from '~types';
+import type { AsyncAddOptionsParam_F } from '../asyncMachine';
 import { type AsyncInterpreter, type AsyncInterpreterFrom } from './interpreter';
 
 /**
@@ -33,57 +33,40 @@ export type AsyncInterpreter_F = <M extends AnyMachine>(
 /**
  * Function type signature for performing an action later asynchronously.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  * @param action - Async action type {@linkcode AsyncAction2}.
  *
  * @returns Result type {@linkcode MaybeAsyncActionResult}.
  */
-export type AsyncPerformActionLater_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (action: AsyncAction2<E, Pc, Tc, T>) => MaybeAsyncActionResult<Tc>;
+export type AsyncPerformActionLater_F<Ct extends Contract = Contract> = (
+  action: AsyncAction2<Ct>,
+) => MaybeAsyncActionResult<Ct>;
 
 /**
  * Function type signature for performing an async action immediately.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  * @param from - Origin state identifier string or `false`.
  * @param action - Async action type {@linkcode AsyncAction2}.
  *
  * @returns Promise resolving to `void`.
  */
-export type AsyncPerformAction_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (from: string | false, action: AsyncAction2<E, Pc, Tc, T>) => Promise<void>;
+export type AsyncPerformAction_F<Ct extends Contract = Contract> = (
+  from: string | false,
+  action: AsyncAction2<Ct>,
+) => Promise<void>;
 
 /**
  * Function type signature for evaluating an async predicate guard.
  *
- * @template `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State tag string type.
+
  * @param predicate - Async predicate guard type {@linkcode AsyncPredicateS3}.
  *
  * @returns Promise or boolean result.
  */
-export type AsyncPerformPredicate_F<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = (predicate: AsyncPredicateS3<E, Pc, Tc, T>) => MaybePromise<boolean>;
+export type AsyncPerformPredicate_F<Ct extends Contract = Contract> = (
+  predicate: AsyncPredicateS3<Ct>,
+) => MaybePromise<boolean>;
 
 /**
  * Function type signature for performing an after delay transition asynchronously.
@@ -159,38 +142,24 @@ export type AsyncPerformTransitions_F = (
  *
  * @returns Promise resolving to state node configuration type {@linkcode NodeConfig2} or `undefined`.
  */
-export type _AsyncSend_F<E extends EventObject> = (
-  event: E,
+export type _AsyncSend_F<Ct extends Contract = Contract> = (
+  event: ContractEvents<Ct>,
 ) => Promise<NodeConfig2 | undefined>;
 
 /**
- * Function type signature for providing machine options to an async interpreter class {@linkcode AsyncInterpreter}.
+ * Function type signature for providing machine options to an async interpreter
+ * class {@linkcode AsyncInterpreter}.Ø
  *
- * @template `C` - Common machine config type {@linkcode CommonConfig3}.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `E` - Events map type.
- * @template `A` - Actors config map type.
- * @template `Ta` - State tag string type.
- * @template `Eo` - Event object type.
- * @template `AllPaths` - All path strings type.
- * @template `Mo` - Simple machine options type.
+ * The interpreter stays parameterized by the same contract, so the returned
+ * instance exposes the contract options surface.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
  * @template `L` - Existing options type.
- * @param option - Machine options param.
- *
- * @returns Updated class {@linkcode AsyncInterpreter} instance.
  */
 export type AsyncProvideMachineOptions_F<
-  C extends CommonConfig3 = CommonConfig3,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Ta extends string = string,
-  Eo extends EventObject = EventObject,
-  AllPaths extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = EmptyObject,
-> = <const T extends Mo>(
-  option: AsyncAddOptionsParam_F<Eo, Pc, Tc, Ta, T, L>,
-) => AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L & T>;
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
+> = <const T extends ContractOptions<Ct>>(
+  option: AsyncAddOptionsParam_F<Ct, T, L, Ps>,
+) => AsyncInterpreter<Ct, L & T, Ps>;

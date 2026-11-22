@@ -1,8 +1,7 @@
-import type { EventObject } from '#events';
 import type { State } from '#states';
-import { nothing } from '@bemedev/app-options/internal';
+import type { Contract } from '@bemedev/app-options';
 import { _any } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import { nothing } from '@bemedev/app-options/internal';
 import equal from 'fast-deep-equal';
 import { FnMapR, isFunction } from '../types/primitives';
 import { SubscriberBase } from './subscriber.base';
@@ -11,15 +10,14 @@ import { SubscriberBase } from './subscriber.base';
  * Subscriber class that manages the subscription state and provides methods
  * to handle state changes and unsubscribe.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Type of the context.
- * @template `T` - State path string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * The subscriber is contract-first: the state it receives is built from the
+ * contract events, context and tags.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the observed machine.
  */
-class Subscriber<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-> extends SubscriberBase<State<Eo, Tc, T>> {
+class Subscriber<const Ct extends Contract = Contract> extends SubscriberBase<
+  State<Ct>
+> {
   /**
    * Subscriber identifier getter.
    *
@@ -38,13 +36,13 @@ class Subscriber<
    * @param firstTime - Initial trigger execution flag.
    */
   constructor(
-    _subscriber: FnMapR<Eo, Tc, T, void>,
-    equals: (a: State<Eo, Tc, T>, b: State<Eo, Tc, T>) => boolean = equal,
+    _subscriber: FnMapR<Ct, void>,
+    equals: (a: State<Ct>, b: State<Ct>) => boolean = equal,
     private _id?: string,
     events: string[] = [],
     public firstTime?: boolean,
   ) {
-    const subscriber = Subscriber.transformSub(_subscriber, events);
+    const subscriber = Subscriber.transformSub<Ct>(_subscriber, events);
     super(subscriber, undefined, equals, firstTime);
   }
 
@@ -56,18 +54,14 @@ class Subscriber<
    *
    * @returns Unified subscriber state handling function.
    */
-  private static transformSub = <
-    Tc extends PrimitiveObject = PrimitiveObject,
-    T extends string = string,
-    Eo extends EventObject = EventObject,
-  >(
-    _subscriber: FnMapR<Eo, Tc, T, void>,
+  private static transformSub = <const Ct extends Contract = Contract>(
+    _subscriber: FnMapR<Ct, void>,
     events: string[],
   ) => {
     const check1 = isFunction(_subscriber);
     return check1
       ? _subscriber
-      : ({ event, ...rest }: State<Eo, Tc, T>) => {
+      : ({ event, ...rest }: State<Ct>) => {
           const _else = _subscriber.else ?? nothing;
           const { type, payload } = event;
 
@@ -90,15 +84,9 @@ export type { Subscriber };
 /**
  * Options for configuring a subscriber instance.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the observed machine.
  */
-export type SubscriberOptions<
-  E extends EventObject = EventObject,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-> = {
+export type SubscriberOptions<Ct extends Contract = Contract> = {
   /**
    * Optional subscriber identifier string.
    */
@@ -106,7 +94,7 @@ export type SubscriberOptions<
   /**
    * Optional equality comparator function.
    */
-  equals?: (a: State<E, Tc, T>, b: State<E, Tc, T>) => boolean;
+  equals?: (a: State<Ct>, b: State<Ct>) => boolean;
   /**
    * Optional initial trigger flag.
    */
@@ -116,9 +104,7 @@ export type SubscriberOptions<
 /**
  * Function signature for subscriber creation factory.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type.
- * @template `T` - State path string type.
- * @template | {@linkcode EventObject} `Eo` - Event object type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the observed machine.
  *
  * @param subscriber - Subscriber map or function.
  * @param options - Subscriber options object.
@@ -126,15 +112,11 @@ export type SubscriberOptions<
  *
  * @returns Instance of type {@linkcode Subscriber}.
  */
-export type CreateSubscriber_F = <
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  const Eo extends EventObject = EventObject,
->(
-  subscriber: FnMapR<Eo, Tc, T, void>,
-  options?: SubscriberOptions<Eo, Tc, T>,
+export type CreateSubscriber_F = <const Ct extends Contract = Contract>(
+  subscriber: FnMapR<Ct, void>,
+  options?: SubscriberOptions<Ct>,
   ...events: string[]
-) => Subscriber<Tc, T, Eo>;
+) => Subscriber<Ct>;
 
 /**
  * Creates a new instance of SubscriberMapClass.

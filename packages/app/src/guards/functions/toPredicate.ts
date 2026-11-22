@@ -1,5 +1,4 @@
 import { GUARD_TYPE } from '#constants';
-import type { EventObject } from '#events';
 import type { GuardConfig } from '#guards';
 import type { StateExtended } from '#states';
 import { reduceFnMap } from '@bemedev/app-options/internal';
@@ -9,7 +8,7 @@ import recursive, {
   type GuardDefUnion,
 } from '@bemedev/boolean-recursive';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract } from '@bemedev/app-options';
 import { isDescriber, isString } from '../../types/primitives';
 import type { AsyncPredicateS3, SyncPredicateS3, PredicateMap } from '../types';
 
@@ -25,19 +24,11 @@ import type { AsyncPredicateS3, SyncPredicateS3, PredicateMap } from '../types';
  * @param guards - Predicate map.
  * @param events - Machine events list.
  */
-export type _ToPredicateF = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
+export type _ToPredicateF = <Ct extends Contract = Contract>(
   guard: GuardConfig,
-  guards: PredicateMap<Eo, Pc, Tc, T> | undefined,
+  guards: PredicateMap<Ct> | undefined,
   ...events: string[]
-) => {
-  func?: GuardDefUnion<[StateExtended<Eo, Pc, Tc, T>]> | undefined;
-  errors: string[];
-};
+) => { func?: GuardDefUnion<[StateExtended<Ct>]> | undefined; errors: string[] };
 
 /**
  * Signature for async guard recursive parser function.
@@ -51,17 +42,12 @@ export type _ToPredicateF = <
  * @param guards - Predicate map.
  * @param events - Machine events list.
  */
-export type _ToPredicateAsyncF = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
+export type _ToPredicateAsyncF = <Ct extends Contract = Contract>(
   guard: GuardConfig,
-  guards: PredicateMap<Eo, Pc, Tc, T> | undefined,
+  guards: PredicateMap<Ct> | undefined,
   ...events: string[]
 ) => {
-  func?: AsyncGuardDefUnion<[StateExtended<Eo, Pc, Tc, T>]> | undefined;
+  func?: AsyncGuardDefUnion<[StateExtended<Ct>]> | undefined;
   errors: string[];
 };
 
@@ -82,16 +68,11 @@ export type _ToPredicate = _ToPredicateF & { async: _ToPredicateAsyncF };
  * @param guards - Predicate map.
  * @param events - Machine events list.
  */
-export type ToPredicate_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
+export type ToPredicate_F = <Ct extends Contract = Contract>(
   guard: GuardConfig,
-  guards: PredicateMap<Eo, Pc, Tc, T> | undefined,
+  guards: PredicateMap<Ct> | undefined,
   ...events: string[]
-) => { predicate?: SyncPredicateS3<Eo, Pc, Tc, T> | undefined; errors: string[] };
+) => { predicate?: SyncPredicateS3<Ct> | undefined; errors: string[] };
 
 /**
  * Signature for converting guard config into executable async predicate.
@@ -105,16 +86,11 @@ export type ToPredicate_F = <
  * @param guards - Predicate map.
  * @param events - Machine events list.
  */
-export type ToPredicateAsync_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
->(
+export type ToPredicateAsync_F = <Ct extends Contract = Contract>(
   guard: GuardConfig,
-  guards: PredicateMap<Eo, Pc, Tc, T> | undefined,
+  guards: PredicateMap<Ct> | undefined,
   ...events: string[]
-) => { predicate?: AsyncPredicateS3<Eo, Pc, Tc, T> | undefined; errors: string[] };
+) => { predicate?: AsyncPredicateS3<Ct> | undefined; errors: string[] };
 
 /**
  * Combined type for sync and async guard predicate converters.

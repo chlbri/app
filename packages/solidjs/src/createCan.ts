@@ -1,8 +1,8 @@
 import type {
   AddSubscriber_F,
-  EventObject,
-  PrimitiveObject,
-  State,
+  Contract,
+  ContractEventType,
+  MachineStateOf,
 } from '@bemedev/app';
 import { expandFn } from '@bemedev/app/bemedev';
 import { deepEqual } from '@bemedev/app/utils';
@@ -11,30 +11,26 @@ import { createSignal, onCleanup } from 'solid-js';
 /**
  * SolidJS primitive that creates reactive signal helpers for querying event capabilities from a service.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
- * @template `Ta` - Tag type extending `string`.
- * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
+ * Every type is derived from the contract of the service.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the service.
  *
  * @param service - Service object containing `subscribe`, `state`, and `canEvents`.
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
- * @param service.state - Current state of type {@linkcode State}.
+ * @param service.state - Current state derived from the contract.
  * @param service.canEvents - Function checking if event types can be accepted.
  *
  * @returns Object helper with `or` and `and` methods returning signals.
  *
  * @see {@linkcode expandFn}, {@linkcode createSignal}, {@linkcode onCleanup}, {@linkcode deepEqual}
  */
-export function createCan<
-  Tc extends PrimitiveObject,
-  Ta extends string,
-  Eo extends EventObject,
->(service: {
-  subscribe: AddSubscriber_F<Tc, Ta, Eo>;
-  state: State<Eo, Tc, Ta>;
-  canEvents: (...events: Eo['type'][]) => boolean;
+export function createCan<const Ct extends Contract = Contract>(service: {
+  subscribe: AddSubscriber_F<Ct>;
+  state: MachineStateOf<Ct>;
+  canEvents: (...events: ContractEventType<Ct>[]) => boolean;
 }) {
   const dispatch = (matcher: 'some' | 'every') => {
-    return (...events: Eo['type'][]) => {
+    return (...events: ContractEventType<Ct>[]) => {
       const selector = () => {
         return events[matcher](event => service.canEvents(event));
       };

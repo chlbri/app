@@ -1,8 +1,7 @@
 import type {
   AddSubscriber_F,
-  EventObject,
-  PrimitiveObject,
-  State,
+  Contract,
+  MachineStateOf,
   StateValue,
 } from '@bemedev/app';
 import { expandFn } from '@bemedev/app/bemedev';
@@ -12,23 +11,22 @@ import { useSync } from '@bemedev/react-sync';
 /**
  * React hook that creates reactive helpers for checking active state hierarchy.
  *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
- * @template `Ta` - Tag type extending `string`.
- * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
+ * Every type is derived from the contract of the service.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the service.
  *
  * @param service - Service object containing `subscribe` and `state`.
  * @param service.subscribe - Subscription handler function of type {@linkcode AddSubscriber_F}.
- * @param service.state - Current state of type {@linkcode State}.
+ * @param service.state - Current state derived from the contract.
  *
  * @returns Object helper with `or` and `and` methods to check state hierarchy.
  *
  * @see {@linkcode decomposeSV}, {@linkcode useSync}, {@linkcode expandFn}, {@linkcode deepEqual}, {@linkcode identity}
  */
-export function useIsInside<
-  Tc extends PrimitiveObject,
-  Ta extends string,
-  Eo extends EventObject,
->(service: { subscribe: AddSubscriber_F<Tc, Ta, Eo>; state: State<Eo, Tc, Ta> }) {
+export function useIsInside<const Ct extends Contract = Contract>(service: {
+  subscribe: AddSubscriber_F<Ct>;
+  state: MachineStateOf<Ct>;
+}) {
   const selector1 = (value: StateValue) => {
     return decomposeSV(value);
   };

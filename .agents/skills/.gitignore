@@ -1,4 +1,10 @@
 # pnpm
+/devtools-vite-plugin
+/migrate-from-nextjs
+/migrate-from-react-router
+/react-router
+/react-start
+/router-query
 /pnpm-@tanstack+devtools-vite-devtools-vite-plugin
 /pnpm-@tanstack+react-router-migrate-from-react-router
 /pnpm-@tanstack+react-router-react-router

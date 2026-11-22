@@ -6,6 +6,8 @@
 
 import { recompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
+import type { Contract } from '@bemedev/app-contract';
+import { same, type UtilityMap } from '../utility';
 
 import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';
@@ -20,11 +22,12 @@ import {
 /**
  * Creates the option helpers that do not depend on the sync/async mode.
  *
- * @param config - Contract machine configuration.
+ * @param contract - Contract carrying the configuration.
  *
  * @returns Shared helpers plus the derived events list.
  */
-export const createCommonHelpers = (config: any) => {
+export const createCommonHelpers = (contract: Contract) => {
+  const config = contract.config as any;
   const eventsList = constructEventsMap(config);
 
   /**
@@ -104,8 +107,30 @@ export const createCommonHelpers = (config: any) => {
             })),
     });
 
+  const resend = (resend: any) => () => ({ resend });
+  const forceSend = (forceSend: any) => () => ({ forceSend });
+
+  const utilities: UtilityMap = {
+    isValue: same(isValue),
+    isNotValue: same(isNotValue),
+    isDefined: same(isDefined),
+    isNotDefined: same(isNotDefined),
+    swap: same(swap),
+    filter: same(filter),
+    erase: same(erase),
+    pauseActivity: same(timeAction('pauseActivity')),
+    resumeActivity: same(timeAction('resumeActivity')),
+    stopActivity: same(timeAction('stopActivity')),
+    pauseTimer: same(timeAction('pauseTimer')),
+    resumeTimer: same(timeAction('resumeTimer')),
+    stopTimer: same(timeAction('stopTimer')),
+    resend: same(resend),
+    forceSend: same(forceSend),
+  };
+
   return {
     eventsList,
+    utilities,
     isValue,
     isNotValue,
     isDefined,
@@ -114,7 +139,7 @@ export const createCommonHelpers = (config: any) => {
     filter,
     erase,
     timeAction,
-    resend: (resend: any) => () => ({ resend }),
-    forceSend: (forceSend: any) => () => ({ forceSend }),
+    resend,
+    forceSend,
   };
 };

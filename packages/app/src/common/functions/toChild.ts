@@ -1,8 +1,7 @@
-import type { CommonChild, SimpleMachineOptions2 } from '#common/machine';
-import type { EventObject } from '#events';
+import type { CommonChild } from '#common/machine';
 import { toTransition } from '#transitions';
 import { _any, identify } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract, ContractOptions } from '@bemedev/app-options';
 import type { ChildConfig } from '../../actors/types';
 import { toChildSrc } from './toChildSrc';
 
@@ -22,16 +21,13 @@ import { toChildSrc } from './toChildSrc';
  * @returns Structured child instance of type {@linkcode CommonChild}.
  */
 export type ToChild_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
+  Ct extends Contract = Contract,
   R extends { eventsMap: any } = { eventsMap: any },
-  Eo extends EventObject = EventObject,
 >(
   child: ChildConfig & { __id: string },
-  options: SimpleMachineOptions2 | undefined,
+  options: ContractOptions<Ct> | undefined,
   ...events: string[]
-) => CommonChild<Eo, Pc, Tc, T, R>;
+) => CommonChild<Ct, R>;
 
 /**
  * Converts an emitter config to an emitter object with a source and transitions.

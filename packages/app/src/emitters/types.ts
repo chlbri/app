@@ -1,8 +1,7 @@
 import type { NotUndefined } from '@bemedev/app-options/bemedev';
-import type { ActorsConfigMap, EventObject } from '#events';
+import type { ActorsConfigMap } from '#events';
 import type { AsyncTransition } from '#transitions';
-import type { PrimitiveObject } from '@bemedev/typings';
-import type { AsyncEmitterFunction } from '@bemedev/app-options';
+import type { AsyncEmitterFunction, Contract } from '@bemedev/app-options';
 
 export type {
   AsyncEmitterFunction,
@@ -41,23 +40,14 @@ export type EmitterSrcConfig = string;
 /**
  * Asynchronous emitter configuration structure.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `R` - Return value type.
  */
-export type AsyncEmitter<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = {
+export type AsyncEmitter<Ct extends Contract = Contract, R = any> = {
   /**
    * Source function returning a pausable stream.
    */
-  src: AsyncEmitterFunction<E, Pc, Tc, T, R>;
+  src: AsyncEmitterFunction<Ct, R>;
   /**
    * Optional description string.
    */
@@ -65,37 +55,28 @@ export type AsyncEmitter<
   /**
    * Transitions triggered on next emission.
    */
-  next: AsyncTransition<E, Pc, Tc, T>[];
+  next: AsyncTransition<Ct>[];
   /**
    * Transitions triggered on error emission.
    */
-  error: AsyncTransition<E, Pc, Tc, T>[];
+  error: AsyncTransition<Ct>[];
   /**
    * Transitions triggered on completion.
    */
-  complete: AsyncTransition<E, Pc, Tc, T>[];
+  complete: AsyncTransition<Ct>[];
 };
 
 /**
  * Synchronous emitter configuration structure.
  *
- * @template | {@linkcode EventObject} `E` - Event object type.
- * @template `Pc` - Private context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Internal context type.
- * @template `T` - State path string type.
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  * @template `R` - Return value type.
  */
-export type SyncEmitter<
-  E extends EventObject = EventObject,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  R = any,
-> = {
+export type SyncEmitter<Ct extends Contract = Contract, R = any> = {
   /**
    * Source function returning a pausable stream.
    */
-  src: AsyncEmitterFunction<E, Pc, Tc, T, R>;
+  src: AsyncEmitterFunction<Ct, R>;
   /**
    * Optional description string.
    */
@@ -103,15 +84,15 @@ export type SyncEmitter<
   /**
    * Transitions triggered on next emission.
    */
-  next: AsyncTransition<E, Pc, Tc, T>[];
+  next: AsyncTransition<Ct>[];
   /**
    * Transitions triggered on error emission.
    */
-  error: AsyncTransition<E, Pc, Tc, T>[];
+  error: AsyncTransition<Ct>[];
   /**
    * Transitions triggered on completion.
    */
-  complete: AsyncTransition<E, Pc, Tc, T>[];
+  complete: AsyncTransition<Ct>[];
 };
 
 /**

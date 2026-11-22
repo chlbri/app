@@ -1,12 +1,16 @@
 import type { Equals, Fn } from '@bemedev/app/bemedev';
 import type {
-  ActorsConfigMap,
+  Contract,
+  ContractContext,
+  ContractEvents,
+  ContractPContext,
+  ContractTags,
+} from '@bemedev/app/contract';
+import type {
   AsyncInterpreter,
-  CommonConfig3,
   EmptyObject,
   EventArgObject,
   EventObject,
-  EventsMap,
   ExtractSender,
   MachineType,
   PrimitiveObject,
@@ -48,22 +52,23 @@ type CommonTestsResult = Record<
 };
 
 /**
- * Result object returned by type {@linkcode ConstructTests_F} containing generated test methods.
+ * Result object returned by type {@linkcode ConstructTests_F} containing
+ * generated test methods.
  *
- * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
+ * Every type is derived from the contract of the tested service.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the tested machine.
  * @template `T` - Custom helper return type extending `object`.
- * @template `Ta` - Tag type extending `string`.
  */
 export type ConstructTestsResult<
-  Eo extends EventObject,
+  Ct extends Contract = Contract,
   T extends object = object,
-  Ta extends string = string,
 > = T &
   CommonTestsResult & {
-    send: (_event: EventArgObject<Eo>, index?: number) => TestArr;
-  } & (Equals<Ta, never> extends true
+    send: (_event: EventArgObject<ContractEvents<Ct>>, index?: number) => TestArr;
+  } & (Equals<ContractTags<Ct>, never> extends true
     ? EmptyObject
-    : { useTags: (...tags: Ta[]) => TestArr });
+    : { useTags: (...tags: ContractTags<Ct>[]) => TestArr });
 
 /**
  * Internal result structure for type {@linkcode constructTests} execution.
@@ -101,40 +106,24 @@ type ConstructContexts_F<Pc = any, Tc extends PrimitiveObject = PrimitiveObject>
 /**
  * Configuration options object passed to custom test helper functions.
  *
- * @template | {@linkcode CommonConfig3} `C` - Machine configuration type extending type {@linkcode CommonConfig3}.
- * @template `Pc` - Protected context type.
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type extending type {@linkcode PrimitiveObject}.
- * @template | {@linkcode EventsMap} `E` - Events map type extending type {@linkcode EventsMap}.
- * @template | {@linkcode ActorsConfigMap} `A` - Actors configuration map extending type {@linkcode ActorsConfigMap}.
- * @template `Ta` - Tag type extending `string`.
- * @template | {@linkcode EventObject} `Eo` - Event object type extending type {@linkcode EventObject}.
- * @template `AllPaths` - All paths union type extending `string`.
- * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type extending type {@linkcode SimpleMachineOptions2}.
- * @template | {@linkcode SimpleMachineOptions2} `L` - Local machine options type extending type {@linkcode SimpleMachineOptions2}.
+ * Contexts, events, tags and the service type are all derived from the contract.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the tested machine.
+ * @template | {@linkcode SimpleMachineOptions2} `L` - Accumulated options.
  * @template | {@linkcode MachineType} `Type` - Machine type ('sync' or 'async').
  */
 export type Option<
-  C extends CommonConfig3 = CommonConfig3,
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  E extends EventsMap = EventsMap,
-  A extends ActorsConfigMap = ActorsConfigMap,
-  Ta extends string = string,
-  Eo extends EventObject = EventObject,
-  AllPaths extends string = string,
-  Mo extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
   Type extends MachineType = 'async',
 > = {
   waiter: ConstructWaiter_F;
-  contexts: ConstructContexts_F<Pc, Tc>;
+  contexts: ConstructContexts_F<ContractPContext<Ct>, ContractContext<Ct>>;
   getIndex: (_index?: number) => string;
   tupleOf: OptionTupleOf;
-  service: Type extends 'async'
-    ? SyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>
-    : AsyncInterpreter<C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L>;
+  service: Type extends 'async' ? AsyncInterpreter<Ct, L> : SyncInterpreter<Ct, L>;
 
-  sender: <const T extends Eo['type']>(
+  sender: <const T extends ContractEvents<Ct>['type']>(
     type: T,
-  ) => (...data: ExtractSender<Eo, T>) => TestArr;
+  ) => (...data: ExtractSender<ContractEvents<Ct>, T>) => TestArr;
 };

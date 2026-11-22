@@ -8,6 +8,49 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.1.0] - 22/11/2026** => _00:34_
+
+</summary>
+
+### Breaking changes
+
+- **Utility package merged**: `@bemedev/app-utility` is merged into
+  `@bemedev/app-options`; the utility package is removed. Import `createUtility`,
+  `same`, utility types and plugin types from `@bemedev/app-options`.
+- **Required builder context**: `createUtility(context, ...plugins)` now requires a
+  `{ contract }` context; the former optional `Partial` context is gone.
+- **Contract-driven helpers**: `buildHelpers` accepts
+  `{ contract, plugins, legacy }`; `config` and `mode` are derived from the contract.
+- **Contract-typed utilities**: `UtilityContext.contract` and
+  `UtilityPlugin<Adds, Ct>` are typed from `@bemedev/app-contract`.
+
+### Features
+
+- **Plugins**: `createOptions(contract, ...plugins)`, `.use()` and `.useAll()` add
+  helpers to the option surface with full type inference.
+- **Global registry**: `configureOptions` and `registerPlugins` apply plugins to
+  every build at library level.
+- **Engine**: `buildHelpers({ contract, plugins, legacy })` is the single builder
+  behind every derived API. The execution mode and the event list are derived from
+  the contract.
+- **Utilities**: helper surfaces are derived from one descriptor map per mode, so
+  synchronous and asynchronous helpers no longer drift.
+- **`createUtility`**: contract-aware utility builder. The context (`{ contract }`)
+  is required, the built-in helpers are always seeded, and registered plugins are
+  applied automatically. Utility plugins receive the contract, its config, the
+  derived events, the legacy options and the built utilities.
+- **Cache**: resolved helpers are cached by contract and plugin signature; the
+  registry version invalidates the cache.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.3] - 17/11/2026** => _13:00_
 
 </summary>

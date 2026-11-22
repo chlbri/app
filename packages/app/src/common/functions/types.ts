@@ -40,16 +40,14 @@ export type IsAsyncFn<T> = T extends Fn ? IsPromise<ReturnType<T>> : false;
  *
  * @template `T` - Function map type.
  */
-type _IsAsyncFnMap<T> =
-  T extends FnMap<any, any, any, any, infer R> ? IsPromise<R> : false;
+type _IsAsyncFnMap<T> = T extends FnMap<any, infer R> ? IsPromise<R> : false;
 
 /**
  * Internal helper checking if a reduced function map returns a Promise.
  *
  * @template `T` - Function map type.
  */
-type _IsAsyncFnMapR<T> =
-  T extends FnMapR<any, any, any, infer R> ? IsPromise<R> : false;
+type _IsAsyncFnMapR<T> = T extends FnMapR<any, infer R> ? IsPromise<R> : false;
 
 /**
  * Helper checking if a function map or handler `T` contains async handler functions.

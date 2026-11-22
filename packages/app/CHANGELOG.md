@@ -8,6 +8,41 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.1.0] - 22/11/2026** => _00:34_
+
+</summary>
+
+### Breaking changes
+
+- **Contract-driven helpers**: `buildHelpers` now takes
+  `{ contract, plugins, legacy }`; the machine surfaces derive the mode and
+  configuration from the contract.
+
+### Features
+
+- **Utilities**: re-export `createUtility`, `same`, the plugin registry helpers and
+  the utility builder types (`UtilityBuilder`, `UtilityBuilderContext`,
+  `UtilityInstance`, `UtilityMode`) from `@bemedev/app-options`.
+
+### Refactor
+
+- **Shared merge helper**: `utils` re-exports `merge2` from
+  `@bemedev/app-options/internal` instead of keeping a local copy.
+
+### Dependencies
+
+- Add `@bemedev/app-contract` as a direct dependency, since the root package
+  re-exports it and `@bemedev/app-options` declares it as a peer dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.3] - 17/11/2026** => _13:00_
 
 </summary>

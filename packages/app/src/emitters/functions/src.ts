@@ -1,5 +1,4 @@
-import type { EventObject } from '#events';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { Contract } from '@bemedev/app-options';
 import type { AsyncEmitterFunction, AsyncEmittersMap } from '../types';
 
 /**
@@ -16,16 +15,10 @@ import type { AsyncEmitterFunction, AsyncEmittersMap } from '../types';
  *
  * @returns Resolved emitter function of type {@linkcode AsyncEmitterFunction} or `undefined`.
  */
-export type ToEmitterSrc_F = <
-  Pc = any,
-  Tc extends PrimitiveObject = PrimitiveObject,
-  T extends string = string,
-  Eo extends EventObject = EventObject,
-  R = any,
->(
+export type ToEmitterSrc_F = <Ct extends Contract = Contract, R = any>(
   emitter: string,
-  emitters?: AsyncEmittersMap<Eo, Pc, Tc, T>,
-) => AsyncEmitterFunction<Eo, Pc, Tc, T, R> | undefined;
+  emitters?: AsyncEmittersMap<Ct>,
+) => AsyncEmitterFunction<Ct, R> | undefined;
 
 /**
  * Resolves an emitter source function from the machine emitters options map.
