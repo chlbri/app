@@ -18,7 +18,7 @@ import type {
   SubType,
   SubTypeLow,
 } from '@bemedev/app-options/bemedev';
-import type { Decompose } from '@bemedev/decompose';
+import type { Decompose } from '@bemedev/app-options/decompose';
 
 import type {
   CommonConfig3,

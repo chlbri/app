@@ -786,15 +786,6 @@ importers:
       '@bemedev/app-options':
         specifier: workspace:^
         version: link:../options
-      '@bemedev/better-promise':
-        specifier: ^0.1.1
-        version: 0.1.1
-      '@bemedev/boolean-recursive':
-        specifier: ^0.0.3
-        version: 0.0.3
-      '@bemedev/decompose':
-        specifier: ^2.3.0
-        version: 2.3.0
       '@bemedev/scheduler':
         specifier: ^1.2.1
         version: 1.2.1
@@ -1383,9 +1374,6 @@ importers:
       '@bemedev/better-set':
         specifier: ^0.2.1
         version: 0.2.1
-      '@bemedev/typings':
-        specifier: ^1.5.0
-        version: 1.5.0
     devDependencies:
       '@bemedev/app':
         specifier: workspace:^

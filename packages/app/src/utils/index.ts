@@ -1,8 +1,12 @@
 import equal from 'fast-deep-equal';
 
-export { decompose, decomposeSV, recompose } from '@bemedev/decompose';
+export { decompose, decomposeSV, recompose } from '@bemedev/app-options/decompose';
 
-export type { Decompose, DecomposeKeys, DecomposeOptions } from '@bemedev/decompose';
+export type {
+  Decompose,
+  DecomposeKeys,
+  DecomposeOptions,
+} from '@bemedev/app-options/decompose';
 
 export { IS_TEST, merge2 } from '@bemedev/app-options/internal';
 export * from './byKey2';

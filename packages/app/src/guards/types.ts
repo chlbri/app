@@ -4,7 +4,7 @@ import type {
   WithDescriber,
 } from '#actions';
 import type { Equals, NotUndefined } from '@bemedev/app-options/bemedev';
-import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
+import type { EmptyObject, KeysMatching } from '@bemedev/app-options/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type {
   Contract,

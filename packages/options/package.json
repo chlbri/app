@@ -77,6 +77,11 @@
       "require": "./lib/internal/index.cjs",
       "types": "./lib/internal/index.d.ts"
     },
+    "./plugins": {
+      "import": "./lib/plugins.js",
+      "require": "./lib/plugins.cjs",
+      "types": "./lib/plugins.d.ts"
+    },
     "./types": {
       "import": "./lib/types.js",
       "require": "./lib/types.cjs",

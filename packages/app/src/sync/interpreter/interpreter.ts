@@ -40,7 +40,7 @@ import type {
 } from '#common/machine';
 import { byKey2 } from '#utils';
 import type { Contract, OptionsPlugin } from '@bemedev/app-options';
-import { recompose } from '@bemedev/decompose';
+import { recompose } from '@bemedev/app-options/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
 import type {

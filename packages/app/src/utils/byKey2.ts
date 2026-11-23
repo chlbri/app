@@ -3,7 +3,7 @@ import {
   type ByKey2Options,
 } from '@bemedev/app-options/internal';
 import { expandFn } from '@bemedev/app-options/bemedev';
-import type { Decompose } from '@bemedev/decompose';
+import type { Decompose } from '@bemedev/app-options/decompose';
 
 /**
  * Retrieves a nested value from an object using a dot-separated (or custom delimited) key path.

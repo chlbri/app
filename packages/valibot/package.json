@@ -58,8 +58,7 @@
     "test:watch": "vp test"
   },
   "dependencies": {
-    "@bemedev/better-set": "^0.2.1",
-    "@bemedev/typings": "^1.5.0"
+    "@bemedev/better-set": "^0.2.1"
   },
   "devDependencies": {
     "@bemedev/app": "workspace:^",

@@ -37,7 +37,7 @@ import type {
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemedev';
 import { _unknown } from '@bemedev/app-options/bemedev';
 import { constructEventsMap } from '@bemedev/app-options/internal';
-import { decompose, type Decompose } from '@bemedev/decompose';
+import { decompose, type Decompose } from '@bemedev/app-options/decompose';
 import type { AnyMachine, CommonElements, GetIO_F, MachineType } from './types';
 
 /**

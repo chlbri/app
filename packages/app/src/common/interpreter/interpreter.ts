@@ -45,7 +45,7 @@ import {
 import type { AllowedNames } from '@bemedev/app-options/bemedev';
 import { isDefined, isPrimitive, toArray } from '@bemedev/app-options/bemedev';
 import type { Contract } from '@bemedev/app-options';
-import { asyncfy } from '@bemedev/better-promise';
+import { asyncfy } from '@bemedev/app-options/better-promise';
 import { createInterval, type Interval3 } from '@bemedev/interval3';
 import { type Fn, type MachineType, type Pausable } from '~types';
 import {

@@ -15,7 +15,7 @@ import type {
   ContractContext,
   ContractPContext,
 } from '@bemedev/app-options';
-import type { Decompose } from '@bemedev/decompose';
+import type { Decompose } from '@bemedev/app-options/decompose';
 import type { Interval3, IntervalParams } from '@bemedev/interval3';
 import type { Equals, PrimitiveObject } from '@bemedev/typings';
 import type { Fn, FnMap, FnMapR, KeyU, OptionalDefinition } from '~types';

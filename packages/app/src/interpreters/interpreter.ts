@@ -22,7 +22,7 @@ import {
   anyPromises,
   withTimeout,
   type TimeoutPromise,
-} from '@bemedev/better-promise';
+} from '@bemedev/app-options/better-promise';
 import { toPredicate } from '../guards/functions/toPredicate';
 
 import { sleep } from '@bemedev/sleep';
@@ -60,7 +60,7 @@ import {
 import { type AsyncEmitterFunction } from '#emitters';
 import { byKey2 } from '#utils';
 import type { Contract, OptionsPlugin } from '@bemedev/app-options';
-import { recompose } from '@bemedev/decompose';
+import { recompose } from '@bemedev/app-options/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types';
 import type { AsyncAddOptions_F } from '../asyncMachine';
