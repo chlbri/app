@@ -1,6 +1,4 @@
-import type { Fn } from './libs/bemedev/globals/types';
-
-export type { Fn, NotUndefined } from './libs/bemedev/globals/types';
+import type { Fn } from '@bemedev/app-utils-bemedev';
 
 /**
  * Callback function type with no arguments returning any result.

@@ -1,6 +1,6 @@
 import type { Contract, ContractOptions } from '@bemedev/app-contract';
 
-import type { UtilityMap } from './types';
+import type { UtilityMap } from '@bemedev/app-plugins/types';
 
 /**
  * Access to previously defined options.

@@ -10,8 +10,9 @@
 
 import type { Contract, ContractOptions, ContractSync } from '@bemedev/app-contract';
 import { Addons, AsyncAddons, SyncAddons } from './addons';
-import type { ResolveUtilities, UtilityMap, UtilityMode } from './utility';
+import type { UtilityMap } from '@bemedev/app-plugins/types';
 import type { LegacyOptions, OptionsPlugin, PluginAddons } from './utility/plugin';
+import type { ResolveUtilities, UtilityMode } from '@bemedev/app-plugins/types';
 
 export type { LegacyOptions } from './utility/plugin';
 

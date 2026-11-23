@@ -4,9 +4,8 @@ import type {
   ContractOptions,
   OptionsPlugin,
   PluginAddons,
-  ResolveUtilities,
 } from '@bemedev/app-options';
-import type { AsyncAddons } from '@bemedev/app-options/plugins';
+import type { AsyncAddons, ResolveUtilities } from '@bemedev/app-options/plugins';
 import type { EmptyObject } from '~types';
 import type { AsyncMachine } from './machine';
 export type { AsyncAddons };

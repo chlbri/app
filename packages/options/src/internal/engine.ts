@@ -11,7 +11,8 @@
 import type { Contract } from '@bemedev/app-contract';
 import { createUtilities, RESOLVE, type Addons } from '@bemedev/app-plugins';
 
-import type { OptionsPlugin, UtilityMap, UtilityMode } from '../utility';
+import type { UtilityMap, UtilityMode } from '@bemedev/app-plugins/types';
+import type { OptionsPlugin } from '../utility';
 import { createAsyncUtilities } from './async';
 import { createCommonHelpers } from './common';
 import { createSyncUtilities } from './sync';
