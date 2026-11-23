@@ -1019,6 +1019,9 @@ importers:
 
   packages/options:
     dependencies:
+      '@bemedev/app-utility':
+        specifier: workspace:^
+        version: link:../utility
       '@bemedev/better-promise':
         specifier: ^0.1.1
         version: 0.1.1

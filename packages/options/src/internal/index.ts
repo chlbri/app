@@ -2,8 +2,7 @@
  * Internal runtime modules.
  *
  * Everything here is private to the package: the package entry point only
- * exposes `createOptions`, `createUtility`, the plugin registry and
- * `buildHelpers`.
+ * exposes `createOptions` and `buildHelpers`.
  */
 
 export * from './async';

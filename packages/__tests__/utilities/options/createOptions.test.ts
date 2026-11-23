@@ -1,21 +1,6 @@
 import { createContract } from '@bemedev/app-contract';
-import {
-  configureOptions,
-  createOptions,
-  same,
-  type UtilityPair,
-  type UtilityPlugin,
-} from '@bemedev/app-options';
+import { createOptions, createUtilities, same } from '@bemedev/app-options';
 import { expectTypeOf } from 'vite-plus/test';
-
-declare module '@bemedev/app-options' {
-  interface Addons {
-    sum: UtilityPair<
-      (a: number, b: number) => number,
-      (a: number, b: number) => number
-    >;
-  }
-}
 
 describe('#01 => utility added to options', () => {
   const config = {
@@ -26,37 +11,33 @@ describe('#01 => utility added to options', () => {
   const syncContract = createContract(config, { sync: true });
   const asyncContract = createContract(config, {});
 
-  const sumPlugin = {
-    name: 'sum',
-    create: () => ({ sum: same((a: number, b: number) => a + b) }),
-  } satisfies UtilityPlugin;
-
-  afterEach(() => configureOptions());
+  const sumPlugin = createUtilities({}, () => ({
+    sum: same((a: number, b: number) => a + b),
+  }));
 
   test('#01 => sync implementation', () => {
-    configureOptions(sumPlugin);
-
-    const options = createOptions(syncContract)(({ sum }) => ({
-      actions: { total: sum(1, 2) as any },
-    }));
+    const options = createOptions(
+      syncContract,
+      sumPlugin,
+    )(({ sum }) => ({ actions: { total: sum(1, 2) as any } }));
 
     expect(options.actions!.total).toBe(3);
   });
 
   test('#02 => async implementation', () => {
-    configureOptions(sumPlugin);
-
-    const options = createOptions(asyncContract)(({ sum }) => ({
-      actions: { total: sum(4, 5) as any },
-    }));
+    const options = createOptions(
+      asyncContract,
+      sumPlugin,
+    )(({ sum }) => ({ actions: { total: sum(4, 5) as any } }));
 
     expect(options.actions!.total).toBe(9);
   });
 
-  test('#03 => typings come from the augmented Addons interface', () => {
-    configureOptions(sumPlugin);
-
-    createOptions(syncContract)(({ sum }) => {
+  test('#03 => typings come from the plugin tuple', () => {
+    createOptions(
+      syncContract,
+      sumPlugin,
+    )(({ sum }) => {
       expectTypeOf(sum).toEqualTypeOf<(a: number, b: number) => number>();
       return {};
     });

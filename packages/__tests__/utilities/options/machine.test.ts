@@ -1,18 +1,7 @@
 import { createContract } from '@bemedev/app-contract';
-import {
-  configureOptions,
-  same,
-  type UtilityPair,
-  type UtilityPlugin,
-} from '@bemedev/app-options';
+import { createUtilities, same } from '@bemedev/app-options';
 import { createMachine } from '@bemedev/app';
 import { expectTypeOf } from 'vite-plus/test';
-
-declare module '@bemedev/app-options' {
-  interface Addons<Ct> {
-    count: UtilityPair<() => number, () => number>;
-  }
-}
 
 describe('TESTS', () => {
   const config = {
@@ -22,17 +11,9 @@ describe('TESTS', () => {
 
   const syncContract = createContract(config, { sync: true });
 
-  const twicePlugin = {
-    name: 'twice',
-    create: () => ({ twice: same((value: number) => value * 2) }),
-  } satisfies UtilityPlugin;
-
-  const countPlugin = {
-    name: 'count',
-    create: () => ({ count: same(() => 0) }),
-  } satisfies UtilityPlugin;
-
-  afterEach(() => configureOptions());
+  const twicePlugin = createUtilities({}, () => ({
+    twice: same((value: number) => value * 2),
+  }));
 
   describe('#01 => utility added directly to a machine', () => {
     test('#01 => sync implementation', () => {
@@ -76,48 +57,23 @@ describe('TESTS', () => {
     });
   });
 
-  describe('#02 => utility added to the machine through Addons augmentation', () => {
-    test('#01 => implementation', () => {
-      configureOptions(countPlugin);
-
-      const machine = createMachine(config, { sync: true });
-
-      const options = machine.createOptions(({ count }) => ({
-        actions: { value: count() as any },
-      }));
-
-      expect(options.actions!.value).toBe(0);
-    });
-
-    test('#02 => typings without a plugin tuple', () => {
-      configureOptions(countPlugin);
-
-      const machine = createMachine(config, { sync: true });
-
-      machine.createOptions(({ count }) => {
-        expectTypeOf(count).toEqualTypeOf<() => number>();
-        return {};
-      });
-    });
-
-    test('#03 => typing remains available from a contract machine', () => {
-      configureOptions(countPlugin);
-
+  describe('#02 => contract machine', () => {
+    test('#01 => exposes the built-in helpers', () => {
       const machine = createMachine(syncContract);
 
-      machine.createOptions(({ count }) => {
-        expectTypeOf(count).toEqualTypeOf<() => number>();
-        return {};
-      });
+      const options = machine.createOptions(({ guardBatch }) => ({
+        guards: { check: guardBatch(() => true) as any },
+      }));
+
+      expect(typeof options.guards!.check).toBe('function');
     });
 
-    test('#04 => async machines remap the augmented addons too', () => {
-      configureOptions(countPlugin);
+    test('#02 => typings', () => {
+      const machine = createMachine(syncContract);
 
-      const machine = createMachine(config, {});
-
-      machine.createOptions(({ count }) => {
-        expectTypeOf(count).toEqualTypeOf<() => number>();
+      machine.createOptions(({ isDefined, assign }) => {
+        expectTypeOf(isDefined).toBeFunction();
+        expectTypeOf(assign).toBeFunction();
         return {};
       });
     });

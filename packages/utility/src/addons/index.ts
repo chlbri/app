@@ -7,13 +7,17 @@ import type {
   MaybePromise,
   SyncAction2,
 } from '@bemedev/app-contract';
+
+import type { ResolveUtilities } from '../types';
 import type { Fn, UtilityPair } from './types';
+
 import type {
   AsyncActionHelper,
   AsyncAssign,
   AsyncOptions,
   SyncAssign,
 } from './actions.types';
+
 import type {
   AsyncGuardUnion,
   SyncGuardUnion,
@@ -21,13 +25,26 @@ import type {
   ValueIs,
 } from './guards.types';
 
-export type { AsyncAssign, AsyncOptions };
-export type { AsyncGuardUnion, SyncGuardUnion };
+export type { AsyncActionHelper, AsyncAssign, AsyncOptions, SyncAssign };
+export type { AsyncGuardUnion, SyncGuardUnion, ValueDefined, ValueIs };
 export type { Fn, UtilityPair };
+
+/** Swaps state arguments in functional transitions. */
+export type Swap<C extends Contract> = <
+  F extends (...args: any[]) => any,
+  Ev extends string = string,
+>(
+  fn: F,
+  event?: Ev,
+) => (types: any) => FnR<C, ReturnType<F>>;
 
 /**
  * Contract followed by every addon: a synchronous and an asynchronous
  * variant of the same helper.
+ *
+ * It is the closed map of helpers injected into options callbacks. Plugins are
+ * not declared here: they extend the surface through their own utility maps,
+ * which flow through the generic parameters of `createOptions`.
  *
  * @template | {@linkcode Contract} `Ct` - Contract type.
  */
@@ -174,3 +191,15 @@ export type Addons<Ct extends Contract = Contract> = {
     async: (id: string) => AsyncAction2<Ct>;
   };
 };
+
+/** Synchronous helper surface resolved from {@linkcode Addons}. */
+export type SyncAddons<Ct extends Contract = Contract> = ResolveUtilities<
+  Addons<Ct>,
+  'sync'
+>;
+
+/** Asynchronous helper surface resolved from {@linkcode Addons}. */
+export type AsyncAddons<Ct extends Contract = Contract> = ResolveUtilities<
+  Addons<Ct>,
+  'async'
+>;

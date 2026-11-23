@@ -12,7 +12,6 @@ import type {
   SwapFunction_F,
 } from '#common/machine';
 import type {
-  AugmentedAddons,
   Contract,
   ContractContext,
   ContractEvents,
@@ -465,9 +464,7 @@ export type SyncAddOptionsParam_F<
   L = SimpleMachineOptions2,
   Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = (
-  option: SyncAddOption<Ct> &
-    AugmentedAddons<Ct, 'sync', keyof SyncAddOption<Ct>> &
-    ResolveUtilities<PluginAddons<Ps>, 'sync'>,
+  option: SyncAddOption<Ct> & ResolveUtilities<PluginAddons<Ps>, 'sync'>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.

@@ -1,29 +1,18 @@
 export * from './createOptions';
-export * from './plugins';
 
 export { buildHelpers, type BuildHelpersOptions } from './internal/engine';
 
-export type {
-  Addons,
-  AsyncAddons,
-  AugmentedAddons,
-  BaseAddons,
-  SyncAddons,
-} from './addons';
+export type { Addons, AsyncAddons, SyncAddons } from './addons';
 
-export { mergePlugins, mergeUtilities, orderPlugins, same } from './utility';
+export { same } from './utility';
+
+export { createUtilities } from '@bemedev/app-utility';
 
 export type {
-  EmptyUtilities,
-  MergeUtilityMaps,
-  PluginUnion,
-  PluginUtilities,
+  OptionsPlugin,
+  PluginAddons,
   ResolveUtilities,
-  UnionToIntersection,
-  UtilityContext,
-  UtilityFn,
   UtilityMap,
   UtilityMode,
   UtilityPair,
-  UtilityPlugin,
 } from './utility';

@@ -82,11 +82,6 @@
       "require": "./lib/internal/index.cjs",
       "types": "./lib/internal/index.d.ts"
     },
-    "./plugins": {
-      "import": "./lib/plugins.js",
-      "require": "./lib/plugins.cjs",
-      "types": "./lib/plugins.d.ts"
-    },
     "./types": {
       "import": "./lib/types.js",
       "require": "./lib/types.cjs",
@@ -108,6 +103,7 @@
     "test:watch": "vp test"
   },
   "dependencies": {
+    "@bemedev/app-utility": "workspace:^",
     "@bemedev/better-promise": "^0.1.1",
     "@bemedev/boolean-recursive": "^0.0.3",
     "@bemedev/decompose": "^2.3.0",

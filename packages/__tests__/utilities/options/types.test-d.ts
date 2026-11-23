@@ -1,11 +1,10 @@
 import { createContract } from '@bemedev/app-contract';
 import {
   createOptions,
+  createUtilities,
   same,
   type AsyncAddons,
   type SyncAddons,
-  type UtilityPair,
-  type UtilityPlugin,
 } from '@bemedev/app-options';
 import { createMachine } from '@bemedev/app';
 
@@ -16,34 +15,19 @@ const config = {
 
 const syncContract = createContract(config, { sync: true });
 
-const formatPlugin = {
-  name: 'format',
-  create: () => ({ format: same((value: number) => `#${value}`) }),
-} satisfies UtilityPlugin;
+const formatPlugin = createUtilities({}, () => ({
+  format: same((value: number) => `#${value}`),
+}));
 
-declare module '@bemedev/app-options' {
-  interface Addons<Ct> {
-    report: UtilityPair<(value: number) => string, (value: number) => string>;
-  }
-}
+expectTypeOf<SyncAddons<typeof syncContract>['assign']>().toBeFunction();
 
-expectTypeOf<SyncAddons<typeof syncContract>['report']>().toEqualTypeOf<
-  (value: number) => string
->();
+expectTypeOf<AsyncAddons<typeof syncContract>['assign']>().toBeFunction();
 
-expectTypeOf<AsyncAddons<typeof syncContract>['report']>().toEqualTypeOf<
-  (value: number) => string
->();
-
-createOptions(syncContract)(({ report }) => {
-  expectTypeOf(report).toEqualTypeOf<(value: number) => string>();
-  return {};
-});
-
-const augmented = createMachine(config, { sync: true });
-
-augmented.createOptions(({ report }) => {
-  expectTypeOf(report).toEqualTypeOf<(value: number) => string>();
+createOptions(
+  syncContract,
+  formatPlugin,
+)(({ format }) => {
+  expectTypeOf(format).toEqualTypeOf<(value: number) => string>();
   return {};
 });
 
@@ -56,9 +40,6 @@ direct.createOptions(({ format }) => {
 
 // @ts-expect-error - unknown helper on createOptions
 createOptions(syncContract)(({ unknownHelper }) => ({}));
-
-// @ts-expect-error - unknown helper on an augmented machine
-augmented.createOptions(({ unknownHelper }) => ({}));
 
 // @ts-expect-error - unknown helper on a machine with a direct plugin
 direct.createOptions(({ unknownHelper }) => ({}));

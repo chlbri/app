@@ -17,6 +17,7 @@ const buildPack = () =>
       '@bemedev/decompose',
       '@bemedev/function-swap',
       '@bemedev/app-utils-bemedev',
+      '@bemedev/app-utility',
     ],
   });
 

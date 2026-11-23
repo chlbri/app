@@ -1,24 +1,20 @@
 /**
  * Single engine building the helpers injected into option callbacks.
  *
- * Every derived API (`createOptions`, machine options and interpreter
- * options) goes through {@linkcode buildHelpers}; no caller builds helpers
- * directly.
+ * Default options are implemented here, at build time: the built-in helpers
+ * are projected for the contract mode and the plugins are then applied through
+ * the lazy `createUtilities` proxy of `@bemedev/app-utility`.
  *
  * @module engine
  */
 
 import type { Contract } from '@bemedev/app-contract';
+import { createUtilities, type Addons } from '@bemedev/app-utility';
 
-import { createUtility } from '../plugins';
-import { getGlobalPlugins, getPluginsVersion } from '../plugins';
-import {
-  mergePlugins,
-  orderPlugins,
-  type LegacyOptions,
-  type UtilityMode,
-  type UtilityPlugin,
-} from '../utility';
+import type { OptionsPlugin, UtilityMap, UtilityMode } from '../utility';
+import { createAsyncUtilities } from './async';
+import { createCommonHelpers } from './common';
+import { createSyncUtilities } from './sync';
 
 /**
  * Options accepted by {@linkcode buildHelpers}.
@@ -32,10 +28,8 @@ import {
 export type BuildHelpersOptions<Ct extends Contract = Contract> = {
   /** Contract carried by the consumer. */
   contract: Ct;
-  /** Per-call plugins, applied after the registered ones. */
-  plugins?: readonly UtilityPlugin<any, any>[];
-  /** Current legacy options handed to plugins. */
-  legacy?: LegacyOptions<Ct>;
+  /** Plugins applied to this build. */
+  plugins?: readonly OptionsPlugin<any, any>[];
 };
 
 /** Resolved helper surface. */
@@ -70,33 +64,119 @@ const pluginId = (plugin: object) => {
 };
 
 /**
+ * Projects a descriptor map to one execution mode.
+ *
+ * @param target - Descriptor map to project.
+ * @param mode - Execution mode to project on.
+ *
+ * @returns A frozen map of the selected implementations.
+ */
+const project = (target: UtilityMap, mode: UtilityMode) =>
+  Object.freeze(
+    Object.fromEntries(
+      Object.entries(target).map(([name, descriptor]) => [name, descriptor[mode]]),
+    ),
+  ) as Helpers;
+
+/**
+ * Implements the default options and applies the plugins on top of them.
+ *
+ * The built-in helpers are the addons of the `createUtilities` builder: they
+ * do not depend on any plugin, so they are computed first and merged after the
+ * plugin utilities are materialized through the proxy.
+ *
+ * Plugins are the lazy maps returned by `createUtilities`. They are resolved in
+ * the order they are given, each one receiving the utilities built so far as
+ * its addons: a utility declared later replaces an earlier plugin utility with
+ * the same name, while the default addons can never be replaced.
+ *
+ * @param contract - Contract the helpers are built for.
+ * @param plugins - Plugins to apply, in order.
+ * @param mode - Execution mode to resolve.
+ *
+ * @returns The resolved helper surface of the mode.
+ */
+const build = (
+  contract: Contract,
+  plugins: readonly OptionsPlugin<any, any>[],
+  mode: UtilityMode,
+): Helpers => {
+  const common = createCommonHelpers(contract);
+
+  const modeUtilities =
+    mode === 'sync'
+      ? createSyncUtilities(contract, common)
+      : createAsyncUtilities(contract, common);
+
+  const defaults = { ...common.utilities, ...modeUtilities } as Addons;
+
+  const trigger = Object.keys(defaults)[0];
+  let built = false;
+
+  const utilities = createUtilities({ contract, utilities: defaults }, args => {
+    const map: UtilityMap = {};
+
+    for (const plugin of plugins) {
+      const addons = { ...args.utilities, ...map } as any;
+
+      // `createUtilities` builds on the first entry resolution, so a
+      // sentinel entry materializes the plugin for these addons.
+      (plugin as any).__resolve__?.sync?.(addons);
+
+      for (const name of Object.keys(plugin) as string[]) {
+        if (Object.hasOwn(defaults, name)) {
+          throw new Error(`A plugin cannot override the default utility "${name}"`);
+        }
+
+        const entry = (plugin as any)[name];
+        map[name] = { sync: entry.sync(addons), async: entry.async(addons) };
+      }
+    }
+
+    built = true;
+
+    return map;
+  });
+
+  // `createUtilities` only runs its builder when an entry is resolved, so the
+  // first default helper is used as the trigger.
+  if (!built && trigger) (utilities as any)[trigger].sync(defaults);
+
+  const names = Object.keys(utilities) as string[];
+  const added = Object.fromEntries(
+    names.map(name => {
+      const entry = (utilities as any)[name];
+
+      return [name, { sync: entry.sync(defaults), async: entry.async(defaults) }];
+    }),
+  ) as UtilityMap;
+
+  return project({ ...defaults, ...added }, mode);
+};
+
+/**
  * Builds the helper surface of one execution mode.
  *
- * The contract drives everything: mode, configuration and event list. Global
- * plugins are merged with per-call ones, ordered by `requires`, then applied on
- * top of the built-in utilities. Results are cached by contract and plugin
- * signature; configure, register or remove a plugin to invalidate the cache.
+ * The contract drives everything: mode, configuration and event list. The
+ * default options are implemented here, then plugins are applied in order on
+ * top of them through `createUtilities`. Results are cached by contract and
+ * plugin signature.
  *
- * @param options - Contract and optional per-call plugins.
+ * @param options - Contract and optional plugins.
  *
  * @returns The resolved helper object of the contract mode.
  */
 export const buildHelpers = <Ct extends Contract = Contract>({
   contract,
   plugins = [],
-  legacy,
 }: BuildHelpersOptions<Ct>): Helpers => {
   const mode: UtilityMode = contract.types?.sync === true ? 'sync' : 'async';
-  const effective = mergePlugins(getGlobalPlugins(), plugins);
-  const ordered = orderPlugins(effective);
   const cacheOwner = contract as object;
-  const signature = [getPluginsVersion(), mode, ...ordered.map(pluginId)].join('|');
+  const signature = [mode, ...plugins.map(pluginId)].join('|');
   const cached = CACHE.get(cacheOwner)?.get(signature);
   if (cached) return cached;
 
-  const helpers = createUtility({ contract, legacy }, ...plugins).resolve(
-    mode,
-  ) as Helpers;
+  const helpers = build(contract, plugins, mode);
 
   const bucket = CACHE.get(cacheOwner) ?? new Map<string, Helpers>();
   bucket.set(signature, helpers);

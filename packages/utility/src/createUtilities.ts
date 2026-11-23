@@ -1,14 +1,18 @@
 import type { Contract } from '@bemedev/app-contract';
 import type { Addons } from './addons';
-import type { BuilderArgs, Context, EmptyO, UtilityMap } from './types';
+import type { BuilderArgs, Cast, Context, EmptyO, UtilityMap } from './types';
 
 export type CreateUtilities_F = <
-  Ct extends Contract = never,
-  U extends UtilityMap = EmptyO,
+  const Ct extends Context,
   R extends UtilityMap = EmptyO,
 >(
-  context: Context<Ct, U>,
-  builder: (args: BuilderArgs<Ct, U>) => R,
+  context: Ct,
+  builder: (
+    args: BuilderArgs<
+      Cast<Ct['contract'], Contract>,
+      Cast<Ct['utilities'], UtilityMap>
+    >,
+  ) => R,
 ) => R;
 
 /**
@@ -38,7 +42,7 @@ export const createUtilities: CreateUtilities_F = (context, builder) => {
 
     const result = builder({
       contract,
-      utilties: { ...addons, ...utilities },
+      utilities: { ...addons, ...utilities },
     } as any);
 
     cache.set(addons, result);
@@ -71,3 +75,5 @@ export const createUtilities: CreateUtilities_F = (context, builder) => {
         : undefined,
   }) as any;
 };
+
+// #sym:plugins delete it, all plugins must be inject be .use (#sym:use ). ALso use will be double type, first like now, just the pluginsMap, and second, a function will all default utilities and previous utilities and the contract, like (use(args:{contract, utitlities}))

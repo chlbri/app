@@ -35,9 +35,6 @@ export type UtilityPair<S = UtilityFn, A = UtilityFn> = { sync: S; async: A };
  */
 export type UtilityMap = Record<string, UtilityPair<any, any>>;
 
-/** Empty utility map used as the seed of a builder. */
-export type EmptyUtilities = Record<never, UtilityPair<any, any>>;
-
 /**
  * Projects a descriptor map to one execution mode.
  *
@@ -47,23 +44,3 @@ export type EmptyUtilities = Record<never, UtilityPair<any, any>>;
 export type ResolveUtilities<U, M extends UtilityMode> = {
   [K in keyof U]: U[K] extends Record<M, infer R> ? R : never;
 };
-
-/**
- * Merges two object maps, the second one winning on shared keys.
- *
- * @template `A` - Base map.
- * @template `B` - Overriding map.
- */
-export type MergeUtilityMaps<A extends object, B extends object> = Omit<A, keyof B> &
-  B;
-
-/**
- * Standard `UnionToIntersection` helper.
- *
- * @template `U` - Union to turn into an intersection.
- */
-export type UnionToIntersection<U> = (
-  U extends any ? (arg: U) => void : never
-) extends (arg: infer I) => void
-  ? I
-  : never;

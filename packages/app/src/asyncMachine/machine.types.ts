@@ -13,7 +13,6 @@ import type {
 } from '#common/machine';
 import type { EventArg, EventArgAll } from '#events';
 import type {
-  AugmentedAddons,
   Contract,
   ContractContext,
   ContractEvents,
@@ -600,9 +599,7 @@ export type AsyncAddOptionsParam_F<
   L = SimpleMachineOptions2,
   Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = (
-  option: AsyncAddOption<Ct> &
-    AugmentedAddons<Ct, 'async', keyof AsyncAddOption<Ct>> &
-    ResolveUtilities<PluginAddons<Ps>, 'async'>,
+  option: AsyncAddOption<Ct> & ResolveUtilities<PluginAddons<Ps>, 'async'>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.

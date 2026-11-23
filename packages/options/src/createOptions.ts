@@ -1,7 +1,7 @@
 import type { Contract } from '@bemedev/app-contract';
 
 import { buildHelpers } from './internal';
-import type { OptionsPlugin } from './plugins';
+import type { OptionsPlugin } from './utility/plugin';
 import type { CreateOptions_F, CreateOptionsWith } from './types';
 
 export type {
@@ -32,10 +32,7 @@ const builder = (
   const legacyOptions = Object.freeze({ _legacy: Object.freeze({}) }) as any;
 
   const callable = (helper: (options: any, legacy: any) => any) =>
-    helper(
-      buildHelpers({ contract, plugins, legacy: legacyOptions }),
-      legacyOptions,
-    );
+    helper(buildHelpers({ contract, plugins }), legacyOptions);
 
   return Object.assign(callable, {
     use: (...more: readonly OptionsPlugin<any, any>[]) =>
@@ -72,7 +69,5 @@ const builder = (
  *
  * @see -- type {@linkcode CreateOptions_F}
  */
-export const createOptions = ((
-  contract: Contract,
-  ...plugins: readonly OptionsPlugin<any, any>[]
-) => builder(contract, plugins)) as CreateOptions_F;
+export const createOptions: CreateOptions_F = (contract, ...plugins) =>
+  builder(contract, plugins);

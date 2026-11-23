@@ -15,8 +15,8 @@ import type {
   ContractSync,
 } from '@bemedev/app-contract';
 import type { ResolveUtilities, UtilityMode } from './utility';
-import { AsyncAddons, BaseAddons, SyncAddons } from './addons';
-import type { OptionsPlugin, PluginAddons } from './plugins';
+import { Addons, AsyncAddons, SyncAddons } from './addons';
+import type { OptionsPlugin, PluginAddons } from './utility/plugin';
 import type { LegacyOptions } from './utility/plugin';
 
 export type { LegacyOptions } from './utility/plugin';
@@ -50,8 +50,8 @@ export type OptionsHelpers<
   M extends UtilityMode,
   Ps extends readonly OptionsPlugin<any, C>[] = [],
 > = [Ps[number]] extends [never]
-  ? ResolveUtilities<BaseAddons<C>, M>
-  : ResolveUtilities<BaseAddons<C>, M> & ResolveUtilities<PluginAddons<Ps>, M>;
+  ? ResolveUtilities<Addons<C>, M>
+  : ResolveUtilities<Addons<C>, M> & ResolveUtilities<PluginAddons<Ps>, M>;
 
 /**
  * Synchronous helper surface of a contract.

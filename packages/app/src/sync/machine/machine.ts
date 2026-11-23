@@ -104,7 +104,6 @@ export class SyncMachine<
     const helpers = buildHelpers({
       contract: this.contract,
       plugins: this.__plugins,
-      legacy: { _legacy },
     }) as any;
 
     return helper(helpers, { _legacy });
