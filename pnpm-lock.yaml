@@ -1080,6 +1080,9 @@ importers:
       '@bemedev/app-options':
         specifier: workspace:^
         version: link:../../options
+      '@bemedev/function-swap':
+        specifier: ^0.2.5
+        version: 0.2.5(@bemedev/decompose@2.3.0)
     devDependencies:
       '@bemedev/app-contract':
         specifier: workspace:^
@@ -1624,6 +1627,11 @@ packages:
     peerDependencies:
       rolldown: ^1.3.2
       vitest: 5.1.1
+
+  '@bemedev/function-swap@0.2.5':
+    resolution: {integrity: sha512-p1Cz6Q1oA6mr0KrSaRMeiZwP482HSQunhJ/2xbGy5q7VyEmwxedTAve8/J/sMCUrZJ1vlvO5R2HnQwb1MXE+bw==}
+    peerDependencies:
+      '@bemedev/decompose': 2.3.0
 
   '@bemedev/hook-wrapper@1.0.0':
     resolution: {integrity: sha512-B+4OFKcxiLguIZilNtQXCVU3gWsOMqvrMCiakx+lVK6reSr+wkGrvWBctvl1KxT9BG6hAJzfIEn0mkxEGRjy+w==}
@@ -6930,6 +6938,10 @@ snapshots:
       - vite
       - vue-tsc
       - yaml
+
+  '@bemedev/function-swap@0.2.5(@bemedev/decompose@2.3.0)':
+    dependencies:
+      '@bemedev/decompose': 2.3.0
 
   '@bemedev/hook-wrapper@1.0.0': {}
 

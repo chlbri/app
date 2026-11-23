@@ -67,7 +67,8 @@
     "test:watch": "vp test"
   },
   "dependencies": {
-    "@bemedev/app-options": "workspace:^"
+    "@bemedev/app-options": "workspace:^",
+    "@bemedev/function-swap": "^0.2.5"
   },
   "peerDependencies": {
     "@bemedev/app-contract": "workspace:^"
