@@ -1,14 +1,13 @@
 {
-  "name": "@bemedev/app-useful-utilities",
+  "name": "@bemedev/app-plugins",
   "version": "0.0.1",
-  "description": "Optional composable utilities for @bemedev/app, delivered as options plugins",
+  "description": "Utilities for @bemedev/app",
   "keywords": [
     "state machines",
     "utilities",
-    "plugins",
     "typescript"
   ],
-  "homepage": "https://github.com/chlbri/app/blob/main/packages/useful-utilities/README.md",
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/plugins/core/README.md",
   "license": "MIT",
   "author": {
     "name": "chlbri",
@@ -47,10 +46,23 @@
       "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
     },
-    "./swap": {
-      "import": "./lib/swap.js",
-      "require": "./lib/swap.cjs",
-      "types": "./lib/swap.d.ts"
+    "./same": {
+      "import": "./lib/same.js",
+      "require": "./lib/same.cjs",
+      "types": "./lib/same.d.ts"
+    },
+    "./types": {
+      "types": "./lib/types.d.ts"
+    },
+    "./addons": {
+      "import": "./lib/addons/index.js",
+      "require": "./lib/addons/index.cjs",
+      "types": "./lib/addons/index.d.ts"
+    },
+    "./decompose": {
+      "import": "./lib/decompose.js",
+      "require": "./lib/decompose.cjs",
+      "types": "./lib/decompose.d.ts"
     }
   },
   "publishConfig": {
@@ -66,19 +78,16 @@
     "test:only": "vp run test",
     "test:watch": "vp test"
   },
-  "dependencies": {
-    "@bemedev/app-options": "workspace:^",
-    "@bemedev/app-utility": "workspace:^",
-    "@bemedev/decompose": "^2.3.0",
-    "@bemedev/function-swap": "^0.2.5"
-  },
   "peerDependencies": {
     "@bemedev/app-contract": "workspace:^"
   },
+  "dependencies": {
+    "@bemedev/decompose": "^2.3.0"
+  },
   "devDependencies": {
     "@bemedev/app-contract": "workspace:^",
+    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "^1.6.2",
-    "@bemedev/typings": "^1.5.0",
     "@size-limit/file": "^14.3.0",
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "catalog:",
@@ -90,6 +99,9 @@
     "typescript": "7.0.2",
     "vite-plus": "catalog:"
   },
+  "bundledDependencies": [
+    "@bemedev/app-utils-bemedev"
+  ],
   "engines": {
     "node": ">=24"
   }

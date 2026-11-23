@@ -1,6 +1,6 @@
 import { createContract } from '@bemedev/app-contract';
 import { createOptions, createUtilities } from '@bemedev/app-options';
-import { same } from '@bemedev/app-utility';
+import { same } from '@bemedev/app-plugins';
 
 import { createMachine } from '@bemedev/app';
 

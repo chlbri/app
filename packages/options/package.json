@@ -72,11 +72,6 @@
       "require": "./lib/decompose.cjs",
       "types": "./lib/decompose.d.ts"
     },
-    "./function-swap": {
-      "import": "./lib/function-swap.js",
-      "require": "./lib/function-swap.cjs",
-      "types": "./lib/function-swap.d.ts"
-    },
     "./internal": {
       "import": "./lib/internal/index.js",
       "require": "./lib/internal/index.cjs",
@@ -103,18 +98,15 @@
     "test:watch": "vp test"
   },
   "dependencies": {
-    "@bemedev/app-utility": "workspace:^",
+    "@bemedev/app-plugins": "workspace:^",
     "@bemedev/better-promise": "^0.1.1",
-    "@bemedev/boolean-recursive": "^0.0.3",
-    "@bemedev/decompose": "^2.3.0",
-    "@bemedev/function-swap": "^0.2.5"
+    "@bemedev/boolean-recursive": "^0.0.3"
   },
   "peerDependencies": {
     "@bemedev/app-contract": "workspace:^"
   },
   "devDependencies": {
     "@bemedev/app-contract": "workspace:^",
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "^1.6.2",
     "@bemedev/typings": "^1.5.0",
     "@size-limit/file": "^14.3.0",
@@ -128,9 +120,6 @@
     "typescript": "7.0.2",
     "vite-plus": "catalog:"
   },
-  "bundledDependencies": [
-    "@bemedev/app-utils-bemedev"
-  ],
   "engines": {
     "node": ">=24"
   }

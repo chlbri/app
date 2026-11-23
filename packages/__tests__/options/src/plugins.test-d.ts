@@ -7,7 +7,7 @@ import {
   type OptionsHelpers,
   type SyncAddons,
 } from '@bemedev/app-options';
-import { same } from '@bemedev/app-utility';
+import { same } from '@bemedev/app-plugins';
 
 const config = {
   initial: 'idle',

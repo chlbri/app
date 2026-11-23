@@ -179,7 +179,12 @@ export default defineConfig({
         command: 'size-limit --silent',
 
         cache: {
-          input: ['.size-limit.ts', 'packages/*/lib/**', 'packages/utils/*/lib/**'],
+          input: [
+            '.size-limit.ts',
+            'packages/*/lib/**',
+            'packages/utils/*/lib/**',
+            'packages/plugins/*/lib/**',
+          ],
           output: [],
         },
       },
@@ -250,7 +255,7 @@ export default defineConfig({
       'packages/contract/vite.config.ts',
       'packages/interval3/vite.config.ts',
       'packages/options/vite.config.ts',
-      'packages/useful-utilities/vite.config.ts',
+      'packages/plugins/bemedev/vite.config.ts',
       'apps/reactjs/vite.config.ts',
       'apps/solidjs/vite.config.ts',
     ],

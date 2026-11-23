@@ -3,13 +3,13 @@
  *
  * Default options are implemented here, at build time: the built-in helpers
  * are projected for the contract mode and the plugins are then applied through
- * the lazy `createUtilities` proxy of `@bemedev/app-utility`.
+ * the lazy `createUtilities` proxy of `@bemedev/app-plugins`.
  *
  * @module engine
  */
 
 import type { Contract } from '@bemedev/app-contract';
-import { createUtilities, RESOLVE, type Addons } from '@bemedev/app-utility';
+import { createUtilities, RESOLVE, type Addons } from '@bemedev/app-plugins';
 
 import type { OptionsPlugin, UtilityMap, UtilityMode } from '../utility';
 import { createAsyncUtilities } from './async';

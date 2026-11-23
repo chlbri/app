@@ -16,7 +16,7 @@ export type LegacyOptions<Ct extends Contract = Contract> = {
  * A plugin contributing utilities to the options helpers.
  *
  * A plugin is the value returned by `createUtilities` from
- * `@bemedev/app-utility`: the lazy map it exposes is resolved against the
+ * `@bemedev/app-plugins`: the lazy map it exposes is resolved against the
  * addons supplied by `createOptions`. The default helpers are injected by
  * `createOptions` itself, so a plugin only adds utilities on top of them.
  *

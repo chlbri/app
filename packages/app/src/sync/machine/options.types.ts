@@ -21,7 +21,7 @@ import type {
 } from '@bemedev/app-options';
 import type { FnMap, FnR, SingleOrArrayL2, TraversableTuple } from '~types';
 import type { SyncMachine } from './machine';
-import type { SyncAddons } from '@bemedev/app-utility/addons';
+import type { SyncAddons } from '@bemedev/app-plugins/addons';
 
 export type {
   SyncChildFunction2,

@@ -15,9 +15,8 @@ const buildPack = () =>
       '@bemedev/better-promise',
       '@bemedev/boolean-recursive',
       '@bemedev/decompose',
-      '@bemedev/function-swap',
-      '@bemedev/app-utils-bemedev',
-      '@bemedev/app-utility',
+
+      '@bemedev/app-plugins',
     ],
   });
 

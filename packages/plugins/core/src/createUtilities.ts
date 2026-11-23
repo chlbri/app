@@ -9,7 +9,7 @@ import type { BuilderArgs, Cast, Context, EmptyO, UtilityMap } from './types';
  * their first access. Consumers that need to enumerate the map, instead of
  * reading a known key, use this symbol to build it once, synchronously.
  */
-export const RESOLVE = Symbol('@bemedev/app-utility/resolve');
+export const RESOLVE = Symbol('@bemedev/app-plugins/resolve');
 
 export type CreateUtilities_F = <
   const Ct extends Context,

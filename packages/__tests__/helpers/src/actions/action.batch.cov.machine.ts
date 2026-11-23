@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import { swapPlugin } from '@bemedev/app-useful-utilities';
+import { swapPlugin } from '@bemedev/app-bemedev-plugins';
 import { type } from '@bemedev/typings';
 
 export default createMachine(

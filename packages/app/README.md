@@ -642,11 +642,11 @@ The path follows `@bemedev/decompose` conventions: `'context'`, `'context.field'
 ### 5.2 swap
 
 `swap` is no longer a default helper. It is provided by the
-[`@bemedev/app-useful-utilities`](../useful-utilities) package as an options plugin,
-so it has to be opted in:
+[`@bemedev/app-bemedev-plugins`](../plugins/bemedev) package as an options plugin, so
+it has to be opted in:
 
 ```typescript
-import { swapPlugin } from '@bemedev/app-useful-utilities';
+import { swapPlugin } from '@bemedev/app-bemedev-plugins';
 
 // With createOptions
 const options = createOptions(contract).use(swapPlugin)(({ swap }) => ({ ... }));
@@ -997,7 +997,7 @@ machine.provideOptions(({ isValue }) => ({
     isAuthenticated: ({ context }) =>
       context.token !== undefined && !isExpired(context.token),
 
-    // Remapped predicate with swap (imported from @bemedev/app-useful-utilities,
+    // Remapped predicate with swap (imported from @bemedev/app-bemedev-plugins,
     // or injected through its swapPlugin)
     isAdult: swap((age: number) => age >= 18)({ '[0]': '[0].context.user.age' }),
 
@@ -1142,7 +1142,7 @@ const machine = createMachine(
 
 ```typescript
 // Dynamic: function of current state (or remapped with swap from
-// @bemedev/app-useful-utilities)
+// @bemedev/app-bemedev-plugins)
 delays: {
   RETRY_DELAY: ({ context }) => context.retryCount * 1000,
   SWAPPED_DELAY: swap((count: number, ms: number) => count * ms)({

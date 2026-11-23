@@ -4,9 +4,9 @@
 
 import { withTimeout } from '@bemedev/better-promise';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
-import { recompose } from '@bemedev/decompose';
+import { recompose } from '@bemedev/app-plugins/decompose';
 import type { Contract } from '@bemedev/app-contract';
-import { same, type UtilityMap } from '@bemedev/app-utility';
+import { same, type UtilityMap } from '@bemedev/app-plugins';
 
 import type { AsyncAddons } from '../addons';
 import { createCommonHelpers } from './common';

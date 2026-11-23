@@ -1,13 +1,13 @@
-# @bemedev/app-useful-utilities
+# @bemedev/app-bemedev-plugins
 
-Optional utilities for [`@bemedev/app`](../app), delivered as
-[options plugins](../options). They are not part of the default helpers: opt in
+Optional utilities for [`@bemedev/app`](../../app), delivered as
+[options plugins](../../options). They are not part of the default helpers: opt in
 explicitly with `use`.
 
 ## Installation
 
 ```bash
-pnpm add @bemedev/app-useful-utilities
+pnpm add @bemedev/app-bemedev-plugins
 ```
 
 ## `swap`
@@ -20,7 +20,7 @@ other location accepting a selector.
 
 ```ts
 import { createOptions } from '@bemedev/app-options';
-import { swapPlugin } from '@bemedev/app-useful-utilities';
+import { swapPlugin } from '@bemedev/app-bemedev-plugins';
 
 const options = createOptions(contract).use(swapPlugin)(({ swap, assign }) => ({
   actions: {
@@ -39,7 +39,7 @@ On a machine, attach the plugin through its types:
 
 ```ts
 import { createMachine } from '@bemedev/app';
-import { swapPlugin } from '@bemedev/app-useful-utilities';
+import { swapPlugin } from '@bemedev/app-bemedev-plugins';
 
 const machine = createMachine(
   config,
@@ -50,7 +50,7 @@ const machine = createMachine(
 ### As a standalone function
 
 ```ts
-import { swap } from '@bemedev/app-useful-utilities';
+import { swap } from '@bemedev/app-bemedev-plugins';
 
 const readAge = swap((age: number) => age)({ '[0]': '[0].context.age' });
 ```

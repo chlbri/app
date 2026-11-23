@@ -1,4 +1,4 @@
-export type { AsyncOptions } from '@bemedev/app-utility';
+export type { AsyncOptions } from '@bemedev/app-plugins';
 export * from '#exports/types.types';
 export * from '../registry.types';
 export * from './edges';

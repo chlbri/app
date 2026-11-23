@@ -10,6 +10,8 @@ const GLOBS = [
   'packages/*/lib/**/*.d.ts',
   'packages/utils/*/lib/**/*.js',
   'packages/utils/*/lib/**/*.d.ts',
+  'packages/plugins/*/lib/**/*.js',
+  'packages/plugins/*/lib/**/*.d.ts',
 ];
 
 const files = GLOBS.map(g => globSync(join(root, g)))

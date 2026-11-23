@@ -10,8 +10,8 @@ packages:
   - 'packages/utils/bemedev'
   - 'packages/cli'
   - 'packages/interval3'
-  - 'packages/utility'
-  - 'packages/useful-utilities'
+  - 'packages/plugins/core'
+  - 'packages/plugins/bemedev'
   - 'apps/*'
 
 allowBuilds:

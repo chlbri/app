@@ -14,7 +14,7 @@ const buildPack = () =>
       '@bemedev/app-contract',
       '@bemedev/app-options',
       '@bemedev/app-options/internal',
-      '@bemedev/app-utility',
+      '@bemedev/app-plugins',
       '@bemedev/decompose',
       '@bemedev/function-swap',
     ],
@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => ({
     env: { NODE_ENV: 'test' },
     globals: true,
     clearMocks: false,
-    name: 'useful-utilities',
+    name: 'bemedev-plugins',
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },

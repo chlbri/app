@@ -528,12 +528,12 @@ importers:
       '@bemedev/app':
         specifier: workspace:^
         version: link:../../app
+      '@bemedev/app-bemedev-plugins':
+        specifier: workspace:^
+        version: link:../../plugins/bemedev
       '@bemedev/app-cli':
         specifier: workspace:^
         version: link:../../cli
-      '@bemedev/app-useful-utilities':
-        specifier: workspace:^
-        version: link:../../useful-utilities
       '@bemedev/app-vitest':
         specifier: workspace:^
         version: link:../../vitest
@@ -600,12 +600,12 @@ importers:
       '@bemedev/app':
         specifier: workspace:^
         version: link:../../app
+      '@bemedev/app-bemedev-plugins':
+        specifier: workspace:^
+        version: link:../../plugins/bemedev
       '@bemedev/app-cli':
         specifier: workspace:^
         version: link:../../cli
-      '@bemedev/app-useful-utilities':
-        specifier: workspace:^
-        version: link:../../useful-utilities
       '@bemedev/app-vitest':
         specifier: workspace:^
         version: link:../../vitest
@@ -657,9 +657,9 @@ importers:
       '@bemedev/app-options':
         specifier: workspace:^
         version: link:../../options
-      '@bemedev/app-utility':
+      '@bemedev/app-plugins':
         specifier: workspace:^
-        version: link:../../utility
+        version: link:../../plugins/core
       '@bemedev/dev-utils':
         specifier: ^1.6.2
         version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
@@ -684,12 +684,12 @@ importers:
       '@bemedev/app':
         specifier: workspace:^
         version: link:../../app
+      '@bemedev/app-bemedev-plugins':
+        specifier: workspace:^
+        version: link:../../plugins/bemedev
       '@bemedev/app-cli':
         specifier: workspace:^
         version: link:../../cli
-      '@bemedev/app-useful-utilities':
-        specifier: workspace:^
-        version: link:../../useful-utilities
       '@bemedev/app-vitest':
         specifier: workspace:^
         version: link:../../vitest
@@ -1025,34 +1025,117 @@ importers:
 
   packages/options:
     dependencies:
-      '@bemedev/app-utility':
+      '@bemedev/app-plugins':
         specifier: workspace:^
-        version: link:../utility
+        version: link:../plugins/core
       '@bemedev/better-promise':
         specifier: ^0.1.1
         version: 0.1.1
       '@bemedev/boolean-recursive':
         specifier: ^0.0.3
         version: 0.0.3
-      '@bemedev/decompose':
-        specifier: ^2.3.0
-        version: 2.3.0
-      '@bemedev/function-swap':
-        specifier: ^0.2.5
-        version: 0.2.5(@bemedev/decompose@2.3.0)
     devDependencies:
       '@bemedev/app-contract':
         specifier: workspace:^
         version: link:../contract
-      '@bemedev/app-utils-bemedev':
-        specifier: workspace:^
-        version: link:../utils/bemedev
       '@bemedev/dev-utils':
         specifier: ^1.6.2
         version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@bemedev/typings':
         specifier: ^1.5.0
         version: 1.5.0
+      '@size-limit/file':
+        specifier: ^14.3.0
+        version: 14.3.0(size-limit@14.3.0)
+      '@types/node':
+        specifier: ^26.6.6
+        version: 26.6.6
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
+      pretty-quick:
+        specifier: ^4.2.2
+        version: 4.2.2(prettier@3.10.1)
+      rimraf:
+        specifier: ^6.1.4
+        version: 6.1.4
+      size-limit:
+        specifier: ^14.3.0
+        version: 14.3.0
+      tslib:
+        specifier: ^2.9.1
+        version: 2.9.1
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vite-plus:
+        specifier: 'catalog:'
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
+
+  packages/plugins/bemedev:
+    dependencies:
+      '@bemedev/app-options':
+        specifier: workspace:^
+        version: link:../../options
+    devDependencies:
+      '@bemedev/app-contract':
+        specifier: workspace:^
+        version: link:../../contract
+      '@bemedev/dev-utils':
+        specifier: ^1.6.2
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+      '@bemedev/typings':
+        specifier: ^1.5.0
+        version: 1.5.0
+      '@size-limit/file':
+        specifier: ^14.3.0
+        version: 14.3.0(size-limit@14.3.0)
+      '@types/node':
+        specifier: ^26.6.6
+        version: 26.6.6
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
+      pretty-quick:
+        specifier: ^4.2.2
+        version: 4.2.2(prettier@3.10.1)
+      rimraf:
+        specifier: ^6.1.4
+        version: 6.1.4
+      size-limit:
+        specifier: ^14.3.0
+        version: 14.3.0
+      tslib:
+        specifier: ^2.9.1
+        version: 2.9.1
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vite-plus:
+        specifier: 'catalog:'
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
+
+  packages/plugins/core:
+    dependencies:
+      '@bemedev/decompose':
+        specifier: ^2.3.0
+        version: 2.3.0
+    devDependencies:
+      '@bemedev/app-contract':
+        specifier: workspace:^
+        version: link:../../contract
+      '@bemedev/app-utils-bemedev':
+        specifier: workspace:^
+        version: link:../../utils/bemedev
+      '@bemedev/dev-utils':
+        specifier: ^1.6.2
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
       '@size-limit/file':
         specifier: ^14.3.0
         version: 14.3.0(size-limit@14.3.0)
@@ -1252,107 +1335,6 @@ importers:
       vite-plugin-solid:
         specifier: ^2.11.17
         version: 2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2)
-      vite-plus:
-        specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-
-  packages/useful-utilities:
-    dependencies:
-      '@bemedev/app-options':
-        specifier: workspace:^
-        version: link:../options
-      '@bemedev/app-utility':
-        specifier: workspace:^
-        version: link:../utility
-      '@bemedev/decompose':
-        specifier: ^2.3.0
-        version: 2.3.0
-      '@bemedev/function-swap':
-        specifier: ^0.2.5
-        version: 0.2.5(@bemedev/decompose@2.3.0)
-    devDependencies:
-      '@bemedev/app-contract':
-        specifier: workspace:^
-        version: link:../contract
-      '@bemedev/dev-utils':
-        specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
-      '@bemedev/typings':
-        specifier: ^1.5.0
-        version: 1.5.0
-      '@size-limit/file':
-        specifier: ^14.3.0
-        version: 14.3.0(size-limit@14.3.0)
-      '@types/node':
-        specifier: ^26.6.6
-        version: 26.6.6
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
-      pretty-quick:
-        specifier: ^4.2.2
-        version: 4.2.2(prettier@3.10.1)
-      rimraf:
-        specifier: ^6.1.4
-        version: 6.1.4
-      size-limit:
-        specifier: ^14.3.0
-        version: 14.3.0
-      tslib:
-        specifier: ^2.9.1
-        version: 2.9.1
-      tsx:
-        specifier: ^4.23.15
-        version: 4.23.15
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vite-plus:
-        specifier: 'catalog:'
-        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
-
-  packages/utility:
-    dependencies:
-      '@bemedev/decompose':
-        specifier: ^2.3.0
-        version: 2.3.0
-    devDependencies:
-      '@bemedev/app-contract':
-        specifier: workspace:^
-        version: link:../contract
-      '@bemedev/app-utils-bemedev':
-        specifier: workspace:^
-        version: link:../utils/bemedev
-      '@bemedev/dev-utils':
-        specifier: ^1.6.2
-        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
-      '@size-limit/file':
-        specifier: ^14.3.0
-        version: 14.3.0(size-limit@14.3.0)
-      '@types/node':
-        specifier: ^26.6.6
-        version: 26.6.6
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
-      pretty-quick:
-        specifier: ^4.2.2
-        version: 4.2.2(prettier@3.10.1)
-      rimraf:
-        specifier: ^6.1.4
-        version: 6.1.4
-      size-limit:
-        specifier: ^14.3.0
-        version: 14.3.0
-      tslib:
-        specifier: ^2.9.1
-        version: 2.9.1
-      tsx:
-        specifier: ^4.23.15
-        version: 4.23.15
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
         version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
@@ -1642,11 +1624,6 @@ packages:
     peerDependencies:
       rolldown: ^1.3.2
       vitest: 5.1.1
-
-  '@bemedev/function-swap@0.2.5':
-    resolution: {integrity: sha512-p1Cz6Q1oA6mr0KrSaRMeiZwP482HSQunhJ/2xbGy5q7VyEmwxedTAve8/J/sMCUrZJ1vlvO5R2HnQwb1MXE+bw==}
-    peerDependencies:
-      '@bemedev/decompose': 2.3.0
 
   '@bemedev/hook-wrapper@1.0.0':
     resolution: {integrity: sha512-B+4OFKcxiLguIZilNtQXCVU3gWsOMqvrMCiakx+lVK6reSr+wkGrvWBctvl1KxT9BG6hAJzfIEn0mkxEGRjy+w==}
@@ -6953,10 +6930,6 @@ snapshots:
       - vite
       - vue-tsc
       - yaml
-
-  '@bemedev/function-swap@0.2.5(@bemedev/decompose@2.3.0)':
-    dependencies:
-      '@bemedev/decompose': 2.3.0
 
   '@bemedev/hook-wrapper@1.0.0': {}
 

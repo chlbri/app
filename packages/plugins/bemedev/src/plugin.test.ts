@@ -1,7 +1,8 @@
 import { createContract } from '@bemedev/app-contract';
 import { buildHelpers, createOptions } from '@bemedev/app-options';
 
-import { swap, swapPlugin } from './swap';
+import { swapPlugin } from './plugin';
+import { swap } from './swap';
 
 const contract = createContract(
   { initial: 'idle', states: { idle: { on: { WRITE: '/' } } } },

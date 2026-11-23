@@ -1,7 +1,7 @@
 import { interpret } from '@bemedev/app';
 import { createMachine } from '@bemedev/app';
 import { createConfig } from '@bemedev/app';
-import { swapPlugin } from '@bemedev/app-useful-utilities';
+import { swapPlugin } from '@bemedev/app-bemedev-plugins';
 import { notU } from '@bemedev/app/utils';
 import { type } from '@bemedev/typings';
 import { DELAY } from './constants';

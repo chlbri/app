@@ -28,7 +28,7 @@ import type {
 } from '~types';
 import type { AsyncMachine } from './machine';
 import type { FnMap, FnR } from '@bemedev/app-contract';
-import type { AsyncAddons } from '@bemedev/app-utility/addons';
+import type { AsyncAddons } from '@bemedev/app-plugins/addons';
 /**
  * Options for async action helpers.
  *

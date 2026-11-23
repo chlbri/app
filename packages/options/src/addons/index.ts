@@ -1,7 +1,7 @@
 /**
  * Helper surface injected into options callbacks.
  *
- * The `Addons` map lives in `@bemedev/app-utility` so the utility package owns
+ * The `Addons` map lives in `@bemedev/app-plugins` so the utility package owns
  * the runtime contract used by `createUtilities`. This module only re-exports
  * it, along with the mode projections, for consumers of the options package.
  *
@@ -22,4 +22,4 @@ export type {
   UtilityPair,
   ValueDefined,
   ValueIs,
-} from '@bemedev/app-utility';
+} from '@bemedev/app-plugins';

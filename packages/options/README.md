@@ -15,7 +15,7 @@ The package exposes two APIs:
 
 Plugins are chained with `use`: there is no library-level registry, so two calls
 never leak utilities into each other. The utilities are created with
-`createUtilities` from `@bemedev/app-utility`, which also owns the `Addons` map of
+`createUtilities` from `@bemedev/app-plugins`, which also owns the `Addons` map of
 the default helpers.
 
 Both machine flavors are covered by the same API; the contract's `sync` flag selects
@@ -37,7 +37,7 @@ libraries and the package re-exports its runtime.
 
 `createUtility` and its builder (`add`, `use`, `build`, `resolve`) are removed. The
 default helpers are implemented by `createOptions` itself, and plugins are applied
-there; `createUtilities` from `@bemedev/app-utility` is the only utility factory. The
+there; `createUtilities` from `@bemedev/app-plugins` is the only utility factory. The
 `UtilityPlugin`, `UtilityBuilder`, `UtilityBuilderContext`, `UtilityInstance` and
 `UtilityContext` types are gone: plugins use `OptionsPlugin`.
 
@@ -94,7 +94,7 @@ Asynchronous helpers additionally accept the `max`, `then` and `catch` options o
 `assign`, `action` and `sendTo`.
 
 The `swap` helper is no longer a default helper: install
-[`@bemedev/app-useful-utilities`](../useful-utilities) and opt in with
+[`@bemedev/app-bemedev-plugins`](../plugins/bemedev) and opt in with
 `createOptions(contract).use(swapPlugin)`.
 
 ### Applying the options
@@ -237,7 +237,7 @@ The runtime dependencies of the helpers are re-exported, so consumers of
 | `createOptions`       | Fn   | Curried contract options factory.                             |
 | `CreateOptions_F`     | Type | Function signature of `createOptions`.                        |
 | `CreateOptionsWith`   | Type | Curried callable carrying the applied plugins.                |
-| `Addons`              | Type | Built-in helper map, re-exported from `@bemedev/app-utility`. |
+| `Addons`              | Type | Built-in helper map, re-exported from `@bemedev/app-plugins`. |
 | `OptionsHelpers`      | Type | Helper surface of a contract and a plugin tuple.              |
 | `UseBuilder`          | Type | Inline builder accepted by `use`.                             |
 | `UseHelpers`          | Type | Utilities received by an inline `use` builder.                |
@@ -248,7 +248,7 @@ The runtime dependencies of the helpers are re-exported, so consumers of
 | `LegacyOptions`       | Type | `_legacy` accessor passed as the second callback argument.    |
 | `buildHelpers`        | Fn   | Builds the helper surface of a contract and its plugins.      |
 | `same`                | Fn   | Declares one implementation for both modes.                   |
-| `createUtilities`     | Fn   | Re-exported from `@bemedev/app-utility`; defines plugins.     |
+| `createUtilities`     | Fn   | Re-exported from `@bemedev/app-plugins`; defines plugins.     |
 | `OptionsPlugin`       | Type | Plugin contributing utilities, typed by the contract.         |
 | `PluginAddons`        | Type | Utilities added by a tuple of plugins.                        |
 | `UtilityPair`         | Type | Synchronous and asynchronous variants of one utility.         |

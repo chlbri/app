@@ -3,9 +3,9 @@
  */
 
 import recursive from '@bemedev/boolean-recursive';
-import { recompose } from '@bemedev/decompose';
+import { recompose } from '@bemedev/app-plugins/decompose';
 import type { Contract } from '@bemedev/app-contract';
-import { same, type UtilityMap } from '@bemedev/app-utility';
+import { same, type UtilityMap } from '@bemedev/app-plugins';
 
 import type { SyncAddons } from '../addons';
 import { createCommonHelpers } from './common';

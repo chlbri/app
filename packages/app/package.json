@@ -70,6 +70,11 @@
       "require": "./lib/contract.cjs",
       "types": "./lib/contract.d.ts"
     },
+    "./decompose": {
+      "import": "./lib/decompose.js",
+      "require": "./lib/decompose.cjs",
+      "types": "./lib/decompose.d.ts"
+    },
     "./delays": {
       "import": "./lib/delays/index.js",
       "require": "./lib/delays/index.cjs",

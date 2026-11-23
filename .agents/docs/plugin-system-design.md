@@ -3,11 +3,11 @@
 > Design document (read-only, no source files changed).
 >
 > Scope: `@bemedev/app-options`, `@bemedev/app`, and a new dependency-free core
-> package (`@bemedev/app-utility`). Goal: stop duplicating option helpers, make every
+> package (`@bemedev/app-plugins`). Goal: stop duplicating option helpers, make every
 > helper a _utility_, and allow libraries to register plugins that extend
 > `createOptions` and everything derived from it.
 >
-> **Current evolution**: `@bemedev/app-utility` was merged into
+> **Current evolution**: `@bemedev/app-plugins` was merged into
 > `@bemedev/app-options`. `createUtility(context, ...plugins)` is contract-aware,
 > seeds the built-in helpers, applies the global registry, and exposes the contract
 > to plugins. The sections below record the original design and are kept for
@@ -32,7 +32,7 @@
    - `machine.provideOptions(fn)`
    - `interpreter.addOptions(fn)`
    - machine factories (`createMachine`)
-5. **New lib `@bemedev/app-utility`** exposing `createUtility()`, with `.add(...)`,
+5. **New lib `@bemedev/app-plugins`** exposing `createUtility()`, with `.add(...)`,
    `.use(...)`, `.build(...)`, `.resolve(mode)`.
 6. Keep the current public API and behavior working.
 
@@ -42,7 +42,7 @@
   new option categories; the resulting actions/guards still land in `actions`,
   `guards`, `delays`, `actors`.
 - Making `@bemedev/app-options` depend on `@bemedev/app` (that would create a cycle).
-  The dependency direction stays `app -> app-options -> app-utility -> app-contract`.
+  The dependency direction stays `app -> app-options -> app-plugins -> app-contract`.
 - Runtime auto-registration through bare imports (breaks `sideEffects: false` and
   tree-shaking; see §11).
 
@@ -75,7 +75,7 @@ them into **one descriptor map**.
 
 ```
             +-------------------------------+
-            |   @bemedev/app-utility        |   new, dependency-free
+            |   @bemedev/app-plugins        |   new, dependency-free
             |   createUtility / plugins     |
             +---------------+---------------+
                             |
@@ -99,7 +99,7 @@ them into **one descriptor map**.
 
 ### Three layers
 
-1. **`@bemedev/app-utility`** — knows nothing about machines or contracts.
+1. **`@bemedev/app-plugins`** — knows nothing about machines or contracts.
    - `UtilityPair`, `UtilityMap`, `UtilityPlugin`.
    - `createUtility()` builder with typed accumulation.
    - `resolveUtilities(map, mode)`.
@@ -118,7 +118,7 @@ them into **one descriptor map**.
 Create:
 
 ```
-packages/utility/                        -> @bemedev/app-utility
+packages/plugins/core/                    -> @bemedev/app-plugins
   package.json
   src/index.ts
   src/types.ts                           UtilityPair, UtilityMap, ResolveUtilities
@@ -145,7 +145,7 @@ first; they only consume `@bemedev/app`.
 
 ---
 
-## 5. Core types (`@bemedev/app-utility`)
+## 5. Core types (`@bemedev/app-plugins`)
 
 ### 5.1 Utility descriptor
 
@@ -226,7 +226,7 @@ export type UtilityBuilder<U extends UtilityMap = {}> = {
 ```
 
 `UnionToIntersection` already exists in `@bemedev/app-utils-bemedev`; move a copy
-into `app-utility` (it must stay dependency-free) or import only the type from
+into `app-plugins` (it must stay dependency-free) or import only the type from
 `app-contract` if it is re-exported there.
 
 ### 5.5 Runtime builder
@@ -537,7 +537,7 @@ why `buildHelpers` lives below `createOptions`.
 ### 9.1 `retry`
 
 ```ts
-import { same, type UtilityPlugin } from '@bemedev/app-utility';
+import { same, type UtilityPlugin } from '@bemedev/app-plugins';
 
 export const retryPlugin = {
   name: 'retry',
@@ -576,10 +576,10 @@ export const logPlugin = {
 performs a topological sort and throws a clear error on cycles or missing
 dependencies.
 
-### 9.3 Using `createUtility` standalone (the requested "app-utility" lib)
+### 9.3 Using `createUtility` standalone (the requested "app-plugins" lib)
 
 ```ts
-import { createUtility, same } from '@bemedev/app-utility';
+import { createUtility, same } from '@bemedev/app-plugins';
 
 const utilities = createUtility()
   .add(
@@ -624,7 +624,7 @@ something" API (`createActor`, `createInterpreter`) can reuse it.
 | Sync/async duplication                                                 | Plugin works sync but fails async | `UtilityPair` requires both; `same()` for identical implementations; type tests force both                                              |
 | `app-options` importing `app`                                          | Cycle / broken build              | Engine stays in `app-options`; `app` only imports `buildHelpers`                                                                        |
 | Global registry leaks between tests/requests                           | Non-deterministic helpers         | Reset function (`configureOptions([])`); per-call plugins take precedence; SSR recommendation: no global mutation                       |
-| `bundleDependencies` / size-limit                                      | Package size grows                | `app-utility` is tiny and dependency-free; `app-options` bundles one extra file                                                         |
+| `bundleDependencies` / size-limit                                      | Package size grows                | `app-plugins` is tiny and dependency-free; `app-options` bundles one extra file                                                         |
 | Overloaded helper types (`assign`, `action`) lost through mapped types | Broken inference                  | `ResolveUtilities` maps the _type_ and preserves call signatures; add `expectTypeOf` tests for `assign`, `action`, `sendTo`             |
 | Plugin ordering changes behavior                                       | Subtle regressions                | Explicit `requires`; no implicit ordering except registration order                                                                     |
 | `Register` pattern conflicts                                           | Two augmentation systems          | Keep `Register` for option identifiers; plugins augment `Addons` only                                                                   |
@@ -639,7 +639,7 @@ something" API (`createActor`, `createInterpreter`) can reuse it.
   (`packages/__tests__/options/src/`), including type assertions with `expectTypeOf`.
 - Snapshot `Object.keys(createSyncHelpers(config))` and the async equivalent.
 
-### Phase 1 — extract `@bemedev/app-utility`
+### Phase 1 — extract `@bemedev/app-plugins`
 
 - New package, no dependency on `app`/`app-options`.
 - Implement `UtilityPair`, `UtilityMap`, `ResolveUtilities`, `UtilityPlugin`,
@@ -684,8 +684,8 @@ something" API (`createActor`, `createInterpreter`) can reuse it.
 ## 13. Proposed file blueprint
 
 ```
-packages/utility/
-  package.json                        @bemedev/app-utility
+packages/plugins/core/
+  package.json                        @bemedev/app-plugins
   src/index.ts                        re-exports
   src/types.ts                        UtilityPair, UtilityMap, ResolveUtilities
   src/plugin.ts                       UtilityPlugin, PluginUtilities, same
@@ -735,7 +735,7 @@ packages/app/src/
 
 ## 15. Open questions to decide before implementation
 
-1. Package name: `@bemedev/app-utility` vs `@bemedev/app-utilities` — existing
+1. Package name: `@bemedev/app-plugins` vs `@bemedev/app-utilities` — existing
    package `@bemedev/app-utils-bemedev` already occupies a similar name.
 2. Should `configureOptions` be in `app-options` or `app`? Recommendation:
    `app-options`, re-exported by `app`.
