@@ -651,6 +651,9 @@ importers:
       '@bemedev/app-options':
         specifier: workspace:^
         version: link:../../options
+      '@bemedev/app-utility':
+        specifier: workspace:^
+        version: link:../../utility
       '@bemedev/dev-utils':
         specifier: ^1.6.2
         version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
@@ -1240,6 +1243,45 @@ importers:
       vite-plugin-solid:
         specifier: ^2.11.17
         version: 2.11.17(@testing-library/jest-dom@8.0.0(@testing-library/dom@10.4.2)(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(solid-js@1.9.20)(supports-color@10.2.2)
+      vite-plus:
+        specifier: 'catalog:'
+        version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)
+
+  packages/utility:
+    devDependencies:
+      '@bemedev/app-contract':
+        specifier: workspace:^
+        version: link:../contract
+      '@bemedev/dev-utils':
+        specifier: ^1.6.2
+        version: 1.6.2(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vitest@5.1.1)
+      '@size-limit/file':
+        specifier: ^14.3.0
+        version: 14.3.0(size-limit@14.3.0)
+      '@types/node':
+        specifier: ^26.6.6
+        version: 26.6.6
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
+      pretty-quick:
+        specifier: ^4.2.2
+        version: 4.2.2(prettier@3.10.1)
+      rimraf:
+        specifier: ^6.1.4
+        version: 6.1.4
+      size-limit:
+        specifier: ^14.3.0
+        version: 14.3.0
+      tslib:
+        specifier: ^2.9.1
+        version: 2.9.1
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
         version: 1.7.0(@types/node@26.6.6)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)

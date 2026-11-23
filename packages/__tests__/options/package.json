@@ -15,6 +15,7 @@
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-contract": "workspace:^",
     "@bemedev/app-options": "workspace:^",
+    "@bemedev/app-utility": "workspace:^",
     "@bemedev/dev-utils": "^1.6.2",
     "@bemedev/typings": "^1.5.0",
     "@types/node": "^26.6.6",
