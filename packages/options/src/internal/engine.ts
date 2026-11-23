@@ -9,7 +9,7 @@
  */
 
 import type { Contract } from '@bemedev/app-contract';
-import { createUtilities, type Addons } from '@bemedev/app-utility';
+import { createUtilities, RESOLVE, type Addons } from '@bemedev/app-utility';
 
 import type { OptionsPlugin, UtilityMap, UtilityMode } from '../utility';
 import { createAsyncUtilities } from './async';
@@ -110,43 +110,29 @@ const build = (
 
   const defaults = { ...common.utilities, ...modeUtilities } as Addons;
 
-  // const trigger = Object.keys(defaults)[0];
-
   const utilities = createUtilities({ contract, utilities: defaults }, args => {
     const map: UtilityMap = {};
 
     for (const plugin of plugins) {
       const addons = { ...args.utilities, ...map } as any;
 
-      // `createUtilities` builds on the first entry resolution, so a
-      // sentinel entry materializes the plugin for these addons.
-      (plugin as any).__resolve__?.sync?.(addons);
+      // The plugin map is lazy: resolve it once for these addons.
+      const resolved = (plugin as any)[RESOLVE](addons) as UtilityMap;
 
-      for (const name of Object.keys(plugin) as string[]) {
+      for (const [name, entry] of Object.entries(resolved)) {
         if (Object.hasOwn(defaults, name)) {
           throw new Error(`A plugin cannot override the default utility "${name}"`);
         }
 
-        const entry = (plugin as any)[name];
-        map[name] = { sync: entry.sync(addons), async: entry.async(addons) };
+        map[name] = { sync: entry.sync, async: entry.async };
       }
     }
 
     return map;
   });
 
-  // `createUtilities` only runs its builder when an entry is resolved, so the
-  // first default helper is used as the trigger.
-  // if (trigger) (utilities as any)[trigger].sync(defaults);
-
-  const names = Object.keys(utilities) as string[];
-  const added = Object.fromEntries(
-    names.map(name => {
-      const entry = (utilities as any)[name];
-
-      return [name, { sync: entry.sync(defaults), async: entry.async(defaults) }];
-    }),
-  ) as UtilityMap;
+  // Resolve the outer map eagerly: its keys are only enumerable once built.
+  const added = (utilities as any)[RESOLVE](defaults) as UtilityMap;
 
   return project({ ...defaults, ...added }, mode);
 };

@@ -2,6 +2,15 @@ import type { Contract } from '@bemedev/app-contract';
 import type { Addons } from './addons';
 import type { BuilderArgs, Cast, Context, EmptyO, UtilityMap } from './types';
 
+/**
+ * Symbol resolving the whole utility map eagerly.
+ *
+ * The map is lazy by design: `sync`/`async` entries only run the builder on
+ * their first access. Consumers that need to enumerate the map, instead of
+ * reading a known key, use this symbol to build it once, synchronously.
+ */
+export const RESOLVE = Symbol('@bemedev/app-utility/resolve');
+
 export type CreateUtilities_F = <
   const Ct extends Context,
   R extends UtilityMap = EmptyO,
@@ -58,6 +67,8 @@ export const createUtilities: CreateUtilities_F = (context, builder) => {
 
   return new Proxy({} as any, {
     get: (_target, name) => {
+      if (name === RESOLVE) return build;
+
       // `then` must stay undefined, otherwise the map is treated as a thenable.
       if (typeof name !== 'string' || name === 'then') return;
       if (built && !(name in built)) return;
