@@ -28,7 +28,7 @@ export * from '@bemedev/app-contract';
  * @example
  * ```ts
  * const options = createOptions(contract)(({ assign }) => ({
- *   actions: { increment: assign('context.count', ({ context }) => context.count + 1) },
+ *   actions: { increment: assign('count', ({ context }) => context.count + 1) },
  * }));
  * ```
  *
@@ -111,7 +111,7 @@ const builder = (
  *
  * const options = createOptions(contract)(({ assign }) => ({
  *   actions: {
- *     increment: assign('context.count', ({ context }) => context.count + 1),
+ *     increment: assign('count', ({ context }) => context.count + 1),
  *   },
  * }));
  * ```

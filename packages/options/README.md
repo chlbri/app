@@ -66,9 +66,7 @@ import { createOptions } from '@bemedev/app-options';
 import { counterContract } from './counter.contract';
 
 export const counterOptions = createOptions(counterContract)(({ assign }) => ({
-  actions: {
-    increment: assign('context.count', ({ context }) => context.count + 1),
-  },
+  actions: { increment: assign('count', ({ context }) => context.count + 1) },
 }));
 ```
 

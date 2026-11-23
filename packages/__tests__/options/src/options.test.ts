@@ -31,16 +31,12 @@ const state = (count: number, token?: string) =>
 describe('#01 => createOptions / sync', () => {
   test('#01 => assign keyed path returns a merger', () => {
     const options = createOptions(syncContract)(({ assign }) => ({
-      actions: {
-        increment: assign('context.count', ({ context }) => context.count + 1),
-      },
+      actions: { increment: assign('count', ({ context }) => context.count + 1) },
     }));
 
     const result = options.actions!.increment!(state(1, 'token'));
 
-    expect(result).toEqual({
-      mergers: [{ key: 'context.count', source: { context: { count: 2 } } }],
-    });
+    expect(result).toEqual({ mergers: [{ key: 'count', source: { count: 2 } }] });
   });
 
   test('#02 => assign keyless returns a source merger', () => {
@@ -126,15 +122,13 @@ describe('#02 => createOptions / async', () => {
   test('#01 => assign awaits the function map', async () => {
     const options = createOptions(asyncContract)(({ assign }) => ({
       actions: {
-        increment: assign('context.count', async ({ context }) => context.count + 1),
+        increment: assign('count', async ({ context }) => context.count + 1),
       },
     }));
 
     const result = await options.actions!.increment!(state(1, 'token'));
 
-    expect(result).toEqual({
-      mergers: [{ key: 'context.count', source: { context: { count: 2 } } }],
-    });
+    expect(result).toEqual({ mergers: [{ key: 'count', source: { count: 2 } }] });
   });
 
   test('#02 => action routes rejections to the catch handler', async () => {

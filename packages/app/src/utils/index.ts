@@ -7,7 +7,6 @@ export type { Decompose, DecomposeKeys, DecomposeOptions } from '@bemedev/decomp
 export { IS_TEST, merge2 } from '@bemedev/app-options/internal';
 export * from './byKey2';
 export * from './objects';
-export * from './constructEventMap';
 export * from './reduceDescriber';
 export * from './resolve';
 export * from './strings';
@@ -17,7 +16,6 @@ export * from './typings';
 export { flatMap } from '../states/functions/flatMap';
 export * from './readonly';
 export * from './checkValues';
-export * from './soa';
 export * from './fn';
 export * from './typings';
 export * from '@bemedev/sleep';

@@ -20,7 +20,7 @@ export default createContract(
     },
   },
   {
-    context: type(({ array }) => ({ scores: array('number') })),
+    context: type(({ array, optional }) => ({ scores: optional(array('number')) })),
     eventsMap: type({ FILTER: 'never', ERASE: 'never' }),
     sync: true,
   },
