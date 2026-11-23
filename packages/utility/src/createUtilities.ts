@@ -1,12 +1,6 @@
 import type { Contract } from '@bemedev/app-contract';
 import type { Addons } from './addons';
-import type {
-  BuilderArgs,
-  Context,
-  EmptyO,
-  Utility_to_Plugin_Map,
-  UtilityMap,
-} from './types';
+import type { BuilderArgs, Context, EmptyO, UtilityMap } from './types';
 
 export type CreateUtilities_F = <
   Ct extends Contract = never,
@@ -15,7 +9,7 @@ export type CreateUtilities_F = <
 >(
   context: Context<Ct, U>,
   builder: (args: BuilderArgs<Ct, U>) => R,
-) => Utility_to_Plugin_Map<R>;
+) => R;
 
 /**
  * Creates the plugin map of a utility module.
