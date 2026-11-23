@@ -23,13 +23,13 @@ expectTypeOf<SyncAddons<typeof syncContract>['assign']>().toBeFunction();
 
 expectTypeOf<AsyncAddons<typeof syncContract>['assign']>().toBeFunction();
 
-createOptions(
-  syncContract,
-  formatPlugin,
-)(({ format }) => {
+createOptions(syncContract).use(formatPlugin)(({ format }) => {
   expectTypeOf(format).toEqualTypeOf<(value: number) => string>();
   return {};
 });
+
+// @ts-expect-error - plugins are injected through use, not createOptions
+createOptions(syncContract, formatPlugin);
 
 const direct = createMachine(config, { sync: true, plugins: [formatPlugin] });
 

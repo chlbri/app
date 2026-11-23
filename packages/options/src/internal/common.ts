@@ -7,7 +7,7 @@
 import { recompose } from '@bemedev/decompose';
 import { swap as _swap } from '@bemedev/function-swap';
 import type { Contract } from '@bemedev/app-contract';
-import { same, type UtilityMap } from '../utility';
+import { same, type UtilityMap } from '@bemedev/app-utility';
 
 import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';

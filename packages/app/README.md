@@ -518,9 +518,10 @@ const sync = utilities.resolve('sync');
 ```
 
 Per-call plugins win over registered ones with the same name:
-`createUtility({ contract }, retryPlugin)` or `createOptions(contract, retryPlugin)`.
-See the [`@bemedev/app-options`](../options) README for the plugin contract,
-`requires` ordering and `override` semantics.
+`createUtility({ contract }, retryPlugin)` or
+`createOptions(contract).use(retryPlugin)`. See the
+[`@bemedev/app-options`](../options) README for the plugin contract, `requires`
+ordering and `override` semantics.
 
 <br/>
 

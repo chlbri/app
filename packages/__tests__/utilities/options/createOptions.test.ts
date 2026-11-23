@@ -16,40 +16,36 @@ describe('#01 => utility added to options', () => {
   }));
 
   test('#01 => sync implementation', () => {
-    const options = createOptions(
-      syncContract,
-      sumPlugin,
-    )(({ sum }) => ({ actions: { total: sum(1, 2) as any } }));
+    const options = createOptions(syncContract).use(sumPlugin)(({ sum }) => ({
+      actions: { total: sum(1, 2) as any },
+    }));
 
     expect(options.actions!.total).toBe(3);
   });
 
   test('#02 => async implementation', () => {
-    const options = createOptions(
-      asyncContract,
-      sumPlugin,
-    )(({ sum }) => ({ actions: { total: sum(4, 5) as any } }));
+    const options = createOptions(asyncContract).use(sumPlugin)(({ sum }) => ({
+      actions: { total: sum(4, 5) as any },
+    }));
 
     expect(options.actions!.total).toBe(9);
   });
 
   test('#03 => typings come from the plugin tuple', () => {
-    createOptions(
-      syncContract,
-      sumPlugin,
-    )(({ sum }) => {
+    createOptions(syncContract).use(sumPlugin)(({ sum }) => {
       expectTypeOf(sum).toEqualTypeOf<(a: number, b: number) => number>();
       return {};
     });
   });
 
-  test('#04 => a direct plugin argument also applies and types it', () => {
-    const options = createOptions(
-      syncContract,
-      sumPlugin,
-    )(({ sum }) => {
-      expectTypeOf(sum).toEqualTypeOf<(a: number, b: number) => number>();
-      return { actions: { total: sum(6, 7) as any } };
+  test('#04 => an inline builder receives the previous utilities', () => {
+    const options = createOptions(syncContract)
+      .use(sumPlugin)
+      .use(({ utilities }) => ({
+        doubleSum: same((a: number, b: number) => utilities.sum.sync(a, b)),
+      }))(({ doubleSum }) => {
+      expectTypeOf(doubleSum).toEqualTypeOf<(a: number, b: number) => number>();
+      return { actions: { total: doubleSum(6, 7) as any } };
     });
 
     expect(options.actions!.total).toBe(13);

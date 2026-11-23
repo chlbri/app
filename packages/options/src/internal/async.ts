@@ -6,7 +6,7 @@ import { withTimeout } from '@bemedev/better-promise';
 import asyncRecursive from '@bemedev/boolean-recursive/async';
 import { recompose } from '@bemedev/decompose';
 import type { Contract } from '@bemedev/app-contract';
-import { same, type UtilityMap } from '../utility';
+import { same, type UtilityMap } from '@bemedev/app-utility';
 
 import type { AsyncAddons } from '../addons';
 import { createCommonHelpers } from './common';

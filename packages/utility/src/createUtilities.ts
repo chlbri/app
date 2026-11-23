@@ -40,9 +40,11 @@ export const createUtilities: CreateUtilities_F = (context, builder) => {
     const cached = cache.get(addons);
     if (cached) return (built = cached);
 
+    // Resolved addons win over the declared ones: the caller may pass a plugin
+    // map whose entries are still resolvers rather than implementations.
     const result = builder({
       contract,
-      utilities: { ...addons, ...utilities },
+      utilities: { ...utilities, ...addons },
     } as any);
 
     cache.set(addons, result);

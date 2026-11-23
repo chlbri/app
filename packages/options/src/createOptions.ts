@@ -1,21 +1,70 @@
 import type { Contract } from '@bemedev/app-contract';
+import { createUtilities } from '@bemedev/app-utility';
 
 import { buildHelpers } from './internal';
+import type { CreateOptionsWith, UseBuilder } from './types';
 import type { OptionsPlugin } from './utility/plugin';
-import type { CreateOptions_F, CreateOptionsWith } from './types';
 
 export type {
   AsyncOptions,
   AsyncOptionsHelpers,
-  CreateOptions_F,
   CreateOptionsWith,
   LegacyOptions,
   OptionsHelper,
   OptionsHelpers,
   SyncOptionsHelpers,
+  UseBuilder,
+  UseHelpers,
 } from './types';
 
 export * from '@bemedev/app-contract';
+
+/**
+ * Curried `createOptions` signature.
+ *
+ * The returned function accepts an options callback and produces the machine
+ * options object, typed with the contract option surface. Plugins are chained
+ * with `use`, either as maps or through an inline builder.
+ *
+ * @example
+ * ```ts
+ * const options = createOptions(contract)(({ assign }) => ({
+ *   actions: { increment: assign('context.count', ({ context }) => context.count + 1) },
+ * }));
+ * ```
+ *
+ * @example
+ * ```ts
+ * const options = createOptions(contract).use(retryPlugin)(({ retry }) => ({
+ *   actions: { load: retry(3, fetchAction) },
+ * }));
+ * ```
+ */
+export type CreateOptions_F = <const C extends Contract>(
+  contract: C,
+) => CreateOptionsWith<C>;
+
+/** Item accepted by `use`: a plugin map or an inline builder. */
+type UseItem = OptionsPlugin<any, any> | UseBuilder<any, any>;
+
+/**
+ * Normalizes a `use` item to a plugin.
+ *
+ * An inline builder is wrapped in a lazy `createUtilities` plugin, so the
+ * engine resolves it with the utilities built so far like any other plugin.
+ *
+ * @param item - Plugin map or inline builder.
+ * @param contract - Contract forwarded to the inline builder.
+ *
+ * @returns The plugin resolving the item.
+ */
+const toPlugin = (item: UseItem, contract: Contract): OptionsPlugin<any, any> => {
+  if (typeof item !== 'function') return item;
+
+  return createUtilities({ contract }, ({ contract, utilities }) =>
+    item({ contract, utilities }),
+  );
+};
 
 /**
  * Builds the options callable of a contract.
@@ -35,8 +84,8 @@ const builder = (
     helper(buildHelpers({ contract, plugins }), legacyOptions);
 
   return Object.assign(callable, {
-    use: (...more: readonly OptionsPlugin<any, any>[]) =>
-      builder(contract, [...plugins, ...more]),
+    use: (...more: readonly UseItem[]) =>
+      builder(contract, [...plugins, ...more.map(item => toPlugin(item, contract))]),
   }) as CreateOptionsWith<any, any>;
 };
 
@@ -45,7 +94,8 @@ const builder = (
  *
  * The returned function receives the same helpers as
  * `machine.createOptions` and produces the contract options object. Plugins
- * can be passed directly or chained with `.use()`.
+ * are chained with `.use()`, either as maps or through an inline builder
+ * receiving the contract and the utilities built so far.
  *
  * @example
  * ```ts
@@ -69,5 +119,4 @@ const builder = (
  *
  * @see -- type {@linkcode CreateOptions_F}
  */
-export const createOptions: CreateOptions_F = (contract, ...plugins) =>
-  builder(contract, plugins);
+export const createOptions: CreateOptions_F = contract => builder(contract, []);

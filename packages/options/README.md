@@ -13,10 +13,10 @@ The package exposes two APIs:
 - `buildHelpers` builds the helper surface shared by `createOptions` and the
   machine/interpreter option callbacks.
 
-Plugins are declared per call or chained with `use`: there is no library-level
-registry, so two calls never leak utilities into each other. The utilities are
-created with `createUtilities` from `@bemedev/app-utility`, which also owns the
-`Addons` map of the default helpers.
+Plugins are chained with `use`: there is no library-level registry, so two calls
+never leak utilities into each other. The utilities are created with
+`createUtilities` from `@bemedev/app-utility`, which also owns the `Addons` map of
+the default helpers.
 
 Both machine flavors are covered by the same API; the contract's `sync` flag selects
 the synchronous or the asynchronous surface.
@@ -163,16 +163,28 @@ throws at build time.
 
 ### Applying plugins
 
-At call level:
+Plugins are chained with `use`:
 
 ```typescript
-const options = createOptions(
-  contract,
-  retryPlugin,
-)(({ retry }) => ({ actions: { load: retry(3, loadUser) } }));
+const options = createOptions(contract).use(retryPlugin).use(logPlugin)(
+  ({ retry }) => ({ actions: { load: retry(3, loadUser) } }),
+);
 
-// or chained
+// or in a single call
 createOptions(contract).use(retryPlugin, logPlugin);
+```
+
+`use` also accepts an inline builder receiving the contract and the utilities built
+so far — default helpers and previous plugins:
+
+```typescript
+createOptions(contract)
+  .use(retryPlugin)
+  .use(({ contract, utilities }) => ({
+    logRetry: same((message: string) =>
+      utilities.retry.sync(1, () => console.log(contract, message)),
+    ),
+  }));
 ```
 
 At machine level, pass `plugins` in the type schema object:
@@ -191,8 +203,8 @@ machine.createOptions(({ retry }) => ({ actions: { load: retry(3, loadUser) } })
 Later plugins win over earlier ones, but the default helpers stay protected:
 
 ```typescript
-createOptions(contract, retryPlugin, tripleRetryPlugin); // tripleRetry wins
-createOptions(contract, assignPlugin); // throws: default `assign` is protected
+createOptions(contract).use(retryPlugin, tripleRetryPlugin); // tripleRetry wins
+createOptions(contract).use(assignPlugin); // throws: default `assign` is protected
 ```
 
 **Typing note**: the plugin tuple types the helper surface, so a helper is only
@@ -225,6 +237,8 @@ The runtime dependencies of the helpers are re-exported, so consumers of
 | `CreateOptionsWith`   | Type | Curried callable carrying the applied plugins.                |
 | `Addons`              | Type | Built-in helper map, re-exported from `@bemedev/app-utility`. |
 | `OptionsHelpers`      | Type | Helper surface of a contract and a plugin tuple.              |
+| `UseBuilder`          | Type | Inline builder accepted by `use`.                             |
+| `UseHelpers`          | Type | Utilities received by an inline `use` builder.                |
 | `SyncOptionsHelpers`  | Type | Helper surface injected for a `sync: true` contract.          |
 | `AsyncOptionsHelpers` | Type | Helper surface injected for an asynchronous contract.         |
 | `OptionsHelper`       | Type | Callback signature, selected from the contract `sync` flag.   |

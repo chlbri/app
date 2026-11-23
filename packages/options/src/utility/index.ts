@@ -5,5 +5,4 @@
  */
 
 export * from './plugin';
-export * from './same';
 export * from './types';

@@ -1,13 +1,13 @@
+import { createMachine } from '@bemedev/app';
 import { createContract, type SyncAction2 } from '@bemedev/app-contract';
 import {
   createOptions,
   createUtilities,
-  same,
   type AsyncAddons,
   type OptionsHelpers,
   type SyncAddons,
 } from '@bemedev/app-options';
-import { createMachine } from '@bemedev/app';
+import { same } from '@bemedev/app-utility';
 
 const config = {
   initial: 'idle',
@@ -40,14 +40,14 @@ createOptions(syncContract)(({ assign, isValue }) => {
   return {};
 });
 
-createOptions(
-  syncContract,
-  otherPlugin,
-)(({ other, assign }) => {
+createOptions(syncContract).use(otherPlugin)(({ other, assign }) => {
   expectTypeOf(other).toEqualTypeOf<(value: string) => number>();
   expectTypeOf(assign).toBeFunction();
   return {};
 });
+
+// @ts-expect-error - plugins are injected through use, not createOptions
+createOptions(syncContract, otherPlugin);
 
 const quadruplePlugin = createUtilities({}, ({ utilities }: any) => ({
   quadruple: same((value: number): number => utilities.double.sync(value)),
@@ -58,6 +58,19 @@ createOptions(syncContract).use(
   quadruplePlugin,
 )(({ quadruple }) => {
   expectTypeOf(quadruple).toEqualTypeOf<(value: number) => number>();
+  return {};
+});
+
+createOptions(syncContract)
+  .use(doublePlugin)
+  .use(({ contract, utilities }) => {
+    expectTypeOf(contract).toEqualTypeOf<typeof syncContract>();
+    expectTypeOf(utilities.double.sync).toEqualTypeOf<(value: number) => number>();
+    expectTypeOf(utilities.assign).toBeObject();
+
+    return { quintuple: same((value: number) => utilities.double.sync(value)) };
+  })(({ quintuple }) => {
+  expectTypeOf(quintuple).toEqualTypeOf<(value: number) => number>();
   return {};
 });
 

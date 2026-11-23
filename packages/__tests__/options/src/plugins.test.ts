@@ -1,5 +1,7 @@
 import { createContract } from '@bemedev/app-contract';
-import { createOptions, createUtilities, same } from '@bemedev/app-options';
+import { createOptions, createUtilities } from '@bemedev/app-options';
+import { same } from '@bemedev/app-utility';
+
 import { createMachine } from '@bemedev/app';
 
 describe('TESTS', () => {
@@ -33,9 +35,10 @@ describe('TESTS', () => {
 
   const quadruplePlugin = createUtilities(
     { utilities: doublePlugin },
-    ({ utilities }: any) => ({
+    ({ utilities }) => ({
       quadruple: same((value: number) => {
-        return utilities.double.sync(utilities.double.sync(value));
+        const fn = utilities.double.sync;
+        return fn(fn(value));
       }),
     }),
   );
@@ -87,13 +90,18 @@ describe('TESTS', () => {
       expect(async.sort()).toStrictEqual(expected);
     });
 
-    test('#02 => accepts a plugin as a direct argument', () => {
-      const options = createOptions(
-        syncContract,
-        doublePlugin,
-      )(({ double }) => ({ actions: { doubled: double(2) as any } }));
+    test('#02 => accepts an inline builder through use', () => {
+      const options = createOptions(syncContract)
+        .use(doublePlugin)
+        .use(({ contract, utilities }) => ({
+          quadruple: same((value: number) => {
+            expect(contract).toBe(syncContract);
+            const fn = utilities.double.sync;
+            return fn(fn(value));
+          }),
+        }))(({ quadruple }) => ({ actions: { quadrupled: quadruple(2) as any } }));
 
-      expect(options.actions!.doubled).toBe(4);
+      expect(options.actions!.quadrupled).toBe(8);
     });
 
     test('#03 => accepts a plugin through use', () => {
@@ -114,15 +122,13 @@ describe('TESTS', () => {
     });
 
     test('#05 => exposes the retry helper in sync and async', () => {
-      const sync = createOptions(
-        syncContract,
-        retryPlugin,
-      )(({ retry }) => ({ actions: { retried: retry(2, () => 42) as any } }));
+      const sync = createOptions(syncContract).use(retryPlugin)(({ retry }) => ({
+        actions: { retried: retry(2, () => 42) as any },
+      }));
 
-      const async = createOptions(
-        asyncContract,
-        retryPlugin,
-      )(({ retry }) => ({ actions: { retried: retry(2, () => 42) as any } }));
+      const async = createOptions(asyncContract).use(retryPlugin)(({ retry }) => ({
+        actions: { retried: retry(2, () => 42) as any },
+      }));
 
       expect(sync.actions!.retried!(state() as any)).toStrictEqual({
         result: 42,
@@ -140,12 +146,9 @@ describe('TESTS', () => {
         ({ contract }) => ({ pluginContract: same(() => contract) }),
       );
 
-      const options = createOptions(
-        syncContract,
-        contractPlugin,
-      )(({ pluginContract }) => ({
-        actions: { contract: pluginContract() as any },
-      }));
+      const options = createOptions(syncContract).use(contractPlugin)(
+        ({ pluginContract }) => ({ actions: { contract: pluginContract() as any } }),
+      );
 
       expect(options.actions!.contract).toBe(syncContract);
     });
@@ -157,8 +160,7 @@ describe('TESTS', () => {
         double: same((value: number) => value * 3),
       }));
 
-      const options = createOptions(
-        syncContract,
+      const options = createOptions(syncContract).use(
         doublePlugin,
         tripler,
       )(({ double }) => ({ actions: { doubled: double(2) as any } }));
@@ -171,9 +173,9 @@ describe('TESTS', () => {
         assign: same(() => undefined),
       }));
 
-      expect(() => createOptions(syncContract, assignPlugin)(() => ({}))).toThrow(
-        'A plugin cannot override the default utility "assign"',
-      );
+      expect(() =>
+        createOptions(syncContract).use(assignPlugin)(() => ({})),
+      ).toThrow('A plugin cannot override the default utility "assign"');
     });
   });
 

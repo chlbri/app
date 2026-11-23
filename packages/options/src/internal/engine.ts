@@ -110,8 +110,7 @@ const build = (
 
   const defaults = { ...common.utilities, ...modeUtilities } as Addons;
 
-  const trigger = Object.keys(defaults)[0];
-  let built = false;
+  // const trigger = Object.keys(defaults)[0];
 
   const utilities = createUtilities({ contract, utilities: defaults }, args => {
     const map: UtilityMap = {};
@@ -133,14 +132,12 @@ const build = (
       }
     }
 
-    built = true;
-
     return map;
   });
 
   // `createUtilities` only runs its builder when an entry is resolved, so the
   // first default helper is used as the trigger.
-  if (!built && trigger) (utilities as any)[trigger].sync(defaults);
+  // if (trigger) (utilities as any)[trigger].sync(defaults);
 
   const names = Object.keys(utilities) as string[];
   const added = Object.fromEntries(
