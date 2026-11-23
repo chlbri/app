@@ -36,6 +36,7 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     clearMocks: false,
     name: 'cli',
+    typecheck: { enabled: true, ignoreSourceErrors: true },
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },

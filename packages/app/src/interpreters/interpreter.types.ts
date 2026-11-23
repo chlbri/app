@@ -1,6 +1,6 @@
 import type { AsyncAction2, MaybeAsyncActionResult } from '#actions';
 import type { InterpretArgs } from '#common/interpreter';
-import type { AnyMachine, SimpleMachineOptions2 } from '#common/machine';
+import type { SimpleMachineOptions2 } from '#common/machine';
 import type { AsyncPredicateS3 } from '#guards';
 import type { NodeConfig2 } from '#states';
 import type {
@@ -17,6 +17,7 @@ import type {
 import type { EmptyObject, MaybePromise } from '~types';
 import type { AsyncAddOptionsParam_F } from '../asyncMachine';
 import { type AsyncInterpreter, type AsyncInterpreterFrom } from './interpreter';
+import type { AnyMachine } from '@bemedev/app-plugins';
 
 /**
  * Factory function signature for instantiating an async interpreter class {@linkcode AsyncInterpreterFrom}.

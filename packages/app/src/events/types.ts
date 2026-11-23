@@ -1,11 +1,6 @@
+import type { EventObject } from '@bemedev/app-options';
 import type { Equals } from '@bemedev/app-options/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
-import type {
-  EventArgObject,
-  EventObject,
-  EventsMap,
-  EventsR,
-} from '@bemedev/app-options';
 
 export type {
   ActorsConfigMap,
@@ -15,31 +10,14 @@ export type {
   EventArgAll,
   EventArgObject,
   EventObject,
-  EventStrings,
   EventsMap,
   EventsR,
+  EventStrings,
   InitEvent,
   ToEventObject,
   ToEvents,
   ToEventsR,
 } from '@bemedev/app-options';
-
-/**
- * Transforms an event map into arguments to send to the machine.
- * @template | {@linkcode EventsMap} `E` - the map of events.
- *
- * @see {@linkcode EventsR}, -- type {@linkcode EventObject}
- */
-export type EventArg<E extends EventsMap> = EventArgObject<EventsR<E>>;
-
-/**
- * Extracts the type of the event from the event map.
- * @template | {@linkcode EventsMap} `E` - the map of events
- *
- * @see {@linkcode EventsR}, -- type {@linkcode EventObject}
- */
-export type EventArgT<E extends EventsMap> =
-  EventsR<E> extends infer To extends EventObject ? To['type'] : never;
 
 /**
  * Helper extracting tuple parameter list for event sender functions.

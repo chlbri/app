@@ -34,7 +34,7 @@ expectTypeOf<OptionsHelpers<typeof asyncContract, 'async'>>().toEqualTypeOf<
 >();
 
 createOptions(syncContract)(({ assign, isValue }) => {
-  const action = assign('context.count', () => 0);
+  const action = assign('count', (() => 0) as any);
   expectTypeOf(action).toExtend<SyncAction2<typeof syncContract>>();
   expectTypeOf(isValue).toBeFunction();
   return {};

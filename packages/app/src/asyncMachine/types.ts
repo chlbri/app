@@ -1,5 +1,5 @@
 import type { AsyncAction2, FromActionConfig } from '#actions';
-import type { ConfigFrom } from '#common/interpreter';
+import type { ConfigFrom } from '@bemedev/app-options/plugins';
 import type {
   ChildEvents,
   CommonConfig,

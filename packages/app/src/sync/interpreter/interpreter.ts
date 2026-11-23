@@ -33,7 +33,6 @@ import type {
 
 import type { ExecuteActivity_F, InterpretArgs, Mode } from '#common/interpreter';
 import type {
-  AnyMachine,
   CommonChildFunction2,
   MachineEventsOf,
   SimpleMachineOptions2,
@@ -51,6 +50,7 @@ import { createSubscriber } from '../../common/subscriber';
 import type { SyncAddOptions_F } from '../machine';
 import type { SyncMachine } from '../machine/machine';
 import { merge2 } from '@bemedev/app-options/internal';
+import type { AnyMachine } from '@bemedev/app-plugins';
 
 /**
  * The class {@linkcode SyncInterpreter} is responsible for interpreting and managing the state of a synchronous machine.

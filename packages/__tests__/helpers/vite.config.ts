@@ -1,12 +1,12 @@
-import { defineConfig } from 'vite-plus';
+import { defineProject } from 'vite-plus';
 
-export default defineConfig({
+export default defineProject({
   resolve: { tsconfigPaths: true },
 
   test: {
     bail: 100,
     maxConcurrency: 100,
-
+    typecheck: { enabled: true, ignoreSourceErrors: true },
     allowOnly: true,
     environment: 'node',
     env: { NODE_ENV: 'test' },

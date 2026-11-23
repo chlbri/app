@@ -53,7 +53,6 @@ import {
 import {
   CommonChildFunction2,
   getEntries,
-  type AnyMachine,
   type MachineEventsOf,
   type SimpleMachineOptions2,
 } from '#common/machine';
@@ -66,6 +65,7 @@ import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types'
 import type { AsyncAddOptions_F } from '../asyncMachine';
 import type { AsyncMachine } from '../asyncMachine/machine';
 import { merge2 } from '@bemedev/app-options/internal';
+import type { AnyMachine } from '@bemedev/app-plugins';
 
 /**
  * The class {@linkcode AsyncInterpreter} is responsible for interpreting and managing the state of an asynchronous machine.

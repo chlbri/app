@@ -42,6 +42,8 @@ export type SimplifyArray<T extends any[]> = UnionToTuple<
   ValuesOf<_SimplifyArray<T>>
 >;
 
+// #region Fixtures
+
 const ttString = 'str';
 const ttNumber = 55;
 const ttBoolean = true;
@@ -70,18 +72,6 @@ const complexObject2 = {
   f: new TC(),
 };
 
-expectTypeOf(ttString).toExtend<PrimitiveObject>();
-expectTypeOf(ttNumber).toExtend<PrimitiveObject>();
-expectTypeOf(ttBoolean).toExtend<PrimitiveObject>();
-expectTypeOf(ttArra1).toExtend<PrimitiveObject>();
-expectTypeOf(ttArray2).toExtend<PrimitiveObject>();
-expectTypeOf(ttObject).toExtend<PrimitiveObject>();
-expectTypeOf(ttFunction).not.toExtend<PrimitiveObject>();
-expectTypeOf(ttArrowFunction).not.toExtend<PrimitiveObject>();
-expectTypeOf(ttClass).not.toExtend<PrimitiveObject>();
-expectTypeOf(complexObject1).toExtend<PrimitiveObject>();
-expectTypeOf(complexObject2).not.toExtend<PrimitiveObject>();
-
 type _TT1 = {
   arg1: { arg11: string; arg12: number };
   arg2: number;
@@ -97,259 +87,339 @@ type TT13 = Simplify<
   >
 >;
 
-expectTypeOf({
-  arg1: { arg11: 'example', arg12: 'str', '@my': 'yyt' },
-  arg2: 'str',
-  arg3: { arg31: { arg311: 'example', '@my': 'yyt' }, '@my': 'yyt' },
-}).toEqualTypeOf<TT11>();
+// #endregion
 
-expectTypeOf({
-  arg1: { arg11: 'example', arg12: '42', '@my': 'yyt' },
-  arg2: '100',
-  arg3: { arg31: { arg311: 'example' }, '@my': 'yyt' },
-}).not.toExtend<TT11>();
+// #region NoExtraKeys schemas
 
-expectTypeOf({
-  arg1: { arg12: 45, ert11: 'string' },
-  arg2: 5,
-  arg3: { arg31: { arg311: 'string' } },
-}).toEqualTypeOf<TT12>();
-
-expectTypeOf({
-  ert1: { arg12: 45, ert11: 'string' },
-  arg2: 5,
-  ert3: { arg31: { arg311: 'string' } },
-}).toEqualTypeOf<TT13>();
-
-expectTypeOf<{ user: string; password: string }>().toExtend<PrimitiveObject>();
-
-expectTypeOf<TT11>().toExtend<PrimitiveObject>();
-expectTypeOf<TT13>().toExtend<PrimitiveObject>();
-
-// #region NoExtraKeys Tests
-
-// Basic schema for testing
 type BasicSchema = { name: string; value: number; optional?: boolean };
 
-// Nested schema for testing
 type NestedSchema = {
   id: string;
   config: { enabled: boolean; options?: { timeout: number; retries?: number } };
   tags?: string[];
 };
 
-// Deep recursive schema (like ConfigDef)
 type DeepSchema = {
   targets: string;
   initial?: string;
   states?: Record<string, DeepSchema>;
 };
 
-// #region Basic NoExtraKeys tests
-
-// Valid: exact match
-type ValidBasic = NoExtraKeys<{ name: 'test'; value: 42 }, BasicSchema>;
-expectTypeOf<ValidBasic>().toMatchObjectType<{ name: 'test'; value: 42 }>();
-
-// Valid: with optional property
-type ValidWithOptional = NoExtraKeys<
-  { name: 'test'; value: 42; optional: true },
-  BasicSchema
->;
-expectTypeOf<ValidWithOptional>().toMatchObjectType<{
-  name: 'test';
-  value: 42;
-  optional: true;
-}>();
-
-// Valid: partial object (omitting optional)
-type ValidPartial = NoExtraKeys<{ name: 'test'; value: 42 }, BasicSchema>;
-expectTypeOf<ValidPartial>().toMatchObjectType<{ name: 'test'; value: 42 }>();
-
-// Invalid: extra key should be typed as never
-type InvalidExtraKey = NoExtraKeys<
-  { name: 'test'; value: 42; extra: string },
-  BasicSchema
->;
-expectTypeOf<InvalidExtraKey['extra']>().toEqualTypeOf<never>();
-
-// #endregion Basic NoExtraKeys tests
-
-// #region Nested NoExtraKeys tests
-
-// Valid nested object
-type ValidNested = NoExtraKeys<
-  { id: 'abc'; config: { enabled: true; options: { timeout: 1000 } } },
-  NestedSchema
->;
-expectTypeOf<ValidNested>().branded.toEqualTypeOf<{
-  id: 'abc';
-  config: { enabled: true; options: { timeout: 1000 } };
-}>();
-
-// Invalid: extra key in nested object
-type InvalidNestedExtra = NoExtraKeys<
-  { id: 'abc'; config: { enabled: true; extra: 'not allowed' } },
-  NestedSchema
->;
-// The nested 'extra' should be never
-expectTypeOf<InvalidNestedExtra['config']>().toHaveProperty('extra');
-
-// Valid with deep optional
-type ValidDeepOptional = NoExtraKeys<
-  { id: 'xyz'; config: { enabled: false; options: { timeout: 500; retries: 3 } } },
-  NestedSchema
->;
-expectTypeOf<ValidDeepOptional['config']['options']>().branded.toEqualTypeOf<{
-  timeout: 500;
-  retries: 3;
-}>();
-
-// #endregion Nested NoExtraKeys tests
-
-// #region Deep recursive NoExtraKeys tests (like ConfigDef)
-
-// Valid deep schema
-type ValidDeep = NoExtraKeys<
-  {
-    targets: 'idle | active';
-    initial: 'idle';
-    states: { idle: { targets: 'active' }; active: { targets: 'idle' } };
-  },
-  DeepSchema
->;
-expectTypeOf<ValidDeep>().branded.toEqualTypeOf<{
-  targets: 'idle | active';
-  initial: 'idle';
-  states: { idle: { targets: 'active' }; active: { targets: 'idle' } };
-}>();
-
-// Valid deeply nested states
-type ValidDeepNested = NoExtraKeys<
-  {
-    targets: 'parent';
-    states: {
-      parent: {
-        targets: 'child1 | child2';
-        initial: 'child1';
-        states: { child1: { targets: 'child2' }; child2: { targets: 'child1' } };
-      };
-    };
-  },
-  DeepSchema
->;
-expectTypeOf<ValidDeepNested['states']>().branded.toEqualTypeOf<{
-  parent: {
-    targets: 'child1 | child2';
-    initial: 'child1';
-    states: { child1: { targets: 'child2' }; child2: { targets: 'child1' } };
-  };
-}>();
-
-// Invalid: extra key at root level
-type InvalidDeepRoot = NoExtraKeys<{ targets: 'test'; extraRoot: true }, DeepSchema>;
-expectTypeOf<InvalidDeepRoot['extraRoot']>().toEqualTypeOf<never>();
-
-// Invalid: extra key in nested state
-type InvalidDeepNested = NoExtraKeys<
-  { targets: 'test'; states: { test: { targets: 'other'; notAllowed: 'value' } } },
-  DeepSchema
->;
-// The nested state should have 'notAllowed' as never
-expectTypeOf<InvalidDeepNested['states']>().not.toBeNever();
-
-// #endregion Deep recursive NoExtraKeys tests
-
-// #region NoExtraKeysStrict tests
-
-// Valid strict
-type ValidStrict = NoExtraKeysStrict<{ name: 'test'; value: 42 }, BasicSchema>;
-expectTypeOf<ValidStrict>().branded.toEqualTypeOf<{ name: 'test'; value: 42 }>();
-
-// NoExtraKeysStrict requires T to extend Schema
-// This should fail at compile time if uncommented:
-// type InvalidStrict = NoExtraKeysStrict<{ name: 'test' }, BasicSchema>;
-
-// #endregion NoExtraKeysStrict tests
-
-// #region NoExtraKeysRecord tests
-
 type StateSchema = { target: string; initial?: string };
 
-type ValidRecord = NoExtraKeysRecord<
-  { idle: { target: 'active' }; active: { target: 'idle'; initial: 'sub' } },
-  StateSchema
->;
-expectTypeOf<ValidRecord>().branded.toEqualTypeOf<{
-  idle: { target: 'active' };
-  active: { target: 'idle'; initial: 'sub' };
-}>();
-
-// Invalid record entry
-type InvalidRecord = NoExtraKeysRecord<
-  { idle: { target: 'active'; extra: true } },
-  StateSchema
->;
-expectTypeOf<InvalidRecord['idle']['extra']>().toEqualTypeOf<never>();
-
-// #endregion NoExtraKeysRecord tests
-
-// #region NoExtraKeysFor tests
-
-type ValidFor = NoExtraKeysFor<BasicSchema, { name: 'partial' }>;
-expectTypeOf<ValidFor>().branded.toEqualTypeOf<{ name: 'partial' }>();
-
-type InvalidFor = NoExtraKeysFor<BasicSchema, { name: 'test'; extra: 1 }>;
-expectTypeOf<InvalidFor['extra']>().toEqualTypeOf<never>();
-
-// #endregion NoExtraKeysFor tests
-
-// #region Edge cases
-
-// Empty object
-type EmptySchema = NonNullable<object>;
-type EmptyObj = NoExtraKeys<NonNullable<object>, EmptySchema>;
-expectTypeOf<EmptyObj>().branded.toEqualTypeOf<NonNullable<object>>();
-
-// Schema with array (arrays should not be recursively processed)
 type ArraySchema = { items: number[]; nested: { values: string[] } };
-type ValidArray = NoExtraKeys<
-  { items: [1, 2, 3]; nested: { values: ['a', 'b'] } },
-  ArraySchema
->;
-expectTypeOf<ValidArray>().branded.toEqualTypeOf<{
-  items: [1, 2, 3];
-  nested: { values: ['a', 'b'] };
-}>();
 
-// Schema with function (functions should not be recursively processed)
 type FnSchema = {
   handler: () => void;
   config: { callback?: (x: number) => string };
 };
-type ValidFn = NoExtraKeys<
-  { handler: () => {}; config: { callback: (x: number) => 'test' } },
-  FnSchema
->;
-expectTypeOf<ValidFn['handler']>().toEqualTypeOf<() => {}>();
 
-// Schema with Date (Date should not be recursively processed)
 type DateSchema = { createdAt: Date; meta: { updatedAt?: Date } };
-type ValidDate = NoExtraKeys<
-  { createdAt: Date; meta: { updatedAt: Date } },
-  DateSchema
->;
-expectTypeOf<ValidDate['createdAt']>().toEqualTypeOf<Date>();
 
-// Schema with Map/Set (should not be recursively processed)
 type CollectionSchema = { map: Map<string, number>; set: Set<string> };
-type ValidCollection = NoExtraKeys<
-  { map: Map<string, number>; set: Set<string> },
-  CollectionSchema
->;
-expectTypeOf<ValidCollection['map']>().toEqualTypeOf<Map<string, number>>();
-expectTypeOf<ValidCollection['set']>().toEqualTypeOf<Set<string>>();
 
-// #endregion Edge cases
+// #endregion
 
-// #endregion NoExtraKeys Tests
+describe('PrimitiveObject', () => {
+  test('#01 => primitives and plain objects extend PrimitiveObject', () => {
+    expectTypeOf(ttString).toExtend<PrimitiveObject>();
+    expectTypeOf(ttNumber).toExtend<PrimitiveObject>();
+    expectTypeOf(ttBoolean).toExtend<PrimitiveObject>();
+    expectTypeOf(ttArra1).toExtend<PrimitiveObject>();
+    expectTypeOf(ttArray2).toExtend<PrimitiveObject>();
+    expectTypeOf(ttObject).toExtend<PrimitiveObject>();
+    expectTypeOf(complexObject1).toExtend<PrimitiveObject>();
+  });
+
+  test('#02 => functions, classes and class instances are rejected', () => {
+    expectTypeOf(ttFunction).not.toExtend<PrimitiveObject>();
+    expectTypeOf(ttArrowFunction).not.toExtend<PrimitiveObject>();
+    expectTypeOf(ttClass).not.toExtend<PrimitiveObject>();
+    expectTypeOf(complexObject2).not.toExtend<PrimitiveObject>();
+  });
+});
+
+describe('Simplify & ChangeProperties', () => {
+  test('#01 => KeyStrings', () => {
+    expectTypeOf({
+      arg1: { arg11: 'example', arg12: 'str', '@my': 'yyt' },
+      arg2: 'str',
+      arg3: { arg31: { arg311: 'example', '@my': 'yyt' }, '@my': 'yyt' },
+    }).toEqualTypeOf<TT11>();
+  });
+
+  test('#02 => KeyStrings rejects non-string values', () => {
+    expectTypeOf({
+      arg1: { arg11: 'example', arg12: '42', '@my': 'yyt' },
+      arg2: '100',
+      arg3: { arg31: { arg311: 'example' }, '@my': 'yyt' },
+    }).not.toExtend<TT11>();
+  });
+
+  test('#03 => ChangeProperties', () => {
+    expectTypeOf({
+      arg1: { arg12: 45, ert11: 'string' },
+      arg2: 5,
+      arg3: { arg31: { arg311: 'string' } },
+    }).toEqualTypeOf<TT12>();
+  });
+
+  test('#04 => nested ChangeProperties', () => {
+    expectTypeOf({
+      ert1: { arg12: 45, ert11: 'string' },
+      arg2: 5,
+      ert3: { arg31: { arg311: 'string' } },
+    }).toEqualTypeOf<TT13>();
+  });
+
+  test('#05 => simplified objects extend PrimitiveObject', () => {
+    expectTypeOf<{ user: string; password: string }>().toExtend<PrimitiveObject>();
+    expectTypeOf<TT11>().toExtend<PrimitiveObject>();
+    expectTypeOf<TT13>().toExtend<PrimitiveObject>();
+  });
+});
+
+// #region NoExtraKeys Tests
+
+describe('NoExtraKeys', () => {
+  describe('#01 => Basic', () => {
+    type ValidBasic = NoExtraKeys<{ name: 'test'; value: 42 }, BasicSchema>;
+
+    type ValidWithOptional = NoExtraKeys<
+      { name: 'test'; value: 42; optional: true },
+      BasicSchema
+    >;
+
+    type ValidPartial = NoExtraKeys<{ name: 'test'; value: 42 }, BasicSchema>;
+
+    type InvalidExtraKey = NoExtraKeys<
+      { name: 'test'; value: 42; extra: string },
+      BasicSchema
+    >;
+
+    test('#01 => exact match', () => {
+      expectTypeOf<ValidBasic>().toMatchObjectType<{ name: 'test'; value: 42 }>();
+    });
+
+    test('#02 => with optional property', () => {
+      expectTypeOf<ValidWithOptional>().toMatchObjectType<{
+        name: 'test';
+        value: 42;
+        optional: true;
+      }>();
+    });
+
+    test('#03 => partial object', () => {
+      expectTypeOf<ValidPartial>().toMatchObjectType<{ name: 'test'; value: 42 }>();
+    });
+
+    test('#04 => extra key is never', () => {
+      expectTypeOf<InvalidExtraKey['extra']>().toEqualTypeOf<never>();
+    });
+  });
+
+  describe('#02 => Nested', () => {
+    type ValidNested = NoExtraKeys<
+      { id: 'abc'; config: { enabled: true; options: { timeout: 1000 } } },
+      NestedSchema
+    >;
+
+    type InvalidNestedExtra = NoExtraKeys<
+      { id: 'abc'; config: { enabled: true; extra: 'not allowed' } },
+      NestedSchema
+    >;
+
+    type ValidDeepOptional = NoExtraKeys<
+      {
+        id: 'xyz';
+        config: { enabled: false; options: { timeout: 500; retries: 3 } };
+      },
+      NestedSchema
+    >;
+
+    test('#01 => valid nested object', () => {
+      expectTypeOf<ValidNested>().branded.toEqualTypeOf<{
+        id: 'abc';
+        config: { enabled: true; options: { timeout: 1000 } };
+      }>();
+    });
+
+    test('#02 => extra key in nested object is kept', () => {
+      expectTypeOf<InvalidNestedExtra['config']>().toHaveProperty('extra');
+    });
+
+    test('#03 => deep optional', () => {
+      expectTypeOf<ValidDeepOptional['config']['options']>().branded.toEqualTypeOf<{
+        timeout: 500;
+        retries: 3;
+      }>();
+    });
+  });
+
+  describe('#03 => Deep recursive', () => {
+    type ValidDeep = NoExtraKeys<
+      {
+        targets: 'idle | active';
+        initial: 'idle';
+        states: { idle: { targets: 'active' }; active: { targets: 'idle' } };
+      },
+      DeepSchema
+    >;
+
+    type ValidDeepNested = NoExtraKeys<
+      {
+        targets: 'parent';
+        states: {
+          parent: {
+            targets: 'child1 | child2';
+            initial: 'child1';
+            states: { child1: { targets: 'child2' }; child2: { targets: 'child1' } };
+          };
+        };
+      },
+      DeepSchema
+    >;
+
+    type InvalidDeepRoot = NoExtraKeys<
+      { targets: 'test'; extraRoot: true },
+      DeepSchema
+    >;
+
+    type InvalidDeepNested = NoExtraKeys<
+      {
+        targets: 'test';
+        states: { test: { targets: 'other'; notAllowed: 'value' } };
+      },
+      DeepSchema
+    >;
+
+    test('#01 => valid deep schema', () => {
+      expectTypeOf<ValidDeep>().branded.toEqualTypeOf<{
+        targets: 'idle | active';
+        initial: 'idle';
+        states: { idle: { targets: 'active' }; active: { targets: 'idle' } };
+      }>();
+    });
+
+    test('#02 => valid deeply nested states', () => {
+      expectTypeOf<ValidDeepNested['states']>().branded.toEqualTypeOf<{
+        parent: {
+          targets: 'child1 | child2';
+          initial: 'child1';
+          states: { child1: { targets: 'child2' }; child2: { targets: 'child1' } };
+        };
+      }>();
+    });
+
+    test('#03 => extra key at root level is never', () => {
+      expectTypeOf<InvalidDeepRoot['extraRoot']>().toEqualTypeOf<never>();
+    });
+
+    test('#04 => nested state stays non-never', () => {
+      expectTypeOf<InvalidDeepNested['states']>().not.toBeNever();
+    });
+  });
+
+  describe('#04 => NoExtraKeysStrict', () => {
+    type ValidStrict = NoExtraKeysStrict<{ name: 'test'; value: 42 }, BasicSchema>;
+
+    // NoExtraKeysStrict requires T to extend Schema
+    // This should fail at compile time if uncommented:
+    // type InvalidStrict = NoExtraKeysStrict<{ name: 'test' }, BasicSchema>;
+
+    test('#01 => valid strict', () => {
+      expectTypeOf<ValidStrict>().branded.toEqualTypeOf<{
+        name: 'test';
+        value: 42;
+      }>();
+    });
+  });
+
+  describe('#05 => NoExtraKeysRecord', () => {
+    type ValidRecord = NoExtraKeysRecord<
+      { idle: { target: 'active' }; active: { target: 'idle'; initial: 'sub' } },
+      StateSchema
+    >;
+
+    type InvalidRecord = NoExtraKeysRecord<
+      { idle: { target: 'active'; extra: true } },
+      StateSchema
+    >;
+
+    test('#01 => valid record', () => {
+      expectTypeOf<ValidRecord>().branded.toEqualTypeOf<{
+        idle: { target: 'active' };
+        active: { target: 'idle'; initial: 'sub' };
+      }>();
+    });
+
+    test('#02 => extra key in record entry is never', () => {
+      expectTypeOf<InvalidRecord['idle']['extra']>().toEqualTypeOf<never>();
+    });
+  });
+
+  describe('#06 => NoExtraKeysFor', () => {
+    type ValidFor = NoExtraKeysFor<BasicSchema, { name: 'partial' }>;
+
+    type InvalidFor = NoExtraKeysFor<BasicSchema, { name: 'test'; extra: 1 }>;
+
+    test('#01 => valid partial', () => {
+      expectTypeOf<ValidFor>().branded.toEqualTypeOf<{ name: 'partial' }>();
+    });
+
+    test('#02 => extra key is never', () => {
+      expectTypeOf<InvalidFor['extra']>().toEqualTypeOf<never>();
+    });
+  });
+
+  describe('#07 => Edge cases', () => {
+    type EmptySchema = NonNullable<object>;
+    type EmptyObj = NoExtraKeys<NonNullable<object>, EmptySchema>;
+
+    type ValidArray = NoExtraKeys<
+      { items: [1, 2, 3]; nested: { values: ['a', 'b'] } },
+      ArraySchema
+    >;
+
+    type ValidFn = NoExtraKeys<
+      { handler: () => {}; config: { callback: (x: number) => 'test' } },
+      FnSchema
+    >;
+
+    type ValidDate = NoExtraKeys<
+      { createdAt: Date; meta: { updatedAt: Date } },
+      DateSchema
+    >;
+
+    type ValidCollection = NoExtraKeys<
+      { map: Map<string, number>; set: Set<string> },
+      CollectionSchema
+    >;
+
+    test('#01 => empty object', () => {
+      expectTypeOf<EmptyObj>().branded.toEqualTypeOf<NonNullable<object>>();
+    });
+
+    test('#02 => arrays are not recursively processed', () => {
+      expectTypeOf<ValidArray>().branded.toEqualTypeOf<{
+        items: [1, 2, 3];
+        nested: { values: ['a', 'b'] };
+      }>();
+    });
+
+    test('#03 => functions are not recursively processed', () => {
+      expectTypeOf<ValidFn['handler']>().toEqualTypeOf<() => {}>();
+    });
+
+    test('#04 => Date is not recursively processed', () => {
+      expectTypeOf<ValidDate['createdAt']>().toEqualTypeOf<Date>();
+    });
+
+    test('#05 => Map and Set are not recursively processed', () => {
+      expectTypeOf<ValidCollection['map']>().toEqualTypeOf<Map<string, number>>();
+      expectTypeOf<ValidCollection['set']>().toEqualTypeOf<Set<string>>();
+    });
+  });
+});
+
+// #endregion

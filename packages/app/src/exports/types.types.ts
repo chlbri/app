@@ -1,11 +1,9 @@
 import type { InterpretArgs } from '#common/interpreter';
 import type {
-  AnyMachine,
   CommonConfig,
   CommonConfig2,
   CommonConfig3,
   NoExtraKeysConfig,
-  SimpleMachineOptions2,
 } from '#common/machine';
 import type {
   ActorsConfigMap,
@@ -26,6 +24,8 @@ import type { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings';
 import type { AsyncMachine } from '../asyncMachine/machine';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine } from '../sync/machine';
+import type { AnyMachine } from '@bemedev/app-plugins';
+import type { SimpleMachineOptions2 } from '@bemedev/app-plugins/addons';
 
 /**
  * Contract surface used to select the machine options type before the full

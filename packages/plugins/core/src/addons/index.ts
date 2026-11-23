@@ -29,6 +29,9 @@ import type {
 } from './guards.types';
 import type { EventArg, EventsMapFrom } from './inferers';
 
+export type * from './inferers';
+export type * from './types';
+
 export type {
   AsyncActionHelper,
   AsyncAssign,

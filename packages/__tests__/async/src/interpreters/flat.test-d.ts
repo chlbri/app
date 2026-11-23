@@ -18,17 +18,21 @@ const config = createConfig({
 
 type KeyConfig1 = keyof FlatMapN<typeof config>;
 
-expectTypeOf<KeyConfig1>().toEqualTypeOf<
-  | '/'
-  | '/atomic'
-  | '/compound'
-  | '/parallel'
-  | '/compound/state1'
-  | '/compound/state2'
-  | '/parallel/atomic'
-  | '/parallel/compound'
-  | '/parallel/compound/state1'
-  | '/parallel/compound/state2'
-  | '/parallel/atomic/state1'
-  | '/parallel/atomic/state2'
->();
+describe('FlatMapN', () => {
+  test('#01 => returns every state path', () => {
+    expectTypeOf<KeyConfig1>().toEqualTypeOf<
+      | '/'
+      | '/atomic'
+      | '/compound'
+      | '/parallel'
+      | '/compound/state1'
+      | '/compound/state2'
+      | '/parallel/atomic'
+      | '/parallel/compound'
+      | '/parallel/compound/state1'
+      | '/parallel/compound/state2'
+      | '/parallel/atomic/state1'
+      | '/parallel/atomic/state2'
+    >();
+  });
+});

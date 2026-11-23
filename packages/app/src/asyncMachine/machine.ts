@@ -4,19 +4,20 @@ import { type DelayFunction } from '#delays';
 import { type FlatMapN } from '#states';
 import {
   buildHelpers,
-  type Contract,
   type ContractConfig,
   type OptionsPlugin,
 } from '@bemedev/app-options';
+import type { Contract } from '@bemedev/app-contract';
 import { _unknown } from '@bemedev/app-options/bemedev';
 
-import type { CommonCreateMachine_F, SimpleMachineOptions2 } from '#common/machine';
+import type { CommonCreateMachine_F } from '#common/machine';
 
 import type { AsyncPredicateS } from '#guards';
 
 import { CommonMachine } from '../common/machine';
 import type { EmptyObject } from '~types';
 import type { AsyncAddOptions_F, AsyncProvideOptions_F } from './machine.types';
+import { SimpleMachineOptions2 } from '@bemedev/app-plugins/addons';
 
 /**
  * A class representing an asynchronous state machine.

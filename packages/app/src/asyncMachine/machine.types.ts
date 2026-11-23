@@ -1,11 +1,14 @@
-import type { SimpleMachineOptions2 } from '#common/machine';
 import type {
   Contract,
   ContractOptions,
   OptionsPlugin,
   PluginAddons,
 } from '@bemedev/app-options';
-import type { AsyncAddons, ResolveUtilities } from '@bemedev/app-options/plugins';
+import type {
+  AsyncAddons,
+  SimpleMachineOptions2,
+} from '@bemedev/app-plugins/addons';
+import { ResolveUtilities } from '@bemedev/app-plugins/types';
 import type { EmptyObject } from '~types';
 import type { AsyncMachine } from './machine';
 export type { AsyncAddons };

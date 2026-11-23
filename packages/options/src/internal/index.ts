@@ -17,4 +17,3 @@ export * from './merge2';
 export * from './objects';
 export * from './reduceFnMap';
 export * from './sync';
-export * from './types';

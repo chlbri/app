@@ -22,7 +22,7 @@ import type { RecordS } from './primitives';
  * @template `T` - Source object type.
  * @template `K` - Key union of the merge target.
  */
-export type Merger<T, K extends string = string> = {
+export type Merger<T = any, K extends string = string> = {
   /** Optional source object containing values to merge. */
   source?: T;
   /** Dot-separated key path indicating which property to merge. */

@@ -51,7 +51,6 @@ import { type Fn, type MachineType, type Pausable } from '~types';
 import {
   getEntries,
   getExits,
-  type AnyMachine,
   type CommonMachine,
   type MachineContextOf,
   type MachineEventsOf,
@@ -75,6 +74,7 @@ import type {
   SimpleScheduler,
 } from './types';
 import { IS_TEST, merge2 } from '@bemedev/app-options/internal';
+import type { AnyMachine } from '@bemedev/app-plugins';
 
 /**
  * Abstract base class for state machine interpreters.

@@ -11,7 +11,7 @@ import type {
   ContractTags,
   StateValue,
 } from '@bemedev/app-contract';
-import type { Fn } from './addons';
+import type { Fn } from '@bemedev/app-utils-bemedev';
 
 /**
  * Machine category classification (synchronous or asynchronous).
@@ -28,7 +28,7 @@ export type MachineType = 'sync' | 'async';
  *
  * @see -- type {@linkcode StateValue}, -- type {@linkcode Fn}
  */
-export interface AnyMachine<Ct extends Contract = Contract> {
+export type AnyMachine<Ct extends Contract = Contract> = {
   /**
    * Contract of the machine.
    */
@@ -163,4 +163,4 @@ export interface AnyMachine<Ct extends Contract = Contract> {
    * Function converting a state value into a node configuration.
    */
   toNode: Fn<[StateValue], any>;
-}
+};

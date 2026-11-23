@@ -38,7 +38,8 @@ import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemede
 import { _unknown } from '@bemedev/app-options/bemedev';
 import { constructEventsMap } from '@bemedev/app-options/internal';
 import { decompose, type Decompose } from '@bemedev/app-options/decompose';
-import type { AnyMachine, CommonElements, GetIO_F, MachineType } from './types';
+import type { CommonElements, GetIO_F } from './types';
+import type { AnyMachine, MachineType } from '@bemedev/app-plugins';
 
 /**
  * Abstract base class for state machines (synchronous and asynchronous).
