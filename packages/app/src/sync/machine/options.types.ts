@@ -21,6 +21,7 @@ import type {
 } from '@bemedev/app-options';
 import type { FnMap, FnR, SingleOrArrayL2, TraversableTuple } from '~types';
 import type { SyncMachine } from './machine';
+import type { SyncAddons } from '@bemedev/app-utility/addons';
 
 export type {
   SyncChildFunction2,
@@ -456,7 +457,7 @@ export type SyncAddOptionsParam_F<
   L = SimpleMachineOptions2,
   Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = (
-  option: SyncAddOption<Ct> & ResolveUtilities<PluginAddons<Ps>, 'sync'>,
+  option: SyncAddons<Ct> & ResolveUtilities<PluginAddons<Ps>, 'sync'>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.

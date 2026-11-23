@@ -9,7 +9,7 @@ import type {
   StatePextendedOf,
 } from '@bemedev/app-contract';
 import type { Ru, SubType, TrueObject, ValuesOf } from '@bemedev/app-utils-bemedev';
-import type { DecomposeC } from './types';
+import type { DecomposeC } from '../types';
 
 /**
  * Internal helper function map type keyed by event types.
@@ -85,7 +85,7 @@ export type FnMapFilterObject<
  *
  * @returns Action of type `A` filtering the supplied context key.
  */
-export type CommonFilterAction_F<Ct extends Contract = Contract, A = any> = <
+export type CommonFilterAction<Ct extends Contract = Contract, A = any> = <
   D = 0 extends 1 & ContractContext<Ct>
     ? Record<string, any>
     : SubType<DecomposeC<ContractContext<Ct>>, TrueObject | any[] | undefined>,

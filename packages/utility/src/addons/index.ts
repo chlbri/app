@@ -15,8 +15,10 @@ import type {
   AsyncActionHelper,
   AsyncAssign,
   AsyncOptions,
+  CommonEraseAction,
+  CommonFilterAction,
   SyncAssign,
-} from './actions.types';
+} from './actions';
 
 import type { AnyMachine } from '../anyMachine';
 import type {
@@ -116,14 +118,14 @@ export type Addons<Ct extends Contract = Contract> = {
 
   /** Filters an array or object context property. */
   filter: {
-    sync: (key: string, fn: any) => SyncAction2<Ct>;
-    async: (key: string, fn: any) => AsyncAction2<Ct>;
+    sync: CommonFilterAction<Ct, SyncAction2<Ct>>;
+    async: CommonFilterAction<Ct, AsyncAction2<Ct>>;
   };
 
   /** Erases context properties. */
   erase: {
-    sync: (...keys: string[]) => SyncAction2<Ct>;
-    async: (...keys: string[]) => AsyncAction2<Ct>;
+    sync: CommonEraseAction<Ct, SyncAction2<Ct>>;
+    async: CommonEraseAction<Ct, AsyncAction2<Ct>>;
   };
 
   /** Creates an action running a side effect. */
@@ -145,13 +147,16 @@ export type Addons<Ct extends Contract = Contract> = {
     async: <M extends AnyMachine>(
       _?: M,
     ) => <
-      F extends { to: string; event: ContractEventArg<Ct> } = {
-        to: string;
-        event: ContractEventArg<Ct>;
-      },
+      F extends
+        | { to: string; event: EventArg<EventsMapFrom<M>> }
+        | Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }> =
+        | { to: string; event: EventArg<EventsMapFrom<M>> }
+        | Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }>,
     >(
-      fn: FnMap<Ct, MaybePromise<F>>,
-      options?: AsyncOptions<Ct>,
+      fn: FnMap<Ct, F>,
+      ...args: F extends Promise<{ to: string; event: EventArg<EventsMapFrom<M>> }>
+        ? [AsyncOptions<Ct>]
+        : []
     ) => AsyncAction2<Ct>;
   };
 

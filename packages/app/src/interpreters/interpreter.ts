@@ -301,12 +301,10 @@ export class AsyncInterpreter<
    *
    * @returns The boolean result or a promise resolving to a boolean.
    */
-  #executePredicate: AsyncPerformPredicate_F<Ct> = predicate => {
+  #executePredicate: AsyncPerformPredicate_F<Ct> = async predicate => {
     this.__setStatus('busy');
-    const out = this.#performPredicate(predicate);
-
+    const out = await this.#performPredicate(predicate);
     this.__setStatus('working');
-
     return out;
   };
 
@@ -337,8 +335,8 @@ export class AsyncInterpreter<
    */
   #performPredicates = async (...guards: GuardConfig[]) => {
     if (guards.length < 1) return true;
-    const predicates = guards.map(this.toPredicateFn).filter(isDefined);
 
+    const predicates = guards.map(this.toPredicateFn).filter(isDefined);
     for (const predicate of predicates) {
       const out = await this.#executePredicate(predicate);
       if (!out) return false;

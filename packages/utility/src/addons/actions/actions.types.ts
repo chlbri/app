@@ -10,7 +10,7 @@ import type {
   SingleOrArrayL2,
   TraversableTupleAsync,
   TraversableTupleSync,
-} from './types';
+} from '../types';
 
 export type ErrorFn<Ct extends Contract = Contract> = <Err>(
   err: Err,

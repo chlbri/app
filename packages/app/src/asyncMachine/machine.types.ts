@@ -28,6 +28,7 @@ import type {
 } from '~types';
 import type { AsyncMachine } from './machine';
 import type { FnMap, FnR } from '@bemedev/app-contract';
+import type { AsyncAddons } from '@bemedev/app-utility/addons';
 /**
  * Options for async action helpers.
  *
@@ -189,7 +190,7 @@ export type AsyncTimeAction_F<Ct extends Contract = Contract> = (
  *
  * @returns Async action of type {@linkcode AsyncAction2}.
  */
-export type AsyncAction_F<Ct extends Contract = Contract> = <F>(
+export type AsyncAction_F<Ct extends Contract = Contract> = <const F>(
   fn: FnMap<Ct, F>,
   ...args: AsyncOptionsArgs<F, Ct>
 ) => AsyncAction2<Ct>;
@@ -264,7 +265,7 @@ export type AsyncSendAction_F<Ct extends Contract = Contract> = <
 export type AsyncValueCheckerGuard_F<Ct extends Contract = Contract> = (
   path: DefinedValue<Ct>,
   ...values: any[]
-) => FnR<Ct, boolean>;
+) => FnR<Ct, MaybePromise<boolean>>;
 
 /**
  * Function type signature for creating a property definition guard helper.
@@ -279,7 +280,7 @@ export type AsyncValueCheckerGuard_F<Ct extends Contract = Contract> = (
  */
 export type AsyncDefineGuard_F<Ct extends Contract = Contract> = (
   path: DefinedValue<Ct>,
-) => FnR<Ct, boolean>;
+) => FnR<Ct, MaybePromise<boolean>>;
 
 /**
  * Function type signature for batching multiple actions into a single async action.
@@ -590,7 +591,7 @@ export type AsyncAddOptionsParam_F<
   L = SimpleMachineOptions2,
   Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = (
-  option: AsyncAddOption<Ct> & ResolveUtilities<PluginAddons<Ps>, 'async'>,
+  option: AsyncAddons<Ct> & ResolveUtilities<PluginAddons<Ps>, 'async'>,
   /**
    * Access to previously defined options from previous addOptions or provideOptions calls.
    * Provides actions, guards, emitters, machines, promises, and delays.

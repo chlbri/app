@@ -1,5 +1,5 @@
 import type { Contract } from '@bemedev/app-contract';
-import { createUtilities } from '@bemedev/app-utility';
+import { createUtilities, type Addons } from '@bemedev/app-utility';
 
 import { buildHelpers } from './internal';
 import type { CreateOptionsWith, UseBuilder } from './types';
@@ -41,7 +41,7 @@ export * from '@bemedev/app-contract';
  */
 export type CreateOptions_F = <const C extends Contract>(
   contract: C,
-) => CreateOptionsWith<C>;
+) => CreateOptionsWith<C, readonly [OptionsPlugin<Addons<C>, C>]>;
 
 /** Item accepted by `use`: a plugin map or an inline builder. */
 type UseItem = OptionsPlugin<any, any> | UseBuilder<any, any>;
@@ -118,4 +118,5 @@ const builder = (
  *
  * @see -- type {@linkcode CreateOptions_F}
  */
-export const createOptions: CreateOptions_F = contract => builder(contract, []);
+export const createOptions: CreateOptions_F = (contract =>
+  builder(contract, [])) as CreateOptions_F;
