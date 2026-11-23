@@ -23,6 +23,10 @@ export type {
   UnionToTuple,
   Unionize,
   _UnionToIntersection2,
+  TrueObject,
+  To,
+  ValuesOf,
+  NotReadonly,
 } from '#bemedev/globals/types';
 export * from '#bemedev/globals/utils/_unknown';
 export * from '#bemedev/globals/utils/expandFn';

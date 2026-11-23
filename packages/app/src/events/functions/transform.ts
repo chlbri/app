@@ -1,3 +1,4 @@
+import { transformEventArg as _transformEventArg } from '@bemedev/app-options/internal';
 import type { EventObject } from '../types';
 
 /**
@@ -15,6 +16,9 @@ export type TransformEventArg = <T extends EventObject = EventObject>(
 /**
  * Transforms a raw event argument into a standardized interface {@linkcode EventObject}.
  *
+ * Delegates to `@bemedev/app-options` so the machine runtime and the option
+ * helpers share a single implementation.
+ *
  * @param event - The event string or event object to transform.
  *
  * @returns Standardized event object containing `type` and `payload`.
@@ -22,8 +26,5 @@ export type TransformEventArg = <T extends EventObject = EventObject>(
  * @see {@linkcode TransformEventArg}
  */
 export const transformEventArg: TransformEventArg = event => {
-  const check1 = typeof event === 'string';
-  if (check1) return { type: event, payload: {} } as any;
-
-  return { ...event, payload: event.payload };
+  return _transformEventArg(event) as any;
 };

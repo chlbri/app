@@ -250,6 +250,7 @@ export default defineConfig({
       'packages/contract/vite.config.ts',
       'packages/interval3/vite.config.ts',
       'packages/options/vite.config.ts',
+      'packages/useful-utilities/vite.config.ts',
       'apps/reactjs/vite.config.ts',
       'apps/solidjs/vite.config.ts',
     ],

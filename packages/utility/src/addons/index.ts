@@ -18,25 +18,27 @@ import type {
   SyncAssign,
 } from './actions.types';
 
+import type { AnyMachine } from '../anyMachine';
 import type {
   AsyncGuardUnion,
   SyncGuardUnion,
   ValueDefined,
   ValueIs,
 } from './guards.types';
+import type { EventArg, EventsMapFrom } from './inferers';
 
-export type { AsyncActionHelper, AsyncAssign, AsyncOptions, SyncAssign };
-export type { AsyncGuardUnion, SyncGuardUnion, ValueDefined, ValueIs };
-export type { Fn, UtilityPair };
-
-/** Swaps state arguments in functional transitions. */
-export type Swap<C extends Contract> = <
-  F extends (...args: any[]) => any,
-  Ev extends string = string,
->(
-  fn: F,
-  event?: Ev,
-) => (types: any) => FnR<C, ReturnType<F>>;
+export type {
+  AsyncActionHelper,
+  AsyncAssign,
+  AsyncGuardUnion,
+  AsyncOptions,
+  Fn,
+  SyncAssign,
+  SyncGuardUnion,
+  UtilityPair,
+  ValueDefined,
+  ValueIs,
+};
 
 /**
  * Contract followed by every addon: a synchronous and an asynchronous
@@ -129,10 +131,20 @@ export type Addons<Ct extends Contract = Contract> = {
 
   /** Sends an event to a child actor. */
   sendTo: {
-    sync: () => (
-      fn: FnMap<Ct, { to: string; event: ContractEventArg<Ct> }>,
+    sync: <M extends AnyMachine>(
+      _?: M,
+    ) => <
+      F extends { to: string; event: EventArg<EventsMapFrom<M>> } = {
+        to: string;
+        event: EventArg<EventsMapFrom<M>>;
+      },
+    >(
+      fn: FnMap<Ct, F>,
     ) => SyncAction2<Ct>;
-    async: () => <
+
+    async: <M extends AnyMachine>(
+      _?: M,
+    ) => <
       F extends { to: string; event: ContractEventArg<Ct> } = {
         to: string;
         event: ContractEventArg<Ct>;

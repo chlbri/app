@@ -1,6 +1,7 @@
 import type { Contract } from '@bemedev/app-contract';
 import type { Addons, Fn } from './addons';
 import type { UtilityPair } from './addons/types';
+export type * from './addons';
 
 /** Execution mode a utility can be resolved for. */
 export type UtilityMode = 'sync' | 'async';

@@ -1,10 +1,10 @@
 # pnpm
-/pnpm-@tanstack+devtools-vite-devtools-vite-plugin
-/pnpm-@tanstack+react-router-migrate-from-react-router
-/pnpm-@tanstack+react-router-react-router
-/pnpm-@tanstack+react-router-router-query
-/pnpm-@tanstack+react-start-migrate-from-nextjs
-/pnpm-@tanstack+react-start-react-start
+/devtools-vite-plugin
+/migrate-from-nextjs
+/migrate-from-react-router
+/react-router
+/react-start
+/router-query
 /solid-router
 /solid-start
 # pnpm end

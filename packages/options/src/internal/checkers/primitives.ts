@@ -5,12 +5,13 @@
  * machine implementation while keeping the very same validation rules.
  */
 
+import type { Describer } from '@bemedev/app-contract';
 import { expandFn } from '@bemedev/app-utils-bemedev';
 import _async from '@bemedev/boolean-recursive/async';
 import sync from '@bemedev/boolean-recursive/sync';
 
 /** Allowed property keys of a type `Describer`. */
-const DESCRIBER_KEYS = ['name', 'description'] as const;
+export const DESCRIBER_KEYS = ['name', 'description'] as const;
 
 /** Signature of {@linkcode checkKeys}, including its `strict` variant. */
 export type CheckKeys_F = {
@@ -150,7 +151,7 @@ export const isString = (value: unknown): value is string => {
  *
  * @returns `true` when `value` is `undefined` or a string.
  */
-export const isStringOrUndefined = (value: unknown): boolean => {
+export const isStringOrUndefined = (value: unknown): value is string | undefined => {
   if (value === undefined) return true;
   return typeof value === 'string';
 };
@@ -162,7 +163,7 @@ export const isStringOrUndefined = (value: unknown): boolean => {
  *
  * @returns `true` when `value` only holds `name` and `description`.
  */
-export const isDescriber = (value: unknown): boolean => {
+export const isDescriber = (value: unknown): value is Describer => {
   if (typeof value !== 'object' || value === null) return false;
   return checkKeys.strict(value, ...DESCRIBER_KEYS);
 };

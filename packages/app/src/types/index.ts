@@ -1,3 +1,4 @@
+export type { AsyncOptions } from '@bemedev/app-utility';
 export * from '#exports/types.types';
 export * from '../registry.types';
 export * from './edges';
@@ -264,7 +265,6 @@ export type {
   AsyncForAction_F,
   AsyncMachine,
   AsyncMachineOptions2,
-  AsyncOptions,
   AsyncProvideOptions_F,
   AsyncResendAction_F,
   AsyncSendAction_F,
@@ -273,29 +273,6 @@ export type {
   AsyncWhileAction_F,
   AsyncAction_F,
 } from '../asyncMachine';
-
-export type {
-  SyncAction_F,
-  SyncAddOption,
-  SyncAddOptionsParam_F,
-  SyncAddOptions_F,
-  SyncAllActions_F,
-  SyncAssignAction_F,
-  SyncBatchAction_F,
-  SyncChildFunction2,
-  SyncDefineGuard_F,
-  SyncEraseAction_F,
-  SyncFilterAction_F,
-  SyncForAction_F,
-  SyncMachine,
-  SyncMachineOptions2,
-  SyncProvideOptions_F,
-  SyncResendAction_F,
-  SyncSendAction_F,
-  SyncTimeAction_F,
-  SyncValueCheckerGuard_F,
-  SyncWhileAction_F,
-} from '#sync/machine';
 
 export type {
   SyncCollectedService,

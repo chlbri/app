@@ -86,7 +86,7 @@ The `sync` flag declared in the contract `types` decides which surface is inject
 
 Both surfaces expose the same helper names as the machine:
 
-- guards: `isValue`, `isNotValue`, `isDefined`, `isNotDefined`, `guardBatch`, `swap`
+- guards: `isValue`, `isNotValue`, `isDefined`, `isNotDefined`, `guardBatch`
 - actions: `assign`, `action`, `batch`, `_for`, `_while`, `_doWhile`, `filter`,
   `erase`, `sendTo`, `resend`, `forceSend`
 - activities and timers: `pauseActivity`, `resumeActivity`, `stopActivity`,
@@ -94,6 +94,10 @@ Both surfaces expose the same helper names as the machine:
 
 Asynchronous helpers additionally accept the `max`, `then` and `catch` options on
 `assign`, `action` and `sendTo`.
+
+The `swap` helper is no longer a default helper: install
+[`@bemedev/app-useful-utilities`](../useful-utilities) and opt in with
+`createOptions(contract).use(swapPlugin)`.
 
 ### Applying the options
 

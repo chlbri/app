@@ -9,7 +9,6 @@ import type {
   CommonFilterAction_F,
   DecomposeC,
   SimpleMachineOptions2,
-  SwapFunction_F,
 } from '#common/machine';
 import type {
   Contract,
@@ -315,13 +314,6 @@ export type SyncAddOption<Ct extends Contract = Contract> = {
    * @see -- type {@linkcode SyncBatchGuard_F}
    */
   guardBatch: SyncBatchGuard_F<Ct>;
-  /**
-   * Swap helper function that swaps the state arguments in functional
-   * transitions.
-   *
-   * @see -- type {@linkcode SwapFunction_F}
-   */
-  swap: SwapFunction_F<Ct>;
   /**
    * Helper function to assign context variables synchronously.
    *

@@ -22,7 +22,6 @@ import {
   type StatePextended,
   type StateValue,
 } from '#states';
-import { constructEvents } from '#utils';
 import type {
   Contract,
   ContractActorsMap,
@@ -33,10 +32,11 @@ import type {
   ContractPContext,
   ContractPaths,
   ContractTags,
+  OptionsPlugin,
 } from '@bemedev/app-options';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemedev';
-import type { OptionsPlugin } from '@bemedev/app-options';
 import { _unknown } from '@bemedev/app-options/bemedev';
+import { constructEventsMap } from '@bemedev/app-options/internal';
 import { decompose, type Decompose } from '@bemedev/decompose';
 import type { AnyMachine, CommonElements, GetIO_F, MachineType } from './types';
 
@@ -457,7 +457,7 @@ export abstract class CommonMachine<
       .flat() as any;
     this._initialConfig = initialConfig(this.config as any);
     this._getInitialKeys();
-    this.__eventsList = constructEvents(this.config as any) as any;
+    this.__eventsList = constructEventsMap(this.config as any) as any;
   }
 
   /**

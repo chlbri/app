@@ -9,7 +9,6 @@ import type {
   CommonFilterAction_F,
   DecomposeC,
   SimpleMachineOptions2,
-  SwapFunction_F,
 } from '#common/machine';
 import type { EventArg, EventArgAll } from '#events';
 import type {
@@ -23,13 +22,12 @@ import type {
 } from '@bemedev/app-options';
 import type {
   EmptyObject,
-  FnMap,
-  FnR,
   MaybePromise,
   SingleOrArrayL2,
   TraversableTuple,
 } from '~types';
 import type { AsyncMachine } from './machine';
+import type { FnMap, FnR } from '@bemedev/app-contract';
 /**
  * Options for async action helpers.
  *
@@ -445,13 +443,6 @@ export type AsyncAddOption<Ct extends Contract = Contract> = {
    * @see -- type {@linkcode AsyncBatchGuard_F}
    */
   guardBatch: AsyncBatchGuard_F<Ct>;
-  /**
-   * Swap helper function that swaps the state arguments in functional
-   * transitions.
-   *
-   * @see -- type {@linkcode SwapFunction_F}
-   */
-  swap: SwapFunction_F<Ct>;
   /**
    * Helper function to assign context variables asynchronously.
    *

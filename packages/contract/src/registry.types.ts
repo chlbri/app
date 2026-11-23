@@ -1,4 +1,4 @@
-import type { TargetDef } from './internal/machine';
+import type { TargetDef } from './internal/machine.types';
 
 /**
  * Map of option categories to string identifiers for registry options.

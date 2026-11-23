@@ -1,6 +1,7 @@
 import { interpret } from '@bemedev/app';
 import { createMachine } from '@bemedev/app';
 import { createConfig } from '@bemedev/app';
+import { swapPlugin } from '@bemedev/app-useful-utilities';
 import { notU } from '@bemedev/app/utils';
 import { type } from '@bemedev/typings';
 import { DELAY } from './constants';
@@ -118,6 +119,7 @@ const _config2 = createConfig({
 export const _machine2 = createMachine(_config2, {
   ...typings2,
   sync: true,
+  plugins: [swapPlugin],
 }).provideOptions(({ isNotValue, isValue, assign, action, swap }) => ({
   actions: {
     inc: assign('iterator', ({ context }) => notU(context?.iterator) + 1),

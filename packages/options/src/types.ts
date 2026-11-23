@@ -8,32 +8,12 @@
  * utility maps.
  */
 
-import type {
-  AsyncAction2,
-  Contract,
-  ContractOptions,
-  ContractSync,
-} from '@bemedev/app-contract';
-import type { ResolveUtilities, UtilityMap, UtilityMode } from './utility';
+import type { Contract, ContractOptions, ContractSync } from '@bemedev/app-contract';
 import { Addons, AsyncAddons, SyncAddons } from './addons';
-import type { OptionsPlugin, PluginAddons } from './utility/plugin';
-import type { LegacyOptions } from './utility/plugin';
+import type { ResolveUtilities, UtilityMap, UtilityMode } from './utility';
+import type { LegacyOptions, OptionsPlugin, PluginAddons } from './utility/plugin';
 
 export type { LegacyOptions } from './utility/plugin';
-
-/**
- * Extra options accepted by async action helpers.
- *
- * @template | {@linkcode Contract} `C` - Contract type.
- */
-export type AsyncOptions<C extends Contract = Contract> = {
-  /** Called with the thrown error when the async function rejects. */
-  catch: (err: any) => AsyncAction2<C>;
-  /** Optional action executed upon success. */
-  then?: AsyncAction2<C>;
-  /** Maximum duration in milliseconds before the action is aborted. */
-  max?: number;
-};
 
 /**
  * Helper surface injected into an options callback.

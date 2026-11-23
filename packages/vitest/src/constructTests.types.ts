@@ -1,4 +1,5 @@
 import type { Contract } from '@bemedev/app/contract';
+import type { OptionsPlugin } from '@bemedev/app/options';
 import type {
   AsyncInterpreter,
   SimpleMachineOptions2,
@@ -15,6 +16,7 @@ import type { ConstructTestsResult, Option } from './types';
  *
  * @template | {@linkcode Contract} `Ct` - Contract of the tested machine.
  * @template | {@linkcode SimpleMachineOptions2} `L` - Accumulated options.
+ * @template `Ps` - Plugins attached to the tested service.
  * @template `T` - Custom helper return type extending `object`.
  *
  * @param service - Interpreter service instance (type {@linkcode SyncInterpreter} or type {@linkcode AsyncInterpreter}).
@@ -26,10 +28,11 @@ import type { ConstructTestsResult, Option } from './types';
 export type ConstructTests_F = <
   const Ct extends Contract = Contract,
   const L extends SimpleMachineOptions2 = SimpleMachineOptions2,
+  const Ps extends readonly OptionsPlugin<any, any>[] = [],
   const T extends object = object,
 >(
   // vi: VitestUtils,
-  service: SyncInterpreter<Ct, L> | AsyncInterpreter<Ct, L>,
-  helper?: (option: Option<Ct, L, (typeof service)['TYPE']>) => T,
+  service: SyncInterpreter<Ct, L, Ps> | AsyncInterpreter<Ct, L, Ps>,
+  helper?: (option: Option<Ct, L, (typeof service)['TYPE'], Ps>) => T,
   startIndex?: number,
 ) => ConstructTestsResult<Ct, T>;

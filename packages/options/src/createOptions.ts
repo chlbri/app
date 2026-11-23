@@ -6,7 +6,6 @@ import type { CreateOptionsWith, UseBuilder } from './types';
 import type { OptionsPlugin } from './utility/plugin';
 
 export type {
-  AsyncOptions,
   AsyncOptionsHelpers,
   CreateOptionsWith,
   LegacyOptions,

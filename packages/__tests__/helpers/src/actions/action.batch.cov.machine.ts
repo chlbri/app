@@ -1,4 +1,5 @@
 import { createMachine } from '@bemedev/app';
+import { swapPlugin } from '@bemedev/app-useful-utilities';
 import { type } from '@bemedev/typings';
 
 export default createMachine(
@@ -15,5 +16,5 @@ export default createMachine(
       },
     },
   },
-  { context: type('number') },
+  { context: type('number'), plugins: [swapPlugin] },
 );

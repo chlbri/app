@@ -38,7 +38,6 @@ import type { AlwaysConfig, TransitionConfig } from '#transitions';
 import {
   byKey2,
   decomposeSV,
-  IS_TEST,
   isStringEmpty,
   reduceDescriber,
   replaceAll,
@@ -75,7 +74,7 @@ import type {
   Selector_F,
   SimpleScheduler,
 } from './types';
-import { merge2 } from '@bemedev/app-options/internal';
+import { IS_TEST, merge2 } from '@bemedev/app-options/internal';
 
 /**
  * Abstract base class for state machine interpreters.

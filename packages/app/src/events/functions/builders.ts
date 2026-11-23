@@ -1,5 +1,5 @@
 import { DEFAULT_DELIMITER } from '#constants';
-import { AFTER_EVENT, ALWAYS_EVENT } from '../constants';
+import { AFTER_EVENT, ALWAYS_EVENT } from '@bemedev/app-options/internal';
 
 /**
  * Internal helper to concatenate two strings with a delimiter.

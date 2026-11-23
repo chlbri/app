@@ -9,16 +9,16 @@ import type {
   Describer,
   EmptyObject,
   RecordS,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 import type {
   DeepPartial,
-  Fn,
   NOmit,
   NotUndefined,
   Ru,
   UnionToIntersection,
   _UnionToIntersection2,
 } from '@bemedev/app-options/bemedev';
+import { DESCRIBER_KEYS, isFunction, isString } from '@bemedev/app-options/internal';
 
 export type {
   Describer,
@@ -55,9 +55,12 @@ export type SingleOrArrayR<T> = T | readonly T[];
 export type SingleOrArrayL2<T> = T | [T, T, ...T[]];
 
 /**
- * Describer keys used to define the name and description of an object.
+ * Describer keys, function guard and string guard.
+ *
+ * They are re-exported from `@bemedev/app-options` so the machine runtime and
+ * the option helpers share a single implementation.
  */
-export const DESCRIBER_KEYS = ['name', 'description'] as const;
+export { DESCRIBER_KEYS, isFunction, isString };
 
 /**
  * Retrieves the `name` property from a type {@linkcode Describer}.
@@ -71,30 +74,6 @@ export type FromDescriber<T extends Describer> = T['name'];
  */
 export type Describer2 = NOmit<Describer, 'description'> &
   Partial<Pick<Describer, 'description'>>;
-
-/**
- * Type guard that checks if a given value is a function.
- *
- * @param value - The value to inspect.
- *
- * @returns `true` if `value` is a function, `false` otherwise.
- */
-export const isFunction = (value: unknown): value is Fn => {
-  return typeof value === 'function';
-};
-
-/**
- * Type guard that checks if a given value is a string.
- *
- * @param value - The value to inspect.
- *
- * @returns `true` if `value` is a string, `false` otherwise.
- *
- * @see -- type {@linkcode IsString_F}
- */
-export const isString: IsString_F = value => {
-  return typeof value === 'string';
-};
 
 /**
  * Type guard that checks if an argument conforms to type {@linkcode Describer}.

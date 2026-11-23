@@ -14,11 +14,7 @@ export const isStringEmpty = (arg: unknown) => {
 /**
  * Type guard function to check if a value is a string or undefined.
  *
- * @param value - The value to inspect.
- *
- * @returns `true` if `value` is undefined or of type `string`, `false` otherwise.
+ * Re-exported from `@bemedev/app-options` so the machine runtime and the
+ * option helpers share a single implementation.
  */
-export const isStringOrUndefined = (value: unknown): boolean => {
-  if (value === undefined) return true;
-  return typeof value === 'string';
-};
+export { isStringOrUndefined } from '@bemedev/app-options/internal';

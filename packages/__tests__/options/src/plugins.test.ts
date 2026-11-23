@@ -70,7 +70,6 @@ describe('TESTS', () => {
         'sendTo',
         'stopActivity',
         'stopTimer',
-        'swap',
       ];
 
       const sync: string[] = [];

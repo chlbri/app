@@ -1,15 +1,8 @@
 import type { AsyncAction2, WithDescriber } from '#actions';
 import type { NoExtraKeysActorConfig } from '#actors';
-import type { ActorsConfigMap, EventStrings } from '#events';
+import type { ActorsConfigMap } from '#events';
 
-import type {
-  FlatMapN,
-  NodeConfig2,
-  StateExtended,
-  StatePextendedOf,
-  StateValue,
-  TargetDef,
-} from '#states';
+import type { FlatMapN, NodeConfig2, StateValue, TargetDef } from '#states';
 
 import type {
   AsyncTransition,
@@ -28,11 +21,6 @@ import type {
 import type { Decompose } from '@bemedev/decompose';
 
 import type {
-  Decompose as _Decompose,
-  DecomposeString,
-} from '@bemedev/function-swap';
-
-import type {
   CommonConfig3,
   Contract,
   ContractActorsMap,
@@ -40,7 +28,6 @@ import type {
   ContractContext,
   ContractEvents,
   ContractEventsMap,
-  ContractEventType,
   ContractOptions,
   ContractPaths,
   ContractPContext,
@@ -530,25 +517,3 @@ export type CommonChild<
   on: Identitfy<RecordS<AsyncTransition<Ct>>>[];
   contexts: string[];
 };
-
-/**
- * Helper function for swapping state signatures in functional transitions.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- */
-export type SwapFunction_F<Ct extends Contract = Contract> = <
-  const F2 extends Fn,
-  const Ev extends ContractEventType<Ct> = string,
->(
-  fn: F2,
-  event?: Ev,
-) => (
-  types: DecomposeString<
-    [
-      EventStrings extends Ev
-        ? StateExtended<Ct>
-        : Required<StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: Ev }>>>,
-    ],
-    _Decompose<Parameters<F2>>
-  >,
-) => FnR<Ct, ReturnType<F2>>;

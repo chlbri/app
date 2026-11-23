@@ -579,7 +579,7 @@ All helpers are injected as parameters of the options helper callback:
 ```typescript
 // Create strongly-typed options for Sync or Async machines
 const options = machine.createOptions(({
-  assign, swap, action, batch, filter, erase,
+  assign, action, batch, filter, erase,
   sendTo, resend, forceSend,
   pauseActivity, resumeActivity, stopActivity,
   isValue, isNotValue, isDefined, isNotDefined,
@@ -641,13 +641,28 @@ The path follows `@bemedev/decompose` conventions: `'context'`, `'context.field'
 
 ### 5.2 swap
 
-Remaps and adapts standard functions into machine options using parameter
-decomposition powered by `@bemedev/function-swap`.
+`swap` is no longer a default helper. It is provided by the
+[`@bemedev/app-useful-utilities`](../useful-utilities) package as an options plugin,
+so it has to be opted in:
 
-`swap` converts any standard function `fn` into a machine selector function (`FnR`),
-remapping parameter positions from state, context, or event payload paths. Because it
-returns a standard machine selector, **`swap` can be used across actions, `assign`,
-`guards`, `delays`, and standalone options.**
+```typescript
+import { swapPlugin } from '@bemedev/app-useful-utilities';
+
+// With createOptions
+const options = createOptions(contract).use(swapPlugin)(({ swap }) => ({ ... }));
+
+// With a machine
+const machine = createMachine(config, { plugins: [swapPlugin] }).provideOptions(
+  ({ swap }) => ({ ... }),
+);
+```
+
+`swap` remaps and adapts standard functions into machine options using parameter
+decomposition powered by `@bemedev/function-swap`. It converts any standard function
+`fn` into a machine selector function (`FnR`), remapping parameter positions from
+state, context, or event payload paths. Because it returns a standard machine
+selector, **`swap` can be used across actions, `assign`, `guards`, `delays`, and
+standalone options.**
 
 ```typescript
 // 1. Inside assign (remap event payload into context assignment)
@@ -976,13 +991,14 @@ machine.createOptions(({ isValue, isNotValue, isDefined, isNotDefined }) => ({
 ### 6.2 Custom & Async Predicates
 
 ```typescript
-machine.provideOptions(({ isValue, swap }) => ({
+machine.provideOptions(({ isValue }) => ({
   guards: {
     // Synchronous custom predicate
     isAuthenticated: ({ context }) =>
       context.token !== undefined && !isExpired(context.token),
 
-    // Remapped predicate with swap
+    // Remapped predicate with swap (imported from @bemedev/app-useful-utilities,
+    // or injected through its swapPlugin)
     isAdult: swap((age: number) => age >= 18)({ '[0]': '[0].context.user.age' }),
 
     // Predicate with event payload
@@ -1125,7 +1141,8 @@ const machine = createMachine(
 ```
 
 ```typescript
-// Dynamic: function of current state (or remapped with swap)
+// Dynamic: function of current state (or remapped with swap from
+// @bemedev/app-useful-utilities)
 delays: {
   RETRY_DELAY: ({ context }) => context.retryCount * 1000,
   SWAPPED_DELAY: swap((count: number, ms: number) => count * ms)({
