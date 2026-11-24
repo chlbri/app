@@ -1,7 +1,7 @@
 import type { State } from '#states';
 import type { Contract } from '@bemedev/app-options';
 import { _any } from '@bemedev/app-options/bemedev';
-import { nothing } from '@bemedev/app-options/internal';
+import { nothing } from '@bemedev/app-plugins/internal';
 import equal from 'fast-deep-equal';
 import { FnMapR, isFunction } from '../types/primitives';
 import { SubscriberBase } from './subscriber.base';

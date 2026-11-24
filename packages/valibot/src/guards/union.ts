@@ -1,4 +1,4 @@
-import type { GuardConfig } from '@bemedev/app/guards';
+import type { GuardConfig } from '@bemedev/app-contract/internal';
 import * as v from 'valibot';
 import { ActionConfig_Schema } from '../actions';
 

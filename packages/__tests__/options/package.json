@@ -16,10 +16,10 @@
     "@bemedev/app-contract": "workspace:^",
     "@bemedev/app-options": "workspace:^",
     "@bemedev/app-plugins": "workspace:^",
-    "@bemedev/dev-utils": "^1.6.2",
-    "@types/node": "^26.6.6",
-    "tsx": "^4.23.15",
-    "typescript": "7.0.2",
+    "@bemedev/dev-utils": "catalog:",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   }
 }

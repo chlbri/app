@@ -1,5 +1,5 @@
 import type { AsyncAction2, AsyncActionMap, WithDescriber } from '#actions';
-import { reduceFnMap } from '@bemedev/app-options/internal';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
 import type { Contract } from '@bemedev/app-options';
 import { fromDescriber } from '~types';
 

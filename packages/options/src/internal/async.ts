@@ -3,7 +3,7 @@
  */
 
 import { withTimeout } from '@bemedev/better-promise';
-import asyncRecursive from '@bemedev/boolean-recursive/async';
+import recursive from '@bemedev/boolean-recursive/async';
 import { recompose } from '@bemedev/app-plugins/decompose';
 import type { Contract } from '@bemedev/app-contract';
 import { same, type UtilityMap } from '@bemedev/app-plugins';
@@ -52,7 +52,7 @@ export const createAsyncUtilities = (
     };
 
     const prepared = guards.map(reduceGuardItem).filter(Boolean);
-    return asyncRecursive(...prepared);
+    return recursive(...prepared);
   };
 
   /**

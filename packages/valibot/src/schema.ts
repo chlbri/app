@@ -1,5 +1,4 @@
-import type { NodeConfig2 } from '@bemedev/app/states';
-import type { RefineStringArray } from '@bemedev/app/types';
+import type { NodeConfig2, RefineStringArray } from '@bemedev/app-contract/internal';
 import * as v from 'valibot';
 import {
   checkNodeType,

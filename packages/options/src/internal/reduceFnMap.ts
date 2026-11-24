@@ -5,7 +5,7 @@
  * per-event function maps exactly like machine options do.
  */
 
-import { nothing } from './constants';
+import { nothing } from '@bemedev/app-plugins/internal';
 import { isStringEvent, transformEventArg } from './events';
 import { isFunction } from './objects';
 

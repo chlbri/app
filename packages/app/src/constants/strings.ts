@@ -16,7 +16,7 @@ export const TARGETLESS_KEY = '' as const;
  * Re-exported from `@bemedev/app-options` so the machine runtime and the
  * option helpers share a single source.
  */
-export { DEFAULT_NOTHING } from '@bemedev/app-options/internal';
+export { DEFAULT_NOTHING } from '@bemedev/app-plugins/internal';
 
 /**
  * Regular expression used to escape special characters in strings.

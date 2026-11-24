@@ -1,4 +1,5 @@
 import type { CreateContract_F } from './contract.types';
+export type * from './contract.types';
 
 /**
  * Runtime implementation shared by the named and unnamed contract forms.

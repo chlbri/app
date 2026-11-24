@@ -1,5 +1,6 @@
-import type { Equals, Fn, Keys, NotUndefined } from '@bemedev/app-options/bemedev';
-import type { FnMap, FnMapR } from '~types';
+import type { Equals, Fn, Keys, NotUndefined } from '@bemedev/app-utils-bemedev';
+import type { FnMap } from '@bemedev/app-contract/internal';
+import type { FnMapR } from '~types';
 
 /**
  * Helper checking if a state configuration object contains async transitions or child states.

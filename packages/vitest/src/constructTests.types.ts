@@ -1,5 +1,5 @@
-import type { Contract } from '@bemedev/app/contract';
-import type { OptionsPlugin } from '@bemedev/app/options';
+import type { Contract } from '@bemedev/app-contract';
+import type { OptionsPlugin } from '@bemedev/app-options';
 import type {
   AsyncInterpreter,
   SimpleMachineOptions2,

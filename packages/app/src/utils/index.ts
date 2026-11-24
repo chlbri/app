@@ -8,7 +8,8 @@ export type {
   DecomposeOptions,
 } from '@bemedev/app-options/decompose';
 
-export { IS_TEST, merge2 } from '@bemedev/app-options/internal';
+export { merge2 } from '@bemedev/app-options/internal';
+export { IS_TEST } from '@bemedev/app-plugins/internal';
 export * from './byKey2';
 export * from './objects';
 export * from './reduceDescriber';

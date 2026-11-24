@@ -1,12 +1,11 @@
-export { createInterval3 } from '@bemedev/interval3/interval';
+export { createInterval3, type Interval3 } from '@bemedev/interval3/interval';
 export type {
-  Interval3,
   IntervalListener,
   IntervalParams,
   PauserListener,
   RenewIntervalParams,
   TimerState,
-} from '@bemedev/interval3';
+} from '@bemedev/interval3/types';
 export * from '@bemedev/scheduler';
 export { sleep } from '@bemedev/sleep';
 export * from '@bemedev/app-utils-bemedev';

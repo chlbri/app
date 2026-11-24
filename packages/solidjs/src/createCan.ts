@@ -1,10 +1,6 @@
-import type {
-  AddSubscriber_F,
-  Contract,
-  ContractEventType,
-  MachineStateOf,
-} from '@bemedev/app';
-import { expandFn } from '@bemedev/app/bemedev';
+import type { AddSubscriber_F } from '@bemedev/app/types';
+import { expandFn } from '@bemedev/app-utils-bemedev';
+import { State, Contract, ContractEventType } from '@bemedev/app-contract';
 import { deepEqual } from '@bemedev/app/utils';
 import { createSignal, onCleanup } from 'solid-js';
 
@@ -26,7 +22,7 @@ import { createSignal, onCleanup } from 'solid-js';
  */
 export function createCan<const Ct extends Contract = Contract>(service: {
   subscribe: AddSubscriber_F<Ct>;
-  state: MachineStateOf<Ct>;
+  state: State<Ct>;
   canEvents: (...events: ContractEventType<Ct>[]) => boolean;
 }) {
   const dispatch = (matcher: 'some' | 'every') => {

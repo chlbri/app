@@ -1,15 +1,8 @@
 import { createMachine } from '@bemedev/app';
 import { type, type inferO, type Keys } from '@bemedev/app-contract/typings';
-import {
-  any,
-  array,
-  custom,
-  litterals,
-  optional,
-  partial,
-  record,
-  union,
-} from '@bemedev/app-contract/typings/helpers';
+import { helpers } from '@bemedev/app-contract/typings';
+
+const { any, array, custom, litterals, optional, partial, record, union } = helpers;
 
 const state = litterals('registration', 'registered', 'idle');
 // type State = 'registration' | 'registered' | 'idle';

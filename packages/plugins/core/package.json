@@ -54,10 +54,20 @@
       "require": "./lib/addons/index.cjs",
       "types": "./lib/addons/index.d.ts"
     },
+    "./bemedev": {
+      "import": "./lib/bemedev.js",
+      "require": "./lib/bemedev.cjs",
+      "types": "./lib/bemedev.d.ts"
+    },
     "./decompose": {
       "import": "./lib/decompose.js",
       "require": "./lib/decompose.cjs",
       "types": "./lib/decompose.d.ts"
+    },
+    "./internal": {
+      "import": "./lib/internal/index.js",
+      "require": "./lib/internal/index.cjs",
+      "types": "./lib/internal/index.d.ts"
     },
     "./same": {
       "import": "./lib/same.js",
@@ -85,19 +95,23 @@
   },
   "dependencies": {
     "@bemedev/app-contract": "workspace:^",
-    "@bemedev/decompose": "^2.3.0"
+    "@bemedev/decompose": "catalog:"
+  },
+  "peerDependencies": {
+    "@bemedev/app-utils-bemedev": "workspace:^",
+    "@bemedev/typings": "catalog:"
   },
   "devDependencies": {
-    "@bemedev/dev-utils": "^1.6.2",
-    "@size-limit/file": "^14.3.0",
-    "@types/node": "^26.6.6",
+    "@bemedev/dev-utils": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "pretty-quick": "^4.2.2",
-    "rimraf": "^6.1.4",
-    "size-limit": "^14.3.0",
-    "tslib": "^2.9.1",
-    "tsx": "^4.23.15",
-    "typescript": "7.0.2",
+    "pretty-quick": "catalog:",
+    "rimraf": "catalog:",
+    "size-limit": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
   "engines": {

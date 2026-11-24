@@ -20,8 +20,9 @@ import type {
   ContextFrom,
   MachineOptionsFrom,
   PrivateContextFrom,
-} from '@bemedev/app-options/plugins';
-import type { Interval3, IntervalParams } from '@bemedev/interval3';
+} from '@bemedev/app-plugins/addons';
+import type { Interval3 } from '@bemedev/interval3';
+import type { IntervalParams } from '@bemedev/interval3/types';
 import type { Equals } from '@bemedev/app-utils-bemedev';
 import type { Fn, FnMapR, KeyU, OptionalDefinition } from '~types';
 

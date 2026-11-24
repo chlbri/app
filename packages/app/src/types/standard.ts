@@ -8,3 +8,5 @@ import type { StandardOutput } from '@bemedev/app-contract/typings';
 export type inferS<T extends StandardOutput> = NonNullable<
   T['~standard']['types']
 >['output'];
+
+export { StandardOutput };

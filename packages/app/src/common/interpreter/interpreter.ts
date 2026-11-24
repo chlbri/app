@@ -7,7 +7,7 @@ import {
   type EventObject,
   type ExtractSender,
 } from '#events';
-import { _any } from '@bemedev/app-options/bemedev';
+import { _any } from '@bemedev/app-utils-bemedev';
 
 import { toAction, type WithDescriber } from '#actions';
 import type { ChildConfig, EmitterConfig } from '#actor';
@@ -73,8 +73,9 @@ import type {
   Selector_F,
   SimpleScheduler,
 } from './types';
-import { IS_TEST, merge2 } from '@bemedev/app-options/internal';
+import { merge2 } from '@bemedev/app-options/internal';
 import type { AnyMachine } from '@bemedev/app-plugins';
+import { IS_TEST } from '@bemedev/app-plugins/internal';
 
 /**
  * Abstract base class for state machine interpreters.

@@ -4,13 +4,12 @@
  * @see -- module sync, -- module async
  */
 
-import { recompose } from '@bemedev/app-plugins/decompose';
 import type { Contract } from '@bemedev/app-contract';
 import { same, type UtilityMap } from '@bemedev/app-plugins';
-
+import { isDefined as _isDefined } from '@bemedev/app-utils-bemedev';
+import { recompose } from '@bemedev/decompose';
 import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';
-import { isDefined as _isDefined } from '@bemedev/app-utils-bemedev';
 import { byKey2 } from './objects';
 import { reduceFnMapFilterArray, reduceFnMapFilterObject } from './reduceFnMap';
 

@@ -6,9 +6,7 @@ import _machine1 from './real.1.machine';
 import _machine2 from './real.2.machine';
 import _mainMachine3 from './real.3.machine';
 
-beforeAll(() => {
-  vi.useFakeTimers();
-});
+beforeAll(() => vi.useFakeTimers());
 
 describe('REAL LIFE TESTS', () => {
   describe('#01 => Real life testing', () => {

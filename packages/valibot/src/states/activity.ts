@@ -1,4 +1,4 @@
-import type { ActivityArray } from '@bemedev/app/states';
+import type { ActivityArray } from '@bemedev/app-contract/internal';
 import * as v from 'valibot';
 import { ActionConfig_Schema } from '../actions';
 import { GuardConfig_Schema } from '../guards';

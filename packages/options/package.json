@@ -104,20 +104,26 @@
   },
   "dependencies": {
     "@bemedev/app-plugins": "workspace:^",
-    "@bemedev/better-promise": "^0.1.1",
-    "@bemedev/boolean-recursive": "^0.0.3"
+    "@bemedev/better-promise": "catalog:",
+    "@bemedev/boolean-recursive": "catalog:"
+  },
+  "peerDependencies": {
+    "@bemedev/app-utils-bemedev": "workspace:^",
+    "@bemedev/typings": "catalog:",
+    "@bemedev/app-contract": "workspace:^",
+    "@bemedev/decompose": "catalog:"
   },
   "devDependencies": {
-    "@bemedev/dev-utils": "^1.6.2",
-    "@size-limit/file": "^14.3.0",
-    "@types/node": "^26.6.6",
+    "@bemedev/dev-utils": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "pretty-quick": "^4.2.2",
-    "rimraf": "^6.1.4",
-    "size-limit": "^14.3.0",
-    "tslib": "^2.9.1",
-    "tsx": "^4.23.15",
-    "typescript": "7.0.2",
+    "pretty-quick": "catalog:",
+    "rimraf": "catalog:",
+    "size-limit": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
   "engines": {

@@ -1,1 +1,1 @@
-export * from '@bemedev/app-contract/typings';
+export * from '@bemedev/typings';

@@ -1,6 +1,6 @@
 import type { Contract, FnR } from '@bemedev/app-contract';
 import { swap as _swap } from '@bemedev/function-swap';
-import { reduceFnMap } from './internal/reduceFnMap';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
 
 /**
  * Signature of the {@linkcode swap} helper.

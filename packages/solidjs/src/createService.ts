@@ -1,9 +1,5 @@
-import type {
-  AddSubscriber_F,
-  Contract,
-  ContractEventType,
-  MachineStateOf,
-} from '@bemedev/app';
+import type { AddSubscriber_F } from '@bemedev/app';
+import type { Contract, ContractEventType, State } from '@bemedev/app-contract';
 import { createCan } from './createCan';
 import { createIsInside } from './createIsInside';
 import { createState } from './createState';
@@ -27,11 +23,11 @@ import type { CreateStateOptions } from './types';
  */
 export function createService<const Ct extends Contract = Contract>(service: {
   subscribe: AddSubscriber_F<Ct>;
-  state: MachineStateOf<Ct>;
+  state: State<Ct>;
   canEvents: (...events: ContractEventType<Ct>[]) => boolean;
 }) {
   return {
-    state: <T = MachineStateOf<Ct>>(options?: CreateStateOptions<Ct, T>) => {
+    state: <T = State<Ct>>(options?: CreateStateOptions<Ct, T>) => {
       return createState<Ct, T>(service, options);
     },
 

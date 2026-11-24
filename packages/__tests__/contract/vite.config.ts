@@ -1,6 +1,6 @@
-import { defineProject } from 'vite-plus';
+import { defineConfig } from 'vite-plus';
 
-export default defineProject({
+export default defineConfig({
   test: {
     bail: 100,
     maxConcurrency: 100,

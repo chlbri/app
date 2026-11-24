@@ -1,5 +1,7 @@
-import type { AddSubscriber_F, Contract, MachineStateOf } from '@bemedev/app';
-import { deepEqual, identity } from '@bemedev/app/utils';
+import type { AddSubscriber_F } from '@bemedev/app/types';
+import type { Contract, State } from '@bemedev/app-contract';
+import { deepEqual } from '@bemedev/app/utils';
+import { identity } from '@bemedev/app-utils-bemedev';
 import { useSync } from '@bemedev/react-sync';
 import type { UseStateOptions } from './types';
 
@@ -23,11 +25,8 @@ import type { UseStateOptions } from './types';
  *
  * @see {@linkcode useSync}, {@linkcode deepEqual}, {@linkcode identity}
  */
-export function useState<
-  const Ct extends Contract = Contract,
-  T = MachineStateOf<Ct>,
->(
-  service: { subscribe: AddSubscriber_F<Ct>; state: MachineStateOf<Ct> },
+export function useState<const Ct extends Contract = Contract, T = State<Ct>>(
+  service: { subscribe: AddSubscriber_F<Ct>; state: State<Ct> },
   options?: UseStateOptions<Ct, T>,
 ): T {
   const {
@@ -48,7 +47,7 @@ export function useState<
     },
     _selector,
     _selector,
-    identity,
+    identity as any,
     equals,
   );
 }

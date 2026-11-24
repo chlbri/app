@@ -46,23 +46,29 @@
   "devDependencies": {
     "@bemedev/app": "workspace:^",
     "@bemedev/app-cli": "workspace:^",
-    "@bemedev/dev-utils": "^1.6.2",
-    "@bemedev/sleep": "^0.2.2",
-    "@size-limit/file": "^14.3.0",
-    "@types/node": "^26.6.6",
+    "@bemedev/dev-utils": "catalog:",
+    "@bemedev/sleep": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
-    "pretty-quick": "^4.2.2",
-    "rimraf": "^6.1.4",
-    "size-limit": "^14.3.0",
-    "tslib": "^2.9.1",
-    "tsx": "^4.23.15",
-    "typescript": "7.0.2",
+    "pretty-quick": "catalog:",
+    "rimraf": "catalog:",
+    "size-limit": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
   "peerDependencies": {
     "@bemedev/app": "workspace:^",
-    "vitest": "^5.1.1"
+    "@bemedev/app-contract": "workspace:^",
+    "@bemedev/app-options": "workspace:^",
+    "@bemedev/app-plugins": "workspace:^",
+    "@bemedev/app-utils-bemedev": "workspace:^",
+    "@bemedev/typings": "catalog:",
+    "@bemedev/sleep": "catalog:",
+    "vitest": "catalog:"
   },
   "engines": {
     "node": ">=24"

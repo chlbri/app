@@ -1,21 +1,12 @@
-import type { AsyncAction2, FromActionConfig } from '#actions';
-import type { ConfigFrom } from '@bemedev/app-options/plugins';
+import type { FromActionConfig } from '#actions';
+import type { ChildEvents, NoExtraKeysTargetDef } from '#common/machine';
+import type { EmitterReturn } from '#emitters';
 import type {
-  ChildEvents,
-  CommonConfig,
-  NoExtraKeysTargetDef,
-} from '#common/machine';
-import type { DelayFunction2 } from '#delays';
-import type { AsyncEmitterFunction, EmitterDef, EmitterReturn } from '#emitters';
-import type { AsyncPredicateS } from '#guards';
-import type {
-  ActivityConfig,
   ExtractActionsFromActivity,
   ExtractDelaysFromActivity,
   ExtractGuardsFromActivity,
   ExtractTagsFromFlat,
   FlatMapN,
-  TargetDef,
 } from '#states';
 import type {
   AsyncTransition,
@@ -24,26 +15,32 @@ import type {
   ExtractDelayKeysFromTransitions,
   ExtractEmitterSrcKeyFromTransitions,
   ExtractGuardKeysFromTransitions,
-  TransitionsConfig,
 } from '#transitions';
-import type { Equals, Keys } from '@bemedev/app-options/bemedev';
-import { Identitfy } from '@bemedev/app-options/bemedev';
-import type { Recompose } from '@bemedev/app-options/decompose';
-import type { PrimitiveObject } from '@bemedev/app-contract/typings';
-import type { KeyU, ReduceArray } from '~types';
-import { RecordS } from '../types/primitives';
-
 import type {
+  ActivityConfig,
+  AsyncAction2,
+  AsyncEmitterFunction,
+  AsyncPredicateS,
+  CommonConfig,
+  DelayFunction2,
+  EmitterDef,
+  TargetDef,
+  TransitionsConfig,
+  RecordS,
   AsyncChildFunction2,
-  Contract,
-  ContractActorsMap,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract/internal';
+import { Contract, ContractActorsMap } from '@bemedev/app-contract';
+import type { PrimitiveObject } from '@bemedev/typings';
+import type { ConfigFrom, KeyU } from '@bemedev/app-plugins/addons';
+import type { Equals, Identitfy, Keys } from '@bemedev/app-utils-bemedev';
+import type { Recompose } from '@bemedev/decompose';
+import type { ReduceArray } from '~types';
 
+export type { Contract, ContractActorsMap, AsyncChildFunction2 };
 export type {
-  AsyncChildFunction2,
   AsyncMachineOptions2,
   AsyncSimpleMachineOptions,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Type representing the main JSON node config of a state machine.

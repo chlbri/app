@@ -1,5 +1,5 @@
 import { DEFAULT_NOTHING } from '@bemedev/app/constants';
-import { nothing } from '@bemedev/app-options/internal';
+import { nothing } from '@bemedev/app-plugins/internal';
 
 describe('TESTS', () => {
   test('#00 => NODE_ENV is "test"', () => {

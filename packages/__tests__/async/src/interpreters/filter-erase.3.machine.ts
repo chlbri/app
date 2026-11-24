@@ -1,8 +1,8 @@
 import { createMachine } from '@bemedev/app';
 import { type } from '@bemedev/app-contract/typings';
-import { record } from '@bemedev/app-contract/typings/helpers';
+import { helpers } from '@bemedev/app-contract/typings';
 
-const scores = record('number');
+const scores = helpers.record('number');
 
 export default createMachine(
   'src/__tests__/interpreters/filter-erase.3.machine',

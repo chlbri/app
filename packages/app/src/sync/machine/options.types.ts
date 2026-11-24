@@ -7,7 +7,7 @@ import type {
 } from '@bemedev/app-options';
 import type { SyncAddons } from '@bemedev/app-plugins/addons';
 import type { SyncMachine } from './machine';
-import type { ResolveUtilities } from '@bemedev/app-options/plugins';
+import type { ResolveUtilities } from '@bemedev/app-plugins/types';
 
 export type {
   SyncChildFunction2,

@@ -6,8 +6,15 @@
  */
 
 import { isChildConfig } from './checkers/children';
-import { AFTER_EVENT, ALWAYS_EVENT, INIT_EVENT } from './constants';
 
+/** Internal event emitted when a machine starts. */
+export const INIT_EVENT = 'machine$$init' as const;
+
+/** Internal event emitted by an `always` transition. */
+export const ALWAYS_EVENT = 'machine$$always' as const;
+
+/** Internal event emitted by an `after` transition. */
+export const AFTER_EVENT = 'machine$$after' as const;
 /**
  * Type guard checking that an event is an internal event marker.
  *

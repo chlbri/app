@@ -13,12 +13,6 @@ import type {
   SyncPredicate,
 } from '#guards';
 import type {
-  AnyArray,
-  IndexesOfArray,
-  NotUndefined,
-  SoA,
-} from '@bemedev/app-options/bemedev';
-import type {
   _TransitionConfigMap,
   ArrayTransitions,
   ArrayTransitionsF,
@@ -28,6 +22,13 @@ import type {
   TransitionConfigMapG,
   TransitionsConfig,
 } from '@bemedev/app-options';
+import type {
+  AnyArray,
+  IndexesOfArray,
+  NotUndefined,
+  SoA,
+} from '@bemedev/app-options/bemedev';
+import type { ActorConfig, ChildConfig, EmitterConfig } from '../actors/types';
 
 export type {
   _TransitionConfigMap,
@@ -45,8 +46,6 @@ export type {
   TransitionConfigMapG,
   TransitionsConfig,
 } from '@bemedev/app-options';
-import type { Observable } from 'rxjs';
-import type { ActorConfig, ChildConfig, EmitterConfig } from '../actors/types';
 
 import type { CommonChild } from '#common/machine';
 import type { AsyncEmitter } from '#emitters';
@@ -474,34 +473,6 @@ export type SyncTransition<Ct extends Contract = Contract> = {
   readonly actions: SyncAction<Ct>[];
   readonly guards: SyncPredicate<Ct>[];
   readonly description?: string;
-};
-
-/**
- * Structure representing an async emitter configuration.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `R` - Value emitted by the Observable `src`.
- */
-export type AsyncEmiter4<Ct extends Contract = Contract, R = any> = {
-  src: Observable<R>;
-  description?: string;
-  then: AsyncTransition<Ct>[];
-  catch: AsyncTransition<Ct>[];
-  finally: AsyncTransition<Ct>[];
-};
-
-/**
- * Structure representing a synchronous emitter configuration.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `R` - Value emitted by the Observable `src`.
- */
-export type SyncEmiter4<Ct extends Contract = Contract, R = any> = {
-  src: Observable<R>;
-  description?: string;
-  then: SyncTransition<Ct>[];
-  catch: SyncTransition<Ct>[];
-  finally: SyncTransition<Ct>[];
 };
 
 /**

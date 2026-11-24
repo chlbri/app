@@ -1,12 +1,8 @@
-import type {
-  AddSubscriber_F,
-  Contract,
-  ContractEventType,
-  MachineStateOf,
-} from '@bemedev/app';
-
-import { expandFn } from '@bemedev/app/bemedev';
-import { deepEqual, identity } from '@bemedev/app/utils';
+import type { Contract, ContractEventType, State } from '@bemedev/app-contract';
+import type { AddSubscriber_F } from '@bemedev/app/types';
+import { expandFn } from '@bemedev/app-utils-bemedev';
+import { deepEqual } from '@bemedev/app/utils';
+import { identity } from '@bemedev/app-utils-bemedev';
 import { useSync } from '@bemedev/react-sync';
 
 /**
@@ -27,7 +23,7 @@ import { useSync } from '@bemedev/react-sync';
  */
 export function useCan<const Ct extends Contract = Contract>(service: {
   subscribe: AddSubscriber_F<Ct>;
-  state: MachineStateOf<Ct>;
+  state: State<Ct>;
   canEvents: (...events: ContractEventType<Ct>[]) => boolean;
 }) {
   const dispatch =

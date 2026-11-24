@@ -1,4 +1,4 @@
-import type { Contract, MachineStateOf } from '@bemedev/app';
+import type { Contract, State } from '@bemedev/app-contract';
 import type { Dequal_F } from '@bemedev/app/types';
 
 /**
@@ -14,13 +14,10 @@ import type { Dequal_F } from '@bemedev/app/types';
  * @property equals - Optional equality comparator function to compare previous and next selected state.
  * @property stateEquals - Optional equality comparator function to compare previous and next machine state before selection.
  */
-export type CreateStateOptions<
-  Ct extends Contract = Contract,
-  T = MachineStateOf<Ct>,
-> = {
-  selector?: (state: MachineStateOf<Ct>) => T;
+export type CreateStateOptions<Ct extends Contract = Contract, T = State<Ct>> = {
+  selector?: (state: State<Ct>) => T;
   equals?: Dequal_F<T>;
-  stateEquals?: Dequal_F<MachineStateOf<Ct>>;
+  stateEquals?: Dequal_F<State<Ct>>;
 };
 
 /**
@@ -31,5 +28,5 @@ export type CreateStateOptions<
  */
 export type CreateServiceOptions<
   Ct extends Contract = Contract,
-  T = MachineStateOf<Ct>,
+  T = State<Ct>,
 > = CreateStateOptions<Ct, T>;

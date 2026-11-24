@@ -1,6 +1,11 @@
 export * from '#exports/createMachine';
 export * from '#exports/interpret';
 export * from '~types';
+
+// `#utils` re-exports `@bemedev/app-contract/typings`, whose member set now
+// overlaps with types owned by this package. Keep the local definitions as the
+// canonical ones to avoid ambiguous wildcard exports.
+export type { NotReadonly, StateValue, TrueObject } from '~types';
 export { createContract } from '@bemedev/app-options';
 export { buildHelpers, createUtilities, same } from '@bemedev/app-options';
 export type {

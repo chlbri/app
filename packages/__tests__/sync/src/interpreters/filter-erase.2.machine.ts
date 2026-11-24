@@ -1,8 +1,8 @@
 import { createMachine } from '@bemedev/app';
 import { type } from '@bemedev/app-contract/typings';
-import { any } from '@bemedev/app-contract/typings/helpers';
+import { helpers } from '@bemedev/app-contract/typings';
 
-const person = any({ name: 'string', age: 'number', active: 'boolean' });
+const person = helpers.any({ name: 'string', age: 'number', active: 'boolean' });
 
 export default createMachine(
   'src/__tests__/interpreters/filter-erase.2.machine',

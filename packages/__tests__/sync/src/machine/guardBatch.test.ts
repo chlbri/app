@@ -1,5 +1,5 @@
 import { createConfig, createMachine, interpret } from '@bemedev/app';
-import { type } from '@bemedev/app-contract/typings';
+import { type } from '@bemedev/typings';
 import { describe, expect, test } from 'vite-plus/test';
 
 describe('SyncMachine - guardBatch', () => {
