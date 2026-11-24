@@ -1,5 +1,5 @@
-export { type } from "@bemedev/typings";
-export * as helpers from "@bemedev/typings/helpers";
+export { type } from '@bemedev/typings';
+export * as helpers from '@bemedev/typings/helpers';
 
 export type {
   Fn,
@@ -15,4 +15,4 @@ export type {
   Sh,
   StandardKey,
   Keys,
-} from "@bemedev/typings/types";
+} from '@bemedev/typings/types';
