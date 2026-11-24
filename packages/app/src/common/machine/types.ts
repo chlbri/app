@@ -19,6 +19,7 @@ import type {
   SubTypeLow,
 } from '@bemedev/app-options/bemedev';
 import type { Decompose } from '@bemedev/app-options/decompose';
+import type { PrimitiveObject } from '@bemedev/app-contract/typings';
 
 import type {
   CommonConfig3,
@@ -29,7 +30,6 @@ import type {
   ContractPContext,
   OptionsPlugin,
 } from '@bemedev/app-options';
-import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
 import type {
   EmptyObject,
   FnMap,
@@ -183,20 +183,6 @@ export type SimpleMachineOptions2 = Partial<
  * Helper function for extracting entry or exit actions from a node.
  */
 export type GetIO_F = (key: 'exit' | 'entry', node?: any) => WithDescriber[];
-
-/**
- * Internal standard output properties type picker.
- *
- * @template | {@linkcode ObjectT} `T` - Target object type.
- */
-type StandardOutput2<T extends ObjectT> = Pick<Sh<T>, StandardKey>;
-
-/**
- * Alias for standard output mapping type.
- *
- * @template | {@linkcode ObjectT} `T` - Object type.
- */
-export type StdO2<T extends ObjectT> = StandardOutput2<T>;
 
 /**
  * Common function signature for timer actions.

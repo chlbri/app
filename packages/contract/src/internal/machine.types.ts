@@ -5,7 +5,8 @@
  * JSON config without importing `@bemedev/app`.
  */
 
-import type { RecordS, Require, SingleOrArrayL } from './primitives';
+import { Require } from '@bemedev/app-utils-bemedev';
+import type { RecordS, SingleOrArrayL } from './primitives';
 
 /** Describer object used to name and document actions or guards. */
 export type Describer = { name: string; description: string };

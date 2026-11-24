@@ -29,7 +29,7 @@ import type {
 import type { Equals, Keys } from '@bemedev/app-options/bemedev';
 import { Identitfy } from '@bemedev/app-options/bemedev';
 import type { Recompose } from '@bemedev/app-options/decompose';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { PrimitiveObject } from '@bemedev/app-contract/typings';
 import type { KeyU, ReduceArray } from '~types';
 import { RecordS } from '../types/primitives';
 

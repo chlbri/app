@@ -7,9 +7,9 @@ import type {
   ContractEventType,
   ContractEvents,
   Describer,
-  EmptyObject,
   RecordS,
 } from '@bemedev/app-contract';
+import type { EmptyObject } from '@bemedev/app-contract/typings';
 import type {
   DeepPartial,
   NOmit,
@@ -22,7 +22,6 @@ import { DESCRIBER_KEYS, isFunction, isString } from '@bemedev/app-options/inter
 
 export type {
   Describer,
-  EmptyObject,
   EventToType,
   FnMap,
   FnR,
@@ -30,6 +29,8 @@ export type {
   RecordS,
   SingleOrArrayL,
 } from '@bemedev/app-options';
+
+export { EmptyObject };
 
 /**
  * Type guard function signature for checking if a value is of type `string`.

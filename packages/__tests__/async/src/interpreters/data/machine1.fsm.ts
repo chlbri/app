@@ -1,7 +1,6 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 import { DELAY } from './constants';
-import { typings } from '@bemedev/app/utils';
 
 // #region machine1
 export const machine1 = createMachine(
@@ -17,7 +16,7 @@ export const machine1 = createMachine(
     },
   },
   {
-    context: typings.context({ iterator: 'number' }),
+    context: type({ iterator: 'number' }),
 
     eventsMap: type({ NEXT: 'never' }),
   },

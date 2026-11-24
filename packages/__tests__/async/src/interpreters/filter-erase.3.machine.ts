@@ -1,6 +1,6 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/typings';
-import { record } from '@bemedev/typings/helpers';
+import { type } from '@bemedev/app-contract/typings';
+import { record } from '@bemedev/app-contract/typings/helpers';
 
 const scores = record('number');
 

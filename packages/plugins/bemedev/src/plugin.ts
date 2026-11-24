@@ -22,11 +22,7 @@ import { swap } from './swap';
  * }));
  * ```
  */
-export const swapPlugin = createUtilities({}, () => ({ swap: same(swap) }));
+export const plugin = createUtilities({}, () => ({ swap: same(swap) }));
 
-/** Type of the plugin returned by {@linkcode swapPlugin}. */
-export type SwapPlugin = typeof swapPlugin;
-
-export const plugin = swapPlugin;
-
-export type Plugin = SwapPlugin;
+/** Type of the plugin returned by {@linkcode plugin}. */
+export type Plugin = typeof plugin;

@@ -6,7 +6,7 @@ import type {
   IsAsyncConfig,
   IsAsyncFnMap,
 } from '@bemedev/app/types';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 const contract = createContract(
   { initial: 'idle', states: { idle: {}, done: {} } } as const,

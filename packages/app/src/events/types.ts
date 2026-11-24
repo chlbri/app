@@ -1,6 +1,6 @@
 import type { EventObject } from '@bemedev/app-options';
 import type { Equals } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { PrimitiveObject } from '@bemedev/app-contract/typings';
 
 export type {
   ActorsConfigMap,

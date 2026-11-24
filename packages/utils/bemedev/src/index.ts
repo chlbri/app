@@ -46,3 +46,4 @@ export { default as keysOf } from '#bemedev/features/objects/typings/keysOf';
 export { isPrimitive } from '#bemedev/globals/utils/is/primitive';
 export { default as numbersT } from '#bemedev/features/numbers/typings';
 export { default as stringsT } from '#bemedev/features/strings/typings';
+export { default as isFunction } from '#bemedev/features/functions/castings/is/all';

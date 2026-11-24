@@ -1,4 +1,4 @@
-import { sleep } from '@bemedev/sleep';
+import { sleep } from '@bemedev/app/bemedev';
 import type { VitestUtils } from 'vite-plus/test';
 
 /**

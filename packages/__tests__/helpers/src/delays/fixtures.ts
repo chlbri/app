@@ -2,7 +2,7 @@
 import { interpret } from '@bemedev/app';
 import { createMachine } from '@bemedev/app';
 import { constructTests } from '@bemedev/app-vitest';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 export const DELAY = 60;
 export const machine1 = createMachine(

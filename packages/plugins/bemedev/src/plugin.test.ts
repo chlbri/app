@@ -1,23 +1,14 @@
 import { createContract } from '@bemedev/app-contract';
 import { buildHelpers, createOptions } from '@bemedev/app-options';
 
-import { swapPlugin } from './plugin';
-import { swap } from './swap';
+import { plugin } from './plugin';
 
-const contract = createContract(
-  { initial: 'idle', states: { idle: { on: { WRITE: '/' } } } },
-  { sync: true },
-);
+describe('#02 => plugin', () => {
+  const contract = createContract(
+    { initial: 'idle', states: { idle: { on: { WRITE: '/' } } } },
+    { sync: true },
+  );
 
-describe('swap', () => {
-  test('#01 => remaps arguments from decomposed paths', () => {
-    const fn = swap((value: number) => value + 1)({ '[0]': '[0].context' });
-
-    expect(fn({ context: 1, pContext: {} } as any)).toBe(2);
-  });
-});
-
-describe('swapPlugin', () => {
   test('#01 => is not part of the default helpers', () => {
     const helpers = buildHelpers({ contract });
 
@@ -25,13 +16,13 @@ describe('swapPlugin', () => {
   });
 
   test('#02 => adds swap to the helper surface', () => {
-    const helpers = buildHelpers({ contract, plugins: [swapPlugin] });
+    const helpers = buildHelpers({ contract, plugins: [plugin] });
 
     expect(typeof helpers.swap).toBe('function');
   });
 
   test('#03 => dispatches on the event name', () => {
-    const helpers = buildHelpers({ contract, plugins: [swapPlugin] });
+    const helpers = buildHelpers({ contract, plugins: [plugin] });
     const fn = helpers.swap(
       (value: string) => value.toUpperCase(),
       'WRITE',
@@ -43,7 +34,7 @@ describe('swapPlugin', () => {
   });
 
   test('#04 => is usable through createOptions', () => {
-    const options = createOptions(contract).use(swapPlugin)(({ swap, assign }) => ({
+    const options = createOptions(contract).use(plugin)(({ swap, assign }) => ({
       actions: {
         inc: assign(swap((value: number) => value + 1)({ '[0]': '[0].context' })),
       },

@@ -10,7 +10,7 @@ import type {
   TrueObject,
   ValuesOf,
 } from '@bemedev/app/types';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { PrimitiveObject } from '@bemedev/app-contract/typings';
 
 export type ExtractLargeKeys<T> = string extends T
   ? never

@@ -4,11 +4,16 @@ import type {
   ContractEventType,
   ContractEvents,
   EventStrings,
-  NotUndefined,
   StateExtended,
   StatePextendedOf,
 } from '@bemedev/app-contract';
-import type { Ru, SubType, TrueObject, ValuesOf } from '@bemedev/app-utils-bemedev';
+import type {
+  NotUndefined,
+  Ru,
+  SubType,
+  TrueObject,
+  ValuesOf,
+} from '@bemedev/app-utils-bemedev';
 import type { DecomposeC } from '../types';
 
 /**

@@ -30,6 +30,9 @@
     "features/strings/typings/index",
     "features/objects/types",
     "features/strings/types",
-    "features/strings/constants"
+    "features/strings/constants",
+    "features/functions/castings/is/all",
+    "features/functions/castings/is/index",
+    "features/functions/castings/is/strict"
   ]
 }

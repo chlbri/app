@@ -1,7 +1,7 @@
 import { createMachine } from '@bemedev/app';
-import { notU, typings } from '@bemedev/app/utils';
+import { notU } from '@bemedev/app/utils';
 import { createPausable } from '@bemedev/rx-pausable';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 import { interval } from 'rxjs/internal/observable/interval';
 import { map } from 'rxjs/internal/operators/map';
 import { take } from 'rxjs/internal/operators/take';
@@ -41,7 +41,7 @@ export default createMachine(
     context: type(({ optional }) => optional('number')),
     sync: true,
 
-    actorsMap: typings.actorsMap({
+    actorsMap: type({
       emitters: { interval1: { next: 'number', error: 'undefined' } },
     }),
   },

@@ -1,14 +1,12 @@
+import { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings/types';
 import type {
   ActorsConfigMap,
   CommonConfig2,
   ContractMachineOptions,
   ContractSimpleMachineOptions,
   EventObject,
-  PrimitiveObject,
-  StandardOutput,
   ToEventObject,
   ToEvents,
-  inferT,
 } from './internal';
 import type { Register } from './registry.types';
 import type { Contract, StatePaths } from './types';

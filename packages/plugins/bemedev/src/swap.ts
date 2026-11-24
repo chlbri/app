@@ -1,7 +1,6 @@
 import type { Contract, FnR } from '@bemedev/app-contract';
-import { reduceFnMap } from '@bemedev/app-options/internal';
-import type { Fn } from '@bemedev/app-utils-bemedev';
 import { swap as _swap } from '@bemedev/function-swap';
+import { reduceFnMap } from './internal/reduceFnMap';
 
 /**
  * Signature of the {@linkcode swap} helper.
@@ -16,7 +15,7 @@ import { swap as _swap } from '@bemedev/function-swap';
  *
  * @template | {@linkcode Contract} `Ct` - Contract of the machine.
  */
-export type Swap<Ct extends Contract = Contract> = <
+export type Swap_F<Ct extends Contract = Contract> = <
   F extends (...args: any[]) => any,
   Ev extends string = string,
 >(
@@ -35,14 +34,6 @@ export type Swap<Ct extends Contract = Contract> = <
  * @param event - Optional event name scoping the swap.
  *
  * @returns A function mapping decomposed paths to the swapped function.
- */
-const swapImpl = (fn: Fn, event?: string) => (types: any) => {
-  const swapped = _swap(fn as any).constraint()(types);
-  return event ? reduceFnMap({ [event]: swapped }, event) : swapped;
-};
-
-/**
- * Swaps the parameters of a function into machine-selector arguments.
  *
  * @example
  * ```ts
@@ -53,4 +44,7 @@ const swapImpl = (fn: Fn, event?: string) => (types: any) => {
  * });
  * ```
  */
-export const swap = swapImpl as unknown as Swap;
+export const swap: Swap_F = (fn, event) => types => {
+  const swapped = _swap(fn).constraint()(types);
+  return event ? reduceFnMap({ [event]: swapped }, event) : swapped;
+};

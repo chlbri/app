@@ -5,7 +5,7 @@ import type {
 } from '#actions';
 import type { Equals, NotUndefined } from '@bemedev/app-options/bemedev';
 import type { EmptyObject, KeysMatching } from '@bemedev/app-options/decompose';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { PrimitiveObject } from '@bemedev/app-contract/typings';
 import type {
   Contract,
   ContractContext,

@@ -22,7 +22,7 @@ import type {
   PrivateContextFrom,
 } from '@bemedev/app-options/plugins';
 import type { Interval3, IntervalParams } from '@bemedev/interval3';
-import type { Equals } from '@bemedev/typings';
+import type { Equals } from '@bemedev/app-utils-bemedev';
 import type { Fn, FnMapR, KeyU, OptionalDefinition } from '~types';
 
 import type { Subscriber, SubscriberOptions } from '../subscriber';

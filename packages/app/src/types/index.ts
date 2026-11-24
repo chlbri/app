@@ -140,13 +140,14 @@ export type {
 } from '@bemedev/app-options';
 
 export type {
+  Fn,
   PrimitiveObject,
   PrimitiveObjectMap,
   PrimitiveObjectT,
   inferO,
   inferSh,
   inferT,
-} from '@bemedev/typings';
+} from '@bemedev/app-contract/typings';
 
 export type {
   ChildConfigDef,
@@ -184,7 +185,6 @@ export type {
   MachineTagsOf,
   NoExtraKeysTargetDef,
   SimpleMachineOptions2,
-  StdO2,
   TransformTargetDef,
 } from '#common/machine';
 
@@ -283,6 +283,16 @@ export type {
 } from '#sync/interpreter';
 
 export type {
+  SyncMachine,
+  SyncProvideOptions_F,
+  SyncAddOptionsParam_F,
+  SyncAddOptions_F,
+  SyncChildFunction2,
+  SyncMachineOptions2,
+  SyncSimpleMachineOptions,
+} from '#sync/machine';
+
+export type {
   AsyncInterpreter,
   AsyncInterpreterFrom,
   AsyncInterpreter_F,
@@ -296,7 +306,6 @@ export type {
   DecomposeKeys,
   DeleteFirst_F,
   EscapeRexExp_F,
-  Fn,
   RecomposeSV_F,
   ReduceDescriber_F,
   ReplaceAll_F,

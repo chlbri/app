@@ -1,5 +1,5 @@
 import type { ActorsConfigMap, EventObject, EventsMap } from './events';
-import type { PrimitiveObject } from './primitives';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Minimal contract surface used by the vendored option types.

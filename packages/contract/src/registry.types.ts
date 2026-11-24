@@ -7,13 +7,8 @@ export type RegisterOptions = Record<
   'children' | 'emitters' | 'tags' | 'actions' | 'guards' | 'delays',
   string
 >;
-/**
- * The Register interface is augmented by the CLI-generated
- * `app.contract.gen.ts` file. It uses the TanStack Start pattern of
- * `declare module` augmentation to wire pre-resolved types to machine paths.
- *
- */
-export interface Register extends Record<
+
+export type RegisterType = Record<
   string,
   {
     /** Resolved path tree and flattened path union of the contract. */
@@ -25,5 +20,14 @@ export interface Register extends Record<
     /** Private context surfaced by the contract. */
     pContext?: any;
   }
-  // oxlint-disable-next-line typescript/no-empty-object-type
-> {}
+>;
+
+/**
+ * The Register interface is augmented by the CLI-generated
+ * `app.contract.gen.ts` file. It uses the TanStack Start pattern of
+ * `declare module` augmentation to wire pre-resolved types to machine paths.
+ *
+ */
+export interface Register extends RegisterType
+// oxlint-disable-next-line typescript/no-empty-object-type
+{}

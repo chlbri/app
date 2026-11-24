@@ -1,5 +1,5 @@
 import type { Fn, UnionToTuple } from '@bemedev/app/bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { PrimitiveObject } from '@bemedev/app-contract/typings';
 import type {
   ChangeProperties,
   KeyStrings,

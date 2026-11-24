@@ -1,4 +1,4 @@
-import type { PrimitiveObject, RecordS } from '@bemedev/app-contract';
+import type { RecordS, PrimitiveObject } from '@bemedev/app-contract';
 import type { NotReadonly } from '@bemedev/app-utils-bemedev';
 import type { Decompose } from '@bemedev/decompose';
 

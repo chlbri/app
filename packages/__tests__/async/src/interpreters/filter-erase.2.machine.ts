@@ -1,6 +1,6 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/typings';
-import { any } from '@bemedev/typings/helpers';
+import { type } from '@bemedev/app-contract/typings';
+import { any } from '@bemedev/app-contract/typings/helpers';
 
 const person = any({ name: 'string', age: 'number', active: 'boolean' });
 

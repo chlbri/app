@@ -1,4 +1,4 @@
-import * as helpers from '@bemedev/typings/helpers';
+import * as helpers from '@bemedev/app-contract/typings/helpers';
 
 export const pphoneNumber = helpers.any({
   countryCode: 'number',

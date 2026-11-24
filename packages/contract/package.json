@@ -45,6 +45,24 @@
       "import": "./lib/index.js",
       "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
+    },
+    "./internal": {
+      "import": "./lib/internal/index.js",
+      "require": "./lib/internal/index.cjs",
+      "types": "./lib/internal/index.d.ts"
+    },
+    "./registry": {
+      "types": "./lib/registry.types.d.ts"
+    },
+    "./typings": {
+      "import": "./lib/typings.js",
+      "require": "./lib/typings.cjs",
+      "types": "./lib/typings.d.ts"
+    },
+    "./typings/helpers": {
+      "import": "./lib/typings/helpers.js",
+      "require": "./lib/typings/helpers.cjs",
+      "types": "./lib/typings/helpers.d.ts"
     }
   },
   "publishConfig": {
@@ -61,9 +79,15 @@
     "test:only": "vp run test",
     "test:watch": "vp test"
   },
+  "dependencies": {
+    "@bemedev/typings": "^1.5.0"
+  },
+  "bundledDependencies": [
+    "@bemedev/app-utils-bemedev"
+  ],
   "devDependencies": {
+    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "^1.6.2",
-    "@bemedev/typings": "^1.5.0",
     "@size-limit/file": "^14.3.0",
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "catalog:",

@@ -6,10 +6,10 @@ import type {
   EventsMap,
   EventsR,
   FnMap,
-  NotUndefined,
   PrimitiveObject,
 } from '@bemedev/app-contract';
 import type { KeyU, SimpleMachineOptions2 } from './types';
+import type { NotUndefined } from '@bemedev/app-utils-bemedev';
 
 /**
  * Transforms an event map into arguments to send to the machine.

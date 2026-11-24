@@ -1,6 +1,6 @@
 import { createMachine, type SyncInterpreterFrom } from '@bemedev/app';
 import { eventToType } from '@bemedev/app/events';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 export const counterMachine = createMachine(
   {

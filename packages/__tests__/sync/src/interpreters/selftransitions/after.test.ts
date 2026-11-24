@@ -2,7 +2,7 @@ import { createMachine, interpret } from '@bemedev/app';
 import { constructTests } from '@bemedev/app-vitest';
 import { DEFAULT_MAX_TIME_PROMISE } from '@bemedev/app/constants';
 import { returnFalse } from '@bemedev/app/guards';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 const DELAY = 1000;
 

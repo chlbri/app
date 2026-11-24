@@ -3,14 +3,21 @@ import type {
   Contract,
   ContractContext,
   ContractPContext,
-  EmptyObject,
   FnR,
   MaybePromise,
-  PrimitiveObject,
   SyncPredicateS,
+  PrimitiveObject,
 } from '@bemedev/app-contract';
-import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
 import type { KeysMatching } from '@bemedev/decompose';
+import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
+
+/**
+ * Key-less object used when a context is absent.
+ *
+ * `Record<never, never>` is required here: `Record<string, never>` still
+ * satisfies `TrueObject`, which makes `KeysMatching` recurse on itself.
+ */
+type NoKeys = Record<never, never>;
 
 /**
  * Helper type extracting keys matching non-undefined values in private or
@@ -21,15 +28,15 @@ import type { KeysMatching } from '@bemedev/decompose';
  */
 type _DefinedValue<Pc = any, Tc = any> = KeysMatching<{
   pContext: Equals<any, Pc> extends true
-    ? EmptyObject
+    ? NoKeys
     : NotUndefined<Pc> extends never
-      ? EmptyObject
+      ? NoKeys
       : NotUndefined<Pc>;
 
   context: Equals<PrimitiveObject, Tc> extends true
-    ? EmptyObject
+    ? NoKeys
     : NotUndefined<Tc> extends never
-      ? EmptyObject
+      ? NoKeys
       : NotUndefined<Tc>;
 }>;
 

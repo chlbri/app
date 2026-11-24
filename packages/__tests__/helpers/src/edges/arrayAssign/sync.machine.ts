@@ -1,13 +1,13 @@
 import { createMachine } from '@bemedev/app';
-import { typings } from '@bemedev/app/utils';
+import { type } from '@bemedev/app-contract/typings';
 
 export default createMachine(
   'arrayAssignSync',
   { on: { INC: { actions: ['incthearray'] } } },
   {
     sync: true,
-    context: typings.context({ number1: 'number', number2: 'number' }),
-    eventsMap: typings.eventsMap({ INC: 'undefined' }),
+    context: type({ number1: 'number', number2: 'number' }),
+    eventsMap: type({ INC: 'undefined' }),
   },
 ).provideOptions(({ assign }) => ({
   actions: {

@@ -1,4 +1,4 @@
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 import { createMachine } from '@bemedev/app';
 
 export default createMachine(

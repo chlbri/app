@@ -17,10 +17,14 @@ import type { Register, RegisterOptions } from '#registry';
 import type {
   Contract,
   ContractMachineOptions,
-  EmptyObject,
   OptionsPlugin,
 } from '@bemedev/app-options';
-import type { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings';
+import type {
+  EmptyObject,
+  inferT,
+  PrimitiveObject,
+  StandardOutput,
+} from '@bemedev/app-contract/typings';
 import type { AsyncMachine } from '../asyncMachine/machine';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine } from '../sync/machine';

@@ -4,4 +4,9 @@
  * @module
  */
 
-export { swapPlugin, plugin, type SwapPlugin, type Plugin } from './plugin';
+export {
+  plugin as swapPlugin,
+  plugin,
+  type Plugin as SwapPlugin,
+  type Plugin,
+} from './plugin';
