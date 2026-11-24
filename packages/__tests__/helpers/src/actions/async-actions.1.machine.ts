@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import { swapPlugin } from '@bemedev/app-bemedev-plugins';
+import { plugin } from '@bemedev/app-bemedev-plugins';
 import { type } from '@bemedev/app-contract/typings';
 
 export default createMachine(
@@ -8,5 +8,5 @@ export default createMachine(
     initial: 'idle',
     states: { idle: { on: { LOAD: { actions: 'loadUser', target: '/' } } } },
   },
-  { context: type({ name: 'string' }), plugins: [swapPlugin] },
+  { context: type({ name: 'string' }), plugins: [plugin] },
 );
