@@ -1039,6 +1039,9 @@ importers:
 
   packages/plugins/bemedev:
     dependencies:
+      '@bemedev/app-plugins':
+        specifier: workspace:^
+        version: link:../core
       '@bemedev/function-swap':
         specifier: ^0.2.5
         version: 0.2.5(@bemedev/decompose@2.3.0)

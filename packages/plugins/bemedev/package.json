@@ -67,6 +67,7 @@
     "test:watch": "vp test"
   },
   "dependencies": {
+    "@bemedev/app-plugins": "workspace:^",
     "@bemedev/function-swap": "^0.2.5"
   },
   "devDependencies": {
