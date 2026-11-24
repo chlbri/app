@@ -1,5 +1,6 @@
 import { createUtilities, same } from '@bemedev/app-plugins';
 import { swap } from './swap';
+export type { Swap_F } from './swap';
 
 /**
  * Options plugin adding the `swap` helper to the options surface.

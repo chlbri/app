@@ -5,3 +5,4 @@
  */
 
 export { plugin, type Plugin } from './plugin';
+export type { Swap_F } from './swap';
