@@ -26,22 +26,18 @@ export const isStringEvent = (event: any): event is string => {
   return out;
 };
 
+/**
+ * Signature of {@linkcode transformEventArg}.
+ *
+ * @template | {@linkcode EventObject} `T` - Event object type returned.
+ *
+ * @param event - Raw event string or event object.
+ *
+ * @returns The standardized event object.
+ */
 export type TransformEventArg = <T extends EventObject = EventObject>(
   event: string | EventObject,
 ) => T;
-
-/**
- * Transforms a raw event argument into a standardized interface {@linkcode EventObject}.
- *
- * Delegates to `@bemedev/app-options` so the machine runtime and the option
- * helpers share a single implementation.
- *
- * @param event - The event string or event object to transform.
- *
- * @returns Standardized event object containing `type` and `payload`.
- *
- * @see {@linkcode TransformEventArg}
- */
 
 /**
  * Transforms a raw event argument into a standardized event object.
@@ -49,6 +45,8 @@ export type TransformEventArg = <T extends EventObject = EventObject>(
  * @param event - Event string or event object.
  *
  * @returns Event object holding `type` and `payload`.
+ *
+ * @see -- type {@linkcode TransformEventArg}
  */
 export const transformEventArg: TransformEventArg = event => {
   if (typeof event === 'string') return { type: event, payload: {} };

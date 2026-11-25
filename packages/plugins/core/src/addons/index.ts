@@ -1,3 +1,9 @@
+/**
+ * Built-in addons injected into the options callbacks.
+ *
+ * @module
+ */
+
 import type {
   AsyncAction2,
   Contract,

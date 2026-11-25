@@ -1,6 +1,6 @@
 import type { Contract, FnR } from '@bemedev/app-contract';
-import { swap as _swap } from '@bemedev/function-swap';
 import { reduceFnMap } from '@bemedev/app-plugins/internal';
+import { swap as _swap } from '@bemedev/function-swap';
 
 /**
  * Signature of the {@linkcode swap} helper.
@@ -43,6 +43,8 @@ export type Swap_F<Ct extends Contract = Contract> = <
  *   '[0]': '[0].context',
  * });
  * ```
+ *
+ * @see -- type {@linkcode Swap_F}
  */
 export const swap: Swap_F = (fn, event) => types => {
   const swapped = _swap(fn).constraint()(types);

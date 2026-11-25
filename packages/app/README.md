@@ -492,36 +492,23 @@ const enrichedService = service.provideOptions(({ action }) => ({
 
 ### Plugins and standalone utilities
 
-`@bemedev/app` re-exports the plugin registry and the contract-aware utility builder
-from `@bemedev/app-options`. Register a plugin once, then every machine and
-interpreter surface can use the helper it contributes:
+`@bemedev/app` re-exports the plugin factory and the utility types from
+`@bemedev/app-plugins`. A plugin is the lazy map returned by `createUtilities`;
+attach it to a machine or to `createOptions` to expose the helpers it contributes:
 
 ```typescript
-import {
-  configureOptions,
-  createContract,
-  createUtility,
-  same,
-  type UtilityPlugin,
-} from '@bemedev/app';
+import { createUtilities, same } from '@bemedev/app';
 
-export const retryPlugin = {
-  name: 'retry',
-  create: () => ({ retry: same((action: () => unknown) => action) }),
-} satisfies UtilityPlugin;
-
-configureOptions(retryPlugin);
-
-const contract = createContract(config, types);
-const utilities = createUtility({ contract }).build();
-const sync = utilities.resolve('sync');
+export const retryPlugin = createUtilities({}, () => ({
+  retry: same((action: () => unknown) => action),
+}));
 ```
 
-Per-call plugins win over registered ones with the same name:
-`createUtility({ contract }, retryPlugin)` or
-`createOptions(contract).use(retryPlugin)`. See the
-[`@bemedev/app-options`](../options) README for the plugin contract, `requires`
-ordering and `override` semantics.
+Attach it at the machine level with `plugins`, or at the options level with
+`createOptions(contract).use(retryPlugin)`. Plugins are applied in the order they are
+given, and a plugin can never replace a default helper such as `assign`. See the
+[`@bemedev/app-options`](../options) README for the plugin contract and the
+precedence rules.
 
 <br/>
 
@@ -646,7 +633,7 @@ The path follows `@bemedev/decompose` conventions: `'context'`, `'context.field'
 it has to be opted in:
 
 ```typescript
-import { swapPlugin } from '@bemedev/app-bemedev-plugins';
+import { plugin as swapPlugin } from '@bemedev/app-bemedev-plugins';
 
 // With createOptions
 const options = createOptions(contract).use(swapPlugin)(({ swap }) => ({ ... }));
@@ -998,7 +985,7 @@ machine.provideOptions(({ isValue }) => ({
       context.token !== undefined && !isExpired(context.token),
 
     // Remapped predicate with swap (imported from @bemedev/app-bemedev-plugins,
-    // or injected through its swapPlugin)
+    // or injected through its plugin)
     isAdult: swap((age: number) => age >= 18)({ '[0]': '[0].context.user.age' }),
 
     // Predicate with event payload

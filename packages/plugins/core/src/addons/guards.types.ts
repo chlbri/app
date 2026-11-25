@@ -52,11 +52,25 @@ export type DefinedValue<Ct extends Contract = Contract> =
   | 'events.type'
   | 'events.payload';
 
+/**
+ * Guard checking that a path of the machine is defined.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
+ *
+ * @see -- type {@linkcode DefinedValue}, -- type {@linkcode FnR}
+ */
 export type ValueDefined<Ct extends Contract = Contract> = {
   sync: (path: DefinedValue<Ct>) => FnR<Ct, boolean>;
   async: (path: DefinedValue<Ct>) => FnR<Ct, MaybePromise<boolean>>;
 };
 
+/**
+ * Guard checking that a path of the machine matches one of the supplied values.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
+ *
+ * @see -- type {@linkcode DefinedValue}, -- type {@linkcode FnR}
+ */
 export type ValueIs<Ct extends Contract = Contract> = {
   sync: (path: DefinedValue<Ct>, ...values: any[]) => FnR<Ct, boolean>;
   async: (
@@ -65,12 +79,30 @@ export type ValueIs<Ct extends Contract = Contract> = {
   ) => FnR<Ct, MaybePromise<boolean>>;
 };
 
+/**
+ * A synchronous guard accepted by {@linkcode Addons.guardBatch}.
+ *
+ * Guards combine through `and` and `or` objects and may be omitted.
+ *
+ * @template | {@linkcode Contract} `C` - Contract of the machine.
+ *
+ * @see -- type {@linkcode SyncPredicateS}
+ */
 export type SyncGuardUnion<C extends Contract> =
   | undefined
   | SyncPredicateS<C>
   | { and: SyncGuardUnion<C>[] }
   | { or: SyncGuardUnion<C>[] };
 
+/**
+ * An asynchronous guard accepted by {@linkcode Addons.guardBatch}.
+ *
+ * Guards combine through `and` and `or` objects and may be omitted.
+ *
+ * @template | {@linkcode Contract} `C` - Contract of the machine.
+ *
+ * @see -- type {@linkcode AsyncPredicateS}
+ */
 export type AsyncGuardUnion<C extends Contract> =
   | undefined
   | AsyncPredicateS<C>

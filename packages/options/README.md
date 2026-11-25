@@ -95,7 +95,7 @@ Asynchronous helpers additionally accept the `max`, `then` and `catch` options o
 
 The `swap` helper is no longer a default helper: install
 [`@bemedev/app-bemedev-plugins`](../plugins/bemedev) and opt in with
-`createOptions(contract).use(swapPlugin)`.
+`createOptions(contract).use(plugin)`.
 
 ### Applying the options
 

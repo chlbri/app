@@ -20,7 +20,7 @@ other location accepting a selector.
 
 ```ts
 import { createOptions } from '@bemedev/app-options';
-import { swapPlugin } from '@bemedev/app-bemedev-plugins';
+import { plugin as swapPlugin } from '@bemedev/app-bemedev-plugins';
 
 const options = createOptions(contract).use(swapPlugin)(({ swap, assign }) => ({
   actions: {
@@ -39,7 +39,7 @@ On a machine, attach the plugin through its types:
 
 ```ts
 import { createMachine } from '@bemedev/app';
-import { swapPlugin } from '@bemedev/app-bemedev-plugins';
+import { plugin as swapPlugin } from '@bemedev/app-bemedev-plugins';
 
 const machine = createMachine(
   config,

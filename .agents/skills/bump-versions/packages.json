@@ -7,6 +7,8 @@
     "packages/reactjs",
     "packages/solidjs",
     "packages/valibot",
-    "packages/vitest"
+    "packages/vitest",
+    "packages/plugins/core",
+    "packages/plugins/bemedev"
   ]
 }

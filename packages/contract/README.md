@@ -200,6 +200,16 @@ The vendored machine types are exported from the same entry point: `CommonConfig
 and their supporting helper types. Import them from `@bemedev/app-contract` — no
 `@bemedev/app` installation is required.
 
+### Subpath exports
+
+| Subpath                          | Content                                         |
+| -------------------------------- | ----------------------------------------------- |
+| `@bemedev/app-contract/bemedev`  | Re-exports of `@bemedev/app-utils-bemedev`.     |
+| `@bemedev/app-contract/internal` | Internal config, edge and event helpers.        |
+| `@bemedev/app-contract/registry` | The augmentable `Register` interface.           |
+| `@bemedev/app-contract/typings`  | `@bemedev/typings` and its `helpers` namespace. |
+| `@bemedev/app-contract/types`    | Type-only entry of the package.                 |
+
 ## License
 
 MIT

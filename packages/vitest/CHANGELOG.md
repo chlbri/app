@@ -5,6 +5,41 @@
 <details>
 <summary>
 
+## **[3.2.0] - 25/11/2026** => _04:14_
+
+</summary>
+
+### Breaking changes
+
+- **Contract-first tests**: `ConstructTests_F`, `ConstructTestsResult` and `Option`
+  now take a `Ct extends Contract` generic plus an `L` options generic and a `Ps`
+  plugin tuple, instead of `(C, Pc, Tc, E, A, Ta, Eo, AllPaths, Mo, L)`.
+
+### Features
+
+- **Plugins**: generated tests use `OptionsPlugin` from `@bemedev/app-options` and
+  accept the plugins attached to the tested service.
+
+### Refactor
+
+- **Dedicated packages**: import contract types from `@bemedev/app-contract`, helpers
+  from `@bemedev/app-utils-bemedev`, and `sleep` from `@bemedev/sleep`.
+
+### Dependencies
+
+- Declare `@bemedev/app-contract`, `@bemedev/app-options`, `@bemedev/app-plugins`,
+  `@bemedev/app-utils-bemedev`, `@bemedev/typings` and `@bemedev/sleep` as peers.
+- Adopt the pnpm catalog for every dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.3] - 17/11/2026** => _13:00_
 
 </summary>

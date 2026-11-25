@@ -17,7 +17,9 @@ npm install @bemedev/app-vitest --save-dev
 pnpm add @bemedev/app-vitest -D
 ```
 
-> **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 2.0.0 · Vitest ≥ 5.1.0
+> **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 2.0.0 · Vitest ≥ 5.1.0, plus the
+> `@bemedev/app-contract`, `@bemedev/app-options`, `@bemedev/app-plugins` and
+> `@bemedev/app-utils-bemedev` peers.
 
 <br/>
 
@@ -52,7 +54,6 @@ describe('My Machine Integration', () => {
 
 | Parameter    | Type          | Description                                                                                   |
 | ------------ | ------------- | --------------------------------------------------------------------------------------------- |
-| `vi`         | `VitestUtils` | The Vitest `vi` utility object (required for fake timer management).                          |
 | `service`    | `Interpreter` | The interpreter service instance under test (Sync or Async).                                  |
 | `helper`     | `Function`    | Optional callback to define custom helpers (e.g. context assertions or custom event senders). |
 | `startIndex` | `number`      | Optional starting sequence index (defaults to `0`).                                           |
@@ -94,7 +95,6 @@ to create customized, type-safe assertions:
 
 ```typescript
 const { wait, sendFetch, checkCount } = constructTests(
-  vi,
   service,
   ({ waiter, sender, contexts, service }) => ({
     // 1. A custom delay helper (automatically advances fake timers if active)

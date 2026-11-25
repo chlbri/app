@@ -8,6 +8,51 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.2.0] - 25/11/2026** => _04:14_
+
+</summary>
+
+### Breaking changes
+
+- **Peer dependencies**: `@bemedev/app-contract`, `@bemedev/app-plugins`,
+  `@bemedev/app-utils-bemedev`, `@bemedev/decompose`, `@bemedev/boolean-recursive`,
+  `@bemedev/better-promise` and `@bemedev/typings` move to `peerDependencies`;
+  install the ones your machines use alongside `@bemedev/app`.
+- **Plugin API**: `configureOptions`, `registerPlugins`, `createUtility` and
+  `UtilityPlugin` are no longer re-exported. Declare plugins with `createUtilities`
+  from `@bemedev/app-plugins` and attach them with `plugins`.
+
+### Features
+
+- **Decompose subpath**: add the `@bemedev/app/decompose` export.
+- **Plugins**: re-export `createUtilities`, `same`, `Addons`, `UtilityMap`,
+  `UtilityMode` and `UtilityPair` from `@bemedev/app-plugins`.
+- **Unique typings**: re-export `StateValue`, `NotReadonly` and `TrueObject` from
+  `@bemedev/app-utils-bemedev`.
+
+### Refactor
+
+- **Dedicated packages**: shared helpers move to `@bemedev/app-utils-bemedev`, shared
+  addons and interpreter types to `@bemedev/app-plugins`, and contract types to
+  `@bemedev/app-contract`.
+- **Removed local helpers**: `byKey2`, `constructEventMap`, `identity`, `soa` and the
+  local environment module are replaced by re-exports from the dedicated packages.
+- **Barrel cleanup**: reorder and prune the `#exports`, `#common`, `#sync` and
+  `#utils` barrels around the new package boundaries.
+
+### Dependencies
+
+- Adopt the pnpm catalog for every dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.1.0] - 22/11/2026** => _00:34_
 
 </summary>

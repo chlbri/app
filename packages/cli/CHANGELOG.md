@@ -5,6 +5,37 @@
 <details>
 <summary>
 
+## **[3.2.0] - 25/11/2026** => _04:14_
+
+</summary>
+
+### Fixes
+
+- **`pContext` generation**: generated modules emit the concrete `pContext` schema
+  type (for example `{ count: number }`) instead of `any`.
+
+### Refactor
+
+- **Contract types**: reducers and the tree parser read node, actor, guard and
+  activity types from `@bemedev/app-contract/internal`.
+- **Shared helpers**: `toArray`, `isDescriber` and `fromDescriber` now come from
+  `@bemedev/app-utils-bemedev`, `@bemedev/app-options/internal` and
+  `@bemedev/app/types` instead of the root `@bemedev/app` barrel.
+
+### Dependencies
+
+- Add `@bemedev/app-utils-bemedev` as a peer dependency.
+- Adopt the pnpm catalog for every dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.3] - 17/11/2026** => _13:00_
 
 </summary>

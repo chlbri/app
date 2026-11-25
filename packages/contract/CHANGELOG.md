@@ -5,6 +5,39 @@
 <details>
 <summary>
 
+## **[3.2.0] - 25/11/2026** => _04:14_
+
+</summary>
+
+### Features
+
+- **Subpath exports**: add `@bemedev/app-contract/bemedev`,
+  `@bemedev/app-contract/internal`, `@bemedev/app-contract/registry`,
+  `@bemedev/app-contract/typings` and `@bemedev/app-contract/types`.
+- **Register interface**: expose `Register` as an augmentable interface, matching the
+  TanStack Start pattern used by the CLI-generated `app.contract.gen.ts`.
+
+### Refactor
+
+- **Internal split**: contract, options, events and edge helpers move to focused
+  `internal` modules, and `machine.ts` becomes `machine.types.ts`.
+- **Centralized typings**: the `typings` entry re-exports `@bemedev/typings` and its
+  `helpers` namespace from a single module.
+
+### Dependencies
+
+- Bundle `@bemedev/app-utils-bemedev` and add `@bemedev/typings` as a dependency.
+- Adopt the pnpm catalog for every dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.3] - 17/11/2026** => _13:00_
 
 </summary>

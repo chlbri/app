@@ -11,6 +11,20 @@ import type { BuilderArgs, Cast, Context, EmptyO, UtilityMap } from './types';
  */
 export const RESOLVE = Symbol('@bemedev/app-plugins/resolve');
 
+/**
+ * Signature of {@linkcode createUtilities}.
+ *
+ * Builds the plugin map of a utility module from a context and a builder.
+ *
+ * @template | {@linkcode Context} `Ct` - Known contract and utilities.
+ * @template | {@linkcode UtilityMap} `R` - Utilities produced by the
+ * builder.
+ *
+ * @param context - Contract and utilities already known by the caller.
+ * @param builder - Builds the utilities from the deferred addons.
+ *
+ * @returns A plugin map resolving every utility against the supplied addons.
+ */
 export type CreateUtilities_F = <
   const Ct extends Context,
   R extends UtilityMap = EmptyO,
@@ -39,6 +53,8 @@ export type CreateUtilities_F = <
  * @param builder - Builds the utilities from the deferred addons.
  *
  * @returns A plugin map resolving every utility against the supplied addons.
+ *
+ * @see -- type {@linkcode CreateUtilities_F}
  */
 export const createUtilities: CreateUtilities_F = (context, builder) => {
   const { contract, utilities } = context;

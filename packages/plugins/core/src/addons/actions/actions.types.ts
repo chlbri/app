@@ -12,6 +12,16 @@ import type {
   TraversableTupleSync,
 } from '../types';
 
+/**
+ * Error handler called when an asynchronous action rejects.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
+ * @template `Err` - Type of the thrown error.
+ *
+ * @returns Action receiving the error and building the next result.
+ *
+ * @see -- type {@linkcode AsyncAction2}
+ */
 export type ErrorFn<Ct extends Contract = Contract> = <Err>(
   err: Err,
 ) => AsyncAction2<Ct>;
@@ -41,6 +51,15 @@ export type AsyncOptions<C extends Contract = Contract> = {
   max?: number;
 };
 
+/**
+ * Synchronous `assign` overloads: either target context keys with a value
+ * mapper, or replace the whole context from a function.
+ *
+ * @template | {@linkcode Contract} `Ct` - Contract of the machine.
+ * @template `D` - Decomposed context paths accepted as keys.
+ *
+ * @see -- type {@linkcode FnMap}, -- type {@linkcode SingleOrArrayL2}
+ */
 export type SyncAssign<
   Ct extends Contract = Contract,
   D = DecomposeC<ContractContext<Ct>>,

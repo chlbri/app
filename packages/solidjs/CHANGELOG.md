@@ -5,6 +5,36 @@
 <details>
 <summary>
 
+## **[3.2.0] - 25/11/2026** => _04:14_
+
+</summary>
+
+### Breaking changes
+
+- **Contract-first primitives**: `createService`, `createState`, `createCan` and
+  `createIsInside` take a single `Ct extends Contract` generic instead of
+  `(Tc, Ta, Eo)`. Every type is derived from the service contract.
+
+### Refactor
+
+- **Dedicated packages**: import contract types from `@bemedev/app-contract`, shared
+  helpers from `@bemedev/app-utils-bemedev`, and `decomposeSV` from
+  `@bemedev/decompose`.
+
+### Dependencies
+
+- Adopt the pnpm catalog and declare `@bemedev/app-contract`,
+  `@bemedev/app-utils-bemedev`, `@bemedev/decompose` and `solid-js` as peers.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.4] - 18/11/2026** => _15:01_
 
 </summary>
