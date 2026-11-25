@@ -107,7 +107,7 @@ export const Logs = ({ service }: Props) => {
                   <div
                     className={cn(
                       'text-slate-400 font-mono text-xs',
-                      { 'truncate max-w-[100px]': !item.expanded },
+                      { 'truncate max-w-25': !item.expanded },
                       'text-start',
                     )}
                   >
@@ -194,7 +194,7 @@ Logs.test = (({ service }) => {
                   <div
                     className={cn(
                       'text-slate-400 font-mono text-xs',
-                      { 'truncate max-w-[100px]': !item.expanded },
+                      { 'truncate max-w-25': !item.expanded },
                       'text-start',
                     )}
                   >

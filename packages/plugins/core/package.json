@@ -88,6 +88,7 @@
     "posttest": "vp fmt",
     "pretest": "vp run pack",
     "rm:lib": "vp dlx rimraf ./lib",
+    "publish:first": "vp run pretest && pnpm publish --access public --no-git-checks",
     "test:coverage": "vp test run",
     "test": "vp run test:coverage --no-coverage",
     "test:only": "vp run test",
