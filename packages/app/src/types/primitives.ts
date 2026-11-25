@@ -13,8 +13,8 @@ import type { KeyU } from '@bemedev/app-plugins/addons';
 import type {
   DeepPartial,
   NOmit,
+  NoExtraKeys,
   NotUndefined,
-  Ru,
   UnionToIntersection,
   _UnionToIntersection2,
 } from '@bemedev/app-utils-bemedev';
@@ -33,6 +33,14 @@ export type {
   SingleOrArrayL2,
   SingleOrArrayR,
 } from '@bemedev/app-plugins/addons';
+export type {
+  ExtractS,
+  NoExtraKeys,
+  NoExtraKeysStrict,
+  NotReadonly,
+  TrueObject,
+  ValuesOf,
+} from '@bemedev/app-utils-bemedev';
 export type { KeyU };
 
 export type {
@@ -91,15 +99,6 @@ export type Describer2 = NOmit<Describer, 'description'> &
  */
 export const fromDescriber = (value: string | Describer) => {
   return isDescriber(value) ? value.name : value;
-};
-
-/**
- * Removes the `readonly` modifier from every property of type `T`.
- *
- * @template `T` - The object type to make mutable.
- */
-export type NotReadonly<T> = {
-  -readonly [P in keyof T]: T[P];
 };
 
 /**
@@ -354,15 +353,6 @@ export type FnMapR<
 > = FnReduced<Ct, R> | _FnMapReduced<Ct, R, Ex>;
 
 /**
- * A type that represents all values of type `T`.
- *
- * @template `T` - The object type whose values are extracted.
- *
- * @see -- type {@linkcode NotUndefined}
- */
-export type ValuesOf<T> = NotUndefined<NotUndefined<T>[keyof NotUndefined<T>]>;
-
-/**
  * The partial version of {@linkcode KeyU}.
  *
  * @template `S` - The string keys of the record.
@@ -371,30 +361,6 @@ export type ValuesOf<T> = NotUndefined<NotUndefined<T>[keyof NotUndefined<T>]>;
  * @see -- type {@linkcode Partial}
  */
 export type KeyO<S extends string, R = unknown> = Partial<KeyU<S, R>>;
-
-/**
- * Extracts the string type from a union type `T`.
- *
- * @template `T` - The union type to extract the string type from.
- *
- * @see -- type {@linkcode Extract}
- */
-export type ExtractS<T> = Extract<T, string>;
-
-/**
- * A type that represents a true object, which is an object that does not have
- * any iterable properties or the `SymbolConstructor` property.
- *
- * @remarks This type is useful to ensure that the object is a plain object
- * without any special properties.
- *
- * @see -- type {@linkcode Ru}, -- type {@linkcode SymbolConstructor}
- */
-export type TrueObject = Ru & {
-  [Symbol.iterator]?: never;
-  //@ts-expect-error - 'SymbolConstructor' does not exist on type 'object'
-  [SymbolConstructor]?: never;
-};
 
 /**
  * A type that represents an absent value.
@@ -412,83 +378,9 @@ export type Delimiter = typeof DEFAULT_DELIMITER;
 // #region NoExtraKeys
 
 /**
- * Extracts keys from type T that represent object properties which should be
- * recursively processed for no-extra-keys validation.
- *
- * @template `T` - The type to extract recursive keys from.
- * @template `Schema` - The schema type to compare against.
+ * `RecursiveObjectKeys`, `NoExtraKeys` and `NoExtraKeysStrict` are owned by
+ * `@bemedev/app-utils-bemedev` and re-exported at the top of this module.
  */
-type RecursiveObjectKeys<T, Schema> = {
-  [K in keyof T & keyof Schema]: T[K] extends TrueObject ? K : never;
-}[keyof T & keyof Schema];
-
-/**
- * Generic type that restricts extra keys deeply on any object type.
- * Works with partial objects and ensures all keys match the schema exactly.
- *
- * @template `T` - The type to validate (the actual value type).
- * @template `Schema` - The schema type that defines allowed keys.
- *
- * @remarks
- * This type performs deep validation ensuring:
- * 1. No extra keys are present at the top level
- * 2. All nested object properties are recursively validated
- * 3. Works with partial/optional properties
- * 4. Preserves readonly modifiers
- *
- * @example
- * ```typescript
- * type MySchema = {
- *   name: string;
- *   config?: {
- *     value: number;
- *     nested?: {
- *       deep: boolean;
- *     };
- *   };
- * };
- *
- * // Valid - all keys match schema
- * type Valid = NoExtraKeys<{ name: 'test'; config: { value: 1 } }, MySchema>;
- *
- * // Invalid - 'extra' key is not in schema, will be typed as 'never'
- * type Invalid = NoExtraKeys<{ name: 'test'; extra: true }, MySchema>;
- * ```
- *
- * @see -- type {@linkcode NoExtraKeysStrict}
- */
-export type NoExtraKeys<T, Schema> = T & {
-  [K in Exclude<keyof T, keyof Schema>]: never;
-} & {
-  [K in RecursiveObjectKeys<T, Schema>]?: NoExtraKeys<
-    NotUndefined<T[K]>,
-    NotUndefined<Schema[K]>
-  >;
-};
-
-/**
- * A stricter version of {@linkcode NoExtraKeys} that also validates
- * that all keys in the schema are present in the type T.
- *
- * @template `T` - The type to validate (the actual value type).
- * @template `Schema` - The schema type that defines allowed keys.
- *
- * @remarks
- * Use this when you want to ensure not only that there are no extra keys,
- * but also that all required keys from the schema are present.
- *
- * @example
- * ```typescript
- * type MySchema = {
- *   name: string;
- *   value: number;
- * };
- *
- * // T must have both 'name' and 'value'
- * type Strict = NoExtraKeysStrict<{ name: 'test'; value: 1 }, MySchema>;
- * ```
- */
-export type NoExtraKeysStrict<T extends Schema, Schema> = NoExtraKeys<T, Schema>;
 
 /**
  * Deep version of {@linkcode NoExtraKeys} that processes Record types
