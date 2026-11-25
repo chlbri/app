@@ -1,5 +1,5 @@
 import { CommonChildFunction2, getEntries } from '#common/machine';
-import { eventToType, transformEventArg } from '#events';
+import { eventToType } from '#events';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
@@ -7,7 +7,11 @@ import type { ContractEvents } from '@bemedev/app-contract/types';
 import type { Contract, OptionsPlugin } from '@bemedev/app-options';
 import { byKey2, isDescriber, merge2 } from '@bemedev/app-options/internal';
 import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
-import { AFTER_EVENT, ALWAYS_EVENT } from '@bemedev/app-plugins/internal';
+import {
+  AFTER_EVENT,
+  ALWAYS_EVENT,
+  transformEventArg,
+} from '@bemedev/app-plugins/internal';
 import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';

@@ -1,11 +1,6 @@
-import {
-  eventToType,
-  possibleEvents,
-  transformEventArg,
-  type EventArgObject,
-  type EventObject,
-  type ExtractSender,
-} from '#events';
+import { eventToType, possibleEvents, type ExtractSender } from '#events';
+
+import type { EventArgObject, EventObject } from '@bemedev/app-contract';
 import {
   _any,
   isDefined,
@@ -47,7 +42,11 @@ import type {
 import { byKey2, merge2 } from '@bemedev/app-options/internal';
 import type { AnyMachine } from '@bemedev/app-plugins';
 import { type MachineType } from '@bemedev/app-plugins';
-import { INIT_EVENT, IS_TEST } from '@bemedev/app-plugins/internal';
+import {
+  INIT_EVENT,
+  IS_TEST,
+  transformEventArg,
+} from '@bemedev/app-plugins/internal';
 import type { AllowedNames } from '@bemedev/app-utils-bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { createInterval, type Interval3 } from '@bemedev/interval3';

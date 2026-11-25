@@ -1,3 +1,5 @@
+import { EventObject } from '@bemedev/app-contract';
+
 /** Internal event emitted when a machine starts. */
 export const INIT_EVENT = 'machine$$init' as const;
 
@@ -24,6 +26,23 @@ export const isStringEvent = (event: any): event is string => {
   return out;
 };
 
+export type TransformEventArg = <T extends EventObject = EventObject>(
+  event: string | EventObject,
+) => T;
+
+/**
+ * Transforms a raw event argument into a standardized interface {@linkcode EventObject}.
+ *
+ * Delegates to `@bemedev/app-options` so the machine runtime and the option
+ * helpers share a single implementation.
+ *
+ * @param event - The event string or event object to transform.
+ *
+ * @returns Standardized event object containing `type` and `payload`.
+ *
+ * @see {@linkcode TransformEventArg}
+ */
+
 /**
  * Transforms a raw event argument into a standardized event object.
  *
@@ -31,7 +50,7 @@ export const isStringEvent = (event: any): event is string => {
  *
  * @returns Event object holding `type` and `payload`.
  */
-export const transformEventArg = (event: any) => {
+export const transformEventArg: TransformEventArg = event => {
   if (typeof event === 'string') return { type: event, payload: {} };
-  return { ...event, payload: event.payload };
+  return { ...event, payload: event.payload } as any;
 };

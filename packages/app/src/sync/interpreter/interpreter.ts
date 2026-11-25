@@ -1,6 +1,6 @@
 import { type ExtendedActionsParams } from '#common/interpreter';
 import type { CommonChildFunction2 } from '#common/machine';
-import { eventToType, transformEventArg, type ExtractSender } from '#events';
+import { eventToType, type ExtractSender } from '#events';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
 import type { Contract } from '@bemedev/app-contract';
@@ -32,7 +32,11 @@ import type {
   WithDescriber,
 } from '@bemedev/app-contract';
 
-import { AFTER_EVENT, ALWAYS_EVENT } from '@bemedev/app-plugins/internal';
+import {
+  AFTER_EVENT,
+  ALWAYS_EVENT,
+  transformEventArg,
+} from '@bemedev/app-plugins/internal';
 
 import type {
   _SyncSend_F,

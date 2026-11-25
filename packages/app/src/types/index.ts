@@ -17,14 +17,13 @@ export type {
   EventsMap,
   EventsR,
   EventStrings,
-  EventToType_F,
-  ExtractSender,
   InitEvent,
   ToEventObject,
   ToEvents,
   ToEventsR,
-  TransformEventArg,
-} from '#events';
+} from '@bemedev/app-contract/internal';
+
+export type { EventToType_F, ExtractSender } from '#events';
 
 export type {
   ActivityArray,
