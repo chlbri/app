@@ -1,6 +1,10 @@
+import {
+  AFTER_EVENT,
+  ALWAYS_EVENT,
+  INIT_EVENT,
+  isStringEvent,
+} from '@bemedev/app-plugins/internal';
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
-import { AFTER_EVENT, ALWAYS_EVENT, INIT_EVENT } from '@bemedev/app/events';
-import { isStringEvent } from '@bemedev/app-options/internal';
 
 describe('isStringEvent', () => {
   const { acceptation, success } = createTests(isStringEvent);

@@ -1,20 +1,16 @@
 import type { DEFAULT_DELIMITER } from '#constants';
 import type {
+  Contract,
+  ContractEventType,
+  ContractEvents,
+  Describer,
   EventStrings,
+  RecordS,
   State,
   StateExtended,
   StatePOf,
   StatePextendedOf,
 } from '@bemedev/app-contract';
-import { checkKeys } from '@bemedev/app-options/internal';
-import type {
-  Contract,
-  ContractEventType,
-  ContractEvents,
-  Describer,
-  RecordS,
-} from '@bemedev/app-contract';
-import type { EmptyObject } from '@bemedev/typings';
 import type {
   DeepPartial,
   NOmit,
@@ -23,8 +19,14 @@ import type {
   UnionToIntersection,
   _UnionToIntersection2,
 } from '@bemedev/app-utils-bemedev';
+import type { EmptyObject } from '@bemedev/typings';
 
-import { DESCRIBER_KEYS, isFunction, isString } from '@bemedev/app-options/internal';
+import {
+  DESCRIBER_KEYS,
+  isDescriber,
+  isFunction,
+  isString,
+} from '@bemedev/app-options/internal';
 
 export type {
   Describer,
@@ -81,18 +83,6 @@ export type FromDescriber<T extends Describer> = T['name'];
  */
 export type Describer2 = NOmit<Describer, 'description'> &
   Partial<Pick<Describer, 'description'>>;
-
-/**
- * Type guard that checks if an argument conforms to type {@linkcode Describer}.
- *
- * @param arg - The value to check.
- *
- * @returns `true` if `arg` is a valid describer, `false` otherwise.
- */
-export const isDescriber = (arg: any): arg is Describer => {
-  const out = checkKeys.strict(arg, ...DESCRIBER_KEYS);
-  return out;
-};
 
 /**
  * Extracts the string name from a string or type {@linkcode Describer}.

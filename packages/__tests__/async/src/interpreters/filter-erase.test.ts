@@ -1,13 +1,5 @@
-import { interpret } from '@bemedev/app';
-import {
-  AFTER_EVENT,
-  ALWAYS_EVENT,
-  INIT_EVENT,
-  after,
-  always,
-  type AfterEvent,
-  type AlwaysEvent,
-} from '@bemedev/app/events';
+import { after, always, interpret } from '@bemedev/app';
+import type { AfterEvent, AlwaysEvent } from '@bemedev/app-contract/internal';
 import { constructTests } from '@bemedev/app-vitest';
 import _machine7 from './erase.7.machine';
 import _machine1 from './filter-erase.1.machine';
@@ -18,6 +10,12 @@ import _machine5 from './filter-erase.5.machine';
 import _machine6 from './filter-erase.6.machine';
 import _filterMachine7 from './filter-erase.7.machine';
 import _filterMachine8 from './filter-erase.8.machine';
+
+import {
+  AFTER_EVENT,
+  ALWAYS_EVENT,
+  INIT_EVENT,
+} from '@bemedev/app-plugins/internal';
 
 describe('Filter and Erase actions', () => {
   beforeAll(() => {

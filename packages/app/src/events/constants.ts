@@ -8,4 +8,4 @@ export {
   AFTER_EVENT,
   ALWAYS_EVENT,
   INIT_EVENT,
-} from '@bemedev/app-options/internal';
+} from '@bemedev/app-plugins/internal';
