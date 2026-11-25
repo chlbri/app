@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-contract",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Lightweight machine contracts for @bemedev/app",
   "keywords": [
     "state machines",
@@ -45,6 +45,27 @@
       "import": "./lib/index.js",
       "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
+    },
+    "./bemedev": {
+      "import": "./lib/bemedev.js",
+      "require": "./lib/bemedev.cjs",
+      "types": "./lib/bemedev.d.ts"
+    },
+    "./internal": {
+      "import": "./lib/internal/index.js",
+      "require": "./lib/internal/index.cjs",
+      "types": "./lib/internal/index.d.ts"
+    },
+    "./registry": {
+      "types": "./lib/registry.types.d.ts"
+    },
+    "./typings": {
+      "import": "./lib/typings.js",
+      "require": "./lib/typings.cjs",
+      "types": "./lib/typings.d.ts"
+    },
+    "./types": {
+      "types": "./lib/types.d.ts"
     }
   },
   "publishConfig": {
@@ -61,18 +82,24 @@
     "test:only": "vp run test",
     "test:watch": "vp test"
   },
+  "dependencies": {
+    "@bemedev/typings": "catalog:"
+  },
+  "bundledDependencies": [
+    "@bemedev/app-utils-bemedev"
+  ],
   "devDependencies": {
-    "@bemedev/dev-utils": "^1.6.2",
-    "@bemedev/typings": "^1.5.0",
-    "@size-limit/file": "^14.3.0",
-    "@types/node": "^26.6.6",
+    "@bemedev/app-utils-bemedev": "workspace:^",
+    "@bemedev/dev-utils": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "pretty-quick": "^4.2.2",
-    "rimraf": "^6.1.4",
-    "size-limit": "^14.3.0",
-    "tslib": "^2.9.1",
-    "tsx": "^4.23.15",
-    "typescript": "7.0.2",
+    "pretty-quick": "catalog:",
+    "rimraf": "catalog:",
+    "size-limit": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
   "engines": {

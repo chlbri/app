@@ -1,32 +1,27 @@
+export * from '#common/functions';
+export * from '#constants';
+export * from '#events';
 export * from '#exports/createMachine';
 export * from '#exports/interpret';
-export * from '~types';
-export { createContract } from '@bemedev/app-options';
+export * from '#utils';
+export { buildHelpers, createContract } from '@bemedev/app-options';
 export {
-  buildHelpers,
-  configureOptions,
-  createUtility,
-  registerPlugins,
+  createUtilities,
   same,
-} from '@bemedev/app-options';
+  type Addons,
+  type UtilityMap,
+  type UtilityMode,
+  type UtilityPair,
+} from '@bemedev/app-plugins';
+export type { StateValue } from '@bemedev/app-utils-bemedev';
+export * from '~types';
+
 export type {
-  AugmentedAddons,
   BuildHelpersOptions,
   OptionsPlugin,
   PluginAddons,
-  PluginUtilities,
-  UtilityBuilder,
-  UtilityBuilderContext,
-  UtilityContext,
-  UtilityInstance,
-  UtilityMap,
-  UtilityMode,
-  UtilityPair,
-  UtilityPlugin,
 } from '@bemedev/app-options';
-export * from '#utils';
-export * from '#common/functions';
-export * from '#constants';
+
 export {
   _any,
   _unknown,
@@ -39,4 +34,6 @@ export {
   toArray,
   trueO,
   tupleOf,
-} from '@bemedev/app-options/bemedev';
+  type NotReadonly,
+  type TrueObject,
+} from '@bemedev/app-utils-bemedev';

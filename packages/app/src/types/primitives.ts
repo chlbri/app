@@ -1,35 +1,59 @@
 import type { DEFAULT_DELIMITER } from '#constants';
-import type { EventStrings } from '#events';
-import type { State, StateExtended, StatePOf, StatePextendedOf } from '#states';
-import { checkKeys } from '#utils';
 import type {
   Contract,
   ContractEventType,
   ContractEvents,
   Describer,
-  EmptyObject,
+  EventStrings,
   RecordS,
-} from '@bemedev/app-options';
+  State,
+  StatePOf,
+} from '@bemedev/app-contract';
+import type { KeyU } from '@bemedev/app-plugins/addons';
 import type {
   DeepPartial,
-  Fn,
   NOmit,
+  NoExtraKeys,
   NotUndefined,
-  Ru,
   UnionToIntersection,
   _UnionToIntersection2,
-} from '@bemedev/app-options/bemedev';
+} from '@bemedev/app-utils-bemedev';
+import type { EmptyObject } from '@bemedev/typings';
+
+import {
+  DESCRIBER_KEYS,
+  isDescriber,
+  isFunction,
+  isString,
+} from '@bemedev/app-options/internal';
+
+export type {
+  FnMapFilterArray,
+  FnMapFilterObject,
+  SingleOrArrayL2,
+  SingleOrArrayR,
+} from '@bemedev/app-plugins/addons';
+export type {
+  ExtractS,
+  NoExtraKeys,
+  NoExtraKeysStrict,
+  NotReadonly,
+  TrueObject,
+  ValuesOf,
+} from '@bemedev/app-utils-bemedev';
+export type { KeyU };
 
 export type {
   Describer,
-  EmptyObject,
   EventToType,
   FnMap,
   FnR,
   MaybePromise,
   RecordS,
   SingleOrArrayL,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
+
+export { EmptyObject };
 
 /**
  * Type guard function signature for checking if a value is of type `string`.
@@ -41,23 +65,17 @@ export type {
 export type IsString_F = (value: unknown) => value is string;
 
 /**
- * Single element or readonly array type of `T`.
- *
- * @template `T` - The element type.
+ * `SingleOrArrayR` and `SingleOrArrayL2` are owned by
+ * `@bemedev/app-plugins/addons` and re-exported at the top of this module.
  */
-export type SingleOrArrayR<T> = T | readonly T[];
 
 /**
- * Single element or array type with at least two elements of type `T`.
+ * Describer keys, function guard and string guard.
  *
- * @template `T` - The element type.
+ * They are re-exported from `@bemedev/app-options` so the machine runtime and
+ * the option helpers share a single implementation.
  */
-export type SingleOrArrayL2<T> = T | [T, T, ...T[]];
-
-/**
- * Describer keys used to define the name and description of an object.
- */
-export const DESCRIBER_KEYS = ['name', 'description'] as const;
+export { DESCRIBER_KEYS, isFunction, isString };
 
 /**
  * Retrieves the `name` property from a type {@linkcode Describer}.
@@ -73,42 +91,6 @@ export type Describer2 = NOmit<Describer, 'description'> &
   Partial<Pick<Describer, 'description'>>;
 
 /**
- * Type guard that checks if a given value is a function.
- *
- * @param value - The value to inspect.
- *
- * @returns `true` if `value` is a function, `false` otherwise.
- */
-export const isFunction = (value: unknown): value is Fn => {
-  return typeof value === 'function';
-};
-
-/**
- * Type guard that checks if a given value is a string.
- *
- * @param value - The value to inspect.
- *
- * @returns `true` if `value` is a string, `false` otherwise.
- *
- * @see -- type {@linkcode IsString_F}
- */
-export const isString: IsString_F = value => {
-  return typeof value === 'string';
-};
-
-/**
- * Type guard that checks if an argument conforms to type {@linkcode Describer}.
- *
- * @param arg - The value to check.
- *
- * @returns `true` if `arg` is a valid describer, `false` otherwise.
- */
-export const isDescriber = (arg: any): arg is Describer => {
-  const out = checkKeys.strict(arg, ...DESCRIBER_KEYS);
-  return out;
-};
-
-/**
  * Extracts the string name from a string or type {@linkcode Describer}.
  *
  * @param value - The input string or describer object.
@@ -117,15 +99,6 @@ export const isDescriber = (arg: any): arg is Describer => {
  */
 export const fromDescriber = (value: string | Describer) => {
   return isDescriber(value) ? value.name : value;
-};
-
-/**
- * Removes the `readonly` modifier from every property of type `T`.
- *
- * @template `T` - The object type to make mutable.
- */
-export type NotReadonly<T> = {
-  -readonly [P in keyof T]: T[P];
 };
 
 /**
@@ -347,70 +320,9 @@ export type FnReduced<Ct extends Contract = Contract, R = any> = (
 ) => R;
 
 /**
- * Internal helper function map type keyed by event types.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `Item` - Type of the item to filter.
- * @template `Ex` - Event types to exclude.
+ * `FnMapFilterArray` and `FnMapFilterObject` are owned by
+ * `@bemedev/app-plugins/addons` and re-exported at the top of this module.
  */
-type _FnMapFilterArray<Ct extends Contract, Item, Ex extends string> = {
-  [key in Exclude<ContractEventType<Ct>, EventStrings | Ex>]?: (
-    item: Item,
-    index: number,
-    state: StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: key }>>,
-  ) => boolean;
-} & Partial<
-  Record<
-    EventStrings | 'else',
-    (item: Item, index: number, state: StateExtended<Ct>) => boolean
-  >
->;
-
-/**
- * Function map filter array type.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `Item` - Type of the item to filter.
- * @template `Ex` - Event types to exclude.
- */
-export type FnMapFilterArray<
-  Ct extends Contract = Contract,
-  Item = any,
-  Ex extends string = never,
-> =
-  | ((item: Item, index: number, state: StateExtended<Ct>) => boolean)
-  | _FnMapFilterArray<Ct, Item, Ex>;
-
-/**
- * Internal helper function map type keyed by event types.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `Item` - Type of the item to filter.
- * @template `Ex` - Event types to exclude.
- */
-type _FnMapFilterObject<Ct extends Contract, Item, Ex extends string> = {
-  [key in Exclude<ContractEventType<Ct>, EventStrings | Ex>]?: (
-    item: Item,
-    state: StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: key }>>,
-  ) => boolean;
-} & Partial<
-  Record<EventStrings | 'else', (item: Item, state: StateExtended<Ct>) => boolean>
->;
-
-/**
- * Function map filter object type.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `Item` - Type of the item to filter.
- * @template `Ex` - Event types to exclude.
- */
-export type FnMapFilterObject<
-  Ct extends Contract = Contract,
-  Item = any,
-  Ex extends string = never,
-> =
-  | ((item: Item, state: StateExtended<Ct>) => boolean)
-  | _FnMapFilterObject<Ct, Item, Ex>;
 
 /**
  * Internal helper type for reduced function maps.
@@ -441,25 +353,6 @@ export type FnMapR<
 > = FnReduced<Ct, R> | _FnMapReduced<Ct, R, Ex>;
 
 /**
- * A type that represents all values of type `T`.
- *
- * @template `T` - The object type whose values are extracted.
- *
- * @see -- type {@linkcode NotUndefined}
- */
-export type ValuesOf<T> = NotUndefined<NotUndefined<T>[keyof NotUndefined<T>]>;
-
-/**
- * A type that represents a record with string keys and values of type {@linkcode R}.
- *
- * @template `S` - The string keys of the record.
- * @template `R` - The type of the values in the record, optional
- *
- * @remarks Simplified version of {@linkcode Record}
- */
-export type KeyU<S extends string, R = unknown> = Record<S, R>;
-
-/**
  * The partial version of {@linkcode KeyU}.
  *
  * @template `S` - The string keys of the record.
@@ -468,30 +361,6 @@ export type KeyU<S extends string, R = unknown> = Record<S, R>;
  * @see -- type {@linkcode Partial}
  */
 export type KeyO<S extends string, R = unknown> = Partial<KeyU<S, R>>;
-
-/**
- * Extracts the string type from a union type `T`.
- *
- * @template `T` - The union type to extract the string type from.
- *
- * @see -- type {@linkcode Extract}
- */
-export type ExtractS<T> = Extract<T, string>;
-
-/**
- * A type that represents a true object, which is an object that does not have
- * any iterable properties or the `SymbolConstructor` property.
- *
- * @remarks This type is useful to ensure that the object is a plain object
- * without any special properties.
- *
- * @see -- type {@linkcode Ru}, -- type {@linkcode SymbolConstructor}
- */
-export type TrueObject = Ru & {
-  [Symbol.iterator]?: never;
-  //@ts-expect-error - 'SymbolConstructor' does not exist on type 'object'
-  [SymbolConstructor]?: never;
-};
 
 /**
  * A type that represents an absent value.
@@ -509,83 +378,9 @@ export type Delimiter = typeof DEFAULT_DELIMITER;
 // #region NoExtraKeys
 
 /**
- * Extracts keys from type T that represent object properties which should be
- * recursively processed for no-extra-keys validation.
- *
- * @template `T` - The type to extract recursive keys from.
- * @template `Schema` - The schema type to compare against.
+ * `RecursiveObjectKeys`, `NoExtraKeys` and `NoExtraKeysStrict` are owned by
+ * `@bemedev/app-utils-bemedev` and re-exported at the top of this module.
  */
-type RecursiveObjectKeys<T, Schema> = {
-  [K in keyof T & keyof Schema]: T[K] extends TrueObject ? K : never;
-}[keyof T & keyof Schema];
-
-/**
- * Generic type that restricts extra keys deeply on any object type.
- * Works with partial objects and ensures all keys match the schema exactly.
- *
- * @template `T` - The type to validate (the actual value type).
- * @template `Schema` - The schema type that defines allowed keys.
- *
- * @remarks
- * This type performs deep validation ensuring:
- * 1. No extra keys are present at the top level
- * 2. All nested object properties are recursively validated
- * 3. Works with partial/optional properties
- * 4. Preserves readonly modifiers
- *
- * @example
- * ```typescript
- * type MySchema = {
- *   name: string;
- *   config?: {
- *     value: number;
- *     nested?: {
- *       deep: boolean;
- *     };
- *   };
- * };
- *
- * // Valid - all keys match schema
- * type Valid = NoExtraKeys<{ name: 'test'; config: { value: 1 } }, MySchema>;
- *
- * // Invalid - 'extra' key is not in schema, will be typed as 'never'
- * type Invalid = NoExtraKeys<{ name: 'test'; extra: true }, MySchema>;
- * ```
- *
- * @see -- type {@linkcode NoExtraKeysStrict}
- */
-export type NoExtraKeys<T, Schema> = T & {
-  [K in Exclude<keyof T, keyof Schema>]: never;
-} & {
-  [K in RecursiveObjectKeys<T, Schema>]?: NoExtraKeys<
-    NotUndefined<T[K]>,
-    NotUndefined<Schema[K]>
-  >;
-};
-
-/**
- * A stricter version of {@linkcode NoExtraKeys} that also validates
- * that all keys in the schema are present in the type T.
- *
- * @template `T` - The type to validate (the actual value type).
- * @template `Schema` - The schema type that defines allowed keys.
- *
- * @remarks
- * Use this when you want to ensure not only that there are no extra keys,
- * but also that all required keys from the schema are present.
- *
- * @example
- * ```typescript
- * type MySchema = {
- *   name: string;
- *   value: number;
- * };
- *
- * // T must have both 'name' and 'value'
- * type Strict = NoExtraKeysStrict<{ name: 'test'; value: 1 }, MySchema>;
- * ```
- */
-export type NoExtraKeysStrict<T extends Schema, Schema> = NoExtraKeys<T, Schema>;
 
 /**
  * Deep version of {@linkcode NoExtraKeys} that processes Record types

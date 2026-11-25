@@ -1,27 +1,43 @@
-import { type WithDescriber } from '#actions';
-import type { ChildConfig, EmitterConfig, FinallyConfig } from '#actor';
 import { type ExtendedActionsParams } from '#common/interpreter';
+import type { CommonChildFunction2 } from '#common/machine';
+import { eventToType, type ExtractSender } from '#events';
+import { type GuardConfig } from '#guards';
+import { initialConfig, nextSV } from '#states';
+import type { Contract } from '@bemedev/app-contract';
+import type { OptionsPlugin } from '@bemedev/app-options';
+import { byKey2, isDescriber, merge2 } from '@bemedev/app-options/internal';
+import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
+import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
+import { recompose } from '@bemedev/decompose';
+import { createScheduler } from '@bemedev/scheduler/sync';
+import equal from 'fast-deep-equal';
+import { CommonInterpreter } from '../../common/interpreter/interpreter';
+import { createSubscriber } from '../../common/subscriber';
+import type { SyncAddOptions_F } from '../machine';
+import type { SyncMachine } from '../machine/machine';
+
 import { DEFAULT_MAX_SELF_TRANSITIONS, DEFAULT_MAX_TIME_PROMISE } from '#constants';
-import { type AsyncEmitterFunction } from '#emitters';
+
+import type {
+  AlwaysConfig,
+  AsyncEmitterFunction,
+  ChildConfig,
+  ContractEvents,
+  DelayedTransitions,
+  EmitterConfig,
+  EventArgObject,
+  EventObject,
+  FinallyConfig,
+  TransitionConfig,
+  WithDescriber,
+} from '@bemedev/app-contract';
+
 import {
   AFTER_EVENT,
   ALWAYS_EVENT,
-  eventToType,
   transformEventArg,
-  type EventArgObject,
-  type EventObject,
-  type ExtractSender,
-} from '#events';
-import { type GuardConfig } from '#guards';
-import { initialConfig, nextSV } from '#states';
-import type {
-  AlwaysConfig,
-  DelayedTransitions,
-  TransitionConfig,
-} from '#transitions';
-import { _any, isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
-import equal from 'fast-deep-equal';
-import { isDescriber } from '~types';
+} from '@bemedev/app-plugins/internal';
+
 import type {
   _SyncSend_F,
   SyncPerformAction_F,
@@ -32,25 +48,11 @@ import type {
 } from './options.types';
 
 import type { ExecuteActivity_F, InterpretArgs, Mode } from '#common/interpreter';
-import type {
-  AnyMachine,
-  CommonChildFunction2,
-  MachineEventsOf,
-  SimpleMachineOptions2,
-} from '#common/machine';
-import { byKey2 } from '#utils';
-import type { Contract, OptionsPlugin } from '@bemedev/app-options';
-import { recompose } from '@bemedev/decompose';
-import { createScheduler } from '@bemedev/scheduler/sync';
-import { CommonInterpreter } from '../../common/interpreter/interpreter';
+
 import type {
   AddSubscriber_F,
   AnyInterpreter,
 } from '../../common/interpreter/types';
-import { createSubscriber } from '../../common/subscriber';
-import type { SyncAddOptions_F } from '../machine';
-import type { SyncMachine } from '../machine/machine';
-import { merge2 } from '@bemedev/app-options/internal';
 
 /**
  * The class {@linkcode SyncInterpreter} is responsible for interpreting and managing the state of a synchronous machine.
@@ -126,7 +128,7 @@ export class SyncInterpreter<
    * @param forceSend - The optional event payload of type {@linkcode EventArgObject} to force send.
    */
   protected __performForceSendAction = (
-    forceSend?: EventArgObject<MachineEventsOf<Ct>>,
+    forceSend?: EventArgObject<ContractEvents<Ct>>,
   ) => {
     if (!forceSend) return;
     const values = Object.values(this.machine.flat);
@@ -683,17 +685,17 @@ export class SyncInterpreter<
   /**
    * Creates a curried sender function for the given event type.
    *
-   * @template `T` - The event type string extending `MachineEventsOf<Ct>['type']`.
+   * @template `T` - The event type string extending `ContractEvents<Ct>['type']`.
    *
    * @param type - The event type string.
    *
    * @returns A function that accepts payload data and sends the event.
    */
-  sender = <const T extends MachineEventsOf<Ct>['type']>(type: T) => {
-    return (...data: ExtractSender<MachineEventsOf<Ct>, T>) => {
+  sender = <const T extends ContractEvents<Ct>['type']>(type: T) => {
+    return (...data: ExtractSender<ContractEvents<Ct>, T>) => {
       const payload = data.length === 1 ? data[0] : {};
       const event = { type, payload } as unknown as EventArgObject<
-        MachineEventsOf<Ct>
+        ContractEvents<Ct>
       >;
       return this.send(event);
     };
@@ -730,7 +732,7 @@ export class SyncInterpreter<
    *
    * @param _event - The event argument object of type {@linkcode EventArgObject}.
    */
-  protected __send = (_event: EventArgObject<MachineEventsOf<Ct>>) => {
+  protected __send = (_event: EventArgObject<ContractEvents<Ct>>) => {
     const event = transformEventArg(_event);
     const next = this.__presend(event as any);
 

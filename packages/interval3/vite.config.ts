@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     clearMocks: false,
     name: 'interval3',
+    typecheck: { enabled: true, ignoreSourceErrors: true },
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },
@@ -36,7 +37,7 @@ export default defineConfig(({ mode }) => ({
             'vite.config.ts',
             '!**/*.gen.ts',
           ],
-          output: ['lib/**'],
+          output: ['lib/**', '!**/.DS_Store'],
         },
       },
     },

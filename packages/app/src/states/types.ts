@@ -1,18 +1,8 @@
 import type { AsyncAction, FromActionConfig, WithDescriber } from '#actions';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { AsyncTransitions } from '#transitions';
-import type {
-  Equals,
-  Keys,
-  UnionToIntersection,
-} from '@bemedev/app-options/bemedev';
-import type {
-  EmptyObject,
-  Identify,
-  RecordS,
-  ReduceArray,
-  SingleOrArrayL,
-} from '~types';
+import type { Equals, Keys, UnionToIntersection } from '@bemedev/app-utils-bemedev';
+import type { Identify, ReduceArray } from '~types';
 
 import type {
   ActivityArray,
@@ -20,8 +10,10 @@ import type {
   Contract,
   NodeConfig2,
   NodeConfig3,
+  RecordS,
+  SingleOrArrayL,
   StateType,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 export type {
   ActivityArray,
@@ -43,11 +35,11 @@ export type {
   StatePextendedOf,
   StatePOf,
   StateType,
-  StateValue,
-  StateValueMap,
   TargetDef,
   WorkingStatus,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
+
+export type { StateValue, StateValueMap } from '@bemedev/app-utils-bemedev';
 
 /**
  * Type alias for state node configuration type {@linkcode NodeConfig2}.
@@ -146,6 +138,14 @@ export type ExtractTagsFromFlat<Flat extends FlatMapN> =
 // #endregion
 
 /**
+ * Neutral key-less object used for nodes without children.
+ *
+ * `Record<never, never>` is required here: `Record<string, never>` adds a
+ * string index signature, which widens `keyof FlatMapN` to `string`.
+ */
+type NoKeys = Record<never, never>;
+
+/**
  * Internal helper to compute a recursive flat map of state node configurations.
  *
  * @template | {@linkcode NodeConfig3} `T` - Node configuration object.
@@ -167,9 +167,9 @@ type FlatMapNodeConfig<
       [key in keyof T['states']]: T['states'][key] extends infer S extends
         NodeConfig2 & { states: RecordS<NodeConfig2> }
         ? FlatMapNodeConfig<S, withChildren, `${Remaining}${key & string}/`>
-        : EmptyObject;
+        : NoKeys;
     }[keyof T['states']]
-  : EmptyObject;
+  : NoKeys;
 
 /**
  * Flattened map of all state paths to their respective node configurations.

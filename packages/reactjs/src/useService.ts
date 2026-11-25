@@ -1,9 +1,5 @@
-import type {
-  AddSubscriber_F,
-  Contract,
-  ContractEventType,
-  MachineStateOf,
-} from '@bemedev/app';
+import type { Contract, ContractEventType, State } from '@bemedev/app-contract';
+import type { AddSubscriber_F } from '@bemedev/app/types';
 import type { UseStateOptions } from './types';
 import { useCan } from './useCan';
 import { useIsInside } from './useIsInside';
@@ -27,11 +23,11 @@ import { useState } from './useState';
  */
 export function useService<const Ct extends Contract = Contract>(service: {
   subscribe: AddSubscriber_F<Ct>;
-  state: MachineStateOf<Ct>;
+  state: State<Ct>;
   canEvents: (...events: ContractEventType<Ct>[]) => boolean;
 }) {
   return {
-    state: <T = MachineStateOf<Ct>>(options?: UseStateOptions<Ct, T>) => {
+    state: <T = State<Ct>>(options?: UseStateOptions<Ct, T>) => {
       return useState(service, options);
     },
 

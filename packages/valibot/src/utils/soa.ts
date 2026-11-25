@@ -1,4 +1,4 @@
-import type { SingleOrArrayL } from '@bemedev/app/types';
+import type { SingleOrArrayL } from '@bemedev/app-contract/internal';
 import * as v from 'valibot';
 
 /**

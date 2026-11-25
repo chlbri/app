@@ -1,27 +1,20 @@
 import equal from 'fast-deep-equal';
-
-export { decompose, decomposeSV, recompose } from '@bemedev/decompose';
-
-export type { Decompose, DecomposeKeys, DecomposeOptions } from '@bemedev/decompose';
-
-export * from './environment';
 export { merge2 } from '@bemedev/app-options/internal';
-export * from './byKey2';
+export { IS_TEST } from '@bemedev/app-plugins/internal';
+export { identity } from '@bemedev/app-utils-bemedev';
+export { decompose, decomposeSV, recompose } from '@bemedev/decompose';
+export type { Decompose, DecomposeKeys, DecomposeOptions } from '@bemedev/decompose';
+export * from '@bemedev/sleep';
+export { flatMap } from '../states/functions/flatMap';
+export * from './checkValues';
+export * from './fn';
 export * from './objects';
-export * from './constructEventMap';
+export * from './readonly';
 export * from './reduceDescriber';
 export * from './resolve';
 export * from './strings';
+export * from './typings';
 export * from './undefined';
-export * from './identity';
-export * from './typings';
-export { flatMap } from '../states/functions/flatMap';
-export * from './readonly';
-export * from './checkValues';
-export * from './soa';
-export * from './fn';
-export * from './typings';
-export * from '@bemedev/sleep';
 
 /**
  * Performs a deep equality comparison between two values of type `T`.

@@ -1,4 +1,4 @@
 export * from './contract';
 export * from './internal';
-export * from './registry.types';
+export * from './registry';
 export * from './types';

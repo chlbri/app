@@ -1,4 +1,4 @@
-import type { NodeConfigAtomic2 } from '#states';
+import type { NodeConfigAtomic2 } from '@bemedev/app-contract';
 import { stateType } from '../stateType';
 
 /**

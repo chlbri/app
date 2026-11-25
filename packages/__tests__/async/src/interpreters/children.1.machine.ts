@@ -1,8 +1,9 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/typings';
+import { plugin } from '@bemedev/app-bemedev-plugins';
+import { type } from '@bemedev/app-contract/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/children.1.machine',
   { initial: 'idle', states: { idle: { activities: { DELAY: 'inc' } } } },
-  { context: type('number') },
+  { context: type('number'), plugins: [plugin] },
 );

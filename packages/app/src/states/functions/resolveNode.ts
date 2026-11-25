@@ -2,10 +2,11 @@ import { toAction } from '#actions';
 import { toChild } from '#common/functions';
 import { toEmitter } from '#emitters';
 import { toTransition } from '#transitions';
-import { _any, identify, toArray } from '@bemedev/app-options/bemedev';
-import type { Contract, ContractOptions } from '@bemedev/app-options';
-import type { Node, NodeConfig2 } from '../types';
+import { _any, identify, toArray } from '@bemedev/app-utils-bemedev';
+import type { Node } from '../types';
 import { stateType } from './stateType';
+
+import type { Contract, ContractOptions, NodeConfig2 } from '@bemedev/app-contract';
 
 /**
  * Function signature for resolving state node configuration into an executable type {@linkcode Node}.

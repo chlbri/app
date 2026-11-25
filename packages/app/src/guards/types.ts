@@ -1,24 +1,18 @@
-import type {
-  FromActionConfig,
-  NoExtraKeysWithDescriber,
-  WithDescriber,
-} from '#actions';
-import type { Equals, NotUndefined } from '@bemedev/app-options/bemedev';
-import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
-import type { PrimitiveObject } from '@bemedev/typings';
-import type {
-  Contract,
-  ContractContext,
-  ContractPContext,
-} from '@bemedev/app-options';
-import type { RecordS, ReduceArray } from '~types';
+import type { FromActionConfig, NoExtraKeysWithDescriber } from '#actions';
 import type {
   AsyncPredicateS,
+  Contract,
   GuardAnd,
   GuardConfig,
   GuardOr,
+  RecordS,
   SyncPredicateS2,
-} from '@bemedev/app-options';
+  WithDescriber,
+} from '@bemedev/app-contract';
+import type { DefinedValue } from '@bemedev/app-plugins/addons';
+import type { ReduceArray } from '~types';
+
+export type { DefinedValue };
 
 export type {
   AsyncPredicateS,
@@ -31,7 +25,7 @@ export type {
   SyncPredicateS,
   SyncPredicateS2,
   SyncPredicateS3,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Enforces no extra keys on guard configuration objects.
@@ -164,34 +158,6 @@ export type PredicateMap<Ct extends Contract = Contract> = Partial<
 >;
 
 /**
- * Helper type extracting keys matching non-undefined values in private or
- * public context.
- *
- * @template `Pc` - Private context type.
- * @template `Tc` - Public context type.
+ * `DefinedValue` is owned by `@bemedev/app-plugins/addons` and re-exported at
+ * the top of this module.
  */
-type _DefinedValue<Pc = any, Tc = any> = KeysMatching<{
-  pContext: Equals<any, Pc> extends true
-    ? EmptyObject
-    : NotUndefined<Pc> extends never
-      ? EmptyObject
-      : NotUndefined<Pc>;
-
-  context: Equals<PrimitiveObject, Tc> extends true
-    ? EmptyObject
-    : NotUndefined<Tc> extends never
-      ? EmptyObject
-      : NotUndefined<Tc>;
-}>;
-
-/**
- * Represents a type that can be a defined value or a string representing an
- * event or its type.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- */
-export type DefinedValue<Ct extends Contract = Contract> =
-  | _DefinedValue<ContractPContext<Ct>, ContractContext<Ct>>
-  | 'events'
-  | 'events.type'
-  | 'events.payload';

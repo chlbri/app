@@ -10,20 +10,24 @@
     "generate:watch": "app-cli watch -c ./src",
     "pretest": "vp run generate:lib"
   },
+  "peerDependencies": {
+    "@bemedev/typings": "catalog:",
+    "@bemedev/app-plugins": "workspace:^"
+  },
   "devDependencies": {
     "@bemedev/app": "workspace:^",
     "@bemedev/app-cli": "workspace:^",
+    "@bemedev/app-bemedev-plugins": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
-    "@bemedev/decompose": "^2.3.0",
-    "@bemedev/dev-utils": "^1.6.2",
-    "@bemedev/rx-pausable": "^1.2.0",
-    "@bemedev/sequence": "^1.0.0",
-    "@bemedev/sleep": "^0.2.2",
-    "@bemedev/typings": "^1.5.0",
-    "@types/node": "^26.6.6",
-    "rxjs": "^7.8.2",
-    "tsx": "^4.23.15",
-    "typescript": "7.0.2",
+    "@bemedev/decompose": "catalog:",
+    "@bemedev/dev-utils": "catalog:",
+    "@bemedev/rx-pausable": "catalog:",
+    "@bemedev/sequence": "catalog:",
+    "@bemedev/sleep": "catalog:",
+    "@types/node": "catalog:",
+    "rxjs": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   }
 }

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vite-plus/test';
 import { createMachine } from '@bemedev/app';
 import { interpret } from '@bemedev/app';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 describe('TESTS', () => {
   const machine = createMachine(

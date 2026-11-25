@@ -77,13 +77,14 @@ jobs:
       # live in the workspace: packing follows the symlink and `packages/*/lib`
       # misses `packages/utils/bemedev` (used by @bemedev/app-options). Stage it
       # too or the published tarball would embed a `lib`-less copy of the
-      # bundled dep.
+      # bundled dep. `packages/plugins/*/lib` is outside the single-level glob
+      # as well, so stage it explicitly for the plugin packages.
       - name: Stage build output
         run: |
           set -euo pipefail
           rm -rf "$RUNNER_TEMP/artifact"
           mkdir -p "$RUNNER_TEMP/artifact"
-          cp -a --parents packages/*/lib packages/utils/*/lib "$RUNNER_TEMP/artifact"
+          cp -a --parents packages/*/lib packages/utils/*/lib packages/plugins/*/lib "$RUNNER_TEMP/artifact"
 
       - name: Upload workspace
         uses: actions/upload-artifact@v7
@@ -198,10 +199,35 @@ jobs:
       package: ./packages/options
       artifact: built-workspace
 
+  bemedev-plugins:
+    needs: [build]
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
+    secrets: inherit
+
+    with:
+      type:
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
+
+      package: ./packages/plugins/bemedev
+      artifact: built-workspace
+
   cleanup:
     name: Cleanup Artifacts
     runs-on: ubuntu-latest
-    needs: [build, app, vitest, solidjs, reactjs, cli, valibot, contract, options]
+    needs:
+      [
+        build,
+        app,
+        vitest,
+        solidjs,
+        reactjs,
+        cli,
+        valibot,
+        contract,
+        options,
+        bemedev-plugins,
+      ]
     if: always()
 
     permissions:

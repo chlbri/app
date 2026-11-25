@@ -8,6 +8,49 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.2.0] - 25/11/2026** => _04:14_
+
+</summary>
+
+### Breaking changes
+
+- **Plugins are utility maps**: a plugin is now the value returned by
+  `createUtilities`, so the `name`, `requires`, `override` and `create` fields are
+  gone. Plugins are applied in the order they are given, and a plugin can never
+  replace a default addon.
+- **Removed global registry**: `configureOptions`, `registerPlugins`, `useAll`,
+  `createUtility` and the `./function-swap` subpath are removed. Chain plugins with
+  `.use()` and build them with `createUtilities` from `@bemedev/app-plugins`.
+
+### Features
+
+- **Inline plugins**: `.use()` accepts a builder receiving the contract and the
+  utilities built so far, in addition to plugin maps.
+- **Contract-first types**: `OptionsPlugin`, `PluginAddons`, `Addons` and the utility
+  types come from `@bemedev/app-plugins` and derive from the contract.
+
+### Refactor
+
+- **Extracted engine**: the plugin runtime and the addon definitions move to
+  `@bemedev/app-plugins`; this package keeps the options builder and re-exports.
+- **Trimmed internals**: remove the embedded addons, `reduceFnMap`, environment and
+  event constant modules.
+
+### Dependencies
+
+- Add `@bemedev/app-plugins` and move `@bemedev/app-utils-bemedev`,
+  `@bemedev/typings` and `@bemedev/decompose` to peer dependencies.
+- Adopt the pnpm catalog for every dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.1.1] - 22/11/2026** => _00:59_
 
 </summary>

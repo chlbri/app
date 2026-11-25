@@ -1,13 +1,11 @@
-import { reduceTransitions } from './reduceTransitions';
-import {
-  toArray,
-  type ActivityConfig,
-  fromDescriber,
-  isDescriber,
-} from '@bemedev/app';
+import type { ActivityConfig } from '@bemedev/app-contract/internal';
+import { isDescriber } from '@bemedev/app-options/internal';
+import { toArray } from '@bemedev/app-utils-bemedev';
+import { fromDescriber } from '@bemedev/app/types';
 import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { tap } from '@bemedev/pipe/extensions/common';
+import { reduceTransitions } from './reduceTransitions';
 
 /**
  * Reduces activity configuration into sets of extracted actions, guards, and delays.

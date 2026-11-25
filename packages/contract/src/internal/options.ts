@@ -5,6 +5,7 @@
  * the sync flag are read from the contract carried as the first type parameter.
  */
 
+import type { StateValue } from '@bemedev/app-utils-bemedev';
 import type { RegisterOptions } from '../registry.types';
 import type {
   ContractContextOf,
@@ -22,7 +23,7 @@ import type { RecordS } from './primitives';
  * @template `T` - Source object type.
  * @template `K` - Key union of the merge target.
  */
-export type Merger<T, K extends string = string> = {
+export type Merger<T = any, K extends string = string> = {
   /** Optional source object containing values to merge. */
   source?: T;
   /** Dot-separated key path indicating which property to merge. */
@@ -85,14 +86,6 @@ export type WorkingStatus =
   | 'sending'
   | 'stopped'
   | 'busy';
-
-/** Nested state value map. */
-export interface StateValueMap {
-  [key: string]: StateValue;
-}
-
-/** Machine state value. */
-export type StateValue = string | StateValueMap;
 
 /**
  * Fields shared by every active state object.

@@ -8,32 +8,16 @@
  * utility maps.
  */
 
+import type { Contract, ContractOptions, ContractSync } from '@bemedev/app-contract';
 import type {
-  AsyncAction2,
-  Contract,
-  ContractOptions,
-  ContractSync,
-} from '@bemedev/app-contract';
-import type { ResolveUtilities, UtilityMode } from './utility';
-import { AsyncAddons, BaseAddons, SyncAddons } from './addons';
-import type { OptionsPlugin, PluginAddons } from './plugins';
-import type { LegacyOptions } from './utility/plugin';
+  ResolveUtilities,
+  UtilityMap,
+  UtilityMode,
+} from '@bemedev/app-plugins/types';
+import { Addons, AsyncAddons, SyncAddons } from './addons';
+import type { LegacyOptions, OptionsPlugin, PluginAddons } from './utility';
 
-export type { LegacyOptions } from './utility/plugin';
-
-/**
- * Extra options accepted by async action helpers.
- *
- * @template | {@linkcode Contract} `C` - Contract type.
- */
-export type AsyncOptions<C extends Contract = Contract> = {
-  /** Called with the thrown error when the async function rejects. */
-  catch: (err: any) => AsyncAction2<C>;
-  /** Optional action executed upon success. */
-  then?: AsyncAction2<C>;
-  /** Maximum duration in milliseconds before the action is aborted. */
-  max?: number;
-};
+export type { LegacyOptions } from './utility';
 
 /**
  * Helper surface injected into an options callback.
@@ -50,8 +34,36 @@ export type OptionsHelpers<
   M extends UtilityMode,
   Ps extends readonly OptionsPlugin<any, C>[] = [],
 > = [Ps[number]] extends [never]
-  ? ResolveUtilities<BaseAddons<C>, M>
-  : ResolveUtilities<BaseAddons<C>, M> & ResolveUtilities<PluginAddons<Ps>, M>;
+  ? ResolveUtilities<Addons<C>, M>
+  : ResolveUtilities<Addons<C>, M> & ResolveUtilities<PluginAddons<Ps>, M>;
+
+/**
+ * Utilities available to an inline `use` builder: every default helper plus
+ * the utilities added by the plugins already applied to the callable.
+ *
+ * @template | {@linkcode Contract} `C` - Contract type.
+ * @template `Ps` - Plugins already applied.
+ */
+export type UseHelpers<
+  C extends Contract,
+  Ps extends readonly OptionsPlugin<any, C>[] = [],
+> = Addons<C> & PluginAddons<Ps>;
+
+/**
+ * Inline builder accepted by the function form of `use`.
+ *
+ * It receives the contract and the descriptor map built so far, and returns
+ * the utilities to add.
+ *
+ * @template | {@linkcode Contract} `C` - Contract type.
+ * @template `Ps` - Plugins already applied when the builder runs.
+ * @template | {@linkcode UtilityMap} `R` - Utilities added by the builder.
+ */
+export type UseBuilder<
+  C extends Contract,
+  Ps extends readonly OptionsPlugin<any, C>[] = [],
+  R extends UtilityMap = UtilityMap,
+> = (args: { contract: C; utilities: UseHelpers<C, Ps> }) => R;
 
 /**
  * Synchronous helper surface of a contract.
@@ -105,6 +117,17 @@ export type CreateOptionsWith<
   <const O extends ContractOptions<C>>(helper: OptionsHelper<C, O, Ps>): O;
 
   /**
+   * Applies utilities built from the contract and the utilities already
+   * available.
+   *
+   * @param builder - Receives `{ contract, utilities }` and returns the
+   * utilities to add.
+   */
+  use<const R extends OptionsPlugin<any, C>>(
+    builder: UseBuilder<C, Ps, R>,
+  ): CreateOptionsWith<C, [...Ps, R]>;
+
+  /**
    * Applies one or more plugins to this callable.
    *
    * @param plugins - Plugins to apply.
@@ -113,32 +136,3 @@ export type CreateOptionsWith<
     ...plugins: Qs
   ): CreateOptionsWith<C, [...Ps, ...Qs]>;
 };
-
-/**
- * Curried `createOptions` signature.
- *
- * The returned function accepts an options callback and produces the machine
- * options object, typed with the contract option surface. Plugins can be
- * passed once or chained with `use`.
- *
- * @example
- * ```ts
- * const options = createOptions(contract)(({ assign }) => ({
- *   actions: { increment: assign('context.count', ({ context }) => context.count + 1) },
- * }));
- * ```
- *
- * @example
- * ```ts
- * const options = createOptions(contract, retryPlugin)(({ retry }) => ({
- *   actions: { load: retry(3, fetchAction) },
- * }));
- * ```
- */
-export type CreateOptions_F = <
-  const C extends Contract,
-  const Ps extends readonly OptionsPlugin<any, C>[] = [],
->(
-  contract: C,
-  ...plugins: Ps
-) => CreateOptionsWith<C, Ps>;

@@ -1,10 +1,7 @@
-import type {
-  AddSubscriber_F,
-  Contract,
-  MachineStateOf,
-  StateValue,
-} from '@bemedev/app';
+import type { Contract, State } from '@bemedev/app-contract';
+import type { StateValue } from '@bemedev/app-utils-bemedev';
 import { expandFn } from '@bemedev/app/bemedev';
+import type { AddSubscriber_F } from '@bemedev/app/types';
 import { decomposeSV, deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';
 
@@ -25,7 +22,7 @@ import { useSync } from '@bemedev/react-sync';
  */
 export function useIsInside<const Ct extends Contract = Contract>(service: {
   subscribe: AddSubscriber_F<Ct>;
-  state: MachineStateOf<Ct>;
+  state: State<Ct>;
 }) {
   const selector1 = (value: StateValue) => {
     return decomposeSV(value);

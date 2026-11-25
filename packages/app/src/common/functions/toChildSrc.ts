@@ -1,6 +1,6 @@
 import type { ChildrenMap, CommonChildFunction2 } from '#common/machine';
-import { reduceFnMap } from '@bemedev/app-options/internal';
-import type { Contract } from '@bemedev/app-options';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
+import type { Contract } from '@bemedev/app-contract';
 
 /**
  * Function signature for converting child identifier into child machine function.

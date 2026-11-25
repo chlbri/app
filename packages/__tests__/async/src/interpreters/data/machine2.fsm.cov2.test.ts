@@ -1,6 +1,6 @@
 import { constructTests } from '@bemedev/app-vitest';
 import { interpret } from '@bemedev/app';
-import { nothing } from '@bemedev/app-options/internal';
+import { nothing } from '@bemedev/app-plugins/internal';
 import { tupleOf } from '@bemedev/app/bemedev';
 import equal from 'fast-deep-equal';
 import { DELAY } from './constants';

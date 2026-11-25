@@ -58,10 +58,6 @@
     },
     "./types": {
       "types": "./lib/types.types.d.ts"
-    },
-    "./helpers": {
-      "import": "./lib/helpers.js",
-      "types": "./lib/helpers.d.ts"
     }
   },
   "publishConfig": {
@@ -77,18 +73,21 @@
     "test:only": "vp run test",
     "test:watch": "vp test"
   },
+  "peerDependencies": {
+    "@bemedev/app-utils-bemedev": "workspace:^"
+  },
   "devDependencies": {
-    "@bemedev/dev-utils": "^1.6.2",
-    "@bemedev/typings": "^1.5.0",
-    "@size-limit/file": "^14.3.0",
-    "@types/node": "^26.6.6",
+    "@bemedev/app-utils-bemedev": "workspace:^",
+    "@bemedev/dev-utils": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "pretty-quick": "^4.2.2",
-    "rimraf": "^6.1.4",
-    "size-limit": "^14.3.0",
-    "tslib": "^2.9.1",
-    "tsx": "^4.23.15",
-    "typescript": "7.0.2",
+    "pretty-quick": "catalog:",
+    "rimraf": "catalog:",
+    "size-limit": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
   "engines": {

@@ -1,4 +1,5 @@
-import { isDescriber, type Describer } from '~types';
+import { isDescriber } from '@bemedev/app-options/internal';
+import type { Describer } from '@bemedev/app-contract';
 
 /**
  * Signature for function that reduces a string or type {@linkcode Describer} to a string state name.

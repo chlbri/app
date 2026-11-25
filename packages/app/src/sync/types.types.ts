@@ -3,11 +3,19 @@ import type { ActorConfig } from '#actor';
 import type { NoExtraKeysTargetDef } from '#common/machine';
 import type { AsyncEmitterFunction } from '#emitters';
 import type { AsyncPredicate } from '#guards';
+import { Identify } from '~types';
 
-import type { BaseConfig, StateType, TargetDef } from '#states';
-import type { AlwaysConfig, DelayedTransitions } from '#transitions';
-import type { Contract } from '@bemedev/app-options';
-import type { FnMap, FnR, Identify, RecordS } from '~types';
+import type {
+  AlwaysConfig,
+  BaseConfig,
+  Contract,
+  DelayedTransitions,
+  FnMap,
+  FnR,
+  RecordS,
+  StateType,
+  TargetDef,
+} from '@bemedev/app-contract';
 
 /**
  * Transitions configuration container for synchronous state machines.

@@ -5,6 +5,36 @@
 <details>
 <summary>
 
+## **[3.2.0] - 25/11/2026** => _04:14_
+
+</summary>
+
+### Breaking changes
+
+- **Test fixtures removed**: the `createValibotTests` helper and `src/fixtures.ts`
+  are gone; build test suites directly with `@bemedev/dev-utils`.
+
+### Refactor
+
+- **Contract types**: read node, activity, transition, guard and actor types from
+  `@bemedev/app-contract/internal`, primitive types from `@bemedev/typings`, and
+  `SoRa` from `@bemedev/app-utils-bemedev`.
+
+### Dependencies
+
+- Move `@bemedev/typings` to peer dependencies and declare `@bemedev/app-contract`
+  and `@bemedev/app-utils-bemedev` as peers instead of `@bemedev/app`.
+- Adopt the pnpm catalog for every dependency.
+
+- <u>Test coverage **_100%_**</u>
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.0.3] - 17/11/2026** => _13:00_
 
 </summary>

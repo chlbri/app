@@ -1,9 +1,10 @@
 import { DEFAULT_DELIMITER } from '#constants';
 import { deleteFirst, isStringEmpty, recomposeSV, replaceAll } from '#utils';
-import { _any, isDefined, trueO } from '@bemedev/app-options/bemedev';
-import { decompose, decomposeKeys, recompose } from '@bemedev/decompose';
-import { isString } from '~types';
-import type { StateValue } from '../types';
+import { isString } from '@bemedev/app-options/internal';
+import type { StateValue } from '@bemedev/app-utils-bemedev';
+import { _any, isDefined, trueO } from '@bemedev/app-utils-bemedev';
+
+import { decompose, decomposeKeys, recompose } from '@bemedev/app-options/decompose';
 
 /**
  * Function signature for calculating next state value.

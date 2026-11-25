@@ -1,5 +1,5 @@
-import type { Fn } from '@bemedev/app-options/bemedev';
-import type { NodeConfig2, StateType } from '../types';
+import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { NodeConfig2, StateType } from '@bemedev/app-contract';
 
 /**
  * Function signature for determining state category type.

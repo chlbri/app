@@ -1,4 +1,4 @@
-import { type NodeConfig2 } from '@bemedev/app/states';
+import { type NodeConfig2 } from '@bemedev/app-contract/internal';
 import * as v from 'valibot';
 import { Config_Schema } from './schema';
 import { createBetterSet } from '@bemedev/better-set';

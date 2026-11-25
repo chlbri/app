@@ -1,5 +1,5 @@
 import { DEFAULT_DELIMITER } from '#constants';
-import type { NodeConfig2 } from '../types';
+import type { NodeConfig2 } from '@bemedev/app-contract';
 
 /**
  * Function signature for URL shape recomposition.

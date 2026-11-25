@@ -6,7 +6,7 @@ import {
 import { constructTests } from '@bemedev/app-vitest';
 import { DELAY, fakeDB, machine21, machine3 } from './data';
 import type { StateValue } from '@bemedev/app/states';
-import { nothing } from '@bemedev/app-options/internal';
+import { nothing } from '@bemedev/app-plugins/internal';
 import { _any, _unknown, tupleOf } from '@bemedev/app/bemedev';
 
 import type { AnyInterpreter } from '@bemedev/app/types';

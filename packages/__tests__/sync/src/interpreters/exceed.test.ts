@@ -6,7 +6,7 @@ import {
 import { createMachine } from '@bemedev/app';
 import { interpret } from '@bemedev/app';
 import { constructTests } from '@bemedev/app-vitest';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 beforeAll(() => {
   vi.useFakeTimers();

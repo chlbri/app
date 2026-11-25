@@ -1,4 +1,5 @@
-import type { AddSubscriber_F, Contract, MachineStateOf } from '@bemedev/app';
+import type { AddSubscriber_F } from '@bemedev/app/types';
+import type { Contract, State } from '@bemedev/app-contract';
 import { deepEqual, identity } from '@bemedev/app/utils';
 import { createSignal, onCleanup } from 'solid-js';
 import type { CreateStateOptions } from './types';
@@ -23,11 +24,8 @@ import type { CreateStateOptions } from './types';
  *
  * @see {@linkcode createSignal}, {@linkcode onCleanup}, {@linkcode deepEqual}, {@linkcode identity}
  */
-export function createState<
-  const Ct extends Contract = Contract,
-  T = MachineStateOf<Ct>,
->(
-  service: { subscribe: AddSubscriber_F<Ct>; state: MachineStateOf<Ct> },
+export function createState<const Ct extends Contract = Contract, T = State<Ct>>(
+  service: { subscribe: AddSubscriber_F<Ct>; state: State<Ct> },
   options?: CreateStateOptions<Ct, T>,
 ) {
   const {

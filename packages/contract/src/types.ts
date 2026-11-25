@@ -1,3 +1,4 @@
+import { PrimitiveObject, StandardOutput } from '@bemedev/typings/types';
 import type {
   ActorsConfigMap,
   AnyMachineOptions,
@@ -5,9 +6,9 @@ import type {
   EventArgAll,
   EventObject,
   EventsMap,
-  PrimitiveObject,
-  StandardOutput,
 } from './internal';
+
+export * from './registry.types';
 
 /**
  * Joins a parent state path with a child state key.

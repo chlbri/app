@@ -1,4 +1,4 @@
-import { defineConfig, defaultExclude } from 'vite-plus';
+import { defaultExclude, defineConfig } from 'vite-plus';
 
 export default defineConfig({
   fmt: {
@@ -39,6 +39,9 @@ export default defineConfig({
       '**/*.test-d.ts',
       '**/libs/bemedev/*',
       '.agents/**',
+      '**/*.mjs',
+      '**/*.js',
+      '**/*.cjs',
     ],
 
     options: { typeAware: true, typeCheck: true },
@@ -179,7 +182,13 @@ export default defineConfig({
         command: 'size-limit --silent',
 
         cache: {
-          input: ['.size-limit.ts', 'packages/*/lib/**', 'packages/utils/*/lib/**'],
+          input: [
+            '.size-limit.ts',
+            'packages/*/lib/**',
+            'packages/utils/*/lib/**',
+            '!**/.DS_Store',
+            'packages/plugins/*/lib/**',
+          ],
           output: [],
         },
       },
@@ -192,7 +201,7 @@ export default defineConfig({
             'vite.config.ts',
             'packages/**/src/**',
             'apps/*/src/**',
-
+            '!**/.DS_Store',
             '!**/*.gen.ts',
           ],
 
@@ -250,6 +259,7 @@ export default defineConfig({
       'packages/contract/vite.config.ts',
       'packages/interval3/vite.config.ts',
       'packages/options/vite.config.ts',
+      'packages/plugins/bemedev/vite.config.ts',
       'apps/reactjs/vite.config.ts',
       'apps/solidjs/vite.config.ts',
     ],

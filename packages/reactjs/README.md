@@ -37,19 +37,28 @@ const service = interpret(myMachine, { context: { count: 0 } });
 service.start();
 
 function MyComponent() {
+  // `useService` returns the `state`, `can` and `isInside` helpers.
+  const hooks = useService(service);
+
   // 1. Select a specific slice of context
-  const count = useService(service, { selector: s => s.context.count });
+  const count = hooks.state({ selector: s => s.context.count });
 
   // 2. Or track the active state value
-  const stateValue = useService(service, { selector: s => s.value });
+  const stateValue = hooks.state({ selector: s => s.value });
 
   // 3. Or track the whole state object
-  const state = useService(service);
+  const state = hooks.state();
+
+  // 4. Reactive event and state hierarchy queries
+  const canStart = hooks.can('START');
+  const isInsideIdle = hooks.isInside('idle');
 
   return (
     <div>
       <p>Count: {count}</p>
       <p>State: {JSON.stringify(stateValue)}</p>
+      <p>Can start: {String(canStart)}</p>
+      <p>Inside idle: {String(isInsideIdle)}</p>
     </div>
   );
 }
@@ -59,34 +68,46 @@ function MyComponent() {
 
 ## Available Hooks
 
-The package also exports `useState`, `useCan`, and `useIsInside` for common state
-selection patterns:
+The package also exports `useState`, `useCan`, and `useIsInside`. They accept the
+same service object as `useService`:
 
 ```typescript
-const count = useState(service, state => state.context.count);
-const canIncrement = useCan(service, 'INCREMENT');
-const isInside = useIsInside(service, 'some.state');
+import { useCan, useIsInside, useState } from '@bemedev/app-reactjs';
+
+const count = useState(service, { selector: state => state.context.count });
+const canIncrement = useCan(service)('INCREMENT');
+const isInside = useIsInside(service)('some.state');
 ```
 
-These helpers are designed to work with the same interpreter service and provide a
-lightweight way to subscribe to state slices, transition permissions, and nested
-state location checks.
+`useCan` and `useIsInside` return a callable helper exposing `.or` and `.and`:
+
+```typescript
+const canLoad = useCan(service).or('FETCH', 'RETRY');
+const insideLoading = useIsInside(service).and('authenticated', 'loading');
+```
 
 <br/>
 
 ## API Reference
 
-### `useService(service, options?)`
+### `useService(service)`
 
-Creates a React state hook that updates whenever the interpreter transitions, using
-deep comparison to prevent unnecessary renders.
+Creates the service helpers that re-render whenever the interpreter transitions,
+using deep comparison to prevent unnecessary renders.
 
-| Parameter | Type              | Description                                                                                                                |
-| --------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `service` | `Interpreter`     | The `@bemedev/app` interpreter service instance.                                                                           |
-| `options` | `UseStateOptions` | Optional object containing `selector`, `equals`, and/or `stateEquals` custom `equality` comparator functions (`Dequal_F`). |
+| Property   | Type                               | Description                                                              |
+| ---------- | ---------------------------------- | ------------------------------------------------------------------------ |
+| `state`    | `(options?: UseStateOptions) => T` | Selects machine state or a context slice.                                |
+| `can`      | `(...events: string[]) => boolean` | Checks whether the given event(s) can be accepted (`can.or`, `can.and`). |
+| `isInside` | `(...states: string[]) => boolean` | Checks whether the machine is inside the given state hierarchies.        |
 
-Returns the selected state or slice.
+### `UseStateOptions`
+
+| Option        | Type                  | Description                                                                                                   |
+| ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `selector`    | `(state: State) => T` | Optional selector function projecting machine state into a sub-state slice.                                   |
+| `equals`      | `Dequal_F<T>`         | Optional equality comparator function comparing previous and next selected state (defaults to `deepEqual`).   |
+| `stateEquals` | `Dequal_F<State>`     | Optional equality comparator function comparing raw machine state before selection (defaults to `deepEqual`). |
 
 <br/>
 

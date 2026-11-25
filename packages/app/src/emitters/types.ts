@@ -1,7 +1,10 @@
+import { AsyncTransition } from '#transitions';
+import type {
+  ActorsConfigMap,
+  AsyncEmitterFunction,
+  Contract,
+} from '@bemedev/app-contract';
 import type { NotUndefined } from '@bemedev/app-options/bemedev';
-import type { ActorsConfigMap } from '#events';
-import type { AsyncTransition } from '#transitions';
-import type { AsyncEmitterFunction, Contract } from '@bemedev/app-options';
 
 export type {
   AsyncEmitterFunction,
@@ -12,7 +15,7 @@ export type {
   Pausable,
   SyncEmitterFunction,
   SyncEmittersMap,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Object holding an unsubscribe cleanup method.

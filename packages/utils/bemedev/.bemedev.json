@@ -5,7 +5,6 @@
     "features/arrays/types",
     "features/common/types",
     "features/functions/types",
-    "features/objects/types",
     "globals/types",
     "features/arrays/castings/toArray",
     "features/arrays/castings/tuple/index",
@@ -28,6 +27,13 @@
     "features/objects/typings/keysOf",
     "globals/utils/is/primitive",
     "features/numbers/typings/index",
-    "features/strings/typings/index"
+    "features/strings/typings/index",
+    "features/objects/types",
+    "features/strings/types",
+    "features/strings/constants",
+    "features/functions/castings/is/all",
+    "features/functions/castings/is/index",
+    "features/functions/castings/is/strict",
+    "globals/utils/identity"
   ]
 }

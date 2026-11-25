@@ -1,22 +1,11 @@
 import { createMachine } from '@bemedev/app';
-import { type, type inferO, type Keys } from '@bemedev/typings';
-import {
-  any,
-  array,
-  custom,
-  litterals,
-  optional,
-  partial,
-  record,
-  union,
-} from '@bemedev/typings/helpers';
+import { type, type inferO, type Keys } from '@bemedev/app-contract/typings';
+import { helpers } from '@bemedev/app-contract/typings';
+
+const { any, array, custom, litterals, optional, partial, record, union } = helpers;
 
 const state = litterals('registration', 'registered', 'idle');
-// type State = 'registration' | 'registered' | 'idle';
-
 const csvData = record(union('string', 'number'));
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const deep = union('string', 'number', array(union('string', 'number')));
 
 type CSVDataDeep = inferO<typeof deep> | CsvDataMap;

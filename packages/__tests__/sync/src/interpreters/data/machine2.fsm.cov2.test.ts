@@ -2,7 +2,7 @@ import { tupleOf } from '@bemedev/app/bemedev';
 import {} from '.';
 import { constructTests } from '@bemedev/app-vitest';
 import { deepEqual, interpret } from '@bemedev/app';
-import { nothing } from '@bemedev/app-options/internal';
+import { nothing } from '@bemedev/app-plugins/internal';
 import { _machine2 } from './machine2.fsm';
 import { fakeDB } from './fakeDB';
 import { DELAY } from './constants';

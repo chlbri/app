@@ -1,4 +1,4 @@
-import type { FinallyConfig } from '@bemedev/app/types';
+import type { FinallyConfig } from '@bemedev/app-contract/internal';
 import * as v from 'valibot';
 import { ActionConfig_Schema } from '../actions';
 import { GuardConfig_Schema } from '../guards';

@@ -1,4 +1,4 @@
-import type { inferO } from '@bemedev/typings';
+import type { inferO } from '@bemedev/app-contract/typings';
 import { asset, intermediary } from './machine1.machine.typings';
 
 export const ASSET_1: inferO<typeof asset> = {

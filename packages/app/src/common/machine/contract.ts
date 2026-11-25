@@ -9,8 +9,8 @@ import type {
   ContractPContext,
   ContractPaths,
   ContractTags,
-} from '@bemedev/app-options';
-import type { State } from '#states';
+  State,
+} from '@bemedev/app-contract';
 
 /**
  * Contract-derived machine types.

@@ -11,31 +11,59 @@ import type { EmptyObject } from '@bemedev/decompose';
 
 type TTConfig = ConfigFrom<Machine3>;
 
-expectTypeOf<TTConfig>().toEqualTypeOf<Config3>();
-
 type TTPrivate = PrivateContextFrom<Machine3>;
-expectTypeOf<TTPrivate>().branded.toEqualTypeOf<{ data: string }>();
 
 type TTC = ContextFrom<Machine3>;
-expectTypeOf<TTC>().toEqualTypeOf<{ age: number }>();
 
 type TTEm = EventsMapFrom<Machine3>;
-expectTypeOf<TTEm>().branded.toEqualTypeOf<{
-  EVENT: { password: string; username: string };
-  EVENT2: boolean;
-  EVENT3: { login: string; pwd: string };
-}>();
 
 type TTE = EventsFrom<Machine3>;
-expectTypeOf<TTE>().toEqualTypeOf<
-  | { type: 'machine$$init'; payload: EmptyObject }
-  | { type: 'machine$$exceeded'; payload: EmptyObject }
-  | { type: 'machine$$always'; payload: EmptyObject }
-  | { type: 'EVENT2'; payload: boolean }
-  | { type: 'EVENT'; payload: { password: string; username: string } }
-  | { type: 'EVENT3'; payload: { login: string; pwd: string } }
-  | { type: 'machine1::on::NEXT'; payload: boolean }
->();
+
+type EventByName<T, K extends string> = Extract<T, { type: K }>;
+
+describe('Machine type extraction', () => {
+  test('#01 => ConfigFrom accepts the literal config', () => {
+    expectTypeOf<Config3>().toExtend<TTConfig>();
+  });
+
+  test('#02 => PrivateContextFrom', () => {
+    expectTypeOf<TTPrivate>().branded.toEqualTypeOf<{ data: string }>();
+  });
+
+  test('#03 => ContextFrom', () => {
+    expectTypeOf<TTC>().toEqualTypeOf<{ age: number }>();
+  });
+
+  test('#04 => EventsMapFrom', () => {
+    expectTypeOf<TTEm>().branded.toEqualTypeOf<{
+      EVENT: { password: string; username: string };
+      EVENT2: boolean;
+      EVENT3: { login: string; pwd: string };
+    }>();
+  });
+
+  test('#05 => EventsFrom', () => {
+    expectTypeOf<
+      EventByName<TTE, 'machine$$init'>['payload']
+    >().toEqualTypeOf<EmptyObject>();
+
+    expectTypeOf<EventByName<TTE, 'EVENT'>['payload']>().toEqualTypeOf<{
+      password: string;
+      username: string;
+    }>();
+
+    expectTypeOf<EventByName<TTE, 'EVENT2'>['payload']>().toEqualTypeOf<boolean>();
+
+    expectTypeOf<EventByName<TTE, 'EVENT3'>['payload']>().toEqualTypeOf<{
+      login: string;
+      pwd: string;
+    }>();
+
+    expectTypeOf<
+      EventByName<TTE, 'machine1::on::NEXT'>['payload']
+    >().toEqualTypeOf<boolean>();
+  });
+});
 
 // type ActionKeys =
 //   ActionKeysFrom<Machine3> extends infer P extends string

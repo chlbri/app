@@ -1,4 +1,5 @@
-import type { WithDescriber } from '#actions';
+import type { NoExtraKeys } from '@bemedev/app-utils-bemedev';
+
 import type {
   NoExtraKeysTransitionConfig,
   NoExtraKeysTransitionConfigSoA,
@@ -11,9 +12,9 @@ import type {
   EmitterConfig,
   FinallyConfig,
   FinallyConfigArray,
-} from '@bemedev/app-options';
-import type { NoExtraKeys } from '@bemedev/app-options/bemedev';
-import type { Describer } from '~types';
+  WithDescriber,
+  Describer,
+} from '@bemedev/app-contract';
 
 export type {
   _FinallyConfig,
@@ -23,7 +24,7 @@ export type {
   EmitterConfig,
   FinallyConfig,
   FinallyConfigArray,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Internal utility type to enforce no extra keys on finally transition configuration objects.

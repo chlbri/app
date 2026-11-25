@@ -1,24 +1,25 @@
-import type { Equals, Fn } from '@bemedev/app/bemedev';
+import type { OptionsPlugin } from '@bemedev/app-options';
+import { MachineType, SimpleMachineOptions2 } from '@bemedev/app-plugins';
+import type { Equals, Fn, StateValue } from '@bemedev/app-utils-bemedev';
+import type { ProcessEventMap } from 'process';
+
 import type {
   Contract,
   ContractContext,
   ContractEvents,
   ContractPContext,
   ContractTags,
-} from '@bemedev/app/contract';
+  EventArgObject,
+  EventObject,
+} from '@bemedev/app-contract';
+
 import type {
   AsyncInterpreter,
   EmptyObject,
-  EventArgObject,
-  EventObject,
   ExtractSender,
-  MachineType,
-  PrimitiveObject,
-  SimpleMachineOptions2,
-  StateValue,
   SyncInterpreter,
 } from '@bemedev/app/types';
-import type { ProcessEventMap } from 'process';
+import { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Tuple representing a test description and its corresponding execution callback.
@@ -111,17 +112,21 @@ type ConstructContexts_F<Pc = any, Tc extends PrimitiveObject = PrimitiveObject>
  * @template | {@linkcode Contract} `Ct` - Contract of the tested machine.
  * @template | {@linkcode SimpleMachineOptions2} `L` - Accumulated options.
  * @template | {@linkcode MachineType} `Type` - Machine type ('sync' or 'async').
+ * @template `Ps` - Plugins attached to the tested service.
  */
 export type Option<
   Ct extends Contract = Contract,
   L extends SimpleMachineOptions2 = SimpleMachineOptions2,
   Type extends MachineType = 'async',
+  Ps extends readonly OptionsPlugin<any, any>[] = [],
 > = {
   waiter: ConstructWaiter_F;
   contexts: ConstructContexts_F<ContractPContext<Ct>, ContractContext<Ct>>;
   getIndex: (_index?: number) => string;
   tupleOf: OptionTupleOf;
-  service: Type extends 'async' ? AsyncInterpreter<Ct, L> : SyncInterpreter<Ct, L>;
+  service: Type extends 'async'
+    ? AsyncInterpreter<Ct, L, Ps>
+    : SyncInterpreter<Ct, L, Ps>;
 
   sender: <const T extends ContractEvents<Ct>['type']>(
     type: T,

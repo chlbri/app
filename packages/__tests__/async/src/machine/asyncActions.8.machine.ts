@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 export const asyncActionsTypings8 = {
   eventsMap: type({ TEST: 'never', TEST2: 'never' }),

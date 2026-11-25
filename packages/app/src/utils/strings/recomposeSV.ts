@@ -1,6 +1,6 @@
-import type { Fn } from '@bemedev/app-options/bemedev';
 import { DEFAULT_DELIMITER } from '#constants';
-import type { StateValue } from '#states';
+import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { StateValue } from '@bemedev/typings';
 
 /**
  * Function type signature for recomposing a string into a type {@linkcode StateValue}.

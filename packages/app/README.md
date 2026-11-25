@@ -492,35 +492,23 @@ const enrichedService = service.provideOptions(({ action }) => ({
 
 ### Plugins and standalone utilities
 
-`@bemedev/app` re-exports the plugin registry and the contract-aware utility builder
-from `@bemedev/app-options`. Register a plugin once, then every machine and
-interpreter surface can use the helper it contributes:
+`@bemedev/app` re-exports the plugin factory and the utility types from
+`@bemedev/app-plugins`. A plugin is the lazy map returned by `createUtilities`;
+attach it to a machine or to `createOptions` to expose the helpers it contributes:
 
 ```typescript
-import {
-  configureOptions,
-  createContract,
-  createUtility,
-  same,
-  type UtilityPlugin,
-} from '@bemedev/app';
+import { createUtilities, same } from '@bemedev/app';
 
-export const retryPlugin = {
-  name: 'retry',
-  create: () => ({ retry: same((action: () => unknown) => action) }),
-} satisfies UtilityPlugin;
-
-configureOptions(retryPlugin);
-
-const contract = createContract(config, types);
-const utilities = createUtility({ contract }).build();
-const sync = utilities.resolve('sync');
+export const retryPlugin = createUtilities({}, () => ({
+  retry: same((action: () => unknown) => action),
+}));
 ```
 
-Per-call plugins win over registered ones with the same name:
-`createUtility({ contract }, retryPlugin)` or `createOptions(contract, retryPlugin)`.
-See the [`@bemedev/app-options`](../options) README for the plugin contract,
-`requires` ordering and `override` semantics.
+Attach it at the machine level with `plugins`, or at the options level with
+`createOptions(contract).use(retryPlugin)`. Plugins are applied in the order they are
+given, and a plugin can never replace a default helper such as `assign`. See the
+[`@bemedev/app-options`](../options) README for the plugin contract and the
+precedence rules.
 
 <br/>
 
@@ -578,7 +566,7 @@ All helpers are injected as parameters of the options helper callback:
 ```typescript
 // Create strongly-typed options for Sync or Async machines
 const options = machine.createOptions(({
-  assign, swap, action, batch, filter, erase,
+  assign, action, batch, filter, erase,
   sendTo, resend, forceSend,
   pauseActivity, resumeActivity, stopActivity,
   isValue, isNotValue, isDefined, isNotDefined,
@@ -640,13 +628,28 @@ The path follows `@bemedev/decompose` conventions: `'context'`, `'context.field'
 
 ### 5.2 swap
 
-Remaps and adapts standard functions into machine options using parameter
-decomposition powered by `@bemedev/function-swap`.
+`swap` is no longer a default helper. It is provided by the
+[`@bemedev/app-bemedev-plugins`](../plugins/bemedev) package as an options plugin, so
+it has to be opted in:
 
-`swap` converts any standard function `fn` into a machine selector function (`FnR`),
-remapping parameter positions from state, context, or event payload paths. Because it
-returns a standard machine selector, **`swap` can be used across actions, `assign`,
-`guards`, `delays`, and standalone options.**
+```typescript
+import { plugin as swapPlugin } from '@bemedev/app-bemedev-plugins';
+
+// With createOptions
+const options = createOptions(contract).use(swapPlugin)(({ swap }) => ({ ... }));
+
+// With a machine
+const machine = createMachine(config, { plugins: [swapPlugin] }).provideOptions(
+  ({ swap }) => ({ ... }),
+);
+```
+
+`swap` remaps and adapts standard functions into machine options using parameter
+decomposition powered by `@bemedev/function-swap`. It converts any standard function
+`fn` into a machine selector function (`FnR`), remapping parameter positions from
+state, context, or event payload paths. Because it returns a standard machine
+selector, **`swap` can be used across actions, `assign`, `guards`, `delays`, and
+standalone options.**
 
 ```typescript
 // 1. Inside assign (remap event payload into context assignment)
@@ -975,13 +978,14 @@ machine.createOptions(({ isValue, isNotValue, isDefined, isNotDefined }) => ({
 ### 6.2 Custom & Async Predicates
 
 ```typescript
-machine.provideOptions(({ isValue, swap }) => ({
+machine.provideOptions(({ isValue }) => ({
   guards: {
     // Synchronous custom predicate
     isAuthenticated: ({ context }) =>
       context.token !== undefined && !isExpired(context.token),
 
-    // Remapped predicate with swap
+    // Remapped predicate with swap (imported from @bemedev/app-bemedev-plugins,
+    // or injected through its plugin)
     isAdult: swap((age: number) => age >= 18)({ '[0]': '[0].context.user.age' }),
 
     // Predicate with event payload
@@ -1124,7 +1128,8 @@ const machine = createMachine(
 ```
 
 ```typescript
-// Dynamic: function of current state (or remapped with swap)
+// Dynamic: function of current state (or remapped with swap from
+// @bemedev/app-bemedev-plugins)
 delays: {
   RETRY_DELAY: ({ context }) => context.retryCount * 1000,
   SWAPPED_DELAY: swap((count: number, ms: number) => count * ms)({

@@ -5,13 +5,16 @@
  * without importing `@bemedev/app`.
  */
 
-import type {
-  EmptyObject,
-  Equals,
-  NotUndefined,
-  PrimitiveObject,
-  Unionize,
-} from './primitives';
+import type { PrimitiveObject } from '@bemedev/typings';
+import { NotUndefined, Unionize, Equals } from '@bemedev/app-utils-bemedev';
+
+/**
+ * Empty event payload.
+ *
+ * `Record<never, never>` is required: `Record<string, never>` adds a string
+ * index signature, which changes event payload equality checks.
+ */
+type EmptyObject = Record<never, never>;
 
 /** Type of the initial machine event. */
 export type InitEvent = 'machine$$init';
@@ -28,7 +31,7 @@ export type EventStrings = InitEvent | AlwaysEvent | AfterEvent;
 /**
  * Map of event names to their payloads.
  */
-export type EventsMap = Record<string, PrimitiveObject>;
+export type EventsMap = Record<string, PrimitiveObject | never>;
 
 /**
  * Typed event object.

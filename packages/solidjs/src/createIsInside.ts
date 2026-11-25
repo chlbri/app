@@ -1,11 +1,9 @@
-import type {
-  AddSubscriber_F,
-  Contract,
-  MachineStateOf,
-  StateValue,
-} from '@bemedev/app';
-import { expandFn } from '@bemedev/app/bemedev';
-import { decomposeSV, deepEqual } from '@bemedev/app/utils';
+import type { Contract, State } from '@bemedev/app-contract';
+import type { StateValue } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-utils-bemedev';
+import type { AddSubscriber_F } from '@bemedev/app/types';
+import { deepEqual } from '@bemedev/app/utils';
+import { decomposeSV } from '@bemedev/decompose';
 import { createSignal, onCleanup } from 'solid-js';
 
 /**
@@ -25,7 +23,7 @@ import { createSignal, onCleanup } from 'solid-js';
  */
 export function createIsInside<const Ct extends Contract = Contract>(service: {
   subscribe: AddSubscriber_F<Ct>;
-  state: MachineStateOf<Ct>;
+  state: State<Ct>;
 }) {
   const selector1 = (value: StateValue) => {
     return decomposeSV(value);

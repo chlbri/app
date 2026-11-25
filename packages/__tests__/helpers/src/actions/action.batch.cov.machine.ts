@@ -1,5 +1,6 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/typings';
+import { plugin } from '@bemedev/app-bemedev-plugins';
+import { type } from '@bemedev/app-contract/typings';
 
 export default createMachine(
   'src/__tests__/actions/action.batch.cov.machine',
@@ -15,5 +16,5 @@ export default createMachine(
       },
     },
   },
-  { context: type('number') },
+  { context: type('number'), plugins: [plugin] },
 );

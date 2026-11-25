@@ -1,5 +1,5 @@
 import { createContract } from '@bemedev/app-contract';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 /**
  * Sync filters machine.
@@ -20,7 +20,7 @@ export default createContract(
     },
   },
   {
-    context: type(({ array }) => ({ scores: array('number') })),
+    context: type(({ array, optional }) => ({ scores: optional(array('number')) })),
     eventsMap: type({ FILTER: 'never', ERASE: 'never' }),
     sync: true,
   },

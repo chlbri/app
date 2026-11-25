@@ -6,15 +6,8 @@
  * machine runtime.
  */
 
+import type { Merger } from '@bemedev/app-contract';
 import { expandFn } from '@bemedev/app-utils-bemedev';
-
-/** Source object and key path to merge. */
-export type Merger<T = any, K extends string = string> = {
-  /** Optional source object containing values to merge. */
-  source?: T;
-  /** Dot-separated key path indicating which property to merge. */
-  key?: K;
-};
 
 /** Properties accepted by {@linkcode merge2}. */
 export type MergeProps2<T = any, K extends string = string> = {

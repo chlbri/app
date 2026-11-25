@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import { typings } from '@bemedev/app/utils';
+import { type } from '@bemedev/app-contract/typings';
 
 export const WAITERS = { short: 200, medium: 500, long: 1000 };
 
@@ -19,8 +19,8 @@ export default createMachine(
     },
   },
   {
-    context: typings.context('number'),
-    actorsMap: typings.actorsMap({
+    context: type('number'),
+    actorsMap: type({
       emitters: { interval: { next: 'number', error: 'undefined' } },
     }),
   },

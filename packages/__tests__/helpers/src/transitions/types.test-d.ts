@@ -15,7 +15,11 @@ const ttest1 = {
 
 type TTest1 = GetEventKeysFromDelayed<typeof ttest1>;
 
-expectTypeOf<TTest1>().toEqualTypeOf<'START' | 'END.[0]' | 'END.[1]'>();
+describe('DelayedTransitions', () => {
+  test('#01 => extracts delayed event keys', () => {
+    expectTypeOf<TTest1>().toEqualTypeOf<'START' | 'END.[0]' | 'END.[1]'>();
+  });
+});
 // #endregion
 
 // #region Transitions Keys
@@ -33,16 +37,7 @@ const ttest2 = {
 
 type TTest2 = GetEventKeysFromTransitions<typeof ttest2>;
 
-expectTypeOf<TTest2>().toEqualTypeOf<
-  | 'on.START'
-  | 'on.END.[0]'
-  | 'on.END.[1]'
-  | 'after.START'
-  | 'after.END.[0]'
-  | 'after.END.[1]'
->();
-
-//Create tests with emitters/children only
+// Create tests with emitters/children only
 const ttest3 = {
   on: {
     START: { actions: '/state1' },
@@ -69,21 +64,36 @@ const ttest3 = {
 
 type TTest3 = GetEventKeysFromTransitions<typeof ttest3>;
 
-expectTypeOf<TTest3>().toEqualTypeOf<
-  | 'on.START'
-  | 'on.END.[0]'
-  | 'on.END.[1]'
-  | 'after.START'
-  | 'after.END.[0]'
-  | 'after.END.[1]'
-  | 'always.[0]'
-  | 'always.[1]'
-  | 'actors.em1.next'
-  | 'actors.em1.error'
-  | 'actors.m1.on.EVENT1'
-  | 'actors.m1.on.EVENT34.[0]'
-  | 'actors.m1.on.EVENT34.[1]'
->();
+describe('TransitionsConfig', () => {
+  test('#01 => extracts on and after event keys', () => {
+    expectTypeOf<TTest2>().toEqualTypeOf<
+      | 'on.START'
+      | 'on.END.[0]'
+      | 'on.END.[1]'
+      | 'after.START'
+      | 'after.END.[0]'
+      | 'after.END.[1]'
+    >();
+  });
+
+  test('#02 => extracts always and actor event keys', () => {
+    expectTypeOf<TTest3>().toEqualTypeOf<
+      | 'on.START'
+      | 'on.END.[0]'
+      | 'on.END.[1]'
+      | 'after.START'
+      | 'after.END.[0]'
+      | 'after.END.[1]'
+      | 'always.[0]'
+      | 'always.[1]'
+      | 'actors.em1.next'
+      | 'actors.em1.error'
+      | 'actors.m1.on.EVENT1'
+      | 'actors.m1.on.EVENT34.[0]'
+      | 'actors.m1.on.EVENT34.[1]'
+    >();
+  });
+});
 // #endregion
 
 const transition1 = {
@@ -95,11 +105,6 @@ const transition1 = {
 
 type TTS1 = ExtractChildKeysFromTransitions<typeof transition1>;
 
-expectTypeOf<TTS1>().toEqualTypeOf<
-  | { src: 'machine111'; contexts: {}; on: 'NEXT' | 'PREVIOUS' }
-  | { src: 'machine122'; contexts: {}; on: 'NEXT2' | 'PREVIOUS2' }
->();
-
 const transition2 = {
   actors: {
     machine111: { contexts: {}, on: { NEXT: '/working', PREVIOUS: '/idle' } },
@@ -108,11 +113,26 @@ const transition2 = {
 } as const satisfies TransitionsConfig;
 
 type TTS3 = ExtractEmitterSrcKeyFromTransitions<typeof transition2>;
-expectTypeOf<TTS3>().toEqualTypeOf<'emitter1'>();
 
 type TTS4 = ExtractChildKeysFromTransitions<typeof transition2>;
-expectTypeOf<TTS4>().toEqualTypeOf<{
-  src: 'machine111';
-  contexts: {};
-  on: 'NEXT' | 'PREVIOUS';
-}>();
+
+describe('Actors', () => {
+  test('#01 => extracts child keys', () => {
+    expectTypeOf<TTS1>().toEqualTypeOf<
+      | { src: 'machine111'; contexts: {}; on: 'NEXT' | 'PREVIOUS' }
+      | { src: 'machine122'; contexts: {}; on: 'NEXT2' | 'PREVIOUS2' }
+    >();
+  });
+
+  test('#02 => extracts emitter src keys', () => {
+    expectTypeOf<TTS3>().toEqualTypeOf<'emitter1'>();
+  });
+
+  test('#03 => ignores emitters when extracting child keys', () => {
+    expectTypeOf<TTS4>().toEqualTypeOf<{
+      src: 'machine111';
+      contexts: {};
+      on: 'NEXT' | 'PREVIOUS';
+    }>();
+  });
+});

@@ -1,5 +1,8 @@
-import type { Contract } from '@bemedev/app-options';
-import type { AsyncEmitterFunction, AsyncEmittersMap } from '../types';
+import type {
+  Contract,
+  AsyncEmitterFunction,
+  AsyncEmittersMap,
+} from '@bemedev/app-options';
 
 /**
  * Function signature for resolving emitter source function from emitters map.

@@ -3,22 +3,11 @@ import type {
   FromActionConfig,
   NoExtraKeysWithDescriberSoa,
   SyncAction,
-  WithDescriber,
 } from '#actions';
+
 import type {
-  AsyncPredicate,
-  FromGuard,
+  WithDescriber,
   GuardConfig,
-  NoExtraKeysGuardConfigSoA,
-  SyncPredicate,
-} from '#guards';
-import type {
-  AnyArray,
-  IndexesOfArray,
-  NotUndefined,
-  SoA,
-} from '@bemedev/app-options/bemedev';
-import type {
   _TransitionConfigMap,
   ArrayTransitions,
   ArrayTransitionsF,
@@ -27,7 +16,31 @@ import type {
   TransitionConfigMapFG,
   TransitionConfigMapG,
   TransitionsConfig,
-} from '@bemedev/app-options';
+  ActorConfig,
+  ChildConfig,
+  EmitterConfig,
+  Contract,
+  RecordS,
+  SingleOrArrayL,
+} from '@bemedev/app-contract';
+
+import type {
+  AsyncPredicate,
+  FromGuard,
+  NoExtraKeysGuardConfigSoA,
+  SyncPredicate,
+} from '#guards';
+
+import type {
+  AnyArray,
+  IndexesOfArray,
+  NotUndefined,
+  SoA,
+} from '@bemedev/app-utils-bemedev';
+
+import type { CommonChild } from '#common/machine';
+import type { AsyncEmitter } from '#emitters';
+import type { Identify, ReduceArray } from '~types';
 
 export type {
   _TransitionConfigMap,
@@ -44,14 +57,7 @@ export type {
   TransitionConfigMapFG,
   TransitionConfigMapG,
   TransitionsConfig,
-} from '@bemedev/app-options';
-import type { Observable } from 'rxjs';
-import type { ActorConfig, ChildConfig, EmitterConfig } from '../actors/types';
-
-import type { CommonChild } from '#common/machine';
-import type { AsyncEmitter } from '#emitters';
-import type { Contract } from '@bemedev/app-options';
-import type { Identify, RecordS, ReduceArray, SingleOrArrayL } from '~types';
+} from '@bemedev/app-contract';
 
 // type TargetDef = {
 //   readonly targets: string;
@@ -474,34 +480,6 @@ export type SyncTransition<Ct extends Contract = Contract> = {
   readonly actions: SyncAction<Ct>[];
   readonly guards: SyncPredicate<Ct>[];
   readonly description?: string;
-};
-
-/**
- * Structure representing an async emitter configuration.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `R` - Value emitted by the Observable `src`.
- */
-export type AsyncEmiter4<Ct extends Contract = Contract, R = any> = {
-  src: Observable<R>;
-  description?: string;
-  then: AsyncTransition<Ct>[];
-  catch: AsyncTransition<Ct>[];
-  finally: AsyncTransition<Ct>[];
-};
-
-/**
- * Structure representing a synchronous emitter configuration.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `R` - Value emitted by the Observable `src`.
- */
-export type SyncEmiter4<Ct extends Contract = Contract, R = any> = {
-  src: Observable<R>;
-  description?: string;
-  then: SyncTransition<Ct>[];
-  catch: SyncTransition<Ct>[];
-  finally: SyncTransition<Ct>[];
 };
 
 /**

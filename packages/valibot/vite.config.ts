@@ -7,7 +7,15 @@ export default defineConfig({
     sourcemap: true,
     excludesTS: ['src/fixtures.ts'],
     ignoresJS: ['**/*.example.ts', '**/fixtures.ts'],
-    externals: ['@bemedev/app', 'valibot', 'vitest', '@bemedev/dev-utils'],
+    externals: [
+      '@bemedev/app',
+      'valibot',
+      'vitest',
+      '@bemedev/dev-utils',
+      '@bemedev/app-contract',
+      '@bemedev/app-utils-bemedev',
+      '@bemedev/typings',
+    ],
   }),
   run: {
     tasks: {
@@ -21,7 +29,7 @@ export default defineConfig({
             'vite.config.ts',
             '!**/*.gen.ts',
           ],
-          output: ['lib/**'],
+          output: ['lib/**', '!**/.DS_Store'],
         },
       },
     },

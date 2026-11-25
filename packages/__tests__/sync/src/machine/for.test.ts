@@ -1,6 +1,6 @@
 import { createConfig, createMachine, interpret } from '@bemedev/app';
-import { nothing } from '@bemedev/app-options/internal';
-import { type } from '@bemedev/typings';
+import { nothing } from '@bemedev/app-plugins/internal';
+import { type } from '@bemedev/app-contract/typings';
 import { describe, expect, test, vi } from 'vite-plus/test';
 
 const config = createConfig({

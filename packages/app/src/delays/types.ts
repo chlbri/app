@@ -1,7 +1,5 @@
-import type { Contract } from '@bemedev/app-options';
-import type { FnMap } from '~types';
-
-export type { DelayFunction2, DelayFunction3 } from '@bemedev/app-options';
+import type { Contract, FnMap } from '@bemedev/app-contract';
+export type { DelayFunction2, DelayFunction3 } from '@bemedev/app-contract';
 
 /**
  * Delay type definition.

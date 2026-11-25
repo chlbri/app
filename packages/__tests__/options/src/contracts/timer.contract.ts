@@ -1,5 +1,5 @@
 import { createContract } from '@bemedev/app-contract';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 /**
  * Sync timer machine.

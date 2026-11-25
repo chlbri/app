@@ -12,13 +12,15 @@ export const TARGETLESS_KEY = '' as const;
 /**
  * Default value for "nothing" actions.
  * For test purposes, this is used to represent a no-operation or a placeholder.
+ *
+ * Re-exported from `@bemedev/app-options` so the machine runtime and the
+ * option helpers share a single source.
  */
-export const DEFAULT_NOTHING = 'nothing' as const;
+export { DEFAULT_NOTHING } from '@bemedev/app-plugins/internal';
 
 /**
  * Regular expression used to escape special characters in strings.
  */
 export const ESCAPE_REGEXP = /[.*+?^${}()|[\]\\]/g;
 
-export * from '#events';
 export * from '#exports/constants';

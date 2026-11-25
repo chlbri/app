@@ -1,33 +1,39 @@
-import { type WithDescriber } from '#actions';
+import { CommonChildFunction2, getEntries } from '#common/machine';
+import { eventToType } from '#events';
+import { type GuardConfig } from '#guards';
+import { initialConfig, nextSV } from '#states';
+import type { DelayedTransitions, TransitionConfig } from '#transitions';
+import type { ContractEvents } from '@bemedev/app-contract/types';
+import type { Contract, OptionsPlugin } from '@bemedev/app-options';
+import { byKey2, isDescriber, merge2 } from '@bemedev/app-options/internal';
+import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
+import {
+  AFTER_EVENT,
+  ALWAYS_EVENT,
+  transformEventArg,
+} from '@bemedev/app-plugins/internal';
+import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
+import { recompose } from '@bemedev/decompose';
+import { createScheduler } from '@bemedev/scheduler';
+import { sleep } from '@bemedev/sleep';
+import equal from 'fast-deep-equal';
+import { type EmptyObject } from '~types';
+import type { AsyncAddOptions_F } from '../asyncMachine';
+import type { AsyncMachine } from '../asyncMachine/machine';
+import { toPredicate } from '../guards/functions/toPredicate';
+
 import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
-import { _any } from '@bemedev/app-options/bemedev';
 
-import {
-  AFTER_EVENT,
-  ALWAYS_EVENT,
-  eventToType,
-  transformEventArg,
-  type EventArgObject,
-  type EventObject,
-} from '#events';
-import { type GuardConfig } from '#guards';
-import { initialConfig, nextSV } from '#states';
-import type { DelayedTransitions, TransitionConfig } from '#transitions';
-import { isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
 import {
   anyPromises,
   withTimeout,
   type TimeoutPromise,
 } from '@bemedev/better-promise';
-import { toPredicate } from '../guards/functions/toPredicate';
 
-import { sleep } from '@bemedev/sleep';
-import equal from 'fast-deep-equal';
-import { isDescriber, type EmptyObject } from '~types';
 import type {
   _AsyncSend_F,
   AsyncCollected0,
@@ -47,25 +53,19 @@ import {
   AnyInterpreter,
   CommonInterpreter,
   type ExecuteActivity_F,
-  type ExtendedActionsParams,
   type Mode,
 } from '#common/interpreter';
-import {
-  CommonChildFunction2,
-  getEntries,
-  type AnyMachine,
-  type MachineEventsOf,
-  type SimpleMachineOptions2,
-} from '#common/machine';
-import { type AsyncEmitterFunction } from '#emitters';
-import { byKey2 } from '#utils';
-import type { Contract, OptionsPlugin } from '@bemedev/app-options';
-import { recompose } from '@bemedev/decompose';
-import { createScheduler } from '@bemedev/scheduler';
-import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types';
-import type { AsyncAddOptions_F } from '../asyncMachine';
-import type { AsyncMachine } from '../asyncMachine/machine';
-import { merge2 } from '@bemedev/app-options/internal';
+
+import type {
+  AsyncEmitterFunction,
+  ChildConfig,
+  EmitterConfig,
+  EventArgObject,
+  EventObject,
+  ExtendedActionsParams,
+  FinallyConfig,
+  WithDescriber,
+} from '@bemedev/app-contract/internal';
 
 /**
  * The class {@linkcode AsyncInterpreter} is responsible for interpreting and managing the state of an asynchronous machine.
@@ -197,7 +197,7 @@ export class AsyncInterpreter<
    */
   protected __performForceSendAction = async (
     from: string | false,
-    forceSend?: EventArgObject<MachineEventsOf<Ct>>,
+    forceSend?: EventArgObject<ContractEvents<Ct>>,
   ) => {
     if (!forceSend) return;
     const values = Object.values(this.machine.flat);
@@ -301,12 +301,10 @@ export class AsyncInterpreter<
    *
    * @returns The boolean result or a promise resolving to a boolean.
    */
-  #executePredicate: AsyncPerformPredicate_F<Ct> = predicate => {
+  #executePredicate: AsyncPerformPredicate_F<Ct> = async predicate => {
     this.__setStatus('busy');
-    const out = this.#performPredicate(predicate);
-
+    const out = await this.#performPredicate(predicate);
     this.__setStatus('working');
-
     return out;
   };
 
@@ -337,8 +335,8 @@ export class AsyncInterpreter<
    */
   #performPredicates = async (...guards: GuardConfig[]) => {
     if (guards.length < 1) return true;
-    const predicates = guards.map(this.toPredicateFn).filter(isDefined);
 
+    const predicates = guards.map(this.toPredicateFn).filter(isDefined);
     for (const predicate of predicates) {
       const out = await this.#executePredicate(predicate);
       if (!out) return false;
@@ -816,7 +814,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving when event processing and state updates complete.
    */
-  protected __send = async (_event: EventArgObject<MachineEventsOf<Ct>>) => {
+  protected __send = async (_event: EventArgObject<ContractEvents<Ct>>) => {
     const event = transformEventArg(_event);
     const next = await this.__presend(event as any);
 

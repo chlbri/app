@@ -1,11 +1,9 @@
 import type { InterpretArgs } from '#common/interpreter';
 import type {
-  AnyMachine,
   CommonConfig,
   CommonConfig2,
   CommonConfig3,
   NoExtraKeysConfig,
-  SimpleMachineOptions2,
 } from '#common/machine';
 import type {
   ActorsConfigMap,
@@ -15,17 +13,23 @@ import type {
   ToEvents,
 } from '#events';
 import type { AsyncInterpreterFrom } from '#interpreter';
-import type { Register, RegisterOptions } from '#registry';
+import type { Register } from '#registry';
 import type {
   Contract,
   ContractMachineOptions,
-  EmptyObject,
   OptionsPlugin,
 } from '@bemedev/app-options';
-import type { inferT, PrimitiveObject, StandardOutput } from '@bemedev/typings';
+import type {
+  EmptyObject,
+  inferT,
+  PrimitiveObject,
+  StandardOutput,
+} from '@bemedev/typings';
 import type { AsyncMachine } from '../asyncMachine/machine';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine } from '../sync/machine';
+import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
+import type { RegisterOptions } from '@bemedev/app-contract/registry';
 
 /**
  * Contract surface used to select the machine options type before the full

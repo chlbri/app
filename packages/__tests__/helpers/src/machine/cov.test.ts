@@ -10,7 +10,7 @@ import { AsyncMachine } from '@bemedev/app';
 
 import { constructTests } from '@bemedev/app-vitest';
 import { reduceDescriber } from '@bemedev/app/utils';
-import { nothing } from '@bemedev/app-options/internal';
+import { nothing } from '@bemedev/app-plugins/internal';
 
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
 import path from 'path';

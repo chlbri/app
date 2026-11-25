@@ -1,6 +1,6 @@
-import { createTests } from '@bemedev/dev-utils/vitest-extended';
-import { INIT_EVENT } from '@bemedev/app/events';
+import { INIT_EVENT } from '@bemedev/app-plugins/internal';
 import { eventToType } from '@bemedev/app/events';
+import { createTests } from '@bemedev/dev-utils/vitest-extended';
 
 describe('eventToType', () => {
   const { acceptation, success } = createTests(eventToType);

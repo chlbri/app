@@ -1,13 +1,18 @@
 import {
   eventToType,
-  INIT_EVENT,
   possibleEvents,
-  transformEventArg,
-  type EventArgObject,
-  type EventObject,
+  type EventStrings,
   type ExtractSender,
 } from '#events';
-import { _any } from '@bemedev/app-options/bemedev';
+
+import type { EventArgObject, EventObject } from '@bemedev/app-contract';
+import {
+  _any,
+  isDefined,
+  isPrimitive,
+  toArray,
+  type Fn,
+} from '@bemedev/app-utils-bemedev';
 
 import { toAction, type WithDescriber } from '#actions';
 import type { ChildConfig, EmitterConfig } from '#actor';
@@ -17,48 +22,38 @@ import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
-  type EventStrings,
 } from '#constants';
 import { toDelay } from '#delays';
 import { toEmitterSrc } from '#emitters';
 import { toPredicate, type GuardConfig } from '#guards';
+import { flatMap, initialConfig, nextSV, nodeToValue, resolveNode } from '#states';
+import { decomposeSV, isStringEmpty, reduceDescriber, replaceAll } from '#utils';
+import type {
+  ActivityConfig,
+  AlwaysConfig,
+  Contract,
+  ContractContext,
+  ContractEvents,
+  ContractPContext,
+  ContractTags,
+  Pausable,
+  State,
+  StateExtended,
+  TransitionConfig,
+  WorkingStatus,
+} from '@bemedev/app-contract';
+import { byKey2, merge2 } from '@bemedev/app-options/internal';
+import type { AnyMachine } from '@bemedev/app-plugins';
+import { type MachineType } from '@bemedev/app-plugins';
 import {
-  flatMap,
-  initialConfig,
-  nextSV,
-  nodeToValue,
-  resolveNode,
-  type ActivityConfig,
-  type State,
-  type StateExtended,
-  type StateValue,
-  type WorkingStatus,
-} from '#states';
-import type { AlwaysConfig, TransitionConfig } from '#transitions';
-import {
-  byKey2,
-  decomposeSV,
+  INIT_EVENT,
   IS_TEST,
-  isStringEmpty,
-  reduceDescriber,
-  replaceAll,
-} from '#utils';
-import type { AllowedNames } from '@bemedev/app-options/bemedev';
-import { isDefined, isPrimitive, toArray } from '@bemedev/app-options/bemedev';
-import type { Contract } from '@bemedev/app-options';
+  transformEventArg,
+} from '@bemedev/app-plugins/internal';
+import type { AllowedNames, StateValue } from '@bemedev/app-utils-bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { createInterval, type Interval3 } from '@bemedev/interval3';
-import { type Fn, type MachineType, type Pausable } from '~types';
-import {
-  getEntries,
-  getExits,
-  type AnyMachine,
-  type CommonMachine,
-  type MachineContextOf,
-  type MachineEventsOf,
-  type MachinePContextOf,
-  type MachineTagsOf,
-} from '../machine';
+import { getEntries, getExits, type CommonMachine } from '../machine';
 import { createSubscriber, type Subscriber } from '../subscriber';
 import type {
   AddSubscriber_F,
@@ -75,7 +70,6 @@ import type {
   Selector_F,
   SimpleScheduler,
 } from './types';
-import { merge2 } from '@bemedev/app-options/internal';
 
 /**
  * Abstract base class for state machine interpreters.
@@ -198,7 +192,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   /**
    * The active event object currently processed by this interpreter service.
    */
-  private __event: MachineEventsOf<Ct> = transformEventArg(INIT_EVENT);
+  private __event: ContractEvents<Ct> = transformEventArg(INIT_EVENT);
 
   /**
    * The initial node configuration of the state machine.
@@ -234,9 +228,9 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   protected __initialContexts: Required<Contexts<Ct>> = {} as any;
 
   /**
-   * Public accessor for the current public context of type `MachineContextOf<Ct>`.
+   * Public accessor for the current public context of type `ContractContext<Ct>`.
    *
-   * @returns The active context object of type `MachineContextOf<Ct>`.
+   * @returns The active context object of type `ContractContext<Ct>`.
    */
   get context() {
     return this.__contexts.context;
@@ -353,7 +347,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @deprecated Use for testing only. Returns `undefined` in production.
    *
-   * @returns The active private context object of type `MachinePContextOf<Ct>`, or `undefined` in production.
+   * @returns The active private context object of type `ContractPContext<Ct>`, or `undefined` in production.
    *
    * @see {@linkcode context}
    */
@@ -391,7 +385,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @see -- type {@linkcode Selector_F} · {@linkcode byKey2}
    */
-  get select(): Selector_F<MachineContextOf<Ct>> {
+  get select(): Selector_F<ContractContext<Ct>> {
     const check = isPrimitive(this.__contexts.context);
     if (check) return undefined as any;
     const out = (path: string) => byKey2.low(this.__state.context, path);
@@ -407,7 +401,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @see -- type {@linkcode Selector_F} · {@linkcode byKey2}
    */
-  get _pSelect(): Selector_F<MachinePContextOf<Ct>> {
+  get _pSelect(): Selector_F<ContractPContext<Ct>> {
     /* v8 ignore else -- @preserve */
     if (IS_TEST()) {
       const pContext = this.__contexts.pContext;
@@ -428,7 +422,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   }
 
   /**
-   * Accessor for the current event object of type `MachineEventsOf<Ct>`.
+   * Accessor for the current event object of type `ContractEvents<Ct>`.
    *
    * @deprecated Intended primarily for type inference and debugging.
    *
@@ -457,12 +451,12 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   }
 
   /**
-   * Accessor for the active state tags of type `MachineTagsOf<Ct>[]`.
+   * Accessor for the active state tags of type `ContractTags<Ct>[]`.
    *
    * @returns An array of active state tag strings.
    */
   get tags() {
-    return getTags<MachineTagsOf<Ct>>(this.__config);
+    return getTags<ContractTags<Ct>>(this.__config);
   }
 
   /**
@@ -523,11 +517,11 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   /**
    * Schedules a change to the current active event.
    *
-   * @param event - The new event object of type `MachineEventsOf<Ct>`.
+   * @param event - The new event object of type `ContractEvents<Ct>`.
    *
    * @returns The scheduled task result.
    */
-  protected __changeEvent = (event: MachineEventsOf<Ct>) => {
+  protected __changeEvent = (event: ContractEvents<Ct>) => {
     const cb = () => {
       this.__performStates({ event });
       this.__event = event;
@@ -545,7 +539,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    */
   protected __changeEventInternal = (__internal: EventStrings) => {
     const __event = this.__event;
-    const event: MachineEventsOf<Ct> = { ...__event, __internal };
+    const event: ContractEvents<Ct> = { ...__event, __internal };
 
     return this.__changeEvent(event);
   };
@@ -1067,11 +1061,11 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @deprecated Internal method.
    *
-   * @param context - The context object of type `MachineContextOf<Ct>`.
+   * @param context - The context object of type `ContractContext<Ct>`.
    *
    * @returns The updated inner machine instance.
    */
-  _provideContext = (context: MachineContextOf<Ct>) => {
+  _provideContext = (context: ContractContext<Ct>) => {
     this.__initialContexts.context = this.__contexts.context = context;
     this.__performStates({ context });
     this.__machine.addContext(context);
@@ -1215,11 +1209,11 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   /**
    * Extracts valid transition definitions matching a given event.
    *
-   * @param event - Event object of type `MachineEventsOf<Ct>`.
+   * @param event - Event object of type `ContractEvents<Ct>`.
    *
    * @returns Sorted array of state path and transition tuples.
    */
-  protected __extractTransitions = (event: MachineEventsOf<Ct>) => {
+  protected __extractTransitions = (event: ContractEvents<Ct>) => {
     type FlatArray = [from: string, transitions: TransitionConfig[]][];
     const entriesFlat = Object.entries(this.__flat);
     const flat: FlatArray = [];
@@ -1265,7 +1259,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   /**
    * Abstract pre-send handler hook.
    */
-  protected abstract __presend: Fn<[event: MachineEventsOf<Ct>], any>;
+  protected abstract __presend: Fn<[event: ContractEvents<Ct>], any>;
 
   /**
    * Accessor for all event types that can currently trigger state transitions.
@@ -1283,7 +1277,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @returns `true` if all events can be performed; otherwise, `false`.
    */
-  canEvents = (...events: MachineEventsOf<Ct>['type'][]) => {
+  canEvents = (...events: ContractEvents<Ct>['type'][]) => {
     return events.every(event => this.possibleEvents.includes(event));
   };
 
@@ -1294,7 +1288,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @returns `true` if the event cannot be processed; otherwise, `false`.
    */
-  private __cannotPerformEvents = (_event: EventArgObject<MachineEventsOf<Ct>>) => {
+  private __cannotPerformEvents = (_event: EventArgObject<ContractEvents<Ct>>) => {
     const type = eventToType(_event);
     const check = !this.possibleEvents.includes(type);
     return check;
@@ -1303,17 +1297,17 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   /**
    * Creates a curried event sender function for a specific event type.
    *
-   * @template `T` - Event type string extending `MachineEventsOf<Ct>['type']`.
+   * @template `T` - Event type string extending `ContractEvents<Ct>['type']`.
    *
    * @param type - Target event type string.
    *
    * @returns Function accepting payload data and sending the event.
    */
-  sender = <const T extends MachineEventsOf<Ct>['type']>(type: T) => {
-    return (...data: ExtractSender<MachineEventsOf<Ct>, T>) => {
+  sender = <const T extends ContractEvents<Ct>['type']>(type: T) => {
+    return (...data: ExtractSender<ContractEvents<Ct>, T>) => {
       const payload = data.length === 1 ? data[0] : {};
       const event = { type, payload } as unknown as EventArgObject<
-        MachineEventsOf<Ct>
+        ContractEvents<Ct>
       >;
       return this.send(event);
     };
@@ -1565,7 +1559,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @param _event - Event argument object of type {@linkcode EventArgObject}.
    */
-  protected abstract __send: (_event: EventArgObject<MachineEventsOf<Ct>>) => any;
+  protected abstract __send: (_event: EventArgObject<ContractEvents<Ct>>) => any;
 
   /**
    * Dispatches an event to the interpreter if permitted by active state rules.
@@ -1574,7 +1568,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @returns Dispatch operation result.
    */
-  send = (_event: EventArgObject<MachineEventsOf<Ct>>) => {
+  send = (_event: EventArgObject<ContractEvents<Ct>>) => {
     const check = !this.isReady || this.__cannotPerformEvents(_event);
     if (check) return;
     return this.__send(_event);
@@ -1600,7 +1594,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    * @returns Event dispatch result.
    */
   protected __performResendAction = (
-    resend?: EventArgObject<MachineEventsOf<Ct>>,
+    resend?: EventArgObject<ContractEvents<Ct>>,
   ) => {
     if (!resend) return;
     const cannot = this.__cannotPerformEvents(resend);
@@ -1618,11 +1612,11 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
     const contexts = this.__contexts;
 
     return {
-      get pContext(): MachinePContextOf<Ct> {
+      get pContext(): ContractPContext<Ct> {
         return contexts.pContext;
       },
 
-      set pContext(val: MachinePContextOf<Ct>) {
+      set pContext(val: ContractPContext<Ct>) {
         contexts.pContext = val;
       },
 
@@ -1859,11 +1853,11 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
    *
    * @deprecated Internal method.
    *
-   * @param pContext - Private context object of type `MachinePContextOf<Ct>`.
+   * @param pContext - Private context object of type `ContractPContext<Ct>`.
    *
    * @returns Updated machine instance.
    */
-  _providePrivateContext = (pContext: MachinePContextOf<Ct>) => {
+  _providePrivateContext = (pContext: ContractPContext<Ct>) => {
     // this.__initialPpc = this.__pContext = pContext;
     this.__initialContexts.pContext = this.__contexts.pContext = pContext;
     this.__machine.addPrivateContext(pContext);

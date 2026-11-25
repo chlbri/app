@@ -6,7 +6,7 @@
  */
 
 import type { Describer } from '@bemedev/app-contract';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn, toArray } from '@bemedev/app-utils-bemedev';
 import { isDescriber, isString } from './primitives';
 
 /**
@@ -29,8 +29,8 @@ export const checkAction = (entry: unknown): entry is string | Describer => {
  */
 export const checkActions = expandFn(
   (action: unknown): boolean => {
-    if (Array.isArray(action)) return action.every(checkAction);
-    return checkAction(action);
+    const actions = toArray(action);
+    return actions.every(checkAction);
   },
   {
     /**

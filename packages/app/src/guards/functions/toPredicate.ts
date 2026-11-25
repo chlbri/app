@@ -1,16 +1,17 @@
 import { GUARD_TYPE } from '#constants';
-import type { GuardConfig } from '#guards';
+import type { GuardConfig, PredicateMap } from '#guards';
 import type { StateExtended } from '#states';
-import { reduceFnMap } from '@bemedev/app-options/internal';
+import type { AsyncPredicateS3, SyncPredicateS3 } from '@bemedev/app-contract';
+import type { Contract } from '@bemedev/app-options';
 import { expandFn, isDefined } from '@bemedev/app-options/bemedev';
-import recursive, {
+import { isDescriber, isString } from '@bemedev/app-options/internal';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
+import {
+  default as asyncRecursive,
+  default as recursive,
   type AsyncGuardDefUnion,
   type GuardDefUnion,
 } from '@bemedev/boolean-recursive';
-import asyncRecursive from '@bemedev/boolean-recursive/async';
-import type { Contract } from '@bemedev/app-options';
-import { isDescriber, isString } from '../../types/primitives';
-import type { AsyncPredicateS3, SyncPredicateS3, PredicateMap } from '../types';
 
 /**
  * Signature for sync guard recursive parser function.

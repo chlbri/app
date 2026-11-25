@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import { type, type inferO } from '@bemedev/typings';
+import { type, type inferO } from '@bemedev/app-contract/typings';
 import isOnline from 'is-online';
 import { asset, intermediary } from './machine1.machine.typings';
 

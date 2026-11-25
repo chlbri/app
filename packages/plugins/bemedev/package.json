@@ -1,0 +1,96 @@
+{
+  "name": "@bemedev/app-bemedev-plugins",
+  "version": "3.2.0",
+  "description": "Optional composable utilities for @bemedev/app, delivered as options plugins",
+  "keywords": [
+    "state machines",
+    "utilities",
+    "plugins",
+    "typescript"
+  ],
+  "homepage": "https://github.com/chlbri/app/blob/main/packages/plugins/bemedev/README.md",
+  "license": "MIT",
+  "author": {
+    "name": "chlbri",
+    "email": "bri_lvi@icloud.com",
+    "url": "https://bemedev.vercel.app"
+  },
+  "maintainers": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "contributors": [
+    {
+      "email": "bri_lvi@icloud.com",
+      "name": "chlbri",
+      "url": "https://bemedev.vercel.app"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chlbri/app"
+  },
+  "files": [
+    "lib"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    },
+    "./swap": {
+      "import": "./lib/swap.js",
+      "require": "./lib/swap.cjs",
+      "types": "./lib/swap.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "p-q": "pretty-quick",
+    "posttest": "vp fmt",
+    "pretest": "vp run pack",
+    "rm:lib": "vp dlx rimraf ./lib",
+    "publish:first": "vp run pretest && pnpm publish --access public --no-git-checks",
+    "test:coverage": "vp test run",
+    "test": "vp run test:coverage --no-coverage",
+    "test:only": "vp run test",
+    "test:watch": "vp test"
+  },
+  "dependencies": {
+    "@bemedev/app-plugins": "workspace:^",
+    "@bemedev/function-swap": "catalog:"
+  },
+  "peerDependencies": {
+    "@bemedev/app-utils-bemedev": "workspace:^",
+    "@bemedev/typings": "catalog:",
+    "@bemedev/app-contract": "workspace:^",
+    "@bemedev/decompose": "catalog:"
+  },
+  "devDependencies": {
+    "@bemedev/dev-utils": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "pretty-quick": "catalog:",
+    "rimraf": "catalog:",
+    "size-limit": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

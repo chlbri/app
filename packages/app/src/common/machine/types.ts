@@ -1,21 +1,17 @@
-import type { AsyncAction2, WithDescriber } from '#actions';
 import type { NoExtraKeysActorConfig } from '#actors';
-import type { ActorsConfigMap, EventStrings } from '#events';
-
 import type {
-  FlatMapN,
+  ActorsConfigMap,
+  AsyncAction2,
+  FnMap,
   NodeConfig2,
-  StateExtended,
-  StatePextendedOf,
-  StateValue,
   TargetDef,
-} from '#states';
-
-import type {
-  AsyncTransition,
-  NoExtraKeysTransitionConfigSoA,
   TransitionsConfig,
-} from '#transitions';
+  WithDescriber,
+} from '@bemedev/app-contract/internal';
+
+import type { FlatMapN } from '#states';
+
+import type { AsyncTransition, NoExtraKeysTransitionConfigSoA } from '#transitions';
 
 import type {
   Fn,
@@ -24,41 +20,32 @@ import type {
   Ru,
   SubType,
   SubTypeLow,
-} from '@bemedev/app-options/bemedev';
-import type { Decompose } from '@bemedev/decompose';
-
-import type {
-  Decompose as _Decompose,
-  DecomposeString,
-} from '@bemedev/function-swap';
+  TrueObject,
+  ValuesOf,
+} from '@bemedev/app-utils-bemedev';
+import type { EmptyObject, PrimitiveObject } from '@bemedev/typings';
 
 import type {
   CommonConfig3,
   Contract,
-  ContractActorsMap,
   ContractConfig,
   ContractContext,
-  ContractEvents,
-  ContractEventsMap,
-  ContractEventType,
   ContractOptions,
-  ContractPaths,
   ContractPContext,
-  ContractTags,
-  OptionsPlugin,
-} from '@bemedev/app-options';
-import type { ObjectT, PrimitiveObject, Sh, StandardKey } from '@bemedev/typings';
-import type {
-  EmptyObject,
-  FnMap,
-  FnMapFilterArray,
-  FnMapFilterObject,
   FnR,
   MaybePromise,
-  RecordS,
-  TrueObject,
-  ValuesOf,
-} from '~types';
+} from '@bemedev/app-contract';
+
+import type { OptionsPlugin } from '@bemedev/app-options';
+import type {
+  DecomposeC,
+  FnMapFilterArray,
+  FnMapFilterObject,
+  SimpleMachineOptions2,
+} from '@bemedev/app-plugins/addons';
+import type { RecordS } from '~types';
+
+export type { DecomposeC, OptionsPlugin };
 
 export type {
   ChildConfigDef,
@@ -67,7 +54,7 @@ export type {
   CommonConfig2,
   CommonConfig3,
   CommonConfigNode,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Type guard for enforcing no extra keys on target definitions.
@@ -155,158 +142,6 @@ export type NoExtraKeysConfig<T extends CommonConfig3> = T & {
 };
 
 /**
- * Machine category classification (synchronous or asynchronous).
- */
-export type MachineType = 'sync' | 'async';
-
-/**
- * Simple representation of a machine with meaningful properties.
- *
- * Every machine property is derived from the contract carried by the machine:
- * no event, context or tag type is declared independently.
- *
- * @template | {@linkcode Contract} `Ct` - Contract describing the machine.
- *
- * @see -- type {@linkcode StateValue}, -- type {@linkcode Fn}
- */
-export interface AnyMachine<Ct extends Contract = Contract> {
-  /**
-   * Contract of the machine.
-   */
-  contract: Ct;
-
-  /**
-   * Machine options object.
-   */
-  options: ContractOptions<Ct>;
-
-  /**
-   * Machine configuration object.
-   */
-  config: ContractConfig<Ct>;
-
-  /**
-   * Classification type of the machine ('sync' or 'async').
-   */
-  readonly TYPE: MachineType;
-
-  /**
-   * Flat map representation of node configurations.
-   */
-  flat: Record<string, any>;
-
-  /**
-   * Machine context object.
-   */
-  context: ContractContext<Ct>;
-
-  /**
-   * Machine private context object.
-   */
-  pContext: ContractPContext<Ct>;
-
-  /**
-   * Map of machine events.
-   */
-  eventsMap: ContractEventsMap<Ct>;
-
-  /**
-   * Map of machine actor configurations.
-   */
-  actorsMap: ContractActorsMap<Ct>;
-
-  /**
-   * Internal contract type marker.
-   */
-  __contract: Ct;
-
-  /**
-   * Internal event object type marker.
-   */
-  __events: ContractEvents<Ct>;
-
-  /**
-   * Internal state object type marker.
-   */
-  __state: any;
-
-  /**
-   * Internal decomposed state path object type marker.
-   */
-  __decomposedState: any;
-
-  /**
-   * Method to add options to the machine.
-   */
-  addOptions: any;
-
-  /**
-   * Registered actions map.
-   */
-  actions: any;
-
-  /**
-   * Registered guards map.
-   */
-  guards: any;
-
-  /**
-   * Registered delays map.
-   */
-  delays: any;
-
-  /**
-   * Internal state path string type marker.
-   */
-  __allPaths: ContractPaths<Ct>;
-
-  /**
-   * Internal state tag string type marker.
-   */
-  __tag: ContractTags<Ct>;
-
-  /**
-   * Array of state tag strings defined on the machine.
-   */
-  tags: ContractTags<Ct>[];
-
-  /**
-   * Registered child actors map.
-   */
-  children: any;
-
-  /**
-   * Method returning a renewed instance of the machine.
-   */
-  renew: any;
-
-  /**
-   * Initial node configuration object.
-   */
-  initialConfig: any;
-
-  /**
-   * Initial state value object.
-   */
-  initialValue: StateValue;
-
-  /**
-   * Function checking if a target state path is an initial node.
-   */
-  isInitial: Fn<[string], boolean>;
-
-  /**
-   * Function retrieving parent configuration node from initial target path.
-   */
-  retrieveParentFromInitial: Fn<[string], any>;
-
-  /**
-   * Function converting a state value into a node configuration.
-   */
-  toNode: Fn<[StateValue], any>;
-}
-
-/**
  * Options resolution function parameter type.
  *
  * @template | {@linkcode SimpleMachineOptions2} `Mo` - Machine options type.
@@ -340,33 +175,9 @@ export type CommonElements<Ct extends Contract = Contract> = {
 };
 
 /**
- * Second version of simple machine options.
- *
- * @see -- type {@linkcode Partial}, -- type {@linkcode Record}
- */
-export type SimpleMachineOptions2 = Partial<
-  Record<'actions' | 'guards' | 'delays', any> &
-    Record<'actors', { children?: RecordS<any>; emitters?: RecordS<any> }>
->;
-
-/**
  * Helper function for extracting entry or exit actions from a node.
  */
 export type GetIO_F = (key: 'exit' | 'entry', node?: any) => WithDescriber[];
-
-/**
- * Internal standard output properties type picker.
- *
- * @template | {@linkcode ObjectT} `T` - Target object type.
- */
-type StandardOutput2<T extends ObjectT> = Pick<Sh<T>, StandardKey>;
-
-/**
- * Alias for standard output mapping type.
- *
- * @template | {@linkcode ObjectT} `T` - Object type.
- */
-export type StdO2<T extends ObjectT> = StandardOutput2<T>;
 
 /**
  * Common function signature for timer actions.
@@ -378,18 +189,9 @@ export type CommonTimeAction_F<Ct extends Contract = Contract> = (
 ) => (id: string) => AsyncAction2<Ct>;
 
 /**
- * Decomposed context paths of type `Tc`, excluding array index segments.
- *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type to decompose.
- * @template `_Pc` - Unused private context placeholder, kept for signature parity.
+ * `DecomposeC` is owned by `@bemedev/app-plugins/addons` and re-exported at
+ * the top of this module.
  */
-export type DecomposeC<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  _Pc = any,
-> = Omit<
-  Decompose<NonNullable<Tc>, { object: 'both'; start: false; sep: '.' }>,
-  `${string}.[${number}]${string}`
->;
 
 /**
  * Function type signature for creating an erase property action helper.
@@ -530,25 +332,3 @@ export type CommonChild<
   on: Identitfy<RecordS<AsyncTransition<Ct>>>[];
   contexts: string[];
 };
-
-/**
- * Helper function for swapping state signatures in functional transitions.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- */
-export type SwapFunction_F<Ct extends Contract = Contract> = <
-  const F2 extends Fn,
-  const Ev extends ContractEventType<Ct> = string,
->(
-  fn: F2,
-  event?: Ev,
-) => (
-  types: DecomposeString<
-    [
-      EventStrings extends Ev
-        ? StateExtended<Ct>
-        : Required<StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: Ev }>>>,
-    ],
-    _Decompose<Parameters<F2>>
-  >,
-) => FnR<Ct, ReturnType<F2>>;

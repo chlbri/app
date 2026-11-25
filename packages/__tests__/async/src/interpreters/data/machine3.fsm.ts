@@ -1,7 +1,6 @@
 import { createMachine } from '@bemedev/app';
 import { createConfig } from '@bemedev/app';
-import { typings } from '@bemedev/app/utils';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 export const config3 = createConfig({
   description: 'cdd',
@@ -46,7 +45,7 @@ export const machine3 = createMachine(config3, {
     EVENT3: { login: 'string', pwd: 'string' },
   }),
   pContext: type({ data: 'string' }),
-  context: typings.context({ age: 'number' }),
+  context: type({ age: 'number' }),
   actorsMap: type({ children: { machine1: { NEXT: 'boolean' } } }),
 });
 

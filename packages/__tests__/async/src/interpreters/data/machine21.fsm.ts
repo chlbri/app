@@ -1,7 +1,7 @@
 import { interpret } from '@bemedev/app';
 import { createMachine } from '@bemedev/app';
-import { notU, typings } from '@bemedev/app/utils';
-import { type } from '@bemedev/typings';
+import { notU } from '@bemedev/app/utils';
+import { type } from '@bemedev/app-contract/typings';
 import { DELAY } from './constants';
 import { fakeDB } from './fakeDB';
 import { machine1 } from './machine1.fsm';
@@ -73,7 +73,7 @@ export const machine21 = createMachine(
       SEND: 'never',
     }),
 
-    context: typings.context(({ array }) => ({
+    context: type(({ array }) => ({
       iterator: 'number',
       input: 'string',
       data: array('string'),

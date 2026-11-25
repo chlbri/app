@@ -5,12 +5,11 @@
 import recursive from '@bemedev/boolean-recursive';
 import { recompose } from '@bemedev/decompose';
 import type { Contract } from '@bemedev/app-contract';
-import { same, type UtilityMap } from '../utility';
-
+import { same, type UtilityMap } from '@bemedev/app-plugins';
 import type { SyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
 import { merge2 } from './merge2';
-import { reduceFnMap } from './reduceFnMap';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
 
 /** Option helpers of a synchronous machine. */
 export type SyncHelpers = SyncAddons;

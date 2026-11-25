@@ -1,9 +1,9 @@
-import type { RefineStringArray } from '@bemedev/app/types';
 import type {
   AlwaysConfig,
   ArrayTransitions,
   ArrayTransitionsF,
-} from '@bemedev/app/transitions';
+  RefineStringArray,
+} from '@bemedev/app-contract/internal';
 import * as v from 'valibot';
 import { NotArray_Schema } from '../utils/array';
 import { recordV } from '../utils/record';

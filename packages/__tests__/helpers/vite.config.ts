@@ -6,7 +6,7 @@ export default defineConfig({
   test: {
     bail: 100,
     maxConcurrency: 100,
-
+    typecheck: { enabled: true, ignoreSourceErrors: true },
     allowOnly: true,
     environment: 'node',
     env: { NODE_ENV: 'test' },

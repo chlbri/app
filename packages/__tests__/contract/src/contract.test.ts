@@ -9,15 +9,18 @@ import {
   type ContractPaths,
   type ContractPContext,
   type ContractSync,
-  type EmptyObject,
   type EventStrings,
-  type StateValue,
   type SyncMachineOptions2,
   type SyncSimpleMachineOptions,
   type WorkingStatus,
 } from '@bemedev/app-contract';
 
+import type { StateValue } from '@bemedev/app-utils-bemedev';
+
 import contract, { config, types } from './auth.contract';
+
+/** Empty object with no keys, matching the initial/after/always event payloads. */
+type EmptyObject = Record<never, never>;
 
 // const contract = createContract(config, types);
 

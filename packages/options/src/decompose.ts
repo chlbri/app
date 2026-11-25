@@ -4,4 +4,4 @@
  * can import them without a direct dependency on `@bemedev/decompose`.
  */
 
-export * from '@bemedev/decompose';
+export * from '@bemedev/app-plugins/decompose';

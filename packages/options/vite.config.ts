@@ -15,8 +15,8 @@ const buildPack = () =>
       '@bemedev/better-promise',
       '@bemedev/boolean-recursive',
       '@bemedev/decompose',
-      '@bemedev/function-swap',
-      '@bemedev/app-utils-bemedev',
+
+      '@bemedev/app-plugins',
     ],
   });
 
@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => ({
     env: { NODE_ENV: 'test' },
     globals: true,
     clearMocks: false,
+    typecheck: { enabled: true, ignoreSourceErrors: true },
     // Inline dev-utils: it nests its own vitest copy, breaking test collection
     server: { deps: { inline: ['@bemedev/dev-utils'] } },
   },
@@ -46,7 +47,7 @@ export default defineConfig(({ mode }) => ({
             'vite.config.ts',
             '!**/*.gen.ts',
           ],
-          output: ['lib/**'],
+          output: ['lib/**', '!**/.DS_Store'],
         },
       },
     },

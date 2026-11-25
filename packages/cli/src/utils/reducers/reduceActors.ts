@@ -1,7 +1,7 @@
 import { reduceEmitter } from './reduceEmitter';
 import { reduceChild } from './reduceChild';
-import { type ActorConfig, type RecordS } from '@bemedev/app';
 import { createBetterSet } from '@bemedev/better-set';
+import type { ActorConfig, RecordS } from '@bemedev/app-contract/internal';
 
 /**
  * Reduces a map of actor configurations into sets of actions, guards, targets, pContext keys, emitters, and children.

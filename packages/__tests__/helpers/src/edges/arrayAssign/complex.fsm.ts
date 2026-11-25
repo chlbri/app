@@ -1,12 +1,12 @@
 import { createMachine } from '@bemedev/app';
-import { typings } from '@bemedev/app/utils';
+import { type } from '@bemedev/app-contract/typings';
 
 export default createMachine(
   'edges.arrayAssign.complex',
   { on: { INC: { actions: ['incDeep'] } } },
   {
-    eventsMap: typings.eventsMap({ INC: 'undefined' }),
-    context: typings.context({
+    eventsMap: type({ INC: 'undefined' }),
+    context: type({
       number1: 'number',
       number2: 'number',
       deep: { number3: 'number', deep2: { number4: 'number' } },

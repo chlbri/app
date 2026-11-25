@@ -1,20 +1,19 @@
-import { interpret } from '@bemedev/app';
+import { after, always, interpret } from '@bemedev/app';
+import type { AfterEvent, AlwaysEvent } from '@bemedev/app-contract/internal';
 import { constructTests } from '@bemedev/app-vitest';
-import {
-  AFTER_EVENT,
-  ALWAYS_EVENT,
-  INIT_EVENT,
-  after,
-  always,
-  type AfterEvent,
-  type AlwaysEvent,
-} from '@bemedev/app/events';
+
 import _machine1 from './assign-map.1.machine';
 import _machine2 from './assign-map.2.machine';
 import _machine3 from './assign-map.3.machine';
 import _machine4 from './assign-map.4.machine';
 import _machine5 from './assign-map.5.machine';
 import _machine6 from './assign-map.6.machine';
+
+import {
+  AFTER_EVENT,
+  ALWAYS_EVENT,
+  INIT_EVENT,
+} from '@bemedev/app-plugins/internal';
 
 describe('reduceFnMap and reduceFnMapReduced through machine options', () => {
   describe('#01 => Property assign (reduceFnMap)', () => {

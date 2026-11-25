@@ -1,9 +1,6 @@
-import {
-  GUARD_TYPE,
-  fromDescriber,
-  type GuardUnion,
-  type WithDescriber,
-} from '@bemedev/app';
+import { GUARD_TYPE } from '@bemedev/app';
+import type { GuardUnion, WithDescriber } from '@bemedev/app-contract/internal';
+import { fromDescriber } from '@bemedev/app/types';
 
 /**
  * Flattens and deduplicates guard configurations into a unique list of describers.

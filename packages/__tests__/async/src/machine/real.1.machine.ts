@@ -1,13 +1,11 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/typings';
+import { type } from '@bemedev/app-contract/typings';
 
 const actions = { exit: 'inc', entry: 'inc' } as const;
 
 export const realMachineTypings1 = {
   context: type('number'),
-
   eventsMap: type({ NEXT: 'undefined', PREVIOUS: 'undefined' }),
-
   sync: true,
 } as const;
 

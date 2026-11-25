@@ -1,4 +1,22 @@
+export { default as toArray } from '#bemedev/features/arrays/castings/toArray';
+export { default as tupleOf } from '#bemedev/features/arrays/castings/tuple';
+export { default as _any } from '#bemedev/features/common/castings/any';
+export { default as isDefined } from '#bemedev/features/common/castings/is/defined';
+export { default as commonT } from '#bemedev/features/common/typings';
+export { default as extract } from '#bemedev/features/common/typings/extract';
+export { default as isFunction } from '#bemedev/features/functions/castings/is/all';
+export * from '#bemedev/features/functions/functions/identify';
+export * from '#bemedev/features/functions/functions/partialCall';
+export * from '#bemedev/features/functions/functions/partialCallO';
+export * from '#bemedev/features/functions/functions/switch';
+export { default as numbersT } from '#bemedev/features/numbers/typings';
+export { default as trueO } from '#bemedev/features/objects/castings/trueObject';
+export { default as byKey } from '#bemedev/features/objects/typings/byKey';
+export { default as keysOf } from '#bemedev/features/objects/typings/keysOf';
+export type { ExtractS } from '#bemedev/features/strings/types';
+export { default as stringsT } from '#bemedev/features/strings/typings';
 export type {
+  _UnionToIntersection2,
   AllowedNames,
   AnyArray,
   DeepPartial,
@@ -9,36 +27,28 @@ export type {
   Identitfy,
   IndexesOfArray,
   Keys,
-  NOmit,
   NoExtraKeys,
+  NoExtraKeysStrict,
+  NOmit,
+  NotReadonly,
   NotUndefined,
   Primitive,
   Require,
   Ru,
   SoA,
   SoRa,
+  StateValue,
+  StateValueMap,
   SubType,
   SubTypeLow,
+  To,
+  TrueObject,
+  Unionize,
   UnionToIntersection,
   UnionToTuple,
-  Unionize,
-  _UnionToIntersection2,
+  ValuesOf,
 } from '#bemedev/globals/types';
 export * from '#bemedev/globals/utils/_unknown';
 export * from '#bemedev/globals/utils/expandFn';
-export { default as trueO } from '#bemedev/features/objects/castings/trueObject';
-export { default as toArray } from '#bemedev/features/arrays/castings/toArray';
-export { default as tupleOf } from '#bemedev/features/arrays/castings/tuple';
-export { default as _any } from '#bemedev/features/common/castings/any';
-export { default as isDefined } from '#bemedev/features/common/castings/is/defined';
-export * from '#bemedev/features/functions/functions/identify';
-export * from '#bemedev/features/functions/functions/partialCall';
-export * from '#bemedev/features/functions/functions/partialCallO';
-export * from '#bemedev/features/functions/functions/switch';
-export { default as commonT } from '#bemedev/features/common/typings';
-export { default as extract } from '#bemedev/features/common/typings/extract';
-export { default as byKey } from '#bemedev/features/objects/typings/byKey';
-export { default as keysOf } from '#bemedev/features/objects/typings/keysOf';
+export { identity } from '#bemedev/globals/utils/identity';
 export { isPrimitive } from '#bemedev/globals/utils/is/primitive';
-export { default as numbersT } from '#bemedev/features/numbers/typings';
-export { default as stringsT } from '#bemedev/features/strings/typings';

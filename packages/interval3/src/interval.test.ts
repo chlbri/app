@@ -1,9 +1,5 @@
-import {
-  create,
-  createInterval,
-  createInterval3,
-  type PauserListener,
-} from './index';
+import { create, createInterval, createInterval3 } from './index';
+import { PauserListener } from './types.types';
 
 describe('TESTS', () => {
   describe('#01 => Interval3 configuration', () => {

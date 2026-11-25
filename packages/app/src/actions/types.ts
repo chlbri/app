@@ -2,10 +2,12 @@ import type {
   ActionResult,
   MaybeAsyncActionResult,
   WithDescriber,
-} from '@bemedev/app-options';
-import type { NoExtraKeys } from '@bemedev/app-options/bemedev';
-import type { Contract } from '@bemedev/app-options';
-import type { Describer, FnMap, FromDescriber } from '~types';
+  Contract,
+  Describer,
+  FnMap,
+} from '@bemedev/app-contract';
+import type { NoExtraKeys } from '@bemedev/app-utils-bemedev';
+import type { FromDescriber } from '~types';
 
 export type {
   ActionResult,
@@ -13,7 +15,7 @@ export type {
   MaybeAsyncActionResult,
   SyncAction2,
   WithDescriber,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Enforces no extra keys when value is a describer object.

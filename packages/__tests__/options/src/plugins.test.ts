@@ -1,19 +1,8 @@
 import { createContract } from '@bemedev/app-contract';
-import {
-  configureOptions,
-  createOptions,
-  registerPlugins,
-  same,
-  type UtilityPair,
-  type UtilityPlugin,
-} from '@bemedev/app-options';
-import { createMachine } from '@bemedev/app';
+import { createOptions, createUtilities } from '@bemedev/app-options';
+import { same } from '@bemedev/app-plugins';
 
-declare module '@bemedev/app-options' {
-  interface Addons<Ct> {
-    double: UtilityPair<(value: number) => number, (value: number) => number>;
-  }
-}
+import { createMachine } from '@bemedev/app';
 
 describe('TESTS', () => {
   const config = {
@@ -24,52 +13,37 @@ describe('TESTS', () => {
   const syncContract = createContract(config, { sync: true });
   const asyncContract = createContract(config, {});
 
-  const retryPlugin = {
-    name: 'retry',
-    create: () => ({
-      retry: same((times: number, fn: () => any) => (state: any) => {
-        let last: unknown;
+  const retryPlugin = createUtilities({}, () => ({
+    retry: same((times: number, fn: () => any) => (state: any) => {
+      let last: unknown;
 
-        for (let index = 0; index < times; index++) {
-          try {
-            return { result: fn(), state };
-          } catch (error) {
-            last = error;
-          }
+      for (let index = 0; index < times; index++) {
+        try {
+          return { result: fn(), state };
+        } catch (error) {
+          last = error;
         }
+      }
 
-        throw last;
+      throw last;
+    }),
+  }));
+
+  const doublePlugin = createUtilities({}, () => ({
+    double: same((value: number) => value * 2),
+  }));
+
+  const quadruplePlugin = createUtilities(
+    { utilities: doublePlugin },
+    ({ utilities }) => ({
+      quadruple: same((value: number) => {
+        const fn = utilities.double.sync;
+        return fn(fn(value));
       }),
     }),
-  } satisfies UtilityPlugin;
-
-  const doublePlugin = {
-    name: 'double',
-    create: () => ({ double: same((value: number) => value * 2) }),
-  } satisfies UtilityPlugin;
-
-  const quadruplePlugin = {
-    name: 'quadruple',
-    requires: ['double'],
-    create: ({ utilities }: any) => ({
-      quadruple: same((value: number) =>
-        utilities.double.sync(utilities.double.sync(value)),
-      ),
-    }),
-  } satisfies UtilityPlugin;
-
-  const contextPlugin = {
-    name: 'context',
-    create: ({ config, eventsList, contract }: any) => ({
-      pluginConfig: same(() => config),
-      pluginEvents: same(() => eventsList),
-      pluginContract: same(() => contract),
-    }),
-  } satisfies UtilityPlugin;
+  );
 
   const state = () => ({ context: {}, pContext: {}, event: { type: 'START' } });
-
-  afterEach(() => configureOptions());
 
   describe('#01 => createOptions / per call', () => {
     test('#01 => exposes a stable helper surface in both modes', () => {
@@ -96,7 +70,6 @@ describe('TESTS', () => {
         'sendTo',
         'stopActivity',
         'stopTimer',
-        'swap',
       ];
 
       const sync: string[] = [];
@@ -116,13 +89,18 @@ describe('TESTS', () => {
       expect(async.sort()).toStrictEqual(expected);
     });
 
-    test('#02 => accepts a plugin as a direct argument', () => {
-      const options = createOptions(
-        syncContract,
-        doublePlugin,
-      )(({ double }) => ({ actions: { doubled: double(2) as any } }));
+    test('#02 => accepts an inline builder through use', () => {
+      const options = createOptions(syncContract)
+        .use(doublePlugin)
+        .use(({ contract, utilities }) => ({
+          quadruple: same((value: number) => {
+            expect(contract).toBe(syncContract);
+            const fn = utilities.double.sync;
+            return fn(fn(value));
+          }),
+        }))(({ quadruple }) => ({ actions: { quadrupled: quadruple(2) as any } }));
 
-      expect(options.actions!.doubled).toBe(4);
+      expect(options.actions!.quadrupled).toBe(8);
     });
 
     test('#03 => accepts a plugin through use', () => {
@@ -135,23 +113,21 @@ describe('TESTS', () => {
 
     test('#04 => accepts several plugins through use', () => {
       const options = createOptions(syncContract).use(
-        quadruplePlugin,
         doublePlugin,
+        quadruplePlugin,
       )(({ quadruple }) => ({ actions: { quadrupled: quadruple(2) as any } }));
 
       expect(options.actions!.quadrupled).toBe(8);
     });
 
     test('#05 => exposes the retry helper in sync and async', () => {
-      const sync = createOptions(
-        syncContract,
-        retryPlugin,
-      )(({ retry }) => ({ actions: { retried: retry(2, () => 42) as any } }));
+      const sync = createOptions(syncContract).use(retryPlugin)(({ retry }) => ({
+        actions: { retried: retry(2, () => 42) as any },
+      }));
 
-      const async = createOptions(
-        asyncContract,
-        retryPlugin,
-      )(({ retry }) => ({ actions: { retried: retry(2, () => 42) as any } }));
+      const async = createOptions(asyncContract).use(retryPlugin)(({ retry }) => ({
+        actions: { retried: retry(2, () => 42) as any },
+      }));
 
       expect(sync.actions!.retried!(state() as any)).toStrictEqual({
         result: 42,
@@ -163,69 +139,42 @@ describe('TESTS', () => {
       });
     });
 
-    test('#06 => forwards config, events and contract to plugins', () => {
-      const options = createOptions(
-        syncContract,
-        contextPlugin,
-      )(({ pluginConfig, pluginEvents, pluginContract }) => ({
-        actions: {
-          config: pluginConfig() as any,
-          events: pluginEvents() as any,
-          contract: pluginContract() as any,
-        },
-      }));
+    test('#06 => forwards the contract to plugins', () => {
+      const contractPlugin = createUtilities(
+        { contract: syncContract },
+        ({ contract }) => ({ pluginContract: same(() => contract) }),
+      );
 
-      expect(options.actions!.config).toBe(config);
-      expect(options.actions!.events).toContain('START');
+      const options = createOptions(syncContract).use(contractPlugin)(
+        ({ pluginContract }) => ({ actions: { contract: pluginContract() as any } }),
+      );
+
       expect(options.actions!.contract).toBe(syncContract);
     });
   });
 
-  describe('#02 => createOptions / registry', () => {
-    test('#01 => applies plugins registered globally', () => {
-      configureOptions(doublePlugin);
-
-      const options = createOptions(syncContract)(({ double }) => ({
-        actions: { doubled: double(5) as any },
+  describe('#02 => plugin precedence', () => {
+    test('#01 => a later plugin replaces an earlier one with the same name', () => {
+      const tripler = createUtilities({}, () => ({
+        double: same((value: number) => value * 3),
       }));
 
-      expect(options.actions!.doubled).toBe(10);
-    });
-
-    test('#02 => registerPlugins is idempotent and returns the plugin', () => {
-      expect(registerPlugins(doublePlugin)).toStrictEqual([doublePlugin]);
-      registerPlugins(doublePlugin);
-
-      const options = createOptions(syncContract)(({ double }) => ({
-        actions: { doubled: double(6) as any },
-      }));
-
-      expect(options.actions!.doubled).toBe(12);
-    });
-
-    test('#03 => a per-call plugin overrides a global plugin with the same name', () => {
-      configureOptions(doublePlugin);
-
-      const tripler = {
-        name: 'double',
-        create: () => ({ double: same((value: number) => value * 3) }),
-      } satisfies UtilityPlugin;
-
-      const options = createOptions(
-        syncContract,
+      const options = createOptions(syncContract).use(
+        doublePlugin,
         tripler,
       )(({ double }) => ({ actions: { doubled: double(2) as any } }));
 
       expect(options.actions!.doubled).toBe(6);
     });
 
-    test('#04 => configureOptions() resets the registry', () => {
-      configureOptions(doublePlugin);
-      configureOptions();
+    test('#02 => a plugin cannot override a default addon', () => {
+      const assignPlugin = createUtilities({}, () => ({
+        assign: same(() => undefined),
+      }));
 
-      const options = createOptions(syncContract)(() => ({}));
-
-      expect(options).toStrictEqual({});
+      expect(() =>
+        createOptions(syncContract).use(assignPlugin)(() => ({})),
+      ).toThrow('A plugin cannot override the default utility "assign"');
     });
   });
 

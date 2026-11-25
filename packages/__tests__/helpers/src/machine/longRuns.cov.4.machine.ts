@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import { typings } from '@bemedev/app/utils';
+import { type } from '@bemedev/app-contract/typings';
 
 export default createMachine(
   'src/__tests__/machine/longRuns.cov.4.machine',
@@ -8,5 +8,5 @@ export default createMachine(
     initial: 'idle',
     states: { idle: { on: { TEST: { target: '/', actions: 'slowAction' } } } },
   },
-  { context: typings.context('number') },
+  { context: type('number') },
 );

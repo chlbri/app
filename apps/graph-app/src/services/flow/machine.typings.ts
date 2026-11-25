@@ -1,4 +1,4 @@
-import { type } from '@bemedev/app/bemedev';
+import { type } from '@bemedev/app';
 import type { EdgeMarkerType } from 'reactflow';
 
 export const _type = type(({ litterals }) =>

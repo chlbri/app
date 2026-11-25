@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-reactjs",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Middleware between @bemedev/app and reactjs",
   "keywords": [
     "app",
@@ -54,41 +54,44 @@
     "test:watch": "vp test"
   },
   "dependencies": {
-    "@bemedev/react-sync": "^0.1.1"
+    "@bemedev/react-sync": "catalog:"
   },
   "devDependencies": {
     "@bemedev/app": "workspace:^",
     "@bemedev/app-vitest": "workspace:^",
-    "@bemedev/decompose": "2.3.0",
-    "@bemedev/dev-utils": "^1.6.2",
-    "@bemedev/sleep": "^0.2.2",
-    "@size-limit/file": "^14.3.0",
-    "@testing-library/jest-dom": "^8.0.0",
-    "@testing-library/react": "^16.3.3",
-    "@testing-library/user-event": "^14.6.13",
-    "@types/node": "^26.6.6",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
+    "@bemedev/decompose": "catalog:",
+    "@bemedev/dev-utils": "catalog:",
+    "@bemedev/sleep": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
-    "glob": "^14.0.6",
-    "globals": "^17.14.0",
-    "husky": "^9.1.7",
-    "jsdom": "^31.0.1",
-    "onchange": "^7.1.0",
-    "prettier": "^3.10.1",
-    "pretty-quick": "^4.2.2",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "size-limit": "^14.3.0",
-    "tslib": "^2.9.1",
-    "tsx": "^4.23.15",
-    "typescript": "7.0.2",
+    "glob": "catalog:",
+    "globals": "catalog:",
+    "husky": "catalog:",
+    "jsdom": "catalog:",
+    "onchange": "catalog:",
+    "prettier": "catalog:",
+    "pretty-quick": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "size-limit": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
   "peerDependencies": {
+    "@bemedev/app-utils-bemedev": "workspace:^",
+    "@bemedev/app-contract": "workspace:^",
     "@bemedev/app": "workspace:^",
-    "react": "^19.3.1"
+    "@bemedev/decompose": "catalog:",
+    "react": "catalog:"
   },
   "engines": {
     "node": ">=24"
