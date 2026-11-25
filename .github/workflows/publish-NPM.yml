@@ -199,6 +199,19 @@ jobs:
       package: ./packages/options
       artifact: built-workspace
 
+  plugins:
+    needs: [build]
+    uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
+    secrets: inherit
+
+    with:
+      type:
+        ${{ github.ref_name == 'beta' && 'beta' || github.ref_name == 'canary' &&
+        'canary' || 'latest' }}
+
+      package: ./packages/plugins/core
+      artifact: built-workspace
+
   bemedev-plugins:
     needs: [build]
     uses: chlbri/node-github-actions/.github/workflows/publish-vp.yml@main
