@@ -1,11 +1,11 @@
 export type * from '#common/functions/types';
 export type * from '#common/types.types';
 export type * from '#exports/types.types';
-export type * from '../registry.types';
+export type * from '#sync/types.types';
 export type * from '@bemedev/app-contract/internal';
+export type * from '../registry.types';
 export * from './primitives';
 export type * from './standard';
-export type * from '#sync/types.types';
 
 export type {
   ActorsConfigMap,
@@ -178,7 +178,6 @@ export type {
   MachineStateOf,
   MachineTagsOf,
   NoExtraKeysTargetDef,
-  SimpleMachineOptions2,
   TransformTargetDef,
 } from '#common/machine';
 
@@ -216,6 +215,7 @@ export type {
   PredicateSFrom,
   PredicatesMapFrom,
   PrivateContextFrom,
+  SimpleMachineOptions2,
   StateExtendedFrom,
   StateFrom,
   StatePextendedFrom,

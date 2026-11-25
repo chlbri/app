@@ -2,18 +2,17 @@ import type { NoExtraKeysActorConfig } from '#actors';
 import type {
   ActorsConfigMap,
   AsyncAction2,
+  FnMap,
   NodeConfig2,
   TargetDef,
   TransitionsConfig,
   WithDescriber,
-  FnMap,
 } from '@bemedev/app-contract/internal';
 
 import type { FlatMapN } from '#states';
 
 import type { AsyncTransition, NoExtraKeysTransitionConfigSoA } from '#transitions';
 
-import type { Decompose } from '@bemedev/decompose';
 import type {
   Fn,
   Identitfy,
@@ -21,9 +20,10 @@ import type {
   Ru,
   SubType,
   SubTypeLow,
-  ValuesOf,
   TrueObject,
+  ValuesOf,
 } from '@bemedev/app-utils-bemedev';
+import type { Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 import type {
@@ -33,13 +33,14 @@ import type {
   ContractContext,
   ContractOptions,
   ContractPContext,
-  MaybePromise,
-  FnR,
   EmptyObject,
+  FnR,
+  MaybePromise,
 } from '@bemedev/app-contract';
 
+import type { OptionsPlugin } from '@bemedev/app-options';
+import type { SimpleMachineOptions2 } from '@bemedev/app-plugins/addons';
 import type { FnMapFilterArray, FnMapFilterObject, RecordS } from '~types';
-import { OptionsPlugin } from '@bemedev/app-options';
 
 export type { OptionsPlugin };
 
@@ -169,16 +170,6 @@ export type CommonElements<Ct extends Contract = Contract> = {
   delays?: ContractOptions<Ct>['delays'];
   actors?: ContractOptions<Ct>['actors'];
 };
-
-/**
- * Second version of simple machine options.
- *
- * @see -- type {@linkcode Partial}, -- type {@linkcode Record}
- */
-export type SimpleMachineOptions2 = Partial<
-  Record<'actions' | 'guards' | 'delays', any> &
-    Record<'actors', { children?: RecordS<any>; emitters?: RecordS<any> }>
->;
 
 /**
  * Helper function for extracting entry or exit actions from a node.
