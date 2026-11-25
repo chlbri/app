@@ -17,12 +17,15 @@ import type {
   AsyncOptions,
   CommonEraseAction,
   CommonFilterAction,
+  FnMapFilterArray,
+  FnMapFilterObject,
   SyncAssign,
 } from './actions';
 
 import type { AnyMachine } from '../anyMachine';
 import type {
   AsyncGuardUnion,
+  DefinedValue,
   SyncGuardUnion,
   ValueDefined,
   ValueIs,
@@ -37,7 +40,10 @@ export type {
   AsyncAssign,
   AsyncGuardUnion,
   AsyncOptions,
+  DefinedValue,
   Fn,
+  FnMapFilterArray,
+  FnMapFilterObject,
   SyncAssign,
   SyncGuardUnion,
   UtilityPair,

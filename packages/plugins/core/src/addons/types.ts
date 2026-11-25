@@ -1,14 +1,14 @@
-import type { RecordS, PrimitiveObject } from '@bemedev/app-contract';
-import type { NotReadonly } from '@bemedev/app-utils-bemedev';
+import type { PrimitiveObject, RecordS } from '@bemedev/app-contract';
+import type { Fn, NotReadonly } from '@bemedev/app-utils-bemedev';
 import type { Decompose } from '@bemedev/decompose';
 
 /**
  * Generic function type signature.
  *
- * @template `Args` - Tuple of the argument types accepted by the function.
- * @template `R` - Return type of the function.
+ * Re-exported from `@bemedev/app-utils-bemedev`, the lowest layer of the
+ * dependency graph, so the plugin and machine runtimes share one definition.
  */
-export type Fn<Args extends any[] = any[], R = any> = (...args: Args) => R;
+export type { Fn };
 
 /**
  * A type that represents a record with string keys and values of type {@linkcode R}.

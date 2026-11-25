@@ -23,7 +23,6 @@ import type {
   TrueObject,
   ValuesOf,
 } from '@bemedev/app-utils-bemedev';
-import type { Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 import type {
@@ -39,10 +38,15 @@ import type {
 } from '@bemedev/app-contract';
 
 import type { OptionsPlugin } from '@bemedev/app-options';
-import type { SimpleMachineOptions2 } from '@bemedev/app-plugins/addons';
-import type { FnMapFilterArray, FnMapFilterObject, RecordS } from '~types';
+import type {
+  DecomposeC,
+  FnMapFilterArray,
+  FnMapFilterObject,
+  SimpleMachineOptions2,
+} from '@bemedev/app-plugins/addons';
+import type { RecordS } from '~types';
 
-export type { OptionsPlugin };
+export type { DecomposeC, OptionsPlugin };
 
 export type {
   ChildConfigDef,
@@ -186,18 +190,9 @@ export type CommonTimeAction_F<Ct extends Contract = Contract> = (
 ) => (id: string) => AsyncAction2<Ct>;
 
 /**
- * Decomposed context paths of type `Tc`, excluding array index segments.
- *
- * @template | {@linkcode PrimitiveObject} `Tc` - Context type to decompose.
- * @template `_Pc` - Unused private context placeholder, kept for signature parity.
+ * `DecomposeC` is owned by `@bemedev/app-plugins/addons` and re-exported at
+ * the top of this module.
  */
-export type DecomposeC<
-  Tc extends PrimitiveObject = PrimitiveObject,
-  _Pc = any,
-> = Omit<
-  Decompose<NonNullable<Tc>, { object: 'both'; start: false; sep: '.' }>,
-  `${string}.[${number}]${string}`
->;
 
 /**
  * Function type signature for creating an erase property action helper.

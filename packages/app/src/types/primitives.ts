@@ -7,10 +7,9 @@ import type {
   EventStrings,
   RecordS,
   State,
-  StateExtended,
   StatePOf,
-  StatePextendedOf,
 } from '@bemedev/app-contract';
+import type { KeyU } from '@bemedev/app-plugins/addons';
 import type {
   DeepPartial,
   NOmit,
@@ -27,6 +26,14 @@ import {
   isFunction,
   isString,
 } from '@bemedev/app-options/internal';
+
+export type {
+  FnMapFilterArray,
+  FnMapFilterObject,
+  SingleOrArrayL2,
+  SingleOrArrayR,
+} from '@bemedev/app-plugins/addons';
+export type { KeyU };
 
 export type {
   Describer,
@@ -50,18 +57,9 @@ export { EmptyObject };
 export type IsString_F = (value: unknown) => value is string;
 
 /**
- * Single element or readonly array type of `T`.
- *
- * @template `T` - The element type.
+ * `SingleOrArrayR` and `SingleOrArrayL2` are owned by
+ * `@bemedev/app-plugins/addons` and re-exported at the top of this module.
  */
-export type SingleOrArrayR<T> = T | readonly T[];
-
-/**
- * Single element or array type with at least two elements of type `T`.
- *
- * @template `T` - The element type.
- */
-export type SingleOrArrayL2<T> = T | [T, T, ...T[]];
 
 /**
  * Describer keys, function guard and string guard.
@@ -323,70 +321,9 @@ export type FnReduced<Ct extends Contract = Contract, R = any> = (
 ) => R;
 
 /**
- * Internal helper function map type keyed by event types.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `Item` - Type of the item to filter.
- * @template `Ex` - Event types to exclude.
+ * `FnMapFilterArray` and `FnMapFilterObject` are owned by
+ * `@bemedev/app-plugins/addons` and re-exported at the top of this module.
  */
-type _FnMapFilterArray<Ct extends Contract, Item, Ex extends string> = {
-  [key in Exclude<ContractEventType<Ct>, EventStrings | Ex>]?: (
-    item: Item,
-    index: number,
-    state: StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: key }>>,
-  ) => boolean;
-} & Partial<
-  Record<
-    EventStrings | 'else',
-    (item: Item, index: number, state: StateExtended<Ct>) => boolean
-  >
->;
-
-/**
- * Function map filter array type.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `Item` - Type of the item to filter.
- * @template `Ex` - Event types to exclude.
- */
-export type FnMapFilterArray<
-  Ct extends Contract = Contract,
-  Item = any,
-  Ex extends string = never,
-> =
-  | ((item: Item, index: number, state: StateExtended<Ct>) => boolean)
-  | _FnMapFilterArray<Ct, Item, Ex>;
-
-/**
- * Internal helper function map type keyed by event types.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `Item` - Type of the item to filter.
- * @template `Ex` - Event types to exclude.
- */
-type _FnMapFilterObject<Ct extends Contract, Item, Ex extends string> = {
-  [key in Exclude<ContractEventType<Ct>, EventStrings | Ex>]?: (
-    item: Item,
-    state: StatePextendedOf<Ct, Extract<ContractEvents<Ct>, { type: key }>>,
-  ) => boolean;
-} & Partial<
-  Record<EventStrings | 'else', (item: Item, state: StateExtended<Ct>) => boolean>
->;
-
-/**
- * Function map filter object type.
- *
- * @template | {@linkcode Contract} `Ct` - Contract of the machine.
- * @template `Item` - Type of the item to filter.
- * @template `Ex` - Event types to exclude.
- */
-export type FnMapFilterObject<
-  Ct extends Contract = Contract,
-  Item = any,
-  Ex extends string = never,
-> =
-  | ((item: Item, state: StateExtended<Ct>) => boolean)
-  | _FnMapFilterObject<Ct, Item, Ex>;
 
 /**
  * Internal helper type for reduced function maps.
@@ -424,16 +361,6 @@ export type FnMapR<
  * @see -- type {@linkcode NotUndefined}
  */
 export type ValuesOf<T> = NotUndefined<NotUndefined<T>[keyof NotUndefined<T>]>;
-
-/**
- * A type that represents a record with string keys and values of type {@linkcode R}.
- *
- * @template `S` - The string keys of the record.
- * @template `R` - The type of the values in the record, optional
- *
- * @remarks Simplified version of {@linkcode Record}
- */
-export type KeyU<S extends string, R = unknown> = Record<S, R>;
 
 /**
  * The partial version of {@linkcode KeyU}.
