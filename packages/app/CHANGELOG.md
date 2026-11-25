@@ -8,6 +8,53 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.3.0] - 25/11/2026** => _23:35_
+
+</summary>
+
+### Breaking changes
+
+- **Helper peer removed**: `@bemedev/app-utils-bemedev` is no longer a dependency or
+  peer. Import the shared helpers from `@bemedev/app-contract/bemedev`;
+  `@bemedev/app/bemedev` re-exports the same surface.
+- **ESM-only**: the CommonJS export conditions were removed from every subpath.
+
+### Fixes
+
+- **Install**: `npm install @bemedev/app` no longer fails on the unpublished
+  `@bemedev/app-utils-bemedev@^0.2.0`. The helpers are inlined in
+  `@bemedev/app-contract` and consumed through `@bemedev/app-contract/bemedev`.
+- **Bundled interval3**: `@bemedev/interval3` ships inside `@bemedev/app`, so the
+  install never queries the registry for it.
+- **Contract packaging**: `@bemedev/app-contract` no longer ships a duplicate copy of
+  the helpers; they are inlined at build time.
+- **Async examples**: `service.send(...)` is awaited in the documentation so state
+  reads observe the transition.
+
+### Docs
+
+- Replace the removed `typings(...)` helper with `type(...)` schemas in the Quick
+  Start and all examples, add the missing `optional` helper and an upgrade note.
+
+### Refactor
+
+- **Single helper entry point**: every `@bemedev/app-utils-bemedev` import now uses
+  `@bemedev/app-contract/bemedev`.
+
+### Dependencies
+
+- Move `@bemedev/interval3` to `dependencies` and `bundledDependencies` of
+  `@bemedev/app`.
+- Remove `@bemedev/app-utils-bemedev` from the dependencies, peers and bundled
+  dependencies of every package.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.2.0] - 25/11/2026** => _04:14_
 
 </summary>

@@ -104,17 +104,22 @@ npm install @bemedev/app
 pnpm add @bemedev/app
 ```
 
-> **Requirements:** Node.js ≥ 24 · TypeScript ≥ 6.0
+> **Requirements:** Node.js ≥ 24 · TypeScript ≥ 6.0 · ESM-only
+>
+> **Upgrading from 3.2.x?** `@bemedev/app-utils-bemedev` is no longer a peer
+> dependency. Import the shared helpers from `@bemedev/app-contract/bemedev`
+> (re-exported by `@bemedev/app/bemedev`) and remove the old package from your
+> install.
 
 <br/>
 
 ## Quick Start
 
 ```typescript
-import { createMachine, interpret, typings } from '@bemedev/app';
+import { createContract, createMachine, interpret, type } from '@bemedev/app';
 
-// 1. Declare the machine (pure data)
-const machine = createMachine(
+// 1. Declare the machine contract (pure data + schemas)
+const contract = createContract(
   {
     initial: 'idle',
     states: {
@@ -122,18 +127,18 @@ const machine = createMachine(
       running: { on: { STOP: '/idle' } },
     },
   },
-  typings({ eventsMap: { START: 'primitive', STOP: 'primitive' } }),
+  { eventsMap: type({ START: 'never', STOP: 'never' }) },
 );
 
 // 2. Create and start an interpreter
-const service = interpret(machine);
+const service = interpret(createMachine(contract));
 service.start();
 
 // 3. Send events and read state
 console.log(service.value); // 'idle'
-service.send('START');
+await service.send('START');
 console.log(service.value); // 'running'
-service.send('STOP');
+await service.send('STOP');
 console.log(service.value); // 'idle'
 
 // 4. Dispose cleanly
@@ -239,7 +244,7 @@ await service[Symbol.asyncDispose]();
 config; the second is optional type information.
 
 ```typescript
-import { createMachine, typings } from '@bemedev/app';
+import { createMachine, type } from '@bemedev/app';
 
 const machine = createMachine(
   {
@@ -280,14 +285,17 @@ const machine = createMachine(
       error: {},
     },
   },
-  typings({
-    context: { data: typings.array('string'), error: typings.maybe('string') },
-    eventsMap: {
-      FETCH: 'primitive',
-      SUCCESS: { data: typings.array('string') },
+  {
+    context: type(({ array, optional }) => ({
+      data: array('string'),
+      error: optional('string'),
+    })),
+    eventsMap: type(({ array }) => ({
+      FETCH: 'never',
+      SUCCESS: { data: array('string') },
       ERROR: { message: 'string' },
-    },
-  }),
+    })),
+  },
 );
 ```
 
@@ -387,18 +395,17 @@ const user = type(({ partial }) => partial({ name: 'string', age: 'number' }));
 
 ### Full Machine Typings Example
 
-To attach types, supply them as the third argument to `createMachine`:
+To attach types, supply them as the second argument to `createMachine`:
 
 ```typescript
 import { createMachine } from '@bemedev/app';
 import { type } from '@bemedev/typings';
 
 const machine = createMachine(
-  'auth-machine',
   { initial: 'idle', states: { idle: { on: { FETCH: '/loading' } }, loading: {} } },
   {
     // Public context (exposed via service.context)
-    context: type(({ partial, array }) =>
+    context: type(({ partial, array, optional }) =>
       partial({
         items: array('string'),
         error: optional('string'),
@@ -1199,10 +1206,10 @@ const machine = createMachine(
       },
     },
   },
-  typings({
-    context: { data: typings.maybe('string') },
-    eventsMap: { PAUSE: 'primitive', RESUME: 'primitive', STOP: 'primitive' },
-  }),
+  {
+    context: type(({ optional }) => ({ data: optional('string') })),
+    eventsMap: type({ PAUSE: 'never', RESUME: 'never', STOP: 'never' }),
+  },
 ).provideOptions(({ assign, pauseActivity, resumeActivity, stopActivity }) => ({
   actions: {
     refresh: assign('context.data', async () => (await fetchData()).value),
@@ -1309,7 +1316,7 @@ emissions. It never sends events _to_ the emitter.
 ### 9.2 Simple emitter — accumulating values
 
 ```typescript
-import { createMachine, typings, interpret } from '@bemedev/app';
+import { createMachine, interpret, type } from '@bemedev/app';
 import { createPausable } from '@bemedev/rx-pausable';
 import { interval, map, take } from 'rxjs';
 
@@ -1324,10 +1331,10 @@ const machine = createMachine(
     },
     states: { active: {} },
   },
-  typings({
-    context: 'number',
-    actorsMap: { emitters: { ticker: { next: 'number', error: 'never' } } },
-  }),
+  {
+    context: type('number'),
+    actorsMap: type({ emitters: { ticker: { next: 'number', error: 'never' } } }),
+  },
 ).provideOptions(({ assign, action }) => ({
   actions: {
     accumulate: assign('context', {
@@ -1419,7 +1426,7 @@ mapped from child to parent (`pContext`).
 ```typescript
 const child = createMachine(
   { initial: 'idle', states: { idle: { on: { PING: '/pong' } }, pong: {} } },
-  typings({ eventsMap: { PING: 'primitive' } }),
+  { eventsMap: type({ PING: 'never' }) },
 );
 
 const parent = createMachine(
@@ -1440,10 +1447,10 @@ const parent = createMachine(
       },
     },
   },
-  typings({
-    eventsMap: { PING: 'primitive' },
-    actorsMap: { children: { worker: { PING: 'primitive' } } },
-  }),
+  {
+    eventsMap: type({ PING: 'never' }),
+    actorsMap: type({ children: { worker: { PING: 'never' } } }),
+  },
 ).provideOptions(({ sendTo, action }) => ({
   actions: {
     notify: action(() => console.log('child reached pong')),
@@ -1476,18 +1483,15 @@ Tags are **metadata labels** on states. They let consumers ask "what category is
 machine in?" without hard-coding state names. A state can carry multiple tags.
 
 ```typescript
-const machine = createMachine(
-  {
-    initial: 'idle',
-    states: {
-      idle: { tags: ['idle', 'ready'] },
-      loading: { tags: ['busy'] },
-      error: { tags: ['failed'] },
-      success: { tags: ['done'] },
-    },
+const machine = createMachine({
+  initial: 'idle',
+  states: {
+    idle: { tags: ['idle', 'ready'] },
+    loading: { tags: ['busy'] },
+    error: { tags: ['failed'] },
+    success: { tags: ['done'] },
   },
-  typings({ eventsMap: {} }),
-);
+});
 
 const service = interpret(machine);
 service.start();
@@ -1566,9 +1570,9 @@ registry:
 
 ```typescript
 // src/auth/auth.machine.ts
-import { createMachine, registerMachine, typings } from '@bemedev/app';
+import { createMachine, registerMachine } from '@bemedev/app';
 
-const machine = createMachine({/* config */}, typings({/* types */}));
+const machine = createMachine({/* config */}, {/* types */});
 
 registerMachine('./src/auth/auth.machine.ts', machine);
 
@@ -1841,10 +1845,10 @@ betterTimeout({
 
 #### `createMachine(config, types?)`
 
-| Parameter | Description                                                                             |
-| --------- | --------------------------------------------------------------------------------------- |
-| `config`  | Machine configuration — `initial`, `states`, `actors?`                                  |
-| `types`   | Type definitions via `typings(...)` — `context`, `eventsMap`, `actorsMap?`, `pContext?` |
+| Parameter | Description                                                                      |
+| --------- | -------------------------------------------------------------------------------- |
+| `config`  | Machine configuration — `initial`, `states`, `actors?`                           |
+| `types`   | Type schemas via `type(...)` — `context`, `eventsMap`, `actorsMap?`, `pContext?` |
 
 Returns a `Machine` instance. Chainable via `.provideOptions(...)`.
 
