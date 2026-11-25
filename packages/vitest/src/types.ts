@@ -1,6 +1,6 @@
-import type { Equals, Fn } from '@bemedev/app-utils-bemedev';
-import { SimpleMachineOptions2, MachineType } from '@bemedev/app-plugins';
-import type { OptionsPlugin, PrimitiveObject } from '@bemedev/app-options';
+import type { OptionsPlugin } from '@bemedev/app-options';
+import { MachineType, SimpleMachineOptions2 } from '@bemedev/app-plugins';
+import type { Equals, Fn, StateValue } from '@bemedev/app-utils-bemedev';
 import type { ProcessEventMap } from 'process';
 
 import type {
@@ -9,9 +9,8 @@ import type {
   ContractEvents,
   ContractPContext,
   ContractTags,
-  StateValue,
-  EventObject,
   EventArgObject,
+  EventObject,
 } from '@bemedev/app-contract';
 
 import type {
@@ -20,6 +19,7 @@ import type {
   ExtractSender,
   SyncInterpreter,
 } from '@bemedev/app/types';
+import { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Tuple representing a test description and its corresponding execution callback.

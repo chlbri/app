@@ -6,10 +6,10 @@ import type {
   FnR,
   MaybePromise,
   SyncPredicateS,
-  PrimitiveObject,
 } from '@bemedev/app-contract';
-import type { KeysMatching } from '@bemedev/decompose';
 import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
+import type { KeysMatching } from '@bemedev/decompose';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Key-less object used when a context is absent.

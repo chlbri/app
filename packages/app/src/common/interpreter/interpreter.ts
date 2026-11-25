@@ -35,7 +35,6 @@ import type {
   Pausable,
   State,
   StateExtended,
-  StateValue,
   TransitionConfig,
   WorkingStatus,
 } from '@bemedev/app-contract';
@@ -47,7 +46,7 @@ import {
   IS_TEST,
   transformEventArg,
 } from '@bemedev/app-plugins/internal';
-import type { AllowedNames } from '@bemedev/app-utils-bemedev';
+import type { AllowedNames, StateValue } from '@bemedev/app-utils-bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { createInterval, type Interval3 } from '@bemedev/interval3';
 import { getEntries, getExits, type CommonMachine } from '../machine';

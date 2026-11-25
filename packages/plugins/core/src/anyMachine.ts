@@ -9,9 +9,8 @@ import type {
   ContractPContext,
   ContractPaths,
   ContractTags,
-  StateValue,
 } from '@bemedev/app-contract';
-import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { Fn, StateValue } from '@bemedev/app-utils-bemedev';
 
 /**
  * Machine category classification (synchronous or asynchronous).

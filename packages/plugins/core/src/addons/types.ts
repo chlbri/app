@@ -1,6 +1,7 @@
-import type { PrimitiveObject, RecordS } from '@bemedev/app-contract';
+import type { RecordS } from '@bemedev/app-contract';
 import type { Fn, NotReadonly } from '@bemedev/app-utils-bemedev';
 import type { Decompose } from '@bemedev/decompose';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Generic function type signature.

@@ -23,7 +23,7 @@ import type {
   TrueObject,
   ValuesOf,
 } from '@bemedev/app-utils-bemedev';
-import type { PrimitiveObject } from '@bemedev/typings';
+import type { EmptyObject, PrimitiveObject } from '@bemedev/typings';
 
 import type {
   CommonConfig3,
@@ -32,7 +32,6 @@ import type {
   ContractContext,
   ContractOptions,
   ContractPContext,
-  EmptyObject,
   FnR,
   MaybePromise,
 } from '@bemedev/app-contract';
