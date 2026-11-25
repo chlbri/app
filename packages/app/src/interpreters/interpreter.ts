@@ -12,7 +12,7 @@ import {
   ALWAYS_EVENT,
   transformEventArg,
 } from '@bemedev/app-plugins/internal';
-import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
+import { _any, isDefined, switchV, toArray } from '@bemedev/app-contract/bemedev';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import { sleep } from '@bemedev/sleep';

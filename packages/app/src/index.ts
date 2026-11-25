@@ -13,7 +13,7 @@ export {
   type UtilityMode,
   type UtilityPair,
 } from '@bemedev/app-plugins';
-export type { StateValue } from '@bemedev/app-utils-bemedev';
+export type { StateValue } from '@bemedev/app-contract/bemedev';
 export * from '~types';
 
 export type {
@@ -36,4 +36,4 @@ export {
   tupleOf,
   type NotReadonly,
   type TrueObject,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-contract/bemedev';

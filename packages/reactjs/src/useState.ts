@@ -1,7 +1,7 @@
 import type { AddSubscriber_F } from '@bemedev/app/types';
 import type { Contract, State } from '@bemedev/app-contract';
 import { deepEqual } from '@bemedev/app/utils';
-import { identity } from '@bemedev/app-utils-bemedev';
+import { identity } from '@bemedev/app-contract/bemedev';
 import { useSync } from '@bemedev/react-sync';
 import type { UseStateOptions } from './types';
 

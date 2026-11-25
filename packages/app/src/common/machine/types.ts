@@ -22,7 +22,7 @@ import type {
   SubTypeLow,
   TrueObject,
   ValuesOf,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-contract/bemedev';
 import type { EmptyObject, PrimitiveObject } from '@bemedev/typings';
 
 import type {

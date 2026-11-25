@@ -1,6 +1,6 @@
 import type { NodeConfig2 } from '@bemedev/app-contract';
-import type { StateValue } from '@bemedev/app-utils-bemedev';
-import { tupleOf } from '@bemedev/app-utils-bemedev';
+import type { StateValue } from '@bemedev/app-contract/bemedev';
+import { tupleOf } from '@bemedev/app-contract/bemedev';
 import { isAtomic, isCompound } from './checks';
 
 /**

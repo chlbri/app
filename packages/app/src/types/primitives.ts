@@ -17,7 +17,7 @@ import type {
   NotUndefined,
   UnionToIntersection,
   _UnionToIntersection2,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-contract/bemedev';
 import type { EmptyObject } from '@bemedev/typings';
 
 import {
@@ -40,7 +40,7 @@ export type {
   NotReadonly,
   TrueObject,
   ValuesOf,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-contract/bemedev';
 export type { KeyU };
 
 export type {
@@ -379,7 +379,7 @@ export type Delimiter = typeof DEFAULT_DELIMITER;
 
 /**
  * `RecursiveObjectKeys`, `NoExtraKeys` and `NoExtraKeysStrict` are owned by
- * `@bemedev/app-utils-bemedev` and re-exported at the top of this module.
+ * `@bemedev/app-contract/bemedev` and re-exported at the top of this module.
  */
 
 /**

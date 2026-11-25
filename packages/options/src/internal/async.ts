@@ -12,7 +12,7 @@ import type { AsyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
 import { merge2 } from './merge2';
 import { reduceFnMap } from '@bemedev/app-plugins/internal';
-import { toArray } from '@bemedev/app-utils-bemedev';
+import { toArray } from '@bemedev/app-contract/bemedev';
 
 /** Option helpers of an asynchronous machine. */
 export type AsyncHelpers = AsyncAddons;

@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "A reprogramming method to code better",
   "keywords": [
     "state machines",
@@ -121,6 +121,7 @@
   },
   "dependencies": {
     "@bemedev/app-options": "workspace:^",
+    "@bemedev/interval3": "workspace:^",
     "@bemedev/scheduler": "catalog:",
     "@bemedev/sleep": "catalog:",
     "fast-deep-equal": "catalog:"
@@ -131,12 +132,10 @@
     "@bemedev/better-promise": "catalog:",
     "@bemedev/app-contract": "workspace:^",
     "@bemedev/app-plugins": "workspace:^",
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/typings": "catalog:"
   },
   "devDependencies": {
     "@bemedev/dev-utils": "catalog:",
-    "@bemedev/interval3": "workspace:^",
     "@bemedev/rx-pausable": "catalog:",
     "@bemedev/sequence": "catalog:",
     "@size-limit/file": "catalog:",

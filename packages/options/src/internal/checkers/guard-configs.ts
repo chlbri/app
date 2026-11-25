@@ -5,7 +5,7 @@
  * machine implementation.
  */
 
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-contract/bemedev';
 import { checkAction } from './actions';
 import { checkKeys } from './primitives';
 

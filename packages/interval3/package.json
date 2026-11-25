@@ -74,10 +74,9 @@
     "test:watch": "vp test"
   },
   "peerDependencies": {
-    "@bemedev/app-utils-bemedev": "workspace:^"
+    "@bemedev/app-contract": "^3.2.0"
   },
   "devDependencies": {
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "catalog:",
     "@size-limit/file": "catalog:",
     "@types/node": "catalog:",

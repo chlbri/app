@@ -1,6 +1,6 @@
 import type { OptionsPlugin } from '@bemedev/app-options';
 import { MachineType, SimpleMachineOptions2 } from '@bemedev/app-plugins';
-import type { Equals, Fn, StateValue } from '@bemedev/app-utils-bemedev';
+import type { Equals, Fn, StateValue } from '@bemedev/app/bemedev';
 import type { ProcessEventMap } from 'process';
 
 import type {

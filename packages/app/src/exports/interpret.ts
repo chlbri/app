@@ -1,5 +1,5 @@
 import { interpretAsync } from '#interpreter';
-import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { Fn } from '@bemedev/app-contract/bemedev';
 import { interpretSync } from '../sync/interpreter';
 import type { CreateInterpreter_F } from './types.types';
 

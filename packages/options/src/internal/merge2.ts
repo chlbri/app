@@ -7,7 +7,7 @@
  */
 
 import type { Merger } from '@bemedev/app-contract';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-contract/bemedev';
 
 /** Properties accepted by {@linkcode merge2}. */
 export type MergeProps2<T = any, K extends string = string> = {

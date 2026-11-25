@@ -1,4 +1,4 @@
-import { expandFn, type DeepReadonly } from '@bemedev/app-utils-bemedev';
+import { expandFn, type DeepReadonly } from '@bemedev/app-contract/bemedev';
 /**
  * Utility function for making objects deeply read-only with optional property freezing.
  *

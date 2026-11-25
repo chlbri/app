@@ -1,4 +1,4 @@
-import type { NoExtraKeys } from '@bemedev/app-utils-bemedev';
+import type { NoExtraKeys } from '@bemedev/app-contract/bemedev';
 
 import type {
   NoExtraKeysTransitionConfig,

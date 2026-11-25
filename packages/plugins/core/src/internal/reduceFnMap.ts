@@ -1,4 +1,4 @@
-import { isFunction } from '@bemedev/app-utils-bemedev';
+import { isFunction } from '@bemedev/app-contract/bemedev';
 import { nothing } from './nothing';
 import { isStringEvent, transformEventArg } from './event';
 

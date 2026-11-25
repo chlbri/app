@@ -6,7 +6,7 @@
 
 import type { Contract } from '@bemedev/app-contract';
 import { same, type UtilityMap } from '@bemedev/app-plugins';
-import { isDefined as _isDefined } from '@bemedev/app-utils-bemedev';
+import { isDefined as _isDefined } from '@bemedev/app-contract/bemedev';
 import { recompose } from '@bemedev/decompose';
 import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';

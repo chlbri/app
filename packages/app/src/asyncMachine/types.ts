@@ -32,7 +32,7 @@ import type {
 import { Contract, ContractActorsMap } from '@bemedev/app-contract';
 import type { PrimitiveObject } from '@bemedev/typings';
 import type { ConfigFrom, KeyU } from '@bemedev/app-plugins/addons';
-import type { Equals, Identitfy, Keys } from '@bemedev/app-utils-bemedev';
+import type { Equals, Identitfy, Keys } from '@bemedev/app-contract/bemedev';
 import type { Recompose } from '@bemedev/decompose';
 import type { ReduceArray } from '~types';
 

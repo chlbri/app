@@ -1,4 +1,4 @@
-import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { Fn } from '@bemedev/app-contract/bemedev';
 
 /**
  * Callback function type with no arguments returning any result.

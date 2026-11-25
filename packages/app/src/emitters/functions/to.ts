@@ -1,5 +1,5 @@
 import { toTransition } from '#transitions';
-import { toArray } from '@bemedev/app-utils-bemedev';
+import { toArray } from '@bemedev/app-contract/bemedev';
 import type {
   Contract,
   ContractOptions,

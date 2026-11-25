@@ -1,5 +1,5 @@
-import type { Fn } from '@bemedev/app-utils-bemedev';
-import { tupleOf } from '@bemedev/app-utils-bemedev';
+import type { Fn } from '@bemedev/app-contract/bemedev';
+import { tupleOf } from '@bemedev/app-contract/bemedev';
 import type { NodeConfig2 } from '@bemedev/app-contract';
 import { isAtomic, isParallel } from './checks';
 

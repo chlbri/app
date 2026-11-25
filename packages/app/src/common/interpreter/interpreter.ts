@@ -12,7 +12,7 @@ import {
   isPrimitive,
   toArray,
   type Fn,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-contract/bemedev';
 
 import { toAction, type WithDescriber } from '#actions';
 import type { ChildConfig, EmitterConfig } from '#actor';
@@ -50,7 +50,7 @@ import {
   IS_TEST,
   transformEventArg,
 } from '@bemedev/app-plugins/internal';
-import type { AllowedNames, StateValue } from '@bemedev/app-utils-bemedev';
+import type { AllowedNames, StateValue } from '@bemedev/app-contract/bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { createInterval, type Interval3 } from '@bemedev/interval3';
 import { getEntries, getExits, type CommonMachine } from '../machine';

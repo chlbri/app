@@ -1,5 +1,5 @@
 import type { Contract, State } from '@bemedev/app-contract';
-import { _any } from '@bemedev/app-utils-bemedev';
+import { _any } from '@bemedev/app-contract/bemedev';
 import { nothing } from '@bemedev/app-plugins/internal';
 import equal from 'fast-deep-equal';
 import { FnMapR, isFunction } from '../types/primitives';

@@ -1,12 +1,12 @@
 import type { RecordS } from '@bemedev/app-contract';
-import type { Fn, NotReadonly } from '@bemedev/app-utils-bemedev';
+import type { Fn, NotReadonly } from '@bemedev/app-contract/bemedev';
 import type { Decompose } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 /**
  * Generic function type signature.
  *
- * Re-exported from `@bemedev/app-utils-bemedev`, the lowest layer of the
+ * Re-exported from `@bemedev/app-contract/bemedev`, the lowest layer of the
  * dependency graph, so the plugin and machine runtimes share one definition.
  */
 export type { Fn };

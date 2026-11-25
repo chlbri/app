@@ -6,7 +6,7 @@
  */
 
 import type { Describer } from '@bemedev/app-contract';
-import { expandFn, toArray } from '@bemedev/app-utils-bemedev';
+import { expandFn, toArray } from '@bemedev/app-contract/bemedev';
 import { isDescriber, isString } from './primitives';
 
 /**

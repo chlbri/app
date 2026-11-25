@@ -1,5 +1,5 @@
 import { DEFAULT_DELIMITER } from '#constants';
-import type { Fn } from '@bemedev/app-utils-bemedev';
+import type { Fn } from '@bemedev/app-contract/bemedev';
 import type { StateValue } from '@bemedev/typings';
 
 /**

@@ -13,7 +13,6 @@ export default defineConfig({
       'vitest',
       '@bemedev/dev-utils',
       '@bemedev/app-contract',
-      '@bemedev/app-utils-bemedev',
       '@bemedev/typings',
     ],
   }),

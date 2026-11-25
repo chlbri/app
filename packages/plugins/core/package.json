@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-plugins",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Utilities for @bemedev/app",
   "keywords": [
     "state machines",
@@ -92,7 +92,6 @@
     "@bemedev/decompose": "catalog:"
   },
   "peerDependencies": {
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/typings": "catalog:"
   },
   "devDependencies": {

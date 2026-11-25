@@ -1,6 +1,6 @@
 import type { ActivityConfig } from '@bemedev/app-contract/internal';
 import { isDescriber } from '@bemedev/app-options/internal';
-import { toArray } from '@bemedev/app-utils-bemedev';
+import { toArray } from '@bemedev/app/bemedev';
 import { fromDescriber } from '@bemedev/app/types';
 import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';

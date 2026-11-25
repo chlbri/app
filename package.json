@@ -36,6 +36,7 @@
     "ci:offline": "CIN=$(date +%s) && vp install --offline && vp run pretest && vp run lint && vp run test:only && vp run posttest && vp fmt && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
     "ci:admin": "FULL_CI=$(date +%s) && pnpm run rm && pnpm run up && vp run ci && echo \"\n✅ Full CI takes $(($(date +%s) - FULL_CI))s\n\"",
     "ci:nocache": "CIN=$(date +%s) && vp install && vp run -r pack && vp run pretest && vp fmt && vp lint --fix && vp test && vp run posttest && vp fmt && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
+    "ci:admin:off": "FULL_CI=$(date +%s) && pnpm run rm && pnpm install --offline && vp run ci && echo \"\n✅ Full CI takes $(($(date +%s) - FULL_CI))s\n\"",
     "pnpm:devPreinstall": "node -e \"const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); const version=require('child_process').execSync('pnpm -v').toString().trim(); pkg.packageManager='pnpm@' + version; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\\n');\"",
     "config": "vp i",
     "rinit": "vp run rm && vp run config",
@@ -45,8 +46,7 @@
     "pretest": "vp run -r pretest",
     "posttest": "vp run size",
     "rm": "pnpm clean --lockfile --yes",
-    "up": "pnpm update !solid-js !@vitest/coverage-v8 !@vitest/ui --latest && vp run check-updates",
-    "check-updates": "vp dlx npm-check-updates -x solid-js -x @vitest/coverage-v8 -x @vitest/ui -w -u --dep dev,peer,optional,prod",
+    "up": "pnpm update !solid-js !@vitest/coverage-v8 !@vitest/ui --latest",
     "rm:lib": "pnpm run -r rm:lib",
     "generate:lib": "vp run -r generate:lib",
     "prepare": "husky"
@@ -76,5 +76,5 @@
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@12.22.0"
+  "packageManager": "pnpm@12.23.0"
 }

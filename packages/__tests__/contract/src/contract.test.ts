@@ -15,7 +15,7 @@ import {
   type WorkingStatus,
 } from '@bemedev/app-contract';
 
-import type { StateValue } from '@bemedev/app-utils-bemedev';
+import type { StateValue } from '@bemedev/app-contract/bemedev';
 
 import contract, { config, types } from './auth.contract';
 

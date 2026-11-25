@@ -1,5 +1,5 @@
 import type { EventObject } from '@bemedev/app-contract';
-import type { Equals } from '@bemedev/app-utils-bemedev';
+import type { Equals } from '@bemedev/app-contract/bemedev';
 import type { PrimitiveObject } from '@bemedev/typings';
 
 export type {

@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-bemedev-plugins",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Optional composable utilities for @bemedev/app, delivered as options plugins",
   "keywords": [
     "state machines",
@@ -70,7 +70,6 @@
     "@bemedev/function-swap": "catalog:"
   },
   "peerDependencies": {
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/typings": "catalog:",
     "@bemedev/app-contract": "workspace:^",
     "@bemedev/decompose": "catalog:"

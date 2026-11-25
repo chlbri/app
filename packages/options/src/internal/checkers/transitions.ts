@@ -14,7 +14,7 @@ import type {
 import { checkActions } from './actions';
 import { checkGuards } from './guard-configs';
 import { checkKeys, checkValues, isStringOrUndefined } from './primitives';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-contract/bemedev';
 
 /** Allowed key names for transition configuration objects. */
 const TRANSITIONS_KEYS = ['target', 'actions', 'guards', 'description'];

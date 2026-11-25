@@ -36,7 +36,7 @@ import type {
   IndexesOfArray,
   NotUndefined,
   SoA,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-contract/bemedev';
 
 import type { CommonChild } from '#common/machine';
 import type { AsyncEmitter } from '#emitters';

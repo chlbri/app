@@ -1,5 +1,5 @@
 import type { AddSubscriber_F } from '@bemedev/app/types';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-contract/bemedev';
 import { State, Contract, ContractEventType } from '@bemedev/app-contract';
 import { deepEqual } from '@bemedev/app/utils';
 import { createSignal, onCleanup } from 'solid-js';

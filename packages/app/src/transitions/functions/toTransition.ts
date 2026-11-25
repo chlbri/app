@@ -1,7 +1,7 @@
 import { toAction } from '#actions';
 import { toPredicate } from '#guards';
 import type { AsyncTransition } from '#transitions';
-import { toArray } from '@bemedev/app-utils-bemedev';
+import { toArray } from '@bemedev/app-contract/bemedev';
 
 import type {
   Contract,

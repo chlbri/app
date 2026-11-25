@@ -4,7 +4,7 @@ import type { FlatMapN } from '#states';
 import type { OptionsPlugin } from '@bemedev/app-options';
 import { buildHelpers } from '@bemedev/app-options/internal';
 import { SimpleMachineOptions2 } from '@bemedev/app-plugins/addons';
-import { _unknown } from '@bemedev/app-utils-bemedev';
+import { _unknown } from '@bemedev/app-contract/bemedev';
 import { CommonMachine } from '../../common/machine';
 import type { SyncAddOptions_F, SyncProvideOptions_F } from './options.types';
 

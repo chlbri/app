@@ -7,7 +7,7 @@ import type {
   MaybePromise,
   SyncPredicateS,
 } from '@bemedev/app-contract';
-import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
+import type { Equals, NotUndefined } from '@bemedev/app-contract/bemedev';
 import type { KeysMatching } from '@bemedev/decompose';
 import type { PrimitiveObject } from '@bemedev/typings';
 

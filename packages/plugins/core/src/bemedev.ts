@@ -4,4 +4,4 @@
  * @module
  */
 
-export * from '@bemedev/app-utils-bemedev';
+export * from '@bemedev/app-contract/bemedev';

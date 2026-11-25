@@ -5,7 +5,7 @@
  * option helpers rely on, so this package never imports the machine package.
  */
 
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-contract/bemedev';
 import { Decompose } from '@bemedev/decompose';
 
 /** Options accepted when reading a nested property. */

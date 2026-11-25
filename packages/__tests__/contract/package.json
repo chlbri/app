@@ -13,7 +13,6 @@
   "devDependencies": {
     "@bemedev/app-cli": "workspace:^",
     "@bemedev/app-contract": "workspace:^",
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "catalog:",
     "@types/node": "catalog:",
     "tsx": "catalog:",

@@ -6,7 +6,7 @@
  */
 
 import type { Describer } from '@bemedev/app-contract';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-contract/bemedev';
 import _async from '@bemedev/boolean-recursive/async';
 import sync from '@bemedev/boolean-recursive/sync';
 

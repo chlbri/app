@@ -8,7 +8,7 @@ export type {
 } from '@bemedev/interval3/types';
 export * from '@bemedev/scheduler';
 export * from '@bemedev/sleep';
-export * from '@bemedev/app-utils-bemedev';
+export * from '@bemedev/app-contract/bemedev';
 export { type } from '@bemedev/typings';
 export type {
   EmptyObject,

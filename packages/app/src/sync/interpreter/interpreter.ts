@@ -7,7 +7,7 @@ import type { Contract } from '@bemedev/app-contract';
 import type { OptionsPlugin } from '@bemedev/app-options';
 import { byKey2, isDescriber, merge2 } from '@bemedev/app-options/internal';
 import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
-import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
+import { _any, isDefined, switchV, toArray } from '@bemedev/app-contract/bemedev';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import equal from 'fast-deep-equal';

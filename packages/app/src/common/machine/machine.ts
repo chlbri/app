@@ -5,7 +5,7 @@ import {
   keysOf,
   partialCall,
   toArray,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-contract/bemedev';
 
 import { DEFAULT_DELIMITER } from '#constants';
 import { type DefinedValue } from '#guards';

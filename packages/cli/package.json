@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-cli",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "private": false,
   "description": "CLI tool and AST parseTree parser for @bemedev/app",
   "license": "MIT",
@@ -65,8 +65,7 @@
     "vite-plus": "catalog:"
   },
   "peerDependencies": {
-    "@bemedev/app": "workspace:^",
-    "@bemedev/app-utils-bemedev": "workspace:^"
+    "@bemedev/app": "workspace:^"
   },
   "engines": {
     "node": ">=24"

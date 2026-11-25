@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-vitest",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "private": false,
   "description": "Test helpers for @bemedev/app",
   "keywords": [
@@ -65,7 +65,6 @@
     "@bemedev/app-contract": "workspace:^",
     "@bemedev/app-options": "workspace:^",
     "@bemedev/app-plugins": "workspace:^",
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/typings": "catalog:",
     "@bemedev/sleep": "catalog:",
     "vitest": "catalog:"

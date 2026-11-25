@@ -24,7 +24,7 @@ import type {
 } from '@bemedev/app-plugins/addons';
 import type { Interval3 } from '@bemedev/interval3';
 import type { IntervalParams } from '@bemedev/interval3/types';
-import type { Equals, Fn } from '@bemedev/app-utils-bemedev';
+import type { Equals, Fn } from '@bemedev/app-contract/bemedev';
 import type { FnMapR, OptionalDefinition } from '~types';
 import type { Subscriber, SubscriberOptions } from '../subscriber';
 import type { AnyMachine, MachineType } from '@bemedev/app-plugins';

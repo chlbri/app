@@ -1,5 +1,5 @@
 import type { Contract, ContractContext } from '@bemedev/app-contract';
-import type { SubTypeLow } from '@bemedev/app-utils-bemedev';
+import type { SubTypeLow } from '@bemedev/app-contract/bemedev';
 import type { DecomposeC } from '../types';
 
 export * from './actions.types';

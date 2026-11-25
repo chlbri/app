@@ -6,7 +6,7 @@ import type {
   Describer,
   FnMap,
 } from '@bemedev/app-contract';
-import type { NoExtraKeys } from '@bemedev/app-utils-bemedev';
+import type { NoExtraKeys } from '@bemedev/app-contract/bemedev';
 import type { FromDescriber } from '~types';
 
 export type {

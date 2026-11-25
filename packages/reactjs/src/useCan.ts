@@ -1,8 +1,8 @@
 import type { Contract, ContractEventType, State } from '@bemedev/app-contract';
 import type { AddSubscriber_F } from '@bemedev/app/types';
-import { expandFn } from '@bemedev/app-utils-bemedev';
+import { expandFn } from '@bemedev/app-contract/bemedev';
 import { deepEqual } from '@bemedev/app/utils';
-import { identity } from '@bemedev/app-utils-bemedev';
+import { identity } from '@bemedev/app-contract/bemedev';
 import { useSync } from '@bemedev/react-sync';
 
 /**

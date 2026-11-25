@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-solidjs",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Middleware between @bemedev/app-ts and solidjs",
   "keywords": [
     "app",
@@ -82,7 +82,6 @@
     "vite-plus": "catalog:"
   },
   "peerDependencies": {
-    "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/app-contract": "workspace:^",
     "@bemedev/app": "workspace:^",
     "@bemedev/decompose": "catalog:",

@@ -1,5 +1,5 @@
-import { _any, tupleOf } from '@bemedev/app-utils-bemedev';
-import { identity } from '@bemedev/app-utils-bemedev';
+import { _any, tupleOf } from '@bemedev/app/bemedev';
+import { identity } from '@bemedev/app/bemedev';
 import { sleep } from '@bemedev/sleep';
 import { vi, expect, test } from 'vite-plus/test';
 import type { ConstructTests_F } from './constructTests.types';

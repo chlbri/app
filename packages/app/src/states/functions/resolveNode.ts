@@ -2,7 +2,7 @@ import { toAction } from '#actions';
 import { toChild } from '#common/functions';
 import { toEmitter } from '#emitters';
 import { toTransition } from '#transitions';
-import { _any, identify, toArray } from '@bemedev/app-utils-bemedev';
+import { _any, identify, toArray } from '@bemedev/app-contract/bemedev';
 import type { Node } from '../types';
 import { stateType } from './stateType';
 

@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-contract",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Lightweight machine contracts for @bemedev/app",
   "keywords": [
     "state machines",
@@ -81,9 +81,6 @@
   "dependencies": {
     "@bemedev/typings": "catalog:"
   },
-  "bundledDependencies": [
-    "@bemedev/app-utils-bemedev"
-  ],
   "devDependencies": {
     "@bemedev/app-utils-bemedev": "workspace:^",
     "@bemedev/dev-utils": "catalog:",

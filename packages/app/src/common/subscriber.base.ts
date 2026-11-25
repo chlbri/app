@@ -1,5 +1,5 @@
 import { deepEqual } from '#utils';
-import { type Fn, identity } from '@bemedev/app-utils-bemedev';
+import { type Fn, identity } from '@bemedev/app-contract/bemedev';
 
 /**
  * Function signature for a selector function mapping state of type `T` to selected value `R`.

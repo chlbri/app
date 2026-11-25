@@ -1,4 +1,4 @@
-import type { SoRa } from '@bemedev/app-utils-bemedev';
+import type { SoRa } from '@bemedev/app-contract/bemedev';
 import * as v from 'valibot';
 
 /**

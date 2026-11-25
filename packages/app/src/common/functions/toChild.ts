@@ -1,6 +1,6 @@
 import type { CommonChild } from '#common/machine';
 import { toTransition } from '#transitions';
-import { _any, identify } from '@bemedev/app-utils-bemedev';
+import { _any, identify } from '@bemedev/app-contract/bemedev';
 import type { Contract, ContractOptions } from '@bemedev/app-contract';
 import type { ChildConfig } from '../../actors/types';
 import { toChildSrc } from './toChildSrc';

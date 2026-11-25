@@ -13,7 +13,7 @@ import type {
   SubType,
   TrueObject,
   ValuesOf,
-} from '@bemedev/app-utils-bemedev';
+} from '@bemedev/app-contract/bemedev';
 import type { DecomposeC } from '../types';
 
 /**

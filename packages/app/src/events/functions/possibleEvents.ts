@@ -1,5 +1,5 @@
 import type { NodeConfig2, RecordS } from '@bemedev/app-contract';
-import { isDefined } from '@bemedev/app-utils-bemedev';
+import { isDefined } from '@bemedev/app-contract/bemedev';
 
 /**
  * Returns a list of all possible events from a flat record of NodeConfig.

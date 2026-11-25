@@ -3,7 +3,7 @@ import { createAsyncMachine } from '../asyncMachine/machine';
 import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
 export type { ContractMachine, CreateMachine_F } from './types.types';
-import { toArray } from '@bemedev/app-utils-bemedev';
+import { toArray } from '@bemedev/app-contract/bemedev';
 import { OptionsPlugin } from '@bemedev/app-options';
 
 /**

@@ -7,7 +7,7 @@ import type {
   EventsR,
   FnMap,
 } from '@bemedev/app-contract';
-import type { NotUndefined } from '@bemedev/app-utils-bemedev';
+import type { NotUndefined } from '@bemedev/app-contract/bemedev';
 import { PrimitiveObject } from '@bemedev/typings';
 import type { KeyU, SimpleMachineOptions2 } from './types';
 
