@@ -1,6 +1,7 @@
-import type { AddSubscriber_F } from '@bemedev/app/types';
-import type { Contract, State, StateValue } from '@bemedev/app-contract';
+import type { Contract, State } from '@bemedev/app-contract';
+import type { StateValue } from '@bemedev/app-utils-bemedev';
 import { expandFn } from '@bemedev/app/bemedev';
+import type { AddSubscriber_F } from '@bemedev/app/types';
 import { decomposeSV, deepEqual, identity } from '@bemedev/app/utils';
 import { useSync } from '@bemedev/react-sync';
 

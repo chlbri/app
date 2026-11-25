@@ -35,11 +35,11 @@ export type {
   StatePextendedOf,
   StatePOf,
   StateType,
-  StateValue,
-  StateValueMap,
   TargetDef,
   WorkingStatus,
 } from '@bemedev/app-contract';
+
+export type { StateValue, StateValueMap } from '@bemedev/app-utils-bemedev';
 
 /**
  * Type alias for state node configuration type {@linkcode NodeConfig2}.

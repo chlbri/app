@@ -10,11 +10,12 @@ import {
   type ContractPContext,
   type ContractSync,
   type EventStrings,
-  type StateValue,
   type SyncMachineOptions2,
   type SyncSimpleMachineOptions,
   type WorkingStatus,
 } from '@bemedev/app-contract';
+
+import type { StateValue } from '@bemedev/app-utils-bemedev';
 
 import contract, { config, types } from './auth.contract';
 

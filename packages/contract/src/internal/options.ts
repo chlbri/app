@@ -5,6 +5,7 @@
  * the sync flag are read from the contract carried as the first type parameter.
  */
 
+import type { StateValue } from '@bemedev/app-utils-bemedev';
 import type { RegisterOptions } from '../registry.types';
 import type {
   ContractContextOf,
@@ -85,14 +86,6 @@ export type WorkingStatus =
   | 'sending'
   | 'stopped'
   | 'busy';
-
-/** Nested state value map. */
-export interface StateValueMap {
-  [key: string]: StateValue;
-}
-
-/** Machine state value. */
-export type StateValue = string | StateValueMap;
 
 /**
  * Fields shared by every active state object.

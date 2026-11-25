@@ -37,6 +37,8 @@ export type {
   Ru,
   SoA,
   SoRa,
+  StateValue,
+  StateValueMap,
   SubType,
   SubTypeLow,
   To,

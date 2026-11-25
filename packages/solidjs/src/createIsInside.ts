@@ -1,6 +1,7 @@
-import type { AddSubscriber_F } from '@bemedev/app/types';
+import type { Contract, State } from '@bemedev/app-contract';
+import type { StateValue } from '@bemedev/app-utils-bemedev';
 import { expandFn } from '@bemedev/app-utils-bemedev';
-import type { State, Contract, StateValue } from '@bemedev/app-contract';
+import type { AddSubscriber_F } from '@bemedev/app/types';
 import { deepEqual } from '@bemedev/app/utils';
 import { decomposeSV } from '@bemedev/decompose';
 import { createSignal, onCleanup } from 'solid-js';

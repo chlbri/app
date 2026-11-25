@@ -812,6 +812,9 @@ importers:
       '@bemedev/app-contract':
         specifier: workspace:^
         version: link:../../contract
+      '@bemedev/app-utils-bemedev':
+        specifier: workspace:^
+        version: link:../../utils/bemedev
       '@bemedev/dev-utils':
         specifier: 'catalog:'
         version: 1.6.2(@types/node@26.6.6)(@vitest/browser-preview@5.1.1)(@vitest/browser@5.1.1)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@31.0.1)(rolldown@1.3.3)(rollup@4.68.8)(supports-color@10.2.2)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3)(vite@6.4.6(@types/node@26.6.6)(jiti@2.7.0)(lightningcss@1.33.0)(terser@5.51.4)(tsx@4.23.15))(vitest@5.1.1)

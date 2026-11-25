@@ -1,7 +1,7 @@
 import { DEFAULT_DELIMITER } from '#constants';
 import { deleteFirst, isStringEmpty, recomposeSV, replaceAll } from '#utils';
-import type { StateValue } from '@bemedev/app-contract/internal';
 import { isString } from '@bemedev/app-options/internal';
+import type { StateValue } from '@bemedev/app-utils-bemedev';
 import { _any, isDefined, trueO } from '@bemedev/app-utils-bemedev';
 
 import { decompose, decomposeKeys, recompose } from '@bemedev/app-options/decompose';
