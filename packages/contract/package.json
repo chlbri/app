@@ -43,17 +43,14 @@
   "exports": {
     ".": {
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
     },
     "./bemedev": {
       "import": "./lib/bemedev.js",
-      "require": "./lib/bemedev.cjs",
       "types": "./lib/bemedev.d.ts"
     },
     "./internal": {
       "import": "./lib/internal/index.js",
-      "require": "./lib/internal/index.cjs",
       "types": "./lib/internal/index.d.ts"
     },
     "./registry": {
@@ -61,7 +58,6 @@
     },
     "./typings": {
       "import": "./lib/typings.js",
-      "require": "./lib/typings.cjs",
       "types": "./lib/typings.d.ts"
     },
     "./types": {

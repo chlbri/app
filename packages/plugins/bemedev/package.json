@@ -44,12 +44,10 @@
   "exports": {
     ".": {
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
     },
     "./swap": {
       "import": "./lib/swap.js",
-      "require": "./lib/swap.cjs",
       "types": "./lib/swap.d.ts"
     }
   },

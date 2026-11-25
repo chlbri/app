@@ -44,47 +44,38 @@
   "exports": {
     ".": {
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
     },
     "./bemedev": {
       "import": "./lib/bemedev.js",
-      "require": "./lib/bemedev.cjs",
       "types": "./lib/bemedev.d.ts"
     },
     "./better-promise": {
       "import": "./lib/better-promise.js",
-      "require": "./lib/better-promise.cjs",
       "types": "./lib/better-promise.d.ts"
     },
     "./boolean-recursive": {
       "import": "./lib/boolean-recursive.js",
-      "require": "./lib/boolean-recursive.cjs",
       "types": "./lib/boolean-recursive.d.ts"
     },
     "./contract": {
       "import": "./lib/contract.js",
-      "require": "./lib/contract.cjs",
       "types": "./lib/contract.d.ts"
     },
     "./decompose": {
       "import": "./lib/decompose.js",
-      "require": "./lib/decompose.cjs",
       "types": "./lib/decompose.d.ts"
     },
     "./internal": {
       "import": "./lib/internal/index.js",
-      "require": "./lib/internal/index.cjs",
       "types": "./lib/internal/index.d.ts"
     },
     "./plugins": {
       "import": "./lib/plugins.js",
-      "require": "./lib/plugins.cjs",
       "types": "./lib/plugins.d.ts"
     },
     "./types": {
       "import": "./lib/types.js",
-      "require": "./lib/types.cjs",
       "types": "./lib/types.d.ts"
     }
   },

@@ -43,7 +43,6 @@
   "exports": {
     ".": {
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
       "types": "./lib/index.d.ts"
     },
     "./types": {
@@ -51,32 +50,26 @@
     },
     "./addons": {
       "import": "./lib/addons/index.js",
-      "require": "./lib/addons/index.cjs",
       "types": "./lib/addons/index.d.ts"
     },
     "./bemedev": {
       "import": "./lib/bemedev.js",
-      "require": "./lib/bemedev.cjs",
       "types": "./lib/bemedev.d.ts"
     },
     "./decompose": {
       "import": "./lib/decompose.js",
-      "require": "./lib/decompose.cjs",
       "types": "./lib/decompose.d.ts"
     },
     "./internal": {
       "import": "./lib/internal/index.js",
-      "require": "./lib/internal/index.cjs",
       "types": "./lib/internal/index.d.ts"
     },
     "./same": {
       "import": "./lib/same.js",
-      "require": "./lib/same.cjs",
       "types": "./lib/same.d.ts"
     },
     "./typings": {
       "import": "./lib/typings.js",
-      "require": "./lib/typings.cjs",
       "types": "./lib/typings.d.ts"
     }
   },
