@@ -26,7 +26,7 @@ export default defineConfig({
             '../plugins/core/lib/**',
             '../utils/bemedev/lib/**',
           ],
-          output: ['lib/**'],
+          output: ['lib/**', '!**/.DS_Store'],
         },
       },
     },

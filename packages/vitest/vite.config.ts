@@ -19,7 +19,7 @@ export default defineConfig({
             'vite.config.ts',
             '!**/*.gen.ts',
           ],
-          output: ['lib/**'],
+          output: ['lib/**', '!**/.DS_Store'],
         },
       },
     },

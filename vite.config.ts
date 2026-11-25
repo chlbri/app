@@ -186,6 +186,7 @@ export default defineConfig({
             '.size-limit.ts',
             'packages/*/lib/**',
             'packages/utils/*/lib/**',
+            '!**/.DS_Store',
             'packages/plugins/*/lib/**',
           ],
           output: [],
@@ -200,7 +201,7 @@ export default defineConfig({
             'vite.config.ts',
             'packages/**/src/**',
             'apps/*/src/**',
-
+            '!**/.DS_Store',
             '!**/*.gen.ts',
           ],
 

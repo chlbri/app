@@ -1,10 +1,10 @@
 {
   "name": "graph-app",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "_prebuild": "vp run --filter @bemedev/interval3 --filter @bemedev/app-utils-bemedev --filter @bemedev/app-contract --filter @bemedev/app-options --filter @bemedev/app pretest",
+    "_prebuild": "vp run --filter @bemedev/app-utils-bemedev --filter @bemedev/app-contract --filter @bemedev/app-plugins --filter @bemedev/app-options --filter @bemedev/interval3 --filter @bemedev/app --filter @bemedev/app-cli --filter @bemedev/app-vitest pretest",
     "prebuild": "vp run _prebuild && vp run --filter @bemedev/app-reactjs pretest",
     "dev": "vp dev",
     "generate-routes": "tsr generate",
