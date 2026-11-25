@@ -17,7 +17,7 @@ export type {
   ToEventObject,
   ToEvents,
   ToEventsR,
-} from '@bemedev/app-contract';
+} from '@bemedev/app-contract/internal';
 
 /**
  * Helper extracting tuple parameter list for event sender functions.

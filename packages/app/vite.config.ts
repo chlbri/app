@@ -21,6 +21,7 @@ export default defineConfig({
             '!**/*.gen.ts',
             '../contract/lib/**',
             '../interval3/lib/**',
+            '!**/.DS_Store',
             '../options/lib/**',
             '../plugins/core/lib/**',
             '../utils/bemedev/lib/**',

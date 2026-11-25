@@ -7,22 +7,6 @@ export type * from '../registry.types';
 export * from './primitives';
 export type * from './standard';
 
-export type {
-  ActorsConfigMap,
-  AllEvent,
-  AlwaysEvent,
-  EventArgAll,
-  EventArgObject,
-  EventObject,
-  EventsMap,
-  EventsR,
-  EventStrings,
-  InitEvent,
-  ToEventObject,
-  ToEvents,
-  ToEventsR,
-} from '@bemedev/app-contract/internal';
-
 export type { EventToType_F, ExtractSender } from '#events';
 
 export type {
