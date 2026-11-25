@@ -1,42 +1,38 @@
 import { type ExtendedActionsParams } from '#common/interpreter';
+import type { CommonChildFunction2 } from '#common/machine';
 import { eventToType, transformEventArg, type ExtractSender } from '#events';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
-import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
-import equal from 'fast-deep-equal';
-import type { CommonChildFunction2 } from '#common/machine';
 import type { Contract } from '@bemedev/app-contract';
-import { recompose } from '@bemedev/decompose';
-import { byKey2, merge2 } from '@bemedev/app-options/internal';
+import type { OptionsPlugin } from '@bemedev/app-options';
+import { byKey2, isDescriber, merge2 } from '@bemedev/app-options/internal';
 import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
+import { _any, isDefined, switchV, toArray } from '@bemedev/app-utils-bemedev';
+import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
+import equal from 'fast-deep-equal';
 import { CommonInterpreter } from '../../common/interpreter/interpreter';
 import { createSubscriber } from '../../common/subscriber';
 import type { SyncAddOptions_F } from '../machine';
 import type { SyncMachine } from '../machine/machine';
-import type { OptionsPlugin } from '@bemedev/app-options';
 
 import { DEFAULT_MAX_SELF_TRANSITIONS, DEFAULT_MAX_TIME_PROMISE } from '#constants';
 
 import type {
+  AlwaysConfig,
   AsyncEmitterFunction,
   ChildConfig,
-  EmitterConfig,
-  FinallyConfig,
-  WithDescriber,
-  TransitionConfig,
-  AlwaysConfig,
+  ContractEvents,
   DelayedTransitions,
+  EmitterConfig,
   EventArgObject,
   EventObject,
-  ContractEvents,
+  FinallyConfig,
+  TransitionConfig,
+  WithDescriber,
 } from '@bemedev/app-contract';
 
-import {
-  isDescriber,
-  AFTER_EVENT,
-  ALWAYS_EVENT,
-} from '@bemedev/app-options/internal';
+import { AFTER_EVENT, ALWAYS_EVENT } from '@bemedev/app-plugins/internal';
 
 import type {
   _SyncSend_F,

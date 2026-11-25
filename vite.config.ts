@@ -1,4 +1,4 @@
-import { defineConfig, defaultExclude } from 'vite-plus';
+import { defaultExclude, defineConfig } from 'vite-plus';
 
 export default defineConfig({
   fmt: {
@@ -39,6 +39,9 @@ export default defineConfig({
       '**/*.test-d.ts',
       '**/libs/bemedev/*',
       '.agents/**',
+      '**/*.mjs',
+      '**/*.js',
+      '**/*.cjs',
     ],
 
     options: { typeAware: true, typeCheck: true },

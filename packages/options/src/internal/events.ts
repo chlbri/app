@@ -7,12 +7,6 @@
 
 import { isChildConfig } from './checkers/children';
 
-/** Internal event emitted by an `always` transition. */
-export const ALWAYS_EVENT = 'machine$$always' as const;
-
-/** Internal event emitted by an `after` transition. */
-export const AFTER_EVENT = 'machine$$after' as const;
-
 /**
  * Collects every event string supported by a configuration and its descendants.
  *
