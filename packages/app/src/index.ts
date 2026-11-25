@@ -1,5 +1,6 @@
 export * from '#common/functions';
 export * from '#constants';
+export * from '#events';
 export * from '#exports/createMachine';
 export * from '#exports/interpret';
 export * from '#utils';

@@ -1,4 +1,9 @@
-import { eventToType, possibleEvents, type ExtractSender } from '#events';
+import {
+  eventToType,
+  possibleEvents,
+  type EventStrings,
+  type ExtractSender,
+} from '#events';
 
 import type { EventArgObject, EventObject } from '@bemedev/app-contract';
 import {
@@ -17,7 +22,6 @@ import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   DEFAULT_MIN_ACTIVITY_TIME,
-  type EventStrings,
 } from '#constants';
 import { toDelay } from '#delays';
 import { toEmitterSrc } from '#emitters';

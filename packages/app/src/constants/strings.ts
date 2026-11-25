@@ -23,5 +23,4 @@ export { DEFAULT_NOTHING } from '@bemedev/app-plugins/internal';
  */
 export const ESCAPE_REGEXP = /[.*+?^${}()|[\]\\]/g;
 
-export * from '#events';
 export * from '#exports/constants';
