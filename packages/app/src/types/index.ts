@@ -2,7 +2,7 @@ export type * from '#common/functions/types';
 export type * from '#common/types.types';
 export type * from '#exports/types.types';
 export type * from '../registry.types';
-export type * from './edges';
+export type * from '@bemedev/app-contract/internal';
 export * from './primitives';
 export type * from './standard';
 export type * from '#sync/types.types';

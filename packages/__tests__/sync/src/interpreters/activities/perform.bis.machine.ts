@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/app-contract/typings';
+import { type } from '@bemedev/typings';
 
 export default createMachine(
   'src/__tests__/interpreters/activities/perform.bis.machine',

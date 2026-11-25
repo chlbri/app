@@ -7,9 +7,9 @@ export type {
   TimerState,
 } from '@bemedev/interval3/types';
 export * from '@bemedev/scheduler';
-export { sleep } from '@bemedev/sleep';
+export * from '@bemedev/sleep';
 export * from '@bemedev/app-utils-bemedev';
-export { type } from '@bemedev/app-contract/typings';
+export { type } from '@bemedev/typings';
 export type {
   EmptyObject,
   inferO,
@@ -19,4 +19,4 @@ export type {
   PrimitiveObject,
   PrimitiveObjectMap,
   PrimitiveObjectT,
-} from '@bemedev/app-contract/typings';
+} from '@bemedev/typings';

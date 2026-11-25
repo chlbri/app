@@ -1,4 +1,4 @@
-import type { StandardOutput } from '@bemedev/app-contract/typings';
+import type { StandardOutput } from '@bemedev/typings';
 
 /**
  * Extracts the output type from a type {@linkcode StandardOutput} schema object `T`.

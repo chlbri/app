@@ -5,7 +5,7 @@ import {
   keysOf,
   partialCall,
   toArray,
-} from '@bemedev/app-options/bemedev';
+} from '@bemedev/app-utils-bemedev';
 
 import { DEFAULT_DELIMITER } from '#constants';
 import { type DefinedValue } from '#guards';
@@ -32,14 +32,14 @@ import type {
   ContractPContext,
   ContractPaths,
   ContractTags,
-  OptionsPlugin,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemedev';
 import { _unknown } from '@bemedev/app-options/bemedev';
 import { constructEventsMap } from '@bemedev/app-options/internal';
-import { decompose, type Decompose } from '@bemedev/app-options/decompose';
+import { decompose, type Decompose } from '@bemedev/decompose';
 import type { CommonElements, GetIO_F } from './types';
 import type { AnyMachine, MachineType } from '@bemedev/app-plugins';
+import type { OptionsPlugin } from '@bemedev/app-options';
 
 /**
  * Abstract base class for state machines (synchronous and asynchronous).

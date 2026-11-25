@@ -1,6 +1,6 @@
-import { reduceFnMap } from '@bemedev/app-options/internal';
-import type { Contract } from '@bemedev/app-options';
-import type { DelayFunction3, DelayMap } from '../types';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
+import type { Contract, DelayFunction3 } from '@bemedev/app-contract';
+import type { DelayMap } from '../types';
 
 /**
  * Function signature for converting a delay config string into an executable delay function.

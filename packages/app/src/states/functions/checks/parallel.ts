@@ -1,4 +1,4 @@
-import type { NodeConfigParallel2 } from '../../types';
+import type { NodeConfigParallel2 } from '@bemedev/app-contract';
 
 /**
  * Type guard for checking if a state configuration is parallel.

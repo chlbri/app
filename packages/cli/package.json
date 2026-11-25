@@ -65,7 +65,8 @@
     "vite-plus": "catalog:"
   },
   "peerDependencies": {
-    "@bemedev/app": "workspace:^"
+    "@bemedev/app": "workspace:^",
+    "@bemedev/app-utils-bemedev": "workspace:^"
   },
   "engines": {
     "node": ">=24"

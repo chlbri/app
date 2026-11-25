@@ -8,8 +8,8 @@ import type {
   ToEventObject,
   ToEvents,
 } from './internal';
-import type { Register } from './registry.types';
 import type { Contract, StatePaths } from './types';
+import { Register } from './registry';
 
 /**
  * Internal contract surface used to select the options type before the

@@ -1,24 +1,20 @@
+import type { FromActionConfig, NoExtraKeysWithDescriber } from '#actions';
 import type {
-  FromActionConfig,
-  NoExtraKeysWithDescriber,
-  WithDescriber,
-} from '#actions';
-import type { Equals, NotUndefined } from '@bemedev/app-options/bemedev';
-import type { EmptyObject, KeysMatching } from '@bemedev/app-options/decompose';
-import type { PrimitiveObject } from '@bemedev/app-contract/typings';
-import type {
+  AsyncPredicateS,
   Contract,
   ContractContext,
   ContractPContext,
-} from '@bemedev/app-options';
-import type { RecordS, ReduceArray } from '~types';
-import type {
-  AsyncPredicateS,
   GuardAnd,
   GuardConfig,
   GuardOr,
+  RecordS,
   SyncPredicateS2,
-} from '@bemedev/app-options';
+  WithDescriber,
+} from '@bemedev/app-contract';
+import type { Equals, NotUndefined } from '@bemedev/app-utils-bemedev';
+import type { EmptyObject, KeysMatching } from '@bemedev/decompose';
+import type { PrimitiveObject } from '@bemedev/typings';
+import type { ReduceArray } from '~types';
 
 export type {
   AsyncPredicateS,
@@ -31,7 +27,7 @@ export type {
   SyncPredicateS,
   SyncPredicateS2,
   SyncPredicateS3,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Enforces no extra keys on guard configuration objects.

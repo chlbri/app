@@ -35,13 +35,7 @@ import {
   type WorkingStatus,
 } from '#states';
 import type { AlwaysConfig, TransitionConfig } from '#transitions';
-import {
-  byKey2,
-  decomposeSV,
-  isStringEmpty,
-  reduceDescriber,
-  replaceAll,
-} from '#utils';
+import { decomposeSV, isStringEmpty, reduceDescriber, replaceAll } from '#utils';
 import type { AllowedNames } from '@bemedev/app-options/bemedev';
 import { isDefined, isPrimitive, toArray } from '@bemedev/app-options/bemedev';
 import type { Contract } from '@bemedev/app-options';
@@ -73,7 +67,7 @@ import type {
   Selector_F,
   SimpleScheduler,
 } from './types';
-import { merge2 } from '@bemedev/app-options/internal';
+import { byKey2, merge2 } from '@bemedev/app-options/internal';
 import type { AnyMachine } from '@bemedev/app-plugins';
 import { IS_TEST } from '@bemedev/app-plugins/internal';
 

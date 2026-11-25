@@ -37,6 +37,9 @@
     "tailwind-merge": "catalog:",
     "tailwindcss": "catalog:"
   },
+  "peerDependencies": {
+    "@bemedev/typings": "catalog:"
+  },
   "devDependencies": {
     "@bemedev/dev-utils": "catalog:",
     "@bemedev/interval2": "catalog:",

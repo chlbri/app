@@ -1,7 +1,12 @@
 import type { DEFAULT_DELIMITER } from '#constants';
-import type { EventStrings } from '#events';
-import type { State, StateExtended, StatePOf, StatePextendedOf } from '#states';
-import { checkKeys } from '#utils';
+import type {
+  EventStrings,
+  State,
+  StateExtended,
+  StatePOf,
+  StatePextendedOf,
+} from '@bemedev/app-contract';
+import { checkKeys } from '@bemedev/app-options/internal';
 import type {
   Contract,
   ContractEventType,
@@ -9,7 +14,7 @@ import type {
   Describer,
   RecordS,
 } from '@bemedev/app-contract';
-import type { EmptyObject } from '@bemedev/app-contract/typings';
+import type { EmptyObject } from '@bemedev/typings';
 import type {
   DeepPartial,
   NOmit,
@@ -17,7 +22,8 @@ import type {
   Ru,
   UnionToIntersection,
   _UnionToIntersection2,
-} from '@bemedev/app-options/bemedev';
+} from '@bemedev/app-utils-bemedev';
+
 import { DESCRIBER_KEYS, isFunction, isString } from '@bemedev/app-options/internal';
 
 export type {
@@ -28,7 +34,7 @@ export type {
   MaybePromise,
   RecordS,
   SingleOrArrayL,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 export { EmptyObject };
 

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vite-plus/test';
-import { byKey2 } from '@bemedev/app/utils';
+import { byKey2 } from '@bemedev/app-options/internal';
 
 describe('byKey2', () => {
   describe('#01 => Single-level access', () => {

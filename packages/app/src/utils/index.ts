@@ -1,22 +1,17 @@
 import equal from 'fast-deep-equal';
 
-export { decompose, decomposeSV, recompose } from '@bemedev/app-options/decompose';
+export { decompose, decomposeSV, recompose } from '@bemedev/decompose';
 
-export type {
-  Decompose,
-  DecomposeKeys,
-  DecomposeOptions,
-} from '@bemedev/app-options/decompose';
+export type { Decompose, DecomposeKeys, DecomposeOptions } from '@bemedev/decompose';
+export { identity } from '@bemedev/app-utils-bemedev';
 
 export { merge2 } from '@bemedev/app-options/internal';
 export { IS_TEST } from '@bemedev/app-plugins/internal';
-export * from './byKey2';
 export * from './objects';
 export * from './reduceDescriber';
 export * from './resolve';
 export * from './strings';
 export * from './undefined';
-export * from './identity';
 export * from './typings';
 export { flatMap } from '../states/functions/flatMap';
 export * from './readonly';

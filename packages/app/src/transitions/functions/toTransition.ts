@@ -1,10 +1,15 @@
-import { toAction, type WithDescriber } from '#actions';
+import { toAction } from '#actions';
 import { toPredicate } from '#guards';
-import { type GuardConfig } from '#guards';
-import type { AsyncTransition, TransitionConfig } from '#transitions';
+import type { AsyncTransition } from '#transitions';
+import { toArray } from '@bemedev/app-utils-bemedev';
 
-import { toArray } from '@bemedev/app-options/bemedev';
-import type { Contract, ContractOptions } from '@bemedev/app-options';
+import type {
+  Contract,
+  ContractOptions,
+  GuardConfig,
+  TransitionConfig,
+  WithDescriber,
+} from '@bemedev/app-contract';
 
 /**
  * Function signature for converting transition config into structured transition object.

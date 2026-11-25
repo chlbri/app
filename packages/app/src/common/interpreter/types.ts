@@ -18,14 +18,14 @@ import type { Primitive } from '@bemedev/app-options/bemedev';
 import type { Decompose } from '@bemedev/app-options/decompose';
 import type {
   ContextFrom,
+  KeyU,
   MachineOptionsFrom,
   PrivateContextFrom,
 } from '@bemedev/app-plugins/addons';
 import type { Interval3 } from '@bemedev/interval3';
 import type { IntervalParams } from '@bemedev/interval3/types';
-import type { Equals } from '@bemedev/app-utils-bemedev';
-import type { Fn, FnMapR, KeyU, OptionalDefinition } from '~types';
-
+import type { Equals, Fn } from '@bemedev/app-utils-bemedev';
+import type { FnMapR, OptionalDefinition } from '~types';
 import type { Subscriber, SubscriberOptions } from '../subscriber';
 import type { AnyMachine, MachineType } from '@bemedev/app-plugins';
 

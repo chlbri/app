@@ -1,4 +1,4 @@
-import type { AddSubscriber_F } from '@bemedev/app';
+import type { AddSubscriber_F } from '@bemedev/app/types';
 import type { Contract, ContractEventType, State } from '@bemedev/app-contract';
 import { createCan } from './createCan';
 import { createIsInside } from './createIsInside';

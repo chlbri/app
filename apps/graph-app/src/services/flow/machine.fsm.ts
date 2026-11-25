@@ -1,5 +1,5 @@
 import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/app/typings';
+import { type } from '@bemedev/typings';
 import { connection, edge, node } from './machine.typings';
 
 export default createMachine(

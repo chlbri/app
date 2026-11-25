@@ -1,13 +1,10 @@
-import {
-  createContract,
-  type Contract,
-  type OptionsPlugin,
-} from '@bemedev/app-options';
+import { createContract, type Contract } from '@bemedev/app-contract';
 import { createAsyncMachine } from '../asyncMachine/machine';
 import { createSyncMachine } from '../sync/machine';
 import type { CreateMachine_F } from './types.types';
 export type { ContractMachine, CreateMachine_F } from './types.types';
 import { toArray } from '@bemedev/app-utils-bemedev';
+import { OptionsPlugin } from '@bemedev/app-options';
 
 /**
  * Internal helper function to instantiate a state machine from a contract.

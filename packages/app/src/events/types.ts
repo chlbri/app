@@ -1,6 +1,6 @@
-import type { EventObject } from '@bemedev/app-options';
-import type { Equals } from '@bemedev/app-options/bemedev';
-import type { PrimitiveObject } from '@bemedev/app-contract/typings';
+import type { EventObject } from '@bemedev/app-contract';
+import type { Equals } from '@bemedev/app-utils-bemedev';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 export type {
   ActorsConfigMap,
@@ -17,7 +17,7 @@ export type {
   ToEventObject,
   ToEvents,
   ToEventsR,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Helper extracting tuple parameter list for event sender functions.

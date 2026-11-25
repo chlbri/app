@@ -1,9 +1,8 @@
 import { DEFAULT_DELIMITER } from '#constants';
 import { replaceAll } from '#utils';
-import { decomposeSV, type StateValue } from '@bemedev/app-options/decompose';
-import { isString } from '~types';
-
-import type { NodeConfig2 } from '../types';
+import type { NodeConfig2 } from '@bemedev/app-contract';
+import { isString } from '@bemedev/app-options/internal';
+import { decomposeSV, type StateValue } from '@bemedev/decompose';
 import { flatMap } from './flatMap';
 import { getChildren } from './getChildren';
 import { getParents } from './getParents';

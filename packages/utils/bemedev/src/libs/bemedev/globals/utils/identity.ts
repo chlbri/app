@@ -8,4 +8,4 @@
  * @readonly
  * @author chlbri (bri_lvi@icloud.com)
  */
-export const identity = <T>(value: T) => value;
+export const identity = <T, R = T>(a: T): R => a as any;

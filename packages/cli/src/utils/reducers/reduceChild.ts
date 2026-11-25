@@ -1,8 +1,9 @@
+import { ChildConfig, TransitionConfig } from '@bemedev/app-contract';
 import { reduceTransitions } from './reduceTransitions';
-import { toArray, type ChildConfig, type TransitionConfig } from '@bemedev/app';
 import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { paramArray, tap } from '@bemedev/pipe/extensions/common';
+import { toArray } from '@bemedev/app-utils-bemedev';
 
 /**
  * Reduces a child machine configuration into symbol sets and pContext keys.

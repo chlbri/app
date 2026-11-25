@@ -1,5 +1,5 @@
 import { transformEventArg as _transformEventArg } from '@bemedev/app-options/internal';
-import type { EventObject } from '../types';
+import type { EventObject } from '@bemedev/app-contract';
 
 /**
  * Function type signature for transforming a raw event argument into an interface {@linkcode EventObject}.

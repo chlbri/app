@@ -1,4 +1,4 @@
-import type { AddSubscriber_F } from '@bemedev/app';
+import type { AddSubscriber_F } from '@bemedev/app/types';
 import type { Contract, State } from '@bemedev/app-contract';
 import { deepEqual, identity } from '@bemedev/app/utils';
 import { createSignal, onCleanup } from 'solid-js';

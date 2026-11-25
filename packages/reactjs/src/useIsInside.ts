@@ -1,4 +1,4 @@
-import type { AddSubscriber_F } from '@bemedev/app';
+import type { AddSubscriber_F } from '@bemedev/app/types';
 import type { Contract, State, StateValue } from '@bemedev/app-contract';
 import { expandFn } from '@bemedev/app/bemedev';
 import { decomposeSV, deepEqual, identity } from '@bemedev/app/utils';

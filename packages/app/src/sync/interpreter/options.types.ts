@@ -1,17 +1,21 @@
-import type { SyncAction2 } from '#actions';
 import type { AnyInterpreter } from '#common/interpreter';
-import type { SimpleMachineOptions2 } from '#common/machine';
-import type { GuardConfig, SyncPredicateS2, SyncPredicateS3 } from '#guards';
-import type { AlwaysConfig, TransitionConfig } from '#transitions';
+import type { OptionsPlugin } from '@bemedev/app-options';
+import type { SimpleMachineOptions2 } from '@bemedev/app-plugins/addons';
+import type { SyncAddOptionsParam_F } from '../machine/options.types';
+import type { SyncNodeConfig } from '../types.types';
+import type { SyncInterpreter } from './interpreter';
+
+import type { AlwaysConfig, TransitionConfig } from '@bemedev/app-contract/internal';
+
 import type {
   Contract,
   ContractEvents,
   ContractOptions,
-  OptionsPlugin,
-} from '@bemedev/app-options';
-import type { SyncAddOptionsParam_F } from '../machine/options.types';
-import type { SyncNodeConfig } from '../types.types';
-import type { SyncInterpreter } from './interpreter';
+  GuardConfig,
+  SyncAction2,
+  SyncPredicateS2,
+  SyncPredicateS3,
+} from '@bemedev/app-contract';
 
 /**
  * Structure representing a collected running service instance.

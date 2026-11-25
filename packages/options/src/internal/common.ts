@@ -11,7 +11,10 @@ import { recompose } from '@bemedev/decompose';
 import { constructEventsMap } from './events';
 import { isDefined, isNotDefined, isNotValue, isValue } from './guards';
 import { byKey2 } from './objects';
-import { reduceFnMapFilterArray, reduceFnMapFilterObject } from './reduceFnMap';
+import {
+  reduceFnMapFilterArray,
+  reduceFnMapFilterObject,
+} from '@bemedev/app-plugins/internal';
 
 /**
  * Creates the option helpers that do not depend on the sync/async mode.
@@ -45,7 +48,7 @@ export const createCommonHelpers = (contract: Contract) => {
    * @returns Action filtering the property.
    */
   const filter = (key: string, fn: any) => (state: any) => {
-    const currentValue = byKey2(state.context, key);
+    const currentValue = byKey2.low(state.context, key);
     let filteredValue: any;
 
     if (Array.isArray(currentValue)) {

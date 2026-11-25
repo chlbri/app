@@ -493,6 +493,9 @@ importers:
       '@bemedev/app-reactjs':
         specifier: workspace:^
         version: link:../../packages/reactjs
+      '@bemedev/typings':
+        specifier: 'catalog:'
+        version: 1.5.0
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.5(@voidzero-dev/vite-plus-core@8.3.8001(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(tsx@4.23.15)(typescript@6.0.3))
@@ -584,6 +587,9 @@ importers:
       '@bemedev/hook-wrapper':
         specifier: 'catalog:'
         version: 1.0.0
+      '@bemedev/typings':
+        specifier: 'catalog:'
+        version: 1.5.0
       '@faker-js/faker':
         specifier: 'catalog:'
         version: 10.6.0
@@ -1024,6 +1030,12 @@ importers:
       '@bemedev/app-utils-bemedev':
         specifier: workspace:^
         version: link:../utils/bemedev
+      '@bemedev/better-promise':
+        specifier: 'catalog:'
+        version: 0.1.1
+      '@bemedev/boolean-recursive':
+        specifier: 'catalog:'
+        version: 0.0.3
       '@bemedev/decompose':
         specifier: 'catalog:'
         version: 2.3.0
@@ -1112,6 +1124,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@bemedev/app-utils-bemedev':
+        specifier: workspace:^
+        version: link:../utils/bemedev
       '@bemedev/better-set':
         specifier: 'catalog:'
         version: 0.2.1

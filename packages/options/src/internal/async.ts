@@ -11,7 +11,7 @@ import { same, type UtilityMap } from '@bemedev/app-plugins';
 import type { AsyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
 import { merge2 } from './merge2';
-import { reduceFnMap } from './reduceFnMap';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
 import { toArray } from '@bemedev/app-utils-bemedev';
 
 /** Option helpers of an asynchronous machine. */

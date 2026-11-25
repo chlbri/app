@@ -1,15 +1,19 @@
-import type { AsyncAction2, WithDescriber } from '#actions';
 import type { NoExtraKeysActorConfig } from '#actors';
-import type { ActorsConfigMap } from '#events';
-
-import type { FlatMapN, NodeConfig2, TargetDef } from '#states';
-
 import type {
-  AsyncTransition,
-  NoExtraKeysTransitionConfigSoA,
+  ActorsConfigMap,
+  AsyncAction2,
+  NodeConfig2,
+  TargetDef,
   TransitionsConfig,
-} from '#transitions';
+  WithDescriber,
+  FnMap,
+} from '@bemedev/app-contract/internal';
 
+import type { FlatMapN } from '#states';
+
+import type { AsyncTransition, NoExtraKeysTransitionConfigSoA } from '#transitions';
+
+import type { Decompose } from '@bemedev/decompose';
 import type {
   Fn,
   Identitfy,
@@ -17,9 +21,10 @@ import type {
   Ru,
   SubType,
   SubTypeLow,
-} from '@bemedev/app-options/bemedev';
-import type { Decompose } from '@bemedev/app-options/decompose';
-import type { PrimitiveObject } from '@bemedev/app-contract/typings';
+  ValuesOf,
+  TrueObject,
+} from '@bemedev/app-utils-bemedev';
+import type { PrimitiveObject } from '@bemedev/typings';
 
 import type {
   CommonConfig3,
@@ -28,19 +33,15 @@ import type {
   ContractContext,
   ContractOptions,
   ContractPContext,
-  OptionsPlugin,
-} from '@bemedev/app-options';
-import type {
-  EmptyObject,
-  FnMap,
-  FnMapFilterArray,
-  FnMapFilterObject,
-  FnR,
   MaybePromise,
-  RecordS,
-  TrueObject,
-  ValuesOf,
-} from '~types';
+  FnR,
+  EmptyObject,
+} from '@bemedev/app-contract';
+
+import type { FnMapFilterArray, FnMapFilterObject, RecordS } from '~types';
+import { OptionsPlugin } from '@bemedev/app-options';
+
+export type { OptionsPlugin };
 
 export type {
   ChildConfigDef,
@@ -49,7 +50,7 @@ export type {
   CommonConfig2,
   CommonConfig3,
   CommonConfigNode,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Type guard for enforcing no extra keys on target definitions.

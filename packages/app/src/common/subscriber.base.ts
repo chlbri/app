@@ -1,5 +1,5 @@
-import { deepEqual, identity } from '#utils';
-import { type Fn } from '../bemedev';
+import { deepEqual } from '#utils';
+import { type Fn, identity } from '@bemedev/app-utils-bemedev';
 
 /**
  * Function signature for a selector function mapping state of type `T` to selected value `R`.
@@ -96,7 +96,7 @@ export class SubscriberBase<T, R = T> implements Disposable, AsyncDisposable {
    */
   constructor(
     protected _subscriber: Subscriber_F<T>,
-    protected _selector: Selector_F<T, R> = identity,
+    protected _selector: Selector_F<T, R> = identity as any,
     protected __equals: Equals_F<R> = deepEqual,
     private __firstTime = true,
   ) {}

@@ -1,4 +1,4 @@
-import { isString } from '~types';
+import { isString } from '@bemedev/app-options/internal';
 
 /**
  * Checks if a given argument is a string and if it is empty (i.e., contains only whitespace).

@@ -1,14 +1,19 @@
-import type { SyncAction2 } from '#actions';
-
-import type { CommonCreateMachine_F, SimpleMachineOptions2 } from '#common/machine';
+import type { CommonCreateMachine_F } from '#common/machine';
 import type { DelayFunction } from '#delays';
-import { type AsyncPredicateS } from '#guards';
 import type { FlatMapN } from '#states';
-import type { Contract, ContractConfig, OptionsPlugin } from '@bemedev/app-options';
-import { _unknown } from '@bemedev/app-options/bemedev';
-import { buildHelpers } from '@bemedev/app-options';
+import type { OptionsPlugin } from '@bemedev/app-options';
+import { buildHelpers } from '@bemedev/app-options/internal';
+import { SimpleMachineOptions2 } from '@bemedev/app-plugins/addons';
+import { _unknown } from '@bemedev/app-utils-bemedev';
 import { CommonMachine } from '../../common/machine';
 import type { SyncAddOptions_F, SyncProvideOptions_F } from './options.types';
+
+import type {
+  AsyncPredicateS,
+  Contract,
+  ContractConfig,
+  SyncAction2,
+} from '@bemedev/app-contract';
 
 /**
  * A class representing a synchronous state machine.

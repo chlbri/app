@@ -13,5 +13,4 @@ export * from './events';
 export * from './guards';
 export * from './merge2';
 export * from './objects';
-export * from './reduceFnMap';
 export * from './sync';

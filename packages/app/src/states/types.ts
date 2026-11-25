@@ -2,7 +2,7 @@ import type { AsyncAction, FromActionConfig, WithDescriber } from '#actions';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { AsyncTransitions } from '#transitions';
 import type { Equals, Keys, UnionToIntersection } from '@bemedev/app-utils-bemedev';
-import type { Identify, RecordS, ReduceArray, SingleOrArrayL } from '~types';
+import type { Identify, ReduceArray } from '~types';
 
 import type {
   ActivityArray,
@@ -10,8 +10,10 @@ import type {
   Contract,
   NodeConfig2,
   NodeConfig3,
+  RecordS,
+  SingleOrArrayL,
   StateType,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 export type {
   ActivityArray,
@@ -37,7 +39,7 @@ export type {
   StateValueMap,
   TargetDef,
   WorkingStatus,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Type alias for state node configuration type {@linkcode NodeConfig2}.

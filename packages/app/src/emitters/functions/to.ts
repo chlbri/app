@@ -1,7 +1,10 @@
 import { toTransition } from '#transitions';
-import { toArray } from '@bemedev/app-options/bemedev';
-import type { Contract, ContractOptions } from '@bemedev/app-options';
-import type { EmitterConfig } from '../../actors/types';
+import { toArray } from '@bemedev/app-utils-bemedev';
+import type {
+  Contract,
+  ContractOptions,
+  EmitterConfig,
+} from '@bemedev/app-contract';
 import type { AsyncEmitter } from '../types';
 import { toEmitterSrc } from './src';
 

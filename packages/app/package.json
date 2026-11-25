@@ -144,6 +144,9 @@
   },
   "peerDependencies": {
     "@bemedev/decompose": "catalog:",
+    "@bemedev/boolean-recursive": "catalog:",
+    "@bemedev/scheduler": "catalog:",
+    "@bemedev/better-promise": "catalog:",
     "@bemedev/app-contract": "workspace:^",
     "@bemedev/app-plugins": "workspace:^",
     "@bemedev/app-utils-bemedev": "workspace:^",

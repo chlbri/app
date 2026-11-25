@@ -1,19 +1,15 @@
-import type { SimpleMachineOptions2 } from '#common/machine';
-import type {
-  Contract,
-  ContractOptions,
-  OptionsPlugin,
-  PluginAddons,
-} from '@bemedev/app-options';
-import type { SyncAddons } from '@bemedev/app-plugins/addons';
-import type { SyncMachine } from './machine';
+import type { Contract, ContractOptions } from '@bemedev/app-contract';
+import type { OptionsPlugin, PluginAddons } from '@bemedev/app-options';
 import type { ResolveUtilities } from '@bemedev/app-plugins/types';
+import type { SyncMachine } from './machine';
+
+import type { SimpleMachineOptions2, SyncAddons } from '@bemedev/app-plugins/addons';
 
 export type {
   SyncChildFunction2,
   SyncMachineOptions2,
   SyncSimpleMachineOptions,
-} from '@bemedev/app-options';
+} from '@bemedev/app-contract';
 
 /**
  * Parameters type signature for providing options to a synchronous machine.

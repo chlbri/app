@@ -1,33 +1,36 @@
-import { type WithDescriber } from '#actions';
+import { CommonChildFunction2, getEntries } from '#common/machine';
+import { eventToType, transformEventArg } from '#events';
+import { type GuardConfig } from '#guards';
+import { initialConfig, nextSV } from '#states';
+import type { DelayedTransitions, TransitionConfig } from '#transitions';
+import type { ContractEvents } from '@bemedev/app-contract/types';
+import type { Contract, OptionsPlugin } from '@bemedev/app-options';
+import { isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
+import { byKey2, merge2 } from '@bemedev/app-options/internal';
+import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
+import { AFTER_EVENT, ALWAYS_EVENT } from '@bemedev/app-plugins/internal';
+import { _any } from '@bemedev/app-utils-bemedev';
+import { recompose } from '@bemedev/decompose';
+import { createScheduler } from '@bemedev/scheduler';
+import { sleep } from '@bemedev/sleep';
+import equal from 'fast-deep-equal';
+import { isDescriber, type EmptyObject } from '~types';
+import type { AsyncAddOptions_F } from '../asyncMachine';
+import type { AsyncMachine } from '../asyncMachine/machine';
+import { toPredicate } from '../guards/functions/toPredicate';
+
 import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MAX_TIME_PROMISE,
   TIME_TO_RINIT_SELF_COUNTER,
 } from '#constants';
-import { _any } from '@bemedev/app-options/bemedev';
 
-import {
-  AFTER_EVENT,
-  ALWAYS_EVENT,
-  eventToType,
-  transformEventArg,
-  type EventArgObject,
-  type EventObject,
-} from '#events';
-import { type GuardConfig } from '#guards';
-import { initialConfig, nextSV } from '#states';
-import type { DelayedTransitions, TransitionConfig } from '#transitions';
-import { isDefined, switchV, toArray } from '@bemedev/app-options/bemedev';
 import {
   anyPromises,
   withTimeout,
   type TimeoutPromise,
-} from '@bemedev/app-options/better-promise';
-import { toPredicate } from '../guards/functions/toPredicate';
+} from '@bemedev/better-promise';
 
-import { sleep } from '@bemedev/sleep';
-import equal from 'fast-deep-equal';
-import { isDescriber, type EmptyObject } from '~types';
 import type {
   _AsyncSend_F,
   AsyncCollected0,
@@ -47,25 +50,19 @@ import {
   AnyInterpreter,
   CommonInterpreter,
   type ExecuteActivity_F,
-  type ExtendedActionsParams,
   type Mode,
 } from '#common/interpreter';
-import {
-  CommonChildFunction2,
-  getEntries,
-  type MachineEventsOf,
-  type SimpleMachineOptions2,
-} from '#common/machine';
-import { type AsyncEmitterFunction } from '#emitters';
-import { byKey2 } from '#utils';
-import type { Contract, OptionsPlugin } from '@bemedev/app-options';
-import { recompose } from '@bemedev/app-options/decompose';
-import { createScheduler } from '@bemedev/scheduler';
-import type { ChildConfig, EmitterConfig, FinallyConfig } from '../actors/types';
-import type { AsyncAddOptions_F } from '../asyncMachine';
-import type { AsyncMachine } from '../asyncMachine/machine';
-import { merge2 } from '@bemedev/app-options/internal';
-import type { AnyMachine } from '@bemedev/app-plugins';
+
+import type {
+  AsyncEmitterFunction,
+  ChildConfig,
+  EmitterConfig,
+  EventArgObject,
+  EventObject,
+  ExtendedActionsParams,
+  FinallyConfig,
+  WithDescriber,
+} from '@bemedev/app-contract/internal';
 
 /**
  * The class {@linkcode AsyncInterpreter} is responsible for interpreting and managing the state of an asynchronous machine.
@@ -197,7 +194,7 @@ export class AsyncInterpreter<
    */
   protected __performForceSendAction = async (
     from: string | false,
-    forceSend?: EventArgObject<MachineEventsOf<Ct>>,
+    forceSend?: EventArgObject<ContractEvents<Ct>>,
   ) => {
     if (!forceSend) return;
     const values = Object.values(this.machine.flat);
@@ -814,7 +811,7 @@ export class AsyncInterpreter<
    *
    * @returns A promise resolving when event processing and state updates complete.
    */
-  protected __send = async (_event: EventArgObject<MachineEventsOf<Ct>>) => {
+  protected __send = async (_event: EventArgObject<ContractEvents<Ct>>) => {
     const event = transformEventArg(_event);
     const next = await this.__presend(event as any);
 

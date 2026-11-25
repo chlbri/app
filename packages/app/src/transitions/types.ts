@@ -3,16 +3,11 @@ import type {
   FromActionConfig,
   NoExtraKeysWithDescriberSoa,
   SyncAction,
-  WithDescriber,
 } from '#actions';
+
 import type {
-  AsyncPredicate,
-  FromGuard,
+  WithDescriber,
   GuardConfig,
-  NoExtraKeysGuardConfigSoA,
-  SyncPredicate,
-} from '#guards';
-import type {
   _TransitionConfigMap,
   ArrayTransitions,
   ArrayTransitionsF,
@@ -21,14 +16,31 @@ import type {
   TransitionConfigMapFG,
   TransitionConfigMapG,
   TransitionsConfig,
-} from '@bemedev/app-options';
+  ActorConfig,
+  ChildConfig,
+  EmitterConfig,
+  Contract,
+  RecordS,
+  SingleOrArrayL,
+} from '@bemedev/app-contract';
+
+import type {
+  AsyncPredicate,
+  FromGuard,
+  NoExtraKeysGuardConfigSoA,
+  SyncPredicate,
+} from '#guards';
+
 import type {
   AnyArray,
   IndexesOfArray,
   NotUndefined,
   SoA,
-} from '@bemedev/app-options/bemedev';
-import type { ActorConfig, ChildConfig, EmitterConfig } from '../actors/types';
+} from '@bemedev/app-utils-bemedev';
+
+import type { CommonChild } from '#common/machine';
+import type { AsyncEmitter } from '#emitters';
+import type { Identify, ReduceArray } from '~types';
 
 export type {
   _TransitionConfigMap,
@@ -45,12 +57,7 @@ export type {
   TransitionConfigMapFG,
   TransitionConfigMapG,
   TransitionsConfig,
-} from '@bemedev/app-options';
-
-import type { CommonChild } from '#common/machine';
-import type { AsyncEmitter } from '#emitters';
-import type { Contract } from '@bemedev/app-options';
-import type { Identify, RecordS, ReduceArray, SingleOrArrayL } from '~types';
+} from '@bemedev/app-contract';
 
 // type TargetDef = {
 //   readonly targets: string;
