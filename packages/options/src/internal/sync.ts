@@ -2,14 +2,14 @@
  * Synchronous option helper surface built from a contract configuration.
  */
 
-import recursive from '@bemedev/boolean-recursive';
-import { recompose } from '@bemedev/decompose';
 import type { Contract } from '@bemedev/app-contract';
 import { same, type UtilityMap } from '@bemedev/app-plugins';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
+import bool from '@bemedev/boolean-recursive';
+import { recompose } from '@bemedev/decompose';
 import type { SyncAddons } from '../addons';
 import { createCommonHelpers } from './common';
 import { merge2 } from './merge2';
-import { reduceFnMap } from '@bemedev/app-plugins/internal';
 
 /** Option helpers of a synchronous machine. */
 export type SyncHelpers = SyncAddons;
@@ -49,7 +49,7 @@ export const createSyncUtilities = (
     };
 
     const prepared = guards.map(reduceGuardItem).filter(Boolean);
-    return recursive(...prepared);
+    return bool(...prepared);
   };
 
   /**
