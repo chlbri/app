@@ -49,7 +49,7 @@ export type {
   FnMap,
   FnR,
   MaybePromise,
-  Props,
+  DescriptionProps,
   RecordS,
   SingleOrArrayL,
 } from '@bemedev/app-contract';

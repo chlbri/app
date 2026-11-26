@@ -115,7 +115,7 @@ export type {
   ContractTags,
   ContractTypes,
   ContractTypesOf,
-  Props,
+  DescriptionProps,
 } from '@bemedev/app-options';
 
 export type {

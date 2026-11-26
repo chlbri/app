@@ -32,7 +32,7 @@ import type {
   ContractPContext,
   ContractPaths,
   ContractTags,
-  Props,
+  DescriptionProps,
 } from '@bemedev/app-contract';
 import type { OptionsPlugin } from '@bemedev/app-options';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemedev';
@@ -92,7 +92,7 @@ export abstract class CommonMachine<
    *
    * @returns The machine itself.
    */
-  describe(props: Props) {
+  describe(props: DescriptionProps) {
     this._contract.describe(props);
     return this;
   }

@@ -19,7 +19,7 @@ import type {
   Contract,
   ContractMachineOptions,
   OptionsPlugin,
-  Props,
+  DescriptionProps,
 } from '@bemedev/app-options';
 import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
 import type {
@@ -58,7 +58,7 @@ type OutContractSurface<
     tags: Tags;
     sync: Sync;
   };
-  describe: (props: Props) => any;
+  describe: (props: DescriptionProps) => any;
 };
 
 /**
