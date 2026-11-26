@@ -92,7 +92,7 @@ export abstract class CommonMachine<
    *
    * @returns The machine itself.
    */
-  describe(props: DescriptionProps) {
+  describe(props: DescriptionProps<Ct>) {
     this._contract.describe(props);
     return this;
   }

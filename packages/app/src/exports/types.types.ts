@@ -18,8 +18,8 @@ import type { RegisterOptions } from '@bemedev/app-contract/registry';
 import type {
   Contract,
   ContractMachineOptions,
-  OptionsPlugin,
   DescriptionProps,
+  OptionsPlugin,
 } from '@bemedev/app-options';
 import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
 import type {
@@ -58,7 +58,7 @@ type OutContractSurface<
     tags: Tags;
     sync: Sync;
   };
-  describe: (props: DescriptionProps) => any;
+  describe: (props: DescriptionProps<Contract>) => any;
 };
 
 /**

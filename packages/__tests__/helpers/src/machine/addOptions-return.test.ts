@@ -76,11 +76,8 @@ describe('Machine addOptions return', () => {
     const machine = _machine1;
     const descriptions = {
       general: ['A simple machine'],
-      actors: { children: {}, emotters: {} },
-      delays: {},
-      actions: { shortDelay: ['A short delay'] },
-      guards: {},
-      states: { idle: ['The idle state'] },
+      actions: { increment: ['Increments the context'] },
+      states: { '/idle': ['The idle state'] },
     };
 
     test('#01 => returns itself', () => {

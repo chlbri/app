@@ -45,11 +45,11 @@ export type { KeyU };
 
 export type {
   Describer,
+  DescriptionProps,
   EventToType,
   FnMap,
   FnR,
   MaybePromise,
-  DescriptionProps,
   RecordS,
   SingleOrArrayL,
 } from '@bemedev/app-contract';

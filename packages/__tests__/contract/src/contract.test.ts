@@ -71,11 +71,11 @@ describe('#01 => createContract', () => {
     const described = createContract({ initial: 'idle', states: { idle: {} } });
     const descriptions = {
       general: ['A simple contract'],
-      actors: { children: {}, emotters: {} },
+      actors: { children: {}, emitters: {} },
       delays: {},
       actions: {},
       guards: {},
-      states: { idle: ['The idle state'] },
+      states: { '/idle': ['The idle state'] },
     };
 
     const returned = described.describe(descriptions);

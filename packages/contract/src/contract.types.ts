@@ -39,7 +39,7 @@ type ContractSurface<
     tags: Tags;
     sync: Sync;
   };
-  describe: (props: DescriptionProps) => any;
+  describe: (props: DescriptionProps<Contract>) => any;
 };
 
 /**

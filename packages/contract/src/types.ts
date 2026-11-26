@@ -124,7 +124,7 @@ export type Contract<
   /** Inferred typing surface of the contract. */
   readonly types: Types;
   /** Description hierarchy attached with `describe`. */
-  readonly descriptions?: DescriptionProps;
+  readonly descriptions?: DescriptionProps<Contract<Config, Types, Options>>;
   /**
    * Type-only options surface: the return type of `createOptions`. Never
    * defined at runtime.
@@ -137,7 +137,9 @@ export type Contract<
    *
    * @returns The contract itself.
    */
-  describe(props: DescriptionProps): Contract<Config, Types, Options>;
+  describe(
+    props: DescriptionProps<Contract<Config, Types, Options>>,
+  ): Contract<Config, Types, Options>;
 };
 
 /**
