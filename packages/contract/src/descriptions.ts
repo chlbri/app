@@ -33,3 +33,76 @@ export type DescriptionProps<
     emitters: Helper<keyof NonNullable<NonNullable<Opts['actors']>['emitters']>>;
   }>;
 }>;
+
+/** Description record category (`actions`, `guards`, `delays`, `states`, ...). */
+type DescriptionRecord = Record<string, string[] | undefined>;
+
+/**
+ * Appends the tail of `next` to `current`.
+ *
+ * A missing `current` is created from `next`, and a missing `next` leaves
+ * `current` untouched.
+ *
+ * @param current - Existing description hierarchy.
+ * @param next - Hierarchy appended by a new `describe` call.
+ *
+ * @returns The merged hierarchy.
+ */
+const mergeList = (current?: string[], next?: string[]): string[] | undefined => {
+  if (!next?.length) return current;
+  if (!current?.length) return [...next];
+  return [...current, ...next];
+};
+
+/**
+ * Merges every token entry of a description record.
+ *
+ * Missing tokens are created, existing tokens receive the tail of the new
+ * array.
+ *
+ * @param current - Existing token record.
+ * @param next - Token record appended by a new `describe` call.
+ *
+ * @returns The merged token record.
+ */
+const mergeRecord = (
+  current: DescriptionRecord = {},
+  next?: DescriptionRecord,
+): DescriptionRecord => {
+  if (!next) return current;
+
+  for (const key of Object.keys(next)) {
+    const values = next[key];
+    if (!values?.length) continue;
+    current[key] = mergeList(current[key], values);
+  }
+
+  return current;
+};
+
+/**
+ * Merges a description hierarchy into the contract descriptions.
+ *
+ * @param current - Descriptions already attached to the contract.
+ * @param next - Descriptions of the current `describe` call.
+ *
+ * @returns The updated description hierarchy.
+ */
+export const mergeDescriptions = (
+  current: DescriptionProps<Contract>,
+  next: DescriptionProps<Contract>,
+): DescriptionProps<Contract> => {
+  if (next.general) current.general = mergeList(current.general, next.general);
+  if (next.states) current.states = mergeRecord(current.states, next.states);
+  if (next.guards) current.guards = mergeRecord(current.guards, next.guards);
+  if (next.actions) current.actions = mergeRecord(current.actions, next.actions);
+  if (next.delays) current.delays = mergeRecord(current.delays, next.delays);
+
+  if (next.actors) {
+    const actors = (current.actors ??= {});
+    actors.children = mergeRecord(actors.children, next.actors.children);
+    actors.emitters = mergeRecord(actors.emitters, next.actors.emitters);
+  }
+
+  return current;
+};

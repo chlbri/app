@@ -1,5 +1,5 @@
 import type { CreateContract_F } from './contract.types';
-import type { DescriptionProps } from './descriptions';
+import { mergeDescriptions, type DescriptionProps } from './descriptions';
 import type { Contract } from './types';
 export type * from './contract.types';
 
@@ -26,7 +26,7 @@ const createContractImpl = (
   const named = typeof nameOrConfig === 'string';
   const config = named ? configOrTypes : nameOrConfig;
   const types = (named ? maybeTypes : configOrTypes) ?? {};
-  let descriptions: DescriptionProps<Contract> = {};
+  const descriptions: DescriptionProps<Contract> = {};
 
   type RuntimeContract = {
     config: any;
@@ -42,7 +42,7 @@ const createContractImpl = (
       return descriptions;
     },
     describe(props: DescriptionProps<Contract>) {
-      descriptions = props;
+      mergeDescriptions(descriptions, props);
       return contract;
     },
   };

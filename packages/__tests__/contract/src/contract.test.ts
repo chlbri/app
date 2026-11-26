@@ -81,7 +81,33 @@ describe('#01 => createContract', () => {
     const returned = described.describe(descriptions);
 
     expect(returned).toBe(described);
-    expect(described.descriptions).toBe(descriptions);
+    expect(described.descriptions).toEqual(descriptions);
+  });
+
+  test('#09 => cumulates descriptions across calls', () => {
+    const described = createContract({ initial: 'idle', states: { idle: {} } });
+
+    described.describe({
+      general: ['First'],
+      actions: { first: ['First action'] },
+      states: { '/idle': ['Idle'] },
+    });
+    described.describe({
+      general: ['Second'],
+      actions: { first: ['More first'], second: ['Second action'] },
+      states: { '/idle': ['Still idle'] },
+    });
+
+    expect(described.descriptions?.general).toEqual(['First', 'Second']);
+    expect(described.descriptions?.actions?.first).toEqual([
+      'First action',
+      'More first',
+    ]);
+    expect(described.descriptions?.actions?.second).toEqual(['Second action']);
+    expect(described.descriptions?.states?.['/idle']).toEqual([
+      'Idle',
+      'Still idle',
+    ]);
   });
 });
 

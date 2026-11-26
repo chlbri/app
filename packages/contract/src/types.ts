@@ -131,7 +131,10 @@ export type Contract<
    */
   readonly options?: Options;
   /**
-   * Attaches a description hierarchy to the contract.
+   * Appends a description hierarchy to the contract.
+   *
+   * Calls are cumulative: existing token arrays receive the tail of the new
+   * array, and missing tokens are created.
    *
    * @param props - Description hierarchy of every token category.
    *

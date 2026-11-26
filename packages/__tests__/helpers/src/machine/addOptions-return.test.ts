@@ -85,7 +85,7 @@ describe('Machine addOptions return', () => {
     });
 
     test('#02 => attaches descriptions to the contract', () => {
-      expect(machine.contract.descriptions).toBe(descriptions);
+      expect(machine.contract.descriptions).toEqual(descriptions);
     });
   });
 });
