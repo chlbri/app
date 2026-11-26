@@ -1,17 +1,13 @@
-import { DELAY } from '../interpreters/data';
-import { interpret } from '@bemedev/app';
-import { createMachine } from '@bemedev/app';
-import { constructTests } from '@bemedev/app-vitest';
+import { createMachine, interpret } from '@bemedev/app';
 import { type } from '@bemedev/app-contract/typings';
+import { constructTests } from '@bemedev/app-vitest';
+import { DELAY } from '../interpreters/data';
 
 export const machine1 = createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        activities: { DELAY: 'inc' },
-        on: { NEXT: { description: 'Next', target: '/final' } },
-      },
+      idle: { activities: { DELAY: 'inc' }, on: { NEXT: { target: '/final' } } },
       final: { on: { NEXT: '/idle' } },
     },
   },

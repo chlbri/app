@@ -11,13 +11,13 @@ import type {
   TransitionConfig,
   TransitionConfigMap,
 } from '@bemedev/app-contract';
+import { expandFn } from '@bemedev/app-contract/bemedev';
 import { checkActions } from './actions';
 import { checkGuards } from './guard-configs';
 import { checkKeys, checkValues, isStringOrUndefined } from './primitives';
-import { expandFn } from '@bemedev/app-contract/bemedev';
 
 /** Allowed key names for transition configuration objects. */
-const TRANSITIONS_KEYS = ['target', 'actions', 'guards', 'description'];
+const TRANSITIONS_KEYS = ['target', 'actions', 'guards'];
 
 /**
  * Type guard for checking if a value is a valid transition configuration map.
@@ -41,7 +41,6 @@ export const isTransitionConfigMap = <T extends string[] = string[]>(
   if (valueKeys.length === 0) return false;
   const check1 = checkKeys(_value, ...TRANSITIONS_KEYS);
   if (!check1) return false;
-  const description = _value.description;
   const target = _value.target;
   const actions = _value.actions;
   const guards = _value.guards;
@@ -49,8 +48,6 @@ export const isTransitionConfigMap = <T extends string[] = string[]>(
   const noCheck = target === undefined && actions === undefined;
   if (noCheck) return false;
 
-  const check2 = isStringOrUndefined(description);
-  if (!check2) return false;
   const check33 = isStringOrUndefined(target);
   if (!check33) return false;
   const check3 = checkValues.undefined(target, ...keys);

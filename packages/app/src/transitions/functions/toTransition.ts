@@ -37,14 +37,14 @@ export type ToTransition_F = <Ct extends Contract = Contract>(
  * @param config - The transition configuration to convert.
  * @param options - Optional machine options that may include actions and guards configurations.
  * @param events - The events list used for action and guard resolution.
- * @returns A structured transition object with target, actions, guards, and optional description.
+ * @returns A structured transition object with target, actions, and guards.
  *
  * @see {@linkcode toAction}, {@linkcode toPredicate}
  */
 export const toTransition: ToTransition_F = (config, options, ...events) => {
   const isString = typeof config === 'string';
   if (isString) return { target: config };
-  const { description, target } = config;
+  const { target } = config;
 
   const actions = toArray<WithDescriber>(config.actions).map(action =>
     toAction(action, options?.actions, ...events),
@@ -55,6 +55,5 @@ export const toTransition: ToTransition_F = (config, options, ...events) => {
 
   const out = { target, actions, guards } as any;
 
-  if (description) out.description = description;
   return out;
 };

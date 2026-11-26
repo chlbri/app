@@ -1,7 +1,7 @@
 import { createMachine } from '@bemedev/app';
+import { type } from '@bemedev/app-contract/typings';
 import { notU } from '@bemedev/app/utils';
 import { createPausable } from '@bemedev/rx-pausable';
-import { type } from '@bemedev/app-contract/typings';
 import { interval } from 'rxjs/internal/observable/interval';
 import { map } from 'rxjs/internal/operators/map';
 import { take } from 'rxjs/internal/operators/take';
@@ -17,15 +17,8 @@ export default createMachine(
         on: { NEXT: '/inactive' },
         actors: {
           interval1: {
-            next: {
-              actions: [{ name: 'assigN', description: 'dsdsdds' }],
-              guards: '',
-            },
-            description: 'Interval emitter for active state',
-            complete: {
-              name: 'mockCompleteAction',
-              description: 'Mock complete action',
-            },
+            next: { actions: [{ name: 'assigN' }], guards: '' },
+            complete: { name: 'mockCompleteAction' },
           },
         },
       },

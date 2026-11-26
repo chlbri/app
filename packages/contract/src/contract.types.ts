@@ -8,8 +8,10 @@ import type {
   ToEventObject,
   ToEvents,
 } from './internal';
-import type { Contract, StatePaths } from './types';
 import { Register } from './registry';
+import type { Contract, StatePaths } from './types';
+
+import type { DescriptionProps } from './descriptions';
 
 /**
  * Internal contract surface used to select the options type before the
@@ -37,6 +39,7 @@ type ContractSurface<
     tags: Tags;
     sync: Sync;
   };
+  describe: (props: DescriptionProps) => any;
 };
 
 /**

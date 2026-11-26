@@ -327,7 +327,6 @@ export type CommonChild<
   R extends { eventsMap: any } = { eventsMap: any },
 > = {
   src: CommonChildFunction2<Ct, R>;
-  description?: string;
   id: string;
   on: Identitfy<RecordS<AsyncTransition<Ct>>>[];
   contexts: string[];

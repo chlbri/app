@@ -66,6 +66,23 @@ describe('#01 => createContract', () => {
 
     expect(rich.config).toMatchObject({ initial: 'idle' });
   });
+
+  test('#08 => describe attaches descriptions and returns itself', () => {
+    const described = createContract({ initial: 'idle', states: { idle: {} } });
+    const descriptions = {
+      general: ['A simple contract'],
+      actors: { children: {}, emotters: {} },
+      delays: {},
+      actions: {},
+      guards: {},
+      states: { idle: ['The idle state'] },
+    };
+
+    const returned = described.describe(descriptions);
+
+    expect(returned).toBe(described);
+    expect(described.descriptions).toBe(descriptions);
+  });
 });
 
 describe('#02 => contract types', () => {

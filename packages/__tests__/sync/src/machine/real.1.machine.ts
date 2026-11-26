@@ -17,7 +17,7 @@ export default createMachine(
     initial: 'idle',
     ...actions,
     states: {
-      idle: { ...actions, on: { NEXT: '/parallel' }, description: 'First state' },
+      idle: { ...actions, on: { NEXT: '/parallel' } },
       compound: {
         ...actions,
         on: { NEXT: '/idle' },

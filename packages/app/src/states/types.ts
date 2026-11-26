@@ -215,10 +215,6 @@ export type Node<Ct extends Contract = Contract> = {
    */
   id?: string;
   /**
-   * Optional description text.
-   */
-  description?: string;
-  /**
    * Node category type.
    */
   type: StateType;

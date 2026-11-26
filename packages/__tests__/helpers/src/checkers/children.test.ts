@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vite-plus/test';
 import { isChildConfig } from '@bemedev/app-options/internal';
+import { describe, expect, test } from 'vite-plus/test';
 
 describe('isChildConfig', () => {
   describe('#01 => rejected shapes', () => {
@@ -24,11 +24,11 @@ describe('isChildConfig', () => {
       expect(isChildConfig(value, 'idle')).toBe(false);
     });
 
-    test('#06 => non-string description rejected', () => {
+    test('#06 => description key rejected', () => {
       expect(isChildConfig({ description: 42 })).toBe(false);
     });
 
-    test('#07 => missing on and contexts rejected', () => {
+    test('#07 => description only rejected', () => {
       expect(isChildConfig({ description: 'child' })).toBe(false);
     });
 
@@ -70,9 +70,9 @@ describe('isChildConfig', () => {
       expect(isChildConfig({ contexts: { key: 'value' } })).toBe(true);
     });
 
-    test('#04 => description accepted', () => {
+    test('#04 => contexts with description key rejected', () => {
       const value = { description: 'child', contexts: { key: 'value' } };
-      expect(isChildConfig(value)).toBe(true);
+      expect(isChildConfig(value)).toBe(false);
     });
 
     test('#05 => transition configuration accepted', () => {

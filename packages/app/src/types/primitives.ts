@@ -9,7 +9,6 @@ import type {
   State,
   StatePOf,
 } from '@bemedev/app-contract';
-import type { KeyU } from '@bemedev/app-plugins/addons';
 import type {
   DeepPartial,
   NOmit,
@@ -18,6 +17,7 @@ import type {
   UnionToIntersection,
   _UnionToIntersection2,
 } from '@bemedev/app-contract/bemedev';
+import type { KeyU } from '@bemedev/app-plugins/addons';
 import type { EmptyObject } from '@bemedev/typings';
 
 import {
@@ -28,12 +28,6 @@ import {
 } from '@bemedev/app-options/internal';
 
 export type {
-  FnMapFilterArray,
-  FnMapFilterObject,
-  SingleOrArrayL2,
-  SingleOrArrayR,
-} from '@bemedev/app-plugins/addons';
-export type {
   ExtractS,
   NoExtraKeys,
   NoExtraKeysStrict,
@@ -41,6 +35,12 @@ export type {
   TrueObject,
   ValuesOf,
 } from '@bemedev/app-contract/bemedev';
+export type {
+  FnMapFilterArray,
+  FnMapFilterObject,
+  SingleOrArrayL2,
+  SingleOrArrayR,
+} from '@bemedev/app-plugins/addons';
 export type { KeyU };
 
 export type {
@@ -49,6 +49,7 @@ export type {
   FnMap,
   FnR,
   MaybePromise,
+  Props,
   RecordS,
   SingleOrArrayL,
 } from '@bemedev/app-contract';
@@ -83,12 +84,6 @@ export { DESCRIBER_KEYS, isFunction, isString };
  * @template | {@linkcode Describer} `T` - The describer type.
  */
 export type FromDescriber<T extends Describer> = T['name'];
-
-/**
- * A type {@linkcode Describer} where the `description` property is optional.
- */
-export type Describer2 = NOmit<Describer, 'description'> &
-  Partial<Pick<Describer, 'description'>>;
 
 /**
  * Extracts the string name from a string or type {@linkcode Describer}.

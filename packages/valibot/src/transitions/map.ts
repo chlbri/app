@@ -24,7 +24,6 @@ export const TransitionConfigMapA_Schema = <const T extends ReadonlyArray<string
     target,
     actions: SoaLSchema(ActionConfig_Schema),
     guards: v.optional(SoaLSchema(GuardConfig_Schema)),
-    description: v.optional(v.string()),
   });
 };
 
@@ -48,7 +47,6 @@ export const TransitionConfigMapF_Schema = <const T extends ReadonlyArray<string
     target,
     actions: v.optional(SoaLSchema(ActionConfig_Schema)),
     guards: v.optional(SoaLSchema(GuardConfig_Schema)),
-    description: v.optional(v.string()),
   });
 };
 

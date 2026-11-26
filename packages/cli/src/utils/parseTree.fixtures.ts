@@ -110,7 +110,6 @@ export const config21 = createConfig({
  * Test fixture configuration 3.
  */
 export const config3 = createConfig({
-  description: 'cdd',
   initial: 'state1',
   states: {
     state1: {

@@ -1,3 +1,4 @@
+import { AsyncMachine, deepEqual, interpret } from '@bemedev/app';
 import { tupleOf } from '@bemedev/app/bemedev';
 import {
   _machine2,
@@ -5,12 +6,10 @@ import {
   fakeDB,
   machine2,
 } from '../../../async/src/interpreters/data';
-import { deepEqual, interpret } from '@bemedev/app';
-import { AsyncMachine } from '@bemedev/app';
 
+import { nothing } from '@bemedev/app-plugins/internal';
 import { constructTests } from '@bemedev/app-vitest';
 import { reduceDescriber } from '@bemedev/app/utils';
-import { nothing } from '@bemedev/app-plugins/internal';
 
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
 import path from 'path';
@@ -718,7 +717,7 @@ describe('#06 => machine id is not defined', () => {
   });
 
   describe('#01 => object', () => {
-    const idM = { name: 'machineNotDefined', description: 'Not defined' };
+    const idM = { name: 'machineNotDefined' };
     const machineT = _machineT3;
 
     const service = interpret(machineT);

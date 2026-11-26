@@ -22,7 +22,7 @@ describe('reduceActivity', () => {
       },
       {
         invite: 'single describer object',
-        parameters: [{ after: { name: 'onEnter', description: 'Called' } }],
+        parameters: [{ after: { name: 'onEnter' } }],
         expected: { actions: ['onEnter'], guards: [], delays: ['after'] },
       },
       {

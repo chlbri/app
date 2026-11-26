@@ -7,11 +7,11 @@
 
 import type { ChildConfig } from '@bemedev/app-contract';
 
-import { checkKeys, isString, isStringOrUndefined } from './primitives';
+import { checkKeys, isString } from './primitives';
 import { isOn } from './transitions';
 
 /** Allowed property keys for child actor configurations. */
-const CHILD_KEYS = ['on', 'contexts', 'description'] as const;
+const CHILD_KEYS = ['on', 'contexts'] as const;
 
 /**
  * Type guard for checking if a value is a valid child actor configuration.
@@ -30,18 +30,13 @@ export const isChildConfig = <T extends string[] = string[]>(
   if (typeof value !== 'object' || value === null || Array.isArray(value))
     return false;
 
-  const _value = value as {
-    on?: unknown;
-    contexts?: unknown;
-    description?: unknown;
-  };
+  const _value = value as { on?: unknown; contexts?: unknown };
   const valueKeys = Object.keys(_value);
   if (!checkKeys(_value, ...CHILD_KEYS)) return false;
   if (valueKeys.length === 0) return false;
 
-  const { on, contexts, description } = _value;
+  const { on, contexts } = _value;
 
-  if (!isStringOrUndefined(description)) return false;
   if (on === undefined && contexts === undefined) return false;
   if (!isOn.orUndefined(on, ...keys)) return false;
 

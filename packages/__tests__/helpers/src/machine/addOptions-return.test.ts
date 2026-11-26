@@ -71,4 +71,24 @@ describe('Machine addOptions return', () => {
       expect(service.state.context).toBe(1);
     });
   });
+
+  describe('#05 => describe returns the machine and attaches descriptions', () => {
+    const machine = _machine1;
+    const descriptions = {
+      general: ['A simple machine'],
+      actors: { children: {}, emotters: {} },
+      delays: {},
+      actions: { shortDelay: ['A short delay'] },
+      guards: {},
+      states: { idle: ['The idle state'] },
+    };
+
+    test('#01 => returns itself', () => {
+      expect(machine.describe(descriptions)).toBe(machine);
+    });
+
+    test('#02 => attaches descriptions to the contract', () => {
+      expect(machine.contract.descriptions).toBe(descriptions);
+    });
+  });
 });

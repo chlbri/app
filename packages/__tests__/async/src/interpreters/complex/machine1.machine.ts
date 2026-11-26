@@ -30,20 +30,15 @@ export default createMachine(
           START: [
             {
               target: '/checking',
-              description: 'Start the machine',
               guards: { and: ['assetIsDefined', 'mandatoryIsDefined'] },
               actions: [
                 'provideAsset',
                 'addMandatoryIntermediary',
-                {
-                  name: 'addBlockImmoIntermediary',
-                  description: 'BLOCK_IMMO is here the second intermediary',
-                },
+                { name: 'addBlockImmoIntermediary' },
               ],
             },
             {
               target: '/checking',
-              description: 'Start the machine',
               guards: 'assetIsDefined',
               actions: ['provideAsset', 'addBlockImmoIntermediary'],
             },
@@ -64,13 +59,9 @@ export default createMachine(
               RESET: { target: '/idle', actions: ['reset'] },
               ADD_INTERMEDIARY: [
                 {
-                  description: 'Add an intermediary',
                   guards: {
                     and: [
-                      {
-                        name: 'intermediariesAreNotFull',
-                        description: 'Max 3/5/7 intermediaries',
-                      },
+                      { name: 'intermediariesAreNotFull' },
                       'intermediaryIsNotAdded',
                     ],
                   },

@@ -1,4 +1,3 @@
-import { describe, expect, test } from 'vite-plus/test';
 import {
   isAfter,
   isOn,
@@ -7,6 +6,7 @@ import {
   isTransitionConfig,
   isTransitionConfigMap,
 } from '@bemedev/app-options/internal';
+import { describe, expect, test } from 'vite-plus/test';
 
 describe('isTransitionConfigMap', () => {
   describe('#01 => rejected values', () => {
@@ -47,7 +47,7 @@ describe('isTransitionConfigMap', () => {
       expect(isTransitionConfigMap({ guards: 'guard' })).toBe(false);
     });
 
-    test('#10 => non-string description rejected', () => {
+    test('#10 => description key rejected', () => {
       const value = { target: 'idle', description: 42 };
       expect(isTransitionConfigMap(value, 'idle')).toBe(false);
     });
@@ -85,12 +85,7 @@ describe('isTransitionConfigMap', () => {
     });
 
     test('#04 => complete configuration accepted', () => {
-      const value = {
-        target: 'idle',
-        actions: ['act'],
-        guards: 'guard',
-        description: 'transition',
-      };
+      const value = { target: 'idle', actions: ['act'], guards: 'guard' };
       expect(isTransitionConfigMap(value, 'idle')).toBe(true);
     });
   });

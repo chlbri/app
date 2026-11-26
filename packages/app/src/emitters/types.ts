@@ -52,10 +52,6 @@ export type AsyncEmitter<Ct extends Contract = Contract, R = any> = {
    */
   src: AsyncEmitterFunction<Ct, R>;
   /**
-   * Optional description string.
-   */
-  description?: string;
-  /**
    * Transitions triggered on next emission.
    */
   next: AsyncTransition<Ct>[];
@@ -80,10 +76,6 @@ export type SyncEmitter<Ct extends Contract = Contract, R = any> = {
    * Source function returning a pausable stream.
    */
   src: AsyncEmitterFunction<Ct, R>;
-  /**
-   * Optional description string.
-   */
-  description?: string;
   /**
    * Transitions triggered on next emission.
    */

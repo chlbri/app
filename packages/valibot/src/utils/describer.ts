@@ -1,9 +1,6 @@
 import * as v from 'valibot';
 
 /**
- * Valibot schema for describer object containing `name` and `description` string properties.
+ * Valibot schema for describer object containing a `name` string property.
  */
-export const DescriberSchema = v.strictObject({
-  name: v.string(),
-  description: v.string(),
-});
+export const DescriberSchema = v.strictObject({ name: v.string() });

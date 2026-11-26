@@ -1,7 +1,7 @@
 import type { CommonChild } from '#common/machine';
 import { toTransition } from '#transitions';
-import { _any, identify } from '@bemedev/app-contract/bemedev';
 import type { Contract, ContractOptions } from '@bemedev/app-contract';
+import { _any, identify } from '@bemedev/app-contract/bemedev';
 import type { ChildConfig } from '../../actors/types';
 import { toChildSrc } from './toChildSrc';
 
@@ -49,10 +49,6 @@ export const toChild: ToChild_F = (child, options, ...events) => {
 
   const on = identify(child.on).map(tMapper);
   const contexts = Object.keys(child.contexts || {});
-  const out = _any({ src, on, contexts }) as any;
 
-  const { description } = child;
-  if (description) out.description = description;
-
-  return out;
+  return _any({ src, on, contexts }) as any;
 };

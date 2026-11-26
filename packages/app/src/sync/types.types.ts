@@ -87,7 +87,6 @@ export type SyncTransition<Ct extends Contract = Contract> = {
   readonly target?: string;
   readonly actions: SyncAction<Ct>[];
   readonly guards: AsyncPredicate<Ct>[];
-  readonly description?: string;
 };
 
 /**
@@ -101,7 +100,6 @@ export type SyncTransition<Ct extends Contract = Contract> = {
  */
 export type SyncEmitter<Ct extends Contract = Contract, R = any> = {
   src: AsyncEmitterFunction<Ct, R>;
-  description?: string;
   next: SyncTransition<Ct>[];
   error: SyncTransition<Ct>[];
   complete: SyncTransition<Ct>[];
@@ -135,7 +133,6 @@ export type SyncChild<
   R extends { eventsMap: any } = { eventsMap: any },
 > = {
   src: ChildFunction2<Ct, R>;
-  description?: string;
   id: string;
   on: Identify<RecordS<SyncTransition<Ct>>>[];
   contexts: string[];
@@ -183,7 +180,6 @@ export type SyncTransitions<Ct extends Contract = Contract> = {
  */
 export type SyncNode<Ct extends Contract = Contract> = {
   id?: string;
-  description?: string;
   type: StateType;
   entry: SyncAction<Ct>[];
   exit: SyncAction<Ct>[];

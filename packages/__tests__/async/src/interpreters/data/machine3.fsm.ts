@@ -1,9 +1,7 @@
-import { createMachine } from '@bemedev/app';
-import { createConfig } from '@bemedev/app';
+import { createConfig, createMachine } from '@bemedev/app';
 import { type } from '@bemedev/app-contract/typings';
 
 export const config3 = createConfig({
-  description: 'cdd',
   initial: 'state1',
   states: {
     state1: {

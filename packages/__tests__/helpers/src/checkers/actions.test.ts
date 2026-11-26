@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vite-plus/test';
 import { checkAction, checkActions } from '@bemedev/app-options/internal';
+import { describe, expect, test } from 'vite-plus/test';
 
 describe('checkAction', () => {
   test('#01 => string accepted', () => {
@@ -7,7 +7,7 @@ describe('checkAction', () => {
   });
 
   test('#02 => describer accepted', () => {
-    expect(checkAction({ name: 'action', description: 'An action' })).toBe(true);
+    expect(checkAction({ name: 'action' })).toBe(true);
   });
 
   test('#03 => number rejected', () => expect(checkAction(42)).toBe(false));
@@ -29,10 +29,7 @@ describe('checkActions', () => {
   });
 
   test('#03 => array of describers accepted', () => {
-    const actions = [
-      { name: 'first', description: 'First' },
-      { name: 'second', description: 'Second' },
-    ];
+    const actions = [{ name: 'first' }, { name: 'second' }];
     expect(checkActions(actions)).toBe(true);
   });
 

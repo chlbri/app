@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vite-plus/test';
 import { checkGuards } from '@bemedev/app-options/internal';
+import { describe, expect, test } from 'vite-plus/test';
 
 describe('checkGuards', () => {
   describe('#01 => direct values', () => {
@@ -8,7 +8,7 @@ describe('checkGuards', () => {
     });
 
     test('#02 => describer accepted', () => {
-      expect(checkGuards({ name: 'isOn', description: 'Guard' })).toBe(true);
+      expect(checkGuards({ name: 'isOn' })).toBe(true);
     });
 
     test('#03 => undefined rejected', () => {

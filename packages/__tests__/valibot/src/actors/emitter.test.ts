@@ -26,9 +26,9 @@ describe('TESTS', () => {
         expected: false,
       },
       {
-        invite: 'valid next and description => true',
+        invite: 'next with description key => false',
         parameters: [{ next: 'target1', description: 'test emitter' }],
-        expected: true,
+        expected: false,
       },
       {
         invite: 'valid next and error => true',

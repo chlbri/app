@@ -8,8 +8,8 @@
 import { Require } from '@bemedev/app-utils-bemedev';
 import type { RecordS, SingleOrArrayL } from './primitives';
 
-/** Describer object used to name and document actions or guards. */
-export type Describer = { name: string; description: string };
+/** Describer object used to name actions or guards. */
+export type Describer = { name: string };
 
 /** Action or guard reference, either a string or a describer object. */
 export type WithDescriber = string | Describer;
@@ -35,7 +35,6 @@ export type _TransitionConfigMap<Paths = string> = {
   readonly target?: Paths;
   readonly actions?: SingleOrArrayL<WithDescriber>;
   readonly guards?: SingleOrArrayL<GuardConfig>;
-  readonly description?: string;
 };
 
 /**
@@ -147,7 +146,7 @@ export type AlwaysConfig<Paths = string> =
 export type DelayedTransitions<Paths = string> = RecordS<SingleOrArrayT<Paths>>;
 
 /** Base actor configuration. */
-export type CommonActor = { readonly description?: string };
+export type CommonActor = Record<never, never>;
 
 /** Completion transition map without a target. */
 export type _FinallyConfig = Omit<TransitionConfigMapA, 'target'>;
@@ -198,11 +197,7 @@ export type ActorConfig<Paths = string> = EmitterConfig<Paths> | ChildConfig<Pat
 
 /** Activity configuration map or describer. */
 export type ActivityMap =
-  | {
-      guards?: SingleOrArrayL<GuardConfig>;
-      actions: SingleOrArrayL<WithDescriber>;
-      description?: string;
-    }
+  | { guards?: SingleOrArrayL<GuardConfig>; actions: SingleOrArrayL<WithDescriber> }
   | WithDescriber;
 
 /** Activity configuration array. */
@@ -211,7 +206,6 @@ export type ActivityArray =
       ...{
         guards: SingleOrArrayL<GuardConfig>;
         actions: SingleOrArrayL<WithDescriber>;
-        description?: string;
       }[],
       ActivityMap,
     ]
@@ -222,7 +216,6 @@ export type ActivityConfig = Record<string, ActivityArray>;
 
 /** Base options shared by all state nodes. */
 export type BaseConfig = {
-  readonly description?: string;
   readonly entry?: SingleOrArrayL<WithDescriber>;
   readonly exit?: SingleOrArrayL<WithDescriber>;
   readonly tags?: SingleOrArrayL<string>;

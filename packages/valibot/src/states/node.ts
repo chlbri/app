@@ -24,7 +24,6 @@ export const CommonNodeConfigEntries = <
 ) => {
   return {
     ...Transitions_Schema(...paths).entries,
-    description: v.optional(v.string()),
     entry: v.optional(SoaLSchema(ActionConfig_Schema)),
     exit: v.optional(SoaLSchema(ActionConfig_Schema)),
     tags: v.optional(SoaLSchema(v.string())),

@@ -32,14 +32,15 @@ import type {
   ContractPContext,
   ContractPaths,
   ContractTags,
+  Props,
 } from '@bemedev/app-contract';
+import type { OptionsPlugin } from '@bemedev/app-options';
 import type { AllowedNames, Fn, NotUndefined } from '@bemedev/app-options/bemedev';
 import { _unknown } from '@bemedev/app-options/bemedev';
 import { constructEventsMap } from '@bemedev/app-options/internal';
+import type { AnyMachine, MachineType } from '@bemedev/app-plugins';
 import { decompose, type Decompose } from '@bemedev/decompose';
 import type { CommonElements, GetIO_F } from './types';
-import type { AnyMachine, MachineType } from '@bemedev/app-plugins';
-import type { OptionsPlugin } from '@bemedev/app-options';
 
 /**
  * Abstract base class for state machines (synchronous and asynchronous).
@@ -82,6 +83,18 @@ export abstract class CommonMachine<
    */
   get config() {
     return this._contract.config;
+  }
+
+  /**
+   * Attaches a description hierarchy to the machine contract.
+   *
+   * @param props - Description hierarchy of every token category.
+   *
+   * @returns The machine itself.
+   */
+  describe(props: Props) {
+    this._contract.describe(props);
+    return this;
   }
 
   /**

@@ -11,7 +11,7 @@ import _async from '@bemedev/boolean-recursive/async';
 import sync from '@bemedev/boolean-recursive/sync';
 
 /** Allowed property keys of a type `Describer`. */
-export const DESCRIBER_KEYS = ['name', 'description'] as const;
+export const DESCRIBER_KEYS = ['name'] as const;
 
 /** Signature of {@linkcode checkKeys}, including its `strict` variant. */
 export type CheckKeys_F = {
@@ -161,7 +161,7 @@ export const isStringOrUndefined = (value: unknown): value is string | undefined
  *
  * @param value - Value to check.
  *
- * @returns `true` when `value` only holds `name` and `description`.
+ * @returns `true` when `value` only holds `name`.
  */
 export const isDescriber = (value: unknown): value is Describer => {
   if (typeof value !== 'object' || value === null) return false;

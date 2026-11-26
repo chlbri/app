@@ -14,11 +14,14 @@ import type {
 } from '#events';
 import type { AsyncInterpreterFrom } from '#interpreter';
 import type { Register } from '#registry';
+import type { RegisterOptions } from '@bemedev/app-contract/registry';
 import type {
   Contract,
   ContractMachineOptions,
   OptionsPlugin,
+  Props,
 } from '@bemedev/app-options';
+import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
 import type {
   EmptyObject,
   inferT,
@@ -28,8 +31,6 @@ import type {
 import type { AsyncMachine } from '../asyncMachine/machine';
 import type { SyncInterpreterFrom } from '../sync/interpreter';
 import type { SyncMachine } from '../sync/machine';
-import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
-import type { RegisterOptions } from '@bemedev/app-contract/registry';
 
 /**
  * Contract surface used to select the machine options type before the full
@@ -57,6 +58,7 @@ type OutContractSurface<
     tags: Tags;
     sync: Sync;
   };
+  describe: (props: Props) => any;
 };
 
 /**

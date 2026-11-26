@@ -1,4 +1,5 @@
 import type { CreateContract_F } from './contract.types';
+import type { DescriptionProps } from './descriptions';
 export type * from './contract.types';
 
 /**
@@ -12,8 +13,9 @@ export type * from './contract.types';
  * @param configOrTypes - Machine JSON config (named form) or type schemas (unnamed form).
  * @param maybeTypes - Optional type schemas (named form only).
  *
- * @returns A frozen object holding {@linkcode Contract.config} and
- * {@linkcode Contract.types}.
+ * @returns A frozen object holding {@linkcode Contract.config},
+ * {@linkcode Contract.types} and the description hierarchy set by
+ * {@linkcode Contract.describe}.
  */
 const createContractImpl = (
   nameOrConfig: any,
@@ -23,8 +25,28 @@ const createContractImpl = (
   const named = typeof nameOrConfig === 'string';
   const config = named ? configOrTypes : nameOrConfig;
   const types = (named ? maybeTypes : configOrTypes) ?? {};
+  let descriptions: DescriptionProps = {};
 
-  return Object.freeze({ config, types });
+  type RuntimeContract = {
+    config: any;
+    types: any;
+    readonly descriptions: DescriptionProps;
+    describe: (props: DescriptionProps) => RuntimeContract;
+  };
+
+  const contract: RuntimeContract = {
+    config,
+    types,
+    get descriptions() {
+      return descriptions;
+    },
+    describe(props: DescriptionProps) {
+      descriptions = props;
+      return contract;
+    },
+  };
+
+  return Object.freeze(contract);
 };
 
 /**
@@ -69,3 +91,41 @@ const createContractImpl = (
  * @see -- type {@linkcode CreateContract_F}
  */
 export const createContract = createContractImpl as CreateContract_F;
+
+// const tt = createContract({
+//   initial: 'state1',
+//   states: {
+//     state1: {
+//       initial: 'state11',
+//       states: {
+//         state11: { initial: 'state111', states: { state111: {} } },
+//         state12: { activities: { DELAY5: 'deal', DELAY17: 'deal17' } },
+//       },
+//     },
+//     state2: {
+//       after: {
+//         DELAY: { actions: ['dodo1', 'doré'] },
+//         DELAY2: '/state2',
+//         DELAY3: { actions: 'dodo2' },
+//       },
+//       on: {
+//         EVENT: { actions: ['dodo3', 'doré1'] },
+//         EVENT2: '/',
+//         EVENT3: { actions: 'dodo5' },
+//       },
+//       always: [
+//         { actions: 'dodo6', guards: 'guard2', target: '/state1/state11' },
+//         {
+//           actions: ['dodo7', 'doré3', 'doré1'],
+//           guards: 'guard2',
+//           target: '/state1/state12',
+//         },
+//         '/state1/state11',
+//       ],
+//     },
+//   },
+//   actors: { machine1: { on: {} } },
+// }).describe({
+//   actions: {
+//
+// } });

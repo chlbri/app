@@ -12,7 +12,6 @@ import { SoaLSchema } from '../utils/soa';
 const ActivityMap_Schema = v.union([
   ActionConfig_Schema,
   v.strictObject({
-    description: v.optional(v.string()),
     actions: SoaLSchema(ActionConfig_Schema),
     guards: v.optional(SoaLSchema(GuardConfig_Schema)),
   }),
@@ -24,7 +23,6 @@ const ActivityMap_Schema = v.union([
  * @see {@linkcode ActionConfig_Schema}, {@linkcode SoaLSchema}, {@linkcode GuardConfig_Schema}
  */
 const ActivityMapG_Schema = v.strictObject({
-  description: v.optional(v.string()),
   actions: SoaLSchema(ActionConfig_Schema),
   guards: SoaLSchema(GuardConfig_Schema),
 });

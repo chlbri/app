@@ -6,22 +6,22 @@ import type {
 } from '#actions';
 
 import type {
-  WithDescriber,
-  GuardConfig,
   _TransitionConfigMap,
+  ActorConfig,
   ArrayTransitions,
   ArrayTransitionsF,
+  ChildConfig,
+  Contract,
+  EmitterConfig,
+  GuardConfig,
+  RecordS,
+  SingleOrArrayL,
   TransitionConfigMapA,
   TransitionConfigMapF,
   TransitionConfigMapFG,
   TransitionConfigMapG,
   TransitionsConfig,
-  ActorConfig,
-  ChildConfig,
-  EmitterConfig,
-  Contract,
-  RecordS,
-  SingleOrArrayL,
+  WithDescriber,
 } from '@bemedev/app-contract';
 
 import type {
@@ -467,7 +467,6 @@ export type AsyncTransition<Ct extends Contract = Contract> = {
   readonly target?: string;
   readonly actions: AsyncAction<Ct>[];
   readonly guards: AsyncPredicate<Ct>[];
-  readonly description?: string;
 };
 
 /**
@@ -479,7 +478,6 @@ export type SyncTransition<Ct extends Contract = Contract> = {
   readonly target?: string;
   readonly actions: SyncAction<Ct>[];
   readonly guards: SyncPredicate<Ct>[];
-  readonly description?: string;
 };
 
 /**

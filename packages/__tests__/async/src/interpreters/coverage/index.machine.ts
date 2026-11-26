@@ -1,22 +1,21 @@
-import { createMachine } from '@bemedev/app';
-import { type } from '@bemedev/app-contract/typings';
+import { createMachine } from "@bemedev/app";
+import { type } from "@bemedev/app-contract/typings";
 
-const context = type('number');
+const context = type("number");
 
 export default createMachine(
-  'src/__tests__/interpreters/coverage/index.machine',
+  "src/__tests__/interpreters/coverage/index.machine",
   {
-    initial: 'idle',
+    initial: "idle",
     states: {
       idle: {
-        entry: ['inc'],
+        entry: ["inc"],
         on: {
-          INC: { actions: ['inc', 'neverRun'] },
-          'INC.PRIVATE': { actions: 'incPrivate' },
+          INC: { actions: ["inc", "neverRun"] },
+          "INC.PRIVATE": { actions: "incPrivate" },
           NEXT: {
-            description: 'Next',
-            actions: ['inc', 'incPrivate'],
-            target: '/final',
+            actions: ["inc", "incPrivate"],
+            target: "/final",
           },
         },
       },

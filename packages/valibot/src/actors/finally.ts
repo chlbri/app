@@ -12,7 +12,6 @@ import { SoaLSchema } from '../utils/soa';
 const _F_Schema = v.strictObject({
   actions: SoaLSchema(ActionConfig_Schema),
   guards: v.optional(SoaLSchema(GuardConfig_Schema)),
-  description: v.optional(v.string()),
 });
 
 /**
@@ -23,7 +22,6 @@ const _F_Schema = v.strictObject({
 const _FG_Schema = v.strictObject({
   actions: SoaLSchema(ActionConfig_Schema),
   guards: SoaLSchema(GuardConfig_Schema),
-  description: v.optional(v.string()),
 });
 
 /**

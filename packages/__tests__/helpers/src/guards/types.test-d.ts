@@ -16,7 +16,7 @@ type TT7 = { and: [TT6, TT2] };
 
 type TT8 = { or: [TT6, TT3, TT5] };
 
-type TT9 = { name: 'exists2'; description: 'description' };
+type TT9 = { name: 'exists2' };
 
 describe('GuardConfig & FromGuard', () => {
   test('#01 => string guard', () => {

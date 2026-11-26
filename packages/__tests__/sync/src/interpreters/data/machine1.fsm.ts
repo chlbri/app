@@ -7,10 +7,7 @@ export const machine1 = createMachine(
   {
     initial: 'idle',
     states: {
-      idle: {
-        activities: { DELAY: 'inc' },
-        on: { NEXT: { description: 'Next', target: '/final' } },
-      },
+      idle: { activities: { DELAY: 'inc' }, on: { NEXT: { target: '/final' } } },
 
       final: {},
     },

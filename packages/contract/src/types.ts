@@ -1,4 +1,5 @@
 import { PrimitiveObject, StandardOutput } from '@bemedev/typings/types';
+import type { DescriptionProps } from './descriptions';
 import type {
   ActorsConfigMap,
   AnyMachineOptions,
@@ -122,12 +123,29 @@ export type Contract<
   readonly config: Config;
   /** Inferred typing surface of the contract. */
   readonly types: Types;
+  /** Description hierarchy attached with `describe`. */
+  readonly descriptions?: DescriptionProps;
   /**
    * Type-only options surface: the return type of `createOptions`. Never
    * defined at runtime.
    */
   readonly options?: Options;
+  /**
+   * Attaches a description hierarchy to the contract.
+   *
+   * @param props - Description hierarchy of every token category.
+   *
+   * @returns The contract itself.
+   */
+  describe(props: DescriptionProps): Contract<Config, Types, Options>;
 };
+
+/**
+ * Extracts the description hierarchy of a contract.
+ *
+ * @template `C` - Contract type.
+ */
+export type ContractDescriptions<C extends Contract> = C['descriptions'];
 
 /**
  * Extracts the inferred typing surface of a contract.

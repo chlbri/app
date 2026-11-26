@@ -9,11 +9,11 @@ import type {
   ActorConfig,
   ChildConfig,
   CommonActor,
+  Describer,
   EmitterConfig,
   FinallyConfig,
   FinallyConfigArray,
   WithDescriber,
-  Describer,
 } from '@bemedev/app-contract';
 
 export type {
@@ -37,7 +37,7 @@ type _NoExtraKeysFinallyConfig<T> = T extends string
     ? NoExtraKeys<T, Describer>
     : T extends _FinallyConfig
       ? NoExtraKeysTransitionConfig<T> &
-          Record<Exclude<keyof T, 'guards' | 'actions' | 'description'>, never>
+          Record<Exclude<keyof T, 'guards' | 'actions'>, never>
       : never;
 
 /**

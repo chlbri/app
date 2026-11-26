@@ -7,9 +7,7 @@ export const machine = createMachine(
     initial: 'state1',
     states: {
       state1: {
-        activities: {
-          DELAY: { name: 'activity1', description: 'This is a test activity' },
-        },
+        activities: { DELAY: { name: 'activity1' } },
         on: { NEXT: '/state2' },
       },
       state2: { on: { NEXT: '/state1' } },

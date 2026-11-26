@@ -16,31 +16,31 @@ import type {
   ExtractEmitterSrcKeyFromTransitions,
   ExtractGuardKeysFromTransitions,
 } from '#transitions';
+import { Contract, ContractActorsMap } from '@bemedev/app-contract';
+import type { Equals, Identitfy, Keys } from '@bemedev/app-contract/bemedev';
 import type {
   ActivityConfig,
   AsyncAction2,
+  AsyncChildFunction2,
   AsyncEmitterFunction,
   AsyncPredicateS,
   CommonConfig,
   DelayFunction2,
   EmitterDef,
+  RecordS,
   TargetDef,
   TransitionsConfig,
-  RecordS,
-  AsyncChildFunction2,
 } from '@bemedev/app-contract/internal';
-import { Contract, ContractActorsMap } from '@bemedev/app-contract';
-import type { PrimitiveObject } from '@bemedev/typings';
 import type { ConfigFrom, KeyU } from '@bemedev/app-plugins/addons';
-import type { Equals, Identitfy, Keys } from '@bemedev/app-contract/bemedev';
 import type { Recompose } from '@bemedev/decompose';
+import type { PrimitiveObject } from '@bemedev/typings';
 import type { ReduceArray } from '~types';
 
-export type { Contract, ContractActorsMap, AsyncChildFunction2 };
 export type {
   AsyncMachineOptions2,
   AsyncSimpleMachineOptions,
 } from '@bemedev/app-contract';
+export type { AsyncChildFunction2, Contract, ContractActorsMap };
 
 /**
  * Type representing the main JSON node config of a state machine.
@@ -491,7 +491,6 @@ export type AsyncChild<
   R extends { eventsMap: any } = { eventsMap: any },
 > = {
   src: AsyncChildFunction2<Ct, R>;
-  description?: string;
   id: string;
   on: Identitfy<RecordS<AsyncTransition<Ct>>>[];
   contexts: string[];

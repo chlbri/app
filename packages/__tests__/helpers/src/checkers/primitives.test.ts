@@ -1,4 +1,3 @@
-import { describe, expect, test } from 'vite-plus/test';
 import {
   checkKeys,
   checkValues,
@@ -6,6 +5,7 @@ import {
   isString,
   isStringOrUndefined,
 } from '@bemedev/app-options/internal';
+import { describe, expect, test } from 'vite-plus/test';
 
 describe('checkKeys', () => {
   describe('#01 => checkKeys', () => {
@@ -129,13 +129,13 @@ describe('isStringOrUndefined', () => {
 });
 
 describe('isDescriber', () => {
-  test('#01 => name and description accepted', () => {
-    const value = { name: 'action', description: 'An action' };
+  test('#01 => name accepted', () => {
+    const value = { name: 'action' };
     expect(isDescriber(value)).toBe(true);
   });
 
-  test('#02 => missing description rejected', () => {
-    expect(isDescriber({ name: 'action' })).toBe(false);
+  test('#02 => description key rejected', () => {
+    expect(isDescriber({ name: 'action', description: 'An action' })).toBe(false);
   });
 
   test('#03 => missing name rejected', () => {
@@ -143,7 +143,7 @@ describe('isDescriber', () => {
   });
 
   test('#04 => extra key rejected', () => {
-    const value = { name: 'action', description: 'An action', extra: true };
+    const value = { name: 'action', extra: true };
     expect(isDescriber(value)).toBe(false);
   });
 

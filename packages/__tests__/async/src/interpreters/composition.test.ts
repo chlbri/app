@@ -1,17 +1,17 @@
+import { nothing } from '@bemedev/app-plugins/internal';
+import { constructTests } from '@bemedev/app-vitest';
+import { _any, _unknown, tupleOf } from '@bemedev/app/bemedev';
 import {
   DEFAULT_MAX_SELF_TRANSITIONS,
   DEFAULT_MIN_ACTIVITY_TIME,
   TIME_TO_RINIT_SELF_COUNTER,
 } from '@bemedev/app/constants';
-import { constructTests } from '@bemedev/app-vitest';
-import { DELAY, fakeDB, machine21, machine3 } from './data';
 import type { StateValue } from '@bemedev/app/states';
-import { nothing } from '@bemedev/app-plugins/internal';
-import { _any, _unknown, tupleOf } from '@bemedev/app/bemedev';
+import { DELAY, fakeDB, machine21, machine3 } from './data';
 
-import type { AnyInterpreter } from '@bemedev/app/types';
-import { defaultCheck } from '@bemedev/app/guards';
 import { deepEqual, interpret } from '@bemedev/app';
+import { defaultCheck } from '@bemedev/app/guards';
+import type { AnyInterpreter } from '@bemedev/app/types';
 import _machine1 from './composition.1.machine';
 import _machine2 from './composition.2.machine';
 import _machine3 from './composition.3.machine';
@@ -113,7 +113,6 @@ describe('Composition', () => {
         after: [],
         always: [],
         children: [{ contexts: [], on: [], src: undefined }],
-        description: 'cdd',
         emitters: [],
         entry: [],
         exit: [],
@@ -180,7 +179,6 @@ describe('Composition', () => {
     describe('#05 => config', () => {
       const _config = {
         actors: { machine1: { on: {} } },
-        description: 'cdd',
         initial: 'state1',
         states: {
           state1: {

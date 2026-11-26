@@ -102,6 +102,7 @@ export type {
   ContractActorsMap,
   ContractConfig,
   ContractContext,
+  ContractDescriptions,
   ContractEventArg,
   ContractEvents,
   ContractEventsMap,
@@ -114,6 +115,7 @@ export type {
   ContractTags,
   ContractTypes,
   ContractTypesOf,
+  Props,
 } from '@bemedev/app-options';
 
 export type {
