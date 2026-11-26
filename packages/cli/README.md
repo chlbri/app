@@ -3,6 +3,17 @@
 CLI tool and AST `parseTree` parser for
 [`@bemedev/app`](https://github.com/chlbri/app).
 
+> [!WARNING]
+> **Upcoming 4.0.0 — breaking changes across the whole `@bemedev/app` family,
+> `@bemedev/app-contract` included.** The release focuses on AI agents and removes
+> `description` from **every** token — **actions included** — in contracts and
+> machines alike. The `{ name, description }` (`Describer`) form is no longer
+> accepted: reference actions and guards by their plain string name, while states,
+> actors, activities and transitions lose the field outright. Descriptions for any
+> token are added with the new `describe` method, available on both contracts and
+> machines. See the
+> [@bemedev/app roadmap](https://github.com/chlbri/app/blob/main/packages/app/README.md#upcoming-400).
+
 ## Installation
 
 ```bash

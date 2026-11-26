@@ -113,6 +113,46 @@ pnpm add @bemedev/app
 
 <br/>
 
+## Upcoming 4.0.0
+
+> [!WARNING]
+> **Breaking changes across the whole family, `@bemedev/app-contract` included.** The
+> next major removes `description` from **every** token — **actions included** — in
+> contracts and machines alike, and the `{ name, description }` (`Describer`) form is
+> no longer accepted. Descriptions for any token move to the new `describe` method,
+> available on both contracts and machines. Read this section before upgrading.
+
+Version **4.0.0** of the `@bemedev/app` family is a **breaking** release that focuses
+the API on **AI agents** as first-class consumers of machine definitions.
+Agent-facing configs are pure data, so human-oriented prose leaves the model
+entirely:
+
+| Surface     | 3.x                                                          | 4.0.0         |
+| ----------- | ------------------------------------------------------------ | ------------- |
+| Actions     | `'fetchUser'` or `{ name: 'fetchUser', description: '...' }` | `'fetchUser'` |
+| States      | `description?: string`                                       | removed       |
+| Actors      | `description?: string`                                       | removed       |
+| Activities  | `description?: string`                                       | removed       |
+| Transitions | `description?: string`                                       | removed       |
+
+No token accepts `description` anymore — **including actions** — and the
+`{ name, description }` object form of `Describer` is removed. Actions and guards are
+referenced by their plain string name; states, actors, activities and transitions
+keep their shape minus the field.
+
+Contracts are affected too: `@bemedev/app-contract` carries the same config, so every
+`description` disappears there as well. Contract-level and machine-level descriptions
+move out of the config and into the new `describe` method.
+
+Descriptions are not lost: `describe` — available on both contracts and machines —
+becomes the single way to add a description to any token, keeping the machine
+definition pure data while tooling and agents can still read the metadata on demand.
+
+This release (3.3.1) changes no runtime behaviour: it announces the 4.0.0 breaking
+changes so the migration can start now.
+
+<br/>
+
 ## Quick Start
 
 ```typescript
@@ -154,6 +194,7 @@ await service[Symbol.asyncDispose]();
   - [Names, not references](#names-not-references)
   - [Actors — two kinds of external work](#actors--two-kinds-of-external-work)
 - [Installation](#installation)
+- [Upcoming 4.0.0](#upcoming-400)
 - [Quick Start](#quick-start)
 - [1. Machine Configuration](#1-machine-configuration)
   - [`createConfig(config)`](#createconfigconfig)
@@ -2018,7 +2059,7 @@ app dev      [--output path] [--excludes dirs...]   # alias for watch
 
 ## Changelog
 
-[View CHANGELOG.md](https://github.com/chlbri/app/blob/main/CHANGELOG.md)
+[View CHANGELOG.md](https://github.com/chlbri/app/blob/main/packages/app/CHANGELOG.md)
 
 <br/>
 

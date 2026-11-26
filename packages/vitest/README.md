@@ -7,6 +7,17 @@ Declarative test sequence generator for `@bemedev/app` state machines inside
 of sequentially run, declarative test assertions, removing the boilerplate of manual
 await-tick-assert cycles.
 
+> [!WARNING]
+> **Upcoming 4.0.0 — breaking changes across the whole `@bemedev/app` family,
+> `@bemedev/app-contract` included.** The release focuses on AI agents and removes
+> `description` from **every** token — **actions included** — in contracts and
+> machines alike. The `{ name, description }` (`Describer`) form is no longer
+> accepted: reference actions and guards by their plain string name, while states,
+> actors, activities and transitions lose the field outright. Descriptions for any
+> token are added with the new `describe` method, available on both contracts and
+> machines. See the
+> [@bemedev/app roadmap](https://github.com/chlbri/app/blob/main/packages/app/README.md#upcoming-400).
+
 <br/>
 
 ## Installation
@@ -18,8 +29,7 @@ pnpm add @bemedev/app-vitest -D
 ```
 
 > **Requirements:** Node.js ≥ 24 · `@bemedev/app` ≥ 2.0.0 · Vitest ≥ 5.1.0, plus the
-> `@bemedev/app-contract`, `@bemedev/app-options`, `@bemedev/app-plugins` and
-> `@bemedev/app-utils-bemedev` peers.
+> `@bemedev/app-contract`, `@bemedev/app-options` and `@bemedev/app-plugins` peers.
 
 <br/>
 

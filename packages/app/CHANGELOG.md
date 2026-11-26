@@ -8,6 +8,32 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[3.3.1] - 26/11/2026** => _18:31_
+
+</summary>
+
+### Breaking changes (upcoming 4.0.0)
+
+- **4.0.0 roadmap — AI agents first**: the next major of the `@bemedev/app` family —
+  `@bemedev/app-contract` included — is a **breaking** release focused on AI agents
+  as first-class consumers of machine definitions. `description` is removed from
+  **every** token — **actions included** — in contracts and machines alike, and the
+  `{ name, description }` (`Describer`) object form is no longer accepted. Actions
+  and guards are referenced by their plain string name; states, actors, activities
+  and transitions keep their shape minus the field. Descriptions for any token are
+  added with the new `describe` method, available on both contracts and machines.
+
+### Dependencies
+
+- Downgrade the workspace `packageManager` to `pnpm@12.22.0`.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.3.0] - 25/11/2026** => _23:35_
 
 </summary>

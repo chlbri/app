@@ -8,6 +8,17 @@ structural integrity, valid target paths, correct state node types (`atomic`,
 `compound`, `parallel`), valid transition arrays, and properly structured actions,
 guards, and actor configurations before machine instantiation.
 
+> [!WARNING]
+> **Upcoming 4.0.0 — breaking changes across the whole `@bemedev/app` family,
+> `@bemedev/app-contract` included.** The release focuses on AI agents and removes
+> `description` from **every** token — **actions included** — in contracts and
+> machines alike. The `{ name, description }` (`Describer`) form is no longer
+> accepted: reference actions and guards by their plain string name, while states,
+> actors, activities and transitions lose the field outright. Descriptions for any
+> token are added with the new `describe` method, available on both contracts and
+> machines. See the
+> [@bemedev/app roadmap](https://github.com/chlbri/app/blob/main/packages/app/README.md#upcoming-400).
+
 ---
 
 ## Table of Contents
@@ -118,7 +129,8 @@ child state nodes:
   - `entry` / `exit`: Single or array of action configurations.
   - `tags`: Single string or array of strings.
   - `activities`: Record of activity names to activity configurations.
-  - `description`: Human-readable summary string.
+  - `description`: Human-readable summary string (removed in 4.0.0 — see the warning
+    above; use `describe`).
   - `strict`: Optional boolean to enforce strict configuration rules.
 
 ---
@@ -151,7 +163,8 @@ conditions:
 Validates action specifications in `entry`, `exit`, and transition `actions`:
 
 - **String Action**: Name referencing an action registered in machine options.
-- **Describer Object**: Object containing an execution handler and optional metadata:
+- **Describer Object**: Object containing an execution handler and optional metadata
+  (the `description` field is removed in 4.0.0 — see the warning above):
   ```typescript
   {
     exec: (state, event) => { ... },
@@ -166,7 +179,8 @@ Validates action specifications in `entry`, `exit`, and transition `actions`:
 Guards control whether a transition can trigger:
 
 - **Named Guard**: String key corresponding to a guard function in machine options.
-- **Describer Guard**: Object with `cond` predicate function and description.
+- **Describer Guard**: Object with `cond` predicate function and description (removed
+  in 4.0.0 — use `describe`).
 - **Logical Guard Trees**: Recursive boolean logic schemas:
   - `and`: Array of guards that must all evaluate to `true`.
   - `or`: Array of guards where at least one must evaluate to `true`.
