@@ -1,0 +1,15 @@
+{
+  "buildCommand": "vp run -r pack",
+  "packages": [
+    { "name": "@bemedev/app", "dir": "packages/app" },
+    { "name": "@bemedev/app-cli", "dir": "packages/cli" },
+    { "name": "@bemedev/app-contract", "dir": "packages/contract" },
+    { "name": "@bemedev/app-options", "dir": "packages/options" },
+    { "name": "@bemedev/app-bemedev-plugins", "dir": "packages/plugins/bemedev" },
+    { "name": "@bemedev/app-plugins", "dir": "packages/plugins/core" },
+    { "name": "@bemedev/app-reactjs", "dir": "packages/reactjs" },
+    { "name": "@bemedev/app-solidjs", "dir": "packages/solidjs" },
+    { "name": "@bemedev/app-valibot", "dir": "packages/valibot" },
+    { "name": "@bemedev/app-vitest", "dir": "packages/vitest" }
+  ]
+}
