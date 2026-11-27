@@ -8,18 +8,18 @@ Results directory: `/tmp/test-libs-QIsXT3`
 
 This file is deleted and rewritten on every `test-libs` run.
 
-| Library | npm | yarn | pnpm | bun | Warnings | Verdict |
-| --- | --- | --- | --- | --- | --- | --- |
-| @bemedev/app | PASS | PASS | PASS | PASS | — | PASS |
-| @bemedev/app-bemedev-plugins | PASS | PASS | PASS | PASS | — | PASS |
-| @bemedev/app-cli | PASS | PASS | PASS | PASS | — | PASS |
-| @bemedev/app-contract | PASS | PASS | PASS | PASS | — | PASS |
-| @bemedev/app-options | PASS | PASS | PASS | PASS | — | PASS |
-| @bemedev/app-plugins | PASS | PASS | PASS | PASS | — | PASS |
-| @bemedev/app-reactjs | PASS | PASS | PASS | PASS | (1), (2), (3) | PASS_WITH_WARNINGS |
-| @bemedev/app-solidjs | PASS | PASS | PASS | PASS | — | PASS |
-| @bemedev/app-valibot | PASS | PASS | PASS | PASS | — | PASS |
-| @bemedev/app-vitest | PASS | PASS | PASS | PASS | — | PASS |
+| Library                      | npm  | yarn | pnpm | bun  | Warnings      | Verdict            |
+| ---------------------------- | ---- | ---- | ---- | ---- | ------------- | ------------------ |
+| @bemedev/app                 | PASS | PASS | PASS | PASS | —             | PASS               |
+| @bemedev/app-bemedev-plugins | PASS | PASS | PASS | PASS | —             | PASS               |
+| @bemedev/app-cli             | PASS | PASS | PASS | PASS | —             | PASS               |
+| @bemedev/app-contract        | PASS | PASS | PASS | PASS | —             | PASS               |
+| @bemedev/app-options         | PASS | PASS | PASS | PASS | —             | PASS               |
+| @bemedev/app-plugins         | PASS | PASS | PASS | PASS | —             | PASS               |
+| @bemedev/app-reactjs         | PASS | PASS | PASS | PASS | (1), (2), (3) | PASS_WITH_WARNINGS |
+| @bemedev/app-solidjs         | PASS | PASS | PASS | PASS | —             | PASS               |
+| @bemedev/app-valibot         | PASS | PASS | PASS | PASS | —             | PASS               |
+| @bemedev/app-vitest          | PASS | PASS | PASS | PASS | —             | PASS               |
 
 ## Warnings
 
@@ -41,4 +41,3 @@ This file is deleted and rewritten on every `test-libs` run.
 ## Failures
 
 None.
-
