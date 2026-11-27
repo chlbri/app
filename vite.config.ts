@@ -169,7 +169,10 @@ export default defineConfig({
             'packages/__tests__/*/src/**/*.ts',
             'apps/*/src/**/*.ts',
             'apps/*/vite.config.ts',
-
+            'packages/*/lib/**',
+            'packages/utils/*/lib/**',
+            '!**/.DS_Store',
+            'packages/plugins/*/lib/**',
             '!**/*.gen.ts',
           ],
 
