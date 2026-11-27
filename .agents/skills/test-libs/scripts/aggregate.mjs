@@ -116,7 +116,7 @@ const pmCell = data => {
   if (!data) return '—';
   if (!data.available) return 'skip';
 
-  const complete = data.complete;
+  const complete = data.complete ?? data.install;
   if (!complete) return '—';
 
   return complete.installOk && complete.runtimeFailures.length === 0
