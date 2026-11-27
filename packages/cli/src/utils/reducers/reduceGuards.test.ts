@@ -16,19 +16,14 @@ describe('reduceGuards', () => {
         expected: ['guard1'],
       },
       {
-        invite: 'single describer object guard',
-        parameters: [{ name: 'guard1' }],
-        expected: [{ name: 'guard1' }],
-      },
-      {
         invite: 'and guard structure',
         parameters: [{ and: ['g1', 'g2'] }],
         expected: ['g1', 'g2'],
       },
       {
         invite: 'or guard structure',
-        parameters: [{ or: ['g1', { name: 'g2' }] }],
-        expected: ['g1', { name: 'g2' }],
+        parameters: [{ or: ['g1', 'g2'] }],
+        expected: ['g1', 'g2'],
       },
       {
         invite: 'nested and and or guards',
@@ -41,22 +36,9 @@ describe('reduceGuards', () => {
         expected: ['g1', 'g2'],
       },
       {
-        invite:
-          'string guard followed by object guard with same key replaces string with object guard',
-        parameters: ['g1', { name: 'g1' }],
-        expected: [{ name: 'g1' }],
-      },
-      {
-        invite:
-          'object guard followed by string guard with same key keeps object guard',
-        parameters: [{ name: 'g1' }, 'g1'],
-        expected: [{ name: 'g1' }],
-      },
-      {
-        invite:
-          'object guard followed by object guard with same key keeps first object guard',
-        parameters: [{ name: 'g1' }, { name: 'g1' }],
-        expected: [{ name: 'g1' }],
+        invite: 'deduplicates guards across structures',
+        parameters: ['g1', { and: ['g1', 'g2'] }, { or: ['g2', 'g3'] }],
+        expected: ['g1', 'g2', 'g3'],
       },
     ),
   );

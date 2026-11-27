@@ -1,10 +1,10 @@
-import { reduceGuards } from './reduceGuards';
-import { reduceDescribers } from './reduceDescribers';
 import { toArray } from '@bemedev/app';
+import type { _TransitionConfig } from '@bemedev/app/transitions';
 import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { voidAction } from '@bemedev/pipe/extensions/common';
-import type { _TransitionConfig } from '@bemedev/app/transitions';
+import { reduceActions } from './reduceActions';
+import { reduceGuards } from './reduceGuards';
 
 /**
  * Reduces multiple transition configurations into sets of targets, actions, and guards.
@@ -35,13 +35,12 @@ export const reduceTransitions = (...transitions: _TransitionConfig[]) => {
         }),
 
         v => ({
-          actions: reduceDescribers(...v.actions),
+          actions: reduceActions(...v.actions),
           guards: reduceGuards(...v.guards),
         }),
 
         voidAction(v => actions.add(...v.actions)),
-        v => reduceDescribers(...v.guards),
-        g => guards.add(...g),
+        v => guards.add(...v.guards),
       );
 
       piped();

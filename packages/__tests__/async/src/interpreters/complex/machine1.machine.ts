@@ -34,7 +34,7 @@ export default createMachine(
               actions: [
                 'provideAsset',
                 'addMandatoryIntermediary',
-                { name: 'addBlockImmoIntermediary' },
+                'addBlockImmoIntermediary',
               ],
             },
             {
@@ -60,10 +60,7 @@ export default createMachine(
               ADD_INTERMEDIARY: [
                 {
                   guards: {
-                    and: [
-                      { name: 'intermediariesAreNotFull' },
-                      'intermediaryIsNotAdded',
-                    ],
+                    and: ['intermediariesAreNotFull', 'intermediaryIsNotAdded'],
                   },
                   target: '/working/adding',
                   actions: 'addIntermediary',

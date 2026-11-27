@@ -24,9 +24,9 @@ describe('TESTS', () => {
         expected: false,
       },
       {
-        invite: 'describe object => true',
+        invite: 'describe object => false',
         parameters: [{ name: 'action' }],
-        expected: true,
+        expected: false,
       },
       {
         invite: 'describe object with description key => false',

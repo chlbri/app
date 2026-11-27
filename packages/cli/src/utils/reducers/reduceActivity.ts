@@ -1,7 +1,5 @@
-import type { ActivityConfig } from '@bemedev/app-contract/internal';
-import { isDescriber } from '@bemedev/app-options/internal';
 import { toArray } from '@bemedev/app/bemedev';
-import { fromDescriber } from '@bemedev/app/types';
+import type { ActivityConfig } from '@bemedev/app/types';
 import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { tap } from '@bemedev/pipe/extensions/common';
@@ -35,8 +33,8 @@ export const reduceActivity = (activity: ActivityConfig) => {
               pipe(
                 v => v,
                 v => {
-                  if (typeof v === 'string' || isDescriber(v)) {
-                    actions.add(fromDescriber(v));
+                  if (typeof v === 'string') {
+                    actions.add(v);
                   } else {
                     const result = reduceTransitions(v);
                     actions.add(...result.actions);

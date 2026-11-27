@@ -1,4 +1,4 @@
-import type { AsyncAction, FromActionConfig, WithDescriber } from '#actions';
+import type { AsyncAction, FromActionConfig } from '#actions';
 import type { FromGuard, GuardConfig } from '#guards';
 import type { AsyncTransitions } from '#transitions';
 import type {
@@ -57,9 +57,9 @@ export type SNC = NodeConfig2;
  */
 export type ActionsFromActivity<TS extends ActivityArray> = TS extends any
   ? ReduceArray<TS> extends infer TR
-    ? TR extends { actions: SingleOrArrayL<WithDescriber> }
+    ? TR extends { actions: SingleOrArrayL<string> }
       ? FromGuard<ReduceArray<TR['actions']>>
-      : FromActionConfig<ReduceArray<Extract<TR, WithDescriber>>>
+      : FromActionConfig<ReduceArray<Extract<TR, string>>>
     : never
   : never;
 

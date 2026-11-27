@@ -17,8 +17,8 @@ export default createMachine(
         on: { NEXT: '/inactive' },
         actors: {
           interval1: {
-            next: { actions: [{ name: 'assigN' }], guards: '' },
-            complete: { name: 'mockCompleteAction' },
+            next: { actions: ['assigN'], guards: '' },
+            complete: 'mockCompleteAction',
           },
         },
       },

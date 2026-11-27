@@ -1,41 +1,34 @@
 import { GUARD_TYPE } from '@bemedev/app';
-import type { GuardUnion, WithDescriber } from '@bemedev/app-contract/internal';
-import { fromDescriber } from '@bemedev/app/types';
+import type { GuardUnion } from '@bemedev/app/types';
 
 /**
- * Flattens and deduplicates guard configurations into a unique list of describers.
+ * Flattens and deduplicates guard configurations into a unique list of names.
+ *
+ * Guards are declared as plain strings. Logical `and` / `or` structures are
+ * flattened recursively.
  *
  * @param guards - Array of guard unions of type {@linkcode GuardUnion}.
  *
- * @returns Array of deduplicated guard describers of type {@linkcode WithDescriber}.
+ * @returns Array of deduplicated guard names.
  */
-export const reduceGuards = (...guards: GuardUnion[]): WithDescriber[] => {
-  const result: WithDescriber[] = [];
-  const keyMap = new Map<string, number>();
+export const reduceGuards = (...guards: GuardUnion[]): string[] => {
+  const result = new Set<string>();
 
-  guards
-    .flatMap(guard => {
-      if (typeof guard === 'string') return [guard];
-      if (GUARD_TYPE.and in guard) return reduceGuards(...guard.and);
-      if (GUARD_TYPE.or in guard) return reduceGuards(...guard.or);
-      return [guard];
-    })
-    .forEach(item => {
-      const key = fromDescriber(item);
+  const add = (guard: GuardUnion): void => {
+    if (typeof guard === 'string') {
+      result.add(guard);
+      return;
+    }
 
-      if (keyMap.has(key)) {
-        // Key exists - check if we should replace
-        if (typeof item !== 'string') {
-          // New item is a WithDescriber, replace the string if exists
-          const index = keyMap.get(key)!;
-          if (typeof result[index] === 'string') result[index] = item;
-        }
-      } else {
-        // New key - add it
-        keyMap.set(key, result.length);
-        result.push(item);
-      }
-    });
+    if (GUARD_TYPE.and in guard) {
+      guard.and.forEach(add);
+      return;
+    }
 
-  return result;
+    if (GUARD_TYPE.or in guard) guard.or.forEach(add);
+  };
+
+  guards.forEach(add);
+
+  return [...result];
 };

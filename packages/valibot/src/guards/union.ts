@@ -3,7 +3,7 @@ import * as v from 'valibot';
 import { ActionConfig_Schema } from '../actions';
 
 /**
- * Alias for action config schema used as simple guard configuration.
+ * Alias for the action config schema used as a simple guard configuration.
  *
  * @see {@linkcode ActionConfig_Schema}
  */

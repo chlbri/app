@@ -12,15 +12,13 @@ export default createMachine(
   {
     initial: 'inactive',
     states: {
-      inactive: {
-        on: { NEXT: { target: '/active', guards: { name: 'returnTrue' } } },
-      },
+      inactive: { on: { NEXT: { target: '/active', guards: 'returnTrue' } } },
       active: {
         on: { NEXT: '/inactive' },
         actors: {
           interval1: {
             next: { actions: ['assigN'] },
-            complete: [{ name: 'mockCompleteAction' }],
+            complete: ['mockCompleteAction'],
           },
         },
       },

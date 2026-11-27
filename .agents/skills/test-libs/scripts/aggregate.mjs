@@ -67,8 +67,8 @@ const enrichDetails = (report, entry) => {
   if (!match) return [];
 
   const [, subpath, kind] = match;
-  const [pm] = entry.scope.split('/');
-  const failures = report.pms?.[pm]?.install?.runtimeFailures ?? [];
+  const [pm, stage] = entry.scope.split('/');
+  const failures = report.pms?.[pm]?.[stage]?.runtimeFailures ?? [];
 
   return [
     ...new Set(
@@ -116,10 +116,12 @@ const pmCell = data => {
   if (!data) return '—';
   if (!data.available) return 'skip';
 
-  const install = data.install;
-  if (!install) return '—';
+  const complete = data.complete;
+  if (!complete) return '—';
 
-  return install.installOk && install.runtimeFailures.length === 0 ? 'PASS' : 'FAIL';
+  return complete.installOk && complete.runtimeFailures.length === 0
+    ? 'PASS'
+    : 'FAIL';
 };
 
 const cell = value => String(value).replace(/\|/g, '\\|');

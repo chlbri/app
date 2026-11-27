@@ -1,4 +1,5 @@
 export * from './contract';
+export * from './describers';
 export * from './edges';
 export * from './events';
 export * from './machine.types';

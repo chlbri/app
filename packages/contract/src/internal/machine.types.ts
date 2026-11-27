@@ -8,20 +8,14 @@
 import { Require } from '@bemedev/app-utils-bemedev';
 import type { RecordS, SingleOrArrayL } from './primitives';
 
-/** Describer object used to name actions or guards. */
-export type Describer = { name: string };
-
-/** Action or guard reference, either a string or a describer object. */
-export type WithDescriber = string | Describer;
-
 /** Logical AND guard structure. */
 export type GuardAnd = { and: GuardUnion[] };
 
 /** Logical OR guard structure. */
 export type GuardOr = { or: GuardUnion[] };
 
-/** Union of guard descriptors and logical AND/OR configurations. */
-export type GuardUnion = WithDescriber | GuardAnd | GuardOr;
+/** Union of guard names and logical AND/OR configurations. */
+export type GuardUnion = string | GuardAnd | GuardOr;
 
 /** JSON configuration for a guard. */
 export type GuardConfig = GuardUnion;
@@ -33,7 +27,7 @@ export type GuardConfig = GuardUnion;
  */
 export type _TransitionConfigMap<Paths = string> = {
   readonly target?: Paths;
-  readonly actions?: SingleOrArrayL<WithDescriber>;
+  readonly actions?: SingleOrArrayL<string>;
   readonly guards?: SingleOrArrayL<GuardConfig>;
 };
 
@@ -154,11 +148,11 @@ export type _FinallyConfig = Omit<TransitionConfigMapA, 'target'>;
 /** Tuple of completion transitions. */
 export type FinallyConfigArray = readonly [
   ...Require<_FinallyConfig, 'guards'>[],
-  _FinallyConfig | WithDescriber,
+  _FinallyConfig | string,
 ];
 
 /** Completion configuration for an emitter. */
-export type FinallyConfig = (_FinallyConfig | WithDescriber) | FinallyConfigArray;
+export type FinallyConfig = (_FinallyConfig | string) | FinallyConfigArray;
 
 /**
  * Emitter actor configuration.
@@ -195,18 +189,15 @@ export type ChildConfig<Paths = string> = CommonActor &
  */
 export type ActorConfig<Paths = string> = EmitterConfig<Paths> | ChildConfig<Paths>;
 
-/** Activity configuration map or describer. */
+/** Activity configuration map or action name. */
 export type ActivityMap =
-  | { guards?: SingleOrArrayL<GuardConfig>; actions: SingleOrArrayL<WithDescriber> }
-  | WithDescriber;
+  | { guards?: SingleOrArrayL<GuardConfig>; actions: SingleOrArrayL<string> }
+  | string;
 
 /** Activity configuration array. */
 export type ActivityArray =
   | [
-      ...{
-        guards: SingleOrArrayL<GuardConfig>;
-        actions: SingleOrArrayL<WithDescriber>;
-      }[],
+      ...{ guards: SingleOrArrayL<GuardConfig>; actions: SingleOrArrayL<string> }[],
       ActivityMap,
     ]
   | ActivityMap;
@@ -216,8 +207,8 @@ export type ActivityConfig = Record<string, ActivityArray>;
 
 /** Base options shared by all state nodes. */
 export type BaseConfig = {
-  readonly entry?: SingleOrArrayL<WithDescriber>;
-  readonly exit?: SingleOrArrayL<WithDescriber>;
+  readonly entry?: SingleOrArrayL<string>;
+  readonly exit?: SingleOrArrayL<string>;
   readonly tags?: SingleOrArrayL<string>;
   readonly activities?: ActivityConfig;
 };

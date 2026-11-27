@@ -1,4 +1,4 @@
-import type { NodeConfig2, RecordS } from '@bemedev/app-contract/internal';
+import type { NodeConfig2, RecordS } from '@bemedev/app/types';
 import type { BetterSet } from '@bemedev/better-set';
 
 /**

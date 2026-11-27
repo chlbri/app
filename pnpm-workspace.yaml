@@ -24,7 +24,6 @@ allowBuilds:
 # the package would fail during the build. `pnpm pack` follows the symlink and
 # still bundles the dep's files into the tarball.
 nodeLinker: hoisted
-hoistingLimits: workspaces
 
 minimumReleaseAge: 300
 
@@ -42,11 +41,7 @@ minimumReleaseAgeExclude:
   - '@vitest/*'
 
 overrides:
-  typescript: 6.0.3
-
-update:
-  ignoreDeps:
-    - pnpm
+  typescript: 7.0.2
 
 catalog:
   # Bemedev packages

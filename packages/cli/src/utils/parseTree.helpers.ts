@@ -1,16 +1,13 @@
 import { toArray } from '@bemedev/app';
 import { DEFAULT_DELIMITER } from '@bemedev/app/constants';
+import { flatMap } from '@bemedev/app/states';
+import type { _TransitionsConfig } from '@bemedev/app/transitions';
 import type {
   ActivityConfig,
   NodeConfig2,
   RecordS,
   SingleOrArrayL,
-  WithDescriber,
 } from '@bemedev/app/types';
-import { flatMap } from '@bemedev/app/states';
-import { reduceActivity } from './reducers/reduceActivity';
-import { reduceDescribers } from './reducers/reduceDescribers';
-import { reduceTransitionsConfig } from './reducers/reduceTransitionsConfig';
 import { recompose } from '@bemedev/decompose';
 import { pipe } from '@bemedev/pipe';
 import {
@@ -20,7 +17,9 @@ import {
   toggleMonad,
 } from '@bemedev/pipe/extensions/common';
 import type { ConfigPaths, ConfigPaths2, ParseTreeContext } from './parseTree.types';
-import type { _TransitionsConfig } from '@bemedev/app/transitions';
+import { reduceActions } from './reducers/reduceActions';
+import { reduceActivity } from './reducers/reduceActivity';
+import { reduceTransitionsConfig } from './reducers/reduceTransitionsConfig';
 
 /**
  * Recursively builds the paths map from a flat map of node configurations.
@@ -153,17 +152,17 @@ export const processTransitionsConfig = (
 };
 
 /**
- * Extracts action names from entry or exit describers and adds them to context.
+ * Extracts action names from entry or exit actions and adds them to context.
  *
  * @param ctx - Parse tree context of type {@linkcode ParseTreeContext}.
- * @param actions - Single action or array of actions with describers of type {@linkcode WithDescriber}.
+ * @param actions - Single action or array of action names.
  */
 const processActions = pipe(
-  (ctx: ParseTreeContext, actions?: SingleOrArrayL<WithDescriber>) => {
+  (ctx: ParseTreeContext, actions?: SingleOrArrayL<string>) => {
     pipe(
       () => actions,
       toArray.typed,
-      values => reduceDescribers(...values),
+      values => reduceActions(...values),
       values => ctx.actions.add(...values),
     )();
   },

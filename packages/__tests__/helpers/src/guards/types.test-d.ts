@@ -10,13 +10,11 @@ type TT4 = 'check';
 
 type TT5 = { or: [] };
 
-type TT6 = { or: [TT1, TT4, TT9] };
+type TT6 = { or: [TT1, TT4] };
 
 type TT7 = { and: [TT6, TT2] };
 
 type TT8 = { or: [TT6, TT3, TT5] };
-
-type TT9 = { name: 'exists2' };
 
 describe('GuardConfig & FromGuard', () => {
   test('#01 => string guard', () => {
@@ -44,7 +42,7 @@ describe('GuardConfig & FromGuard', () => {
 
   test('#06 => or guard', () => {
     expectTypeOf<TT6>().toExtend<GuardConfig>();
-    expectTypeOf<FromGuard<TT6>>().toEqualTypeOf<'check' | 'exists' | 'exists2'>();
+    expectTypeOf<FromGuard<TT6>>().toEqualTypeOf<'check' | 'exists'>();
   });
 
   test('#07 => invalid and guard', () => {
@@ -53,10 +51,5 @@ describe('GuardConfig & FromGuard', () => {
 
   test('#08 => invalid nested or guard', () => {
     expectTypeOf<TT8>().not.toExtend<GuardConfig>();
-  });
-
-  test('#09 => describer guard', () => {
-    expectTypeOf<TT9>().toExtend<GuardConfig>();
-    expectTypeOf<FromGuard<TT9>>().toEqualTypeOf<'exists2'>();
   });
 });

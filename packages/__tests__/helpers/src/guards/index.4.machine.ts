@@ -13,8 +13,8 @@ export default createMachine(
             {
               or: [
                 'returnFalse',
-                { and: [{ name: 'returnTrue' }, 'returnTrue2'] },
-                { name: 'returnFalse2' },
+                { and: ['returnTrue', 'returnTrue2'] },
+                'returnFalse2',
               ],
             },
           ],

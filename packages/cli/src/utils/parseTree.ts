@@ -1,4 +1,4 @@
-import type { NodeConfig2, RecordS } from '@bemedev/app-contract/internal';
+import type { NodeConfig2, RecordS } from '@bemedev/app/types';
 import { createBetterSet, type BetterSet } from '@bemedev/better-set';
 import { buildPaths, traverse } from './parseTree.helpers';
 import type {

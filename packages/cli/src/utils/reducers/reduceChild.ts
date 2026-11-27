@@ -1,5 +1,5 @@
-import { ChildConfig, TransitionConfig } from '@bemedev/app-contract';
 import { toArray } from '@bemedev/app/bemedev';
+import type { ChildConfig, TransitionConfig } from '@bemedev/app/types';
 import { createBetterSet } from '@bemedev/better-set';
 import { pipe } from '@bemedev/pipe';
 import { paramArray, tap } from '@bemedev/pipe/extensions/common';

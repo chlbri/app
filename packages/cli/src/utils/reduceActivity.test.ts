@@ -16,13 +16,8 @@ describe('reduceActivity', () => {
     '#01 => Success',
     success(
       {
-        invite: 'single string describer',
+        invite: 'single string action',
         parameters: [{ after: 'onEnter' }],
-        expected: { actions: ['onEnter'], guards: [], delays: ['after'] },
-      },
-      {
-        invite: 'single describer object',
-        parameters: [{ after: { name: 'onEnter' } }],
         expected: { actions: ['onEnter'], guards: [], delays: ['after'] },
       },
       {

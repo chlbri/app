@@ -37,7 +37,6 @@
     "ci:admin": "FULL_CI=$(date +%s) && pnpm run rm && pnpm run up && vp run ci && echo \"\n✅ Full CI takes $(($(date +%s) - FULL_CI))s\n\"",
     "ci:nocache": "CIN=$(date +%s) && vp install && vp run -r pack && vp run pretest && vp fmt && vp lint --fix && vp test && vp run posttest && vp fmt && echo \"\n✅ CI takes $(($(date +%s) - CIN))s\n\"",
     "ci:admin:off": "FULL_CI=$(date +%s) && pnpm run rm && pnpm install --offline && vp run ci && echo \"\n✅ Full CI takes $(($(date +%s) - FULL_CI))s\n\"",
-    "pnpm:devPreinstall": "node -e \"const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); const version=require('child_process').execSync('pnpm -v').toString().trim(); pkg.packageManager='pnpm@' + version; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\\n');\"",
     "config": "vp i",
     "rinit": "vp run rm && vp run config",
     "fmt": "vp fmt",
@@ -76,5 +75,5 @@
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@12.22.0"
+  "packageManager": "pnpm@12.23.0"
 }

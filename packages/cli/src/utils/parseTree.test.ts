@@ -62,9 +62,8 @@ describe('#01 => parseTree', () => {
   });
 
   describe('#02 => entry and exit actions', () => {
-    const compositeAction = readonly({ name: 'entryAction2' });
     const config = {
-      entry: ['entryAction1', compositeAction],
+      entry: ['entryAction1', 'entryAction2'],
       exit: 'exitAction1',
     } as const;
     const result = parseTree(config);
@@ -102,13 +101,12 @@ describe('#01 => parseTree', () => {
     });
 
     describe('#02 => transition object with actions and guards', () => {
-      const complexGuard = readonly({ name: 'complexGuard' });
       const config = readonly.freeze({
         on: {
           NEXT: {
             target: '/child',
             actions: ['doSomething'],
-            guards: ['canGo', complexGuard],
+            guards: ['canGo', 'complexGuard'],
           },
         },
       });
@@ -123,19 +121,17 @@ describe('#01 => parseTree', () => {
       });
 
       test('#03 => complex guard extracted', () => {
-        expect(result.guards.toArray).toContainEqual(complexGuard.name);
+        expect(result.guards.toArray).toContain('complexGuard');
       });
     });
 
     describe('#03 => array transition with guards then target', () => {
-      const guardsB = readonly({ name: 'guardsB' });
-      const duplicateGuardsB = readonly({ name: 'guardsB' });
       const config = readonly({
         on: {
           NEXT: [
             { target: '/a', guards: ['guardA'], actions: ['actionA'] },
-            { target: '/b', guards: [guardsB], actions: ['actionB'] },
-            { guards: duplicateGuardsB },
+            { target: '/b', guards: ['guardsB'], actions: ['actionB'] },
+            { guards: ['guardsB'] },
             '/default',
           ],
         },
@@ -166,16 +162,12 @@ describe('#01 => parseTree', () => {
     });
 
     describe('#02 => always as array with actions and guards', () => {
-      const alwaysAction2 = readonly({ name: 'alwaysAction2' });
-      const alwaysAction3 = readonly({ name: 'alwaysAction3' });
-      const alwaysGuard2 = readonly({ name: 'alwaysGuard2' });
-      const alwaysGuard3 = readonly({ name: 'alwaysGuard3' });
       const config = readonly({
         always: [
           {
             target: '/a',
-            guards: ['alwaysGuard', alwaysGuard2, alwaysGuard3],
-            actions: ['alwaysAction', alwaysAction2, alwaysAction3],
+            guards: ['alwaysGuard', 'alwaysGuard2', 'alwaysGuard3'],
+            actions: ['alwaysAction', 'alwaysAction2', 'alwaysAction3'],
           },
           '/fallback',
         ],
