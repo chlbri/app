@@ -638,8 +638,10 @@ const main = () => {
   const externalSpecs = [...fullExternalPeers].map(
     ([name, spec]) => `${name}@${spec}`,
   );
-  const minimalSpecs = [targetTarball, ...internalSpecs];
-  const completeSpecs = [...minimalSpecs, ...externalSpecs];
+  // Install every external peer up front so missing peers cannot surface as
+  // import errors. This includes required transitive peers such as `vite` for
+  // `vitest`.
+  const installSpecs = [targetTarball, ...internalSpecs, ...externalSpecs];
 
   const pms = {};
 
@@ -651,75 +653,71 @@ const main = () => {
       continue;
     }
 
-    const minimalDir = join(work, pm, 'minimal');
-    const completeDir = join(work, pm, 'complete');
-    const minimal = runScenario({
+    const install = runScenario({
       pm,
-      stage: 'minimal',
-      dir: minimalDir,
-      specs: minimalSpecs,
-      target: { ...target, entries },
-      timeout: args.timeout,
-    });
-    const complete = runScenario({
-      pm,
-      stage: 'complete',
-      dir: completeDir,
-      specs: completeSpecs,
+      stage: 'install',
+      dir: join(work, pm),
+      specs: installSpecs,
       target: { ...target, entries },
       timeout: args.timeout,
     });
 
-    pms[pm] = { available: true, version, minimal, complete };
+    pms[pm] = { available: true, version, install };
   }
 
   const failures = [];
+  const failureDetails = [];
   const warnings = [];
+  const warningDetails = [];
 
-  if (missingSources.length) {
-    warnings.push(
-      ...missingSources.map(
-        item => `source: missing ${item.target} (${item.subpath})`,
-      ),
-    );
+  const addIssue = (severity, scope, message, details = []) => {
+    const line = `${scope}: ${message}`;
+
+    if (severity === 'failure') {
+      failures.push(line);
+      failureDetails.push({ scope, message, details });
+    } else {
+      warnings.push(line);
+      warningDetails.push({ scope, message, details });
+    }
+  };
+
+  for (const item of missingSources) {
+    addIssue('warning', 'source', `missing ${item.target} (${item.subpath})`);
   }
 
-  if (packedCheck.missing.length) {
-    failures.push(
-      ...packedCheck.missing.map(
-        item => `tarball: missing ${item.target} (${item.subpath})`,
-      ),
-    );
+  for (const item of packedCheck.missing) {
+    addIssue('failure', 'tarball', `missing ${item.target} (${item.subpath})`);
   }
 
   for (const [pm, data] of Object.entries(pms)) {
     if (!data.available) continue;
 
-    for (const stage of ['minimal', 'complete']) {
-      const scenario = data[stage];
-      const prefix = `${pm}/${stage}`;
+    const scenario = data.install;
+    const prefix = `${pm}/install`;
 
-      if (!scenario.installOk) {
-        (stage === 'complete' ? failures : warnings).push(
-          `${prefix}: install failed`,
-        );
-      }
+    if (!scenario.installOk) addIssue('failure', prefix, 'install failed');
 
-      if (!scenario.installed) {
-        (stage === 'complete' ? failures : warnings).push(
-          `${prefix}: package not in node_modules`,
-        );
-      }
+    if (!scenario.installed) {
+      addIssue('failure', prefix, 'package not in node_modules');
+    }
 
-      for (const failure of scenario.runtimeFailures) {
-        (stage === 'complete' ? failures : warnings).push(
-          `${prefix}: ${failure.subpath} ${failure.kind} -> ${failure.code || failure.message}`,
-        );
-      }
+    for (const failure of scenario.runtimeFailures) {
+      addIssue(
+        'failure',
+        prefix,
+        `${failure.subpath} ${failure.kind} -> ${failure.code || failure.message}`,
+        [failure.message],
+      );
+    }
 
-      if (scenario.peerWarnings.length) {
-        warnings.push(`${prefix}: ${scenario.peerWarnings.length} peer warning(s)`);
-      }
+    if (scenario.peerWarnings.length) {
+      addIssue(
+        'warning',
+        prefix,
+        `${scenario.peerWarnings.length} peer warning(s)`,
+        scenario.peerWarnings,
+      );
     }
   }
 
@@ -748,10 +746,14 @@ const main = () => {
     tarball: targetTarball,
     pms,
     failures,
+    failureDetails,
     warnings,
+    warningDetails,
   };
 
   const reportPath = join(pkgOut, 'report.json');
+  report.reportJson = reportPath;
+
   writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);
 
   if (args.jsonOnly) {
@@ -778,18 +780,16 @@ const main = () => {
         continue;
       }
 
+      const scenario = data.install;
+      const failed = scenario.runtimeFailures.length;
       console.log(`\n${pm} ${data.version}`);
-      for (const stage of ['minimal', 'complete']) {
-        const scenario = data[stage];
-        const installed = scenario.runtimeFailures.length;
+      console.log(
+        `  install=${scenario.installOk ? 'ok' : 'FAIL'} imports=${scenario.results.length - failed}/${scenario.results.length} peerWarnings=${scenario.peerWarnings.length}`,
+      );
+      for (const failure of scenario.runtimeFailures.slice(0, 5)) {
         console.log(
-          `  ${stage.padEnd(8)} install=${scenario.installOk ? 'ok' : 'FAIL'} imports=${scenario.results.length - installed}/${scenario.results.length} peerWarnings=${scenario.peerWarnings.length}`,
+          `    ! ${failure.subpath} ${failure.kind}: ${failure.code || failure.message}`,
         );
-        for (const failure of scenario.runtimeFailures.slice(0, 5)) {
-          console.log(
-            `    ! ${failure.subpath} ${failure.kind}: ${failure.code || failure.message}`,
-          );
-        }
       }
     }
 

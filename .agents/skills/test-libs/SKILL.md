@@ -15,13 +15,17 @@ description:
 Validates the packages this repository publishes by installing their packed tarballs
 into throwaway consumer projects and importing every export.
 
-For each library, each package manager (`npm`, `yarn`, `pnpm`, `bun`) runs two
-scenarios:
+For each library, each package manager (`npm`, `yarn`, `pnpm`, `bun`) runs one
+install scenario:
 
-| Scenario   | Installs                                                  | Purpose                                                            |
-| ---------- | --------------------------------------------------------- | ------------------------------------------------------------------ |
-| `minimal`  | the library + internal workspace closure                  | out-of-the-box availability, surfaces peer warnings                |
-| `complete` | also the declared external peers and their required peers | proves every export imports when the whole peer chain is satisfied |
+| Scenario  | Installs                                                                                                                                                                                | Purpose                                                            |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `install` | the library + internal workspace closure + every external peer (`react`, `react-dom`, `solid-js`, `vitest`, `valibot`, …) + required transitive peers (for example `vite` for `vitest`) | proves every export imports when the whole peer chain is satisfied |
+
+External peers are installed **before** the imports are checked, so a missing
+`react`, `vitest` or `valibot` cannot surface as an import error. The harness
+discovers them from the packed `peerDependencies` and resolves required peers of
+peers from the registry.
 
 Both ESM (`import`) and CommonJS (`require`) entry points are exercised. Type-only
 subpaths are checked for the presence of their `.d.ts` file in the packed tarball.
@@ -32,10 +36,12 @@ subpaths are checked for the presence of their `.d.ts` file in the packed tarbal
 .agents/skills/test-libs/
 ├── SKILL.md
 ├── packages.json              # registry of libraries to test
+├── last-report.md             # generated: one report for the whole repo
 └── scripts/
     ├── lib.mjs                # discovery + export parsing
     ├── discover.mjs           # registry maintenance / --update
-    └── test-lib.mjs           # per-library temporary-project harness
+    ├── test-lib.mjs           # per-library temporary-project harness
+    └── aggregate.mjs          # writes last-report.md from the report.json files
 ```
 
 `test-lib.mjs` only uses Node built-ins and `tar`; it does not require the workspace
@@ -189,19 +195,25 @@ Run exactly:
     --out <ABS_OUT> \
     --pms npm,yarn,pnpm,bun
 
-The script writes <ABS_OUT>/<slug>/report.json and prints a summary.
-If the command fails, report the failure and stop; do not retry more than once.
+The script writes <ABS_OUT>/<slug>/report.json and prints a summary. Do not create
+per-library markdown files; the parent builds the single repo-wide report with
+`aggregate.mjs`. Use local warning numbers in your reply; the aggregate step
+renumbers them globally. If the command fails, report the failure and stop; do not
+retry more than once.
 
 Return a compact report in this shape:
 
 Package: <NAME> (<DIR>)
-| PM | minimal install | minimal imports | complete install | complete imports | peer warnings | verdict |
-|----|-----------------|-----------------|------------------|------------------|---------------|---------|
-| npm | ... | ... | ... | ... | ... | ... |
+| PM | install | imports | Warnings | Verdict |
+|----|---------|---------|----------|---------|
+| npm | ... | ... | (1), (2) | ... |
+
+Warnings:
+(1) `npm/install`: short description
+(2) `yarn/install`: short description
 
 - Verdict: PASS / PASS_WITH_WARNINGS / FAIL
 - Failures (max 5, with subpath + error code)
-- Warnings (max 5)
 - Report path: <ABS_OUT>/<slug>/report.json
 ```
 
@@ -214,43 +226,93 @@ Package: <NAME> (<DIR>)
 - If a package manager is not installed, its row says `not installed, skipped`. That
   is not a failure.
 
+### Aggregate report (`last-report.md`)
+
+`test-lib.mjs` writes only `<ABS_OUT>/<slug>/report.json` per library. After all
+sub-agents finish, produce the single repo-wide markdown report:
+
+```bash
+node .agents/skills/test-libs/scripts/aggregate.mjs --root . --out "$OUT"
+```
+
+It writes `.agents/skills/test-libs/last-report.md` by default and prints the path.
+The file contains:
+
+- one row per library with the npm / yarn / pnpm / bun verdicts;
+- a `Warnings` column with numbered markers (`(1)`, `(2)`, …);
+- a legend below the table expanding each marker with its scope, the affected
+  libraries and the raw peer-warning / import-error lines;
+- a `Failures` section when there are hard failures.
+
+`last-report.md` is the **only** markdown report for the repository. It is deleted
+and rewritten on every aggregate run. The script also removes stale per-library
+`report.md` files left by older versions of the harness.
+
+Use `--file <path>` to write elsewhere, but keep the default for the normal workflow.
+The per-library `report.json` files remain available for machine-readable data.
+
 ## 4. Aggregate
 
-The script exits with `1` only when the `complete` scenario fails. After all
+The script exits with `1` when any library fails to install or import. After all
 sub-agents finish:
 
-1. Read each `<ABS_OUT>/<slug>/report.json` (or use the sub-agent messages).
-2. Print one table:
+1. Read each `<ABS_OUT>/<slug>/report.md` (or `report.json`), or use the sub-agent
+   messages.
+2. Print one table with a `Warnings` column. Number every warning once and repeat its
+   marker on every library / package-manager row it applies to:
 
-   | Library        | npm  | yarn | pnpm | bun  | Verdict |
-   | -------------- | ---- | ---- | ---- | ---- | ------- |
-   | `@bemedev/app` | PASS | PASS | PASS | PASS | PASS    |
+   | Library                | npm  | yarn | pnpm | bun  | Warnings | Verdict            |
+   | ---------------------- | ---- | ---- | ---- | ---- | -------- | ------------------ |
+   | `@bemedev/app`         | PASS | PASS | PASS | PASS | —        | PASS               |
+   | `@bemedev/app-reactjs` | PASS | PASS | PASS | PASS | (1), (2) | PASS_WITH_WARNINGS |
 
-3. List every `FAIL` with its package manager, stage, export subpath and error code.
-4. Summarize peer warnings separately and distinguish:
-   - **missing declared peer** — a problem in the library's `peerDependencies`;
+3. Below the table, add a **Warnings** legend that expands every marker with the full
+   detail (scope, message and the raw peer-warning / import-error lines):
+
+   | Marker | Scope          | Detail                                                                                     |
+   | ------ | -------------- | ------------------------------------------------------------------------------------------ |
+   | (1)    | `npm/install`  | `ERESOLVE`: `react@^19.3.1` conflicts with `@bemedev/react-sync` requiring `react@^18.3.1` |
+   | (2)    | `yarn/install` | `YN0086`: peer requirements are incorrectly met by the consumer project                    |
+
+   Identical warnings shared by several package managers may use one marker.
+
+4. List every `FAIL` with its package manager, stage, export subpath and error code.
+5. Summarize peer warnings separately and distinguish:
    - **conflicting peer range** — two peers disagree (for example React 18 vs 19),
      which is a real consumer-facing issue;
-   - **minimal-only failure** — expected when external peers are not installed.
-5. Point to the results directory and offer to delete it.
+   - **unresolvable peer** — the harness could not install a declared peer (for
+     example an unpublished version); investigate the manifest;
+   - **advisory peer notice** — the package manager still reports incorrectly met
+     peers even though every external peer is installed (for example Yarn `YN0086`).
+6. Point to the results directory and offer to delete it.
 
-## Reading `report.json`
+## Reading the reports
 
-| Field                          | Meaning                                                         |
-| ------------------------------ | --------------------------------------------------------------- |
-| `verdict`                      | `PASS`, `PASS_WITH_WARNINGS` or `FAIL`                          |
-| `entries`                      | every export subpath with `hasImport`, `hasRequire`, `typeOnly` |
-| `typeOnly`                     | subpaths that only expose types (runtime import skipped)        |
-| `missingSources`               | build output referenced by `exports` but absent in the package  |
-| `packedCheck.missing`          | referenced files absent from the packed tarball (hard failure)  |
-| `internalClosure`              | workspace packages packed alongside the library                 |
-| `externalPeers`                | external peers installed in the `complete` scenario             |
-| `pms.<pm>.minimal`/`.complete` | install status, peer warnings, per-subpath import results       |
-| `failures` / `warnings`        | pre-aggregated verdict inputs                                   |
+Each run writes two files:
 
-`FAIL` means the `complete` scenario could not install the library or one of its
-runtime exports threw. A failure that only occurs in `minimal` is a warning: the
-declared peers were not installed yet.
+- `<ABS_OUT>/<slug>/report.md` — human-readable table with a numbered `Warnings`
+  column and a legend that expands every marker;
+- `<ABS_OUT>/<slug>/report.json` — machine-readable data.
+
+`report.json` fields:
+
+| Field                   | Meaning                                                         |
+| ----------------------- | --------------------------------------------------------------- |
+| `verdict`               | `PASS`, `PASS_WITH_WARNINGS` or `FAIL`                          |
+| `entries`               | every export subpath with `hasImport`, `hasRequire`, `typeOnly` |
+| `typeOnly`              | subpaths that only expose types (runtime import skipped)        |
+| `missingSources`        | build output referenced by `exports` but absent in the package  |
+| `packedCheck.missing`   | referenced files absent from the packed tarball (hard failure)  |
+| `internalClosure`       | workspace packages packed alongside the library                 |
+| `externalPeers`         | external peers installed before the import checks               |
+| `pms.<pm>.install`      | install status, peer warnings, per-subpath import results       |
+| `warnings` / `failures` | pre-aggregated verdict inputs (scope + message strings)         |
+| `warningDetails`        | numbered warning scopes, messages and raw warning lines         |
+| `failureDetails`        | numbered failure scopes, messages and raw error lines           |
+
+`FAIL` means the library could not install or one of its runtime exports threw.
+Because every external peer is installed up front, any remaining peer warning is
+either a real conflict or an advisory notice from the package manager.
 
 ## Script options
 
@@ -279,7 +341,9 @@ harness therefore:
    `dependencies`, `optionalDependencies` and `peerDependencies`;
 2. rewrites those internal specs in the packed manifests to `file:<absolute tarball>`
    so npm, yarn, pnpm and bun all resolve them locally;
-3. installs the tarballs into a fresh consumer project.
+3. installs every external peer (`react`, `react-dom`, `solid-js`, `vitest`,
+   `valibot`, …) and its required peers before the import checks;
+4. installs the tarballs into a fresh consumer project.
 
 This is why the test never needs to publish and works before a release.
 
