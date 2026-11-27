@@ -1,7 +1,6 @@
 import {
   checkKeys,
   checkValues,
-  isDescriber,
   isString,
   isStringOrUndefined,
 } from '@bemedev/app-options/internal';
@@ -126,31 +125,4 @@ describe('isStringOrUndefined', () => {
   test('#04 => number rejected', () => {
     expect(isStringOrUndefined(42)).toBe(false);
   });
-});
-
-describe('isDescriber', () => {
-  test('#01 => name accepted', () => {
-    const value = { name: 'action' };
-    expect(isDescriber(value)).toBe(true);
-  });
-
-  test('#02 => description key rejected', () => {
-    expect(isDescriber({ name: 'action', description: 'An action' })).toBe(false);
-  });
-
-  test('#03 => missing name rejected', () => {
-    expect(isDescriber({ description: 'An action' })).toBe(false);
-  });
-
-  test('#04 => extra key rejected', () => {
-    const value = { name: 'action', extra: true };
-    expect(isDescriber(value)).toBe(false);
-  });
-
-  test('#05 => string rejected', () => {
-    expect(isDescriber('action')).toBe(false);
-  });
-
-  test('#06 => null rejected', () => expect(isDescriber(null)).toBe(false));
-  test('#07 => array rejected', () => expect(isDescriber([])).toBe(false));
 });

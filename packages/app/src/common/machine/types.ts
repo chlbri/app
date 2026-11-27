@@ -6,7 +6,6 @@ import type {
   NodeConfig2,
   TargetDef,
   TransitionsConfig,
-  WithDescriber,
 } from '@bemedev/app-contract/internal';
 
 import type { FlatMapN } from '#states';
@@ -177,7 +176,7 @@ export type CommonElements<Ct extends Contract = Contract> = {
 /**
  * Helper function for extracting entry or exit actions from a node.
  */
-export type GetIO_F = (key: 'exit' | 'entry', node?: any) => WithDescriber[];
+export type GetIO_F = (key: 'exit' | 'entry', node?: any) => string[];
 
 /**
  * Common function signature for timer actions.

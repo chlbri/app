@@ -3,7 +3,6 @@ import type {
   Contract,
   ContractEventType,
   ContractEvents,
-  Describer,
   EventStrings,
   RecordS,
   State,
@@ -20,12 +19,7 @@ import type {
 import type { KeyU } from '@bemedev/app-plugins/addons';
 import type { EmptyObject } from '@bemedev/typings';
 
-import {
-  DESCRIBER_KEYS,
-  isDescriber,
-  isFunction,
-  isString,
-} from '@bemedev/app-options/internal';
+import { isFunction, isString } from '@bemedev/app-options/internal';
 
 export type {
   ExtractS,
@@ -44,7 +38,6 @@ export type {
 export type { KeyU };
 
 export type {
-  Describer,
   DescriptionProps,
   EventToType,
   FnMap,
@@ -71,30 +64,12 @@ export type IsString_F = (value: unknown) => value is string;
  */
 
 /**
- * Describer keys, function guard and string guard.
+ * Function guard and string guard helpers.
  *
  * They are re-exported from `@bemedev/app-options` so the machine runtime and
  * the option helpers share a single implementation.
  */
-export { DESCRIBER_KEYS, isFunction, isString };
-
-/**
- * Retrieves the `name` property from a type {@linkcode Describer}.
- *
- * @template | {@linkcode Describer} `T` - The describer type.
- */
-export type FromDescriber<T extends Describer> = T['name'];
-
-/**
- * Extracts the string name from a string or type {@linkcode Describer}.
- *
- * @param value - The input string or describer object.
- *
- * @returns The string name or the original string.
- */
-export const fromDescriber = (value: string | Describer) => {
-  return isDescriber(value) ? value.name : value;
-};
+export { isFunction, isString };
 
 /**
  * Resolves the effective value type of `T`, falling back to `U` when `T` is strictly `undefined`.

@@ -14,7 +14,7 @@ import {
   type Fn,
 } from '@bemedev/app-contract/bemedev';
 
-import { toAction, type WithDescriber } from '#actions';
+import { toAction } from '#actions';
 import type { ChildConfig, EmitterConfig } from '#actor';
 import { getTags, toChildSrc } from '#common/functions';
 import {
@@ -27,7 +27,7 @@ import { toDelay } from '#delays';
 import { toEmitterSrc } from '#emitters';
 import { toPredicate, type GuardConfig } from '#guards';
 import { flatMap, initialConfig, nextSV, nodeToValue, resolveNode } from '#states';
-import { decomposeSV, isStringEmpty, reduceDescriber, replaceAll } from '#utils';
+import { decomposeSV, isStringEmpty, replaceAll } from '#utils';
 import type {
   ActivityConfig,
   AlwaysConfig,
@@ -42,6 +42,7 @@ import type {
   TransitionConfig,
   WorkingStatus,
 } from '@bemedev/app-contract';
+import type { AllowedNames, StateValue } from '@bemedev/app-contract/bemedev';
 import { byKey2, merge2 } from '@bemedev/app-options/internal';
 import type { AnyMachine } from '@bemedev/app-plugins';
 import { type MachineType } from '@bemedev/app-plugins';
@@ -50,7 +51,6 @@ import {
   IS_TEST,
   transformEventArg,
 } from '@bemedev/app-plugins/internal';
-import type { AllowedNames, StateValue } from '@bemedev/app-contract/bemedev';
 import { asyncfy } from '@bemedev/better-promise';
 import { createInterval, type Interval3 } from '@bemedev/interval3';
 import { getEntries, getExits, type CommonMachine } from '../machine';
@@ -1428,8 +1428,8 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
     const keysNext = Object.keys(flatNext);
 
     const keys = entriesCurrent.map(([key]) => key);
-    const diffEntries: WithDescriber[] = [];
-    const diffExits: WithDescriber[] = [];
+    const diffEntries: string[] = [];
+    const diffExits: string[] = [];
 
     // #region Entry actions
 
@@ -1874,17 +1874,17 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
   /**
    * Resolves an action function from an action describer object.
    *
-   * @param action - Action describer of type {@linkcode WithDescriber}.
+   * @param action - Action name.
    *
    * @returns Resolved action function, or `undefined`.
    */
-  toActionFn = (action: WithDescriber) => {
+  toActionFn = (action: string) => {
     const events = this.__machine.eventsList;
     const actions = this.__machine.actions;
 
     const out = this.__returnWithWarning(
       toAction<Ct>(action, actions, ...events),
-      `Action (${reduceDescriber(action)}) is not defined`,
+      `Action (${action}) is not defined`,
     );
 
     return out;
@@ -1936,7 +1936,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
 
     return this.__returnWithWarning(
       toChildSrc<Ct>(machine, machines as any, ...events),
-      `Machine (${reduceDescriber(machine)}) is not defined`,
+      `Machine (${machine}) is not defined`,
     );
   };
 
@@ -1952,7 +1952,7 @@ export abstract class CommonInterpreter<const Ct extends Contract = Contract>
 
     return this.__returnWithWarning(
       toEmitterSrc<Ct>(emitter, emitters as any),
-      `Emitter (${reduceDescriber(emitter)}) is not defined`,
+      `Emitter (${emitter}) is not defined`,
     );
   };
 

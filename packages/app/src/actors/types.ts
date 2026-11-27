@@ -1,5 +1,3 @@
-import type { NoExtraKeys } from '@bemedev/app-contract/bemedev';
-
 import type {
   NoExtraKeysTransitionConfig,
   NoExtraKeysTransitionConfigSoA,
@@ -9,11 +7,9 @@ import type {
   ActorConfig,
   ChildConfig,
   CommonActor,
-  Describer,
   EmitterConfig,
   FinallyConfig,
   FinallyConfigArray,
-  WithDescriber,
 } from '@bemedev/app-contract';
 
 export type {
@@ -33,12 +29,10 @@ export type {
  */
 type _NoExtraKeysFinallyConfig<T> = T extends string
   ? T
-  : T extends Describer
-    ? NoExtraKeys<T, Describer>
-    : T extends _FinallyConfig
-      ? NoExtraKeysTransitionConfig<T> &
-          Record<Exclude<keyof T, 'guards' | 'actions'>, never>
-      : never;
+  : T extends _FinallyConfig
+    ? NoExtraKeysTransitionConfig<T> &
+        Record<Exclude<keyof T, 'guards' | 'actions'>, never>
+    : never;
 
 /**
  * Enforces no extra keys on read-only tuple of completion configurations.
@@ -46,10 +40,10 @@ type _NoExtraKeysFinallyConfig<T> = T extends string
  * @template | {@linkcode _FinallyConfig} `T` - Read-only array of completion configs.
  */
 export type NoExtraKeysFinallyConfigArray<
-  T extends ReadonlyArray<_FinallyConfig | WithDescriber>,
+  T extends ReadonlyArray<_FinallyConfig | string>,
 > = T extends readonly [
-  infer H extends _FinallyConfig | WithDescriber,
-  ...infer Rest extends ReadonlyArray<_FinallyConfig | WithDescriber>,
+  infer H extends _FinallyConfig | string,
+  ...infer Rest extends ReadonlyArray<_FinallyConfig | string>,
 ]
   ? readonly [_NoExtraKeysFinallyConfig<H>, ...NoExtraKeysFinallyConfigArray<Rest>]
   : [];

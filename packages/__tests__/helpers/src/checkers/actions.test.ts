@@ -6,8 +6,8 @@ describe('checkAction', () => {
     expect(checkAction('action')).toBe(true);
   });
 
-  test('#02 => describer accepted', () => {
-    expect(checkAction({ name: 'action' })).toBe(true);
+  test('#02 => describer rejected', () => {
+    expect(checkAction({ name: 'action' })).toBe(false);
   });
 
   test('#03 => number rejected', () => expect(checkAction(42)).toBe(false));
@@ -28,9 +28,9 @@ describe('checkActions', () => {
     expect(checkActions(['first', 'second'])).toBe(true);
   });
 
-  test('#03 => array of describers accepted', () => {
+  test('#03 => array of describers rejected', () => {
     const actions = [{ name: 'first' }, { name: 'second' }];
-    expect(checkActions(actions)).toBe(true);
+    expect(checkActions(actions)).toBe(false);
   });
 
   test('#04 => invalid entry rejected', () => {

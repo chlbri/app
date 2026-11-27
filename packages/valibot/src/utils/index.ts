@@ -1,5 +1,4 @@
 export * from './array';
-export * from './describer';
 export * from './extractLiterals';
 export * from './map';
 export * from './primitive';

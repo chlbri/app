@@ -1,4 +1,4 @@
-import type { FromActionConfig, NoExtraKeysWithDescriber } from '#actions';
+import type { FromActionConfig, NoExtraKeysAction } from '#actions';
 import type {
   AsyncPredicateS,
   Contract,
@@ -7,7 +7,6 @@ import type {
   GuardOr,
   RecordS,
   SyncPredicateS2,
-  WithDescriber,
 } from '@bemedev/app-contract';
 import type { DefinedValue } from '@bemedev/app-plugins/addons';
 import type { ReduceArray } from '~types';
@@ -32,8 +31,8 @@ export type {
  *
  * @template `T` - Input guard configuration type.
  */
-export type NoExtraKeysGuardConfig<T> = T extends WithDescriber
-  ? NoExtraKeysWithDescriber<T>
+export type NoExtraKeysGuardConfig<T> = T extends string
+  ? NoExtraKeysAction<T>
   : T extends GuardAnd
     ? { readonly and: NoExtraKeysGuardConfigArray<T['and']> } & Record<
         Exclude<keyof T, 'and'>,
@@ -70,13 +69,15 @@ export type NoExtraKeysGuardConfigSoA<T> =
     : NoExtraKeysGuardConfig<T>;
 
 /**
- * Retrieves the name of the action if it is a describer, otherwise returns the action itself.
- * @template | {@linkcode GuardConfig} `T` - GuardConfig to reduce
- * @returns The name of the action if it is a describer, otherwise the action itself.
+ * Retrieves guard names from a guard configuration.
+ *
+ * @template | {@linkcode GuardConfig} `T` - GuardConfig to reduce.
+ *
+ * @returns The guard name or names.
  *
  * @see {@linkcode FromActionConfig}, -- type {@linkcode ReduceArray}, {@linkcode GuardAnd}, {@linkcode GuardOr}
  */
-export type FromGuard<T extends GuardConfig> = T extends WithDescriber
+export type FromGuard<T extends GuardConfig> = T extends string
   ? FromActionConfig<T>
   : T extends GuardAnd
     ? FromGuard<ReduceArray<T['and']>>

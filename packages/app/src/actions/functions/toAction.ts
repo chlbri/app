@@ -1,7 +1,6 @@
-import type { AsyncAction2, AsyncActionMap, WithDescriber } from '#actions';
-import { reduceFnMap } from '@bemedev/app-plugins/internal';
+import type { AsyncAction2, AsyncActionMap } from '#actions';
 import type { Contract } from '@bemedev/app-options';
-import { fromDescriber } from '~types';
+import { reduceFnMap } from '@bemedev/app-plugins/internal';
 
 /**
  * Function signature for converting an action describer to an executable action function.
@@ -16,7 +15,7 @@ import { fromDescriber } from '~types';
  */
 export type ToAction_F = {
   <Ct extends Contract = Contract>(
-    action: WithDescriber,
+    action: string,
     actions: AsyncActionMap<Ct> | undefined,
     ...events: string[]
   ): AsyncAction2<Ct> | undefined;
@@ -32,16 +31,15 @@ export type ToAction_F = {
  * @returns Executable action function or `undefined`.
  */
 const _toAction = (action: any, actions: any, ...events: string[]) => {
-  const name = fromDescriber(action);
-  const fn = actions?.[name];
+  const fn = actions?.[action];
   const func = fn ? reduceFnMap(fn, ...events) : undefined;
   return func;
 };
 
 /**
- * Converts an action configuration of type {@linkcode WithDescriber} into an executable action function.
+ * Converts an action name into an executable action function.
  *
- * @param action - Action configuration of type {@linkcode WithDescriber}.
+ * @param action - Action name.
  * @param actions - Map of actions of type {@linkcode AsyncActionMap}.
  * @param events - List of event names.
  *

@@ -7,8 +7,8 @@ describe('checkGuards', () => {
       expect(checkGuards('isOn')).toBe(true);
     });
 
-    test('#02 => describer accepted', () => {
-      expect(checkGuards({ name: 'isOn' })).toBe(true);
+    test('#02 => describer rejected', () => {
+      expect(checkGuards({ name: 'isOn' })).toBe(false);
     });
 
     test('#03 => undefined rejected', () => {

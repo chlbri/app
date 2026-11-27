@@ -1,7 +1,7 @@
 import equal from 'fast-deep-equal';
+export { identity } from '@bemedev/app-contract/bemedev';
 export { merge2 } from '@bemedev/app-options/internal';
 export { IS_TEST } from '@bemedev/app-plugins/internal';
-export { identity } from '@bemedev/app-contract/bemedev';
 export { decompose, decomposeSV, recompose } from '@bemedev/decompose';
 export type { Decompose, DecomposeKeys, DecomposeOptions } from '@bemedev/decompose';
 export * from '@bemedev/sleep';
@@ -10,7 +10,7 @@ export * from './checkValues';
 export * from './fn';
 export * from './objects';
 export * from './readonly';
-export * from './reduceDescriber';
+
 export * from './resolve';
 export * from './strings';
 export * from './typings';

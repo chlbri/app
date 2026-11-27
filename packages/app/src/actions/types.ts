@@ -1,67 +1,53 @@
 import type {
   ActionResult,
-  MaybeAsyncActionResult,
-  WithDescriber,
   Contract,
-  Describer,
   FnMap,
+  MaybeAsyncActionResult,
 } from '@bemedev/app-contract';
-import type { NoExtraKeys } from '@bemedev/app-contract/bemedev';
-import type { FromDescriber } from '~types';
 
 export type {
   ActionResult,
   AsyncAction2,
   MaybeAsyncActionResult,
   SyncAction2,
-  WithDescriber,
 } from '@bemedev/app-contract';
 
 /**
- * Enforces no extra keys when value is a describer object.
+ * Action names are plain strings, so there is nothing to strip.
  *
  * @template `T` - Input type.
  */
-export type NoExtraKeysWithDescriber<T> = T extends string
-  ? T
-  : NoExtraKeys<T, Describer>;
+export type NoExtraKeysAction<T> = T extends string ? T : never;
 
 /**
- * Enforces no extra keys on read-only tuple/array of describers.
+ * Read-only tuple/array of action names.
  *
- * @template | {@linkcode WithDescriber} `T` - Array of describer types.
+ * @template `T` - Array of action names.
  */
-export type NoExtraKeysWithDescriberArray<T extends ReadonlyArray<WithDescriber>> =
+export type NoExtraKeysActionArray<T extends ReadonlyArray<string>> =
   T extends readonly [
-    infer Head extends WithDescriber,
-    ...infer Tail extends ReadonlyArray<WithDescriber>,
+    infer Head extends string,
+    ...infer Tail extends ReadonlyArray<string>,
   ]
-    ? readonly [
-        NoExtraKeysWithDescriber<Head>,
-        ...NoExtraKeysWithDescriberArray<Tail>,
-      ]
+    ? readonly [Head, ...NoExtraKeysActionArray<Tail>]
     : [];
 
 /**
- * Enforces no extra keys across single value, array, or read-only tuple of describers.
+ * Action names across a single value, array, or read-only tuple.
  *
- * @template `T` - Target action describer type.
+ * @template `T` - Target action type.
  */
-export type NoExtraKeysWithDescriberSoa<T> =
-  T extends ReadonlyArray<WithDescriber>
-    ? NoExtraKeysWithDescriberArray<T>
-    : T extends WithDescriber[]
-      ? NoExtraKeysWithDescriber<T[number]>[]
-      : NoExtraKeysWithDescriber<T>;
+export type NoExtraKeysActionSoa<T> =
+  T extends ReadonlyArray<string> ? NoExtraKeysActionArray<T> : NoExtraKeysAction<T>;
 
 /**
- * Retrieves the name of the action if it is a describer, otherwise returns the action itself.
- * @template `T` - ActionConfig to reduce
- * @returns The name of the action if it is a describer, otherwise the action itself.
+ * Action names are plain strings, so the configuration value is the key.
  *
- * @see -- type {@linkcode FromDescriber}
+ * @template `T` - Action configuration to reduce.
+ *
+ * @returns The action name.
  */
-export type FromActionConfig<T> = T extends Describer ? FromDescriber<T> : T;
+export type FromActionConfig<T> = T;
 
 /**
  * Async action function map.

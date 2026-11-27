@@ -1,4 +1,4 @@
-import type { ActionResult, WithDescriber } from '#actions';
+import type { ActionResult } from '#actions';
 import type { DelayFunction3 } from '#delays';
 import type { Pausable } from '#emitters';
 import type { EventsMap } from '#events';
@@ -9,6 +9,7 @@ import type {
   StateValue,
   WorkingStatus,
 } from '#states';
+import type { Equals, Fn } from '@bemedev/app-contract/bemedev';
 import type {
   Contract,
   ContractContext,
@@ -16,6 +17,7 @@ import type {
 } from '@bemedev/app-options';
 import type { Primitive } from '@bemedev/app-options/bemedev';
 import type { Decompose } from '@bemedev/app-options/decompose';
+import type { AnyMachine, MachineType } from '@bemedev/app-plugins';
 import type {
   ContextFrom,
   KeyU,
@@ -24,10 +26,8 @@ import type {
 } from '@bemedev/app-plugins/addons';
 import type { Interval3 } from '@bemedev/interval3';
 import type { IntervalParams } from '@bemedev/interval3/types';
-import type { Equals, Fn } from '@bemedev/app-contract/bemedev';
 import type { FnMapR, OptionalDefinition } from '~types';
 import type { Subscriber, SubscriberOptions } from '../subscriber';
-import type { AnyMachine, MachineType } from '@bemedev/app-plugins';
 
 export type { ExtendedActionsParams, SendToEvent } from '@bemedev/app-options';
 
@@ -166,7 +166,7 @@ export type AnyInterpreter = {
   /**
    * Resolves an action describer into an executable action function.
    */
-  toActionFn: (action: WithDescriber) => any;
+  toActionFn: (action: string) => any;
   /**
    * Resolves a guard configuration into an executable predicate function.
    */
@@ -278,8 +278,8 @@ export type CreateInterval2_F = (config: IntervalParams) => Interval3;
  */
 export type DiffNext = {
   sv: StateValue;
-  diffEntries: WithDescriber[];
-  diffExits: WithDescriber[];
+  diffEntries: string[];
+  diffExits: string[];
 };
 
 /**

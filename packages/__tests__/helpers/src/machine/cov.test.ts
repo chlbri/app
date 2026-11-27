@@ -9,13 +9,11 @@ import {
 
 import { nothing } from '@bemedev/app-plugins/internal';
 import { constructTests } from '@bemedev/app-vitest';
-import { reduceDescriber } from '@bemedev/app/utils';
 
 import { createTests } from '@bemedev/dev-utils/vitest-extended';
 import path from 'path';
 import _machine1 from './cov.1.machine';
 import _machineT2 from './cov.2.machine';
-import _machineT3 from './cov.3.machine';
 
 describe('machine coverage', () => {
   beforeAll(() => vi.useFakeTimers());
@@ -710,33 +708,6 @@ describe('#06 => machine id is not defined', () => {
 
         test(`#02 => contains warning for machine : "${idM}"`, () => {
           const expected = `Machine (${idM}) is not defined`;
-          expect(service._warningsCollector).toContain(expected);
-        });
-      });
-    });
-  });
-
-  describe('#01 => object', () => {
-    const idM = { name: 'machineNotDefined' };
-    const machineT = _machineT3;
-
-    const service = interpret(machineT);
-
-    test('#01 => start', service.start.bind(service));
-
-    describe('#01 => log', () => {
-      test('#01 => errors is empty', () =>
-        expect(service._errorsCollector).toHaveLength(0));
-
-      describe('#02 => It has some watnings', () => {
-        test('#01 => warnings is not empty', () =>
-          expect(service._warningsCollector).not.toHaveLength(0));
-
-        test('#02 => warnings has length 1', () =>
-          expect(service._warningsCollector).toHaveLength(1));
-
-        test(`#02 => contains warning for machine : "${reduceDescriber(idM)}"`, () => {
-          const expected = `Machine (${reduceDescriber(idM)}) is not defined`;
           expect(service._warningsCollector).toContain(expected);
         });
       });

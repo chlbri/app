@@ -5,19 +5,18 @@
  * machine implementation.
  */
 
-import type { Describer } from '@bemedev/app-contract';
 import { expandFn, toArray } from '@bemedev/app-contract/bemedev';
-import { isDescriber, isString } from './primitives';
+import { isString } from './primitives';
 
 /**
- * Type guard checking that `entry` is an action name or a describer.
+ * Type guard checking that `entry` is an action name.
  *
  * @param entry - Value to check.
  *
- * @returns `true` when `entry` is a string or a describer.
+ * @returns `true` when `entry` is a string.
  */
-export const checkAction = (entry: unknown): entry is string | Describer => {
-  return isString(entry) || isDescriber(entry);
+export const checkAction = (entry: unknown): entry is string => {
+  return isString(entry);
 };
 
 /**

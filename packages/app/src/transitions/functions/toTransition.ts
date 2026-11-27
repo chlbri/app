@@ -8,7 +8,6 @@ import type {
   ContractOptions,
   GuardConfig,
   TransitionConfig,
-  WithDescriber,
 } from '@bemedev/app-contract';
 
 /**
@@ -46,7 +45,7 @@ export const toTransition: ToTransition_F = (config, options, ...events) => {
   if (isString) return { target: config };
   const { target } = config;
 
-  const actions = toArray<WithDescriber>(config.actions).map(action =>
+  const actions = toArray<string>(config.actions).map(action =>
     toAction(action, options?.actions, ...events),
   );
   const guards = toArray<GuardConfig>(config.guards).map(guard =>

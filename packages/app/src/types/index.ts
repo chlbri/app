@@ -284,7 +284,6 @@ export type {
   DeleteFirst_F,
   EscapeRexExp_F,
   RecomposeSV_F,
-  ReduceDescriber_F,
   ReplaceAll_F,
 } from '#utils';
 
@@ -328,5 +327,4 @@ export type {
   SyncAction2,
   SyncActionMap,
   ToAction_F,
-  WithDescriber,
 } from '#actions';

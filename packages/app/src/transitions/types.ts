@@ -1,7 +1,7 @@
 import type {
   AsyncAction,
   FromActionConfig,
-  NoExtraKeysWithDescriberSoa,
+  NoExtraKeysActionSoa,
   SyncAction,
 } from '#actions';
 
@@ -21,7 +21,6 @@ import type {
   TransitionConfigMapFG,
   TransitionConfigMapG,
   TransitionsConfig,
-  WithDescriber,
 } from '@bemedev/app-contract';
 
 import type {
@@ -74,7 +73,7 @@ export type NoExtraKeysTransitionConfig<T extends _TransitionConfigMap | string>
   T extends string
     ? T
     : T & {
-        [key in Extract<keyof T, 'actions'>]: NoExtraKeysWithDescriberSoa<T[key]>;
+        [key in Extract<keyof T, 'actions'>]: NoExtraKeysActionSoa<T[key]>;
       } & {
         [key in Extract<keyof T, 'guards'>]: NoExtraKeysGuardConfigSoA<T[key]>;
       } & {
@@ -119,12 +118,12 @@ export type NoExtraKeysTransitionConfigSoA<T> = T extends
  * @template `T` - The transition configuration type.
  * @returns The actions extracted from the transition configuration.
  *
- * @see -- type {@linkcode WithDescriber}, {@linkcode FromActionConfig}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}
+ * @see -- type {@linkcode FromActionConfig}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}
  */
 export type ExtractActionsFromTransition<
-  T extends { actions: SingleOrArrayL<WithDescriber> },
+  T extends { actions: SingleOrArrayL<string> },
 > =
-  ReduceArray<T['actions']> extends infer R extends WithDescriber
+  ReduceArray<T['actions']> extends infer R extends string
     ? FromActionConfig<R>
     : never;
 
@@ -174,10 +173,10 @@ export type GetEventKeysFromDelayed<T> = {
  * @template `T` - The delayed transitions type.
  *
  *
- * @see -- type {@linkcode ExtractActionsFromTransition}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}, -- type {@linkcode WithDescriber}, -- type {@linkcode ExtractGuardKeysFromTransition}
+ * @see -- type {@linkcode ExtractActionsFromTransition}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}, -- type {@linkcode ExtractGuardKeysFromTransition}
  */
 export type ExtractActionKeysFromDelayed<T> = ExtractActionsFromTransition<
-  Extract<ReduceArray<T[keyof T]>, { actions: SingleOrArrayL<WithDescriber> }>
+  Extract<ReduceArray<T[keyof T]>, { actions: SingleOrArrayL<string> }>
 >;
 
 /**
@@ -284,7 +283,7 @@ export type ExtractDelayKeysFromTransitions<T extends TransitionsConfig> =
  * @template `T` - Transition map type.
  */
 type _ExtractActionsFromMap<T> = ExtractActionsFromTransition<
-  Extract<ReduceArray<NotUndefined<T>>, { actions: SingleOrArrayL<WithDescriber> }>
+  Extract<ReduceArray<NotUndefined<T>>, { actions: SingleOrArrayL<string> }>
 >;
 
 /**
@@ -294,7 +293,7 @@ type _ExtractActionsFromMap<T> = ExtractActionsFromTransition<
  */
 type _ExtractActionsFromFinally<T> =
   ReduceArray<T> extends infer Tr
-    ? Tr extends WithDescriber
+    ? Tr extends string
       ? FromActionConfig<Tr>
       : _ExtractActionsFromMap<Tr>
     : never;
@@ -335,13 +334,13 @@ export type ExtractActionKeysFromActor<T> = T extends EmitterConfig
  *
  * @returns The actions keys extracted from the transitions configuration.
  *
- * @see -- type {@linkcode ExtractActionsFromTransition}, -- type {@linkcode ExtractActionKeysFromDelayed}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}, -- type {@linkcode WithDescriber}, -- type {@linkcode NotUndefined}
+ * @see -- type {@linkcode ExtractActionsFromTransition}, -- type {@linkcode ExtractActionKeysFromDelayed}, -- type {@linkcode ReduceArray}, -- type {@linkcode SingleOrArrayL}, -- type {@linkcode NotUndefined}
  */
 export type ExtractActionKeysFromTransitions<T extends TransitionsConfig> =
   | ExtractActionKeysFromDelayed<T['on']>
   | ExtractActionKeysFromDelayed<T['after']>
   | ExtractActionsFromTransition<
-      Extract<ReduceArray<T['always']>, { actions: SingleOrArrayL<WithDescriber> }>
+      Extract<ReduceArray<T['always']>, { actions: SingleOrArrayL<string> }>
     >
   | (NotUndefined<T['actors']> extends infer Ta
       ? {

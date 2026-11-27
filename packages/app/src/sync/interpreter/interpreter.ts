@@ -4,10 +4,10 @@ import { eventToType, type ExtractSender } from '#events';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
 import type { Contract } from '@bemedev/app-contract';
-import type { OptionsPlugin } from '@bemedev/app-options';
-import { byKey2, isDescriber, merge2 } from '@bemedev/app-options/internal';
-import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
 import { _any, isDefined, switchV, toArray } from '@bemedev/app-contract/bemedev';
+import type { OptionsPlugin } from '@bemedev/app-options';
+import { byKey2, merge2 } from '@bemedev/app-options/internal';
+import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler/sync';
 import equal from 'fast-deep-equal';
@@ -29,7 +29,6 @@ import type {
   EventObject,
   FinallyConfig,
   TransitionConfig,
-  WithDescriber,
 } from '@bemedev/app-contract';
 
 import {
@@ -188,9 +187,9 @@ export class SyncInterpreter<
   /**
    * Performs multiple actions in sequence.
    *
-   * @param actions - The list of action describers of type {@linkcode WithDescriber}.
+   * @param actions - The list of action names.
    */
-  protected __performActions = (...actions: WithDescriber[]) => {
+  protected __performActions = (...actions: string[]) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
 
     for (const fn of fns) {
@@ -269,7 +268,7 @@ export class SyncInterpreter<
 
     if (response) {
       this.__performActions(...toArray.typed(diffExits));
-      this.__performActions(...toArray<WithDescriber>(actions));
+      this.__performActions(...toArray<string>(actions));
       this.__performActions(...toArray.typed(diffEntries));
       return target ?? false;
     }
@@ -307,11 +306,7 @@ export class SyncInterpreter<
     const finals = toArray.typed(_finally);
 
     for (const final of finals) {
-      const check2 = typeof final === 'string';
-      const check3 = isDescriber(final);
-
-      const check4 = check2 || check3;
-      if (check4) {
+      if (typeof final === 'string') {
         this.__performActions(final);
         continue;
       }
@@ -435,11 +430,7 @@ export class SyncInterpreter<
   __executeActivity: ExecuteActivity_F = (_, activities) => {
     const callback = () => {
       for (const activity of activities) {
-        const check2 = typeof activity === 'string';
-        const check3 = isDescriber(activity);
-        const check4 = check2 || check3;
-
-        if (check4) {
+        if (typeof activity === 'string') {
           this.__performActions(activity);
           continue;
         }

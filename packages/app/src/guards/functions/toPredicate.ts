@@ -4,7 +4,7 @@ import type { StateExtended } from '#states';
 import type { AsyncPredicateS3, SyncPredicateS3 } from '@bemedev/app-contract';
 import type { Contract } from '@bemedev/app-options';
 import { expandFn, isDefined } from '@bemedev/app-options/bemedev';
-import { isDescriber, isString } from '@bemedev/app-options/internal';
+import { isString } from '@bemedev/app-options/internal';
 import { reduceFnMap } from '@bemedev/app-plugins/internal';
 import {
   default as asyncRecursive,
@@ -112,14 +112,6 @@ export type ToPredicate = ToPredicate_F & { async: ToPredicateAsync_F };
 const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
   const errors: string[] = [];
 
-  if (isDescriber(guard)) {
-    const fn = _guards?.[guard.name];
-    if (typeof fn === 'boolean') return { func: () => fn, errors };
-    const func = fn ? reduceFnMap(fn, ...events) : undefined;
-    if (!func) errors.push(`Predicate (${guard.name}) is not defined`);
-    return { func: func as any, errors };
-  }
-
   if (isString(guard)) {
     const fn = _guards?.[guard];
     if (typeof fn === 'boolean') return { func: () => fn, errors };
@@ -165,14 +157,6 @@ const _toPredicateFn: _ToPredicateF = (guard, _guards, ...events) => {
  */
 const _toPredicateAsyncFn: _ToPredicateAsyncF = (guard, _guards, ...events) => {
   const errors: string[] = [];
-
-  if (isDescriber(guard)) {
-    const fn = _guards?.[guard.name];
-    if (typeof fn === 'boolean') return { func: () => fn, errors };
-    const func = fn ? reduceFnMap(fn, ...events) : undefined;
-    if (!func) errors.push(`Predicate (${guard.name}) is not defined`);
-    return { func: func as any, errors };
-  }
 
   if (isString(guard)) {
     const fn = _guards?.[guard];
@@ -221,7 +205,7 @@ export const _toPredicate: _ToPredicate = expandFn(_toPredicateFn, {
  *
  * @returns An object containing the predicate function and any errors encountered.
  *
- * @see {@linkcode reduceFnMap}, {@linkcode isDescriber}, {@linkcode isString}, {@linkcode GUARD_TYPE}, {@linkcode recursive}
+ * @see {@linkcode reduceFnMap}, {@linkcode isString}, {@linkcode GUARD_TYPE}, {@linkcode recursive}
  */
 export const toPredicate: ToPredicate = expandFn(
   (guard, guards, ...events) => {

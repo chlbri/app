@@ -3,16 +3,16 @@ import { eventToType } from '#events';
 import { type GuardConfig } from '#guards';
 import { initialConfig, nextSV } from '#states';
 import type { DelayedTransitions, TransitionConfig } from '#transitions';
+import { _any, isDefined, switchV, toArray } from '@bemedev/app-contract/bemedev';
 import type { ContractEvents } from '@bemedev/app-contract/types';
 import type { Contract, OptionsPlugin } from '@bemedev/app-options';
-import { byKey2, isDescriber, merge2 } from '@bemedev/app-options/internal';
+import { byKey2, merge2 } from '@bemedev/app-options/internal';
 import type { AnyMachine, SimpleMachineOptions2 } from '@bemedev/app-plugins';
 import {
   AFTER_EVENT,
   ALWAYS_EVENT,
   transformEventArg,
 } from '@bemedev/app-plugins/internal';
-import { _any, isDefined, switchV, toArray } from '@bemedev/app-contract/bemedev';
 import { recompose } from '@bemedev/decompose';
 import { createScheduler } from '@bemedev/scheduler';
 import { sleep } from '@bemedev/sleep';
@@ -64,7 +64,6 @@ import type {
   EventObject,
   ExtendedActionsParams,
   FinallyConfig,
-  WithDescriber,
 } from '@bemedev/app-contract/internal';
 
 /**
@@ -266,13 +265,13 @@ export class AsyncInterpreter<
    * Sequentially converts and executes multiple action describers or functions.
    *
    * @param from - The origin state path or `false`.
-   * @param actions - Array of type {@linkcode WithDescriber} action definitions to execute.
+   * @param actions - Array of action names to execute.
    *
    * @returns A promise resolving when all actions have finished.
    */
   protected __performActions = async (
     from: string | false,
-    ...actions: WithDescriber[]
+    ...actions: string[]
   ) => {
     const fns = actions.map(this.toActionFn).filter(f => f !== undefined);
 
@@ -362,11 +361,7 @@ export class AsyncInterpreter<
   __executeActivity: ExecuteActivity_F = (from, activities) => {
     const callback = async () => {
       for (const activity of activities) {
-        const check2 = typeof activity === 'string';
-        const check3 = isDescriber(activity);
-        const check4 = check2 || check3;
-
-        if (check4) {
+        if (typeof activity === 'string') {
           await this.__performActions(from, activity);
           continue;
         }
@@ -425,7 +420,7 @@ export class AsyncInterpreter<
 
     if (response) {
       await this.__performActions(from, ...toArray.typed(diffExits));
-      await this.__performActions(from, ...toArray<WithDescriber>(actions));
+      await this.__performActions(from, ...toArray<string>(actions));
       await this.__performActions(from, ...toArray.typed(diffEntries));
       return target ?? false;
     }
@@ -468,11 +463,7 @@ export class AsyncInterpreter<
     const finals = toArray.typed(_finally);
 
     for (const final of finals) {
-      const check2 = typeof final === 'string';
-      const check3 = isDescriber(final);
-
-      const check4 = check2 || check3;
-      if (check4) {
+      if (typeof final === 'string') {
         await this.__performActions(from, final);
         continue;
       }
