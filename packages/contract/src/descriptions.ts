@@ -41,9 +41,6 @@ export type DescriptionProps<
   }>;
 }>;
 
-/** Description record category (`actions`, `guards`, `delays`, `states`, ...). */
-type DescriptionRecord = Record<string, string[] | undefined>;
-
 /**
  * Appends the tail of `next` to `current`.
  *
@@ -72,10 +69,7 @@ const mergeList = (current?: string[], next?: string[]): string[] | undefined =>
  *
  * @returns The merged token record.
  */
-const mergeRecord = (
-  current: DescriptionRecord = {},
-  next?: DescriptionRecord,
-): DescriptionRecord => {
+const mergeRecord = (current: Helper = {}, next?: Helper): Helper => {
   if (!next) return current;
 
   for (const key of Object.keys(next)) {
