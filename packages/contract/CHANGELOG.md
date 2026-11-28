@@ -5,6 +5,39 @@
 <details>
 <summary>
 
+## **[4.0.0-beta-02] - 28/11/2026** => _12:50_
+
+</summary>
+
+### Breaking changes
+
+- **No more describers**: remove `Describer` and `WithDescriber`. Action, guard,
+  activity, transition and actor configurations only accept plain strings, and the
+  `description` field is gone from every config type.
+
+### Features
+
+- **`describe` on contracts**: add `Contract.describe`, merging a typed description
+  hierarchy that is cumulative across calls.
+- **Description hierarchy types**: add `DescriptionProps` and `Helper` to describe
+  states, guards, actions, delays, events, children and emitters, plus the
+  `mergeDescriptions` runtime merger.
+- **New contract helpers**: add `ContractDescriptions` and `ContractEventKeys`, and
+  type event descriptions by the contract event keys.
+- **Options surface**: keep `describe` in `ContractSurface` so options resolution
+  preserves the contract API.
+
+### Docs
+
+- Document `RegisterType` and `ContractEventKeys`.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.3.1] - 26/11/2026** => _18:31_
 
 </summary>

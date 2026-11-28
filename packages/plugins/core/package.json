@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-plugins",
-  "version": "4.0.0-beta-01",
+  "version": "4.0.0-beta-02",
   "description": "Utilities for @bemedev/app",
   "keywords": [
     "state machines",

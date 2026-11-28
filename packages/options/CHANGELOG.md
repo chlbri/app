@@ -8,6 +8,28 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[4.0.0-beta-02] - 28/11/2026** => _12:50_
+
+</summary>
+
+### Breaking changes
+
+- **String-only actions**: `checkAction` accepts plain action names, and the checker
+  primitives no longer recognize `Describer` objects.
+- **Child configs**: `description` is removed from the allowed child actor keys and
+  from the validated shape.
+
+### Refactor
+
+- Rename the `@bemedev/boolean-recursive/async` import alias to `bool`.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.3.1] - 26/11/2026** => _18:31_
 
 </summary>

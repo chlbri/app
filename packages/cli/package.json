@@ -1,6 +1,6 @@
 {
   "name": "@bemedev/app-cli",
-  "version": "4.0.0-beta-01",
+  "version": "4.0.0-beta-02",
   "private": false,
   "description": "CLI tool and AST parseTree parser for @bemedev/app",
   "license": "MIT",

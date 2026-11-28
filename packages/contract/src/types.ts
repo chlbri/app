@@ -201,6 +201,13 @@ export type ContractEventArg<C extends Contract> = EventArgAll<ContractEvents<C>
  */
 export type ContractEventsMap<C extends Contract> = ContractTypesOf<C>['eventMap'];
 
+/**
+ * Extracts the union of event names declared by a contract.
+ *
+ * @template `C` - Contract type.
+ *
+ * @see -- type {@linkcode ContractEventsMap}
+ */
 export type ContractEventKeys<C extends Contract> = keyof ContractEventsMap<C>;
 
 /**

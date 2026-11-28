@@ -85,8 +85,29 @@ type EventArg = ContractEventArg<typeof authContract>;
 type Options = ContractOptions<typeof authContract>; // MachineOptions
 ```
 
-The returned object is frozen and has the shape `{ config, types }`. It does not
-expose any machine runtime, option implementation, or interpreter.
+The returned object is frozen and has the shape
+`{ config, types, descriptions, describe }`. It does not expose any machine runtime,
+option implementation, or interpreter.
+
+### Describing tokens
+
+`describe` attaches human and agent-facing descriptions without polluting the config.
+Calls are cumulative, and every category is typed by the contract:
+
+```typescript
+import { authContract } from './auth.contract';
+
+authContract.describe({
+  general: ['Authenticates a user'],
+  states: { '/idle': ['Waits for a login attempt'] },
+  actions: { login: ['Calls the auth API'] },
+  events: { LOGIN: ['Raised by the login form'] },
+});
+```
+
+The merged hierarchy is available on `contract.descriptions`, typed by
+`DescriptionProps`. Machines created from the contract expose the same method and
+return the machine for chaining.
 
 A contract type carries three things: the `config`, the inferred `types` (`events`,
 `eventMap`, `actorsMap`, `context`, `pContext`, `tags`, `paths`, `sync`) and the
@@ -183,6 +204,11 @@ contract types on change.
 | `RegisterOptions`           | Type | Option identifiers available for a registry entry.                |
 | `TargetDef`                 | Type | Registry path tree node.                                          |
 | `ContractSchemas`           | Type | Schema map accepted by `createContract`.                          |
+| `DescriptionProps`          | Type | Typed description hierarchy attached to a contract.               |
+| `Helper`                    | Type | Description hierarchy for one token category.                     |
+| `mergeDescriptions`         | Fn   | Merges a description hierarchy into another.                      |
+| `ContractDescriptions`      | Type | Description hierarchy of a contract.                              |
+| `ContractEventKeys`         | Type | Union of event names declared by a contract.                      |
 | `ContractTypes`             | Type | Inferred typing surface shape.                                    |
 | `MachineOptions`            | Type | Union of async and sync machine options.                          |
 | `AnyMachineOptions`         | Type | Base shape satisfied by every machine options surface.            |

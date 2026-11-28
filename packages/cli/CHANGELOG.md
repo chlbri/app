@@ -5,6 +5,36 @@
 <details>
 <summary>
 
+## **[4.0.0-beta-02] - 28/11/2026** => _12:50_
+
+</summary>
+
+### Breaking changes
+
+- **Describer removal**: `parseTree` and its reducers handle action names as plain
+  strings, and `reduceDescribers` is removed.
+
+### Features
+
+- **`reduceActions`**: add a reducer that deduplicates plain action names and use it
+  in the `parseTree` pipeline.
+
+### Refactor
+
+- Import machine config types from `@bemedev/app/types` instead of
+  `@bemedev/app-contract/internal`.
+
+### Dependencies
+
+- Add `@bemedev/app-contract` as a peer dependency.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.3.1] - 26/11/2026** => _18:31_
 
 </summary>

@@ -8,6 +8,45 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <details>
 <summary>
 
+## **[4.0.0-beta-02] - 28/11/2026** => _12:50_
+
+</summary>
+
+### Breaking changes
+
+- **Descriptions leave the config**: remove `description` from every machine token —
+  actions included — and drop the `{ name, description }` (`Describer`) /
+  `WithDescriber` form. Actions and guards are referenced by their plain string name.
+- **String-based action helpers**: replace the `NoExtraKeysWithDescriber*` and
+  `FromDescriber` generics with the `NoExtraKeysAction*` helpers and a plain
+  pass-through `FromActionConfig`.
+
+### Features
+
+- **`describe` on machines**: add `CommonMachine.describe`, forwarding the typed
+  description hierarchy to the contract and returning the machine for chaining.
+- **Typed description props**: type `describe` with `DescriptionProps` imported from
+  `@bemedev/app-contract`.
+
+### Refactor
+
+- **Shared types**: import config and option types from `@bemedev/app-contract`,
+  re-exported through `@bemedev/app/types`, and remove the obsolete `reduceDescriber`
+  helper.
+
+### Dependencies
+
+- Move the workspace package manager to pnpm 12.23.0.
+- Align the workspace on TypeScript 6.0.3.
+- Bump the Lucide packages to 1.83.0.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.3.1] - 26/11/2026** => _18:31_
 
 </summary>

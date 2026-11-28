@@ -148,8 +148,19 @@ Descriptions are not lost: `describe` — available on both contracts and machin
 becomes the single way to add a description to any token, keeping the machine
 definition pure data while tooling and agents can still read the metadata on demand.
 
-This release (3.3.1) changes no runtime behaviour: it announces the 4.0.0 breaking
-changes so the migration can start now.
+The 3.3.1 release changed no runtime behaviour: it announced the 4.0.0 breaking
+changes so the migration could start.
+
+The removal is implemented in the 4.0.0 beta line: no token accepts `description`,
+and `describe` forwards a typed description hierarchy to the contract and returns the
+machine for chaining:
+
+```typescript
+const machine = createMachine(contract).describe({
+  general: ['Handles authentication'],
+  actions: { login: ['Calls the auth API'] },
+});
+```
 
 <br/>
 

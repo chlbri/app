@@ -5,6 +5,23 @@
 <details>
 <summary>
 
+## **[4.0.0-beta-02] - 28/11/2026** => _12:50_
+
+</summary>
+
+### Refactor
+
+- Import `test`, `expect`, `vi` and `VitestUtils` from `vitest` instead of
+  `vite-plus/test`.
+- Merge the `@bemedev/app/bemedev` imports in `constructTests`.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.3.1] - 26/11/2026** => _18:31_
 
 </summary>

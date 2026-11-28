@@ -5,6 +5,28 @@
 <details>
 <summary>
 
+## **[4.0.0-beta-02] - 28/11/2026** => _12:50_
+
+</summary>
+
+### Breaking changes
+
+- **No describer schema**: remove `DescriberSchema`; `ActionConfig_Schema` now only
+  accepts a string.
+- **No `description` fields**: drop `description` from common actors, transitions,
+  activities, finally handlers and node entries.
+
+### Refactor
+
+- `CommonActorSchema` becomes an empty object, and schema documentation is updated.
+
+</details>
+
+<br/>
+
+<details>
+<summary>
+
 ## **[3.3.1] - 26/11/2026** => _18:31_
 
 </summary>

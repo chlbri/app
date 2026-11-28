@@ -129,8 +129,8 @@ child state nodes:
   - `entry` / `exit`: Single or array of action configurations.
   - `tags`: Single string or array of strings.
   - `activities`: Record of activity names to activity configurations.
-  - `description`: Human-readable summary string (removed in 4.0.0 — see the warning
-    above; use `describe`).
+  - `description`: Removed in 4.0.0; metadata now lives on the contract or machine
+    `describe` hierarchy.
   - `strict`: Optional boolean to enforce strict configuration rules.
 
 ---
@@ -162,15 +162,9 @@ conditions:
 
 Validates action specifications in `entry`, `exit`, and transition `actions`:
 
-- **String Action**: Name referencing an action registered in machine options.
-- **Describer Object**: Object containing an execution handler and optional metadata
-  (the `description` field is removed in 4.0.0 — see the warning above):
-  ```typescript
-  {
-    exec: (state, event) => { ... },
-    description: 'Updates user profile'
-  }
-  ```
+- **String Action**: Name referencing an action registered in machine options. The
+  `{ name, description }` describer form and the `description` field were removed in
+  4.0.0 — see the warning above.
 
 ---
 
@@ -179,8 +173,8 @@ Validates action specifications in `entry`, `exit`, and transition `actions`:
 Guards control whether a transition can trigger:
 
 - **Named Guard**: String key corresponding to a guard function in machine options.
-- **Describer Guard**: Object with `cond` predicate function and description (removed
-  in 4.0.0 — use `describe`).
+- **Describer Guard**: Removed in 4.0.0 — guard names are plain strings; use
+  `describe` for metadata.
 - **Logical Guard Trees**: Recursive boolean logic schemas:
   - `and`: Array of guards that must all evaluate to `true`.
   - `or`: Array of guards where at least one must evaluate to `true`.
