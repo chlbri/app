@@ -1,4 +1,9 @@
-import type { Contract, ContractOptions, ContractPaths } from './types';
+import type {
+  Contract,
+  ContractEventKeys,
+  ContractOptions,
+  ContractPaths,
+} from './types';
 
 /**
  * Strongly typed description hierarchy for each category of machine tokens.
@@ -28,6 +33,8 @@ export type DescriptionProps<
   guards: Helper<keyof Opts['guards']>;
   actions: Helper<keyof Opts['actions']>;
   delays: Helper<keyof Opts['delays']>;
+  events: Helper<keyof ContractEventKeys<Ct>>;
+
   actors: Partial<{
     children: Helper<keyof NonNullable<NonNullable<Opts['actors']>['children']>>;
     emitters: Helper<keyof NonNullable<NonNullable<Opts['actors']>['emitters']>>;
